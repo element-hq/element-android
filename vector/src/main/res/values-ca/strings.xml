@@ -112,8 +112,6 @@
     <string name="event_status_sending_message">Enviant missatge…</string>
     <string name="initial_sync_start_importing_account_data">Sincronització inicial:
 \nImportant dades del compte</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronització inicial:
-\nImportant comunitats</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronització inicial:
 \nImportant sales que n\'has marxat</string>
     <string name="initial_sync_start_importing_account">Sincronització inicial:
@@ -269,7 +267,6 @@
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_result_placeholder">Sense resultats</string>
     <string name="rooms_header">Sales</string>
-    <string name="groups_header">Comunitats</string>
     <string name="send_bug_report_include_logs">Envia els registres</string>
     <string name="send_bug_report_include_crash_logs">Envia els registres de fallada</string>
     <string name="send_bug_report_include_screenshot">Envia una captura de pantalla</string>
@@ -302,7 +299,6 @@
     <string name="auth_email_already_defined">Aquest correu electrònic ja existeix.</string>
     <string name="auth_forgot_password">Contrasenya oblidada\?</string>
     <string name="auth_recaptcha_message">Aquest servidor vol assegurar-se que no ets cap robot</string>
-    <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
     <string name="login_error_bad_json">JSON mal format</string>
@@ -877,7 +873,6 @@
     <string name="action_change">Canviar</string>
     <string name="change_room_directory_network">Canvia de xarxa</string>
     <string name="please_wait">Espereu, si us plau…</string>
-    <string name="group_all_communities">Totes les comunitats</string>
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
     <string name="fab_menu_create_room">Sales</string>
     <string name="fab_menu_create_chat">Xats directes</string>
@@ -1277,7 +1272,7 @@
     <string name="open_terms_of">Consulta els termes de %s</string>
     <string name="login_terms_title">Accepta els termes per a continuar</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Estàs compartint les adreces de correu electrònic o números de telèfon amb el servidor d\'identitat %1$s. Per parar de compartir-les t\'has de tornar a connectar a %2$s.</string>
-    <string name="message_view_edit_history">Visualitza Edita Històric</string>
+    <string name="message_view_edit_history">Visualitza l\'històric d\'edició</string>
     <string name="settings_show_redacted_summary">Indica els missatges eliminats</string>
     <string name="bootstrap_migration_backup_recovery_key">Clau de recuperació de la còpia de seguretat de claus</string>
     <string name="bootstrap_migration_use_recovery_key">utilitzar la clau de recuperació de còpia de seguretat de claus</string>
@@ -1777,7 +1772,7 @@
     <string name="verify_this_session">Verifica el nou inici de sessió que està accedint al teu compte: %1$s</string>
     <string name="verification_open_other_to_verify">Utilitza aquesta sessió per a verificar-ne una de nova i poder-li donar accés als missatges xifrats.</string>
     <string name="verification_profile_device_untrust_info">Fins que aquest usuari no confiï en aquesta sessió, els missatges enviats i rebuts es marcaran amb una alerta. Com a alternativa, pots verificar-lo manualment.</string>
-    <string name="crosssigning_verify_this_session">Verifica aquest inici de sessió</string>
+    <string name="crosssigning_verify_this_session">Verifica aquest dispositiu</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifica aquesta sessió per fer-la de confiança i permetre que accedeixi als missatges xifrats. Si no has estat tu el que ha iniciat sessió aquí, pot ser que el teu compte estigui compromès:</string>
     <string name="verification_verify_device">Verifica aquesta sessió</string>
     <string name="verification_conclusion_compromised">Alguna de les següents pot haver estat compromesa:
@@ -2208,7 +2203,6 @@
     <string name="create_spaces_details_public_header">Afegeix alguns detalls per ajudar a destacar-lo. Pots canviar-ho en qualsevol moment.</string>
     <string name="create_spaces_private_teammates">Un espai privat per tu i els teus</string>
     <string name="space_type_public_desc">Obert a tothom, perfecte per a comunitats</string>
-    <string name="ftue_display_name_subtitle">Es mostrarà quan enviïs missatges.</string>
     <string name="ftue_display_name_title">Escull un àlies</string>
     <string name="ftue_account_created_subtitle">El teu compte %s s\'ha creat</string>
     <string name="ftue_account_created_congratulations_title">Felicitats!</string>
@@ -2228,7 +2222,7 @@
     <string name="error_file_too_big_simple">El fitxer és massa gran per carregar-lo.</string>
     <string name="attachment_type_location">Ubicació</string>
     <string name="ftue_auth_carousel_encrypted_body">Xifrat d\'extrem a extrem i sense haver de donar cap número de telèfon. Sense anuncis ni extracció de dades.</string>
-    <string name="ftue_auth_carousel_control_body">Tria on es desen les teves converses, donant-te control i independència. Connectat a través de Matrix.</string>
+    <string name="ftue_auth_carousel_control_body">Tria on es desen les teves converses, et dona control i independència. Connectat a través de Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Comunicació segura i independent que t\'ofereix el mateix nivell de privadesa que una conversa cara a cara a casa teva.</string>
     <string name="ftue_auth_carousel_workplace_title">Missatgeria pel teu equip.</string>
     <string name="ftue_auth_carousel_encrypted_title">Missatgeria segura.</string>
@@ -2485,7 +2479,6 @@
     <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'històric de la sala</string>
     <string name="space_leave_radio_buttons_title">Coses en aquest espai</string>
     <string name="settings_autoplay_animated_images_summary">Reprodueix immediatament les imatges animades a la cronologia</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Deixa de compartir</string>
     <string name="labs_enable_live_location">Activa la compartició d\'ubicació en directe</string>
     <string name="location_share_live_remaining_time">%1$s restants</string>
     <string name="location_share_live_until">En directe fins %1$s</string>
@@ -2535,7 +2528,7 @@
     <string name="send_your_first_msg_to_invite">Envia un primer missatge per convidar %s a parlar</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Els missatges d\'aquest xat seran xifrats d\'extrem a extrem.</string>
     <string name="create_room_action_go">Crea</string>
-    <string name="ftue_auth_email_verification_subtitle">Confirma el teu correu electrònic, prem el botó del correu que t\'hem enviat a %s</string>
+    <string name="ftue_auth_email_verification_subtitle">Segueix les instruccions enviades a %s</string>
     <string name="ftue_auth_terms_subtitle">Si us plau, llegeix les condicions i polítiques de %s</string>
     <string name="ftue_auth_choose_server_ems_cta">Contacta</string>
     <string name="ftue_auth_create_account_username_entry_footer">Et podran trobar com a %s</string>
@@ -2547,7 +2540,7 @@
     <string name="ftue_auth_login_username_entry">Usuari / Correu / Telèfon</string>
     <string name="permalink_unsupported_groups">No es pot obrir l\'enllaç: les comunitats han estat substituïdes pels espais</string>
     <string name="live_location_not_enough_permission_dialog_title">No tens permís per compartir la ubicació en directe</string>
-    <string name="ftue_auth_email_verification_title">Comprova el teu correu per verificar.</string>
+    <string name="ftue_auth_email_verification_title">Verifica el teu correu</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Torna a enviar el codi</string>
     <string name="ftue_auth_phone_confirmation_subtitle">S\'ha enviat un codi al %s</string>
     <string name="ftue_auth_phone_confirmation_title">Confirma el teu número de telèfon</string>
@@ -2588,4 +2581,23 @@
     <string name="ftue_auth_password_reset_confirmation">Restabliment de contrasenya</string>
     <string name="ftue_auth_forgot_password">Contrasenya oblidada</string>
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) és un servei robust i fiable d\'allotjament (servidors) per comunicacions ràpides, segures i en temps real. Descobreix-ho a &lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">No podràs accedir a l\'històric de missatges xifrats. Restableix la còpia de seguretat de missatges i les claus de verificació per començar de nou.</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Aprova automàticament els ginys d\'Element Call i permet l\'accés a la càmera i el micròfon</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Activa els permisos d\'accés directe d\'Element Call</string>
+    <string name="live_location_description">Ubicació en directe</string>
+    <string name="verify_invalid_qr_notice">Aquest codi QR sembla incorrecte. Prova de fer la verificació amb un altre mètode.</string>
+    <string name="crosssigning_cannot_verify_this_session">No s\'ha pogut verificar aquest dispositiu</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Quina és l\'adreça del teu servidor\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">On viuen les teves converses</string>
+    <string name="updating_your_data">Actualitzant dades…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s i %2$d altre</item>
+        <item quantity="other">%1$s i %2$d altres</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s i %2$s</string>
+    <string name="auth_reset_password_error_unverified">Correu no verificat, mira la teva safata d\'entrada</string>
+    <string name="location_share_loading_map_error">No s\'ha pogut carregar el mapa
+\nPotser el servidor utilitzat no està configurat per mostrar mapes.</string>
+    <string name="a11y_open_settings">Obre configuració</string>
+    <string name="all_chats">Tots els xats</string>
 </resources>

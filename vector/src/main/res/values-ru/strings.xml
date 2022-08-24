@@ -52,10 +52,8 @@
 \nИмпорт приглашенных комнат</string>
     <string name="initial_sync_start_importing_account_left_rooms">Начальная синхронизация:
 \nИмпорт покинутых комнат</string>
-    <string name="initial_sync_start_importing_account_groups">Начальная синхронизация:
-\nИмпорт сообществ</string>
     <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
-\nИмпорт данных учетной записи</string>
+\nИмпорт данных учётной записи</string>
     <string name="notice_room_update">%s обновил эту комнату.</string>
     <string name="event_status_sending_message">Отправка сообщения…</string>
     <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
@@ -194,7 +192,7 @@
     <string name="room_displayname_3_members">%1$s, %2$s и %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Всем серверам запрещено участвовать! Эта комната больше не может быть использована.</string>
     <string name="notice_room_server_acl_updated_no_change">Без изменений.</string>
-    <string name="room_displayname_empty_room_was">Пустая комната (была %s)</string>
+    <string name="room_displayname_empty_room_was">Пустая комната (без %s)</string>
     <string name="notice_room_server_acl_set_banned">• Соответствующие серверы %s заблокированы.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь запрещены.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Серверы, соответствующие буквальным IP-адресам, теперь разрешены.</string>
@@ -290,7 +288,7 @@
     <string name="send_bug_report_sent">Отчет об ошибке успешно отправлен</string>
     <string name="send_bug_report_failed">Сбой отправки отчета об ошибке (%s)</string>
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
-    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчет о сбое?</string>
+    <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчёт о сбое\?</string>
     <string name="join_room">Войти в Комнату</string>
     <string name="username">Имя пользователя</string>
     <string name="logout">Выйти</string>
@@ -302,12 +300,11 @@
     <string name="option_take_photo_video">Камера</string>
     <string name="auth_login">Вход</string>
     <string name="auth_submit">Подать</string>
-    <string name="auth_invalid_login_param">Неправильный логин и/или пароль</string>
+    <string name="auth_invalid_login_param">Неправильное имя пользователя и/или пароль</string>
     <string name="auth_invalid_email">Это не похоже на действительный адрес электронной почты</string>
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_recaptcha_message">Этот домашний сервер хочет убедиться, что вы не робот</string>
-    <string name="auth_reset_password_missing_email">Должен быть введен адрес электронной почты привязанный к учетной записи.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить адрес электронной почты: убедитесь, что вы перешли по ссылке из сообщения</string>
     <string name="login_error_invalid_home_server">Пожалуйста, введите корректный URL</string>
     <string name="login_error_bad_json">Неверный формат JSON</string>
@@ -513,7 +510,6 @@
     <string name="notification_noisy">Громко</string>
     <string name="encrypted_message">Зашифрованное сообщение</string>
     <string name="loading">Загрузка…</string>
-    <string name="groups_header">Сообщества</string>
     <string name="start_voice_call_prompt_msg">Вы уверены, что хотите начать голосовой вызов?</string>
     <string name="start_video_call_prompt_msg">Вы уверены, что хотите начать видеовызов?</string>
     <string name="room_participants_ban_prompt_msg">Блокировка пользователя удалит его из этой комнаты и не позволит ему присоединиться вновь.</string>
@@ -916,7 +912,6 @@
     <string name="action_change">Изменить</string>
     <string name="change_room_directory_network">Изменить сеть</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="group_all_communities">Все сообщества</string>
     <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
     <string name="fab_menu_create_room">Комнаты</string>
     <string name="fab_menu_create_chat">Личные сообщения</string>
@@ -960,9 +955,9 @@
     <string name="message_edits">Изменение сообщения</string>
     <string name="no_message_edits_found">Изменения не найдены</string>
     <string name="room_filtering_filter_hint">Отфильтровать беседы…</string>
-    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
+    <string name="room_filtering_footer_title">Не можете найти нужное\?</string>
     <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
-    <string name="room_filtering_footer_create_new_direct_message">Отправить новое сообщение в диалог</string>
+    <string name="room_filtering_footer_create_new_direct_message">Отправить новое личное сообщение</string>
     <string name="room_filtering_footer_open_room_directory">Просмотр каталога комнат</string>
     <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Включить жест смахивания для ответа в ленте сообщений</string>
@@ -1455,7 +1450,7 @@
         <item quantity="few">%d сессии активны</item>
         <item quantity="many">%d сессий активно</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Подтвердите эту сессию</string>
+    <string name="crosssigning_verify_this_session">Подтвердите это устройство</string>
     <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
     <string name="settings_dev_tools">Инструменты для разработчиков</string>
     <string name="settings_account_data">Данные учётной записи</string>
@@ -1743,13 +1738,13 @@
     <string name="settings_security_application_protection_summary">Защитите доступ с помощью PIN-кода и биометрии.</string>
     <string name="settings_security_application_protection_title">Защита доступа</string>
     <string name="secure_backup_reset_no_history">Вы перезапустите приложение без истории, сообщений, доверенных устройств или доверенных пользователей</string>
-    <string name="secure_backup_reset_if_you_reset_all">Если сбросить все</string>
+    <string name="secure_backup_reset_if_you_reset_all">Если сбросить всё</string>
     <string name="secure_backup_reset_all_no_other_devices">Делайте это только в том случае, если у вас нет другого устройства, с которого вы можете проверить это устройство.</string>
-    <string name="secure_backup_reset_all">Сбросить все</string>
-    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить все</string>
+    <string name="secure_backup_reset_all">Сбросить всё</string>
+    <string name="bad_passphrase_key_reset_all_action">Забыли или потеряли все варианты восстановления\? Сбросить всё</string>
     <string name="direct_room_created_summary_item_by_you">Вы вошли.</string>
     <string name="direct_room_created_summary_item">%s вошёл(ла).</string>
-    <string name="direct_room_encryption_enabled_tile_description">Сообщения в этой комнате зашифрованы сквозным шифрованием.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Сообщения в этой переписке защищены сквозным шифрованием.</string>
     <string name="direct_room_profile_section_more_leave">Покинуть</string>
     <string name="direct_room_profile_section_more_settings">Настройки</string>
     <string name="direct_room_profile_encrypted_subtitle">Сообщения здесь защищены сквозным шифрованием.
@@ -1840,7 +1835,7 @@
     <string name="send_bug_report_include_key_share_history">Отправить историю запросов на обмен ключами</string>
     <string name="start_chatting">Начать беседу</string>
     <string name="room_created_summary_no_topic_creation_text">%s чтобы люди знали, о чём эта комната.</string>
-    <string name="this_is_the_beginning_of_dm">Это начало вашей истории диалога с %s.</string>
+    <string name="this_is_the_beginning_of_dm">Это начало вашей переписки с %s.</string>
     <string name="settings_export_trail">Экспорт аудита</string>
     <string name="room_member_open_or_create_dm">Личное сообщение</string>
     <string name="settings_discovery_consent_title">Отправить электронную почту и номера телефонов</string>
@@ -2035,7 +2030,7 @@
     <string name="looking_for_someone_not_in_space">Ищете кого-то не в %s\?</string>
     <string name="user_invites_you">%s приглашает вас</string>
     <string name="you_are_invited">Вы приглашены</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Пространства - это новый способ группировки комнат и людей.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Пространства — это новый способ организации комнат и людей.</string>
     <string name="space_add_existing_rooms">Добавить существующие комнаты и пространство</string>
     <string name="space_leave_prompt_msg_as_admin">Вы единственный администратор этого пространства. Если вы его покинете, то никто не сможет управлять им.</string>
     <string name="space_leave_prompt_msg_private">Вы сможете присоединиться только после повторного приглашения.</string>
@@ -2235,7 +2230,7 @@
     <string name="call_tile_video_incoming">Входящий видеовызов</string>
     <string name="call_tile_voice_incoming">Входящий голосовой вызов</string>
     <string name="call_tile_you_declined_this_call">Вы отклонили этот вызов</string>
-    <string name="room_settings_room_notifications_account_settings">Настройки учетной записи</string>
+    <string name="room_settings_room_notifications_account_settings">Настройки учётной записи</string>
     <string name="room_settings_room_notifications_manage_notifications">Вы можете управлять уведомлениями в %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Обратите внимание, что уведомления об упоминаниях и ключевых словах недоступны в зашифрованных комнатах на мобильных устройствах.</string>
     <string name="room_settings_room_notifications_notify_me">Уведомлять меня о</string>
@@ -2387,7 +2382,7 @@
     <string name="room_profile_section_restore_security">Восстановить шифрование</string>
     <string name="contact_admin_to_restore_encryption">Обратитесь к администратору, чтобы восстановить шифрование до рабочего состояния.</string>
     <string name="encryption_has_been_misconfigured">Шифрование настроено неправильно.</string>
-    <string name="sent_location">Поделились своим местоположением</string>
+    <string name="sent_location">Поделился(лась) местоположением</string>
     <string name="login_splash_already_have_account">У меня уже есть учётная запись</string>
     <string name="login_splash_create_account">Создать учётную запись</string>
     <string name="ftue_auth_carousel_workplace_title">Обмен сообщениями для вашей команды.</string>
@@ -2443,13 +2438,13 @@
     <string name="labs_enable_thread_messages">Включить обсуждения сообщений</string>
     <string name="ftue_auth_use_case_connect_to_server">Подключиться к серверу</string>
     <string name="ftue_auth_use_case_join_existing_server">Хотите присоединиться к существующему серверу\?</string>
-    <string name="ftue_auth_use_case_skip_partial">пропустить вопрос</string>
-    <string name="ftue_auth_use_case_skip">Пока не уверенны\? Вы можете %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Пропустить вопрос</string>
+    <string name="ftue_auth_use_case_skip">Пока не уверены\? %s</string>
     <string name="ftue_auth_use_case_option_three">Сообщества</string>
     <string name="ftue_auth_use_case_option_two">Команды</string>
     <string name="ftue_auth_use_case_option_one">Друзья и семья</string>
-    <string name="ftue_auth_use_case_subtitle">Мы поможем вам подключится.</string>
-    <string name="ftue_auth_use_case_title">С кем вы будете общаться больше всего\?</string>
+    <string name="ftue_auth_use_case_subtitle">Мы поможем вам подключиться</string>
+    <string name="ftue_auth_use_case_title">С кем вы будете общаться чаще всего\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете это обсуждение!</string>
     <string name="view_in_room">Просмотр в Комнате</string>
     <string name="reply_in_thread">Обсудить</string>
@@ -2487,9 +2482,8 @@
     <string name="ftue_profile_picture_title">Добавить аватар</string>
     <string name="ftue_display_name_entry_footer">Вы сможете изменить это позже</string>
     <string name="ftue_display_name_entry_title">Отображаемое имя</string>
-    <string name="ftue_display_name_subtitle">Показывается, когда вы отправляете сообщения.</string>
     <string name="ftue_display_name_title">Выберите отображаемое имя</string>
-    <string name="ftue_account_created_subtitle">Ваш аккаунт «%s» создан.</string>
+    <string name="ftue_account_created_subtitle">Ваша учётная запись %s создана</string>
     <string name="ftue_account_created_congratulations_title">Поздравляем!</string>
     <string name="ftue_account_created_take_me_home">Домой</string>
     <string name="ftue_account_created_personalize">Персонализировать</string>
@@ -2513,7 +2507,6 @@
     <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Остановить трансляцию</string>
     <string name="labs_enable_live_location">Включить функцию \"Поделиться трансляцией местоположения\"</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>
@@ -2523,7 +2516,7 @@
     <string name="location_share_live_started">Загрузка трансляции местоположения…</string>
     <string name="location_share_live_select_duration_title">Поделиться трансляцией местоположения на</string>
     <string name="a11y_location_share_option_user_live_icon">Трансляцией местоположения</string>
-    <string name="sent_live_location">Поделились трансляцией местоположения</string>
+    <string name="sent_live_location">Поделился(лась) трансляцией местоположения</string>
     <string name="location_share_option_user_live">Трансляцией местоположения</string>
     <string name="space_explore_filter_no_result_description">Некоторые результаты могут быть скрыты, поскольку они являются приватными и для их просмотра необходимо приглашение.</string>
     <string name="time_unit_minute_short">мин</string>
@@ -2550,7 +2543,7 @@
     <string name="ftue_personalize_skip_this_step">Пропустить этот шаг</string>
     <string name="ftue_personalize_submit">Сохранить и продолжить</string>
     <string name="ftue_personalize_complete_subtitle">Ваши предпочтения были сохранены.</string>
-    <string name="ftue_personalize_complete_title">Всё готово!</string>
+    <string name="ftue_personalize_complete_title">Выглядит хорошо!</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} также отлично подходит для работы. Ему доверяют самые надёжные организации в мире.</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервная копия имеет действительную подпись для данного пользователя.</string>
     <string name="settings_autoplay_animated_images_summary">Воспроизводить анимированные изображения, как только они попадают в поле зрения</string>
@@ -2609,4 +2602,62 @@
     <string name="settings_troubleshoot_test_current_endpoint_success">Текущая конечная точка: %s</string>
     <string name="settings_troubleshoot_test_current_endpoint_title">Конечная точка</string>
     <string name="space_leave_radio_buttons_title">Вещи в этом пространстве</string>
+    <string name="live_location_share_location_item_share">Поделиться местоположением</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Предоставление ключей от прошлых сообщений</string>
+    <string name="create_room_action_go">Вперёд</string>
+    <string name="ftue_auth_new_password_subtitle">Убедитесь, что он состоит из 8 или более символов.</string>
+    <string name="font_size_section_manually">Выбрать вручную</string>
+    <string name="font_size_title">Выбор размера шрифта</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">Удалено %d сообщение</item>
+        <item quantity="few">Удалено %d сообщения</item>
+        <item quantity="many">Удалено %d сообщений</item>
+        <item quantity="other">Удалено %d сообщений</item>
+    </plurals>
+    <string name="ftue_auth_sign_out_all_devices">Выйти из учётной записи на всех устройствах</string>
+    <string name="live_location_description">Трансляция местоположения</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Сообщения в этой переписке будут защищены сквозным шифрованием.</string>
+    <string name="updating_your_data">Обновление данных…</string>
+    <string name="ftue_auth_email_resend_email">Повторно отправить письмо</string>
+    <string name="ftue_auth_email_verification_subtitle">Следуйте инструкциям, отправленным на %s</string>
+    <string name="ftue_auth_email_verification_title">Подтвердите свою электронную почту</string>
+    <string name="ftue_auth_reset_password_breaker_title">Проверьте электронную почту.</string>
+    <string name="ftue_auth_terms_subtitle">Пожалуйста, ознакомьтесь с условиями и правилами %s</string>
+    <string name="ftue_auth_choose_server_ems_title">Хотите разместить собственный сервер\?</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Какой адрес у вашего сервера\?</string>
+    <string name="ftue_auth_choose_server_subtitle">Какой адрес у вашего сервера\? Это что-то вроде дома для всех ваших данных</string>
+    <string name="ftue_auth_choose_server_title">Выберите свой сервер</string>
+    <string name="font_size_section_auto">Установить автоматически</string>
+    <string name="auth_reset_password_error_unverified">Почта не подтверждена, проверьте почтовый ящик</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Изменить</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Где хранятся ваши переписки</string>
+    <string name="ftue_auth_create_account_choose_server_header">Где будут храниться ваши переписки</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Должно быть 8 или более символов</string>
+    <string name="crosssigning_cannot_verify_this_session">Не удалось подтвердить это устройство</string>
+    <string name="permalink_unsupported_groups">Невозможно открыть эту ссылку: сообщества были заменены пространствами</string>
+    <string name="ftue_auth_login_username_entry">Имя пользователя / Почта / Телефон</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Следуйте инструкциям, отправленным на %s</string>
+    <string name="ftue_auth_forgot_password">Забыли пароль</string>
+    <string name="ftue_auth_email_verification_footer">Не получили письмо\?</string>
+    <string name="ftue_auth_captcha_title">Вы человек\?</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Повторно отправить код</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Код отправлен на %s</string>
+    <string name="ftue_auth_phone_confirmation_title">Подтвердите номер телефона</string>
+    <string name="ftue_auth_reset_password">Сбросить пароль</string>
+    <string name="ftue_auth_new_password_entry_title">Новый пароль</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Код подтверждения</string>
+    <string name="ftue_auth_phone_entry_title">Номер телефона</string>
+    <string name="ftue_auth_phone_title">Введите номер телефона</string>
+    <string name="ftue_auth_email_entry_title">Электронная почта</string>
+    <string name="ftue_auth_email_title">Введите адрес электронной почты</string>
+    <string name="ftue_auth_terms_title">Правила сервера</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL-адрес сервера</string>
+    <string name="ftue_auth_welcome_back_title">С возвращением!</string>
+    <string name="ftue_auth_create_account_sso_section_header">Или</string>
+    <string name="ftue_auth_create_account_title">Создайте учётную запись</string>
+    <string name="search_space_two_parents">%1$s и %2$s</string>
+    <string name="a11y_open_settings">Открыть настройки</string>
+    <string name="location_share_loading_map_error">Не удалось загрузить карту
+\nВозможно, этот домашний сервер не настроен для отображения карт.</string>
+    <string name="all_chats">Все Беседы</string>
 </resources>

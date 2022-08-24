@@ -194,7 +194,7 @@ class SpaceListViewModel @AssistedInject constructor(
                         val moved = removeAt(index)
                         add(index + action.delta, moved)
                     },
-                    spaceOrderLocalEchos = updatedLocalEchos
+                    spaceOrderLocalEchos = updatedLocalEchos,
             )
         }
         session.coroutineScope.launch {
@@ -257,29 +257,29 @@ class SpaceListViewModel @AssistedInject constructor(
         }
 
         combine(
-                session.flow()
-                        .liveSpaceSummaries(params),
+                session.flow().liveSpaceSummaries(params),
                 session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
         ) { spaces, _ ->
             spaces
+        }.execute { asyncSpaces ->
+            val spaces = asyncSpaces.invoke().orEmpty()
+            val rootSpaces = asyncSpaces.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
+            val orders = rootSpaces.associate {
+                it.roomId to session.getRoom(it.roomId)
+                        ?.roomAccountDataService()
+                        ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                        ?.content.toModel<SpaceOrderContent>()
+                        ?.safeOrder()
+            }
+            copy(
+                    asyncSpaces = asyncSpaces,
+                    spaces = spaces,
+                    rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    spaceOrderInfo = orders
+            )
         }
-                .execute { async ->
-                    val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-                    val orders = rootSpaces.associate {
-                        it.roomId to session.getRoom(it.roomId)
-                                ?.roomAccountDataService()
-                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
-                                ?.content.toModel<SpaceOrderContent>()
-                                ?.safeOrder()
-                    }
-                    copy(
-                            asyncSpaces = async,
-                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
-                            spaceOrderInfo = orders
-                    )
-                }
 
         // clear local echos on update
         session.accountDataService()

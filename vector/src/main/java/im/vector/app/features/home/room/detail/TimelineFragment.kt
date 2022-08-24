@@ -67,11 +67,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.cleanup
@@ -92,6 +93,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.time.Clock
@@ -125,6 +127,7 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -254,29 +257,8 @@ import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
-class TimelineFragment @Inject constructor(
-        private val session: Session,
-        private val avatarRenderer: AvatarRenderer,
-        private val timelineEventController: TimelineEventController,
-        autoCompleterFactory: AutoCompleter.Factory,
-        private val permalinkHandler: PermalinkHandler,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences,
-        private val threadsManager: ThreadsManager,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val notificationUtils: NotificationUtils,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val imageContentRenderer: ImageContentRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val callManager: WebRtcCallManager,
-        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
-        private val shareIntentHandler: ShareIntentHandler,
-        private val clock: Clock
-) :
+@AndroidEntryPoint
+class TimelineFragment :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -285,6 +267,31 @@ class TimelineFragment @Inject constructor(
         GalleryOrCameraDialogHelper.Listener,
         CurrentCallsView.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var session: Session
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var timelineEventController: TimelineEventController
+    @Inject lateinit var autoCompleterFactory: AutoCompleter.Factory
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var threadsManager: ThreadsManager
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var dimensionConverter: DimensionConverter
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var pillsPostProcessorFactory: PillsPostProcessor.Factory
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
+    @Inject lateinit var clock: Clock
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var buildMeta: BuildMeta
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     companion object {
 
@@ -306,7 +313,7 @@ class TimelineFragment @Inject constructor(
         private const val ircPattern = " (IRC)"
     }
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
@@ -359,6 +366,7 @@ class TimelineFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Room
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 timelineViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
@@ -372,7 +380,7 @@ class TimelineFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         sharedActivityActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this, buildMeta).register()
         callActionsHandler = StartCallActionsHandler(
                 roomId = timelineArgs.roomId,
                 fragment = this,
@@ -656,8 +664,8 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
-    private fun navigateToLocationLiveMap() {
-        navigator.openLocationLiveMap(
+    private fun navigateToLiveLocationMap() {
+        navigator.openLiveLocationMap(
                 context = requireContext(),
                 roomId = timelineArgs.roomId
         )
@@ -857,11 +865,11 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupLiveLocationIndicator() {
-        views.locationLiveStatusIndicator.stopButton.debouncedClicks {
+        views.liveLocationStatusIndicator.stopButton.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
         }
-        views.locationLiveStatusIndicator.debouncedClicks {
-            navigateToLocationLiveMap()
+        views.liveLocationStatusIndicator.debouncedClicks {
+            navigateToLiveLocationMap()
         }
     }
 
@@ -962,7 +970,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        audioMessagePlaybackTracker.makeAllPlaybacksIdle()
+        messageComposerViewModel.endAllVoiceActions()
         lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
@@ -1095,7 +1103,7 @@ class TimelineFragment @Inject constructor(
                 else -> state.isAllowedToManageWidgets
             }
             menu.findItem(R.id.video_call).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
-            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled  || state.hasActiveElementCallWidget()) 0xFF else 0x40
+            menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled || state.hasActiveElementCallWidget()) 0xFF else 0x40
 
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
@@ -1559,7 +1567,7 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
-                            BuildConfig.enableLocationSharing
+                            vectorFeatures.isLocationSharingEnabled(),
                     )
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
@@ -1688,7 +1696,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
-        views.locationLiveStatusIndicator.isVisible = isSharingLiveLocation
+        views.liveLocationStatusIndicator.isVisible = isSharingLiveLocation
     }
 
     private fun FragmentTimelineBinding.hideComposerViews() {
@@ -2068,7 +2076,7 @@ class TimelineFragment @Inject constructor(
                 handleShowLocationPreview(messageContent, informationData.senderId)
             }
             is MessageBeaconInfoContent -> {
-                navigateToLocationLiveMap()
+                navigateToLiveLocationMap()
             }
             else -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
@@ -2646,7 +2654,6 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-        super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
     }

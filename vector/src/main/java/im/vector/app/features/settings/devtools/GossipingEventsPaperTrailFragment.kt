@@ -22,20 +22,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import javax.inject.Inject
 
-class GossipingEventsPaperTrailFragment @Inject constructor(
-        private val epoxyController: GossipingTrailPagedEpoxyController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class GossipingEventsPaperTrailFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         GossipingTrailPagedEpoxyController.InteractionListener {
+
+    @Inject lateinit var epoxyController: GossipingTrailPagedEpoxyController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

@@ -97,14 +97,14 @@
     <string name="notice_room_server_acl_updated_was_banned">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة الحظر.</string>
     <string name="notice_room_server_acl_updated_banned">• الخوادِم المُطابقة لـ %s محظورة الآن.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• خوادِم مُطابقة IP الحرفية مسموحة الآن.</string>
-    <string name="notice_room_server_acl_updated_title_by_you">لقد قمت بتغيير قائمة الوصول لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_updated_title">قام %s بتغيير قائمة الوصول (ACL) لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">لقد غَيَّرت قائمة الوصول لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_updated_title">غَيَّرَ %s قائمة التحكم بالوصول (ACL) لهذه الغُرفة.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخوادِم المتطابقة من حيث بروتوكول الإنترنت (IP) المستخدم محظورة.</string>
     <string name="notice_room_server_acl_set_allowed">• الخوادِم المُطابقة لـِ %s مسموحة.</string>
     <string name="notice_room_server_acl_set_banned">• الخوادِم المُطابقة لـ %s محظورة.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">الخوادِم المتطابقة من حيث بروتوكول الإنترنت (IP) المستخدم مسموحة.</string>
-    <string name="notice_room_server_acl_set_title_by_you">لقد قمت بتعيين قائمة التحكم بالوصول لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_set_title">%s قام بتعيين قائمة التحكم بالوصول لهذه الغرفة.</string>
+    <string name="notice_room_server_acl_set_title_by_you">لقد عيَّنت قائمة التحكم بالوصول لهذه الغُرفة.</string>
+    <string name="notice_room_server_acl_set_title">عيَّنَ %s قائمة التحكم بالوصول لهذه الغرفة.</string>
     <string name="notice_direct_room_update_by_you">رقيتَ هُنا.</string>
     <string name="notice_direct_room_update">رقّى %s هُنا.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">جعلتَ الرسائل المُستقبلية مرئية لـ %1$s</string>
@@ -143,8 +143,6 @@
     <string name="event_status_sending_message">يُرسل الرِّسالة…</string>
     <string name="initial_sync_start_importing_account_data">المُزامنة الأولية:
 \nيستورد بيانات الحِساب</string>
-    <string name="initial_sync_start_importing_account_groups">المُزامنة الأولية:
-\nيستورد المُجتمعات</string>
     <string name="initial_sync_start_importing_account_left_rooms">المُزامنة الأولية:
 \nيستورد الغُرف المُغادَر مِنها</string>
     <string name="initial_sync_start_importing_account_invited_rooms">المُزامنة الأولية:
@@ -229,7 +227,6 @@
     <string name="auth_invalid_login_param">اسم المستخدم و/أو كلمة السر خاطئة</string>
     <string name="auth_invalid_email">لا يبدو هذا وكأنه بريد إلكتروني صالح</string>
     <string name="auth_forgot_password">أنسيت كلمة السر؟</string>
-    <string name="auth_reset_password_missing_email">يجب إدخال عنوان البريد الإلكتروني المرتبط بحسابك.</string>
     <string name="auth_reset_password_error_unauthorized">فشل تأكيد عنوان البريد: تحقق من نقر الرابط في البريد</string>
     <string name="login_error_invalid_home_server">أدخِل مسارا صالحا</string>
     <string name="login_error_not_json">لم يحتوي JSON صالح</string>
@@ -376,7 +373,6 @@
         <item quantity="other">%d رسالة جديدة</item>
     </plurals>
     <string name="low_priority_header">أولوية منخفضة</string>
-    <string name="groups_header">المجتمعات</string>
     <string name="send_bug_report_rage_shake">هزّ الجهاز بجنون يُرسل بلاغًا بعلة</string>
     <string name="notification_noisy_notifications">الإخطارات المزعجة</string>
     <string name="notification_silent_notifications">الإخطارات الصامتة</string>
@@ -859,7 +855,6 @@
     <string name="room_preview_not_found">لا يمكنك الوصول إلى هذه الغرفة حاليًا.
 \nحاول لاحقًا، أو اسأل مدير الغرفة إن كان لديك نفاذ لها.</string>
     <string name="room_preview_no_preview">تتعذر معاية هذه الغرفة</string>
-    <string name="group_all_communities">كل المجتمعات</string>
     <string name="please_wait">رجاء انتظر…</string>
     <string name="change_room_directory_network">غيّر الشبكة</string>
     <string name="create_new_space">أنشئ فضاء جديد</string>
@@ -895,11 +890,11 @@
         <item quantity="other">%d ثانية</item>
     </plurals>
     <string name="login_server_url_form_other_hint">العنوان</string>
-    <string name="login_clear_homeserver_history">امسح التأريخ</string>
+    <string name="login_clear_homeserver_history">امسح التاريخ</string>
     <string name="login_signin">لِج</string>
     <string name="login_signup">سجّل</string>
     <string name="login_signin_to">لج عبر %1$s</string>
-    <string name="login_connect_to_a_custom_server">اتص بخادم مخصص</string>
+    <string name="login_connect_to_a_custom_server">اتصل بخادم مخصص</string>
     <string name="login_connect_to_modular">اتصل بخدمات مايتركس لـ Element</string>
     <string name="login_connect_to">اتصل بـ %1$s</string>
     <string name="login_continue">تابع</string>
@@ -925,7 +920,6 @@
     <string name="ftue_profile_picture_title">أضف صورة لللاحة</string>
     <string name="ftue_display_name_entry_footer">يمكنك تغييره لاحقًا</string>
     <string name="ftue_display_name_entry_title">الاسم العلني</string>
-    <string name="ftue_display_name_subtitle">سيظهر هذا الاسم مع رسائلك.</string>
     <string name="ftue_display_name_title">اختر الاسم العلني</string>
     <string name="ftue_account_created_subtitle">أُنشئ حسابك %s.</string>
     <string name="ftue_account_created_congratulations_title">مبارك!</string>
@@ -1168,4 +1162,9 @@
     <string name="initial_sync_request_title">طَلَبُ مُزامَنة أوَّلِيّ</string>
     <string name="a11y_public_room">غُرفة عامة</string>
     <string name="a11y_video">تسجيل مرئيّ</string>
+    <string name="login_reset_password_error_not_found">هذا البريد الإلكتروني غير مربوط بأي حساب</string>
+    <string name="login_reset_password_warning_submit">تابع</string>
+    <string name="login_reset_password_email_hint">البريد الإلكتروني</string>
+    <string name="login_reset_password_password_hint">كلمة السر الجديدة</string>
+    <string name="login_reset_password_submit">التالي</string>
 </resources>

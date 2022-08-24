@@ -44,8 +44,10 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -54,6 +56,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -78,8 +81,6 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.nightly.NightlyProxy
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -203,11 +204,16 @@ class HomeActivity :
                 )
             }
         }
-        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            if (vectorFeatures.isNewAppLayoutEnabled()) {
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
+            } else {
+                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            }
         }
 
         sharedActionViewModel
@@ -276,6 +282,11 @@ class HomeActivity :
                     }
                 })
                 .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun showLayoutSettings() {
+        HomeLayoutSettingBottomDialogFragment()
+                .show(supportFragmentManager, "LAYOUT_SETTINGS")
     }
 
     private fun openSpaceInvite(spaceId: String) {
@@ -552,7 +563,7 @@ class HomeActivity :
         nightlyProxy.onHomeResumed()
     }
 
-    override fun getMenuRes() = R.menu.home
+    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
@@ -591,7 +602,30 @@ class HomeActivity :
                 navigator.openSettings(this)
                 true
             }
+            R.id.menu_home_layout_settings -> {
+                showLayoutSettings()
+                true
+            }
+            R.id.menu_home_invite_friends -> {
+                launchInviteFriends()
+                true
+            }
             else -> false
+        }
+    }
+
+    private fun launchInviteFriends() {
+        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            val text = getString(R.string.invite_friends_text, permalink)
+
+            startSharePlainTextIntent(
+                    context = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
         }
     }
 

@@ -62,7 +62,10 @@ fun Throwable.isUsernameInUse() = this is Failure.ServerError &&
         error.code == MatrixError.M_USER_IN_USE
 
 fun Throwable.isInvalidUsername() = this is Failure.ServerError &&
-        error.code == MatrixError.M_INVALID_USERNAME
+        (error.code == MatrixError.M_INVALID_USERNAME || usernameContainsNonAsciiCharacters())
+
+private fun Failure.ServerError.usernameContainsNonAsciiCharacters() = error.code == MatrixError.M_UNKNOWN &&
+        error.message == "Query parameter \'username\' must be ascii"
 
 fun Throwable.isInvalidPassword() = this is Failure.ServerError &&
         error.code == MatrixError.M_FORBIDDEN &&
@@ -86,9 +89,13 @@ fun Throwable.isInvalidUIAAuth() = this is Failure.ServerError &&
 fun Throwable.isHomeserverUnavailable() = this is Failure.NetworkConnection &&
         this.ioException is UnknownHostException
 
+fun Throwable.isHomeserverConnectionError() = this is Failure.NetworkConnection
+
 fun Throwable.isMissingEmailVerification() = this is Failure.ServerError &&
         error.code == MatrixError.M_UNAUTHORIZED &&
         error.message == "Unable to get validated threepid"
+
+fun Throwable.isUnrecognisedCertificate() = this is Failure.UnrecognizedCertificateFailure
 
 /**
  * Try to convert to a RegistrationFlowResponse. Return null in the cases it's not possible

@@ -34,7 +34,8 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 
 @AndroidEntryPoint
-class FtueAuthResetPasswordEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordInputBinding>() {
+class FtueAuthResetPasswordEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtueResetPasswordInputBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueResetPasswordInputBinding {
         return FragmentFtueResetPasswordInputBinding.inflate(inflater, container, false)

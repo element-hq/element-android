@@ -35,6 +35,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -70,16 +71,18 @@ data class RoomListParams(
         val displayMode: RoomListDisplayMode
 ) : Parcelable
 
-class RoomListFragment @Inject constructor(
-        private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val footerController: RoomListFooterController,
-        private val userPreferencesProvider: UserPreferencesProvider
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class RoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
         FilteredRoomFooterItem.Listener,
         NotifsFabMenuView.Listener {
+
+    @Inject lateinit var pagedControllerFactory: RoomSummaryPagedControllerFactory
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var footerController: RoomListFooterController
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel

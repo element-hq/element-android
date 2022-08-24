@@ -267,8 +267,6 @@
     <string name="event_status_sent_message">Mesaj trimis</string>
     <string name="initial_sync_start_importing_account_data">Sincronizare inițială:
 \nSe importă datele contului</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronizare inițială:
-\nSe importă comunitățile</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronizare inițială:
 \nSe importă camerele pe care le-ați părăsit</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronizare inițială:

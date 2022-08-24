@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -33,13 +34,15 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.settings.VectorSettingsUrls
-import im.vector.app.openOssLicensesMenuActivity
 import javax.inject.Inject
 
-class LegalsFragment @Inject constructor(
-        private val controller: LegalsController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class LegalsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         LegalsController.Listener {
+
+    @Inject lateinit var controller: LegalsController
+    @Inject lateinit var flavorLegals: FlavorLegals
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -100,8 +103,7 @@ class LegalsFragment @Inject constructor(
 
     override fun openThirdPartyNoticeGplay() {
         if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-            // See https://developers.google.com/android/guides/opensource
-            openOssLicensesMenuActivity(requireActivity())
+            flavorLegals.navigateToThirdPartyNotices(requireContext())
         }
     }
 }

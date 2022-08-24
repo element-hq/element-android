@@ -17,20 +17,46 @@
 package im.vector.app.di
 
 import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.fdroid.service.FDroidGuardServiceStarter
+import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.legals.FlavorLegals
+import im.vector.app.push.fcm.FdroidFcmHelper
 
 @InstallIn(SingletonComponent::class)
 @Module
-object FlavorModule {
+abstract class FlavorModule {
 
-    @Provides
-    fun provideGuardServiceStarter(preferences: VectorPreferences, appContext: Context): GuardServiceStarter {
-        return FDroidGuardServiceStarter(preferences, appContext)
+    companion object {
+        @Provides
+        fun provideGuardServiceStarter(preferences: VectorPreferences, appContext: Context): GuardServiceStarter {
+            return FDroidGuardServiceStarter(preferences, appContext)
+        }
+
+        @Provides
+        fun provideNightlyProxy() = object : NightlyProxy {
+            override fun onHomeResumed() {
+                // no op
+            }
+        }
+
+        @Provides
+        fun providesFlavorLegals() = object : FlavorLegals {
+            override fun hasThirdPartyNotices() = false
+
+            override fun navigateToThirdPartyNotices(context: Context) {
+                // no op
+            }
+        }
     }
+
+    @Binds
+    abstract fun bindsFcmHelper(fcmHelper: FdroidFcmHelper): FcmHelper
 }

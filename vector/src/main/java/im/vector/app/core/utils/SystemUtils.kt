@@ -159,7 +159,7 @@ fun startInstallFromSourceIntent(context: Context, activityResultLauncher: Activ
 }
 
 fun startSharePlainTextIntent(
-        fragment: Fragment,
+        context: Context,
         activityResultLauncher: ActivityResultLauncher<Intent>?,
         chooserTitle: String?,
         text: String,
@@ -182,10 +182,10 @@ fun startSharePlainTextIntent(
         if (activityResultLauncher != null) {
             activityResultLauncher.launch(intent)
         } else {
-            fragment.startActivity(intent)
+            context.startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        fragment.activity?.toast(R.string.error_no_external_application_found)
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

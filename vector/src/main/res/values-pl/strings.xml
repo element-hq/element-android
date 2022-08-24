@@ -53,8 +53,6 @@
 \nImportowanie zaproszonych pokojów</string>
     <string name="initial_sync_start_importing_account_left_rooms">Wstępna synchronizacja:
 \nImportowanie opuszczonych pokojów</string>
-    <string name="initial_sync_start_importing_account_groups">Wstępna synchronizacja:
-\nImportowanie grup</string>
     <string name="initial_sync_start_importing_account_data">Wstępna synchronizacja:
 \nImportowanie danych Konta</string>
     <string name="event_status_sending_message">Wysyłanie wiadomości…</string>
@@ -123,7 +121,6 @@
     <string name="auth_email_already_defined">Ten adres e-mail został już użyty.</string>
     <string name="auth_forgot_password">Zapomniałeś(-aś) hasła?</string>
     <string name="auth_recaptcha_message">Serwer domowy prosi o potwierdzenie, że nie jesteś robotem</string>
-    <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
     <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_invalid_home_server">Proszę wprowadzić prawidłowy adres URL</string>
     <string name="login_error_not_json">Nie zawiera prawidłowego JSON</string>
@@ -268,7 +265,6 @@
     <string name="notification_silent_notifications">Ciche powiadomienia</string>
     <string name="title_activity_bug_report">Zgłoś błąd</string>
     <string name="loading">Wczytywanie…</string>
-    <string name="groups_header">Społeczności</string>
     <string name="send_bug_report_rage_shake">Potrząśnij wściekle, aby zgłosić błąd</string>
     <string name="start_voice_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć rozmowę głosową?</string>
     <string name="start_video_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć wideorozmowę?</string>
@@ -457,7 +453,7 @@
     <string name="markdown_has_been_enabled">Markdown został włączony.</string>
     <string name="markdown_has_been_disabled">Markdown został wyłączony.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="x_plus">%d+</string>
+    <string name="x_plus">+%d</string>
     <string name="settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka ${app_name} dla przychodzących połączeń</string>
     <string name="settings_call_category">Połączenia</string>
     <string name="room_participants_action_remove">Wyrzuć</string>
@@ -552,7 +548,6 @@
     <string name="room_list_rooms_empty_title">Pokoje</string>
     <string name="message_add_reaction">Dodaj reakcję</string>
     <string name="create_new_room">Utwórz nowy pokój</string>
-    <string name="group_all_communities">Wszystkie społeczności</string>
     <string name="fab_menu_create_chat">Wiadomości Bezpośrednie</string>
     <string name="create_room_action_create">STWÓRZ</string>
     <string name="create_room_name_hint">Nazwa</string>
@@ -1132,7 +1127,7 @@
         <item quantity="many">%d aktywnych sesji</item>
         <item quantity="other">%d aktywnych sesji</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Zweryfikuj tą sesję</string>
+    <string name="crosssigning_verify_this_session">Zweryfikuj te urządzenie</string>
     <string name="verification_open_other_to_verify">Otwórz obecną sesję i użyj jej do zweryfikowania obecnej, przyznając jej dostęp do zaszyfrowanych wiadomości.</string>
     <string name="verification_profile_verify">Zweryfkuj</string>
     <string name="verification_profile_verified">Zweryfikowano</string>
@@ -1303,7 +1298,7 @@
     <string name="room_created_summary_item">%s stworzył(a) i skonfigurował(a) ten pokój.</string>
     <string name="encryption_unknown_algorithm_tile_description">Szyfrowanie wykorzystywane przez ten pokój nie jest obsługiwane</string>
     <string name="encryption_not_enabled">Szyfrowanie wyłączone</string>
-    <string name="direct_room_encryption_enabled_tile_description">Wiadomości w tym pokoju są szyfrowane w trybie punkt-punkt (e2e).</string>
+    <string name="direct_room_encryption_enabled_tile_description">Wiadomości w tym czacie są szyfrowane end-to-end.</string>
     <string name="encryption_enabled_tile_description">Wiadomości w tym pokoju są szyfrowane punkt-punkt (e2e). Możesz dowiedzieć się więcej i zweryfikować użytkowników w ich profilach.</string>
     <string name="encryption_enabled">Szyfrowanie włączone</string>
     <string name="bootstrap_cancel_text">Jeżeli teraz przerwiesz, możesz utracić zaszyfrowane wiadomości oraz dane jeżeli utracisz dostęp do zalogowanych sesji. 
@@ -2377,28 +2372,27 @@
     <string name="login_splash_create_account">Utwórz konto</string>
     <string name="ftue_personalize_skip_this_step">Pomiń ten krok</string>
     <string name="ftue_personalize_submit">Zapisz i kontynuuj</string>
-    <string name="ftue_personalize_complete_subtitle">Twoje ustawienia zostały zapisane.</string>
-    <string name="ftue_personalize_complete_title">Wszystko ustawiłeś!</string>
+    <string name="ftue_personalize_complete_subtitle">Zawsze możesz zmienić swój profil w ustawieniach</string>
+    <string name="ftue_personalize_complete_title">Dobrze wyglądasz!</string>
     <string name="ftue_personalize_lets_go">Chodźmy</string>
-    <string name="ftue_profile_picture_subtitle">Możesz go zmienić w każdym momencie.</string>
+    <string name="ftue_profile_picture_subtitle">Pora nadać tej nazwie jakąś twarz</string>
     <string name="ftue_profile_picture_title">Dodaj obraz profilu</string>
     <string name="ftue_display_name_entry_footer">Możesz zmienić ją później</string>
     <string name="room_message_autocomplete_notification">Powiadomienie pokoju</string>
     <string name="ftue_display_name_entry_title">Wyświetlana nazwa</string>
-    <string name="ftue_display_name_subtitle">Będzie ona widoczna podczas wysyłania wiadomości.</string>
     <string name="ftue_display_name_title">Wybierz wyświetlaną nazwę</string>
-    <string name="ftue_account_created_subtitle">Twoje konto %s zostało utworzone.</string>
+    <string name="ftue_account_created_subtitle">Twoje konto %s zostało utworzone</string>
     <string name="ftue_account_created_congratulations_title">Gratulacje!</string>
     <string name="ftue_account_created_take_me_home">Zabierz mnie do domu</string>
     <string name="ftue_account_created_personalize">Spersonalizuj profil</string>
     <string name="ftue_auth_use_case_connect_to_server">Połącz się z serwerem</string>
     <string name="ftue_auth_use_case_join_existing_server">Chcesz dołączyć do istniejącego serwera\?</string>
-    <string name="ftue_auth_use_case_skip_partial">pominąć to pytanie</string>
-    <string name="ftue_auth_use_case_skip">Nie wiesz jeszcze\? Możesz %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Pomiń to pytanie</string>
+    <string name="ftue_auth_use_case_skip">Nie wiesz jeszcze\? %s</string>
     <string name="ftue_auth_use_case_option_three">Społeczności</string>
     <string name="ftue_auth_use_case_option_two">Zespoły</string>
     <string name="ftue_auth_use_case_option_one">Przyjaciele i rodzina</string>
-    <string name="ftue_auth_use_case_subtitle">Pomożemy Ci się połączyć.</string>
+    <string name="ftue_auth_use_case_subtitle">Pomożemy Ci się połączyć</string>
     <string name="ftue_auth_use_case_title">Z kim będziesz najczęściej rozmawiać\?</string>
     <string name="ftue_auth_carousel_encrypted_body">Szyfrowane od-końca-do-końca i nie wymaga numeru telefonu. Brak reklam i dataminingu.</string>
     <string name="ftue_auth_carousel_control_body">Wybierz, gdzie prowadzone są Twoje rozmowy, dając Ci kontrolę i niezależność. Połączenie przez sieć Matrix.</string>
@@ -2577,7 +2571,6 @@
     <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
     <string name="location_share_live_remaining_time">%1$s pozostało</string>
     <string name="location_share_live_until">Na żywo do %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Przestań udostępniać</string>
     <string name="labs_enable_live_location_summary">Tymczasowa implementacja: lokalizacje pozostaną w historii pokoju</string>
     <string name="labs_enable_live_location">Włącz udostępnianie lokalizacji na żywo</string>
     <string name="location_share_live_view">Pokaż lokalizację na żywo</string>
@@ -2636,8 +2629,8 @@
     <string name="ftue_auth_forgot_password">Zapomniane hasło</string>
     <string name="ftue_auth_email_resend_email">Wyślij wiadomość ponownie</string>
     <string name="ftue_auth_email_verification_footer">Email nie dotarł\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Aby potwierdzić swój email, dotknij przycisk we wiadomości wysłanej na %s</string>
-    <string name="ftue_auth_email_verification_title">Sprawdź swoją skrzynkę email aby dokończyć weryfikację.</string>
+    <string name="ftue_auth_email_verification_subtitle">Wykonaj instrukcje podane w wiadomości wysłanej na %s</string>
+    <string name="ftue_auth_email_verification_title">Potwierdź swój email</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Wyślij kod ponownie</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Kod został wysłany do %s</string>
     <string name="ftue_auth_phone_confirmation_title">Potwierdź swój numer telefonu</string>
@@ -2672,4 +2665,25 @@
     <string name="font_size_section_manually">Ustaw ręcznie</string>
     <string name="font_size_section_auto">Ustaw automatycznie</string>
     <string name="font_size_title">Wybierz rozmiar czcionki</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Automatycznie akceptuj widżety Element Call i przyznaj dostęp do kamery i mikrofonu</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Włącz skróty uprawnień dla Element Call</string>
+    <string name="live_location_labs_promotion_description">Uwaga: to eksperymentalna funkcja wykorzystująca tymczasową implementację. Oznacza to, że nie będzie możliwości usunięcia historii lokalizacji, a zaawansowani użytkownicy będą mogli ją zobaczyć nawet gdy przestaniesz dzielić się lokalizacją na żywo z tym pokojem.</string>
+    <string name="live_location_description">Lokalizacja na żywo</string>
+    <string name="labs_enable_msc3061_share_history_desc">Zapraszając kogoś do zaszyfrowanego pokoju który współdzieli historię, zaszyfrowana historia będzie dla tej osoby widoczna.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Współdzielenie kluczy pokoju dla wcześniejszych wiadomości</string>
+    <string name="verify_invalid_qr_notice">Ten kod QR wygląda na niepoprawny. Spróbuj zweryfikować przy użyciu innej metody.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Dostęp do wcześniejszych zaszyfrowanych wiadomości nie będzie możliwy. Zresetuj bezpieczną kopię zapasową wiadomości oraz klucze weryfikacyjne by zacząć od nowa.</string>
+    <string name="crosssigning_cannot_verify_this_session">Nie udało się zweryfikować tego urządzenia</string>
+    <string name="ftue_auth_terms_subtitle">Zapoznaj się z warunkami i zasadami serwera %s</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Jaki jest adres twojego serwera\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Miejsce na twoje konwersacje</string>
+    <string name="updating_your_data">Aktualizowanie twoich danych…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s i %2$d inny</item>
+        <item quantity="few">%1$s i %2$d inne</item>
+        <item quantity="many">%1$s i %2$d innych</item>
+        <item quantity="other">%1$s i %2$d innych</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s i %2$s</string>
+    <string name="auth_reset_password_error_unverified">Email nie został zweryfikowany, sprawdź swoją skrzynkę</string>
 </resources>

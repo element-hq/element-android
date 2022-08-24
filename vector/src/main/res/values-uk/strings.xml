@@ -111,8 +111,6 @@
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваше запрошення. Причина: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Запрошення від %1$s. Причина: %2$s</string>
     <string name="event_status_sending_message">Надсилання повідомлень…</string>
-    <string name="initial_sync_start_importing_account_groups">Початкова синхронізація:
-\nІмпортування спільнот</string>
     <string name="initial_sync_start_importing_account_left_rooms">Початкова синхронізація:
 \nІмпортування кімнат, які ви залишили</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Початкова синхронізація:
@@ -213,7 +211,6 @@
     <string name="auth_email_already_defined">Ця email адреса вже використовується.</string>
     <string name="auth_forgot_password">Забули пароль?</string>
     <string name="auth_recaptcha_message">Цей домашній сервер хоче переконатися, що ви не робот</string>
-    <string name="auth_reset_password_missing_email">Необхідно ввести е-пошту прив\'язану до вашого облікового запису.</string>
     <string name="auth_reset_password_error_unauthorized">Не вдалося перевірити email: переконайтеся, що ви перейшли за посиланням у листі</string>
     <string name="login_error_invalid_home_server">Введіть дійсний URL</string>
     <string name="login_error_bad_json">Викривлений JSON</string>
@@ -414,7 +411,6 @@
     <string name="command_error">Помилка виконання команди</string>
     <string name="unrecognized_command">Команду %s не розпізнано</string>
     <string name="loading">Завантаження…</string>
-    <string name="groups_header">Спільноти</string>
     <string name="send_bug_report_rage_shake">Струснути пристрій, щоб повідомити про ваду</string>
     <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте розпочати голосовий виклик\?</string>
     <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте розпочати відео виклик\?</string>
@@ -665,7 +661,6 @@
     <string name="invite_friends_rich_title">🔐️ Приєднуйтесь до мене в ${app_name}</string>
     <string name="invite_friends_text">Привіт! Спілкуймося в ${app_name}: %s</string>
     <string name="invite_friends">Запросити друзів</string>
-    <string name="group_all_communities">Всі спільноти</string>
     <string name="settings_show_redacted_summary">Показувати заглушку на місці видалених повідомлень</string>
     <string name="settings_general_title">Загальні</string>
     <string name="send_suggestion_failed">Не вдалось надіслати пропозицію (%s)</string>
@@ -1207,7 +1202,7 @@
     <string name="verification_open_other_to_verify">Використайте чинний сеанс, щоб звірити цей сеанс, таким чином надавши йому доступ до зашифрованих повідомлень.</string>
     <string name="confirm_your_identity_quad_s">Підтвердьте вашу тотожність, звіривши цей вхід та надавши йому доступ до зашифрованих повідомлень.</string>
     <string name="verify_this_session">Звірте новий вхід, що доступається до вашого облікового запису: %1$s</string>
-    <string name="crosssigning_verify_this_session">Звірте цей вхід</string>
+    <string name="crosssigning_verify_this_session">Звірте цей пристрій</string>
     <string name="verification_request_waiting">Очікування…</string>
     <string name="new_session">Новий вхід. Це були ви\?</string>
     <string name="refresh">Оновити</string>
@@ -1227,7 +1222,7 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ви прийняли запрошення для %1$s. Причина: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s приймає запрошення для %2$s. Причина: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Ви заблокували %1$s. Причина: %2$s</string>
-    <string name="notice_room_ban_with_reason">%1$s заблоковано %2$s. Причина: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s блокує %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Ви розблокували %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s розблоковує %2$s. Причина: %3$s</string>
     <string name="notice_room_remove_with_reason_by_you">Ви вилучили %1$s. Причина: %2$s</string>
@@ -1436,11 +1431,11 @@
     </plurals>
     <string name="keys_backup_restore_success_title">Резервну копію відновлено %s!</string>
     <string name="keys_backup_recovery_code_error_decrypt">Не вдалося розшифрувати резервну копію за допомогою цього ключа відновлення: переконайтеся, що ви ввели правильний ключ відновлення.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервери з відповідними літералам IP тепер заблоковано.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервери з відповідними літералам IP тепер заблоковані.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Відповідні сервери %s було вилучено зі списку блокування.</string>
-    <string name="notice_room_server_acl_updated_banned">• Відповідні сервери %s тепер заблоковано.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервери, що з відповідними літералам IP заблоковано.</string>
-    <string name="notice_room_server_acl_set_banned">• Відповідні сервери %s заблоковано.</string>
+    <string name="notice_room_server_acl_updated_banned">• Відповідні сервери %s відтепер заблоковані.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервери з відповідними літералам IP заблоковані.</string>
+    <string name="notice_room_server_acl_set_banned">• Відповідні сервери %s заблоковані.</string>
     <string name="error_opening_banned_room">Неможливо відкрити кімнату, у якій вас заблоковано.</string>
     <string name="room_filtering_footer_open_room_directory">Переглянути каталог кімнат</string>
     <string name="create_room_in_progress">Створення кімнати…</string>
@@ -2293,15 +2288,15 @@
     <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
-    <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
-    <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
+    <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможе знайти кімнату й приєднатись — непотрібно вручну запрошувати всіх. Це можна змінити в налаштуваннях кімнати будь-коли.</string>
+    <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й приєднатись — непотрібно вручну запрошувати всіх. Це можна змінити в налаштуваннях кімнати будь-коли.</string>
     <string name="error_voice_message_cannot_reply_or_edit">Не вдалося відповісти чи редагувати, бо голосове повідомлення активне</string>
     <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив нестабільною.</string>
     <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
 \nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
     <string name="this_space_has_no_rooms_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.</string>
-    <string name="this_space_has_no_rooms_not_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.
-\nУ вас нема дозволу додавати кімнати.</string>
+    <string name="this_space_has_no_rooms_not_admin">Деякі кімнати можуть бути приховані, оскільки вони приватні й потребують запрошення.
+\nУ вас немає дозволу додавати кімнати.</string>
     <string name="space_leave_prompt_msg_as_admin">Ви єдиний адміністратор цього простору. Якщо вийдете, він залишиться без керівництва.</string>
     <string name="space_leave_prompt_msg_private">Ви не зможете приєднатись, поки вас не запросять знову.</string>
     <string name="space_leave_prompt_msg_only_you">Ви єдина особа тут. Якщо ви вийдете, більше ніхто не зможе приєднатись, навіть ви ж.</string>
@@ -2526,7 +2521,6 @@
     <string name="ftue_profile_picture_title">Додати зображення профілю</string>
     <string name="ftue_display_name_entry_footer">Ви можете змінити його пізніше</string>
     <string name="ftue_display_name_entry_title">Показуване ім\'я</string>
-    <string name="ftue_display_name_subtitle">Його буде показано у надісланих повідомленнях.</string>
     <string name="ftue_display_name_title">Виберіть показуване ім\'я</string>
     <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створений</string>
     <string name="ftue_account_created_congratulations_title">Вітаємо!</string>
@@ -2576,7 +2570,6 @@
     <string name="a11y_presence_busy">Зайнятий</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервна копія має дійсний підпис від цього користувача.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Оновлено %1$s тому</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Припинити поширення</string>
     <string name="labs_enable_live_location_summary">Тимчасова реалізація: місця зберігаються в історії кімнат</string>
     <string name="labs_enable_live_location">Увімкнути поширення місцеперебування наживо</string>
     <string name="location_share_live_remaining_time">Залишилося %1$s</string>
@@ -2648,8 +2641,8 @@
     <string name="ftue_auth_forgot_password">Забули пароль</string>
     <string name="ftue_auth_email_verification_footer">Не отримали лист\?</string>
     <string name="ftue_auth_email_resend_email">Повторно надіслати електронний лист</string>
-    <string name="ftue_auth_email_verification_subtitle">Щоб підтвердити свою електронну адресу, торкніться кнопки в електронному листі, який ми щойно надіслали на адресу %s</string>
-    <string name="ftue_auth_email_verification_title">Перейдіть до своєї електронної пошти для підтвердження.</string>
+    <string name="ftue_auth_email_verification_subtitle">Виконайте вказівки надіслані на %s</string>
+    <string name="ftue_auth_email_verification_title">Підтвердьте свою електронну адресу</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Повторно надіслати код</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Код було надіслано на %s</string>
     <string name="ftue_auth_phone_confirmation_title">Підтвердьте свій номер телефону</string>
@@ -2686,4 +2679,25 @@
     <string name="font_size_section_manually">Вибрати вручну</string>
     <string name="font_size_section_auto">Установити автоматично</string>
     <string name="font_size_title">Виберіть розмір шрифту</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Віджети автосхвалення викликів Element і надання доступу до камери/мікрофона</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Увімкнути ярлики дозволів на виклик елемента</string>
+    <string name="live_location_description">Місце перебування наживо</string>
+    <string name="verify_invalid_qr_notice">Цей QR-код має неправильний вигляд. Спробуйте звірити іншим методом.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Ви не зможете отримати доступ до історії зашифрованих повідомлень. Скиньте захищену резервну копію повідомлень і ключі підтвердження, щоб почати заново.</string>
+    <string name="crosssigning_cannot_verify_this_session">Не вдалося звірити цей пристрій</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Яка адреса вашого сервера\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Де відбуватимуться ваші розмови</string>
+    <string name="updating_your_data">Оновлення ваших даних…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s і %2$d інший</item>
+        <item quantity="few">%1$s і %2$d інші</item>
+        <item quantity="many">%1$s і %2$d інших</item>
+        <item quantity="other">%1$s і %2$d інших</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s і %2$s</string>
+    <string name="auth_reset_password_error_unverified">Електронна пошта не підтверджена, перевірте свою поштову скриньку</string>
+    <string name="location_share_loading_map_error">Неможливо завантажити карту
+\nМожливо, цей домашній сервер не налаштовано для показу карт.</string>
+    <string name="a11y_open_settings">Відкрити налаштування</string>
+    <string name="all_chats">Усі бесіди</string>
 </resources>

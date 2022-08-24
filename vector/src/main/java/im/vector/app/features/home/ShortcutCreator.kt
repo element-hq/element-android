@@ -24,8 +24,8 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import im.vector.app.BuildConfig
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.MainActivity
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -35,13 +35,15 @@ import javax.inject.Inject
 private val useAdaptiveIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 private const val adaptiveIconSizeDp = 108
 private const val adaptiveIconOuterSidesDp = 18
-private const val directShareCategory = BuildConfig.APPLICATION_ID + ".SHORTCUT_SHARE"
 
 class ShortcutCreator @Inject constructor(
         private val context: Context,
         private val avatarRenderer: AvatarRenderer,
-        private val dimensionConverter: DimensionConverter
+        private val dimensionConverter: DimensionConverter,
+        buildMeta: BuildMeta,
 ) {
+
+    private val directShareCategory = buildMeta.applicationId + ".SHORTCUT_SHARE"
     private val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
     private val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
     private val iconSize by lazy {

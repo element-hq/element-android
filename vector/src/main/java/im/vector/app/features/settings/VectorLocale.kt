@@ -19,9 +19,9 @@ package im.vector.app.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import androidx.core.content.edit
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -53,12 +53,14 @@ object VectorLocale {
         private set
 
     private lateinit var context: Context
+    private lateinit var buildMeta: BuildMeta
 
     /**
      * Init this object.
      */
-    fun init(context: Context) {
+    fun init(context: Context, buildMeta: BuildMeta) {
         this.context = context
+        this.buildMeta = buildMeta
         val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
@@ -174,7 +176,7 @@ object VectorLocale {
                         .setScript(script)
                         .build()
             } catch (exception: IllformedLocaleException) {
-                if (BuildConfig.DEBUG) {
+                if (buildMeta.isDebug) {
                     throw exception
                 }
                 // Ignore this locale in production

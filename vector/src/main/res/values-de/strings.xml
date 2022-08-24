@@ -54,8 +54,6 @@
 \nImportiere eingeladene Räume</string>
     <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation:
 \nImportiere verlassene Räume</string>
-    <string name="initial_sync_start_importing_account_groups">Erste Synchronisation:
-\nImportiere Communities</string>
     <string name="initial_sync_start_importing_account_data">Erste Synchronisation:
 \nImportiere Benutzerdaten</string>
     <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
@@ -293,7 +291,6 @@
     <string name="auth_email_already_defined">Diese E-Mail-Adresse wird bereits verwendet.</string>
     <string name="auth_forgot_password">Passwort vergessen?</string>
     <string name="auth_recaptcha_message">Dieser Homeserver möchte sicherstellen, dass du kein Roboter bist</string>
-    <string name="auth_reset_password_missing_email">Die E-Mail-Adresse, die mit deinem Account verknüpft ist, muss eingegeben werden.</string>
     <string name="auth_reset_password_error_unauthorized">Verifizierung der E-Mail-Adresse ist fehlgeschlagen. Stelle sicher, dass du den Link in der E-Mail geöffnet hast</string>
     <string name="login_error_invalid_home_server">Bitte eine gültige URL eingeben</string>
     <string name="login_error_bad_json">Fehlerhaftes JSON</string>
@@ -499,7 +496,6 @@
     <string name="notification_noisy">Laut</string>
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
     <string name="loading">Lädt…</string>
-    <string name="groups_header">Communities</string>
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="room_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Raum und hindert sie am erneuten Beitritt.</string>
@@ -875,7 +871,6 @@
     <string name="action_change">Ändern</string>
     <string name="change_room_directory_network">Netzwerk wechseln</string>
     <string name="please_wait">Bitte warten…</string>
-    <string name="group_all_communities">Alle Communities</string>
     <string name="room_preview_no_preview">Für diesen Raum kann keine Vorschau angezeigt werden</string>
     <string name="fab_menu_create_room">Räume</string>
     <string name="fab_menu_create_chat">Direktnachrichten</string>
@@ -1092,7 +1087,7 @@
     <string name="login_reset_password_email_hint">E-Mail</string>
     <string name="login_reset_password_password_hint">Neues Passwort</string>
     <string name="login_reset_password_warning_title">Achtung!</string>
-    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Schlüssek zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte die Schlüsselsicherung ein oder exportiere deine Raumschlüssel aus einer anderen Sitzung, bevor du dein Passwort zurücksetzt.</string>
+    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Schlüssel zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte die Schlüsselsicherung ein oder exportiere deine Raumschlüssel aus einer anderen Sitzung, bevor du dein Passwort zurücksetzt.</string>
     <string name="login_reset_password_warning_submit">Fortfahren</string>
     <string name="login_reset_password_error_not_found">Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft</string>
     <string name="login_reset_password_mail_confirmation_title">Prüfe deinen Posteingang</string>
@@ -1297,7 +1292,7 @@
         <item quantity="one">Eine aktive Sitzung</item>
         <item quantity="other">%d aktive Sitzungen</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
+    <string name="crosssigning_verify_this_session">Verifiziere dieses Gerät</string>
     <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
     <string name="verification_profile_verify">Verifizieren</string>
     <string name="verification_profile_verified">Verifiziert</string>
@@ -1520,7 +1515,7 @@
     <string name="secure_backup_banner_setup_line1">Backup</string>
     <string name="secure_backup_banner_setup_line2">Absicherung gegen den Verlust verschlüsselter Nachrichten</string>
     <string name="secure_backup_setup">Richte Backup ein</string>
-    <string name="event_redacted">Nachricht gelöscht</string>
+    <string name="event_redacted">Nachricht entfernt</string>
     <string name="settings_show_redacted">Gelöschte Nachrichten zeigen</string>
     <string name="settings_show_redacted_summary">Zeigt einen Platzhalter für gelöschte Nachrichten an</string>
     <string name="labs_show_unread_notifications_as_tab">Dedizierten Tab für ungelesene Nachrichten zur Hauptansicht hinzufügen</string>
@@ -2367,7 +2362,7 @@
     <string name="ftue_auth_use_case_join_existing_server">Möchtest du einem existierenden Server beitreten\?</string>
     <string name="ftue_auth_use_case_option_three">Communities</string>
     <string name="ftue_auth_use_case_option_two">Teams</string>
-    <string name="ftue_auth_use_case_subtitle">Wir helfen dir, in Verbindung zu kommen.</string>
+    <string name="ftue_auth_use_case_subtitle">Wir helfen dir, in Verbindung zu kommen</string>
     <string name="ftue_auth_use_case_title">Mit wem wirst du am meisten chatten\?</string>
     <string name="action_thread_copy_link_to_thread">Link zu Thread kopieren</string>
     <string name="action_view_threads">Threads anzeigen</string>
@@ -2375,8 +2370,8 @@
     <string name="location_timeline_failed_to_load_map">Laden der Karte fehlgeschlagen</string>
     <string name="a11y_static_map_image">Karte</string>
     <string name="labs_enable_thread_messages_desc">Hinweis: App wird neugestartet</string>
-    <string name="ftue_auth_use_case_skip_partial">diese Frage überspringen</string>
-    <string name="ftue_auth_use_case_skip">Noch nicht sicher\? Du kannst %s</string>
+    <string name="ftue_auth_use_case_skip_partial">Diese Frage überspringen</string>
+    <string name="ftue_auth_use_case_skip">Noch nicht sicher\? %s</string>
     <string name="ftue_auth_use_case_option_one">Freunde und Familie</string>
     <string name="reply_in_thread">In Thread antworten</string>
     <string name="search_thread_from_a_thread">Aus einem Thread</string>
@@ -2448,7 +2443,6 @@
     <string name="screen_sharing_notification_description">Bildschirmfreigabe ist in Arbeit</string>
     <string name="screen_sharing_notification_title">${app_name} Bildschirmfreigabe</string>
     <string name="live_location_bottom_sheet_last_updated_at">Aktualisiert vor %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Teilen beenden</string>
     <string name="labs_enable_live_location">Aktiviere Live-Standortfreigabe</string>
     <string name="live_location_sharing_notification_description">Standortfreigabe ist in Arbeit</string>
     <string name="live_location_sharing_notification_title">${app_name} Live-Standort</string>
@@ -2471,7 +2465,7 @@
     <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
     <string name="settings_show_latest_profile_description">Die neuesten Profilinformationen (Avatar und Anzeigename) für alle Nachrichten anzeigen.</string>
     <string name="settings_show_latest_profile">Aktuelle Benutzerinformationen anzeigen</string>
-    <string name="ftue_personalize_complete_title">Du kannst loslegen!</string>
+    <string name="ftue_personalize_complete_title">Sieht gut aus!</string>
     <string name="ftue_display_name_title">einen Anzeigenamen wählen</string>
     <string name="ftue_account_created_take_me_home">Zurück zum Home-Screen</string>
     <string name="send_feedback_threads_title">Threads Beta-Feedback</string>
@@ -2516,17 +2510,66 @@
     <string name="sent_live_location">teilten ihren Live-Standort</string>
     <string name="ftue_personalize_skip_this_step">Schritt überspringen</string>
     <string name="ftue_personalize_submit">Speichern und fortfahren</string>
-    <string name="ftue_personalize_complete_subtitle">Deine Einstellungen wurden gespeichert.</string>
+    <string name="ftue_personalize_complete_subtitle">Öffne die Einstellungen jederzeit um dein Profil zu aktualisieren</string>
     <string name="ftue_personalize_lets_go">Los geht\'s</string>
-    <string name="ftue_profile_picture_subtitle">Du kannst das jederzeit ändern.</string>
+    <string name="ftue_profile_picture_subtitle">Zeit, dem Namen ein Gesicht zu geben</string>
     <string name="ftue_profile_picture_title">Profilbild hinzufügen</string>
     <string name="ftue_display_name_entry_footer">Du kannst dies später ändern</string>
     <string name="ftue_display_name_entry_title">Anzeigename</string>
-    <string name="ftue_display_name_subtitle">Dies wird angezeigt, wenn Du Nachrichten sendest.</string>
-    <string name="ftue_account_created_subtitle">Dein Konto %s wurde erstellt.</string>
+    <string name="ftue_account_created_subtitle">Dein Konto %s wurde erstellt</string>
     <string name="ftue_account_created_congratulations_title">Herzlichen Glückwunsch!</string>
     <string name="ftue_account_created_personalize">Profil personalisieren</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} ist auch für den Arbeitsplatz geeignet. Die sichersten Organisationen der Welt vertrauen darauf.</string>
     <string name="send_feedback_threads_info">Threads sind noch in Arbeit, und es stehen neue, aufregende Funktionen an, wie z. B. verbesserte Benachrichtigungen. Wir würden uns sehr über Dein Feedback freuen!</string>
-    <string name="direct_room_encryption_enabled_tile_description_future">Nachrichten in diesem Chat werden End-zu-End-Verschlüsselt</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Nachrichten in diesem Chat werden Ende-zu-Ende-verschlüsselt.</string>
+    <string name="ftue_auth_captcha_title">Bist du ein Mensch\?</string>
+    <string name="ftue_auth_terms_subtitle">Bitte lies dir %ss Bedingungen und Richtlinien durch</string>
+    <string name="ftue_auth_terms_title">Server-Richtlinien</string>
+    <string name="ftue_auth_email_verification_subtitle">Folge den Anweisungen, die an %s gesendet wurden</string>
+    <string name="ftue_auth_email_verification_title">E-Mail bestätigen</string>
+    <string name="poll_undisclosed_not_ended">Ergebnisse sind nach Beenden der Abstimmung sichtbar</string>
+    <string name="ftue_auth_reset_password_breaker_title">Prüfe deine E-Mails.</string>
+    <string name="ftue_auth_reset_password">Passwort zurücksetzen</string>
+    <string name="ftue_auth_new_password_subtitle">Gib mindestens 8 Zeichen ein.</string>
+    <string name="ftue_auth_email_entry_title">E-Mail-Adresse</string>
+    <string name="ftue_auth_phone_entry_title">Telefonnummer</string>
+    <string name="ftue_auth_email_resend_email">Erneut senden</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s wird dir einen Bestätigungslink schicken</string>
+    <string name="ftue_auth_email_title">Deine E-Mail-Adresse</string>
+    <string name="ftue_auth_new_password_entry_title">Neues Passwort</string>
+    <string name="ftue_auth_new_password_title">Wähle ein neues Passwort</string>
+    <string name="ftue_auth_sign_out_all_devices">Alle Geräte abmelden</string>
+    <string name="ftue_auth_phone_confirmation_title">Bestätige deine Telefonnummer</string>
+    <string name="ftue_auth_email_verification_footer">Keine E-Mail erhalten\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Folge den Anweisungen, die an %s gesendet wurden</string>
+    <string name="permalink_unsupported_groups">Kann Link nicht öffnen: Communities wurden durch Spaces ersetzt</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Raumschlüssel für vorherige Nachrichten teilen</string>
+    <string name="labs_enable_msc3061_share_history_desc">Beim Einladen in einen Raum mit sichtbarem Verlauf wird der verschlüsselte Verlauf sichtbar sein.</string>
+    <string name="live_location_description">Live-Standort</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d Nachricht gelöscht</item>
+        <item quantity="other">%d Nachrichten gelöscht</item>
+    </plurals>
+    <string name="labs_enable_element_call_permission_shortcuts">Keine Element Call-Berechtigungsabfragen</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Bestätige automatisch Element Call-Widgets und erlaube Kamera- und Mikrofonzugriff</string>
+    <string name="create_room_action_go">Los</string>
+    <string name="ftue_auth_create_account_edit_server_selection">ändern</string>
+    <string name="ftue_auth_create_account_sso_section_header">oder</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Das Zuhause deiner Gespräche</string>
+    <string name="ftue_auth_create_account_choose_server_header">Das zukünftige Zuhause für deine Gespräche</string>
+    <string name="font_size_use_system">Systemstandard nutzen</string>
+    <string name="font_size_section_auto">Automatisch festlegen</string>
+    <string name="font_size_title">Schriftgröße wählen</string>
+    <string name="font_size_section_manually">Manuell wählen</string>
+    <string name="search_space_two_parents">%1$s und %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-Mail nicht bestätigt, prüfe deinen Posteingang</string>
+    <string name="ftue_auth_welcome_back_title">Willkommen zurück!</string>
+    <string name="ftue_auth_forgot_password">Passwort vergessen</string>
+    <string name="ftue_auth_login_username_entry">Benutzername / E-Mail / Telefon</string>
+    <string name="ftue_auth_create_account_title">Erstelle dein Konto</string>
+    <string name="ftue_auth_choose_server_entry_hint">Serveradresse</string>
+    <string name="ftue_auth_choose_server_subtitle">Wie lautet die Adresse deines Servers\? Das wird eine Art Zuhause für deine Daten</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Wie lautet die Adresse deines Servers\?</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Muss 8 oder mehr Zeichen umfassen</string>
+    <string name="ftue_auth_choose_server_title">Wähle deinen Server</string>
 </resources>

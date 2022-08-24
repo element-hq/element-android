@@ -52,8 +52,6 @@
 \nPokud jste se připojili k mnoha místnostem, může to chvíli trvat</string>
     <string name="initial_sync_start_importing_account_left_rooms">Úvodní synchronizace:
 \nImportuji místnost, jež jste opustili</string>
-    <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace:
-\nImportuji skupiny</string>
     <string name="initial_sync_start_importing_account_data">Úvodní synchronizace:
 \nImportuji data účtu</string>
     <string name="event_status_sending_message">Odesílám zprávu…</string>
@@ -279,7 +277,6 @@
     <string name="matrix_only_filter">Pouze kontakty Matrix</string>
     <string name="no_result_placeholder">Žádné výsledky</string>
     <string name="rooms_header">Místnosti</string>
-    <string name="groups_header">Komunity</string>
     <string name="send_bug_report_include_logs">Odeslat záznamy</string>
     <string name="send_bug_report_include_crash_logs">Odeslat záznamy zřícení</string>
     <string name="send_bug_report_include_screenshot">Odeslat screenshot</string>
@@ -311,7 +308,6 @@
     <string name="auth_email_already_defined">Tato e-mailová adresa je již zadána.</string>
     <string name="auth_forgot_password">Zapomenuté heslo?</string>
     <string name="auth_recaptcha_message">Tento domovský server by se rád přesvědčil, že nejste robot</string>
-    <string name="auth_reset_password_missing_email">Musíte zadat e-mailovou adresu spojenou s vaším účtem.</string>
     <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste klepli na zaslaný odkaz</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
     <string name="login_error_bad_json">Poškozený JSON</string>
@@ -948,7 +944,6 @@
     <string name="action_change">Změnit</string>
     <string name="change_room_directory_network">Změnit síť</string>
     <string name="please_wait">Prosím, čekejte…</string>
-    <string name="group_all_communities">Všechny komunity</string>
     <string name="room_preview_no_preview">Nelze provést náhled této místnosti</string>
     <string name="fab_menu_create_room">Místnosti</string>
     <string name="fab_menu_create_chat">Přímé zprávy</string>
@@ -1321,7 +1316,7 @@
         <item quantity="few">%d aktivní relace</item>
         <item quantity="other">%d aktivních relací</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Ověřit tuto relaci</string>
+    <string name="crosssigning_verify_this_session">Ověřit toto zařízení</string>
     <string name="verification_open_other_to_verify">Pro ověření této relace použijte existující relaci, a tím ji udělíte přístup k zašifrovaným zprávám.</string>
     <string name="verification_profile_verify">Ověřit</string>
     <string name="verification_profile_verified">Ověřeno</string>
@@ -2479,7 +2474,6 @@
     <string name="ftue_profile_picture_title">Přidat profilový obrázek</string>
     <string name="ftue_display_name_entry_footer">Později to můžete změnit</string>
     <string name="ftue_display_name_entry_title">Zobrazované jméno</string>
-    <string name="ftue_display_name_subtitle">Toto se zobrazí při odesílání zpráv.</string>
     <string name="ftue_display_name_title">Zvolte si zobrazované jméno</string>
     <string name="ftue_account_created_subtitle">Váš účet %s byl založen</string>
     <string name="ftue_account_created_congratulations_title">Gratulujeme!</string>
@@ -2529,7 +2523,6 @@
     <string name="a11y_presence_busy">Zaneprázdněn</string>
     <string name="keys_backup_settings_signature_from_this_user">Záloha má platný podpis tohoto uživatele.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Aktualizována před %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Ukončit sdílení</string>
     <string name="labs_enable_live_location_summary">Dočasná implementace: polohy přetrvávají v historii místností</string>
     <string name="labs_enable_live_location">Povolit sdílení polohy živě</string>
     <string name="location_share_live_remaining_time">zbývá %1$s</string>
@@ -2599,8 +2592,8 @@
     <string name="ftue_auth_forgot_password">Zapomenuté heslo</string>
     <string name="ftue_auth_email_resend_email">Znovu poslat e-mail</string>
     <string name="ftue_auth_email_verification_footer">Nepřišel vám e-mail\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Pro potvrzení e-mailu klepněte na tlačítko ve zprávě, kterou jsme právě odeslali na adresu %s</string>
-    <string name="ftue_auth_email_verification_title">Pro ověření si zkontrolujte svůj e-mail.</string>
+    <string name="ftue_auth_email_verification_subtitle">Postupujte podle pokynů zaslaných na adresu %s</string>
+    <string name="ftue_auth_email_verification_title">Ověřte svůj e-mail</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Znovu odeslat kód</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Kód byl odeslán na %s</string>
     <string name="ftue_auth_phone_confirmation_title">Potvrďte své telefonní číslo</string>
@@ -2637,4 +2630,24 @@
     <string name="font_size_section_manually">Zvolit ručně</string>
     <string name="font_size_section_auto">Nastavit automaticky</string>
     <string name="font_size_title">Volba velikosti písma</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaticky schvalovat widgety Element hovorů a udělit přístup ke kameře/mikrofonu</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Zapnout zkratky pro povolení Element hovorů</string>
+    <string name="live_location_description">Poloha živě</string>
+    <string name="verify_invalid_qr_notice">Tento kód QR vypadá chybně. Zkuste provést ověření jinou metodou.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Nebudete mít přístup k historii zašifrovaných zpráv. Obnovte zálohování zabezpečených zpráv a ověřovací klíče a začněte znovu.</string>
+    <string name="crosssigning_cannot_verify_this_session">Nepodařilo se ověřit toto zařízení</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Jaká je adresa vašeho serveru\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Kde žijí vaše konverzace</string>
+    <string name="updating_your_data">Aktualizace vašich dat…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s a %2$d další</item>
+        <item quantity="few">%1$s a %2$d další</item>
+        <item quantity="other">%1$s a %2$d dalších</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s a %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-mail nebyl ověřen, zkontrolujte si schránku</string>
+    <string name="location_share_loading_map_error">Nelze načíst mapu
+\nTento domovský server nemusí být nakonfigurován pro zobrazování map.</string>
+    <string name="a11y_open_settings">Otevřít nastavení</string>
+    <string name="all_chats">Všechny konverzace</string>
 </resources>

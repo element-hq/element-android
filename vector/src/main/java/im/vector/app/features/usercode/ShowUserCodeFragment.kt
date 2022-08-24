@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
@@ -32,9 +33,11 @@ import im.vector.app.databinding.FragmentUserCodeShowBinding
 import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class ShowUserCodeFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentUserCodeShowBinding>() {
+@AndroidEntryPoint
+class ShowUserCodeFragment :
+        VectorBaseFragment<FragmentUserCodeShowBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserCodeShowBinding {
         return FragmentUserCodeShowBinding.inflate(inflater, container, false)
@@ -67,7 +70,7 @@ class ShowUserCodeFragment @Inject constructor(
         sharedViewModel.observeViewEvents {
             if (it is UserCodeShareViewEvents.SharePlainText) {
                 startSharePlainTextIntent(
-                        fragment = this,
+                        context = requireContext(),
                         activityResultLauncher = null,
                         chooserTitle = it.title,
                         text = it.text,

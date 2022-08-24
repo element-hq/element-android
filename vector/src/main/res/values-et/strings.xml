@@ -52,8 +52,6 @@
 \nImpordin kutsutud jututubasid</string>
     <string name="initial_sync_start_importing_account_left_rooms">Esmane laadimine:
 \nImpordin lahkutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_groups">Esmane laadimine:
-\nImpordin kogukondi</string>
     <string name="initial_sync_start_importing_account_data">Esmane laadimine:
 \nImpordin kontoandmeid</string>
     <string name="event_status_sending_message">Saadan sõnumit…</string>
@@ -295,7 +293,6 @@
     <string name="matrix_only_filter">Vaid need, kellel on Matrixi konto</string>
     <string name="no_result_placeholder">Tulemusi ei ole</string>
     <string name="rooms_header">Jututoad</string>
-    <string name="groups_header">Kogukonnad</string>
     <string name="send_bug_report_include_logs">Saada logikirjed</string>
     <string name="send_bug_report_include_crash_logs">Saada kokkujooksmise logikirjed</string>
     <string name="send_bug_report_include_screenshot">Saada ekraanipilt</string>
@@ -336,7 +333,6 @@
     <string name="auth_email_already_defined">Selline e-posti aadress on juba kasutusel.</string>
     <string name="auth_forgot_password">Kas unustasid oma salasõna\?</string>
     <string name="auth_recaptcha_message">See koduserver soovib olla kindel, et sa ei ole robot</string>
-    <string name="auth_reset_password_missing_email">Sinu kontoga seotud e-posti aadress peab olema sisestatud.</string>
     <string name="auth_reset_password_error_unauthorized">E-posti aadressi verifitseerimine ei õnnestunud. Palun kontrolli, et sa avasid kirjas leidunud lingi</string>
     <string name="auth_accept_policies">Palun loe läbi ja nõustu koduserveri kasutusjuhendiga:</string>
     <string name="login_error_invalid_home_server">Palun sisesta korrektne URL</string>
@@ -519,7 +515,6 @@
     <string name="action_change">Muuda</string>
     <string name="change_room_directory_network">Vaheta võrku</string>
     <string name="please_wait">Palun oota…</string>
-    <string name="group_all_communities">Kõik kogukonnad</string>
     <string name="room_preview_no_preview">Sellel jututoal puudub eelvaade</string>
     <string name="fab_menu_create_room">Jututoad</string>
     <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
@@ -720,7 +715,7 @@
         <item quantity="one">%d aktiivne sessioon</item>
         <item quantity="other">%d aktiivset sessiooni</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Verifitseeri see sisselogimissessioon</string>
+    <string name="crosssigning_verify_this_session">Verifitseeri see seade</string>
     <string name="verification_open_other_to_verify">Kasuta olemasolevat sessiooni selle sessiooni verifitseerimiseks, andes sellega ligipääsu krüptitud sõnumitele.</string>
     <string name="verification_profile_verify">Verifitseeri</string>
     <string name="verification_profile_verified">Verifitseeritud</string>
@@ -2432,7 +2427,6 @@
     <string name="ftue_profile_picture_title">Lisa profiilipilt</string>
     <string name="ftue_display_name_entry_footer">Sa võid seda hiljem muuta</string>
     <string name="ftue_display_name_entry_title">Kuvatav nimi</string>
-    <string name="ftue_display_name_subtitle">Seda näidatakse sõnumite saatmisel.</string>
     <string name="ftue_display_name_title">Vali kuvatav nimi</string>
     <string name="ftue_account_created_subtitle">Sinu kasutajakonto %s on nüüd olemas</string>
     <string name="ftue_account_created_congratulations_title">Õnnitlused!</string>
@@ -2482,7 +2476,6 @@
     <string name="a11y_presence_busy">Hõivatud</string>
     <string name="keys_backup_settings_signature_from_this_user">Varukoopial on kehtiv allkiri sellelt kasutajalt.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Uuendamise välp: %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Lõpeta asukoha jagamine</string>
     <string name="labs_enable_live_location_summary">Tegemist on ajutise ja esialgse lahendusega: asukohad on jututoa ajaloos näha</string>
     <string name="labs_enable_live_location">Luba asukohta jagada reaalajas</string>
     <string name="location_share_live_remaining_time">Jäänud on %1$s</string>
@@ -2541,8 +2534,8 @@
     <string name="ftue_auth_forgot_password">Kas unustasid oma salasõna</string>
     <string name="ftue_auth_email_resend_email">Saada e-kiri uuesti</string>
     <string name="ftue_auth_email_verification_footer">Sa ei saanud e-kirja kätte\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Oma e-posti aadressi kinnitamiseks klõpsi selles kirjas leiduvat nuppu, mille just saatsime %s aadressile</string>
-    <string name="ftue_auth_email_verification_title">Kinnitamiseks vaata oma e-kirju.</string>
+    <string name="ftue_auth_email_verification_subtitle">Palun järgi juhtnööre, mille just saatsime %s aadressile</string>
+    <string name="ftue_auth_email_verification_title">Verifitseeri oma e-posti aadress</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Saada kinnituskood uuesti</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Kinnituskoodi saatsime telefoninumbrile %s</string>
     <string name="ftue_auth_phone_confirmation_title">Kinnita oma telefoninumber</string>
@@ -2579,4 +2572,23 @@
     <string name="font_size_section_manually">Vali ise</string>
     <string name="font_size_section_auto">Määra automaatselt</string>
     <string name="font_size_title">Vali kirjatüübi suurus</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaatsel luba kasutada Element\'i põhiste kõnede vidinaid ning luba ligipääs kaamerale ja mikrofonile</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Võta kasutsele Element\'i põhiste kõnede õiguste kiirnupud</string>
+    <string name="live_location_description">Asukoht reaalajas</string>
+    <string name="verify_invalid_qr_notice">See QR-kood tundub olema vigane. Palun proovi verifitseerimist mõne muu meetodiga.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Sa ei saa lugeda varasemaid krüptitud sõnumeid. Uuesti alustamiseks seadista varundusvõtmed ja verifitseerimisvõtmed.</string>
+    <string name="crosssigning_cannot_verify_this_session">Selle seadme verifitseerimine ei õnnestunud</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Mis on sinu koduserveri aadress\?</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Kuidas sinu vestlusi hallatakse</string>
+    <string name="updating_your_data">Sinu andmed on uuendamisel…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s ja veel %2$d</item>
+        <item quantity="other">%1$s ja veel %2$d muud</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s ja %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-posti aadress on kinnitamata, palun vaata oma saabunud e-kirju</string>
+    <string name="location_share_loading_map_error">Kaardi laadimine ei õnnestu.
+\nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
+    <string name="a11y_open_settings">Ava seadistused</string>
+    <string name="all_chats">Kõik vestlused</string>
 </resources>

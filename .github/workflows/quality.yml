@@ -7,10 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   check:
@@ -51,8 +49,8 @@ jobs:
       - name: Run lint
         # Not always, if ktlint or detekt fail, avoid running the long lint check.
         run: |
-          ./gradlew lintGplayRelease --stacktrace $CI_GRADLE_ARG_PROPERTIES
-          ./gradlew lintFdroidRelease --stacktrace $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -68,11 +66,13 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.1.1
+        uses: danger/danger-js@11.1.2
         with:
           args: "--dangerfile tools/danger/dangerfile-lint.js"
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          # Fallback for forks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:

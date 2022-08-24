@@ -145,6 +145,7 @@
             app:layout_constraintTop_toBottomOf="@id/serverSelectionSpacing">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createAccountEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionNext"
@@ -186,6 +187,7 @@
             app:layout_constraintTop_toBottomOf="@id/entrySpacing">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createAccountPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionDone"

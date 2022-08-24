@@ -53,8 +53,6 @@
 \nPo importohen dhoma me ftesë</string>
     <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi fillestar:
 \nPo importohen dhoma të braktisura</string>
-    <string name="initial_sync_start_importing_account_groups">Njëkohësimi fillestar:
-\nPo importohen bashkësi</string>
     <string name="initial_sync_start_importing_account_data">Njëkohësimi fillestar:
 \nPo importohet të dhëna llogarie</string>
     <string name="event_status_sending_message">Po dërgohet mesazh…</string>
@@ -266,7 +264,6 @@
     <string name="matrix_only_filter">Vetëm kontakte të Matrix-it</string>
     <string name="no_result_placeholder">S’ka përfundime</string>
     <string name="rooms_header">Dhoma</string>
-    <string name="groups_header">Bashkësi</string>
     <string name="send_bug_report_include_logs">Dërgo regjistra</string>
     <string name="send_bug_report_include_crash_logs">Dërgoni regjistrime vithisjesh</string>
     <string name="send_bug_report_include_screenshot">Dërgo foto ekrani</string>
@@ -293,7 +290,6 @@
     <string name="auth_email_already_defined">Kjo adresë email është e përkufizuar tashmë.</string>
     <string name="auth_forgot_password">Harruat fjalëkalimin?</string>
     <string name="auth_recaptcha_message">Ky shërbyes Home do të donte të sigurohej se s’jeni robot</string>
-    <string name="auth_reset_password_missing_email">Duhet dhënë adresa email e lidhur me llogarinë tuaj.</string>
     <string name="login_error_invalid_home_server">Ju lutemi, jepni një URL të vlefshme</string>
     <string name="login_error_bad_json">JSON e keqformuar</string>
     <string name="login_error_not_json">S’përmbante JSON të vlefshëm</string>
@@ -871,7 +867,6 @@
     <string name="action_change">Ndryshoje</string>
     <string name="change_room_directory_network">Ndryshoni rrjetin</string>
     <string name="please_wait">Ju lutemi, pritni…</string>
-    <string name="group_all_communities">Krejt Bashkësitë</string>
     <string name="room_preview_no_preview">Kjo dhomë s’mund të parashihet</string>
     <string name="fab_menu_create_room">Dhoma</string>
     <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
@@ -2423,7 +2418,6 @@
     <string name="ftue_profile_picture_title">Shtoni një foto profili</string>
     <string name="ftue_display_name_entry_footer">Këtë mund ta ndryshoni më vonë</string>
     <string name="ftue_display_name_entry_title">Emër Në Ekran</string>
-    <string name="ftue_display_name_subtitle">Kjo do të shfaqet kur dërgoni mesazhe.</string>
     <string name="ftue_display_name_title">Zgjidhni një emër për në ekran</string>
     <string name="ftue_account_created_subtitle">Llogaria juaj %s u krijua.</string>
     <string name="ftue_account_created_congratulations_title">Përgëzime!</string>

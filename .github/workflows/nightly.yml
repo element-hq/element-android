@@ -6,10 +6,8 @@ on:
     - cron: "0 4 * * *"
 
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   nightly:
@@ -40,7 +38,7 @@ jobs:
           yes n | towncrier build --version nightly
       - name: Build and upload Gplay Nightly APK
         run: |
-          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES --stacktrace
+          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_NIGHTLY_KEYID: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYID }}
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}

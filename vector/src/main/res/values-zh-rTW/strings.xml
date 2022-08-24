@@ -52,8 +52,6 @@
 \n正在匯入已邀請的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在匯入已離開的聊天室</string>
-    <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在匯入社群</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在匯入帳號資料</string>
     <string name="notice_room_update">%s 已升級此聊天室。</string>
@@ -264,7 +262,6 @@
     <string name="matrix_only_filter">僅 Matrix 聯絡人</string>
     <string name="no_result_placeholder">沒有結果</string>
     <string name="rooms_header">聊天室</string>
-    <string name="groups_header">社群</string>
     <string name="send_bug_report_include_logs">傳送記錄</string>
     <string name="send_bug_report_include_crash_logs">傳送當機紀錄</string>
     <string name="send_bug_report_include_screenshot">傳送螢幕截圖</string>
@@ -298,7 +295,6 @@
     <string name="auth_email_already_defined">此電子郵件位址已經被定義。</string>
     <string name="auth_forgot_password">忘記密碼？</string>
     <string name="auth_recaptcha_message">這個家伺服器想要確定您不是機器人</string>
-    <string name="auth_reset_password_missing_email">必須輸入和您帳號關聯的電子郵件地址。</string>
     <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
     <string name="login_error_invalid_home_server">請輸入有效的網址</string>
     <string name="login_error_bad_json">異常的 JSON</string>
@@ -858,7 +854,6 @@
     <string name="action_change">變更</string>
     <string name="change_room_directory_network">變更網路</string>
     <string name="please_wait">請稍候……</string>
-    <string name="group_all_communities">所有社群</string>
     <string name="room_preview_no_preview">無法預覽此聊天室</string>
     <string name="fab_menu_create_room">聊天室</string>
     <string name="fab_menu_create_chat">直接訊息</string>
@@ -1273,7 +1268,7 @@
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d 活躍的工作階段</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">驗證此登入</string>
+    <string name="crosssigning_verify_this_session">驗證此裝置</string>
     <string name="verification_open_other_to_verify">使用既有的工作階段來驗證這個，讓它可以存取已加密的訊息。</string>
     <string name="verification_profile_verify">驗證</string>
     <string name="verification_profile_verified">已驗證</string>
@@ -1304,7 +1299,7 @@
         <item quantity="other">使用原始大小傳送圖片</item>
     </plurals>
     <string name="delete_event_dialog_title">確認移除</string>
-    <string name="delete_event_dialog_content">您確定您想要移除（刪除）此活動嗎？注意，如果您刪除聊天室名稱或變更主題，則可能會撤銷變更。</string>
+    <string name="delete_event_dialog_content">您確定您想要移除（刪除）此活動嗎？注意，如果您刪除聊天室名稱或主題的變更，變更會被撤銷。</string>
     <string name="delete_event_dialog_reason_checkbox">包含理由</string>
     <string name="delete_event_dialog_reason_hint">修改原因</string>
     <string name="event_redacted_by_user_reason_with_reason">被使用者刪除的活動，理由：%1$s</string>
@@ -2293,9 +2288,9 @@
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
-    <string name="closed_poll_option_title">已關閉投票</string>
+    <string name="closed_poll_option_title">封闭式投票</string>
     <string name="open_poll_option_description">投票者在投票後可以立刻看到投票結果</string>
-    <string name="open_poll_option_title">開啟投票</string>
+    <string name="open_poll_option_title">開放式投票</string>
     <string name="poll_type_title">投票類型</string>
     <string name="edit_poll_title">編輯投票</string>
     <string name="poll_no_votes_cast">沒有投票</string>
@@ -2385,7 +2380,6 @@
     <string name="ftue_profile_picture_title">新增個人資訊照片</string>
     <string name="ftue_display_name_entry_footer">您可以在稍後變更這個</string>
     <string name="ftue_display_name_entry_title">顯示名稱</string>
-    <string name="ftue_display_name_subtitle">這將會在您傳送訊息時顯示。</string>
     <string name="ftue_display_name_title">選擇顯示名稱</string>
     <string name="ftue_account_created_subtitle">您的帳號 %s 已建立</string>
     <string name="ftue_account_created_congratulations_title">恭喜！</string>
@@ -2435,7 +2429,6 @@
     <string name="a11y_presence_busy">忙碌</string>
     <string name="keys_backup_settings_signature_from_this_user">備份具有來自該使用者的有效簽名。</string>
     <string name="live_location_bottom_sheet_last_updated_at">%1$s 前已更新</string>
-    <string name="live_location_bottom_sheet_stop_sharing">停止分享</string>
     <string name="labs_enable_live_location_summary">暫時的實作：位置會保留在聊天室歷史紀錄中</string>
     <string name="labs_enable_live_location">啟用即時位置分享</string>
     <string name="location_share_live_remaining_time">剩餘 %1$s</string>
@@ -2486,7 +2479,7 @@
     <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
     <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
     <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將會是端到端加密。</string>
-    <string name="create_room_action_go">到</string>
+    <string name="create_room_action_go">出發</string>
     <plurals name="room_removed_messages">
         <item quantity="other">已移除 %d 則訊息</item>
     </plurals>
@@ -2501,8 +2494,8 @@
     <string name="ftue_auth_forgot_password">忘記密碼</string>
     <string name="ftue_auth_email_resend_email">重新傳送電子郵件</string>
     <string name="ftue_auth_email_verification_footer">沒有收到電子郵件？</string>
-    <string name="ftue_auth_email_verification_subtitle">要確認您的電子郵件，請點擊我們剛剛寄給 %s 的電子郵件中的按鈕</string>
-    <string name="ftue_auth_email_verification_title">檢查您的電子郵件以驗證。</string>
+    <string name="ftue_auth_email_verification_subtitle">請遵循傳送至 %s 中的步驟</string>
+    <string name="ftue_auth_email_verification_title">驗證您的電子郵件</string>
     <string name="ftue_auth_phone_confirmation_resend_code">重新傳送驗證碼</string>
     <string name="ftue_auth_phone_confirmation_subtitle">驗證碼已傳送至 %s</string>
     <string name="ftue_auth_phone_confirmation_title">確認您的電話號碼</string>
@@ -2539,4 +2532,22 @@
     <string name="font_size_section_manually">手動選擇</string>
     <string name="font_size_section_auto">自動設定</string>
     <string name="font_size_title">選擇字型大小</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">自動批准 Element Call 小工具並授予相機/麥克風存取權限</string>
+    <string name="labs_enable_element_call_permission_shortcuts">啟用 Element Call 權限捷徑</string>
+    <string name="live_location_description">即時位置</string>
+    <string name="verify_invalid_qr_notice">這個 QR code 的格式似乎不正確。請嘗試使用其他方法進行驗證。</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">您將無法存取已加密的訊息歷史紀錄。重設您的安全訊息備份與驗證金鑰以重新開始。</string>
+    <string name="crosssigning_cannot_verify_this_session">無法驗證此裝置</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">您的伺服器地址是？</string>
+    <string name="ftue_auth_sign_in_choose_server_header">您的對話所在位置</string>
+    <string name="updating_your_data">正在更新您的資料……</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="other">%1$s 與 %2$d 個其他人</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s 與 %2$s</string>
+    <string name="auth_reset_password_error_unverified">電子郵件未驗證，請檢查您的收件匣</string>
+    <string name="location_share_loading_map_error">無法載入地圖
+\n此家伺服器可能未設定好顯示地圖。</string>
+    <string name="a11y_open_settings">開啟設定</string>
+    <string name="all_chats">所有聊天</string>
 </resources>

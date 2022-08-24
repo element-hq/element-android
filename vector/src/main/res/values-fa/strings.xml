@@ -54,8 +54,6 @@
 \nدرون‌ریزی اتاق‌های دعوت‌شده</string>
     <string name="initial_sync_start_importing_account_left_rooms">همگام‌سازی نخستین:
 \nدرون‌ریزی اتاق‌های ترک شده</string>
-    <string name="initial_sync_start_importing_account_groups">همگام‌سازی نخستین:
-\nدرون‌ریزی اجتماع‌ها</string>
     <string name="initial_sync_start_importing_account_data">همگام‌سازی نخستین:
 \nدرون‌ریزی داده‌های حساب</string>
     <string name="event_status_sending_message">در حال فرستادن پیام…</string>
@@ -249,7 +247,6 @@
     <string name="system_alerts_header">هشدارهای سیستمی</string>
     <string name="matrix_only_filter">فقط آشنایان ماتریکس</string>
     <string name="no_result_placeholder">نتیجه‌ای نیست</string>
-    <string name="groups_header">انجمن‌ها</string>
     <string name="send_bug_report_include_logs">ارسال رخدادنگارها</string>
     <string name="send_bug_report_include_crash_logs">ارسال رخدادنگارهای خطا</string>
     <string name="send_bug_report_include_screenshot">ارسال تصویر صفحه</string>
@@ -438,7 +435,6 @@
     <string name="action_change">تغییر</string>
     <string name="change_room_directory_network">تغییر شبکه</string>
     <string name="please_wait">لطفاً شکیبایی کنید…</string>
-    <string name="group_all_communities">تمام اجتماع‌ها</string>
     <string name="room_preview_no_preview">این اتاق نمی‌تواند پیش‌نمایش یابد</string>
     <string name="fab_menu_create_room">اتاق‌ها</string>
     <string name="fab_menu_create_chat">پیام‌های مستقیم</string>
@@ -505,7 +501,6 @@
     <string name="settings_dev_tools">ابزارهای توسعه</string>
     <string name="none">هیچ</string>
     <string name="action_revoke">ابطال</string>
-    <string name="auth_reset_password_missing_email">باید نشانی رایانامهٔ پیوسته به حسابتان وارد شود.</string>
     <string name="auth_reset_password_error_unauthorized">شکست در تأیید نشانی رایانامه: مطمئن شوید که پیوند درون رایانامه را کلیک کرده‌اید</string>
     <string name="auth_accept_policies">لطفاً سیاست‌های این کارساز خانگی را بررسی کرده و بپذیرید:</string>
     <string name="login_error_invalid_home_server">لطفا یک نشانی معتبر وارد کنید</string>
@@ -982,7 +977,7 @@
     <string name="encryption_information_dg_xsigning_disabled">ورود چندگانه به کار نیفتاده</string>
     <string name="settings_hs_admin_e2e_disabled">مدیر کارسازتان رمزنگاری سرتاسری پیش‌گزیده را در اتاق‌های خصوصی و پیام‌های مستقیم از کار انداخته است.</string>
     <string name="settings_active_sessions_signout_device">خروج از این نشست</string>
-    <string name="crosssigning_verify_this_session">تأیید این ورود</string>
+    <string name="crosssigning_verify_this_session">تأیید این افزاره</string>
     <string name="verification_open_other_to_verify">استفاده از نشستی موجود برای تأییدش که به پیام‌های رمزشده دسترسی می‌دهد.</string>
     <string name="verification_profile_verify">تأیید</string>
     <string name="verification_profile_verified">تأیید‌شده</string>
@@ -2433,7 +2428,6 @@
     <string name="ftue_profile_picture_title">افزودن یک تصویر نمایه</string>
     <string name="ftue_display_name_entry_footer">می‌توانید بعدها تغییرش دهید</string>
     <string name="ftue_display_name_entry_title">نام نمایشی</string>
-    <string name="ftue_display_name_subtitle">هنگامی که پیام می‌فرستید نشان داده خواهد شد.</string>
     <string name="ftue_account_created_subtitle">حسابتان %s ایجاد شد</string>
     <string name="ftue_account_created_congratulations_title">تبریک!</string>
     <string name="ftue_account_created_take_me_home">مرا به خانه ببر</string>
@@ -2482,7 +2476,6 @@
     <string name="a11y_presence_busy">مشغول</string>
     <string name="keys_backup_settings_signature_from_this_user">پشتیبان امضای معتبری از این کاربر دارد.</string>
     <string name="live_location_bottom_sheet_last_updated_at">%1$s پیش به‌روز شده</string>
-    <string name="live_location_bottom_sheet_stop_sharing">توقّف هم‌رسانی</string>
     <string name="labs_enable_live_location_summary">پیاده‌سازی موقّتی: موقعیت‌ها در تاریخچهٔ اتاق می‌مانند</string>
     <string name="labs_enable_live_location">به کار انداختن هم‌رسانی مکان زنده</string>
     <string name="location_share_live_remaining_time">%1$s مانده</string>
@@ -2550,8 +2543,8 @@
     <string name="ftue_auth_forgot_password">فراموشی گذرواژه</string>
     <string name="ftue_auth_email_resend_email">فرستادن دوبارهٔ رایانامه</string>
     <string name="ftue_auth_email_verification_footer">رایانامه‌ای نگرفتید؟</string>
-    <string name="ftue_auth_email_verification_subtitle">برای تأیید رایانامه‌تان، روی دکمه در رایانامه‌ای‌که اکنون برایتان به %s فرستادیم بزنید</string>
-    <string name="ftue_auth_email_verification_title">برای تأیید، رایانامه‌تان را بررسی کنید.</string>
+    <string name="ftue_auth_email_verification_subtitle">دستورالعمل‌های فرستاده شده به %s را دنبال کنید</string>
+    <string name="ftue_auth_email_verification_title">رایانامه‌تان را تأیید کنید</string>
     <string name="ftue_auth_phone_confirmation_resend_code">فرستادن دوبارهٔ رمز</string>
     <string name="ftue_auth_phone_confirmation_subtitle">رمزی به %s فرستاده خواهد شد</string>
     <string name="ftue_auth_phone_confirmation_title">شمارهٔ تلفنتان را تأیید کنید</string>
@@ -2588,4 +2581,23 @@
     <string name="font_size_section_manually">گزینش دستی</string>
     <string name="font_size_section_auto">تنظیم خودکار</string>
     <string name="font_size_title">گزینش اندازهٔ قلم</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">تأیید خودکار ابزارک‌های تماس و اعطای دسترسی دوربین و میکروفون</string>
+    <string name="labs_enable_element_call_permission_shortcuts">به کار انداخت میان‌برهای اجازهٔ تماس المنت</string>
+    <string name="live_location_description">مکان زنده</string>
+    <string name="verify_invalid_qr_notice">این رمز QR بدریخت به نظر می‌رسد. لطفاً تأیید با روشی دیگر را بیازمایید.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">نخواهید توانست به تاریخچهٔ پیام رمزشده دست یابید. برای آغاز تازه، کلیدهای تأیید و پشتیبان پیام امنتان را بازنشانی کنید.</string>
+    <string name="crosssigning_cannot_verify_this_session">ناتوان در تأیید این افزاره</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">نشانی کارسازتان چیست؟</string>
+    <string name="ftue_auth_sign_in_choose_server_header">زیستگاه گفت‌وگوهایتان</string>
+    <string name="updating_your_data">به‌روز رساندن داده‌هایتان…</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s و ۱ والد دیگر</item>
+        <item quantity="other">%1$s و %2$d والد دیگر</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s و %2$s</string>
+    <string name="auth_reset_password_error_unverified">رایانامه تأیید نشده. صندوق ورودیتان را بررسی کنید</string>
+    <string name="location_share_loading_map_error">ناتوان در بار کردن نقشه
+\nشاید این کارساز خانگی برای نمایش نقشه‌ها پیکربندی نشده باشد.</string>
+    <string name="a11y_open_settings">گشودن تنظیمات</string>
+    <string name="all_chats">تمامی گپ‌ها</string>
 </resources>

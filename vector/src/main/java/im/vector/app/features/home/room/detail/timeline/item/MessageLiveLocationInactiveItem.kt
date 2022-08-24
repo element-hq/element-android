@@ -42,8 +42,8 @@ abstract class MessageLiveLocationInactiveItem :
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val bannerImageView by bind<ImageView>(R.id.locationLiveEndedBannerBackground)
-        val noLocationMapImageView by bind<ImageView>(R.id.locationLiveInactiveMap)
+        val bannerImageView by bind<ImageView>(R.id.liveLocationEndedBannerBackground)
+        val noLocationMapImageView by bind<ImageView>(R.id.liveLocationInactiveMap)
     }
 
     companion object {

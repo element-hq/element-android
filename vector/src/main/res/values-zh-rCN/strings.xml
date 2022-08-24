@@ -52,12 +52,10 @@
 \n正在导入已邀请的房间</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在导入已离开的房间</string>
-    <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在导入社区</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账户数据</string>
     <string name="notice_room_update">%s 升级了此房间。</string>
-    <string name="event_status_sending_message">正在发送消息…</string>
+    <string name="event_status_sending_message">正在发送消息……</string>
     <string name="notice_room_third_party_revoked_invite">%1$s 撤回了对 %2$s 加入房间的邀请</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$s 的邀请。理由：%2$s</string>
     <string name="notice_room_invite_with_reason">%1$s 邀请了 %2$s。理由：%3$s</string>
@@ -65,7 +63,7 @@
     <string name="notice_room_join_with_reason">%1$s 加入了房间。理由：%2$s</string>
     <string name="notice_room_leave_with_reason">%1$s 离开了房间。理由：%2$s</string>
     <string name="notice_room_reject_with_reason">%1$s 已拒绝邀请。理由：%2$s</string>
-    <string name="notice_room_remove_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s移除了%2$s。理由：%3$s</string>
     <string name="notice_room_unban_with_reason">%1$s 解封了 %2$s。理由：%3$s</string>
     <string name="notice_room_ban_with_reason">%1$s 封禁了 %2$s。理由：%3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s 接受 %2$s 的邀請。理由：%3$s</string>
@@ -81,8 +79,8 @@
     <string name="notice_room_canonical_alias_unset">%1$s 为此房间移除了主要地址。</string>
     <string name="notice_room_guest_access_can_join">%1$s 已允许访客加入房间。</string>
     <string name="notice_room_guest_access_forbidden">%1$s 已禁止访客加入房间。</string>
-    <string name="notice_end_to_end_ok">%1$s 已开启端对端加密。</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s 已开启端对端加密（无法识别的演算法 %2$s）。</string>
+    <string name="notice_end_to_end_ok">%1$s已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s已开启端到端加密（无法识别的算法%2$s）。</string>
     <string name="notice_room_created">%1$s 创建了这个房间</string>
     <string name="notice_room_invite_no_invitee_by_you">你的邀请</string>
     <string name="notice_room_created_by_you">你创建了这个房间</string>
@@ -108,7 +106,7 @@
     <string name="notice_call_candidates_by_you">你发送了数据以建立通话。</string>
     <string name="notice_answered_call_by_you">你接听了通话。</string>
     <string name="notice_ended_call_by_you">你结束了通话。</string>
-    <string name="notice_made_future_room_visibility_by_you">你已让未来的房间记录对%1$s可见</string>
+    <string name="notice_made_future_room_visibility_by_you">你已让未来的房间历史对%1$s可见</string>
     <string name="notice_room_update_by_you">你升级了此房间。</string>
     <string name="notice_room_name_removed_by_you">你移除了房间名称</string>
     <string name="notice_room_topic_removed_by_you">你移除了房间主题</string>
@@ -136,7 +134,7 @@
     <string name="notice_room_join_with_reason_by_you">你加入了房间。理由：%1$s</string>
     <string name="notice_room_leave_with_reason_by_you">你离开了房间。理由：%1$s</string>
     <string name="notice_room_reject_with_reason_by_you">你拒绝了邀请。理由：%1$s</string>
-    <string name="notice_room_remove_with_reason_by_you">你踢走了 %1$s。理由：%2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">你移除了%1$s。理由：%2$s</string>
     <string name="notice_room_unban_with_reason_by_you">你解封了 %1$s。理由：%2$s</string>
     <string name="notice_room_ban_with_reason_by_you">你封禁了 %1$s。理由：%2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">你接受了 %1$s 的邀请。理由：%2$s</string>
@@ -152,8 +150,8 @@
     <string name="notice_room_canonical_alias_unset_by_you">你移除了此房间的主要地址。</string>
     <string name="notice_room_guest_access_can_join_by_you">你已允许访客加入房间。</string>
     <string name="notice_room_guest_access_forbidden_by_you">你已禁止访客加入房间。</string>
-    <string name="notice_end_to_end_ok_by_you">你已开启端对端加密。</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">你已开启端对端加密（无法识别的算法 %1$s）。</string>
+    <string name="notice_end_to_end_ok_by_you">你已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">你已开启端到端加密（无法识别的算法%1$s）。</string>
     <string name="notice_direct_room_leave_with_reason_by_you">你已离开。理由：%1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s 已离开。理由：%2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">你已加入。理由：%1$s</string>
@@ -163,7 +161,7 @@
     <string name="notice_direct_room_third_party_invite_by_you">你邀请了 %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_direct_room_update_by_you">你在此处升级。</string>
-    <string name="notice_direct_room_update">%s 在此处升级。</string>
+    <string name="notice_direct_room_update">%s 是升级后的房间。</string>
     <string name="notice_made_future_direct_room_visibility_by_you">你使未来的消息对 %1$s 可见</string>
     <string name="notice_made_future_direct_room_visibility">%1$s 使未来的消息对 %2$s 可见</string>
     <string name="notice_direct_room_leave_by_you">你离开了房间</string>
@@ -193,7 +191,7 @@
     <string name="logout">登出</string>
     <string name="search">搜索</string>
     <string name="option_send_files">发送文件</string>
-    <string name="call_ended">通话结束</string>
+    <string name="call_ended">通话已结束</string>
     <string name="_continue">继续</string>
     <string name="action_join">加入</string>
     <string name="action_reject">拒绝</string>
@@ -219,7 +217,6 @@
     <string name="auth_invalid_email">此电子邮箱地址似乎无效</string>
     <string name="auth_email_already_defined">此电子邮箱地址已被使用。</string>
     <string name="auth_forgot_password">忘记密码？</string>
-    <string name="auth_reset_password_missing_email">必须输入与你账户关联的电子邮箱地址。</string>
     <string name="login_error_invalid_home_server">请输入有效的 URL</string>
     <string name="login_error_not_json">没有包含有效的 JSON</string>
     <string name="login_error_limit_exceeded">发送了过多的请求</string>
@@ -312,13 +309,13 @@
     <string name="room_settings_category_advanced_title">高级</string>
     <string name="room_settings_room_internal_id">此房间的内部 ID</string>
     <string name="room_settings_labs_warning_message">这些是实验性功能，可能会出现不可预料的错误。请谨慎使用。</string>
-    <string name="encryption_export_e2e_room_keys">导出端对端房间密钥</string>
+    <string name="encryption_export_e2e_room_keys">导出端到端房间密钥</string>
     <string name="encryption_export_room_keys">导出房间密钥</string>
     <string name="encryption_export_room_keys_summary">导出密钥到本地文件</string>
     <string name="encryption_export_export">导出</string>
-    <string name="passphrase_enter_passphrase">输入密语</string>
-    <string name="passphrase_confirm_passphrase">确认密语</string>
-    <string name="encryption_import_e2e_room_keys">导入端对端房间密钥</string>
+    <string name="passphrase_enter_passphrase">输入口令词组</string>
+    <string name="passphrase_confirm_passphrase">确认口令词组</string>
+    <string name="encryption_import_e2e_room_keys">导入端到端房间密钥</string>
     <string name="encryption_import_room_keys">导入房间密钥</string>
     <string name="encryption_import_room_keys_summary">从本地文件导入密钥</string>
     <string name="encryption_never_send_to_unverified_devices_title">仅向已验证的会话发送加密消息</string>
@@ -420,12 +417,12 @@
     <string name="black_theme">黑色主题</string>
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">使用12小时制显示时间戳</string>
-    <string name="widget_delete_message_confirmation">你确定要删除这个挂件吗？</string>
+    <string name="widget_delete_message_confirmation">确定要从此房间删除此挂件吗？</string>
     <string name="widget_integration_unable_to_create">无法创建挂件。</string>
     <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
     <string name="widget_integration_positive_power_level">权力级别必须是正整数。</string>
     <string name="widget_integration_must_be_in_room">你不在这个房间。</string>
-    <string name="widget_integration_no_permission_in_room">你没有在当前房间中执行此操作的权限。</string>
+    <string name="widget_integration_no_permission_in_room">你没权限在当前房间执行此操作。</string>
     <string name="widget_integration_missing_room_id">请求中缺失 room_id。</string>
     <string name="widget_integration_missing_user_id">请求中缺失 user_id。</string>
     <string name="widget_integration_room_not_visible">房间 %s 不可见。</string>
@@ -455,13 +452,12 @@
     <string name="room_participants_ban_prompt_msg">封禁用户会把他们移出此房间并阻止他们再次加入。</string>
     <string name="room_settings_all_messages">全部消息</string>
     <string name="room_settings_add_homescreen_shortcut">添加到主屏幕</string>
-    <string name="settings_inline_url_preview">启用链接预览</string>
+    <string name="settings_inline_url_preview">行内URL预览</string>
     <string name="settings_vibrate_on_mention">提及用户时震动</string>
     <string name="create">创建</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d 条新消息</item>
     </plurals>
-    <string name="groups_header">社群</string>
     <string name="send_bug_report_rage_shake">摇一摇快捷反馈问题</string>
     <plurals name="membership_changes">
         <item quantity="other">%d个成员状态变动</item>
@@ -470,14 +466,14 @@
         <item quantity="other">%d个成员</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="other">%d 条未读消息</item>
+        <item quantity="other">%d条未读的已通知消息</item>
     </plurals>
     <string name="list_members">成员</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 个房间</item>
     </plurals>
     <plurals name="active_widgets">
-        <item quantity="other">已启用 %d 个挂件</item>
+        <item quantity="other">%d个启用的挂件</item>
     </plurals>
     <string name="group_details_home">主页</string>
     <string name="rooms">房间</string>
@@ -504,7 +500,7 @@
     <string name="no_sticker_application_dialog_content">你目前没有启用任何贴纸包。
 \n
 \n要添加一些吗？</string>
-    <string name="widget_integration_missing_parameter">缺少所需的参数。</string>
+    <string name="widget_integration_missing_parameter">缺少一个必需参数。</string>
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 你必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
     <string name="action_download">下载</string>
@@ -524,7 +520,7 @@
     <string name="command_description_join_room">用给定地址加入房间</string>
     <string name="command_description_part_room">离开房间</string>
     <string name="command_description_topic">设置房间主题</string>
-    <string name="command_description_remove_user">按照 ID 踢出用户</string>
+    <string name="command_description_remove_user">从此房间移除指定ID的用户</string>
     <string name="command_description_nick">更改你显示的显示名称</string>
     <string name="command_description_markdown">打开/关闭 markdown</string>
     <string name="command_description_clear_scalar_token">修复 Matrix Apps 管理</string>
@@ -587,12 +583,12 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM令牌已成功注册至主服务器。</string>
     <string name="settings_troubleshoot_test_token_registration_failed">未能将FCM令牌注册到主服务器：
 \n %1$s</string>
-    <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 ${app_name} 内置的相机界面。</string>
+    <string name="settings_labs_native_camera_summary">启动系统相机而非自定义的相机屏幕。</string>
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">启用开机时启动</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">检查后台限制</string>
     <string name="settings_troubleshoot_test_battery_title">电池优化</string>
-    <string name="settings_inline_url_preview_summary">若主服务器支持此功能，在聊天中预览链接内容。</string>
+    <string name="settings_inline_url_preview_summary">当主服务器支持此功能时，在聊天中预览链接。</string>
     <string name="settings_send_typing_notifs">发送正在输入通知</string>
     <string name="settings_send_typing_notifs_summary">让房间中的其他用户知道你正在输入。</string>
     <string name="settings_send_markdown">Markdown 格式化</string>
@@ -623,9 +619,9 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} 未被电池优化影响。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果设备在未充电的情况下关屏静置一段时间，其将进入低电耗模式（Doze）。这将阻止应用访问网络并延后其运行、同步与响铃。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
-    <string name="encryption_export_notice">请输入用于加密被导出密钥的密语。恢复此备份时，必须输入相同的密语才能导入密钥。</string>
-    <string name="passphrase_create_passphrase">创建密语</string>
-    <string name="passphrase_passphrase_does_not_match">密语必须对应</string>
+    <string name="encryption_export_notice">请输入用于加密被导出密钥的口令词组。恢复此备份时，必须输入相同的口令词组才能导入密钥。</string>
+    <string name="passphrase_create_passphrase">创建口令词组</string>
+    <string name="passphrase_passphrase_does_not_match">口令词组不匹配</string>
     <string name="command_problem_with_parameters">指令 %s 需要更多参数，或者有些参数不正确。</string>
     <string name="no_valid_google_play_services_apk">没有可用的 Google Play Services APK。消息通知可能不能正常工作。</string>
     <string name="title_activity_keys_backup_setup">密钥备份</string>
@@ -662,27 +658,27 @@
     <string name="encryption_settings_manage_message_recovery_summary">管理密钥备份</string>
     <string name="notification_silent">静音</string>
     <string name="error_empty_field_enter_user_name">请输入一个用户名。</string>
-    <string name="passphrase_empty_error_message">请输入密语</string>
-    <string name="passphrase_passphrase_too_weak">密语太弱了</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">如果你想要 ${app_name} 生成一个恢复密钥，请删除密语。</string>
+    <string name="passphrase_empty_error_message">请输入口令词组</string>
+    <string name="passphrase_passphrase_too_weak">口令词组太弱了</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">如果你想要 ${app_name} 生成一个恢复密钥，请删除口令词组。</string>
     <string name="keys_backup_setup_step1_title">永不丢失已加密消息</string>
-    <string name="keys_backup_setup_step1_description">加密房间中的信息会被端对端加密以确保安全。只有你和拥有密钥的接收方可以读取这些信息。
+    <string name="keys_backup_setup_step1_description">加密房间中的消息是端到端加密的，以确保安全。只有你和接收者拥有密钥读取这些消息。
 \n
-\n安全地备份你的密钥以免丢失信息。</string>
+\n安全地备份你的密钥以免丢失消息。</string>
     <string name="keys_backup_setup">开始使用备份密钥</string>
     <string name="keys_backup_setup_step1_advanced">（高级）</string>
     <string name="keys_backup_setup_step1_manual_export">手动导出密钥</string>
-    <string name="keys_backup_setup_step2_text_title">使用密语保护你的备份。</string>
-    <string name="keys_backup_setup_step2_text_description">我们将会在主服务器上为你的密钥保存一份加密拷贝。设置一个密语来保护你的备份的安全。
+    <string name="keys_backup_setup_step2_text_title">使用口令词组保护你的备份。</string>
+    <string name="keys_backup_setup_step2_text_description">我们将会在主服务器上为你的密钥保存一份加密拷贝。设置一个口令词组来保护你的备份的安全。
 \n
-\n为了最大的安全性，此密语应当与你的账户密码不同。</string>
-    <string name="keys_backup_setup_step2_button_title">设置密语</string>
+\n为了最大的安全性，此口令词组应当与你的账户密码不同。</string>
+    <string name="keys_backup_setup_step2_button_title">设置口令词组</string>
     <string name="keys_backup_setup_creating_backup">正在创建备份</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">或者用一个恢复密钥来保护你的备份，将其保存到另一个安全的地方。</string>
     <string name="keys_backup_setup_step2_skip_button_title">（高级）设置一个恢复密钥</string>
     <string name="keys_backup_setup_step3_success_title">成功！</string>
     <string name="keys_backup_setup_step3_text_line1">正在备份你的密钥。</string>
-    <string name="keys_backup_setup_step3_text_line2">你的恢复密钥是一张安全网——如果你忘记了密语，你可以利用它重获你的已加密消息的访问权。
+    <string name="keys_backup_setup_step3_text_line2">你的恢复密钥是一张安全网——如果你忘记了口令词组，你可以利用它重获你的已加密消息的访问权。
 \n请将你的恢复密钥保存在一个非常安全的地方，比如密码管理器中（或保险箱里）</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">将你的恢复密钥保存在一个非常安全的地方，比如密码管理器中（或保险箱里）</string>
     <string name="keys_backup_setup_step3_button_title">完成</string>
@@ -692,19 +688,19 @@
     <string name="keys_backup_setup_step3_save_button_title">保存为文件</string>
     <string name="keys_backup_setup_step3_please_make_copy">请制作一份拷贝</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">分享恢复密钥…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">正在使用密语来生成恢复密钥，此过程可能会花费几秒钟。</string>
+    <string name="keys_backup_setup_step3_generating_key_status">正在使用口令词组来生成恢复密钥，此过程可能会花费几秒钟。</string>
     <string name="recovery_key">恢复密钥</string>
     <string name="unexpected_error">意外错误</string>
     <string name="keys_backup_setup_skip_title">你确定吗？</string>
     <string name="keys_backup_setup_skip_msg">如果你登出账户或者丢失此设备，你可能再也无法访问你的信息。</string>
     <string name="keys_backup_restore_is_getting_backup_version">正在获取备份的版本 …</string>
-    <string name="keys_backup_restore_with_passphrase">使用恢复密语解锁你的已加密历史消息</string>
+    <string name="keys_backup_restore_with_passphrase">使用恢复口令词组解锁你的已加密消息历史</string>
     <string name="keys_backup_restore_use_recovery_key">使用你的恢复密钥</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">如果不知道你的恢复密语，你可以 %s。</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">如果不知道你的恢复口令词组，你可以 %s。</string>
     <string name="keys_backup_restore_with_recovery_key">使用恢复密钥解锁你的已加密历史消息</string>
     <string name="keys_backup_restore_key_enter_hint">输入恢复密钥</string>
     <string name="keys_backup_restore_with_key_helper">丢失了恢复密钥？你可以在设置中新建一个。</string>
-    <string name="keys_backup_passphrase_error_decrypt">无法使用此密语解密备份：请检查你输入的恢复密语是否正确。</string>
+    <string name="keys_backup_passphrase_error_decrypt">无法使用此口令词组解密备份：请检查你输入的恢复口令词组是否正确。</string>
     <string name="keys_backup_restoring_waiting_message">正在恢复备份：</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">正在计算恢复密钥…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">正在下载密钥…</string>
@@ -731,13 +727,13 @@
     <string name="keys_backup_settings_valid_signature_from_unverified_device">备份具有来自未验证会话%s的有效签名</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">备份具有来自已验证会话%s的无效签名</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">备份具有来自未验证会话%s的无效签名</string>
-    <string name="keys_backup_settings_untrusted_backup">要在此会话中使用密钥备份，请立即使用密语或恢复密钥进行恢复。</string>
+    <string name="keys_backup_settings_untrusted_backup">要在此会话中使用密钥备份，请立即使用口令词组或恢复密钥进行恢复。</string>
     <string name="keys_backup_settings_deleting_backup">正在删除备份…</string>
     <string name="keys_backup_settings_delete_confirm_title">删除备份</string>
     <string name="keys_backup_settings_delete_confirm_message">要从此服务器中删除你备份的加密密钥吗？你将无法再使用恢复密钥来读取加密的历史消息。</string>
     <string name="keys_backup_banner_recover_line1">永不丢失已加密消息</string>
     <string name="keys_backup_banner_recover_line2">使用备份密钥</string>
-    <string name="keys_backup_banner_update_line1">新加密信息密钥</string>
+    <string name="keys_backup_banner_update_line1">新安全消息密钥</string>
     <string name="keys_backup_banner_update_line2">管理密钥备份</string>
     <string name="keys_backup_banner_in_progress">正在备份密钥…</string>
     <string name="keys_backup_info_keys_all_backup_up">所有密钥都已备份</string>
@@ -760,12 +756,12 @@
     <string name="settings_play_shutter_sound">播放快门声</string>
     <string name="action_mark_room_read">标记为已读</string>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="other">%1$s: %2$d 条消息</item>
+        <item quantity="other">%1$s：%2$d条消息</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="other">%d 条通知</item>
     </plurals>
-    <string name="notification_unknown_new_event">新活动</string>
+    <string name="notification_unknown_new_event">新事件</string>
     <string name="notification_unknown_room_name">房间</string>
     <string name="notification_new_messages">新消息</string>
     <string name="notification_new_invitation">新邀请</string>
@@ -808,15 +804,14 @@
     <string name="create_new_room">创建新房间</string>
     <string name="action_change">修改</string>
     <string name="please_wait">请稍候……</string>
-    <string name="group_all_communities">所有社群</string>
     <string name="room_preview_no_preview">无法预览此房间</string>
     <string name="fab_menu_create_room">房间</string>
     <string name="create_room_action_create">创建</string>
-    <string name="create_room_name_hint">房间名称</string>
+    <string name="create_room_name_hint">名称</string>
     <string name="settings_sdk_version">Matrix SDK 版本</string>
     <string name="settings_general_title">通用</string>
-    <string name="settings_preferences">选项</string>
-    <string name="settings_security_and_privacy">隐私安全</string>
+    <string name="settings_preferences">偏好</string>
+    <string name="settings_security_and_privacy">安全与隐私</string>
     <string name="settings_push_rules">推送规则</string>
     <string name="settings_push_rules_no_rules">尚未定义任何推送规则</string>
     <string name="settings_push_gateway_no_pushers">没有已注册的推送通道</string>
@@ -867,8 +862,8 @@
     <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀请</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">你确定想要取消邀请此用户吗？</string>
-    <string name="room_participants_remove_title">踢掉用户</string>
-    <string name="room_participants_remove_reason">踢掉理由</string>
+    <string name="room_participants_remove_title">移除用户</string>
+    <string name="room_participants_remove_reason">移除的理由</string>
     <string name="room_participants_remove_prompt_msg">用户将从此房间移除。
 \n
 \n为防止他们再次加入，你应改为封禁他们。</string>
@@ -892,8 +887,8 @@
     <string name="settings_secure_backup_setup">设置安全备份</string>
     <string name="settings_secure_backup_reset">重置安全备份</string>
     <string name="settings_secure_backup_enter_to_setup">在此设备上设置</string>
-    <string name="settings_secure_backup_section_info">通过在你的服务器上备份加密密钥，防止失去对加密信息和数据的访问。</string>
-    <string name="reset_secure_backup_title">为你已有的备份生成新的安全密钥或设置新的安全口令。</string>
+    <string name="settings_secure_backup_section_info">通过在你的服务器上备份加密密钥，防止失去对加密消息和数据的访问。</string>
+    <string name="reset_secure_backup_title">为你已有的备份生成新的安全密钥或设置新的安全短语。</string>
     <string name="reset_secure_backup_warning">这将替换你的当前密钥或短语。</string>
     <string name="settings_discovery_category">发现</string>
     <string name="settings_discovery_manage">管理你的发现设置。</string>
@@ -905,16 +900,16 @@
         <item quantity="other">%d 个封禁用户</item>
     </plurals>
     <string name="encryption_exported_successfully">成功导出密钥</string>
-    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
-    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+    <string name="notification_ticker_text_dm">%1$s：%2$s</string>
+    <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
     <string name="active_widget_view_action">查看</string>
     <string name="active_widgets_title">活动挂件</string>
     <string name="room_widget_activity_title">挂件</string>
     <string name="room_widget_permission_title">载入挂件</string>
     <string name="room_widget_permission_added_by">此挂件添加者：</string>
-    <string name="room_widget_permission_webview_shared_info_title">使用它会设置 cookie 并与 %s 分享数据：</string>
-    <string name="room_widget_permission_shared_info_title">使用它会与 %s 分享数据：</string>
-    <string name="room_widget_failed_to_load">无法载入挂件。
+    <string name="room_widget_permission_webview_shared_info_title">使用它可能会设置cookie并与%s分享数据：</string>
+    <string name="room_widget_permission_shared_info_title">使用它可能会与%s分享数据：</string>
+    <string name="room_widget_failed_to_load">载入挂件失败。
 \n%s</string>
     <string name="room_widget_reload">重载挂件</string>
     <string name="room_widget_open_in_browser">在浏览器中打开</string>
@@ -936,7 +931,7 @@
     <string name="keys_backup_setup_override_backup_prompt_tile">你的主服务器上已存在备份</string>
     <string name="keys_backup_setup_override_backup_prompt_description">你似乎已在另一个会话中设置密钥备份。你想要将其替换为正在创建的吗？</string>
     <string name="secure_backup_banner_setup_line1">安全备份</string>
-    <string name="secure_backup_banner_setup_line2">保护加密信息及数据的访问权</string>
+    <string name="secure_backup_banner_setup_line2">保护加密消息及数据的访问权</string>
     <string name="secure_backup_setup">设置安全备份</string>
     <string name="identity_server_not_defined">你未使用身份服务器</string>
     <string name="error_user_already_logged_in">你似乎正在试图连接到另一个主服务器。你想要登出吗？</string>
@@ -956,7 +951,7 @@
     <string name="create_room_public_description">任何人都可以加入此房间</string>
     <string name="keys_backup_unable_to_get_trust_info">获取信任信息时发生错误</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">获取密钥备份数据时发生错误</string>
-    <string name="import_e2e_keys_from_file">从文件 \"%1$s\" 导入端对端密钥。</string>
+    <string name="import_e2e_keys_from_file">从文件“%1$s”导入端到端密钥。</string>
     <string name="settings_other_third_party_notices">其他第三方通知</string>
     <string name="navigate_to_room_when_already_in_the_room">你已经在查看此房间！</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">注册令牌</string>
@@ -967,7 +962,7 @@
     <string name="send_suggestion_failed">建议发送失败 (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">在时间线上显示隐藏事件</string>
     <string name="bottom_action_people_x">私聊消息</string>
-    <string name="send_file_step_idle">正在等待…</string>
+    <string name="send_file_step_idle">正在等待……</string>
     <string name="send_file_step_encrypting_thumbnail">正在加密缩略图…</string>
     <string name="send_file_step_sending_thumbnail">正在发送缩略图 (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">正在加密文件…</string>
@@ -1117,7 +1112,7 @@
     <string name="login_reset_password_email_hint">电子邮件</string>
     <string name="login_reset_password_password_hint">新密码</string>
     <string name="login_reset_password_warning_title">注意！</string>
-    <string name="login_reset_password_warning_content">更改你的密码将重置所有会话上的端对端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
+    <string name="login_reset_password_warning_content">更改你的密码将重置所有会话上的端到端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
     <string name="login_reset_password_warning_submit">继续</string>
     <string name="login_reset_password_error_not_found">电子邮件未链接到任何账户</string>
     <string name="login_reset_password_mail_confirmation_title">检查你的收件箱</string>
@@ -1239,7 +1234,7 @@
     <string name="sent_an_audio_file">音频</string>
     <string name="sent_a_file">文件</string>
     <string name="send_a_sticker">贴纸</string>
-    <string name="verification_request_waiting">正在等待…</string>
+    <string name="verification_request_waiting">正在等待……</string>
     <string name="verification_request_other_cancelled">%s 已取消</string>
     <string name="verification_request_you_cancelled">你已取消</string>
     <string name="verification_request_other_accepted">%s 已接受</string>
@@ -1254,9 +1249,9 @@
     <string name="verification_no_scan_emoji_title">通过比较表情符号验证</string>
     <string name="verification_verify_user">验证 %s</string>
     <string name="verification_verified_user">已验证 %s</string>
-    <string name="verification_request_waiting_for">正在等待 %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">此房间的消息未经端对端加密。</string>
-    <string name="room_profile_encrypted_subtitle">该房间的消息已被端对端加密。
+    <string name="verification_request_waiting_for">正在等待%s……</string>
+    <string name="room_profile_not_encrypted_subtitle">此房间的消息未经端到端加密。</string>
+    <string name="room_profile_encrypted_subtitle">该房间的消息已端到端加密。
 \n
 \n你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。</string>
     <string name="room_profile_section_security">安全</string>
@@ -1289,7 +1284,7 @@
     <string name="command_description_rainbow_emote">和彩虹一样给给定的表情上色后发送</string>
     <string name="settings_category_timeline">时间线</string>
     <string name="settings_category_composer">消息编辑器</string>
-    <string name="room_settings_enable_encryption">启用端对端加密…</string>
+    <string name="room_settings_enable_encryption">启用端到端加密……</string>
     <string name="room_settings_enable_encryption_dialog_title">是否启用加密？</string>
     <string name="room_settings_enable_encryption_dialog_content">房间加密一经启用，便无法禁用。在加密房间中，发送的消息无法被服务器看到，只能被房间的参与者看到。启用加密可能会使许多机器人和桥接无法正常运作。</string>
     <string name="room_settings_enable_encryption_dialog_submit">启用加密</string>
@@ -1297,7 +1292,7 @@
     <string name="verification_request_start_notice">为保证安全，请当面验证，或者使用其他通讯方式验证。</string>
     <string name="verification_emoji_notice">比较独特表情，确保它们以相同顺序出现。</string>
     <string name="verification_code_notice">与其他用户设备上显示的代码比较。</string>
-    <string name="verification_conclusion_ok_notice">与此用户的消息端对端加密，无法被第三方读取。</string>
+    <string name="verification_conclusion_ok_notice">与此用户的消息是端到端加密的，无法被第三方读取。</string>
     <string name="verification_conclusion_ok_self_notice">你的新会话已验证。它可以访问你的加密消息，其他用户会将其视为可信任。</string>
     <string name="encryption_information_cross_signing_state">交叉签名</string>
     <string name="encryption_information_dg_xsigning_complete">交叉签名已启用
@@ -1308,7 +1303,7 @@
     <string name="encryption_information_dg_xsigning_not_trusted">交叉签名已启用。
 \n密钥未信任</string>
     <string name="encryption_information_dg_xsigning_disabled">交叉签名未启用</string>
-    <string name="settings_hs_admin_e2e_disabled">你的服务器管理员已默认禁用私有房间和私聊消息端对端加密。</string>
+    <string name="settings_hs_admin_e2e_disabled">你的服务器管理员已默认禁用私有房间和私聊消息端到端加密。</string>
     <string name="settings_active_sessions_list">活跃的会话</string>
     <string name="settings_active_sessions_show_all">显示全部会话</string>
     <string name="settings_active_sessions_manage">管理会话</string>
@@ -1319,7 +1314,7 @@
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d 个活动会话</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">验证此登录</string>
+    <string name="crosssigning_verify_this_session">验证此设备</string>
     <string name="verification_open_other_to_verify">使用现有会话来验证此会话，并授予其访问加密消息的权限。</string>
     <string name="verification_profile_verify">验证</string>
     <string name="verification_profile_verified">已验证</string>
@@ -1335,22 +1330,22 @@
     <string name="reset_cross_signing">重置密钥</string>
     <string name="a11y_qr_code_for_verification">二维码</string>
     <string name="qr_code_scanned_by_other_notice">快要完成了！%s 显示对勾了吗？</string>
-    <string name="qr_code_scanned_by_other_yes">使</string>
+    <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
     <string name="no_connectivity_to_the_server_indicator">到服务器的连接已丢失</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">飞行模式已打开</string>
     <string name="settings_dev_tools">开发工具</string>
     <string name="settings_account_data">账户数据</string>
-    <string name="verification_cannot_access_other_session">使用恢复密语或密钥</string>
+    <string name="verification_cannot_access_other_session">使用恢复口令词组或密钥</string>
     <string name="verification_use_passphrase">如果你无法访问已有会话</string>
     <string name="enter_secret_storage_invalid">无法在存储中找到秘密</string>
-    <string name="message_action_item_redact">移除…</string>
+    <string name="message_action_item_redact">移除……</string>
     <string name="share_confirm_room">你想要发送此附件到 %1$s 吗？</string>
     <plurals name="send_images_with_original_size">
         <item quantity="other">发送原始尺寸图片</item>
     </plurals>
     <string name="delete_event_dialog_title">确认移除</string>
-    <string name="delete_event_dialog_content">你确实想要移除（删除）此事件吗？注意如果你删除房间名或话题更改，可以撤销更改。</string>
+    <string name="delete_event_dialog_content">你确定要移除（删除）此事件吗？注意，如果删除房间名称或话题的更改，更改会被撤销。</string>
     <string name="delete_event_dialog_reason_checkbox">附加理由</string>
     <string name="delete_event_dialog_reason_hint">编辑理由</string>
     <string name="event_redacted_by_user_reason_with_reason">事件被用户删除，理由：%1$s</string>
@@ -1375,18 +1370,18 @@
 \n我们推荐你在设置中立即更换你的密码和恢复密钥。</string>
     <string name="verify_cancelled_notice">已取消验证。 您可以重新开始验证。</string>
     <string name="verification_cancelled">验证已取消</string>
-    <string name="recovery_passphrase">恢复密语</string>
+    <string name="recovery_passphrase">恢复口令词组</string>
     <string name="message_key">消息密钥</string>
     <string name="enter_account_password">输入你的 %s 以继续。</string>
     <string name="bootstrap_dont_reuse_pwd">不要使用你的账户密码。</string>
-    <string name="bootstrap_info_text_2">输入只有你知道的安全口令，用于保护服务器上的秘密。</string>
+    <string name="bootstrap_info_text_2">输入只有你知道的安全短语，用于保护服务器上的秘密。</string>
     <string name="bootstrap_loading_text">这可能会花费数秒，请耐心等待。</string>
     <string name="bootstrap_loading_title">设置恢复。</string>
     <string name="bootstrap_finish_title">完成了！</string>
     <string name="keep_it_safe">保持安全</string>
     <string name="finish">完成</string>
     <string name="bootstrap_crosssigning_progress_initializing">发布创建的身份密钥</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">从密语生成安全密钥</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">从口令词组生成安全密钥</string>
     <string name="bootstrap_crosssigning_progress_default_key">正在定义 SSSS 默认密钥</string>
     <string name="bootstrap_crosssigning_progress_save_msk">正在同步主密钥</string>
     <string name="bootstrap_crosssigning_progress_save_usk">正在同步用户密钥</string>
@@ -1409,7 +1404,7 @@
 \n
 \n你也可以通过设置菜单来建立保护备份以及管理你的密钥。</string>
     <string name="encryption_enabled">加密已开启</string>
-    <string name="encryption_enabled_tile_description">本房间信息已经端对端加密。验证成员时，请查看其个人档案以了解更多信息。</string>
+    <string name="encryption_enabled_tile_description">本房间的消息端到端加密。在成员用户资料中了解更多信息与验证成员。</string>
     <string name="encryption_not_enabled">加密未开启</string>
     <string name="encryption_unknown_algorithm_tile_description">不支持本房间使用的加密方式</string>
     <string name="room_created_summary_item">%s 创建并配置了房间。</string>
@@ -1419,15 +1414,15 @@
     <string name="qr_code_scanned_verif_waiting">正在等候 %s…</string>
     <string name="error_failed_to_import_keys">导入密钥失败</string>
     <string name="settings_notification_configuration">通知配置</string>
-    <string name="settings_messages_in_e2e_one_to_one">一对一聊天的加密信息</string>
-    <string name="settings_messages_in_e2e_group_chat">群聊的加密信息</string>
+    <string name="settings_messages_in_e2e_one_to_one">一对一聊天的加密消息</string>
+    <string name="settings_messages_in_e2e_group_chat">群聊的加密消息</string>
     <string name="settings_messages_at_room">消息包含 @room</string>
     <string name="settings_when_rooms_are_upgraded">当房间升级</string>
     <string name="settings_troubleshoot_title">故障诊断</string>
     <string name="command_description_plain">以纯文本形式发送消息，而不将其解释为 markdown</string>
     <string name="auth_invalid_login_param_space_in_password">用户名和/或密码不正确。输入的密码以空格开头或结尾，请检查。</string>
     <string name="auth_invalid_login_deactivated_account">此账户已停用。</string>
-    <string name="room_message_placeholder">消息…</string>
+    <string name="room_message_placeholder">消息……</string>
     <string name="upgrade_security">加密升级可用</string>
     <string name="security_prompt_text">验证你自己和其他人以保证你的聊天安全</string>
     <string name="bootstrap_enter_recovery">输入你的 %s 以继续</string>
@@ -1437,18 +1432,18 @@
     <string name="bootstrap_progress_checking_backup">检查备份密钥</string>
     <string name="bootstrap_progress_checking_backup_with_info">检查备份密钥 (%s)</string>
     <string name="bootstrap_progress_compute_curve_key">获取曲线密钥</string>
-    <string name="bootstrap_progress_generating_ssss">从密语生成 SSSS 密钥</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">从密语生成 SSSS 密钥（%s）</string>
+    <string name="bootstrap_progress_generating_ssss">从口令词组生成 SSSS 密钥</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">从口令词组生成 SSSS 密钥（%s）</string>
     <string name="bootstrap_progress_generating_ssss_recovery">从恢复密钥生成 SSSS 密钥</string>
     <string name="bootstrap_progress_storing_in_sss">正在在 SSSS 中保存密钥备份秘密</string>
-    <string name="bootstrap_migration_enter_backup_password">输入你的密钥备份密语以继续。</string>
+    <string name="bootstrap_migration_enter_backup_password">输入你的密钥备份口令词组以继续。</string>
     <string name="bootstrap_migration_use_recovery_key">使用你的密钥备份恢复密钥</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">不知道你的密钥备份密语，你可以 %s。</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">不知道你的密钥备份口令词组，你可以 %s。</string>
     <string name="bootstrap_migration_backup_recovery_key">密钥备份恢复密钥</string>
     <string name="settings_security_prevent_screenshots_title">阻止应用内屏幕截图</string>
     <string name="settings_security_prevent_screenshots_summary">启用此设置添加 FLAG_SECURE 到所有活动。重启应用使更改生效。</string>
     <string name="error_saving_media_file">无法保存媒体文件</string>
-    <string name="change_password_summary">选择新的账户密码…</string>
+    <string name="change_password_summary">设置新账户密码……</string>
     <string name="use_other_session_content_description">在你的其他设备上使用最新的${app_name} 网页版、${app_name} 桌面版、${app_name} iOS 版、${app_name} 安卓版，或其他能够交叉签名的 Matrix 客户端</string>
     <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
@@ -1513,24 +1508,24 @@
     <string name="a11y_stop_camera">停止相机</string>
     <string name="a11y_start_camera">启动相机</string>
     <string name="bottom_sheet_setup_secure_backup_title">安全备份</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">通过在你的服务器上备份加密密钥，防止失去对加密信息和数据的访问。</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">通过在你的服务器上备份加密密钥，防止失去对加密消息和数据的访问。</string>
     <string name="bottom_sheet_setup_secure_backup_submit">设置</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">使用安全密钥</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">生成安全密钥存储在安全的地方如密码管理器或保险箱。</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">使用安全口令</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">输入仅有你知道的安全口令，生成备份用的密钥。</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">使用安全短语</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">输入仅有你知道的秘密短语，生成备份用的密钥。</string>
     <string name="bottom_sheet_save_your_recovery_key_title">保存你的安全密钥</string>
     <string name="bottom_sheet_save_your_recovery_key_content">将你的安全密钥存储在安全的地方，例如密码管理器或保险箱。</string>
-    <string name="set_a_security_phrase_title">设置安全口令</string>
-    <string name="set_a_security_phrase_notice">输入只有你知道的安全口令，用于保护你的服务器上的秘密。</string>
-    <string name="set_a_security_phrase_hint">安全口令</string>
-    <string name="set_a_security_phrase_again_notice">再次输入你的安全口令以确认。</string>
+    <string name="set_a_security_phrase_title">设置安全短语</string>
+    <string name="set_a_security_phrase_notice">输入只有你知道的安全短语，用于保护你的服务器上的秘密。</string>
+    <string name="set_a_security_phrase_hint">安全短语</string>
+    <string name="set_a_security_phrase_again_notice">再次输入你的安全短语以确认。</string>
     <string name="room_settings_name_hint">房间名称</string>
     <string name="room_settings_topic_hint">主题</string>
     <string name="room_settings_save_success">你已成功更改房间设置</string>
     <string name="notice_crypto_unable_to_decrypt_final">你无法访问此消息</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">正在等待此消息，可能会花费一些时间</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">由于端对端加密，你可能需要等待某人的消息到达因为加密密钥未正确发送给你。</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">由于端到端加密，你可能需要等待某人的消息到达，因为加密密钥未正确发送给你。</string>
     <string name="crypto_error_withheld_blacklisted">你无法访问此消息因为你已屏蔽此发送者</string>
     <string name="crypto_error_withheld_unverified">你无法访问此消息，因为你的会话不被发送者信任</string>
     <string name="crypto_error_withheld_generic">你无法访问此消息因为发送者有意不发送密钥</string>
@@ -1540,7 +1535,7 @@
     <string name="disclaimer_negative_button">明白了</string>
     <string name="disclaimer_positive_button">了解更多</string>
     <string name="save_recovery_key_chooser_hint">将恢复密钥保存到</string>
-    <string name="loading_contact_book">正在获取你的联系人…</string>
+    <string name="loading_contact_book">正在获取你的联系人……</string>
     <string name="empty_contact_book">你的通讯录是空的</string>
     <string name="contacts_book_title">通讯录</string>
     <string name="three_pid_revoke_invite_dialog_title">撤销邀请</string>
@@ -1548,7 +1543,7 @@
     <string name="member_banned_by">被 %1$s 封禁</string>
     <string name="failed_to_unban">解封用户失败</string>
     <string name="alert_push_are_disabled_title">推送通知已禁用</string>
-    <string name="alert_push_are_disabled_description">查看你的设置以启用推送通知</string>
+    <string name="alert_push_are_disabled_description">检查你的设置以启用推送通知</string>
     <string name="create_pin_title">选择 PIN 以确保安全</string>
     <string name="create_pin_confirm_title">确认 PIN</string>
     <string name="create_pin_confirm_failure">验证 PIN 失败，请输入新的。</string>
@@ -1583,7 +1578,7 @@
     <plurals name="wrong_pin_message_remaining_attempts">
         <item quantity="other">错误代码，剩余 %d 次尝试</item>
     </plurals>
-    <string name="wrong_pin_message_last_remaining_attempt">注意！登出前最后一次尝试！</string>
+    <string name="wrong_pin_message_last_remaining_attempt">警告！登出前最后一次尝试！</string>
     <string name="too_many_pin_failures">错误次数过多，你已被登出</string>
     <string name="auth_msisdn_already_defined">此电话号码已定义。</string>
     <string name="settings_phone_number_empty">你的账户尚未添加电话号码</string>
@@ -1595,8 +1590,8 @@
     <string name="settings_emails_and_phone_numbers_title">电子邮件和电话号码</string>
     <string name="settings_emails_and_phone_numbers_summary">管理链接到你的 Matrix 账户的电子邮件和电话号码</string>
     <string name="settings_text_message_sent_hint">代码</string>
-    <string name="login_msisdn_notice">请使用国际格式（电话号码必须以 ‘+’ 开始）</string>
-    <string name="confirm_your_identity_quad_s">通过验证此登录确认你的身份，授权它访问加密信息。</string>
+    <string name="login_msisdn_notice">请使用国际格式（电话号码必须以“+”开始）</string>
+    <string name="confirm_your_identity_quad_s">验证此登录来确认你的身份，授权其访问加密消息。</string>
     <string name="error_opening_banned_room">无法打开你被封禁的房间。</string>
     <string name="room_error_not_found">无法找到此房间。请确认它存在。</string>
     <string name="no_permissions_to_start_webrtc_call">你没有权限在此房间发起通话</string>
@@ -1613,8 +1608,8 @@
     <string name="settings_security_pin_code_grace_period_summary_off">每次打开 ${app_name} 都要求 PIN 码。</string>
     <string name="settings_security_pin_code_grace_period_summary_on">在 2 分钟未使用 ${app_name} 后要求 PIN 码。</string>
     <string name="settings_security_pin_code_grace_period_title">2 分钟后要求 PIN</string>
-    <string name="settings_security_pin_code_notifications_summary_off">仅在一个简单通知中显示未读消息内容数量。</string>
-    <string name="settings_security_pin_code_notifications_summary_on">显示细节如房间名称和消息内容。</string>
+    <string name="settings_security_pin_code_notifications_summary_off">仅在一个简单的通知中显示未读消息的数量。</string>
+    <string name="settings_security_pin_code_notifications_summary_on">显示详情，如房间名称和消息内容。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中显示内容</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN 码是解锁 ${app_name} 的唯一方式。</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">启用设备特定的生物特征识别，如指纹和面部识别。</string>
@@ -1632,15 +1627,15 @@
     <string name="bad_passphrase_key_reset_all_action">忘记或丢失了所有的恢复选项？重置一切</string>
     <string name="direct_room_created_summary_item_by_you">你已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
-    <string name="direct_room_encryption_enabled_tile_description">此聊天的消息是端对端加密的。</string>
+    <string name="direct_room_encryption_enabled_tile_description">此聊天的消息是端到端加密的。</string>
     <string name="direct_room_profile_section_more_leave">离开</string>
     <string name="direct_room_profile_section_more_settings">设置</string>
-    <string name="direct_room_profile_encrypted_subtitle">此处的消息已被端对端加密。
+    <string name="direct_room_profile_encrypted_subtitle">此处的消息已端到端加密。
 \n
 \n你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">此处的消息未经端对端加密。</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">此处的消息未经端到端加密。</string>
     <string name="login_error_outdated_homeserver_warning_content">此主服务器正在运行较旧版本。要求你的主服务器管理员升级。你可以继续，但一些功能可能无法正确工作。</string>
-    <string name="direct_room_join_rules_invite_by_you">你仅发出此邀请。</string>
+    <string name="direct_room_join_rules_invite_by_you">你将此房间设为仅邀请。</string>
     <string name="direct_room_join_rules_invite">%1$s 仅发出此邀请。</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">在加密房间显示完整历史</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s 和 %2$s</string>
@@ -1670,7 +1665,7 @@
     <string name="room_alias_published_alias_add_manually">手动发布新地址</string>
     <string name="room_alias_published_other">其它发布的地址：</string>
     <string name="room_alias_published_alias_main">这是主要地址</string>
-    <string name="room_alias_published_alias_subtitle">发布的地址可以被任何服务器上的任何人用来加入你的房间。要发布一个地址，它必须先被设为一个本地地址。</string>
+    <string name="room_alias_published_alias_subtitle">任何服务器上的任何人都可用发布的地址加入你的房间。一个地址必须先设置为本地地址才可发布。</string>
     <string name="room_alias_published_alias_title">发布的地址</string>
     <string name="room_settings_alias_subtitle">查看和管理此房间的地址，以及它在房间目录中的可见性。</string>
     <string name="room_settings_alias_title">房间地址</string>
@@ -1755,7 +1750,7 @@
     <string name="room_permissions_notify_everyone">通知每个人</string>
     <string name="room_permissions_remove_messages_sent_by_others">移除其他人发送的消息</string>
     <string name="room_permissions_ban_users">封禁用户</string>
-    <string name="room_permissions_remove_users">踢掉用户</string>
+    <string name="room_permissions_remove_users">移除用户</string>
     <string name="room_permissions_change_settings">更改设置</string>
     <string name="room_permissions_invite_users">邀请用户</string>
     <string name="room_permissions_send_messages">发送消息</string>
@@ -1775,7 +1770,7 @@
     <string name="notice_room_server_acl_updated_banned">• 匹配 %s 的服务器现已被屏蔽。</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 已封禁匹配 IP 地址的服务器。</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• 已允许匹配 IP 地址的服务器。</string>
-    <string name="notice_room_server_acl_set_banned">• 匹配 %s 的服务器被屏蔽。</string>
+    <string name="notice_room_server_acl_set_banned">• 匹配 %s 的服务器已被屏蔽。</string>
     <string name="notice_room_server_acl_set_allowed">• 已允许匹配 %s 的服务器。</string>
     <string name="a11y_checked">已勾选</string>
     <string name="a11y_selected">已选中</string>
@@ -1819,7 +1814,7 @@
     <string name="initial_sync_start_downloading">初始化同步：
 \n正在下载数据…</string>
     <string name="initial_sync_start_server_computing">初始化同步：
-\n正在等待服务器响应…</string>
+\n正在等待服务器响应……</string>
     <string name="room_displayname_empty_room_was">空房间（曾为 %s）</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="other">%1$s，%2$s，%3$s 和 %4$d 位其他成员</item>
@@ -1877,7 +1872,7 @@
     <string name="looking_for_someone_not_in_space">正在寻找不在 %s 中的人？</string>
     <string name="user_invites_you">%s 邀请了你</string>
     <string name="you_are_invited">你被邀请</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">空间是一种将房间和人们进行重新分组的新方式。</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">空间是把房间和人分组的新方式。</string>
     <string name="space_add_existing_rooms">添加现有房间和空间</string>
     <string name="space_leave_prompt_msg_as_admin">你是此空间唯一的管理员。离开就意味着没人能控制它。</string>
     <string name="space_leave_prompt_msg_private">除非你被重新邀请，否则你将无法重新加入。</string>
@@ -1901,7 +1896,7 @@
     <string name="invite_to_space_with_name">邀请至 %s</string>
     <string name="invite_by_link">分享链接</string>
     <string name="invite_by_email">通过电子邮件进行邀请</string>
-    <string name="invite_people_to_your_space_desc">此刻仅有你自己。%s 与他人一道会更好。</string>
+    <string name="invite_people_to_your_space_desc">此刻只有你。%s与他人一道会更好。</string>
     <string name="invite_to_space">邀请至 %s</string>
     <string name="invite_people_menu">邀请人们</string>
     <string name="invite_people_to_your_space">邀请人们加入你的空间</string>
@@ -1925,7 +1920,7 @@
     <string name="create_spaces_me_and_teammates">我和伙伴</string>
     <string name="create_spaces_organise_rooms">用于整理你房间的私有空间</string>
     <string name="create_spaces_just_me">仅我</string>
-    <string name="create_spaces_make_sure_access">确保对的人可以访问 %s。</string>
+    <string name="create_spaces_make_sure_access">确保正确的人可以访问%s。</string>
     <string name="create_spaces_who_are_you_working_with">你与谁一同工作？</string>
     <string name="create_spaces_join_info_help">要加入现有空间，你需要获得邀请。</string>
     <string name="create_spaces_you_can_change_later">你可以稍后更改</string>
@@ -1970,11 +1965,11 @@
     <string name="give_feedback">提供反馈</string>
     <string name="feedback_failed">反馈发送失败（%s）</string>
     <string name="feedback_sent">感谢，你的反馈已成功送达</string>
-    <string name="you_may_contact_me">如果你后续有任何问题，欢迎联系我</string>
+    <string name="you_may_contact_me">如果你有任何后续问题，可以联系我</string>
     <string name="send_feedback_space_info">你正在使用空间的测试版。你的反馈将有助于改善下一版本。我们将会记录你的平台和用户名以帮助我们尽我们所能多发挥你的反馈的作用。</string>
     <string name="feedback">反馈</string>
     <string name="send_feedback_space_title">空间反馈</string>
-    <string name="jitsi_leave_conf_to_join_another_one_content">离开当前的回忆并切换至其他会议？</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">离开当前会议并切换至另一个？</string>
     <string name="error_jitsi_join_conf">抱歉，在尝试加入会议时发生了错误</string>
     <string name="room_settings_room_access_restricted_description">所有在此空间中的人都可以找到并加入它。仅有此房间的管理员可以将其添加到空间中。</string>
     <string name="room_settings_room_access_restricted_title">仅空间成员</string>
@@ -2127,7 +2122,7 @@
     <string name="call_tile_video_declined">视频通话被拒绝</string>
     <string name="call_tile_voice_declined">语音通话被拒绝</string>
     <string name="call_tile_video_call_has_ended">视频通话已结束 • %1$s</string>
-    <string name="call_tile_voice_call_has_ended">语音通话结束了 • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">语音通话已结束 • %1$s</string>
     <string name="call_tile_video_incoming">视频来电</string>
     <string name="call_tile_voice_incoming">语音来电</string>
     <string name="call_tile_you_declined_this_call">你拒绝了此通话</string>
@@ -2143,7 +2138,7 @@
     <string name="settings_notification_new_keyword">添加新关键词</string>
     <string name="settings_notification_your_keywords">你的关键词</string>
     <string name="room_settings_none">无</string>
-    <string name="room_settings_mention_and_keyword_only">仅提及 &amp; 关键词</string>
+    <string name="room_settings_mention_and_keyword_only">仅提及和关键词</string>
     <string name="call_remove_jitsi_widget_progress">正结束通话…</string>
     <string name="call_ended_invite_timeout_title">无应答</string>
     <string name="call_ended_user_busy_description">你呼叫的用户正忙。</string>
@@ -2167,7 +2162,7 @@
     <string name="command_description_add_to_space">添加至给定的空间</string>
     <string name="create_space_in_progress">创建空间中…</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">显示一些有用的信息以帮助调试应用程序</string>
-    <string name="settings_developer_mode_show_info_on_screen_title">在屏幕商显示调试信息</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">在屏幕上显示调试信息</string>
     <string name="does_not_look_like_valid_email">看起来不像是有效的邮箱地址</string>
     <string name="open_discovery_settings">打开“发现”设置</string>
     <string name="user_directory_search_hint_2">按名称、ID或邮箱搜索</string>
@@ -2224,7 +2219,7 @@
     <string name="attachment_type_poll">投票</string>
     <string name="identity_server_consent_dialog_title_2">向 %s 发送电子邮件和电话号码</string>
     <string name="settings_discovery_consent_notice_off_2">您的联系人是私密的。 要从您的联系人中发现用户，我们需要您的许可才能将联系信息发送到您的身份服务器。</string>
-    <string name="shortcut_disabled_reason_sign_out">已退出此会话！</string>
+    <string name="shortcut_disabled_reason_sign_out">已登出此会话！</string>
     <string name="shortcut_disabled_reason_room_left">已离开此房间！</string>
     <string name="identity_server_consent_dialog_content_question">你同意发送此信息吗？</string>
     <string name="identity_server_consent_dialog_content_3">要发现现有的联系人，您需要将联系人信息(电子邮件和电话号码)发送到您的身份服务器。出乎隐私考量，我们会在发送前对您的数据进行散列处理。</string>
@@ -2232,7 +2227,7 @@
     <string name="delete_poll_dialog_content">您确定要删除此投票吗？一旦移除，就无法恢复。</string>
     <string name="delete_poll_dialog_title">删除投票</string>
     <string name="poll_end_room_list_preview">投票已结束</string>
-    <string name="poll_response_room_list_preview">已投票</string>
+    <string name="poll_response_room_list_preview">投票</string>
     <string name="end_poll_confirmation_approve_button">结束投票</string>
     <string name="end_poll_confirmation_description">这将使人们无法再投票，并将显示投票的最终结果。</string>
     <string name="end_poll_confirmation_title">结束此投票？</string>
@@ -2274,7 +2269,7 @@
     <plurals name="notice_room_server_acl_changes">
         <item quantity="other">修改服务器 %d 的 ACLs</item>
     </plurals>
-    <string name="thread_list_empty_subtitle">Thread帮助你的对话不离题且易于跟踪。</string>
+    <string name="thread_list_empty_subtitle">消息列帮助你的对话不离题且易于跟踪。</string>
     <string name="thread_list_modal_all_threads_subtitle">显示当前房间的所有子区</string>
     <string name="thread_list_modal_all_threads_title">所有子区</string>
     <string name="thread_list_modal_title">筛选器</string>
@@ -2310,7 +2305,7 @@
     <string name="a11y_location_share_locate_button">缩放到当前位置</string>
     <string name="a11y_location_share_pin_on_map">地图上选定位置的图钉</string>
     <string name="poll_no_votes_cast">无投票</string>
-    <string name="ftue_auth_email_verification_title">检查你的电子邮件以验证。</string>
+    <string name="ftue_auth_email_verification_title">验证你的电子邮件</string>
     <plurals name="room_removed_messages">
         <item quantity="other">%d条消息已移除</item>
     </plurals>
@@ -2342,7 +2337,6 @@
     <string name="live_location_not_enough_permission_dialog_description">你需要有正确的权限，才能在这个房间里分享实时位置。</string>
     <string name="live_location_not_enough_permission_dialog_title">你没有权限分享实时位置</string>
     <string name="live_location_bottom_sheet_last_updated_at">%1$s前已更新</string>
-    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">停止分享</string>
     <string name="labs_enable_live_location_summary">临时执行：地点在房间历史中持续存在</string>
     <string name="labs_enable_live_location">启用实时位置共享</string>
     <string name="live_location_sharing_notification_description">位置共享正在进行中</string>
@@ -2374,9 +2368,9 @@
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">结果仅在你结束投票后展示</string>
-    <string name="closed_poll_option_title">已关闭的投票</string>
+    <string name="closed_poll_option_title">封闭式投票</string>
     <string name="open_poll_option_description">投票者一投票就能看到结果</string>
-    <string name="open_poll_option_title">开启投票</string>
+    <string name="open_poll_option_title">开放式投票</string>
     <string name="poll_type_title">投票类型</string>
     <string name="edit_poll_title">编辑投票</string>
     <string name="poll_undisclosed_not_ended">结果将在投票结束时可见</string>
@@ -2386,7 +2380,7 @@
     <string name="ftue_profile_picture_title">添加用户资料图片</string>
     <string name="ftue_auth_email_resend_email">重发电子邮件</string>
     <string name="ftue_auth_email_verification_footer">没有收到电子邮件？</string>
-    <string name="ftue_auth_email_verification_subtitle">要确认你的电子邮件地址，点击我们刚刚寄到%s的电子邮件里的按钮</string>
+    <string name="ftue_auth_email_verification_subtitle">跟随发送到%s的说明</string>
     <string name="ftue_auth_phone_confirmation_resend_code">重新发送验证码</string>
     <string name="ftue_auth_phone_confirmation_subtitle">代码已发送到%s</string>
     <string name="ftue_auth_phone_confirmation_title">确认你的电话号码</string>
@@ -2430,7 +2424,7 @@
     <string name="ftue_auth_carousel_encrypted_title">安全传送消息。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">向主服务器注册端点token失败：
 \n%1$s</string>
-    <string name="threads_beta_enable_notice_message">Threads帮助保持你的对话不离题且易于跟踪。%s启用thread会刷新应用。这对一些账户可能需要更长时间。</string>
+    <string name="threads_beta_enable_notice_message">Threads帮助保持你的对话不离题且易于跟踪。%s启用消息列会刷新应用。这对一些账户可能需要更长时间。</string>
     <string name="restart_the_application_to_apply_changes">重启应用以使更改生效。</string>
     <string name="labs_enable_latex_maths">启用LaTeX数学</string>
     <string name="audio_message_file_size">（%1$s）</string>
@@ -2442,7 +2436,7 @@
     <string name="a11y_audio_message_item">%1$s、%2$s、%3$s</string>
     <string name="settings_show_latest_profile">显示最新用户信息</string>
     <string name="labs_enable_thread_messages_desc">注意：应用将重启</string>
-    <string name="labs_enable_thread_messages">启用thread消息</string>
+    <string name="labs_enable_thread_messages">启用消息列消息</string>
     <string name="labs_auto_report_uisi_desc">当无法解密的错误出现时，你的系统会自动发送日志</string>
     <string name="labs_auto_report_uisi">自动报告解密错误。</string>
     <string name="space_explore_filter_no_result_description">一些结果可能被隐藏，因为它们是私有的，你需要它们的邀请。</string>
@@ -2456,7 +2450,7 @@
     <string name="error_forbidden_digits_only_username">主服务器不接收仅有数字的用户名。</string>
     <string name="send_your_first_msg_to_invite">发送你的第一条消息邀请%s聊天</string>
     <string name="encryption_misconfigured">加密配置错误</string>
-    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的消息会被端对端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的消息会端到端加密。</string>
     <string name="room_profile_section_restore_security">还原加密</string>
     <string name="contact_admin_to_restore_encryption">请联系管理员将加密还原到有效状态。</string>
     <string name="encryption_has_been_misconfigured">加密被错误地配置了。</string>
@@ -2469,7 +2463,6 @@
     <string name="ftue_personalize_complete_title">看起来不错！</string>
     <string name="ftue_personalize_lets_go">走吧</string>
     <string name="ftue_display_name_entry_footer">你可以稍后更改这个</string>
-    <string name="ftue_display_name_subtitle">这会在你发送消息时显示。</string>
     <string name="ftue_auth_login_username_entry">用户名/电子邮件/电话号码</string>
     <string name="ftue_auth_captcha_title">你是人类吗？</string>
     <string name="ftue_auth_password_reset_email_confirmation_subtitle">按照发送到%s的操作说明</string>
@@ -2495,11 +2488,11 @@
     <string name="beta_title_bottom_sheet_action">BETA</string>
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">重设通知方式</string>
     <string name="push_gateway_item_profile_tag">资料标签：</string>
-    <string name="navigate_to_thread_when_already_in_the_thread">你已经在查看这个thread了！</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">你已经在查看这个消息列了！</string>
     <string name="create_room_action_go">出发</string>
-    <string name="reply_in_thread">在thread中回复</string>
+    <string name="reply_in_thread">在消息列中回复</string>
     <string name="keys_backup_settings_signature_from_this_user">备份具有来自该用户的有效签名。</string>
-    <string name="command_not_supported_in_threads">命令“%s”可被识别但在threads中不被支持。</string>
+    <string name="command_not_supported_in_threads">命令“%s”可被识别但在消息列中不被支持。</string>
     <string name="font_size_use_system">使用系统默认值</string>
     <string name="font_size_section_manually">手动选择</string>
     <string name="font_size_section_auto">自动设置</string>
@@ -2516,13 +2509,13 @@
     <string name="settings_autoplay_animated_images_title">自动播放动画图片</string>
     <string name="settings_troubleshoot_test_endpoint_registration_success">端点成功注册到主服务器。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">端点注册</string>
-    <string name="threads_labs_enable_notice_message">你的主服务器当前不支持threads，所以此功能可能不可靠。Some threaded messages may not be reliably available. %s你仍要启用threads吗？</string>
+    <string name="threads_labs_enable_notice_message">你的主服务器当前不支持消息列，所以此功能可能不可靠。Some threaded messages may not be reliably available. %s你仍要启用消息列吗？</string>
     <string name="threads_notice_migration_title">Threads接近Beta了 🎉</string>
-    <string name="search_thread_from_a_thread">来自thread</string>
+    <string name="search_thread_from_a_thread">来自消息列</string>
     <string name="thread_list_empty_notice">实用提示：长按消息并使用“%s”。</string>
-    <string name="thread_list_empty_title">使用threads来保持讨论的条理性</string>
-    <string name="thread_list_modal_my_threads_subtitle">显示你参与的所有threads</string>
-    <string name="thread_list_modal_my_threads_title">我的threads</string>
+    <string name="thread_list_empty_title">使用消息列来保持讨论的条理性</string>
+    <string name="thread_list_modal_my_threads_subtitle">显示你参与的所有消息列</string>
+    <string name="thread_list_modal_my_threads_title">我的消息列s</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">加密被错误地配置了，所以你无法发送消息。点击以打开设置。</string>
     <string name="room_unsupported_e2e_algorithm">加密被错误地配置了，所以你无法发送消息。请联系管理员将加密还原到有效的状态。</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s与其他人</string>
@@ -2539,4 +2532,22 @@
     <string name="time_unit_hour_short">小时</string>
     <string name="initial_sync_request_reason_unignored_users">- 一些用户已被取消忽略</string>
     <string name="initial_sync_request_title">初始同步请求</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="other">%1$s与其他%2$d人</item>
+    </plurals>
+    <string name="updating_your_data">正在更新你的数据……</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">自动批准Element通话组件，授予相机/麦克风权限</string>
+    <string name="labs_enable_element_call_permission_shortcuts">启用Element通话权限捷径</string>
+    <string name="live_location_description">实时位置</string>
+    <string name="verify_invalid_qr_notice">这个QR码看起来不正常。请尝试用另一个方法验证。</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">你无法访问加密消息历史。重置你的安全消息备份和验证密钥以重新开始。</string>
+    <string name="crosssigning_cannot_verify_this_session">无法验证此设备</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">你的服务器地址是什么？</string>
+    <string name="ftue_auth_sign_in_choose_server_header">你的对话发生的地方</string>
+    <string name="search_space_two_parents">%1$s和%2$s</string>
+    <string name="auth_reset_password_error_unverified">电子邮件未确认，检查你的收件箱</string>
+    <string name="location_share_loading_map_error">无法加载地图
+\n此主服务器可能没有设置好显示地图。</string>
+    <string name="a11y_open_settings">打开设置</string>
+    <string name="all_chats">全部聊天</string>
 </resources>
