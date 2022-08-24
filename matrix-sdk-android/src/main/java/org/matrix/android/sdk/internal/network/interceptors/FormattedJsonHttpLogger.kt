@@ -32,8 +32,8 @@ internal class FormattedJsonHttpLogger(
     }
 
     /**
-     * Log the message and try to log it again as a JSON formatted string
-     * Note: it can consume a lot of memory but it is only in DEBUG mode
+     * Log the message and try to log it again as a JSON formatted string.
+     * Note: it can consume a lot of memory but it is only in DEBUG mode.
      *
      * @param message
      */
