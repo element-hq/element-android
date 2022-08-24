@@ -60,7 +60,7 @@ class TestEndpointAsTokenRegistration @Inject constructor(
             )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_endpoint_registration_quick_fix) {
                 override fun doFix() {
-                    unifiedPushHelper.reRegister(
+                    unifiedPushHelper.forceRegister(
                             context,
                             pushersManager
                     )

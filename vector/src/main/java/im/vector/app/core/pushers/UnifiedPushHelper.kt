@@ -46,6 +46,7 @@ class UnifiedPushHelper @Inject constructor(
         private val vectorFeatures: VectorFeatures,
         private val fcmHelper: FcmHelper,
 ) {
+
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -56,7 +57,14 @@ class UnifiedPushHelper @Inject constructor(
         )
     }
 
-    fun reRegister(
+    // If registration is forced:
+    // * the current distributor (if any) is removed
+    // * The dialog is opened
+    //
+    // The registration is forced in 2 cases :
+    // * in the settings
+    // * in the troubleshoot list (doFix)
+    fun forceRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
             onDoneRunnable: Runnable? = null
@@ -86,7 +94,8 @@ class UnifiedPushHelper @Inject constructor(
                 // Un-register first
                 unregister(pushersManager)
             }
-            if (UnifiedPush.getDistributor(context).isNotEmpty()) {
+            // the !force should not be needed
+            if (!force && UnifiedPush.getDistributor(context).isNotEmpty()) {
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
                 return@launch
@@ -94,42 +103,24 @@ class UnifiedPushHelper @Inject constructor(
 
             val distributors = UnifiedPush.getDistributors(context)
 
-            if (distributors.size == 1 && !force) {
+            if (!force && distributors.size == 1) {
                 UnifiedPush.saveDistributor(context, distributors.first())
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
             } else {
                 openDistributorDialogInternal(
                         activity = activity,
-                        pushersManager = pushersManager,
                         onDoneRunnable = onDoneRunnable,
-                        distributors = distributors,
-                        unregisterFirst = force
+                        distributors = distributors
                 )
             }
         }
     }
 
-    fun openDistributorDialog(
-            activity: FragmentActivity,
-            pushersManager: PushersManager,
-            onDoneRunnable: Runnable,
-    ) {
-        val distributors = UnifiedPush.getDistributors(activity)
-        openDistributorDialogInternal(
-                activity,
-                pushersManager,
-                onDoneRunnable, distributors,
-                unregisterFirst = true,
-        )
-    }
-
     private fun openDistributorDialogInternal(
             activity: FragmentActivity,
-            pushersManager: PushersManager?,
             onDoneRunnable: Runnable?,
-            distributors: List<String>,
-            unregisterFirst: Boolean,
+            distributors: List<String>
     ) {
         val internalDistributorName = stringProvider.getString(
                 if (fcmHelper.isFirebaseAvailable()) {
@@ -157,10 +148,6 @@ class UnifiedPushHelper @Inject constructor(
                     }
 
                     activity.lifecycleScope.launch {
-                        if (unregisterFirst) {
-                            // Un-register first
-                            unregister(pushersManager)
-                        }
                         UnifiedPush.saveDistributor(context, distributor)
                         Timber.i("Saving distributor: $distributor")
                         UnifiedPush.registerApp(context)
