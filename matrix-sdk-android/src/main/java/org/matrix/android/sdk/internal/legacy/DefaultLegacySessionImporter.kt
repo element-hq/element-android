@@ -104,6 +104,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     }
 
     private suspend fun importCredentials(legacyConfig: LegacyHomeServerConnectionConfig) {
+        @Suppress("DEPRECATION")
         val sessionParams = SessionParams(
                 credentials = Credentials(
                         userId = legacyConfig.credentials.userId,
