@@ -16,16 +16,13 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class ReadMarkerEntity(
-        @PrimaryKey
-        var roomId: String = "",
-        var eventId: String = ""
-) : RealmModel {
+internal class ReadMarkerEntity : RealmObject {
+    @PrimaryKey
+    var roomId: String = ""
+    var eventId: String = ""
 
     companion object
 }

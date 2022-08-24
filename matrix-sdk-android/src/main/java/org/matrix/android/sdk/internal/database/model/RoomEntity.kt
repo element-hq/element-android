@@ -16,24 +16,19 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
-import org.matrix.android.sdk.internal.database.query.findRootOrLatest
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
-@RealmClass
-internal open class RoomEntity(
-        @PrimaryKey var roomId: String = "",
-        var chunks: RealmList<ChunkEntity> = RealmList(),
-        var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
-        var threadSummaries: RealmList<ThreadSummaryEntity> = RealmList(),
-        var accountData: RealmList<RoomAccountDataEntity> = RealmList()
-) : RealmModel {
+internal class RoomEntity : RealmObject {
+    @PrimaryKey var roomId: String = ""
+    var chunks: RealmList<ChunkEntity> = realmListOf()
+    var sendingTimelineEvents: RealmList<TimelineEventEntity> = realmListOf()
+    var threadSummaries: RealmList<ThreadSummaryEntity> = realmListOf()
+    var accountData: RealmList<RoomAccountDataEntity> = realmListOf()
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership
@@ -56,6 +51,7 @@ internal open class RoomEntity(
     companion object
 }
 
+/*
 internal fun RoomEntity.removeThreadSummaryIfNeeded(eventId: String) {
     assertIsManaged()
     threadSummaries.findRootOrLatest(eventId)?.let {
@@ -63,3 +59,5 @@ internal fun RoomEntity.removeThreadSummaryIfNeeded(eventId: String) {
         it.deleteFromRealm()
     }
 }
+
+ */

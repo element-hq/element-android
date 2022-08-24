@@ -31,11 +31,11 @@ internal object PushConditionMapper {
     }
 
     fun map(domain: PushCondition): PushConditionEntity {
-        return PushConditionEntity(
-                kind = domain.kind,
-                iz = domain.iz,
-                key = domain.key,
-                pattern = domain.pattern
-        )
+        return PushConditionEntity().apply {
+            kind = domain.kind
+            iz = domain.iz
+            key = domain.key
+            pattern = domain.pattern
+        }
     }
 }

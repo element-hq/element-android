@@ -16,18 +16,16 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 
 /**
  * This class is used to store pending threePid data, when user wants to add a threePid to his account.
  */
-@RealmClass
-internal open class PendingThreePidEntity(
-        var email: String? = null,
-        var msisdn: String? = null,
-        var clientSecret: String = "",
-        var sendAttempt: Int = 0,
-        var sid: String = "",
-        var submitUrl: String? = null
-) : RealmModel
+internal class PendingThreePidEntity : RealmObject {
+    var email: String? = null
+    var msisdn: String? = null
+    var clientSecret: String = ""
+    var sendAttempt: Int = 0
+    var sid: String = ""
+    var submitUrl: String? = null
+}

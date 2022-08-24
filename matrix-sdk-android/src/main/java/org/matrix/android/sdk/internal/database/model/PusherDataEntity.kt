@@ -15,13 +15,11 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 
-@RealmClass
-internal open class PusherDataEntity(
-        var url: String? = null,
-        var format: String? = null
-) : RealmModel {
+internal class PusherDataEntity : RealmObject {
+    var url: String? = null
+    var format: String? = null
+
     companion object
 }

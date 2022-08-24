@@ -15,26 +15,23 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
-import timber.log.Timber
 
-@RealmClass
-internal open class EventAnnotationsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String? = null,
-        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
-        var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null,
-        var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null,
-        var liveLocationShareAggregatedSummary: LiveLocationShareAggregatedSummaryEntity? = null,
-) : RealmModel {
+internal class EventAnnotationsSummaryEntity : RealmObject {
+    @PrimaryKey
+    var eventId: String = ""
+    var roomId: String? = null
+    var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = realmListOf()
+    var editSummary: EditAggregatedSummaryEntity? = null
+    var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null
+    var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
+    var liveLocationShareAggregatedSummary: LiveLocationShareAggregatedSummaryEntity? = null
 
+    /*
     /**
      * Cleanup undesired editions, done by users different from the originalEventSender.
      */
@@ -50,9 +47,12 @@ internal open class EventAnnotationsSummaryEntity(
                 }
     }
 
+     */
+
     companion object
 }
 
+/*
 internal fun EventAnnotationsSummaryEntity.deleteOnCascade() {
     reactionsSummary.deleteAllFromRealm()
     editSummary?.deleteFromRealm()
@@ -60,3 +60,4 @@ internal fun EventAnnotationsSummaryEntity.deleteOnCascade() {
     pollResponseSummary?.deleteFromRealm()
     deleteFromRealm()
 }
+*/

@@ -16,33 +16,31 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Decorates room summary with space related information.
  */
-@RealmClass
-internal open class SpaceChildSummaryEntity(
+internal class SpaceChildSummaryEntity : RealmObject {
 //        var isSpace: Boolean = false,
 
-        var order: String? = null,
+    var order: String? = null
 
-        var autoJoin: Boolean? = null,
+    var autoJoin: Boolean? = null
 
-        var suggested: Boolean? = null,
+    var suggested: Boolean? = null
 
-        var childRoomId: String? = null,
-        // Link to the actual space summary if it is known locally
-        var childSummaryEntity: RoomSummaryEntity? = null,
+    var childRoomId: String? = null
 
-        var viaServers: RealmList<String> = RealmList()
+    // Link to the actual space summary if it is known locally
+    var childSummaryEntity: RoomSummaryEntity? = null
+
+    var viaServers: RealmList<String> = realmListOf()
 //        var owner: RoomSummaryEntity? = null,
 
 //        var level: Int = 0
-
-) : RealmModel {
 
     companion object
 }

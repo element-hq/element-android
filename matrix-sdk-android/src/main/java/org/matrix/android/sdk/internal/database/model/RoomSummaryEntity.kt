@@ -16,12 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.Index
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -32,14 +31,12 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 import org.matrix.android.sdk.internal.session.room.membership.RoomName
 
-@RealmClass
-internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = "",
-        var roomType: String? = null,
-        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
-        var children: RealmList<SpaceChildSummaryEntity> = RealmList(),
-        var directParentNames: RealmList<String> = RealmList(),
-) : RealmModel {
+internal class RoomSummaryEntity : RealmObject {
+    @PrimaryKey var roomId: String = ""
+    var roomType: String? = null
+    var parents: RealmList<SpaceParentSummaryEntity> = realmListOf()
+    var children: RealmList<SpaceChildSummaryEntity> = realmListOf()
+    var directParentNames: RealmList<String> = realmListOf()
 
     private var displayName: String? = ""
 
@@ -83,7 +80,7 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
-    var heroes: RealmList<String> = RealmList()
+    var heroes: RealmList<String> = realmListOf()
 
     var joinedMembersCount: Int? = 0
         set(value) {
@@ -106,7 +103,7 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
-    var otherMemberIds: RealmList<String> = RealmList()
+    var otherMemberIds: RealmList<String> = realmListOf()
 
     var notificationCount: Int = 0
         set(value) {
@@ -128,9 +125,10 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
-    private var tags: RealmList<RoomTagEntity> = RealmList()
+    private var tags: RealmList<RoomTagEntity> = realmListOf()
 
     fun tags(): List<RoomTagEntity> = tags
+
 
     fun updateTags(newTags: List<Pair<String, Double?>>) {
         val toDelete = mutableListOf<RoomTagEntity>()
@@ -142,12 +140,15 @@ internal open class RoomSummaryEntity(
                 existingTag.tagOrder = updatedTag.second
             }
         }
-        toDelete.forEach { it.deleteFromRealm() }
+        //toDelete.forEach { it.deleteFromRealm() }
         newTags.forEach { newTag ->
             if (tags.all { it.tagName != newTag.first }) {
                 // we must add it
                 tags.add(
-                        RoomTagEntity(newTag.first, newTag.second)
+                        RoomTagEntity().apply {
+                            tagName = newTag.first
+                            tagOrder = newTag.second
+                        }
                 )
             }
         }
@@ -190,7 +191,7 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
-    var aliases: RealmList<String> = RealmList()
+    var aliases: RealmList<String> = realmListOf()
 
     fun updateAliases(newAliases: List<String>) {
         // only update underlying field if there is a diff

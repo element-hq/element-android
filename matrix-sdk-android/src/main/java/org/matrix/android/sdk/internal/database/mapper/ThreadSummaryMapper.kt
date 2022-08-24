@@ -23,9 +23,9 @@ import javax.inject.Inject
 
 internal class ThreadSummaryMapper @Inject constructor() {
 
-    fun map(threadSummary: ThreadSummaryEntity): ThreadSummary {
+    fun map(roomId: String, threadSummary: ThreadSummaryEntity): ThreadSummary {
         return ThreadSummary(
-                roomId = threadSummary.room?.firstOrNull()?.roomId.orEmpty(),
+                roomId = roomId,
                 rootEvent = threadSummary.rootThreadEventEntity?.asDomain(),
                 latestEvent = threadSummary.latestThreadEventEntity?.asDomain(),
                 rootEventId = threadSummary.rootThreadEventId.orEmpty(),

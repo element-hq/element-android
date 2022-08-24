@@ -17,17 +17,15 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.Index
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 
-@RealmClass
-internal open class CurrentStateEventEntity(
-        var eventId: String = "",
-        var root: EventEntity? = null,
-        @Index var roomId: String = "",
-        @Index var type: String = "",
-        @Index var stateKey: String = ""
-) : RealmModel {
+internal class CurrentStateEventEntity : RealmObject {
+    var eventId: String = ""
+    var root: EventEntity? = null
+    @Index var roomId: String = ""
+    @Index var type: String = ""
+    @Index var stateKey: String = ""
+
     companion object
 }

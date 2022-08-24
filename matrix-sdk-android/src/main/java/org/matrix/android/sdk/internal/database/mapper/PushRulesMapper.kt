@@ -16,10 +16,11 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import com.squareup.moshi.Types
-import io.realm.RealmList
+import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.session.pushrules.Kind
 import org.matrix.android.sdk.api.session.pushrules.rest.PushCondition
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.internal.database.model.PushConditionEntity
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -87,15 +88,16 @@ internal object PushRulesMapper {
     }
 
     fun map(pushRule: PushRule): PushRuleEntity {
-        return PushRuleEntity(
-                actionsStr = moshiActionsAdapter.toJson(pushRule.actions),
-                default = pushRule.default ?: false,
-                enabled = pushRule.enabled,
-                ruleId = pushRule.ruleId,
-                pattern = pushRule.pattern,
-                conditions = pushRule.conditions?.let {
-                    RealmList(*pushRule.conditions.map { PushConditionMapper.map(it) }.toTypedArray())
-                } ?: RealmList()
-        )
+        return PushRuleEntity().apply {
+            actionsStr = moshiActionsAdapter.toJson(pushRule.actions)
+            default = pushRule.default ?: false
+            enabled = pushRule.enabled
+            ruleId = pushRule.ruleId
+            pattern = pushRule.pattern
+            conditions = pushRule.conditions?.let {
+                val safeConditions = pushRule.conditions.map { PushConditionMapper.map(it) }
+                realmListOf<PushConditionEntity>().apply { addAll(safeConditions) }
+            } ?: realmListOf()
+        }
     }
 }

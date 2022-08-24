@@ -16,45 +16,44 @@
 
 package org.matrix.android.sdk.internal.database.model.livelocation
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
 /**
  * Aggregation info concerning a live location share.
  */
-@RealmClass
-internal open class LiveLocationShareAggregatedSummaryEntity(
-        /**
-         * Event id of the event that started the live.
-         */
-        @PrimaryKey
-        var eventId: String = "",
+internal class LiveLocationShareAggregatedSummaryEntity : RealmObject {
+    /**
+     * Event id of the event that started the live.
+     */
+    @PrimaryKey
+    var eventId: String = ""
 
-        /**
-         * List of event ids used to compute the aggregated summary data.
-         */
-        var relatedEventIds: RealmList<String> = RealmList(),
+    /**
+     * List of event ids used to compute the aggregated summary data.
+     */
+    var relatedEventIds: RealmList<String> = realmListOf()
 
-        var roomId: String = "",
+    var roomId: String = ""
 
-        var userId: String = "",
+    var userId: String = ""
 
-        /**
-         * Indicate whether the live is currently running.
-         */
-        var isActive: Boolean? = null,
+    /**
+     * Indicate whether the live is currently running.
+     */
+    var isActive: Boolean? = null
 
-        var startOfLiveTimestampMillis: Long? = null,
+    var startOfLiveTimestampMillis: Long? = null
 
-        var endOfLiveTimestampMillis: Long? = null,
+    var endOfLiveTimestampMillis: Long? = null
 
-        /**
-         * For now we persist this as a JSON for greater flexibility.
-         * @see [org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
-         */
-        var lastLocationContent: String? = null,
-) : RealmModel {
+    /**
+     * For now we persist this as a JSON for greater flexibility.
+     * @see [org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
+     */
+    var lastLocationContent: String? = null
+
     companion object
 }

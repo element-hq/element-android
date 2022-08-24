@@ -16,38 +16,30 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.RealmResults
-import io.realm.annotations.Index
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 
-@RealmClass
-internal open class TimelineEventEntity(
-        var localId: Long = 0,
-        @Index var eventId: String = "",
-        @Index var roomId: String = "",
-        @Index var displayIndex: Int = 0,
-        var root: EventEntity? = null,
-        var annotations: EventAnnotationsSummaryEntity? = null,
-        var senderName: String? = null,
-        var isUniqueDisplayName: Boolean = false,
-        var senderAvatar: String? = null,
-        var senderMembershipEventId: String? = null,
-        // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
-        // to a thread chunk and is a temporarily event.
-        var ownedByThreadChunk: Boolean = false,
-        var readReceipts: ReadReceiptsSummaryEntity? = null
-) : RealmModel {
+internal class TimelineEventEntity : RealmObject {
+    var localId: Long = 0
+    @Index var eventId: String = ""
+    @Index var roomId: String = ""
+    @Index var displayIndex: Int = 0
+    var root: EventEntity? = null
+    var annotations: EventAnnotationsSummaryEntity? = null
+    var senderName: String? = null
+    var isUniqueDisplayName: Boolean = false
+    var senderAvatar: String? = null
+    var senderMembershipEventId: String? = null
 
-    @LinkingObjects("timelineEvents")
-    val chunk: RealmResults<ChunkEntity>? = null
+    // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
+    // to a thread chunk and is a temporarily event.
+    var ownedByThreadChunk: Boolean = false
+    var readReceipts: ReadReceiptsSummaryEntity? = null
 
     companion object
 }
 
+/*
 internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
     assertIsManaged()
     if (canDeleteRoot) {
@@ -55,3 +47,4 @@ internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
     }
     deleteFromRealm()
 }
+ */

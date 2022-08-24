@@ -53,7 +53,7 @@ internal class DefaultThreadsService @AssistedInject constructor(
         return monarchy.findAllMappedWithChanges(
                 { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
                 {
-                    threadSummaryMapper.map(it)
+                    threadSummaryMapper.map(roomId, it)
                 }
         )
     }
@@ -61,7 +61,7 @@ internal class DefaultThreadsService @AssistedInject constructor(
     override fun getAllThreadSummaries(): List<ThreadSummary> {
         return monarchy.fetchAllMappedSync(
                 { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { threadSummaryMapper.map(it) }
+                { threadSummaryMapper.map(roomId, it) }
         )
     }
 

@@ -15,9 +15,7 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.pushers.PusherState
 
 // TODO
@@ -29,17 +27,15 @@ import org.matrix.android.sdk.api.session.pushers.PusherState
 //        at org.matrix.android.sdk.internal.database.model.PusherEntity.setData(PusherEntity.kt:16)
 //        at org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)
-@RealmClass
-internal open class PusherEntity(
-        var pushKey: String = "",
-        var kind: String? = null,
-        var appId: String = "",
-        var appDisplayName: String? = null,
-        var deviceDisplayName: String? = null,
-        var profileTag: String? = null,
-        var lang: String? = null,
-        var data: PusherDataEntity? = null
-) : RealmModel {
+internal class PusherEntity : RealmObject {
+    var pushKey: String = ""
+    var kind: String? = null
+    var appId: String = ""
+    var appDisplayName: String? = null
+    var deviceDisplayName: String? = null
+    var profileTag: String? = null
+    var lang: String? = null
+    var data: PusherDataEntity? = null
     private var stateStr: String = PusherState.UNREGISTERED.name
 
     var state: PusherState
@@ -58,7 +54,10 @@ internal open class PusherEntity(
     companion object
 }
 
+/*
 internal fun PusherEntity.deleteOnCascade() {
     data?.deleteFromRealm()
     deleteFromRealm()
 }
+
+ */

@@ -16,12 +16,10 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.Index
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.EmbeddedRealmObject
+import io.realm.kotlin.types.annotations.Index
 
-@RealmClass(embedded = true)
-internal open class RoomAccountDataEntity(
-        @Index var type: String? = null,
-        var contentStr: String? = null
-) : RealmModel
+internal class RoomAccountDataEntity : EmbeddedRealmObject {
+    @Index var type: String? = null
+    var contentStr: String? = null
+}

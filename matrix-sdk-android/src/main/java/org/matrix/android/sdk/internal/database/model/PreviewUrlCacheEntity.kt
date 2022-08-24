@@ -16,24 +16,21 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class PreviewUrlCacheEntity(
-        @PrimaryKey
-        var url: String = "",
+internal class PreviewUrlCacheEntity : RealmObject {
+    @PrimaryKey
+    var url: String = ""
 
-        var urlFromServer: String? = null,
-        var siteName: String? = null,
-        var title: String? = null,
-        var description: String? = null,
-        var mxcUrl: String? = null,
-        var imageWidth: Int? = null,
-        var imageHeight: Int? = null,
-        var lastUpdatedTimestamp: Long = 0L
-) : RealmModel {
+    var urlFromServer: String? = null
+    var siteName: String? = null
+    var title: String? = null
+    var description: String? = null
+    var mxcUrl: String? = null
+    var imageWidth: Int? = null
+    var imageHeight: Int? = null
+    var lastUpdatedTimestamp: Long = 0L
 
     companion object
 }

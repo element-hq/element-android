@@ -16,44 +16,35 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmResults
-import io.realm.annotations.Index
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
-import org.matrix.android.sdk.internal.extensions.clearWith
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 
-@RealmClass
-internal open class ChunkEntity(
-        @Index var prevToken: String? = null,
+internal class ChunkEntity  : RealmObject {
+        @Index var prevToken: String? = null
         // Because of gaps we can have several chunks with nextToken == null
-        @Index var nextToken: String? = null,
-        var prevChunk: ChunkEntity? = null,
-        var nextChunk: ChunkEntity? = null,
-        var stateEvents: RealmList<EventEntity> = RealmList(),
-        var timelineEvents: RealmList<TimelineEventEntity> = RealmList(),
+        @Index var nextToken: String? = null
+        var prevChunk: ChunkEntity? = null
+        var nextChunk: ChunkEntity? = null
+        var stateEvents: RealmList<EventEntity> = realmListOf()
+        var timelineEvents: RealmList<TimelineEventEntity> = realmListOf()
         // Only one chunk will have isLastForward == true
-        @Index var isLastForward: Boolean = false,
-        @Index var isLastBackward: Boolean = false,
+        @Index var isLastForward: Boolean = false
+        @Index var isLastBackward: Boolean = false
         // Threads
-        @Index var rootThreadEventId: String? = null,
-        @Index var isLastForwardThread: Boolean = false,
-) : RealmModel {
+        @Index var rootThreadEventId: String? = null
+        @Index var isLastForwardThread: Boolean = false
 
     fun identifier() = "${prevToken}_$nextToken"
 
     // If true, then this chunk was previously a last forward chunk
     fun hasBeenALastForwardChunk() = nextToken == null && !isLastForward
 
-    @LinkingObjects("chunks")
-    val room: RealmResults<RoomEntity>? = null
-
     companion object
 }
 
+/*
 internal fun ChunkEntity.deleteOnCascade(
         deleteStateEvents: Boolean,
         canDeleteRoot: Boolean
@@ -72,6 +63,7 @@ internal fun ChunkEntity.deleteOnCascade(
     deleteFromRealm()
 }
 
+
 /**
  * Delete the chunk along with the thread events that were temporarily created.
  */
@@ -84,3 +76,4 @@ internal fun ChunkEntity.deleteAndClearThreadEvents() {
             }
     deleteFromRealm()
 }
+ */

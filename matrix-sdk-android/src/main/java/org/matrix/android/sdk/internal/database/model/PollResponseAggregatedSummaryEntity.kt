@@ -15,28 +15,27 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Keep the latest state of a poll.
  */
-@RealmClass
-internal open class PollResponseAggregatedSummaryEntity(
-        // For now we persist this a JSON for greater flexibility
-        // #see PollSummaryContent
-        var aggregatedContent: String? = null,
+internal class PollResponseAggregatedSummaryEntity : RealmObject {
+    // For now we persist this a JSON for greater flexibility
+    // #see PollSummaryContent
+    var aggregatedContent: String? = null
 
-        // If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
-        var closedTime: Long? = null,
-        // Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
-        var nbOptions: Int = 0,
+    // If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
+    var closedTime: Long? = null
 
-        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
-        var sourceEvents: RealmList<String> = RealmList(),
-        var sourceLocalEchoEvents: RealmList<String> = RealmList()
-) : RealmModel {
+    // Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
+    var nbOptions: Int = 0
+
+    // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+    var sourceEvents: RealmList<String> = realmListOf()
+    var sourceLocalEchoEvents: RealmList<String> = realmListOf()
 
     companion object
 }

@@ -16,23 +16,15 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmResults
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Create a specific table to be able to do direct query on it and keep the draft ordered.
  */
-@RealmClass
-internal open class UserDraftsEntity(
-        var userDrafts: RealmList<DraftEntity> = RealmList()
-) : RealmModel {
-
-    // Link to RoomSummaryEntity
-    @LinkingObjects("userDrafts")
-    val roomSummaryEntity: RealmResults<RoomSummaryEntity>? = null
+internal class UserDraftsEntity : RealmObject {
+    var userDrafts: RealmList<DraftEntity> = realmListOf()
 
     companion object
 }

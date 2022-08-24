@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
-@RealmClass
-internal open class BreadcrumbsEntity(
-        var recentRoomIds: RealmList<String> = RealmList()
-) : RealmModel {
+internal class BreadcrumbsEntity : RealmObject {
+    var recentRoomIds: RealmList<String> = realmListOf()
 
     companion object
 }

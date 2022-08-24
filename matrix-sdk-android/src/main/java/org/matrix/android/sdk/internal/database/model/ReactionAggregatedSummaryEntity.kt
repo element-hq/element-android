@@ -16,28 +16,31 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Aggregated Summary of a reaction.
  */
-@RealmClass
-internal open class ReactionAggregatedSummaryEntity(
-        // The reaction String 😀
-        var key: String = "",
-        // Number of time this reaction was selected
-        var count: Int = 0,
-        // Did the current user sent this reaction
-        var addedByMe: Boolean = false,
-        // The first time this reaction was added (for ordering purpose)
-        var firstTimestamp: Long = 0,
-        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
-        var sourceEvents: RealmList<String> = RealmList(),
-        // List of transaction ids for local echos
-        var sourceLocalEcho: RealmList<String> = RealmList()
-) : RealmModel {
+internal class ReactionAggregatedSummaryEntity : RealmObject {
+    // The reaction String 😀
+    var key: String = ""
+
+    // Number of time this reaction was selected
+    var count: Int = 0
+
+    // Did the current user sent this reaction
+    var addedByMe: Boolean = false
+
+    // The first time this reaction was added (for ordering purpose)
+    var firstTimestamp: Long = 0
+
+    // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+    var sourceEvents: RealmList<String> = realmListOf()
+
+    // List of transaction ids for local echos
+    var sourceLocalEcho: RealmList<String> = realmListOf()
 
     companion object
 }

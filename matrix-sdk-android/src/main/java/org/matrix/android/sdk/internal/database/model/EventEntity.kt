@@ -16,42 +16,40 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.RealmObject
-import io.realm.annotations.Index
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
-@RealmClass
-internal open class EventEntity(
-        @Index var eventId: String = "",
-        @Index var roomId: String = "",
-        @Index var type: String = "",
-        var content: String? = null,
-        var prevContent: String? = null,
-        var isUseless: Boolean = false,
-        @Index var stateKey: String? = null,
-        var originServerTs: Long? = null,
-        @Index var sender: String? = null,
-        // Can contain a serialized MatrixError
-        var sendStateDetails: String? = null,
-        var age: Long? = 0,
-        var unsignedData: String? = null,
-        var redacts: String? = null,
-        var decryptionResultJson: String? = null,
-        var ageLocalTs: Long? = null,
-        // Thread related, no need to create a new Entity for performance
-        @Index var isRootThread: Boolean = false,
-        @Index var rootThreadEventId: String? = null,
-        // Number messages within the thread
-        var numberOfThreads: Int = 0,
-        var threadSummaryLatestMessage: TimelineEventEntity? = null
-) : RealmModel {
+internal class EventEntity : RealmObject {
+    @Index var eventId: String = ""
+    @Index var roomId: String = ""
+    @Index var type: String = ""
+    var content: String? = null
+    var prevContent: String? = null
+    var isUseless: Boolean = false
+    @Index var stateKey: String? = null
+    var originServerTs: Long? = null
+    @Index var sender: String? = null
+
+    // Can contain a serialized MatrixError
+    var sendStateDetails: String? = null
+    var age: Long? = 0
+    var unsignedData: String? = null
+    var redacts: String? = null
+    var decryptionResultJson: String? = null
+    var ageLocalTs: Long? = null
+
+    // Thread related, no need to create a new Entity for performance
+    @Index var isRootThread: Boolean = false
+    @Index var rootThreadEventId: String? = null
+
+    // Number messages within the thread
+    var numberOfThreads: Int = 0
+    var threadSummaryLatestMessage: TimelineEventEntity? = null
 
     private var sendStateStr: String = SendState.UNKNOWN.name
 
@@ -85,7 +83,7 @@ internal open class EventEntity(
     companion object
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
-        assertIsManaged()
+        //assertIsManaged()
         val decryptionResult = OlmDecryptionResult(
                 payload = result.clearEvent,
                 senderKey = result.senderCurve25519Key,
@@ -98,10 +96,13 @@ internal open class EventEntity(
         decryptionErrorReason = null
 
         // If we have an EventInsertEntity for the eventId we make sures it can be processed now.
+        /*
         RealmObject.getRealm(this).where(EventInsertEntity::class.java)
                 .equalTo(EventInsertEntityFields.EVENT_ID, eventId)
                 .findFirst()
                 ?.canBeProcessed = true
+
+         */
     }
 
     fun isThread(): Boolean = rootThreadEventId != null

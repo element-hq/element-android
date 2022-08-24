@@ -16,29 +16,24 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmResults
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class ReadReceiptsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String = "",
-        var readReceipts: RealmList<ReadReceiptEntity> = RealmList()
-) : RealmModel {
-
-    @LinkingObjects("readReceipts")
-    val timelineEvent: RealmResults<TimelineEventEntity>? = null
+internal class ReadReceiptsSummaryEntity : RealmObject {
+    @PrimaryKey
+    var eventId: String = ""
+    var roomId: String = ""
+    var readReceipts: RealmList<ReadReceiptEntity> = realmListOf()
 
     companion object
 }
 
+/*
 internal fun ReadReceiptsSummaryEntity.deleteOnCascade() {
     readReceipts.deleteAllFromRealm()
     deleteFromRealm()
 }
+
+ */

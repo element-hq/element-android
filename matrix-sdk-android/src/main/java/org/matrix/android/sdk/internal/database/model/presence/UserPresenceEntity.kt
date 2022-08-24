@@ -16,21 +16,18 @@
 
 package org.matrix.android.sdk.internal.database.model.presence
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
-@RealmClass
-internal open class UserPresenceEntity(
-        @PrimaryKey var userId: String = "",
-        var lastActiveAgo: Long? = null,
-        var statusMessage: String? = null,
-        var isCurrentlyActive: Boolean? = null,
-        var avatarUrl: String? = null,
-        var displayName: String? = null
-) : RealmModel {
+internal class UserPresenceEntity : RealmObject {
+    @PrimaryKey var userId: String = ""
+    var lastActiveAgo: Long? = null
+    var statusMessage: String? = null
+    var isCurrentlyActive: Boolean? = null
+    var avatarUrl: String? = null
+    var displayName: String? = null
 
     var presence: PresenceEnum
         get() {

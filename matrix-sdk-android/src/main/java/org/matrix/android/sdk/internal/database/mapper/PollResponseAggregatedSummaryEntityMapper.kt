@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import io.realm.RealmList
+import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
@@ -35,13 +36,13 @@ internal object PollResponseAggregatedSummaryEntityMapper {
     }
 
     fun map(model: PollResponseAggregatedSummary): PollResponseAggregatedSummaryEntity {
-        return PollResponseAggregatedSummaryEntity(
-                aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent()),
-                nbOptions = model.nbOptions,
-                closedTime = model.closedTime,
-                sourceEvents = RealmList<String>().apply { addAll(model.sourceEvents) },
-                sourceLocalEchoEvents = RealmList<String>().apply { addAll(model.localEchos) }
-        )
+        return PollResponseAggregatedSummaryEntity().apply {
+            aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent())
+            nbOptions = model.nbOptions
+            closedTime = model.closedTime
+            sourceEvents = realmListOf<String>().apply { addAll(model.sourceEvents) }
+            sourceLocalEchoEvents = realmListOf<String>().apply { addAll(model.localEchos) }
+        }
     }
 }
 

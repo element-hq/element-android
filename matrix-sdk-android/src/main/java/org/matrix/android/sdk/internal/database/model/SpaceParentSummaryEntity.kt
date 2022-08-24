@@ -16,32 +16,30 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Decorates room summary with space related information.
  */
-@RealmClass
-internal open class SpaceParentSummaryEntity(
-        /**
-         * Determines whether this is the main parent for the space
-         * When a user joins a room with a canonical parent, clients may switch to view the room in the context of that space,
-         * peeking into it in order to find other rooms and group them together.
-         * In practice, well behaved rooms should only have one canonical parent, but given this is not enforced:
-         * if multiple are present the client should select the one with the lowest room ID,
-         * as determined via a lexicographic utf-8 ordering.
-         */
-        var canonical: Boolean? = null,
+internal class SpaceParentSummaryEntity : RealmObject {
+    /**
+     * Determines whether this is the main parent for the space
+     * When a user joins a room with a canonical parent, clients may switch to view the room in the context of that space,
+     * peeking into it in order to find other rooms and group them together.
+     * In practice, well behaved rooms should only have one canonical parent, but given this is not enforced:
+     * if multiple are present the client should select the one with the lowest room ID,
+     * as determined via a lexicographic utf-8 ordering.
+     */
+    var canonical: Boolean? = null
 
-        var parentRoomId: String? = null,
-        // Link to the actual space summary if it is known locally
-        var parentSummaryEntity: RoomSummaryEntity? = null,
+    var parentRoomId: String? = null
 
-        var viaServers: RealmList<String> = RealmList()
+    // Link to the actual space summary if it is known locally
+    var parentSummaryEntity: RoomSummaryEntity? = null
 
-) : RealmModel {
+    var viaServers: RealmList<String> = realmListOf()
 
     companion object
 }

@@ -16,23 +16,21 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 
 /**
  * This class is used to get notification on new events being inserted. It's to avoid realm getting slow when listening to insert
  * in EventEntity table.
  */
-@RealmClass
-internal open class EventInsertEntity(
-        var eventId: String = "",
-        var eventType: String = "",
-        /**
-         * This flag will be used to filter EventInsertEntity in EventInsertLiveObserver.
-         * Currently it's set to false when the event content is encrypted.
-         */
-        var canBeProcessed: Boolean = true
-) : RealmModel {
+internal class EventInsertEntity : RealmObject {
+    var eventId: String = ""
+    var eventType: String = ""
+
+    /**
+     * This flag will be used to filter EventInsertEntity in EventInsertLiveObserver.
+     * Currently it's set to false when the event content is encrypted.
+     */
+    var canBeProcessed: Boolean = true
 
     private var insertTypeStr: String = EventInsertType.INCREMENTAL_SYNC.name
     var insertType: EventInsertType

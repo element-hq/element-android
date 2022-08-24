@@ -16,23 +16,21 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 
 /**
  * Contain a map between Json filter string and filterId (from Homeserver).
  * Currently there is only one object in this table.
  */
-@RealmClass
-internal open class FilterEntity(
-        // The serialized FilterBody
-        var filterBodyJson: String = "",
-        // The serialized room event filter for pagination
-        var roomEventFilterJson: String = "",
-        // the id server side of the filterBodyJson, can be used instead of filterBodyJson if not blank
-        var filterId: String = ""
+internal class FilterEntity : RealmObject {
+    // The serialized FilterBody
+    var filterBodyJson: String = ""
 
-) : RealmModel {
+    // The serialized room event filter for pagination
+    var roomEventFilterJson: String = ""
+
+    // the id server side of the filterBodyJson, can be used instead of filterBodyJson if not blank
+    var filterId: String = ""
 
     companion object
 }

@@ -38,16 +38,19 @@ internal object PushersMapper {
     }
 
     fun map(pusher: JsonPusher): PusherEntity {
-        return PusherEntity(
-                pushKey = pusher.pushKey,
-                kind = pusher.kind,
-                appId = pusher.appId,
-                appDisplayName = pusher.appDisplayName,
-                deviceDisplayName = pusher.deviceDisplayName,
-                profileTag = pusher.profileTag,
-                lang = pusher.lang,
-                data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
-        )
+        return PusherEntity().apply {
+            pushKey = pusher.pushKey
+            kind = pusher.kind
+            appId = pusher.appId
+            appDisplayName = pusher.appDisplayName
+            deviceDisplayName = pusher.deviceDisplayName
+            profileTag = pusher.profileTag
+            lang = pusher.lang
+            data = PusherDataEntity().apply {
+                url = pusher.data?.url
+                format = pusher.data?.format
+            }
+        }
     }
 }
 
