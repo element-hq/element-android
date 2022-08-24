@@ -23,7 +23,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 
-internal class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
+internal class FormattedJsonHttpLogger(
+        private val level: HttpLoggingInterceptor.Level
+) : HttpLoggingInterceptor.Logger {
 
     companion object {
         private const val INDENT_SPACE = 2
@@ -38,6 +40,10 @@ internal class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
     @Synchronized
     override fun log(@NonNull message: String) {
         Timber.v(message)
+
+        // Try to log formatted Json only if there is a chance that [message] contains Json.
+        // It can be only the case if we log the bodies of Http requests.
+        if (level != HttpLoggingInterceptor.Level.BODY) return
 
         if (message.startsWith("{")) {
             // JSON Detected
