@@ -104,8 +104,7 @@ class UnifiedPushHelper @Inject constructor(
                         pushersManager = pushersManager,
                         onDoneRunnable = onDoneRunnable,
                         distributors = distributors,
-                        unregisterFirst = force,
-                        cancellable = !force
+                        unregisterFirst = force
                 )
             }
         }
@@ -122,7 +121,6 @@ class UnifiedPushHelper @Inject constructor(
                 pushersManager,
                 onDoneRunnable, distributors,
                 unregisterFirst = true,
-                cancellable = true,
         )
     }
 
@@ -132,7 +130,6 @@ class UnifiedPushHelper @Inject constructor(
             onDoneRunnable: Runnable?,
             distributors: List<String>,
             unregisterFirst: Boolean,
-            cancellable: Boolean,
     ) {
         val internalDistributorName = stringProvider.getString(
                 if (fcmHelper.isFirebaseAvailable()) {
@@ -176,7 +173,7 @@ class UnifiedPushHelper @Inject constructor(
                     UnifiedPush.registerApp(context)
                     onDoneRunnable?.run()
                 }
-                .setCancelable(cancellable)
+                .setCancelable(true)
                 .show()
     }
 
