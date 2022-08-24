@@ -193,7 +193,10 @@ class SpaceListFragment :
     override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncSpaces) {
             Uninitialized,
-            is Loading -> views.stateView.state = StateView.State.Loading
+            is Loading -> {
+                views.stateView.state = StateView.State.Loading
+                return@withState
+            }
             is Success -> views.stateView.state = StateView.State.Content
             else -> Unit
         }
