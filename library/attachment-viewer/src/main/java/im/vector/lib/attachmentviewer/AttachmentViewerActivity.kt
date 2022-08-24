@@ -17,7 +17,6 @@
 
 package im.vector.lib.attachmentviewer
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -352,12 +351,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             // new API instead of SYSTEM_UI_FLAG_HIDE_NAVIGATION
             window.decorView.windowInsetsController?.hide(WindowInsets.Type.navigationBars())
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                @SuppressLint("WrongConstant")
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
-            }
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
