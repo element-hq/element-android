@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.crypto
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
@@ -58,9 +58,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessions
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.db.CRYPTO_REALM_SCHEMA
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
-import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceTask
@@ -89,13 +89,15 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.CryptoDatabase
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.cache.ClearCacheTask
-import org.matrix.android.sdk.internal.session.cache.RealmClearCacheTask
+import org.matrix.android.sdk.internal.session.cache.RealmKotlinClearCacheTask
 import retrofit2.Retrofit
 import java.io.File
 
@@ -109,21 +111,18 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @CryptoDatabase
-        @SessionScope
-        fun providesRealmConfiguration(
+        fun providesKotlinRealmConfiguration(
                 @SessionFilesDirectory directory: File,
                 @UserMd5 userMd5: String,
                 realmKeysUtils: RealmKeysUtils,
                 realmCryptoStoreMigration: RealmCryptoStoreMigration
         ): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
+            return RealmConfiguration.Builder(CRYPTO_REALM_SCHEMA)
+                    .directory(directory.path)
                     .apply {
                         realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
                     }
                     .name("crypto_store.realm")
-                    .modules(RealmCryptoStoreModule())
-                    .allowWritesOnUiThread(true)
                     .schemaVersion(realmCryptoStoreMigration.schemaVersion)
                     .migration(realmCryptoStoreMigration)
                     .build()
@@ -131,16 +130,25 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
+        @CryptoDatabase
         @SessionScope
-        fun providesCryptoCoroutineScope(): CoroutineScope {
-            return CoroutineScope(SupervisorJob())
+        fun providesRealmInstance(
+                @CryptoDatabase realmConfiguration: RealmConfiguration,
+                @SessionCoroutineScope coroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = coroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
 
         @JvmStatic
         @Provides
         @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
-            return RealmClearCacheTask(realmConfiguration)
+        fun providesClearCacheTask(@CryptoDatabase realmInstance: RealmInstance): ClearCacheTask {
+            return RealmKotlinClearCacheTask(realmInstance)
         }
 
         @JvmStatic

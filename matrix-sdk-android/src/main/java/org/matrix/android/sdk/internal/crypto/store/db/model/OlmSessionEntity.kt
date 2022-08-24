@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmSession
@@ -26,15 +25,12 @@ import org.matrix.olm.OlmSession
 internal fun OlmSessionEntity.Companion.createPrimaryKey(sessionId: String, deviceKey: String) = "$sessionId|$deviceKey"
 
 // olmSessionData is a serialized OlmSession
-@RealmClass
-internal open class OlmSessionEntity(
-        @PrimaryKey var primaryKey: String = "",
-        var sessionId: String? = null,
-        var deviceKey: String? = null,
-        var olmSessionData: String? = null,
-        var lastReceivedMessageTs: Long = 0
-) :
-        RealmModel {
+internal class OlmSessionEntity : RealmObject {
+    @PrimaryKey var primaryKey: String = ""
+    var sessionId: String? = null
+    var deviceKey: String? = null
+    var olmSessionData: String? = null
+    var lastReceivedMessageTs: Long = 0
 
     fun getOlmSession(): OlmSession? {
         return deserializeFromRealm(olmSessionData)

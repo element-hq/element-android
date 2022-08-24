@@ -16,45 +16,43 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
+import io.realm.kotlin.dynamic.getNullableValue
+import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-internal class MigrateCryptoTo007(realm: DynamicRealm) : RealmMigrator(realm, 7) {
+internal class MigrateCryptoTo007(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 7) {
 
-    override fun doMigrate(realm: DynamicRealm) {
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Updating KeyInfoEntity table")
         val crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi())
-
-        val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
+        val keyInfoEntities = migrationContext.newRealm.query("KeyInfoEntity").find()
         try {
             keyInfoEntities.forEach {
-                val stringSignatures = it.getString(KeyInfoEntityFields.SIGNATURES)
+                val stringSignatures: String? = it.getNullableValue("signatures")
                 val objectSignatures: Map<String, Map<String, String>>? = deserializeFromRealm(stringSignatures)
                 val jsonSignatures = crossSigningKeysMapper.serializeSignatures(objectSignatures)
-                it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
+                it.set("signatures", jsonSignatures)
             }
         } catch (ignore: Throwable) {
         }
 
         // Migrate frozen classes
-        val inboundGroupSessions = realm.where("OlmInboundGroupSessionEntity").findAll()
+        val inboundGroupSessions = migrationContext.newRealm.query("OlmInboundGroupSessionEntity").find()
         inboundGroupSessions.forEach { dynamicObject ->
-            dynamicObject.getString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA)?.let { serializedObject ->
+            dynamicObject.getNullableValue("olmInboundGroupSessionData", String::class)?.let { serializedObject ->
                 try {
                     deserializeFromRealm<OlmInboundGroupSessionWrapper?>(serializedObject)?.let { oldFormat ->
                         val newFormat = oldFormat.exportKeys()?.let {
                             OlmInboundGroupSessionWrapper2(it)
                         }
-                        dynamicObject.setString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA, serializeForRealm(newFormat))
+                        dynamicObject.set("olmInboundGroupSessionData", serializeForRealm(newFormat))
                     }
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## OlmInboundGroupSessionEntity migration failed")

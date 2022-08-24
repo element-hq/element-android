@@ -39,7 +39,7 @@ internal class WorkManagerProvider @Inject constructor(
         context: Context,
         @SessionId private val sessionId: String,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sessionScope: CoroutineScope
+        @SessionCoroutineScope private val sessionScope: CoroutineScope
 ) {
     private val tag = MATRIX_SDK_TAG_PREFIX + sessionId
 

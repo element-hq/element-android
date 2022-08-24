@@ -22,9 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.squareup.moshi.Types
 import dagger.Lazy
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -95,6 +93,7 @@ import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationSe
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -179,7 +178,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val eventDecryptor: EventDecryptor,
         private val verificationMessageProcessor: VerificationMessageProcessor,
         private val liveEventManager: Lazy<StreamEventsManager>
@@ -209,7 +208,7 @@ internal class DefaultCryptoService @Inject constructor(
         // handle verification
         if (!isInitialSync) {
             if (event.type != null && verificationMessageProcessor.shouldProcess(event.type)) {
-                cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
+                sessionCoroutineScope.launch(coroutineDispatchers.dmVerif) {
                     verificationMessageProcessor.process(event)
                 }
             }
@@ -330,19 +329,19 @@ internal class DefaultCryptoService @Inject constructor(
      *
      */
     fun start() {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             internalStart()
         }
         // Just update
         fetchDevicesList(NoOpMatrixCallback())
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             cryptoStore.tidyUpDataBase()
         }
     }
 
     fun ensureDevice() {
-        cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
+        sessionCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
 
@@ -365,7 +364,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     fun onSyncWillProcess(isInitialSync: Boolean) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (isInitialSync) {
                 try {
                     // On initial sync, we start all our tracking from
@@ -400,7 +399,6 @@ internal class DefaultCryptoService @Inject constructor(
      * Close the crypto.
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
-        cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         incomingKeyRequestManager.close()
         outgoingKeyRequestManager.close()
         olmDevice.release()
@@ -428,7 +426,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param syncResponse the syncResponse
      */
     fun onSyncCompleted(syncResponse: SyncResponse) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 if (syncResponse.deviceLists != null) {
                     deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
@@ -702,7 +700,7 @@ internal class DefaultCryptoService @Inject constructor(
             callback: MatrixCallback<MXEncryptEventContentResult>
     ) {
         // moved to crypto scope to have uptodate values
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userIds = getRoomUserIds(roomId)
             var alg = roomEncryptorsStore.get(roomId)
             if (alg == null) {
@@ -735,7 +733,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun discardOutboundSession(roomId: String) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             val roomEncryptor = roomEncryptorsStore.get(roomId)
             if (roomEncryptor is IMXGroupEncryption) {
                 roomEncryptor.discardSessionKey()
@@ -796,7 +794,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun onToDeviceEvent(event: Event) {
         // event have already been decrypted
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
                     // Keys are imported directly, not waiting for end of sync
@@ -922,7 +920,7 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.tag(loggerTag.value).w("Invalid encryption event")
             return
         }
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userIds = getRoomUserIds(roomId)
             setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
         }
@@ -1087,7 +1085,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 val keys = deviceListManager.downloadKeys(userIds, true)
                 val unknownDevices = getUnknownDevices(keys)
@@ -1240,7 +1238,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 deviceListManager.downloadKeys(userIds, forceDownload)
             }.foldToCallback(callback)
@@ -1309,7 +1307,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
             try {

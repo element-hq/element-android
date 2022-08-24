@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBui
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.InitializeCrossSigningTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -68,7 +69,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val uploadSignaturesTask: UploadSignaturesTask,
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val workManagerProvider: WorkManagerProvider,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val crossSigningOlm: CrossSigningOlm,
@@ -554,7 +555,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.d("## CrossSigning - Mark user $userId as trusted ")
             // We should have this user keys
             val otherMasterKeys = getUserCrossSigningKeys(otherUserId)?.masterKey()
@@ -600,7 +601,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun markMyMasterKeyAsTrusted() {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
             checkSelfTrust()
             // re-verify all trusts
@@ -609,7 +610,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun trustDevice(deviceId: String, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             // This device should be yours
             val device = cryptoStore.getUserDevice(userId, deviceId)
             if (device == null) {

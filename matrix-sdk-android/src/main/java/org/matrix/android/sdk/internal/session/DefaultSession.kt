@@ -69,9 +69,6 @@ import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
-import org.matrix.android.sdk.internal.di.ContentScannerDatabase
-import org.matrix.android.sdk.internal.di.CryptoDatabase
-import org.matrix.android.sdk.internal.di.IdentityDatabase
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -89,7 +86,6 @@ internal class DefaultSession @Inject constructor(
         override val sessionId: String,
         override val coroutineDispatchers: MatrixCoroutineDispatchers,
         @SessionDatabase private val realmConfiguration: RealmConfiguration,
-        @CryptoDatabase private val realmConfigurationCrypto: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
@@ -263,17 +259,17 @@ internal class DefaultSession @Inject constructor(
 
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
-        RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
-        //RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
-        //RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
+        // RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
+        // RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
+        // RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
     }
 
     override fun getRealmConfigurations(): List<RealmConfiguration> {
         return listOf(
                 realmConfiguration,
-                realmConfigurationCrypto,
-                //realmConfigurationIdentity,
-                //realmConfigurationContentScanner,
+                // realmConfigurationCrypto,
+                // realmConfigurationIdentity,
+                // realmConfigurationContentScanner,
         )
     }
 }

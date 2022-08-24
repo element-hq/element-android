@@ -81,6 +81,7 @@ import org.matrix.android.sdk.internal.crypto.verification.qrcode.DefaultQrCodeV
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeData
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.generateSharedSecretV2
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -104,7 +105,7 @@ internal class DefaultVerificationService @Inject constructor(
         private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
         private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val taskExecutor: TaskExecutor,
         private val clock: Clock,
 ) : DefaultVerificationTransaction.Listener, VerificationService {
@@ -127,7 +128,7 @@ internal class DefaultVerificationService @Inject constructor(
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
         Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
-        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
+        sessionCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
@@ -161,7 +162,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
+        sessionCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START -> {
                     onRoomStartRequestReceived(event)
@@ -306,7 +307,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         Timber.v("## SAS onRequestReceived from $senderId and device $otherDeviceId, txId:${validRequestInfo.transactionId}")
 
-        cryptoCoroutineScope.launch {
+        sessionCoroutineScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
                 Timber.e("## Verification device $otherDeviceId is not known")
             }
@@ -827,7 +828,7 @@ internal class DefaultVerificationService @Inject constructor(
                             ?.let { vt ->
                                 val otherDeviceId = vt.otherDeviceId ?: return@let
                                 if (!crossSigningService.canCrossSign()) {
-                                    cryptoCoroutineScope.launch {
+                                    sessionCoroutineScope.launch {
                                         secretShareManager.requestSecretTo(otherDeviceId, MASTER_KEY_SSSS_NAME)
                                         secretShareManager.requestSecretTo(otherDeviceId, SELF_SIGNING_KEY_SSSS_NAME)
                                         secretShareManager.requestSecretTo(otherDeviceId, USER_SIGNING_KEY_SSSS_NAME)

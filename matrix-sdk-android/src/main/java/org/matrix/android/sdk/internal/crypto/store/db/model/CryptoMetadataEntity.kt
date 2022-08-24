@@ -16,46 +16,48 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmAccount
 
-@RealmClass
-internal open class CryptoMetadataEntity(
-        // The current user id.
-        @PrimaryKey var userId: String? = null,
-        // The current device id.
-        var deviceId: String? = null,
-        // Serialized OlmAccount
-        var olmAccountData: String? = null,
-        // The sync token corresponding to the device list. // TODO?
-        var deviceSyncToken: String? = null,
-        // Settings for blacklisting unverified devices.
-        var globalBlacklistUnverifiedDevices: Boolean = false,
-        // setting to enable or disable key gossiping
-        var globalEnableKeyGossiping: Boolean = true,
+internal class CryptoMetadataEntity : RealmObject {
+    // The current user id.
+    @PrimaryKey var userId: String? = null
 
-        // MSC3061: Sharing room keys for past messages
-        // If set to true key history will be shared to invited users with respect to room setting
-        var enableKeyForwardingOnInvite: Boolean = false,
+    // The current device id.
+    var deviceId: String? = null
 
-        // The keys backup version currently used. Null means no backup.
-        var backupVersion: String? = null,
+    // Serialized OlmAccount
+    var olmAccountData: String? = null
 
-        // The device keys has been sent to the homeserver
-        var deviceKeysSentToServer: Boolean = false,
+    // The sync token corresponding to the device list. // TODO?
+    var deviceSyncToken: String? = null
 
-        var xSignMasterPrivateKey: String? = null,
-        var xSignUserPrivateKey: String? = null,
-        var xSignSelfSignedPrivateKey: String? = null,
-        var keyBackupRecoveryKey: String? = null,
-        var keyBackupRecoveryKeyVersion: String? = null
+    // Settings for blacklisting unverified devices.
+    var globalBlacklistUnverifiedDevices: Boolean = false
+
+    // setting to enable or disable key gossiping
+    var globalEnableKeyGossiping: Boolean = true
+
+    // MSC3061: Sharing room keys for past messages
+    // If set to true key history will be shared to invited users with respect to room setting
+    var enableKeyForwardingOnInvite: Boolean = false
+
+    // The keys backup version currently used. Null means no backup.
+    var backupVersion: String? = null
+
+    // The device keys has been sent to the homeserver
+    var deviceKeysSentToServer: Boolean = false
+
+    var xSignMasterPrivateKey: String? = null
+    var xSignUserPrivateKey: String? = null
+    var xSignSelfSignedPrivateKey: String? = null
+    var keyBackupRecoveryKey: String? = null
+    var keyBackupRecoveryKeyVersion: String? = null
 
 //        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
-) : RealmModel {
 
     // Deserialize data
     fun getOlmAccount(): OlmAccount? {

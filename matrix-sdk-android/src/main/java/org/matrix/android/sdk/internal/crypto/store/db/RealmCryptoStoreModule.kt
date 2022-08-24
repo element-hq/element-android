@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db
 
-import io.realm.annotations.RealmModule
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
@@ -38,26 +37,22 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 /**
  * Realm module for Crypto store classes.
  */
-@RealmModule(
-        library = true,
-        classes = [
-            CryptoMetadataEntity::class,
-            CryptoRoomEntity::class,
-            DeviceInfoEntity::class,
-            KeysBackupDataEntity::class,
-            OlmInboundGroupSessionEntity::class,
-            OlmSessionEntity::class,
-            UserEntity::class,
-            KeyInfoEntity::class,
-            CrossSigningInfoEntity::class,
-            TrustLevelEntity::class,
-            AuditTrailEntity::class,
-            OutgoingKeyRequestEntity::class,
-            KeyRequestReplyEntity::class,
-            MyDeviceLastSeenInfoEntity::class,
-            WithHeldSessionEntity::class,
-            SharedSessionEntity::class,
-            OutboundGroupSessionInfoEntity::class
-        ]
+internal val CRYPTO_REALM_SCHEMA = setOf(
+        CryptoMetadataEntity::class,
+        CryptoRoomEntity::class,
+        DeviceInfoEntity::class,
+        KeysBackupDataEntity::class,
+        OlmInboundGroupSessionEntity::class,
+        OlmSessionEntity::class,
+        UserEntity::class,
+        KeyInfoEntity::class,
+        CrossSigningInfoEntity::class,
+        TrustLevelEntity::class,
+        AuditTrailEntity::class,
+        OutgoingKeyRequestEntity::class,
+        KeyRequestReplyEntity::class,
+        MyDeviceLastSeenInfoEntity::class,
+        WithHeldSessionEntity::class,
+        SharedSessionEntity::class,
+        OutboundGroupSessionInfoEntity::class
 )
-internal class RealmCryptoStoreModule

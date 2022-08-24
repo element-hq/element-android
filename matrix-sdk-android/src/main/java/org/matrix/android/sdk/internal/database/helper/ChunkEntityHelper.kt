@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
-import io.realm.RealmObject
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.paging.PositionalDataSource
 
 @Suppress("DEPRECATION")
-public abstract class TiledDataSource<T : Any> : PositionalDataSource<T>() {
+public abstract class TiledDataSource<T> : PositionalDataSource<T>() {
 
   public abstract fun countItems(): Int
 

@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.crypto.model.toDebugString
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -65,7 +66,7 @@ internal class MXMegolmEncryption(
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val clock: Clock,
 ) : IMXEncrypting, IMXGroupEncryption {
 
@@ -109,7 +110,7 @@ internal class MXMegolmEncryption(
 
     private fun notifyWithheldForSession(devices: MXUsersDevicesMap<WithHeldCode>, outboundSession: MXOutboundSessionInfo) {
         // offload to computation thread
-        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
+        sessionCoroutineScope.launch(coroutineDispatchers.computation) {
             mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
                 devices.forEach { userId, deviceId, withheldCode ->
                     this.add(UserDevice(userId, deviceId) to withheldCode)

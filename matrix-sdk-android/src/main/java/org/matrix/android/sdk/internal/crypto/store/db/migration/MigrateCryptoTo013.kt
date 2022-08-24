@@ -16,63 +16,26 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
-import timber.log.Timber
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 
 // Version 13L delete unreferenced TrustLevelEntity
-internal class MigrateCryptoTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
+internal class MigrateCryptoTo013(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 13) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        // Use a trick to do that... Ref: https://stackoverflow.com/questions/55221366
-        val trustLevelEntitySchema = realm.schema.get("TrustLevelEntity")
-
-        /*
-        Creating a new temp field called isLinked which is set to true for those which are
-        references by other objects. Rest of them are set to false. Then removing all
-        those which are false and hence duplicate and unnecessary. Then removing the temp field
-        isLinked
-         */
-        var mainCounter = 0
-        var deviceInfoCounter = 0
-        var keyInfoCounter = 0
-        val deleteCounter: Int
-
-        trustLevelEntitySchema
-                ?.addField("isLinked", Boolean::class.java)
-                ?.transform { obj ->
-                    // Setting to false for all by default
-                    obj.set("isLinked", false)
-                    mainCounter++
-                }
-
-        realm.schema.get("DeviceInfoEntity")?.transform { obj ->
-            // Setting to true for those which are referenced in DeviceInfoEntity
-            deviceInfoCounter++
-            obj.getObject("trustLevelEntity")?.set("isLinked", true)
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        val trustLevelEntities = migrationContext.newRealm.query("TrustLevelEntity").find()
+        val linkedTrustLevelEntities = mutableSetOf<TrustLevelEntity>()
+        val deviceInfoEntities = migrationContext.newRealm.query("DeviceInfoEntity").find()
+        deviceInfoEntities.forEach {
+            val trustLevelEntity = it.getNullableValue("trustLevelEntity", TrustLevelEntity::class)
+            if (trustLevelEntity != null) {
+                linkedTrustLevelEntities.add(trustLevelEntity)
+            }
         }
-
-        realm.schema.get("KeyInfoEntity")?.transform { obj ->
-            // Setting to true for those which are referenced in KeyInfoEntity
-            keyInfoCounter++
-            obj.getObject("trustLevelEntity")?.set("isLinked", true)
-        }
-
-        // Removing all those which are set as false
-        realm.where("TrustLevelEntity")
-                .equalTo("isLinked", false)
-                .findAll()
-                .also { deleteCounter = it.size }
-                .deleteAllFromRealm()
-
-        trustLevelEntitySchema?.removeField("isLinked")
-
-        Timber.w("TrustLevelEntity cleanup: $mainCounter entities")
-        Timber.w("TrustLevelEntity cleanup: $deviceInfoCounter entities referenced in DeviceInfoEntities")
-        Timber.w("TrustLevelEntity cleanup: $keyInfoCounter entities referenced in KeyInfoEntity")
-        Timber.w("TrustLevelEntity cleanup: $deleteCounter entities deleted!")
-        if (mainCounter != deviceInfoCounter + keyInfoCounter + deleteCounter) {
-            Timber.e("TrustLevelEntity cleanup: Something is not correct...")
+        val unreferencedTrustLevelEntities = trustLevelEntities.subtract(linkedTrustLevelEntities)
+        unreferencedTrustLevelEntities.forEach {
+            migrationContext.newRealm.delete(it)
         }
     }
 }

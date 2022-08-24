@@ -24,11 +24,12 @@ interface ContentScannerService {
 
     val serverPublicKey: String?
 
-    //TODO: suspend
+    // TODO suspend
     fun getContentScannerServer(): String?
     suspend fun setScannerUrl(url: String?)
     suspend fun enableScanner(enabled: Boolean)
-    //TODO: suspend
+
+    // TODO suspend
     fun isScannerEnabled(): Boolean
     fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean = true, fileInfo: ElementToDecrypt? = null): Flow<Optional<ScanStatusInfo>>
     suspend fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo?

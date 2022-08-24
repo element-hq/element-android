@@ -16,19 +16,16 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
 
-@RealmClass
-internal open class OutboundGroupSessionInfoEntity(
-        var serializedOutboundSessionData: String? = null,
-        var creationTime: Long? = null,
-        var shouldShareHistory: Boolean = false
-) : RealmModel {
+internal class OutboundGroupSessionInfoEntity : RealmObject {
+    var serializedOutboundSessionData: String? = null
+    var creationTime: Long? = null
+    var shouldShareHistory: Boolean = false
 
     fun getOutboundGroupSession(): OlmOutboundGroupSession? {
         return try {

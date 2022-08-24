@@ -29,5 +29,4 @@ internal class MigrateAuthTo005(migrationContext: AutomaticSchemaMigration.Migra
             newObj?.set("loginType", LoginType.UNKNOWN.name)
         }
     }
-
 }

@@ -32,6 +32,7 @@ import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
+import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.util.time.DefaultClock
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMessageEvent

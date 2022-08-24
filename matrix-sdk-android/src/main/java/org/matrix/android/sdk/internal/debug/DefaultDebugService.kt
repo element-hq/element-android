@@ -19,26 +19,23 @@ package org.matrix.android.sdk.internal.debug
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.debug.DebugService
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
-import org.matrix.android.sdk.internal.di.AuthDatabase
-import org.matrix.android.sdk.internal.di.GlobalDatabase
 import javax.inject.Inject
 
 internal class DefaultDebugService @Inject constructor(
-        //@AuthDatabase private val realmConfigurationAuth: RealmConfiguration,
-        //@GlobalDatabase private val realmConfigurationGlobal: RealmConfiguration,
+        // @AuthDatabase private val realmConfigurationAuth: RealmConfiguration,
+        // @GlobalDatabase private val realmConfigurationGlobal: RealmConfiguration,
         private val sessionManager: SessionManager,
 ) : DebugService {
 
     override fun getAllRealmConfigurations(): List<RealmConfiguration> {
         return sessionManager.getLastSession()?.getRealmConfigurations().orEmpty()
-                //realmConfigurationAuth +
-                //realmConfigurationGlobal
+                // realmConfigurationAuth +
+                // realmConfigurationGlobal
     }
 
     override fun logDbUsageInfo() {
-        //RealmDebugTools(realmConfigurationAuth).logInfo("Auth")
-        //RealmDebugTools(realmConfigurationGlobal).logInfo("Global")
+        // RealmDebugTools(realmConfigurationAuth).logInfo("Auth")
+        // RealmDebugTools(realmConfigurationGlobal).logInfo("Global")
         sessionManager.getLastSession()?.logDbUsageInfo()
     }
 }

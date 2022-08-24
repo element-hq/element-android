@@ -16,26 +16,25 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
-import org.matrix.android.sdk.internal.extensions.clearWith
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.PrimaryKey
 
-@RealmClass
-internal open class UserEntity(
-        @PrimaryKey var userId: String? = null,
-        var devices: RealmList<DeviceInfoEntity> = RealmList(),
-        var crossSigningInfoEntity: CrossSigningInfoEntity? = null,
-        var deviceTrackingStatus: Int = 0
-) : RealmModel {
+internal class UserEntity : RealmObject {
+    @PrimaryKey var userId: String? = null
+    var devices: RealmList<DeviceInfoEntity> = realmListOf()
+    var crossSigningInfoEntity: CrossSigningInfoEntity? = null
+    var deviceTrackingStatus: Int = 0
 
     companion object
 }
 
+/*
 internal fun UserEntity.deleteOnCascade() {
     devices.clearWith { it.deleteOnCascade() }
     crossSigningInfoEntity?.deleteOnCascade()
     deleteFromRealm()
 }
+
+ */

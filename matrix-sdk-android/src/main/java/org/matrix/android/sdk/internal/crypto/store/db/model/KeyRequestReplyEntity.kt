@@ -16,17 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import io.realm.RealmModel
-import io.realm.annotations.RealmClass
+import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
-@RealmClass
-internal open class KeyRequestReplyEntity(
-        var senderId: String? = null,
-        var fromDevice: String? = null,
-        var eventJson: String? = null
-) : RealmModel {
+internal class KeyRequestReplyEntity : RealmObject {
+    var senderId: String? = null
+    var fromDevice: String? = null
+    var eventJson: String? = null
+
     companion object
 
     fun getEvent(): Event? {

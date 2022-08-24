@@ -49,7 +49,6 @@ internal class MigrateAuthTo004(migrationContext: AutomaticSchemaMigration.Migra
                         homeserverConnectionConfig
                     }
             newObj?.set("homeServerConnectionConfigJson", adapter.toJson(alteredHomeserverConnectionConfig))
-
         }
     }
 }

@@ -18,11 +18,10 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.Index
-import io.realm.annotations.RealmClass
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
@@ -35,19 +34,17 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
-@RealmClass
-internal open class OutgoingKeyRequestEntity(
-        @Index var requestId: String? = null,
-        var requestedIndex: Int? = null,
-        var recipientsData: String? = null,
-        var requestedInfoStr: String? = null,
-        var creationTimeStamp: Long? = null,
-        // de-normalization for better query (if not have to query all and parse json)
-        @Index var roomId: String? = null,
-        @Index var megolmSessionId: String? = null,
+internal class OutgoingKeyRequestEntity : RealmObject {
+    @Index var requestId: String? = null
+    var requestedIndex: Int? = null
+    var recipientsData: String? = null
+    var requestedInfoStr: String? = null
+    var creationTimeStamp: Long? = null
 
-        var replies: RealmList<KeyRequestReplyEntity> = RealmList()
-) : RealmModel {
+    // de-normalization for better query (if not have to query all and parse json)
+    @Index var roomId: String? = null
+    @Index var megolmSessionId: String? = null
+    var replies: RealmList<KeyRequestReplyEntity> = realmListOf()
 
     @Index private var requestStateStr: String = OutgoingRoomKeyRequestState.UNSENT.name
 
@@ -87,11 +84,11 @@ internal open class OutgoingKeyRequestEntity(
     }
 
     fun addReply(userId: String, fromDevice: String?, event: Event) {
-        val newReply = KeyRequestReplyEntity(
-                senderId = userId,
-                fromDevice = fromDevice,
-                eventJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJson(event)
-        )
+        val newReply = KeyRequestReplyEntity().apply {
+            this.senderId = userId
+            this.fromDevice = fromDevice
+            this.eventJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJson(event)
+        }
         replies.add(newReply)
     }
 
@@ -133,7 +130,10 @@ internal open class OutgoingKeyRequestEntity(
     }
 }
 
+/*
 internal fun OutgoingKeyRequestEntity.deleteOnCascade() {
     replies.deleteAllFromRealm()
     deleteFromRealm()
 }
+
+ */

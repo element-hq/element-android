@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.raw.db.migration
 
 import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.internal.database.MatrixAutomaticSchemaMigration
-import org.matrix.android.sdk.internal.raw.db.migration.MigrateGlobalTo001
 import javax.inject.Inject
 
 internal class GlobalRealmMigration @Inject constructor() : MatrixAutomaticSchemaMigration(

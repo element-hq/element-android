@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.legacy
 
 import android.content.Context
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -31,7 +29,6 @@ import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
-import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.legacy.riot.LoginStorage
 import timber.log.Timber
@@ -156,19 +153,19 @@ internal class DefaultLegacySessionImporter @Inject constructor(
 
     private fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
         // Here we migrate the DB, we copy the crypto DB to the location specific to Matrix SDK2, and we encrypt it.
-        val userMd5 = legacyConfig.credentials.userId.md5()
 
         val sessionId = legacyConfig.credentials.let { (if (it.deviceId.isNullOrBlank()) it.userId else "${it.userId}|${it.deviceId}").md5() }
         val newLocation = File(context.filesDir, sessionId)
-
-        val keyAlias = "crypto_module_$userMd5"
 
         // Ensure newLocation does not exist (can happen in case of partial migration)
         newLocation.deleteRecursively()
         newLocation.mkdirs()
 
         Timber.d("Migration: create legacy realm configuration")
-
+        // TODO RE-ENABLE before merging...
+        /*
+        val userMd5 = legacyConfig.credentials.userId.md5()
+        val keyAlias = "crypto_module_$userMd5"
         val realmConfiguration = RealmConfiguration.Builder()
                 .directory(File(context.filesDir, userMd5))
                 .name("crypto_store.realm")
@@ -182,6 +179,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
             // Move the DB to the new location, handled by Matrix SDK2
             it.writeEncryptedCopyTo(File(newLocation, realmConfiguration.realmFileName), realmKeysUtils.getRealmEncryptionKey(keyAlias))
         }
+
+         */
     }
 
     // Delete all the files created by Riot Android which will not be used anymore by Element

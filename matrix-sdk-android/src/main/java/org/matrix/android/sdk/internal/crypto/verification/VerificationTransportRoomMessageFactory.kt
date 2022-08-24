@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -31,7 +32,7 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         @DeviceId
         private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val clock: Clock,
 ) {
 
@@ -43,7 +44,7 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
                 roomId = roomId,
                 localEchoEventFactory = localEchoEventFactory,
                 tx = tx,
-                cryptoCoroutineScope = cryptoCoroutineScope,
+                sessionCoroutineScope = sessionCoroutineScope,
                 clock = clock,
         )
     }

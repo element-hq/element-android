@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.db.model
+package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
-internal class TrustLevelEntity : RealmObject {
-    var crossSignedVerified: Boolean? = null
-    var locallyVerified: Boolean? = null
+internal class MigrateCryptoTo018(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 18) {
 
-    companion object
-
-    fun isVerified(): Boolean = crossSignedVerified == true || locallyVerified == true
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Migrate to realm-kotlin")
+    }
 }

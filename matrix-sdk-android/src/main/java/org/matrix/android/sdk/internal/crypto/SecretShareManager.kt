@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -53,7 +54,7 @@ private val loggerTag = LoggerTag("SecretShareManager", LoggerTag.CRYPTO)
 internal class SecretShareManager @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val messageEncrypter: MessageEncrypter,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val sendToDeviceTask: SendToDeviceTask,
@@ -100,7 +101,7 @@ internal class SecretShareManager @Inject constructor(
      */
     fun onVerificationCompleteForDevice(deviceId: String) {
         // For now we just keep an in memory cache
-        cryptoCoroutineScope.launch {
+        sessionCoroutineScope.launch {
             verifMutex.withLock {
                 recentlyVerifiedDevices[deviceId] = clock.epochMillis()
             }

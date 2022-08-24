@@ -16,23 +16,31 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.db.CRYPTO_REALM_SCHEMA
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
-import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.time.DefaultClock
 import kotlin.random.Random
 
 internal class CryptoStoreHelper {
 
-    fun createStore(): IMXCryptoStore {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun createStore(coroutineScope: CoroutineScope): IMXCryptoStore {
+        val realmConfiguration =  RealmConfiguration.Builder(CRYPTO_REALM_SCHEMA)
+                .name("test.realm")
+                .deleteRealmIfMigrationNeeded()
+                .build()
+
+        val realmInstance = RealmInstance(coroutineScope, realmConfiguration, UnconfinedTestDispatcher())
         return RealmCryptoStore(
-                realmConfiguration = RealmConfiguration.Builder()
-                        .name("test.realm")
-                        .modules(RealmCryptoStoreModule())
-                        .build(),
+                realmInstance = realmInstance,
                 crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
                 userId = "userId_" + Random.nextInt(),
                 deviceId = "deviceId_sample",

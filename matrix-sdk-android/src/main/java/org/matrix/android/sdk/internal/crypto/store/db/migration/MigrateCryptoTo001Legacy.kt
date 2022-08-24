@@ -16,20 +16,13 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import timber.log.Timber
 
-internal class MigrateCryptoTo001Legacy(realm: DynamicRealm) : RealmMigrator(realm, 1) {
+internal class MigrateCryptoTo001Legacy(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 1) {
 
-    override fun doMigrate(realm: DynamicRealm) {
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
         Timber.d("Add field lastReceivedMessageTs (Long) and set the value to 0")
-
-        realm.schema.get("OlmSessionEntity")
-                ?.addField(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Long::class.java)
-                ?.transform {
-                    it.setLong(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, 0)
-                }
     }
 }

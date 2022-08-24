@@ -16,22 +16,20 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
 import timber.log.Timber
 
-// Fixes duplicate devices in UserEntity#devices
-internal class MigrateCryptoTo009(realm: DynamicRealm) : RealmMigrator(realm, 9) {
+internal class MigrateCryptoTo009(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 9) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        val userEntities = realm.where("UserEntity").findAll()
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Fixes duplicate devices in UserEntity#devices")
+        val userEntities = migrationContext.newRealm.query("UserEntity").find()
         userEntities.forEach {
             try {
-                val deviceList = it.getList(UserEntityFields.DEVICES.`$`)
-                        ?: return@forEach
-                val distinct = deviceList.distinctBy { it.getString(DeviceInfoEntityFields.DEVICE_ID) }
+                val deviceList = it.getValueList("devices", DeviceInfoEntity::class)
+                val distinct = deviceList.distinctBy { it.deviceId }
                 if (distinct.size != deviceList.size) {
                     deviceList.clear()
                     deviceList.addAll(distinct)

@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ private val loggerTag = LoggerTag("InboundGroupSessionStore", LoggerTag.CRYPTO)
  */
 internal class InboundGroupSessionStore @Inject constructor(
         private val store: IMXCryptoStore,
-        private val cryptoCoroutineScope: CoroutineScope,
+        @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
@@ -52,7 +53,7 @@ internal class InboundGroupSessionStore @Inject constructor(
     private val sessionCache = object : LruCache<CacheKey, InboundGroupSessionHolder>(100) {
         override fun entryRemoved(evicted: Boolean, key: CacheKey?, oldValue: InboundGroupSessionHolder?, newValue: InboundGroupSessionHolder?) {
             if (oldValue != null) {
-                cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
                     Timber.tag(loggerTag.value).v("## Inbound: entryRemoved ${oldValue.wrapper.roomId}-${oldValue.wrapper.senderKey}")
                     // store.storeInboundGroupSessions(listOf(oldValue).map { it.wrapper })
                     oldValue.wrapper.session.releaseSession()
@@ -104,7 +105,7 @@ internal class InboundGroupSessionStore @Inject constructor(
             // If it's already known, no need to update cache it's already there
             sessionCache.put(CacheKey(sessionId, senderKey), holder)
         }
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
             store.storeInboundGroupSessions(listOf(holder.wrapper))
         }
     }

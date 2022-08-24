@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.raw
 
 import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.raw.db.model.RawCacheEntity
 import org.matrix.android.sdk.internal.di.GlobalDatabase
+import org.matrix.android.sdk.internal.raw.db.model.RawCacheEntity
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 

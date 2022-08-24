@@ -16,21 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import io.realm.kotlin.migration.AutomaticSchemaMigration
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
 // Version 12L added outbound group session persistence
-internal class MigrateCryptoTo012(realm: DynamicRealm) : RealmMigrator(realm, 12) {
+internal class MigrateCryptoTo012(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 12) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        val outboundEntitySchema = realm.schema.create("OutboundGroupSessionInfoEntity")
-                .addField(OutboundGroupSessionInfoEntityFields.SERIALIZED_OUTBOUND_SESSION_DATA, String::class.java)
-                .addField(OutboundGroupSessionInfoEntityFields.CREATION_TIME, Long::class.java)
-                .setNullable(OutboundGroupSessionInfoEntityFields.CREATION_TIME, true)
-
-        realm.schema.get("CryptoRoomEntity")
-                ?.addRealmObjectField(CryptoRoomEntityFields.OUTBOUND_SESSION_INFO.`$`, outboundEntitySchema)
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        Timber.d("Create OutboundGroupSessionInfoEntity")
+        Timber.d("Update CryptoRoomEntity")
     }
 }

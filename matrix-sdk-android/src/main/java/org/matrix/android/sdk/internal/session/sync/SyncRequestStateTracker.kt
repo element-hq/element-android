@@ -21,12 +21,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
+import org.matrix.android.sdk.internal.di.SessionCoroutineScope
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
 internal class SyncRequestStateTracker @Inject constructor(
-        private val coroutineScope: CoroutineScope
+        @SessionCoroutineScope private val coroutineScope: CoroutineScope
 ) : ProgressReporter {
 
     val syncRequestState = MutableSharedFlow<SyncRequestState>()
