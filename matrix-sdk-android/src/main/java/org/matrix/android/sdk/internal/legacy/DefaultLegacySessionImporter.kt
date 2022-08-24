@@ -162,7 +162,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         newLocation.mkdirs()
 
         Timber.d("Migration: create legacy realm configuration")
-        // TODO: RE-ENABLE before merging...
+        // TODO RE-ENABLE before merging...
         /*
         val userMd5 = legacyConfig.credentials.userId.md5()
         val keyAlias = "crypto_module_$userMd5"

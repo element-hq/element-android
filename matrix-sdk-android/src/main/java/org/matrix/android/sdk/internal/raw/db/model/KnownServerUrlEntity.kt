@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.raw.db.model
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 
-internal class KnownServerUrlEntity() : RealmObject {
+internal class KnownServerUrlEntity : RealmObject {
 
     @PrimaryKey
     var url: String = ""

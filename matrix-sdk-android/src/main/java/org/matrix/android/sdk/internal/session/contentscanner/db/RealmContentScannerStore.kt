@@ -85,7 +85,12 @@ internal class RealmContentScannerStore @Inject constructor(
         it.scanResult = state
     }
 
-    override suspend fun updateScanResultForContent(mxcUrl: String, scannerUrl: String?, state: ScanState, humanReadable: String) = upsertContentScanResultEntity(
+    override suspend fun updateScanResultForContent(
+            mxcUrl: String,
+            scannerUrl: String?,
+            state: ScanState,
+            humanReadable: String
+    ) = upsertContentScanResultEntity(
             mxcUrl,
             scannerUrl
     ) {
