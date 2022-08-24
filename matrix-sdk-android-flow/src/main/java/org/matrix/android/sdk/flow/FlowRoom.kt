@@ -37,7 +37,7 @@ import org.matrix.android.sdk.api.util.toOptional
 
 typealias ThreadRootEvent = TimelineEvent
 
-class FlowRoom(private val room: Room) {
+class FlowRoom(val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asFlow()

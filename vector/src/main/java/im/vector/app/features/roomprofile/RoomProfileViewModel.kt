@@ -35,11 +35,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -67,18 +69,20 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomProfileViewModel, RoomProfileViewState> by hiltMavericksViewModelFactory()
 
-    private val room = session.getRoom(initialState.roomId)!!
+    private val room = session.getRoom(initialState.roomId)
 
     init {
-        val flowRoom = room.flow()
-        observeRoomSummary(flowRoom)
-        observeRoomCreateContent(flowRoom)
-        observeBannedRoomMembers(flowRoom)
-        observePermissions()
-        observePowerLevels()
+        room?.also { room ->
+            val flowRoom = room.flow()
+            observeRoomSummary(flowRoom)
+            observeRoomCreateContent(flowRoom)
+            observeBannedRoomMembers(flowRoom)
+            observePermissions(room)
+            observePowerLevels(room)
+        }
     }
 
-    private fun observePowerLevels() {
+    private fun observePowerLevels(room: Room) {
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
         powerLevelsContentLive
                 .onEach {
@@ -98,10 +102,10 @@ class RoomProfileViewModel @AssistedInject constructor(
                     copy(
                             roomCreateContent = async,
                             // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
-                            recommendedRoomVersion = room.roomVersionService().getRecommendedVersion(),
-                            isUsingUnstableRoomVersion = room.roomVersionService().isUsingUnstableRoomVersion(),
-                            canUpgradeRoom = room.roomVersionService().userMayUpgradeRoom(session.myUserId),
-                            isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty) != null
+                            recommendedRoomVersion = flowRoom.room.roomVersionService().getRecommendedVersion(),
+                            isUsingUnstableRoomVersion = flowRoom.room.roomVersionService().isUsingUnstableRoomVersion(),
+                            canUpgradeRoom = flowRoom.room.roomVersionService().userMayUpgradeRoom(session.myUserId),
+                            isTombstoned = flowRoom.room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty) != null
                     )
                 }
     }
@@ -121,7 +125,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observePermissions() {
+    private fun observePermissions(room: Room) {
         PowerLevelsFlowFactory(room)
                 .createFlow()
                 .setOnEach {
@@ -134,21 +138,22 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: RoomProfileAction) {
+        val room = this.room ?: return
         when (action) {
-            is RoomProfileAction.EnableEncryption -> handleEnableEncryption()
-            RoomProfileAction.LeaveRoom -> handleLeaveRoom()
-            is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+            is RoomProfileAction.EnableEncryption -> handleEnableEncryption(room)
+            RoomProfileAction.LeaveRoom -> handleLeaveRoom(room)
+            is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(room, action)
             is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
-            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
+            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState(room)
         }
     }
 
     fun isPublicRoom(): Boolean {
-        return room.stateService().isPublic()
+        return room?.stateService()?.isPublic().orFalse()
     }
 
-    private fun handleEnableEncryption() {
+    private fun handleEnableEncryption(room: Room) {
         postLoading(true)
 
         viewModelScope.launch {
@@ -168,15 +173,14 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     private fun handleCreateShortcut() {
         viewModelScope.launch(Dispatchers.IO) {
-            withState { state ->
-                state.roomSummary()
-                        ?.let { shortcutCreator.create(it) }
-                        ?.let { _viewEvents.post(RoomProfileViewEvents.OnShortcutReady(it)) }
-            }
+            val state = awaitState()
+            state.roomSummary()
+                    ?.let { shortcutCreator.create(it) }
+                    ?.let { _viewEvents.post(RoomProfileViewEvents.OnShortcutReady(it)) }
         }
     }
 
-    private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
+    private fun handleChangeNotificationMode(room: Room, action: RoomProfileAction.ChangeRoomNotificationState) {
         viewModelScope.launch {
             try {
                 room.roomPushRuleService().setRoomNotificationState(action.notificationState)
@@ -186,7 +190,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLeaveRoom() {
+    private fun handleLeaveRoom(room: Room) {
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         viewModelScope.launch {
             try {
@@ -212,7 +216,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun restoreEncryptionState() {
+    private fun restoreEncryptionState(room: Room) {
         _viewEvents.post(RoomProfileViewEvents.Loading())
         session.coroutineScope.launch {
             try {

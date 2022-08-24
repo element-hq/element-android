@@ -29,8 +29,12 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.mocking.MavericksViewMocks
+import com.airbnb.mvrx.mocking.MockableMavericksView
+import com.airbnb.mvrx.mocking.mockSingleViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -52,6 +56,8 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.roomprofile.mocks.mockRoomProfileArgs
+import im.vector.app.features.roomprofile.mocks.mockRoomProfileViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -65,14 +71,16 @@ data class RoomProfileArgs(
         val roomId: String
 ) : Parcelable
 
-class RoomProfileFragment @Inject constructor(
-        private val roomProfileController: RoomProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-) :
+@AndroidEntryPoint
+class RoomProfileFragment :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        MockableMavericksView,
         RoomProfileController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var roomProfileController: RoomProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
@@ -83,6 +91,12 @@ class RoomProfileFragment @Inject constructor(
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
+    override fun provideMocks() = mockSingleViewModel(
+            viewModelReference = RoomProfileFragment::roomProfileViewModel,
+            defaultState = mockRoomProfileViewState,
+            defaultArgs = mockRoomProfileArgs
+    ){}
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
         return FragmentMatrixProfileBinding.inflate(inflater, container, false)
     }
@@ -91,6 +105,7 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerMockPrinter()
         analyticsScreenName = MobileScreen.ScreenName.RoomDetails
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->

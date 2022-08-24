@@ -121,7 +121,6 @@ import im.vector.app.features.roomdirectory.roompreview.RoomPreviewNoPreviewFrag
 import im.vector.app.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceListFragment
 import im.vector.app.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
-import im.vector.app.features.roomprofile.RoomProfileFragment
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
@@ -546,11 +545,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(RoomProfileFragment::class)
-    fun bindRoomProfileFragment(fragment: RoomProfileFragment): Fragment
 
     @Binds
     @IntoMap
