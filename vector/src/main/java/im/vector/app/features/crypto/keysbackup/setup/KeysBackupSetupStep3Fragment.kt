@@ -28,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import arrow.core.Try
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
@@ -44,9 +45,10 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
-class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep3Binding>() {
+@AndroidEntryPoint
+class KeysBackupSetupStep3Fragment :
+        VectorBaseFragment<FragmentKeysBackupSetupStep3Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep3Binding {
         return FragmentKeysBackupSetupStep3Binding.inflate(inflater, container, false)

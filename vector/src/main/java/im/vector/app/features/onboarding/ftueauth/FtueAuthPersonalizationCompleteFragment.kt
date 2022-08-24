@@ -20,12 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.databinding.FragmentFtuePersonalizationCompleteBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
-import javax.inject.Inject
 
-class FtueAuthPersonalizationCompleteFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtuePersonalizationCompleteBinding>() {
+@AndroidEntryPoint
+class FtueAuthPersonalizationCompleteFragment :
+        AbstractFtueAuthFragment<FragmentFtuePersonalizationCompleteBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePersonalizationCompleteBinding {
         return FragmentFtuePersonalizationCompleteBinding.inflate(inflater, container, false)

@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
@@ -34,12 +35,13 @@ import im.vector.app.features.login.SocialLoginButtonsView.Mode
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
-class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
+@AndroidEntryPoint
+class FtueAuthSignUpSignInSelectionFragment :
+        AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
         return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)

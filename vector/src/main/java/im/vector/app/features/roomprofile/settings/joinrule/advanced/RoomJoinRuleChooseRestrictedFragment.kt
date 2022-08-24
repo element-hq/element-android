@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
@@ -36,12 +37,14 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
-        val controller: ChooseRestrictedController,
-        val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentSpaceRestrictedSelectBinding>(),
+@AndroidEntryPoint
+class RoomJoinRuleChooseRestrictedFragment :
+        VectorBaseFragment<FragmentSpaceRestrictedSelectBinding>(),
         ChooseRestrictedController.Listener,
         OnBackPressed {
+
+    @Inject lateinit var controller: ChooseRestrictedController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel(RoomJoinRuleChooseRestrictedViewModel::class)
 

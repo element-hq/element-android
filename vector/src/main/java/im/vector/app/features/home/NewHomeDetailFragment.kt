@@ -28,6 +28,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
@@ -60,19 +61,21 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class NewHomeDetailFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val colorProvider: ColorProvider,
-        private val alertManager: PopupAlertManager,
-        private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences,
-        private val spaceStateHandler: SpaceStateHandler,
-        private val session: Session,
-) : VectorBaseFragment<FragmentNewHomeDetailBinding>(),
+@AndroidEntryPoint
+class NewHomeDetailFragment :
+        VectorBaseFragment<FragmentNewHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var alertManager: PopupAlertManager
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
+    @Inject lateinit var session: Session
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()

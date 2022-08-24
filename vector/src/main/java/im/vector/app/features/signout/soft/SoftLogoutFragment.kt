@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -39,10 +40,12 @@ import javax.inject.Inject
  * - the user is asked to enter a password to sign in again to a homeserver.
  * - or to cleanup all the data
  */
-class SoftLogoutFragment @Inject constructor(
-        private val softLogoutController: SoftLogoutController
-) : AbstractLoginFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class SoftLogoutFragment :
+        AbstractLoginFragment<FragmentGenericRecyclerBinding>(),
         SoftLogoutController.Listener {
+
+    @Inject lateinit var softLogoutController: SoftLogoutController
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 

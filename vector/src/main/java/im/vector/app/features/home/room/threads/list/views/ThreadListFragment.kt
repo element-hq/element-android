@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -48,14 +49,16 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
-class ThreadListFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val bugReporter: BugReporter,
-        private val threadListController: ThreadListController,
-        val threadListViewModelFactory: ThreadListViewModel.Factory
-) : VectorBaseFragment<FragmentThreadListBinding>(),
+@AndroidEntryPoint
+class ThreadListFragment :
+        VectorBaseFragment<FragmentThreadListBinding>(),
         ThreadListController.Listener,
         VectorMenuProvider {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var threadListController: ThreadListController
+    @Inject lateinit var threadListViewModelFactory: ThreadListViewModel.Factory
 
     private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
 
