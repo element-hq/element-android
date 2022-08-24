@@ -273,11 +273,14 @@ class SpaceListViewModel @AssistedInject constructor(
                         ?.content.toModel<SpaceOrderContent>()
                         ?.safeOrder()
             }
+            val inviterIds = spaces.mapNotNull { it.inviterId }
+            val inviters = inviterIds.mapNotNull { session.userService().getUser(it) }
             copy(
                     asyncSpaces = asyncSpaces,
                     spaces = spaces,
+                    inviters = inviters,
                     rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
-                    spaceOrderInfo = orders
+                    spaceOrderInfo = orders,
             )
         }
 

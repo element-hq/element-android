@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -51,6 +52,7 @@ class NewSpaceSummaryController @Inject constructor(
                 nonNullViewState.spaces,
                 nonNullViewState.selectedSpace,
                 nonNullViewState.rootSpacesOrdered,
+                nonNullViewState.inviters,
                 nonNullViewState.homeAggregateCount,
                 nonNullViewState.expandedStates,
         )
@@ -60,6 +62,7 @@ class NewSpaceSummaryController @Inject constructor(
             spaceSummaries: List<RoomSummary>?,
             selectedSpace: RoomSummary?,
             rootSpaces: List<RoomSummary>?,
+            inviters: List<User>,
             homeCount: RoomAggregateNotificationCount,
             expandedStates: Map<String, Boolean>,
     ) {
@@ -69,6 +72,7 @@ class NewSpaceSummaryController @Inject constructor(
 
         addHomeItem(selectedSpace == null, homeCount)
         addSpaces(spaceSummaries, selectedSpace, rootSpaces, expandedStates)
+        addInvites(selectedSpace, rootSpaces, inviters)
         addCreateItem()
     }
 
@@ -91,7 +95,7 @@ class NewSpaceSummaryController @Inject constructor(
     ) {
         val host = this
 
-        rootSpaces?.filter { it.membership != Membership.INVITE }
+        rootSpaces?.filterNot { it.membership == Membership.INVITE }
                 ?.forEach { spaceSummary ->
                     val subSpaces = spaceSummary.spaceChildren?.filter { spaceChild -> spaceSummaries.containsSpaceId(spaceChild.childRoomId) }
                     val hasChildren = (subSpaces?.size ?: 0) > 0
@@ -157,6 +161,30 @@ class NewSpaceSummaryController @Inject constructor(
                 addSubSpace(id, spaceSummaries, expandedStates, selectedSpace, it, depth + 1)
             }
         }
+    }
+
+    private fun addInvites(
+            selectedSpace: RoomSummary?,
+            rootSpaces: List<RoomSummary>?,
+            inviters: List<User>,
+    ) {
+        val host = this
+
+        rootSpaces?.filter { it.membership == Membership.INVITE }
+                ?.forEach { spaceSummary ->
+                    val isSelected = spaceSummary.roomId == selectedSpace?.roomId
+                    val inviter = inviters.find { it.userId == spaceSummary.inviterId }
+
+                    spaceInviteItem {
+                        id(spaceSummary.roomId)
+                        avatarRenderer(host.avatarRenderer)
+                        inviter(inviter?.displayName.orEmpty())
+                        matrixItem(spaceSummary.toMatrixItem())
+                        onLongClickListener { host.callback?.onSpaceSettings(spaceSummary) }
+                        onInviteSelectedListener { host.callback?.onSpaceInviteSelected(spaceSummary) }
+                        selected(isSelected)
+                    }
+                }
     }
 
     private fun addCreateItem() {

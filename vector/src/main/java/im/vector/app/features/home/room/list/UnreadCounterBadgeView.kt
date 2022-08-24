@@ -44,6 +44,13 @@ class UnreadCounterBadgeView : MaterialTextView {
         }
     }
 
+    fun renderWithText(text: String, highlighted: Boolean) {
+        visibility = View.VISIBLE
+        val bgRes = if (highlighted) R.drawable.bg_unread_highlight else R.drawable.bg_unread_notification
+        setBackgroundResource(bgRes)
+        this.text = text
+    }
+
     data class State(
             val count: Int,
             val highlighted: Boolean
