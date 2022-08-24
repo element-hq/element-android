@@ -86,7 +86,6 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     private fun setupViews() {
 
         views.debugMock.setOnClickListener {
-            MavericksLauncherMockActivity.activityToShowMock = VectorLauncherMockActivity::class
             MavericksLauncherActivity.show(this)
         }
         views.debugFeatures.setOnClickListener { startActivity(Intent(this, DebugFeaturesSettingsActivity::class.java)) }

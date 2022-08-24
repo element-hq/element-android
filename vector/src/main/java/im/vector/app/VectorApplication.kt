@@ -37,6 +37,7 @@ import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.launcher.MavericksLauncherMockActivity
 import com.airbnb.mvrx.mocking.MavericksMock
 import com.airbnb.mvrx.mocking.MockableMavericks
 import com.facebook.stetho.Stetho
@@ -55,6 +56,7 @@ import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
+import im.vector.app.features.debug.VectorLauncherMockActivity
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
@@ -149,6 +151,7 @@ class VectorApplication :
         logInfo()
         LazyThreeTen.init(this)
         MockableMavericks.initialize(mocksEnabled = buildMeta.isDebug, debugMode = false, applicationContext = applicationContext)
+        MavericksLauncherMockActivity.activityToShowMock = VectorLauncherMockActivity::class
         //Mavericks.initialize(debugMode = false)
 
         configureEpoxy()

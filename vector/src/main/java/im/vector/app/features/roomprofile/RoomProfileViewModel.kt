@@ -22,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -58,7 +59,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
         private val stringProvider: StringProvider,
         private val shortcutCreator: ShortcutCreator,
-        private val session: Session,
+        sessionHolder: ActiveSessionHolder,
         private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
@@ -69,7 +70,9 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomProfileViewModel, RoomProfileViewState> by hiltMavericksViewModelFactory()
 
-    private val room = session.getRoom(initialState.roomId)
+    private val session = sessionHolder.getSafeActiveSession()
+    private val room = session?.getRoom(initialState.roomId)
+    private val myUserId = session?.myUserId ?: ""
 
     init {
         room?.also { room ->
@@ -87,7 +90,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         powerLevelsContentLive
                 .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     setState {
                         copy(canUpdateRoomState = canUpdateRoomState)
                     }
@@ -104,7 +107,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                             // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
                             recommendedRoomVersion = flowRoom.room.roomVersionService().getRecommendedVersion(),
                             isUsingUnstableRoomVersion = flowRoom.room.roomVersionService().isUsingUnstableRoomVersion(),
-                            canUpgradeRoom = flowRoom.room.roomVersionService().userMayUpgradeRoom(session.myUserId),
+                            canUpgradeRoom = flowRoom.room.roomVersionService().userMayUpgradeRoom(myUserId),
                             isTombstoned = flowRoom.room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty) != null
                     )
                 }
@@ -131,21 +134,22 @@ class RoomProfileViewModel @AssistedInject constructor(
                 .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomProfileViewState.ActionPermissions(
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
                     copy(actionPermissions = permissions)
                 }
     }
 
     override fun handle(action: RoomProfileAction) {
-        val room = this.room ?: return
+        val session = this.session ?: throw IllegalStateException("Action with no active session")
+        val room = this.room ?: throw IllegalStateException("Action with unknown room")
         when (action) {
             is RoomProfileAction.EnableEncryption -> handleEnableEncryption(room)
-            RoomProfileAction.LeaveRoom -> handleLeaveRoom(room)
+            RoomProfileAction.LeaveRoom -> handleLeaveRoom(session, room)
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(room, action)
-            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
+            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile(session)
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
-            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState(room)
+            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState(session, room)
         }
     }
 
@@ -190,7 +194,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLeaveRoom(room: Room) {
+    private fun handleLeaveRoom(session: Session, room: Room) {
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         viewModelScope.launch {
             try {
@@ -209,14 +213,14 @@ class RoomProfileViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleShareRoomProfile() {
+    private fun handleShareRoomProfile(session: Session) {
         session.permalinkService().createRoomPermalink(initialState.roomId)
                 ?.let { permalink ->
                     _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
                 }
     }
 
-    private fun restoreEncryptionState(room: Room) {
+    private fun restoreEncryptionState(session: Session, room: Room) {
         _viewEvents.post(RoomProfileViewEvents.Loading())
         session.coroutineScope.launch {
             try {
