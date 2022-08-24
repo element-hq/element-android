@@ -152,8 +152,6 @@
     <string name="event_status_sending_message">Sūta ziņu…</string>
     <string name="initial_sync_start_importing_account_data">Sākotnējā sinhronizācija:
 \nImportē konta datus</string>
-    <string name="initial_sync_start_importing_account_groups">Sākotnējā sinhronizācija:
-\nImportē kopienas</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sākotnējā sinhronizācija:
 \nImportē pamestās istabas</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sākotnējā sinhronizācija:
@@ -279,7 +277,6 @@
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
     <string name="title_activity_bug_report">Kļūdas atskaite</string>
     <string name="loading">Ielādējas…</string>
-    <string name="groups_header">Kopienas</string>
     <string name="start_voice_call_prompt_msg">Tiešām vēlies uzsākt balss zvanu\?</string>
     <string name="start_video_call_prompt_msg">Tiešām vēlies uzsākt video zvanu\?</string>
     <string name="option_take_photo">Uzņemt foto</string>
@@ -290,7 +287,6 @@
     <string name="auth_forgot_password">Aizmirsāt paroli\?</string>
 
     <string name="auth_recaptcha_message">Mājasservers vēlas pārbaudīt, vai neesat robots</string>
-    <string name="auth_reset_password_missing_email">Ir jābūt ievadītai kontam piesaistītajai epasta adresei.</string>
     <string name="auth_reset_password_error_unauthorized">Neizdevās verificēt epasta adresi: pārbaudiet, vai esi noklikšķinājis(usi) uz saiti atsūtītajā epastā</string>
 
     <string name="login_error_invalid_home_server">Ievadi korektu URL adresi</string>
@@ -699,7 +695,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="fab_menu_create_chat">Tiešās ziņas</string>
     <string name="fab_menu_create_room">Istabas</string>
     <string name="room_preview_no_preview">Šo istabu nevar priekšskatīt</string>
-    <string name="group_all_communities">Visas kopienas</string>
     <string name="event_redacted">Ziņa ir dzēsta</string>
     <string name="reactions">Reaģēšana</string>
     <string name="title_activity_emoji_reaction_picker">Reaģēšana</string>

@@ -127,7 +127,6 @@
     <string name="send_bug_report_include_key_share_history">Siųsti raktų bendrinimo užklausų istoriją</string>
     <string name="send_bug_report_include_crash_logs">Siųsti sutrikimų žurnalus</string>
     <string name="send_bug_report_include_logs">Siųsti žurnalus</string>
-    <string name="groups_header">Bendruomenės</string>
     <string name="settings_room_directory_show_all_rooms_summary">Rodyti visus kambarių kataloge esančius kambarius, įskaitant kambarius su eksplicitiniu turiniu.</string>
     <string name="settings_room_directory_show_all_rooms">Rodyti eksplicitinio turinio kambarius</string>
     <string name="settings_category_room_directory">Kambarių katalogas</string>

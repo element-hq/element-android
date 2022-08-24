@@ -112,7 +112,6 @@
     <string name="auth_forgot_password">Glemt adgangskode?</string>
 
     <string name="auth_recaptcha_message">Denne Home Server vil gerne være sikker på du ikke er en robot</string>
-    <string name="auth_reset_password_missing_email">Emailadressen forbundet til din konto skal skrives.</string>
     <string name="auth_reset_password_error_unauthorized">Kunne ikke verificere emailadresse: vær sikker på du klikkede på linket i emailen</string>
 
     <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
@@ -180,7 +179,6 @@ Er du sikker?</string>
     <string name="ssl_expected_existing_expl">Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.</string>
     <string name="ssl_only_accept">Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.</string>
     <string name="loading">Loader…</string>
-    <string name="groups_header">Communities</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på, at du ønsker at starte et opkald?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på, at du ønsker at starte et videoopkald\?</string>
     <plurals name="membership_changes">

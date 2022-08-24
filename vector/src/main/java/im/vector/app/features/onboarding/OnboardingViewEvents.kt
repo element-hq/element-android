@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.failure.Failure as SdkFailure
 sealed class OnboardingViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : OnboardingViewEvents()
     data class Failure(val throwable: Throwable) : OnboardingViewEvents()
-    data class DeeplinkAuthenticationFailure(val retryAction: OnboardingAction) : OnboardingViewEvents()
     data class UnrecognisedCertificateFailure(val retryAction: OnboardingAction, val cause: SdkFailure.UnrecognizedCertificateFailure) : OnboardingViewEvents()
 
     object DisplayRegistrationFallback : OnboardingViewEvents()

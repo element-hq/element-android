@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Umožňuje vylepšené přihlašování a registraci.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases

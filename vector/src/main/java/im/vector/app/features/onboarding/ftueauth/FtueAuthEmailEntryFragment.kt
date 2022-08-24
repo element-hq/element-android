@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillEmail
@@ -35,9 +36,10 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import javax.inject.Inject
 
-class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueEmailInputBinding>() {
+@AndroidEntryPoint
+class FtueAuthEmailEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtueEmailInputBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueEmailInputBinding {
         return FragmentFtueEmailInputBinding.inflate(inflater, container, false)

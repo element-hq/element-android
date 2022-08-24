@@ -103,8 +103,6 @@
 \nAktar n texxamin iɣer tettwanecdeḍ</string>
     <string name="initial_sync_start_importing_account_left_rooms">Amtawi n tazwara:
 \nAktar n texxamin i teǧǧiḍ</string>
-    <string name="initial_sync_start_importing_account_groups">Amtawi n tazwara:
-\nAktar n tmezdagnutin</string>
     <string name="initial_sync_start_importing_account_data">Amtawi n tazwara:
 \nAktar n yisefka n umiḍan</string>
     <string name="event_status_sending_message">Tuzzna n yizen…</string>
@@ -208,7 +206,6 @@
     <string name="system_alerts_header">Ilɣa n unagraw</string>
     <string name="no_result_placeholder">Ulac igmad</string>
     <string name="rooms_header">Tixxamin</string>
-    <string name="groups_header">Tamɣiwnin</string>
     <string name="send_bug_report_include_logs">Azen iɣmisen</string>
     <string name="join_room">Rnu ɣer texxamt</string>
     <string name="username">Isem n useqdac</string>
@@ -547,7 +544,6 @@
     <string name="auth_email_already_defined">Tansa-a n yimayl tettuseqdec yakan.</string>
     <string name="auth_forgot_password">Tettuḍ awal uffir\?</string>
     <string name="auth_recaptcha_message">Aqeddac-a agejdan yesra ad iẓer ma mačči d aṛubut i telliḍ</string>
-    <string name="auth_reset_password_missing_email">Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.</string>
     <string name="auth_accept_policies">Ttxil-k·m senqed syen qbel tisertiyin n uqeddac-a agejdan:</string>
     <string name="login_error_invalid_home_server">Ttxil-k·m sekcem URL ameɣtu</string>
     <string name="login_error_no_homeserver_found">Tagi mačči d tansa n uqeddac n Matrix ameɣtu</string>
@@ -710,7 +706,6 @@
     <string name="action_agree">Qbel</string>
     <string name="create_new_room">Rnu taxxamt tamaynut</string>
     <string name="change_room_directory_network">Snifel azeṭṭa</string>
-    <string name="group_all_communities">Meṛṛa timɣiwnin</string>
     <string name="create_room_action_create">RNU</string>
     <string name="create_room_name_hint">Isem</string>
     <string name="create_room_public_description">Yal yiwen yezmer ad yernu ɣer texxamt-a</string>

@@ -359,7 +359,6 @@
     <string name="room_preview_not_found">Ce salon n’est pas accessible en ce moment.
 \nRéessayez plus tard, ou demandez à un administrateur de ce salon de vérifier que vous pouvez y accéder.</string>
     <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
-    <string name="group_all_communities">Toutes les communautés</string>
     <string name="please_wait">Veuillez patienter…</string>
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="action_change">Changer</string>
@@ -569,7 +568,6 @@
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse courriel : assurez-vous d’avoir cliqué sur le lien dans l’courriel</string>
     <string name="settings_emails_empty">Aucune adresse courriel n’a été ajoutée à votre compte</string>
     <string name="auth_email_already_defined">Cette adresse courriel est déjà utilisée.</string>
-    <string name="auth_reset_password_missing_email">L’adresse courriel liée à votre compte doit être saisie.</string>
     <string name="notice_crypto_unable_to_decrypt_final">Vous n’avez pas accès à ce message</string>
     <string name="room_settings_set_avatar">Définir l’avatar</string>
     <string name="room_settings_save_success">Vous avez bien changé les paramètres du salon</string>
@@ -1465,7 +1463,6 @@
     <string name="send_bug_report_include_key_share_history">Inclure l’historique d’échange de clés</string>
     <string name="send_bug_report_include_crash_logs">Envoyer les journaux d’erreur</string>
     <string name="send_bug_report_include_logs">Envoyer les journaux</string>
-    <string name="groups_header">Communautés</string>
     <string name="settings_room_directory_show_all_rooms_summary">Afficher tous les salons dans le répertoire, y compris ceux au contenu choquant.</string>
     <string name="settings_room_directory_show_all_rooms">Afficher les salons au contenu choquant</string>
     <string name="settings_category_room_directory">Répertoire des salons</string>
@@ -1746,8 +1743,6 @@
     <string name="event_status_sent_message">Message envoyé</string>
     <string name="initial_sync_start_importing_account_data">Synchronisation initiale :
 \nImportation des données du compte</string>
-    <string name="initial_sync_start_importing_account_groups">Synchronisation initiale :
-\nImportation des communautés</string>
     <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
 \nImportation des salons que vous avez quittés</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Synchronisation initiale :

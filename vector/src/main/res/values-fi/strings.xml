@@ -52,8 +52,6 @@
 \nTuodaan kutsuttuja huoneita</string>
     <string name="initial_sync_start_importing_account_left_rooms">Alkusynkronointi:
 \nTuodaan poistuttuja huoneita</string>
-    <string name="initial_sync_start_importing_account_groups">Alkusynkronointi:
-\nTuodaan yhteisöjä</string>
     <string name="initial_sync_start_importing_account_data">Alkusynkronointi:
 \nTuodaan tilin tietoja</string>
     <string name="notice_room_update">%s päivitti tämän huoneen.</string>
@@ -240,7 +238,6 @@
     <string name="auth_email_already_defined">Tämä sähköpostiosoite on jo käytössä.</string>
     <string name="auth_forgot_password">Unohditko salasanasi?</string>
     <string name="auth_recaptcha_message">Tämä kotipalvelin haluaa varmistaa, ettet ole robotti</string>
-    <string name="auth_reset_password_missing_email">Anna tiliisi liitetty sähköpostiosoite.</string>
     <string name="auth_reset_password_error_unauthorized">Sähköpostiosoitteesi vahvistaminen epäonnistui. Varmista, että klikkasit sähköpostissa olevaa linkkiä</string>
     <string name="login_error_invalid_home_server">Syötäthän toimivan osoitteen</string>
     <string name="login_error_bad_json">Epämuotoinen JSON</string>
@@ -447,7 +444,6 @@
     <string name="notification_noisy">Äänekäs</string>
     <string name="encrypted_message">Salattu viesti</string>
     <string name="loading">Ladataan…</string>
-    <string name="groups_header">Yhteisöt</string>
     <string name="start_voice_call_prompt_msg">Haluatko varmasti aloittaa äänipuhelun\?</string>
     <string name="start_video_call_prompt_msg">Haluatko varmasti aloittaa videopuhelun\?</string>
     <string name="room_participants_ban_prompt_msg">Käyttäjän estäminen poistaa hänet tästä huoneesta ja estää häntä liittymästä huoneeseen uudelleen.</string>
@@ -815,7 +811,6 @@
     <string name="create_new_room">Luo uusi huone</string>
     <string name="error_no_network">Ei verkkoa. Tarkista internet-yhteytesi.</string>
     <string name="please_wait">Odota…</string>
-    <string name="group_all_communities">Kaikki yhteisöt</string>
     <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
     <string name="fab_menu_create_room">Huoneet</string>
     <string name="fab_menu_create_chat">Yksityisviestit</string>
@@ -2070,7 +2065,6 @@
     <string name="ftue_profile_picture_title">Lisää profiilikuva</string>
     <string name="ftue_display_name_entry_footer">Voit vaihtaa tämän myöhemmin</string>
     <string name="ftue_display_name_entry_title">Näyttönimi</string>
-    <string name="ftue_display_name_subtitle">Tämä näytetään, kun lähetät viestejä.</string>
     <string name="ftue_display_name_title">Valitse näyttönimi</string>
     <string name="ftue_account_created_subtitle">Tilisi %s on luotu.</string>
     <string name="ftue_account_created_congratulations_title">Onnittelut!</string>

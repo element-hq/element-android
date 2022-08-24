@@ -236,7 +236,6 @@
     <string name="action_quick_reply">Snöggt svar</string>
     <string name="home_filter_placeholder_home">Leita að spjallrásum</string>
     <string name="matrix_only_filter">Einungis tengiliðir í Matrix</string>
-    <string name="groups_header">Samfélög</string>
     <string name="send_bug_report_progress">Framvinda (%s%%)</string>
     <string name="auth_invalid_email">Þetta lítur ekki út eins og gilt tölvupóstfang</string>
     <string name="auth_email_already_defined">Þetta tölvupóstfang er nú þegar skráð.</string>
@@ -316,7 +315,6 @@
     <string name="send_bug_report_sent">Það tókst að senda villuskýrsluna</string>
     <string name="send_bug_report_failed">Mistókst að senda villuskýrsluna (%s)</string>
     <string name="auth_recaptcha_message">Þessi heimavefþjónn vill ganga úr skugga um að þú sért ekki vélmenni</string>
-    <string name="auth_reset_password_missing_email">Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.</string>
     <string name="auth_reset_password_error_unauthorized">Gat ekki sannprófað tölvupóstfang: gakktu úr skugga um að þú hafir smellt á tengilinn í tölvupóstinum</string>
     <string name="room_participants_power_level_prompt">Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.
 \nErtu alveg viss\?</string>
@@ -535,8 +533,6 @@
     <string name="notice_room_invite_no_invitee_with_reason">Boð um þátttöku til %1$s. Ástæða: %2$s</string>
     <string name="initial_sync_start_importing_account_data">Upphaf samstillingar:
 \nFlyt inn gögn úr notandaaðgangi</string>
-    <string name="initial_sync_start_importing_account_groups">Upphaf samstillingar:
-\nFlyt inn samfélög</string>
     <string name="initial_sync_start_importing_account_left_rooms">Upphaf samstillingar:
 \nFlyt inn yfirgefnar spjallrásir</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Upphaf samstillingar:
@@ -822,7 +818,6 @@
     <string name="send_file_step_compressing_image">Þjappa mynd…</string>
     <string name="send_file_step_sending_file">Sendi skrá (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Dulrita skrá…</string>
-    <string name="group_all_communities">Öll samfélög</string>
     <string name="settings_show_redacted">Sýna fjarlægð skilaboð</string>
     <string name="room_list_catchup_empty_body">Þú átt engin fleiri ólesin skilaboð</string>
     <string name="invited_by">Boðið af %s</string>

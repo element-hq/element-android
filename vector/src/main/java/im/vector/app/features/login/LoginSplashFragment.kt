@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentLoginSplashBinding
@@ -35,10 +36,12 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application.
  */
-class LoginSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val buildMeta: BuildMeta,
-) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
+@AndroidEntryPoint
+class LoginSplashFragment :
+        AbstractLoginFragment<FragmentLoginSplashBinding>() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
         return FragmentLoginSplashBinding.inflate(inflater, container, false)

@@ -107,7 +107,6 @@
     <string name="auth_forgot_password">Esqueceu-se da palavra-passe?</string>
 
     <string name="auth_recaptcha_message">Este servidor quer ter a certeza de que você não é um robô</string>
-    <string name="auth_reset_password_missing_email">O endereço de e-mail associado à sua conta tem que ser introduzido.</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao verificar o endereço de e-mail: verifique se clicou no link no e-mail</string>
 
     <string name="login_error_invalid_home_server">Introduza um URL válido</string>
@@ -316,7 +315,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="action_download">Descarregar</string>
     <string name="dialog_title_error">Erro</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
-    <string name="groups_header">Comunidades</string>
     <string name="send_bug_report_description_in_english">Se possível, escrever a descrição em inglês.</string>
     <string name="send_bug_report_rage_shake">Agitar furiosamente para relatar um erro</string>
     <string name="option_send_voice">Enviar voz</string>

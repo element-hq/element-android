@@ -52,8 +52,6 @@
 \n초대받은 방 가져오는 중</string>
     <string name="initial_sync_start_importing_account_left_rooms">초기 동기화:
 \n떠난 방 가져오는 중</string>
-    <string name="initial_sync_start_importing_account_groups">초기 동기화:
-\n커뮤니티 가져오는 중</string>
     <string name="initial_sync_start_importing_account_data">초기 동기화:
 \n계정 데이터 가져오는 중</string>
     <string name="event_status_sending_message">메시지 보내는 중…</string>
@@ -133,7 +131,6 @@
     <string name="done">완료</string>
     <string name="action_sign_out_confirmation_simple">정말 로그아웃하시겠습니까\?</string>
     <string name="action_mark_room_read">읽음으로 표시</string>
-    <string name="groups_header">커뮤니티</string>
     <string name="send_bug_report_app_crashed">최근에 애플리케이션이 충돌한 것 같습니다. 충돌 보고서를 열까요\?</string>
     <string name="username">사용자 이름</string>
     <string name="option_send_voice">음성 보내기</string>
@@ -165,7 +162,6 @@
     <string name="auth_login_sso">통합 인증으로 로그인</string>
     <string name="auth_email_already_defined">이 이메일 주소는 이미 정의되었습니다.</string>
     <string name="auth_recaptcha_message">이 홈서버는 당신이 로봇인지 아닌 지를 확인하고 싶습니다</string>
-    <string name="auth_reset_password_missing_email">계정에 연결된 이메일 주소를 입력해야 합니다.</string>
     <string name="auth_reset_password_error_unauthorized">이메일 주소를 확인할 수 없습니다: 이메일에 있는 링크를 클릭했는 지 확인하세요</string>
     <string name="auth_accept_policies">이 홈서버의 규칙을 숙지한 후 수락하세요:</string>
     <string name="login_error_invalid_home_server">올바른 URL을 입력하세요</string>
@@ -700,7 +696,6 @@
     <string name="action_change">변경</string>
     <string name="change_room_directory_network">네트워크 변경</string>
     <string name="please_wait">기다려주세요…</string>
-    <string name="group_all_communities">모든 커뮤니티</string>
     <string name="room_preview_no_preview">이 방은 미리 볼 수 없습니다</string>
     <string name="fab_menu_create_room">방</string>
     <string name="fab_menu_create_chat">다이렉트 메시지</string>

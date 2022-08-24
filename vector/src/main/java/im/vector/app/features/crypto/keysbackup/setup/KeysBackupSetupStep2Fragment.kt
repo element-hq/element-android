@@ -24,6 +24,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import com.nulabinc.zxcvbn.Zxcvbn
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
@@ -31,9 +32,10 @@ import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
+@AndroidEntryPoint
+class KeysBackupSetupStep2Fragment :
+        VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep2Binding {
         return FragmentKeysBackupSetupStep2Binding.inflate(inflater, container, false)

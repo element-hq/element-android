@@ -123,7 +123,6 @@
     <string name="auth_email_already_defined">Este correo electrónico ya está ocupado.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="auth_recaptcha_message">Este servidor quiere verificar que no seas robot</string>
-    <string name="auth_reset_password_missing_email">El correo electrónico de esta cuenta es requrido.</string>
     <string name="auth_reset_password_error_unauthorized">Falló la verificación de correo electrónico: asegúrese de haber hecho clic en el correo</string>
     <string name="login_error_invalid_home_server">Escribe un enlace válido</string>
     <string name="login_error_bad_json">JSON malformado</string>
@@ -276,7 +275,6 @@
     <string name="directory_server_native_rooms">All native %s rooms</string>
     <string name="loading">Cargando…</string>
     <string name="action_download">Descargar</string>
-    <string name="groups_header">Comunidades</string>
     <string name="option_send_voice">Enviar audio</string>
     <string name="option_send_sticker">Enviar sticker</string>
     <string name="option_take_photo">Tomar foto</string>

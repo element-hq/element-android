@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -50,10 +51,12 @@ data class SpacePreviewArgs(
         val idOrAlias: String
 ) : Parcelable
 
-class SpacePreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val epoxyController: SpacePreviewController
-) : VectorBaseFragment<FragmentSpacePreviewBinding>() {
+@AndroidEntryPoint
+class SpacePreviewFragment :
+        VectorBaseFragment<FragmentSpacePreviewBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var epoxyController: SpacePreviewController
 
     private val viewModel by fragmentViewModel(SpacePreviewViewModel::class)
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel

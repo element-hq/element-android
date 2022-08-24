@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -53,7 +54,6 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen:
@@ -63,7 +63,9 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
+@AndroidEntryPoint
+class FtueAuthLoginFragment :
+        AbstractSSOFtueAuthFragment<FragmentLoginBinding>() {
 
     private var isSignupMode = false
 

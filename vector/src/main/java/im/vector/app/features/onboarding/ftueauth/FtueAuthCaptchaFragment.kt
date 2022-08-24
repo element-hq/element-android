@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.crawlCausesFor
 import im.vector.app.databinding.FragmentFtueLoginCaptchaBinding
@@ -43,9 +44,11 @@ data class FtueAuthCaptchaFragmentArgument(
 /**
  * In this screen, the user is asked to confirm they are not a robot.
  */
-class FtueAuthCaptchaFragment @Inject constructor(
-        private val captchaWebview: CaptchaWebview
-) : AbstractFtueAuthFragment<FragmentFtueLoginCaptchaBinding>() {
+@AndroidEntryPoint
+class FtueAuthCaptchaFragment :
+        AbstractFtueAuthFragment<FragmentFtueLoginCaptchaBinding>() {
+
+    @Inject lateinit var captchaWebview: CaptchaWebview
 
     private val params: FtueAuthCaptchaFragmentArgument by args()
     private var webViewBinding: ViewStubWebviewBinding? = null

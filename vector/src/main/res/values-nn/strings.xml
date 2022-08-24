@@ -90,8 +90,6 @@
     <string name="matrix_only_filter">Berre Matrix-kontaktar</string>
     <string name="no_result_placeholder">Ingen treff</string>
     <string name="rooms_header">Rom</string>
-
-    <string name="groups_header">Fellesskap</string>
     <string name="send_bug_report_include_logs">Send loggar</string>
     <string name="send_bug_report_include_crash_logs">Send krasjrapportar</string>
     <string name="send_bug_report_include_screenshot">Send skjermbilde</string>
@@ -131,7 +129,6 @@
     <string name="auth_forgot_password">Gløymt passord\?</string>
 
     <string name="auth_recaptcha_message">Heimtenaren ynskjer å stadfeste at du ikkje er ein robot</string>
-    <string name="auth_reset_password_missing_email">Du må skriva inn e-postadressa som er knytt til brukaren din.</string>
     <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på lenken i e-posten</string>
     <string name="login_error_invalid_home_server">Skriv inn ein gyldig URL</string>
     <string name="login_error_bad_json">Feilformatert JSON</string>
