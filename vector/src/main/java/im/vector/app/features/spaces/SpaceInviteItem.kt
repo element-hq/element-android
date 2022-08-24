@@ -46,8 +46,8 @@ abstract class SpaceInviteItem : VectorEpoxyModel<SpaceInviteItem.Holder>(R.layo
         holder.root.isChecked = selected
         holder.root.onClick(onInviteSelectedListener)
         holder.root.setOnLongClickListener { onLongClickListener?.invoke(holder.root).let { true } }
-        holder.name.text = context.getString(R.string.invited_by, matrixItem.displayName)
-        holder.invitedBy.text = inviter
+        holder.name.text = matrixItem.displayName
+        holder.invitedBy.text = context.getString(R.string.invited_by, inviter)
 
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.notificationBadge.renderWithText("!", true)
