@@ -87,6 +87,7 @@
 
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+    <issue id="DataExtractionRules" severity="error" />
 
     <!-- Performance -->
     <issue id="UselessParent" severity="error" />
