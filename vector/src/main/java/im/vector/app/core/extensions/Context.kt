@@ -91,7 +91,6 @@ fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
  *
  * @return true if no active connection is found
  */
-@Suppress("deprecation")
 @SuppressLint("NewApi") // false positive
 fun Context.inferNoConnectivity(sdkIntProvider: BuildVersionSdkIntProvider): Boolean {
     val connectivityManager = getSystemService<ConnectivityManager>()!!
@@ -104,6 +103,7 @@ fun Context.inferNoConnectivity(sdkIntProvider: BuildVersionSdkIntProvider): Boo
             else -> true
         }
     } else {
+        @Suppress("DEPRECATION")
         when (connectivityManager.activeNetworkInfo?.type) {
             ConnectivityManager.TYPE_WIFI -> false
             ConnectivityManager.TYPE_MOBILE -> false

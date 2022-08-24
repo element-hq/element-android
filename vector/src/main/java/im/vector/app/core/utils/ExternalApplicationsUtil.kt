@@ -309,7 +309,6 @@ suspend fun saveMedia(
     }
 }
 
-@Suppress("DEPRECATION")
 private fun saveMediaLegacy(
         context: Context,
         mediaMimeType: String?,
@@ -340,6 +339,7 @@ private fun saveMediaLegacy(
         val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, currentTimeMillis)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
+            @Suppress("DEPRECATION")
             downloadManager?.addCompletedDownload(
                     savedFile.name,
                     title,
@@ -430,7 +430,6 @@ fun selectTxtFileToWrite(
  * @param currentTimeMillis the current time in milliseconds
  * @return               the created file
  */
-@Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, currentTimeMillis: Long): File? {
     // defines another name for the external media
     var dstFileName: String
