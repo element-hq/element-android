@@ -142,6 +142,7 @@
     <string name="change_space">Change Space</string>
     <string name="explore_rooms">Explore Rooms</string>
     <string name="a11y_expand_space_children">Expand space children</string>
+    <string name="a11y_collapse_space_children">Collapse space children</string>
 
     <!-- Last seen time -->
 
