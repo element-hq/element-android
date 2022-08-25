@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
 import org.matrix.android.sdk.api.session.room.model.kickOrDefault
-import org.matrix.android.sdk.api.session.room.model.localecho.LocalRoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.redactOrDefault
 import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault

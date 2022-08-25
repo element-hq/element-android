@@ -1,11 +1,11 @@
 /*
- * Copyright 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.localecho
+package org.matrix.android.sdk.internal.session.room.create
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
  * This class is only used to store the third party invite data of a local room.
  */
 @JsonClass(generateAdapter = true)
-data class LocalRoomThirdPartyInviteContent(
+internal data class LocalRoomThirdPartyInviteContent(
         @Json(name = "membership") val membership: Membership,
         @Json(name = "displayname") val displayName: String? = null,
         @Json(name = "is_direct") val isDirect: Boolean = false,
