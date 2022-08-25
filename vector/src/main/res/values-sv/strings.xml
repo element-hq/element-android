@@ -102,8 +102,6 @@
 \nImporterar inbjudna rum</string>
     <string name="initial_sync_start_importing_account_left_rooms">Inledande synk:
 \nImporterar lämnade rum</string>
-    <string name="initial_sync_start_importing_account_groups">Inledande synk:
-\nImporterar gemenskaper</string>
     <string name="initial_sync_start_importing_account_data">Inledande synk:
 \nImporterar kontodata</string>
     <string name="event_status_sending_message">Skickar meddelande…</string>
@@ -294,7 +292,6 @@
     <string name="matrix_only_filter">Bara Matrix-kontakter</string>
     <string name="no_result_placeholder">Inga resultat</string>
     <string name="rooms_header">Rum</string>
-    <string name="groups_header">Gemenskaper</string>
     <string name="send_bug_report_include_logs">Skicka loggar</string>
     <string name="send_bug_report_include_crash_logs">Skicka kraschloggar</string>
     <string name="send_bug_report_include_screenshot">Skicka skärmdump</string>
@@ -336,7 +333,6 @@
     <string name="auth_email_already_defined">Den här e-postadressen är redan definierad.</string>
     <string name="auth_forgot_password">Glömt lösenordet\?</string>
     <string name="auth_recaptcha_message">Denna hemserver skulle vilja verifiera att du inte är en robot</string>
-    <string name="auth_reset_password_missing_email">Du måste skriva in e-postadressen länkad till ditt konto.</string>
     <string name="auth_reset_password_error_unauthorized">Misslyckades att verifiera e-postadressen: se till att du klickade på länken i e-brevet</string>
     <string name="auth_accept_policies">Vänligen granska och acceptera villkoren för denna hemserver:</string>
     <string name="login_error_invalid_home_server">Vänligen skriv in en giltig URL</string>
@@ -454,7 +450,6 @@
 \nLagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Lagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
     <string name="change_room_directory_network">Byt nätverk</string>
-    <string name="group_all_communities">Alla gemenskaper</string>
     <string name="settings_general_title">Allmänt</string>
     <string name="settings_preferences">Alternativ</string>
     <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
@@ -2432,7 +2427,6 @@
     <string name="ftue_profile_picture_title">Lägg till en profilbild</string>
     <string name="ftue_display_name_entry_footer">Du kan ändra detta senare</string>
     <string name="ftue_display_name_entry_title">Visningsnamn</string>
-    <string name="ftue_display_name_subtitle">Det här kommer att visas när du skickar meddelanden.</string>
     <string name="ftue_display_name_title">Välj ett visningsnamn</string>
     <string name="ftue_account_created_subtitle">Ditt konto %s har skapats</string>
     <string name="ftue_account_created_congratulations_title">Grattis!</string>
@@ -2482,7 +2476,6 @@
     <string name="a11y_presence_busy">Upptagen</string>
     <string name="keys_backup_settings_signature_from_this_user">Säkerhetskopian har en giltig signatur från den här användaren.</string>
     <string name="live_location_bottom_sheet_last_updated_at">Uppdaterades för %1$s sen</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Sluta dela</string>
     <string name="labs_enable_live_location_summary">Temporär implementation: platser ligger kvar i rumshistoriken</string>
     <string name="labs_enable_live_location">Aktivera platsdelning i realtid</string>
     <string name="location_share_live_remaining_time">%1$s kvar</string>

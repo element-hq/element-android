@@ -153,6 +153,11 @@ data class ViewRoom(
         RoomList,
 
         /**
+         * Room accessed via a shortcut.
+         */
+        Shortcut,
+
+        /**
          * Room accessed via a slash command in Element Web/Desktop like /goto.
          */
         SlashCommand,

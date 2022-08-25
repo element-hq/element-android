@@ -24,12 +24,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
-import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.databinding.FragmentFtueProfilePictureBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.onboarding.OnboardingAction
@@ -38,17 +37,24 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
-class FtueAuthChooseProfilePictureFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) : AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(), GalleryOrCameraDialogHelper.Listener {
+@AndroidEntryPoint
+class FtueAuthChooseProfilePictureFragment :
+        AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(),
+        GalleryOrCameraDialogHelper.Listener {
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
-    private val avatarRenderer: AvatarRenderer by lazy { requireContext().singletonEntryPoint().avatarRenderer() }
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueProfilePictureBinding {
         return FragmentFtueProfilePictureBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

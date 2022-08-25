@@ -53,7 +53,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     @Inject lateinit var timelineSendEventWorkCommon: TimelineSendEventWorkCommon
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
-    override fun doOnError(params: Params): Result {
+    override fun doOnError(params: Params, failureMessage: String): Result {
         params.localEchoIds.forEach { localEchoIds ->
             localEchoRepository.updateSendState(
                     eventId = localEchoIds.eventId,
@@ -63,7 +63,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
             )
         }
 
-        return super.doOnError(params)
+        return super.doOnError(params, failureMessage)
     }
 
     override fun injectWith(injector: SessionComponent) {

@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentInvitesBinding
@@ -32,10 +33,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import javax.inject.Inject
 
-class InvitesFragment @Inject constructor(
-        private val controller: InvitesController,
-        private val notificationDrawerManager: NotificationDrawerManager,
-) : VectorBaseFragment<FragmentInvitesBinding>(), RoomListListener {
+@AndroidEntryPoint
+class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListListener {
+
+    @Inject lateinit var controller: InvitesController
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     private val viewModel by fragmentViewModel(InvitesViewModel::class)
 

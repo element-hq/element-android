@@ -30,6 +30,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -60,13 +61,15 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
-class HomeRoomListFragment @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val recentRoomCarouselController: RecentRoomCarouselController,
-        private val invitesCounterController: InvitesCounterController,
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class HomeRoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener {
+
+    @Inject lateinit var roomSummaryItemFactory: RoomSummaryItemFactory
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var recentRoomCarouselController: RecentRoomCarouselController
+    @Inject lateinit var invitesCounterController: InvitesCounterController
 
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
     private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel

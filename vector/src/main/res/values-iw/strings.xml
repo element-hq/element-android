@@ -114,7 +114,6 @@
     <string name="send_bug_report_include_key_share_history">שלח היסטוריית בקשות לשיתוף מפתח</string>
     <string name="send_bug_report_include_crash_logs">שלח יומני תקלות</string>
     <string name="send_bug_report_include_logs">שלח יומנים</string>
-    <string name="groups_header">קהילות</string>
     <string name="login_error_limit_exceeded">יותר מדי בקשות נשלחו</string>
     <string name="login_error_not_json">לא מכיל JSON חוקי</string>
     <string name="login_error_bad_json">JSON פגום</string>
@@ -125,7 +124,6 @@
     <string name="login_error_invalid_home_server">אנא הכנס כתובת תקינה</string>
     <string name="auth_accept_policies">אנא עיין וקבל את המדיניות של שרת בית זה:</string>
     <string name="auth_reset_password_error_unauthorized">אימות כתובת הדוא\"ל נכשל: ודא שלחצת על הקישור בדוא\"ל</string>
-    <string name="auth_reset_password_missing_email">יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.</string>
     <string name="auth_recaptcha_message">שרת הבית רוצה לוודא שאתה לא רובוט</string>
     <string name="auth_forgot_password">שכחת סיסמה\?</string>
     <string name="auth_msisdn_already_defined">מספר הטלפון הזה כבר קיים ומעודכן במערכת.</string>
@@ -1155,7 +1153,6 @@
     <string name="room_preview_not_found">בשלב זה אין גישה לחדר זה.
 \nנסה שוב מאוחר יותר, או בקש ממנהל החדר לבדוק אם יש לך גישה.</string>
     <string name="room_preview_no_preview">לא ניתן להציג תצוגה מקדימה של חדר זה</string>
-    <string name="group_all_communities">כל הקהילות</string>
     <string name="please_wait">אנא המתינו…</string>
     <string name="change_room_directory_network">שנה רשת</string>
     <string name="action_change">שנה</string>
@@ -1769,8 +1766,6 @@
     <string name="event_status_sent_message">הודעה נשלחה</string>
     <string name="initial_sync_start_importing_account_data">סנכרון ראשוני:
 \nייבוא נתוני חשבון</string>
-    <string name="initial_sync_start_importing_account_groups">סנכרון ראשוני:
-\nייבוא קהילות</string>
     <string name="initial_sync_start_importing_account_left_rooms">סנכרון ראשוני:
 \nייבוא חדרים עזובים</string>
     <string name="initial_sync_start_importing_account_invited_rooms">סנכרון ראשוני:

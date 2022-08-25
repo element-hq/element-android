@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.isHomeserverConnectionError
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isUnrecognisedCertificate
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
@@ -121,9 +122,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
-
-    val currentThreePid: String?
-        get() = registrationWizard.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
@@ -479,17 +477,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
-        // If there is a pending email validation continue on this step
-        try {
-            if (registrationWizard.isRegistrationStarted()) {
-                currentThreePid?.let {
-                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it, isRestoredSession = true)))
-                }
-            }
-        } catch (e: Throwable) {
-            // NOOP. API is designed to use wizards in a login/registration flow,
-            // but we need to check the state anyway.
-        }
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
@@ -715,14 +702,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onAuthenticationStartError(error: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
-            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(
-                    OnboardingViewEvents.Failure(error)
-            )
-            deeplinkUrlIsUnavailable(error, trigger) -> _viewEvents.post(
-                    OnboardingViewEvents.DeeplinkAuthenticationFailure(
-                            retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
-                    )
-            )
+            error.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(sdkIntProvider) -> _viewEvents.post(OnboardingViewEvents.Failure(error))
+            isUnableToSelectServer(error, trigger) -> {
+                withState { state ->
+                    when {
+                        canEditServerSelectionError(state) -> handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
+                        else -> _viewEvents.post(OnboardingViewEvents.Failure(error))
+                    }
+                }
+            }
             error.isUnrecognisedCertificate() -> {
                 _viewEvents.post(OnboardingViewEvents.UnrecognisedCertificateFailure(trigger, error as Failure.UnrecognizedCertificateFailure))
             }
@@ -730,11 +718,12 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun deeplinkUrlIsUnavailable(error: Throwable, trigger: OnboardingAction.HomeServerChange) = error.isHomeserverUnavailable() &&
-            loginConfig != null &&
-            trigger is OnboardingAction.HomeServerChange.SelectHomeServer
+    private fun canEditServerSelectionError(state: OnboardingViewState) =
+            (state.onboardingFlow == OnboardingFlow.SignIn && vectorFeatures.isOnboardingCombinedLoginEnabled()) ||
+                    (state.onboardingFlow == OnboardingFlow.SignUp && vectorFeatures.isOnboardingCombinedRegisterEnabled())
 
-    private fun OnboardingAction.HomeServerChange.SelectHomeServer.resetToDefaultUrl() = copy(homeServerUrl = defaultHomeserverUrl)
+    private fun isUnableToSelectServer(error: Throwable, trigger: OnboardingAction.HomeServerChange) =
+            trigger is OnboardingAction.HomeServerChange.SelectHomeServer && error.isHomeserverConnectionError()
 
     private suspend fun onAuthenticationStartedSuccess(
             trigger: OnboardingAction.HomeServerChange,
@@ -820,6 +809,8 @@ class OnboardingViewModel @AssistedInject constructor(
     fun getInitialHomeServerUrl(): String? {
         return loginConfig?.homeServerUrl
     }
+
+    fun getDefaultHomeserverUrl() = defaultHomeserverUrl
 
     fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
         setState {

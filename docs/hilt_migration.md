@@ -7,8 +7,8 @@ Hilt is built on top of Dagger 2 and simplify usage by removing needs to create 
 When you create a new feature, you should have the following:
 
 Annotate your Activity with @AndroidEntryPoint
+Annotate your Fragment with @AndroidEntryPoint
 If you have a BottomSheetFragment => Annotate it with @AndroidEntryPoint
-Otherwise => Add your Fragment to the FragmentModule
 Add your ViewModel.Factory to the MavericksViewModelModule
 Makes sure your ViewModel as the following code:
 

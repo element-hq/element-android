@@ -27,6 +27,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -60,11 +61,12 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 private const val MINIMUM_PASSWORD_LENGTH = 8
 
-class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
+@AndroidEntryPoint
+class FtueAuthCombinedRegisterFragment :
+        AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedRegisterBinding {
         return FragmentFtueCombinedRegisterBinding.inflate(inflater, container, false)

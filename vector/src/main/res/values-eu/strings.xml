@@ -67,8 +67,6 @@
 \nGonbidatutako gelak inportatzen</string>
     <string name="initial_sync_start_importing_account_left_rooms">Hasierako sinkronizazioa:
 \nUtzitako gelak inportatzen</string>
-    <string name="initial_sync_start_importing_account_groups">Hasierako sinkronizazioa:
-\nKomunitateak inportatzen</string>
     <string name="initial_sync_start_importing_account_data">Hasierako sinkronizazioa:
 \nKontuaren datuak inportatzen</string>
 
@@ -194,7 +192,6 @@
     <string name="auth_forgot_password">Pasahitza ahaztuta\?</string>
 
     <string name="auth_recaptcha_message">Hasiera zerbitzari honek robot bat ez zarela egiaztatu nahi du</string>
-    <string name="auth_reset_password_missing_email">Zure kontura gehitutako e-mail helbidea sartu behar da.</string>
     <string name="auth_reset_password_error_unauthorized">Huts egin du e-mail helbidearen egiaztaketak, egin klik e-mailean zetorren estekan</string>
 
     <string name="login_error_invalid_home_server">Sartu baliozko URL bat</string>
@@ -504,11 +501,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="call">Deia</string>
 
     <string name="loading">Kargatzen…</string>
-
-
-
-    <string name="groups_header">Komunitateak</string>
-
     <string name="start_voice_call_prompt_msg">Ziur ahots-dei bat hasi nahi duzula?</string>
     <string name="start_video_call_prompt_msg">Ziur bideo-dei bat hasi nahi duzula?</string>
 
@@ -1045,8 +1037,6 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
     <string name="action_change">Aldatu</string>
     <string name="change_room_directory_network">Aldatu sarea</string>
     <string name="please_wait">Itxaron mesedez…</string>
-    <string name="group_all_communities">Komunitate guztiak</string>
-
     <string name="room_preview_no_preview">Gela hau ezin da aurreikusi</string>
 
     <string name="fab_menu_create_room">Gelak</string>

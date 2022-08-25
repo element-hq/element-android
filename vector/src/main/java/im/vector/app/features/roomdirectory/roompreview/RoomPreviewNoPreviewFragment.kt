@@ -30,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
@@ -52,9 +53,11 @@ import javax.inject.Inject
 /**
  * Note: this Fragment is also used for world readable room for the moment.
  */
-class RoomPreviewNoPreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
+@AndroidEntryPoint
+class RoomPreviewNoPreviewFragment :
+        VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()

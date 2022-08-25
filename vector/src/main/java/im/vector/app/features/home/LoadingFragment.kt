@@ -21,11 +21,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLoadingBinding
-import javax.inject.Inject
 
-class LoadingFragment @Inject constructor() : VectorBaseFragment<FragmentLoadingBinding>() {
+@AndroidEntryPoint
+class LoadingFragment : VectorBaseFragment<FragmentLoadingBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoadingBinding {
         return FragmentLoadingBinding.inflate(inflater, container, false)

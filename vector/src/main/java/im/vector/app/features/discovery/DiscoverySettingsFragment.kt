@@ -25,6 +25,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -43,10 +44,12 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
-class DiscoverySettingsFragment @Inject constructor(
-        private val controller: DiscoverySettingsController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class DiscoverySettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DiscoverySettingsController.Listener {
+
+    @Inject lateinit var controller: DiscoverySettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

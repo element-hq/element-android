@@ -23,15 +23,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDevtoolsEditorBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
-class RoomDevToolEditFragment @Inject constructor() :
+@AndroidEntryPoint
+class RoomDevToolEditFragment :
         VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
 
     private val sharedViewModel: RoomDevToolViewModel by activityViewModel()

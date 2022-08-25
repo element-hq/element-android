@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -48,10 +49,12 @@ import kotlinx.coroutines.flow.launchIn
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class FtueAuthCombinedLoginFragment @Inject constructor(
-        private val loginFieldsValidation: LoginFieldsValidation,
-        private val loginErrorParser: LoginErrorParser
-) : AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
+@AndroidEntryPoint
+class FtueAuthCombinedLoginFragment :
+        AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
+
+    @Inject lateinit var loginFieldsValidation: LoginFieldsValidation
+    @Inject lateinit var loginErrorParser: LoginErrorParser
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
