@@ -50,32 +50,8 @@ jobs:
           emulator-build: 7425822
           script: | 
             ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew vector:verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
-      - name: Run all the codecoverage tests at once (retry if emulator failed)
-        uses: reactivecircus/android-emulator-runner@v2
-        if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
-        with:
-          api-level: 28
-          arch: x86
-          profile: Nexus 5X
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          emulator-build: 7425822
-          script: |
-            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
-      - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
-        if: always() # we may have failed a previous step and retried, that's OK
-        env:
-          GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Format unit test results
         if: always()

@@ -120,7 +120,7 @@
             app:layout_constraintHeight_percent="0.03"
             app:layout_constraintTop_toBottomOf="@id/chooseServerInput" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/chooseServerSubmit"
             style="@style/Widget.Vector.Button.Login"
             android:layout_width="0dp"
