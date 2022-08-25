@@ -36,4 +36,8 @@ class FakeVectorPreferences {
     fun verifySetSpaceBackstack(value: List<String?>, inverse: Boolean = false) {
         verify(inverse = inverse) { instance.setSpaceBackstack(value) }
     }
+
+    fun givenDeveloperMode(isDeveloperMode: Boolean) {
+        every { instance.developerMode() } returns isDeveloperMode
+    }
 }
