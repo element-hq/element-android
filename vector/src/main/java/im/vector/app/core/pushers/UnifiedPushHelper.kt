@@ -146,10 +146,6 @@ class UnifiedPushHelper @Inject constructor(
                 .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                 .setItems(distributorsName.toTypedArray()) { _, which ->
                     val distributor = distributors[which]
-                    if (distributor == UnifiedPush.getDistributor(context)) {
-                        Timber.d("Same distributor selected again, no action")
-                        return@setItems
-                    }
 
                     activity.lifecycleScope.launch {
                         UnifiedPush.saveDistributor(context, distributor)
