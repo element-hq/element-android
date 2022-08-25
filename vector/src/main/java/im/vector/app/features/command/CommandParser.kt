@@ -374,15 +374,15 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.ADD_TO_SPACE.matches(slashCommand) -> {
-                    if (messageParts.size == 1) {
-                        ParsedCommand.AddToSpace(spaceId = message)
+                    if (messageParts.size == 2) {
+                        ParsedCommand.AddToSpace(spaceId = messageParts.last())
                     } else {
                         ParsedCommand.ErrorSyntax(Command.ADD_TO_SPACE)
                     }
                 }
                 Command.JOIN_SPACE.matches(slashCommand) -> {
-                    if (messageParts.size == 1) {
-                        ParsedCommand.JoinSpace(spaceIdOrAlias = message)
+                    if (messageParts.size == 2) {
+                        ParsedCommand.JoinSpace(spaceIdOrAlias = messageParts.last())
                     } else {
                         ParsedCommand.ErrorSyntax(Command.JOIN_SPACE)
                     }
