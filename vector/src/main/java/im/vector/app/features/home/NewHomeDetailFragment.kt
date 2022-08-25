@@ -126,7 +126,7 @@ class NewHomeDetailFragment @Inject constructor(
         setupActiveCallView()
 
         childFragmentManager.commitTransaction {
-            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, "HOME_ROOM_LIST")
+            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, HOME_ROOM_LIST_FRAGMENT_TAG)
         }
 
         viewModel.onEach(HomeDetailViewState::selectedSpace) { selectedSpace ->
@@ -339,5 +339,9 @@ class NewHomeDetailFragment @Inject constructor(
         true
     } else {
         false
+    }
+
+    companion object {
+        private const val HOME_ROOM_LIST_FRAGMENT_TAG = "TAG_HOME_ROOM_LIST"
     }
 }
