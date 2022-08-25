@@ -19,23 +19,31 @@ package im.vector.app
 import android.os.Build
 import android.view.View
 import android.widget.FrameLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.RecyclerView
 import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_3
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Success
+import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import im.vector.app.features.onboarding.OnboardingFlow
+import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.app.features.onboarding.SelectedHomeserverState
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCombinedServerSelectionFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsController
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewState
+import im.vector.app.test.fakes.FakeErrorFormatter
 import im.vector.app.test.fakes.FakeVectorPreferences
 import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +66,40 @@ class PaparazziScreenshotTest {
     }
 
     @Test
-    fun `room settings`() = runTest {
+    fun `empty server selection`() {
+        val (view, binding) = paparazzi.inflate(R.layout.fragment_ftue_server_selection_combined, FragmentFtueServerSelectionCombinedBinding::bind)
+        val stringProvider = StringProvider(paparazzi.resources)
+        val lifecycleOwner = fakeLifecycleOwner()
+
+        FtueAuthCombinedServerSelectionFragment.Controller(lifecycleOwner, binding, stringProvider, FakeErrorFormatter())
+                .setData(
+                        OnboardingViewState(
+                                onboardingFlow = OnboardingFlow.SignIn,
+                        )
+                )
+
+        paparazzi.snapshot(view)
+    }
+
+    @Test
+    fun `server selection with content`() {
+        val (view, binding) = paparazzi.inflate(R.layout.fragment_ftue_server_selection_combined, FragmentFtueServerSelectionCombinedBinding::bind)
+        val stringProvider = StringProvider(paparazzi.resources)
+        val lifecycleOwner = fakeLifecycleOwner()
+
+        FtueAuthCombinedServerSelectionFragment.Controller(lifecycleOwner, binding, stringProvider, DefaultErrorFormatter(stringProvider))
+                .setData(
+                        OnboardingViewState(
+                                onboardingFlow = OnboardingFlow.SignIn,
+                                selectedHomeserver = SelectedHomeserverState(userFacingUrl = "matrix.org")
+                        )
+                )
+
+        paparazzi.snapshot(view)
+    }
+
+    @Test
+    fun `room settings`() {
         // Material components aren't fully supported yet https://github.com/cashapp/paparazzi/issues/223
         val strings = StringProvider(paparazzi.resources)
         val fakeAvatarRender = FakeAvatarRender()
@@ -108,6 +149,18 @@ fun setFinalStaticValue(field: Field, value: Any) {
     field.isAccessible = true
 
     field.set(null, value)
+}
+
+private fun <B> Paparazzi.inflate(layoutId: Int, binder: (View) -> B): Pair<View, B> {
+    val view = inflate<View>(layoutId)
+    val binding = binder(view)
+    return view to binding
+}
+
+private fun fakeLifecycleOwner(): LifecycleOwner {
+    val lifecycleOwner = mockk<LifecycleOwner>()
+    every { lifecycleOwner.lifecycle } returns LifecycleRegistry(lifecycleOwner)
+    return lifecycleOwner
 }
 
 class FakeDimensionConverter {
