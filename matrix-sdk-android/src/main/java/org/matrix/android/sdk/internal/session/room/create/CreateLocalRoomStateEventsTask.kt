@@ -156,7 +156,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Generate the local state events related to the given third party invites, if any.
      */
     private fun MutableList<Event>.createRoomThreePidEvents() {
-        val threePidEvents = createRoomBody.invite3pids.orEmpty().map { body ->
+        createRoomBody.invite3pids.orEmpty().forEach { body ->
             val localThirdPartyInviteEvent = createLocalStateEvent(
                     type = EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE,
                     content = LocalRoomThirdPartyInviteContent(
@@ -168,11 +168,16 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
             )
             val thirdPartyInviteEvent = createLocalStateEvent(
                     type = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                    content = RoomThirdPartyInviteContent(body.address, null, null, null).toContent(),
+                    content = RoomThirdPartyInviteContent(
+                            displayName = body.address,
+                            keyValidityUrl = null,
+                            publicKey = null,
+                            publicKeys = null
+                    ).toContent(),
             )
-            listOf(localThirdPartyInviteEvent, thirdPartyInviteEvent)
-        }.flatten()
-        addAll(threePidEvents)
+            add(localThirdPartyInviteEvent)
+            add(thirdPartyInviteEvent)
+        }
     }
 
     /**
