@@ -441,6 +441,9 @@
     <string name="system_alerts_header">"System Alerts"</string>
     <string name="suggested_header">Suggested Rooms</string>
 
+    <!-- Invites fragment -->
+    <string name="invites_title">Invites</string>
+
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="matrix_only_filter">Matrix contacts only</string>

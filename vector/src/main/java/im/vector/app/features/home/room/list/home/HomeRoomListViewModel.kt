@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list.home
 
+import androidx.lifecycle.map
 import androidx.paging.PagedList
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -100,9 +101,9 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     private fun configureSections() = viewModelScope.launch {
         val newSections = mutableSetOf<HomeRoomSection>()
+        newSections.add(getInvitesCountSection())
 
         val areSettingsEnabled = preferencesStore.areRecentsEnabledFlow.first()
-
         if (areSettingsEnabled) {
             newSections.add(getRecentRoomsSection())
         }
@@ -125,6 +126,19 @@ class HomeRoomListViewModel @AssistedInject constructor(
         return HomeRoomSection.RecentRoomsData(
                 list = liveList
         )
+    }
+
+    private fun getInvitesCountSection(): HomeRoomSection.InvitesCountData {
+        val builder = RoomSummaryQueryParams.Builder().also {
+            it.memberships = listOf(Membership.INVITE)
+        }
+
+        val liveCount = session.roomService().getRoomSummariesLive(
+                builder.build(),
+                RoomSortOrder.ACTIVITY
+        ).map { it.count() }
+
+        return HomeRoomSection.InvitesCountData(liveCount)
     }
 
     private suspend fun getFilteredRoomsSection(): HomeRoomSection.RoomSummaryData {
