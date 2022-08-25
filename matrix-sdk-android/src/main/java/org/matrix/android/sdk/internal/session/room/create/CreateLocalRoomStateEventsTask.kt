@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.model.redactOrDefault
 import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 import org.matrix.android.sdk.api.session.user.UserService
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomStateEventsTask.Params
 import org.matrix.android.sdk.internal.session.room.membership.threepid.toThreePid
 import org.matrix.android.sdk.internal.task.Task
@@ -62,29 +63,25 @@ import javax.inject.Inject
  * Ref: https://spec.matrix.org/latest/client-server-api/#post_matrixclientv3createroom
  */
 internal interface CreateLocalRoomStateEventsTask : Task<Params, List<Event>> {
-    data class Params(
-            val roomCreatorUserId: String,
-            val createRoomBody: CreateRoomBody
-    )
+    data class Params(val createRoomBody: CreateRoomBody)
 }
 
 internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
+        @UserId private val myUserId: String,
         private val userService: UserService,
         private val clock: Clock,
 ) : CreateLocalRoomStateEventsTask {
 
     private lateinit var createRoomBody: CreateRoomBody
-    private lateinit var roomCreatorUserId: String
 
     override suspend fun execute(params: Params): List<Event> {
         createRoomBody = params.createRoomBody
-        roomCreatorUserId = params.roomCreatorUserId
 
         // Build the list of the state events following the priorities from the matrix specification
         // Changing the order of the events might break the correct display of the room on the client side
         return buildList {
             createRoomCreateEvent()
-            createRoomMemberEvents(listOf(roomCreatorUserId))
+            createRoomMemberEvents(listOf(myUserId))
             createRoomPowerLevelsEvent()
             createRoomAliasEvent()
             createRoomPresetEvents()
@@ -103,7 +100,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
         val roomCreateEvent = createLocalStateEvent(
                 type = EventType.STATE_ROOM_CREATE,
                 content = RoomCreateContent(
-                        creator = roomCreatorUserId,
+                        creator = myUserId,
                         roomVersion = createRoomBody.roomVersion,
                         type = (createRoomBody.creationContent as? Map<*, *>)?.get(CreateRoomParams.CREATION_CONTENT_KEY_ROOM_TYPE) as? String
 
@@ -144,8 +141,8 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
                     createLocalStateEvent(
                             type = EventType.STATE_ROOM_MEMBER,
                             content = RoomMemberContent(
-                                    isDirect = createRoomBody.isDirect.takeUnless { user.userId == roomCreatorUserId }.orFalse(),
-                                    membership = if (user.userId == roomCreatorUserId) Membership.JOIN else Membership.INVITE,
+                                    isDirect = createRoomBody.isDirect.takeUnless { user.userId == myUserId }.orFalse(),
+                                    membership = if (user.userId == myUserId) Membership.JOIN else Membership.INVITE,
                                     displayName = user.displayName,
                                     avatarUrl = user.avatarUrl
                             ).toContent(),
@@ -186,7 +183,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
             val canonicalAliasContent = createLocalStateEvent(
                     type = EventType.STATE_ROOM_CANONICAL_ALIAS,
                     content = RoomCanonicalAliasContent(
-                            canonicalAlias = "${createRoomBody.roomAliasName}:${roomCreatorUserId.getServerName()}"
+                            canonicalAlias = "${createRoomBody.roomAliasName}:${myUserId.getServerName()}"
                     ).toContent(),
             )
             add(canonicalAliasContent)
@@ -287,7 +284,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     private fun createLocalStateEvent(type: String?, content: Content?, stateKey: String? = ""): Event {
         return Event(
                 type = type,
-                senderId = roomCreatorUserId,
+                senderId = myUserId,
                 stateKey = stateKey,
                 content = content,
                 originServerTs = clock.epochMillis(),

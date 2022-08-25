@@ -71,6 +71,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
     private val userService = mockk<UserService>()
 
     private val defaultCreateLocalRoomStateEventsTask = DefaultCreateLocalRoomStateEventsTask(
+            myUserId = MY_USER_ID,
             userService = userService,
             clock = clock
     )
@@ -103,20 +104,19 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
     @Test
     fun `given a CreateRoomBody when execute then the resulting list of events contains the correct room create state event`() = runTest {
         // Given
-        val aRoomCreator = MY_USER_ID
         val aRoomVersion = "a_room_version"
 
         every { createRoomBody.roomVersion } returns aRoomVersion
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(aRoomCreator, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
         val roomCreateEvent = result.find { it.type == EventType.STATE_ROOM_CREATE }
         val roomCreateContent = roomCreateEvent?.content.toModel<RoomCreateContent>()
 
-        roomCreateContent?.creator shouldBeEqualTo aRoomCreator
+        roomCreateContent?.creator shouldBeEqualTo MY_USER_ID
         roomCreateContent?.roomVersion shouldBeEqualTo aRoomVersion
     }
 
@@ -130,7 +130,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         every { createRoomBody.topic } returns aRoomTopic
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -158,7 +158,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         }
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -195,7 +195,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         every { createRoomBody.powerLevelContentOverride } returns aPowerLevelsContent
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -212,7 +212,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         every { createRoomBody.roomAliasName } returns aRoomAlias
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -244,7 +244,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
             every { createRoomBody.preset } returns case.preset
 
             // When
-            val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+            val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
             val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
             // Then
@@ -284,7 +284,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         every { createRoomBody.initialStates } returns aListOfInitialStateEvents
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -319,7 +319,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         every { createRoomBody.invite3pids } returns aListOf3pids
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -358,7 +358,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         }
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then
@@ -447,7 +447,7 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         )
 
         // When
-        val params = CreateLocalRoomStateEventsTask.Params(MY_USER_ID, createRoomBody)
+        val params = CreateLocalRoomStateEventsTask.Params(createRoomBody)
         val result = defaultCreateLocalRoomStateEventsTask.execute(params)
 
         // Then

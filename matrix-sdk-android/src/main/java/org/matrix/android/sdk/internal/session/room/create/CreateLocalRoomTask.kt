@@ -46,7 +46,6 @@ import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
@@ -60,7 +59,6 @@ import javax.inject.Inject
 internal interface CreateLocalRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateLocalRoomTask @Inject constructor(
-        @UserId private val myUserId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
@@ -156,7 +154,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
             isLastForward = true
         }
 
-        val eventList = createLocalRoomStateEventsTask.execute(CreateLocalRoomStateEventsTask.Params(myUserId, createRoomBody))
+        val eventList = createLocalRoomStateEventsTask.execute(CreateLocalRoomStateEventsTask.Params(createRoomBody))
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {
