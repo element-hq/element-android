@@ -28,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
@@ -42,9 +43,11 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class SetIdentityServerFragment @Inject constructor(
-        val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
+@AndroidEntryPoint
+class SetIdentityServerFragment :
+        VectorBaseFragment<FragmentSetIdentityServerBinding>() {
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSetIdentityServerBinding {
         return FragmentSetIdentityServerBinding.inflate(inflater, container, false)

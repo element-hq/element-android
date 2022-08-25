@@ -112,8 +112,6 @@
     <string name="event_status_sending_message">Enviant missatge…</string>
     <string name="initial_sync_start_importing_account_data">Sincronització inicial:
 \nImportant dades del compte</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronització inicial:
-\nImportant comunitats</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronització inicial:
 \nImportant sales que n\'has marxat</string>
     <string name="initial_sync_start_importing_account">Sincronització inicial:
@@ -269,7 +267,6 @@
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_result_placeholder">Sense resultats</string>
     <string name="rooms_header">Sales</string>
-    <string name="groups_header">Comunitats</string>
     <string name="send_bug_report_include_logs">Envia els registres</string>
     <string name="send_bug_report_include_crash_logs">Envia els registres de fallada</string>
     <string name="send_bug_report_include_screenshot">Envia una captura de pantalla</string>
@@ -302,7 +299,6 @@
     <string name="auth_email_already_defined">Aquest correu electrònic ja existeix.</string>
     <string name="auth_forgot_password">Contrasenya oblidada\?</string>
     <string name="auth_recaptcha_message">Aquest servidor vol assegurar-se que no ets cap robot</string>
-    <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
     <string name="login_error_invalid_home_server">Introduïu una URL vàlida</string>
     <string name="login_error_bad_json">JSON mal format</string>
@@ -877,7 +873,6 @@
     <string name="action_change">Canviar</string>
     <string name="change_room_directory_network">Canvia de xarxa</string>
     <string name="please_wait">Espereu, si us plau…</string>
-    <string name="group_all_communities">Totes les comunitats</string>
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
     <string name="fab_menu_create_room">Sales</string>
     <string name="fab_menu_create_chat">Xats directes</string>
@@ -2208,7 +2203,6 @@
     <string name="create_spaces_details_public_header">Afegeix alguns detalls per ajudar a destacar-lo. Pots canviar-ho en qualsevol moment.</string>
     <string name="create_spaces_private_teammates">Un espai privat per tu i els teus</string>
     <string name="space_type_public_desc">Obert a tothom, perfecte per a comunitats</string>
-    <string name="ftue_display_name_subtitle">Es mostrarà quan enviïs missatges.</string>
     <string name="ftue_display_name_title">Escull un àlies</string>
     <string name="ftue_account_created_subtitle">El teu compte %s s\'ha creat</string>
     <string name="ftue_account_created_congratulations_title">Felicitats!</string>
@@ -2485,7 +2479,6 @@
     <string name="labs_enable_live_location_summary">Implementació temporal: les ubicacions persisteixen a l\'històric de la sala</string>
     <string name="space_leave_radio_buttons_title">Coses en aquest espai</string>
     <string name="settings_autoplay_animated_images_summary">Reprodueix immediatament les imatges animades a la cronologia</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Deixa de compartir</string>
     <string name="labs_enable_live_location">Activa la compartició d\'ubicació en directe</string>
     <string name="location_share_live_remaining_time">%1$s restants</string>
     <string name="location_share_live_until">En directe fins %1$s</string>
@@ -2603,4 +2596,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s i %2$s</string>
     <string name="auth_reset_password_error_unverified">Correu no verificat, mira la teva safata d\'entrada</string>
+    <string name="location_share_loading_map_error">No s\'ha pogut carregar el mapa
+\nPotser el servidor utilitzat no està configurat per mostrar mapes.</string>
+    <string name="a11y_open_settings">Obre configuració</string>
+    <string name="all_chats">Tots els xats</string>
 </resources>

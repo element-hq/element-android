@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentFtueAuthSplashBinding
@@ -34,11 +35,13 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application.
  */
-class FtueAuthSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures,
-        private val buildMeta: BuildMeta,
-) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
+@AndroidEntryPoint
+class FtueAuthSplashFragment :
+        AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
         return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)

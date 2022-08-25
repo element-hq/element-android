@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
@@ -37,9 +38,10 @@ import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
-import javax.inject.Inject
 
-class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
+@AndroidEntryPoint
+class FtueAuthCombinedServerSelectionFragment :
+        AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueServerSelectionCombinedBinding {
         return FragmentFtueServerSelectionCombinedBinding.inflate(inflater, container, false)
@@ -86,7 +88,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         )
 
         if (views.chooseServerInput.content().isEmpty()) {
-            val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure()
+            val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure() ?: viewModel.getDefaultHomeserverUrl()
             views.chooseServerInput.editText().setText(userUrlInput)
         }
     }

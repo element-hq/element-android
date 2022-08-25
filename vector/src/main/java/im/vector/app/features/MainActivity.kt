@@ -38,6 +38,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -186,8 +187,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
             val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
             if (roomId?.isNotEmpty() == true) {
-                // TODO Add a trigger Shortcut to the analytics.
-                navigator.openRoom(this, roomId)
+                navigator.openRoom(this, roomId, trigger = ViewRoom.Trigger.Shortcut)
             }
             finish()
         } else {

@@ -22,15 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
 import org.matrix.android.sdk.api.failure.is401
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to check their email and to click on a button once it's done.
  */
-class LoginResetPasswordMailConfirmationFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordMailConfirmationBinding>() {
+@AndroidEntryPoint
+class LoginResetPasswordMailConfirmationFragment :
+        AbstractLoginFragment<FragmentLoginResetPasswordMailConfirmationBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordMailConfirmationBinding {
         return FragmentLoginResetPasswordMailConfirmationBinding.inflate(inflater, container, false)

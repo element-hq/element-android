@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
@@ -37,10 +38,12 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
 
-class VectorSettingsPreferencesFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val fontScalePreferences: FontScalePreferences,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsPreferencesFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var fontScalePreferences: FontScalePreferences
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences

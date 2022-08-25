@@ -69,7 +69,6 @@
     <string name="matrix_only_filter">Allinnich Matrix-kontakten</string>
     <string name="no_result_placeholder">Gjin resultaten</string>
     <string name="rooms_header">Petearen</string>
-    <string name="groups_header">Mienskippen</string>
     <string name="send_bug_report_include_logs">Lochboek ferstjoere</string>
     <string name="send_bug_report_include_crash_logs">Ungeloklochboek ferstjoere</string>
     <string name="send_bug_report_include_screenshot">Skermôfdruk ferstjoere</string>
@@ -103,8 +102,6 @@
     <string name="event_status_sent_message">Berjocht ferstjoerd</string>
     <string name="initial_sync_start_importing_account_data">Inisjele syngronisaasje:
 \nAccountgegevens ymportearje</string>
-    <string name="initial_sync_start_importing_account_groups">Inisjele Syngronisaasje:
-\nMienskippen ymportearje</string>
     <string name="initial_sync_start_importing_account_left_rooms">Inisjele Syngronisaasje:
 \nFerlitten keamers ymportearje</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Inisjele syngronisaasje:
@@ -139,7 +136,6 @@
     <string name="notice_room_visibility_joined">alle dielnimmers, fan it momint ôf dat se de keamer ynkaam binne.</string>
     <string name="notice_room_visibility_invited">alle dielnimmers oan it petear, fan it momint ôf dat se útnûge binne.</string>
     <string name="space_type_public_desc">Iepen foar eltsenien, it beste foar mienskippen</string>
-    <string name="group_all_communities">Alle mienskippen</string>
     <string name="dialog_title_success">Sukses</string>
     <string name="room_settings_enable_encryption_no_permission">Jo hawwe gjin tastimming om fersifering yn dizze keamer yn te skeakeljen.</string>
     <string name="sound_device_phone">Telefoan</string>
@@ -231,7 +227,6 @@
     <string name="call_camera_back">Efterkant</string>
     <string name="call_camera_front">Foarkant</string>
     <string name="auth_recaptcha_message">Dizze thússerver wol der graach wis fan wêze dat jo gjin robot binne</string>
-    <string name="auth_reset_password_missing_email">It e-mailadres dat oan jo account keppele is moat ynfierd wurde.</string>
     <string name="settings_security_and_privacy">Befeiliging &amp; privacy</string>
     <string name="room_widget_resource_grant_permission">Tastean</string>
     <string name="room_settings_room_version_title">Keamerferzje</string>
