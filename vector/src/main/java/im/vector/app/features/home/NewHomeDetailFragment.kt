@@ -44,14 +44,20 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
+import im.vector.app.features.home.room.list.home.NewChatBottomSheet
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.app.features.spaces.SpaceListBottomSheet
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -80,7 +86,11 @@ class NewHomeDetailFragment :
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedRoomListActionViewModel: RoomListSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+
+    private val newChatBottomSheet = NewChatBottomSheet()
+    private val spaceListBottomSheet = SpaceListBottomSheet()
 
     private var hasUnreadRooms = false
         set(value) {
@@ -127,6 +137,8 @@ class NewHomeDetailFragment :
         setupToolbar()
         setupKeysBackupBanner()
         setupActiveCallView()
+        setupFabs()
+        setupObservers()
 
         childFragmentManager.commitTransaction {
             add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, HOME_ROOM_LIST_FRAGMENT_TAG)
@@ -167,6 +179,39 @@ class NewHomeDetailFragment :
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+    }
+
+    private fun setupObservers() {
+        sharedRoomListActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
+
+        sharedRoomListActionViewModel
+                .stream()
+                .onEach(::handleSharedAction)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun handleSharedAction(action: RoomListSharedAction) {
+        when (action) {
+            RoomListSharedAction.CloseBottomSheet -> spaceListBottomSheet.dismiss()
+        }
+    }
+
+    private fun setupFabs() {
+        showFABs()
+
+        views.newLayoutCreateChatButton.setOnClickListener {
+            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
+        }
+
+        views.newLayoutOpenSpacesButton.setOnClickListener {
+            // Click action for open spaces modal goes here
+            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
+        }
+    }
+
+    private fun showFABs() {
+        views.newLayoutCreateChatButton.show()
+        views.newLayoutOpenSpacesButton.show()
     }
 
     private fun navigateBack() {
