@@ -27,4 +27,8 @@ class FakeVectorPreferences {
     fun givenUseCompleteNotificationFormat(value: Boolean) {
         every { instance.useCompleteNotificationFormat() } returns value
     }
+
+    fun givenDeveloperMode(isDeveloperMode: Boolean) {
+        every { instance.developerMode() } returns isDeveloperMode
+    }
 }
