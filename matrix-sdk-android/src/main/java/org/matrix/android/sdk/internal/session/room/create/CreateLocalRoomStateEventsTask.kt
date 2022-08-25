@@ -100,7 +100,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     /**
      * Generate the create state event related to this room.
      */
-    private fun MutableList<Event>.createRoomCreateEvent() = apply {
+    private fun MutableList<Event>.createRoomCreateEvent() {
         val roomCreateEvent = createLocalStateEvent(
                 type = EventType.STATE_ROOM_CREATE,
                 content = RoomCreateContent(
@@ -117,7 +117,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Generate the create state event related to the power levels using the given overridden values or the default values according to the specification.
      * Ref: https://spec.matrix.org/latest/client-server-api/#mroompower_levels
      */
-    private fun MutableList<Event>.createRoomPowerLevelsEvent() = apply {
+    private fun MutableList<Event>.createRoomPowerLevelsEvent() {
         val powerLevelsContent = createLocalStateEvent(
                 type = EventType.STATE_ROOM_POWER_LEVELS,
                 content = (createRoomBody.powerLevelContentOverride ?: PowerLevelsContent()).let {
@@ -138,7 +138,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     /**
      * Generate the local room member state events related to the given user ids, if any.
      */
-    private suspend fun MutableList<Event>.createRoomMemberEvents(userIds: List<String>) = apply {
+    private suspend fun MutableList<Event>.createRoomMemberEvents(userIds: List<String>) {
         val memberEvents = userIds
                 .mapNotNull { tryOrNull { userService.resolveUser(it) } }
                 .map { user ->
@@ -159,7 +159,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     /**
      * Generate the local state events related to the given third party invites, if any.
      */
-    private fun MutableList<Event>.createRoomThreePidEvents() = apply {
+    private fun MutableList<Event>.createRoomThreePidEvents() {
         val threePidEvents = createRoomBody.invite3pids.orEmpty().map { body ->
             val localThirdPartyInviteEvent = createLocalStateEvent(
                     type = EventType.LOCAL_STATE_ROOM_THIRD_PARTY_INVITE,
@@ -182,7 +182,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     /**
      * Generate the local state event related to the given alias, if any.
      */
-    fun MutableList<Event>.createRoomAliasEvent() = apply {
+    fun MutableList<Event>.createRoomAliasEvent() {
         if (createRoomBody.roomAliasName != null) {
             val canonicalAliasContent = createLocalStateEvent(
                     type = EventType.STATE_ROOM_CANONICAL_ALIAS,
@@ -198,8 +198,8 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Generate the local state events related to the given [CreateRoomPreset].
      * Ref: https://spec.matrix.org/latest/client-server-api/#post_matrixclientv3createroom
      */
-    private fun MutableList<Event>.createRoomPresetEvents() = apply {
-        val preset = createRoomBody.preset ?: return@apply
+    private fun MutableList<Event>.createRoomPresetEvents() {
+        val preset = createRoomBody.preset ?: return
 
         var joinRules: RoomJoinRules? = null
         var historyVisibility: RoomHistoryVisibility? = null
@@ -227,8 +227,8 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * Generate the local state events related to the given initial states, if any.
      * The given initial state events override the potential existing ones of the same type.
      */
-    private fun MutableList<Event>.createRoomInitialStateEvents() = apply {
-        val initialStates = createRoomBody.initialStates ?: return@apply
+    private fun MutableList<Event>.createRoomInitialStateEvents() {
+        val initialStates = createRoomBody.initialStates ?: return
 
         val initialStateEvents = initialStates.map { createLocalStateEvent(it.type, it.content, it.stateKey) }
         // Erase existing events of the same type
@@ -240,7 +240,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
     /**
      * Generate the local events related to the given room name and topic, if any.
      */
-    private fun MutableList<Event>.createRoomNameAndTopicStateEvents() = apply {
+    private fun MutableList<Event>.createRoomNameAndTopicStateEvents() {
         if (createRoomBody.name != null) {
             add(createLocalStateEvent(EventType.STATE_ROOM_NAME, RoomNameContent(createRoomBody.name).toContent()))
         }
@@ -255,7 +255,7 @@ internal class DefaultCreateLocalRoomStateEventsTask @Inject constructor(
      * - m.room.history_visibility (https://spec.matrix.org/latest/client-server-api/#server-behaviour-5)
      * - m.room.guest_access (https://spec.matrix.org/latest/client-server-api/#mroomguest_access)
      */
-    private fun MutableList<Event>.createRoomDefaultEvents() = apply {
+    private fun MutableList<Event>.createRoomDefaultEvents() {
         // HistoryVisibility
         if (none { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY }) {
             add(
