@@ -64,7 +64,7 @@ open class CreateRoomParams {
      * A list of user IDs to invite to the room.
      * This will tell the server to invite everyone in the list to the newly created room.
      */
-    var invitedUserIds: MutableList<String> = mutableListOf()
+    var invitedUserIds = mutableListOf<String>()
 
     /**
      * A list of objects representing third party IDs to invite into the room.
