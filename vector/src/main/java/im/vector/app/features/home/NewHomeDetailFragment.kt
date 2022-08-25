@@ -53,7 +53,6 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
-import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.Dispatchers
@@ -130,23 +129,17 @@ class NewHomeDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
-        setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
         setupActiveCallView()
         setupDebugButton()
 
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
+        childFragmentManager.commitTransaction {
+            add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, HOME_ROOM_LIST_FRAGMENT_TAG)
         }
 
         viewModel.onEach(HomeDetailViewState::selectedSpace) { selectedSpace ->
             onSpaceChange(selectedSpace)
-        }
-
-        viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
-            updateUIForTab(currentTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -194,7 +187,6 @@ class NewHomeDetailFragment :
 
     override fun onResume() {
         super.onResume()
-        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
         refreshSpaceState()
         refreshDebugButtonState()
@@ -307,65 +299,6 @@ class NewHomeDetailFragment :
         }
     }
 
-    private fun setupBottomNavigationView() {
-        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        views.bottomNavigationView.setOnItemSelectedListener {
-            val tab = when (it.itemId) {
-                R.id.bottom_action_people -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
-                R.id.bottom_action_rooms -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
-                R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
-                else -> HomeTab.DialPad
-            }
-            viewModel.handle(HomeDetailAction.SwitchTab(tab))
-            true
-        }
-    }
-
-    private fun updateUIForTab(tab: HomeTab) {
-        views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
-        updateSelectedFragment(tab)
-        invalidateOptionsMenu()
-    }
-
-    private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
-
-    private fun updateSelectedFragment(tab: HomeTab) {
-        val fragmentTag = tab.toFragmentTag()
-        val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
-        childFragmentManager.commitTransaction {
-            childFragmentManager.fragments
-                    .filter { it != fragmentToShow }
-                    .forEach {
-                        detach(it)
-                    }
-            if (fragmentToShow == null) {
-                when (tab) {
-                    is HomeTab.RoomList -> {
-                        add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, fragmentTag)
-                    }
-                    is HomeTab.DialPad -> {
-                        throw NotImplementedError("this tab shouldn't exists when app layout is enabled")
-                    }
-                }
-            } else {
-                attach(fragmentToShow)
-            }
-        }
-    }
-
-    private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
-        val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
-        views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
-        if (wasVisible && !isVisible) {
-            // As we hide it check if it's not the current item!
-            withState(viewModel) {
-                if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
-                }
-            }
-        }
-    }
-
     private fun setupDebugButton() {
         views.debugButton.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
@@ -394,9 +327,6 @@ class NewHomeDetailFragment :
     }
 
     override fun invalidate() = withState(viewModel) {
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(
                 it.syncState,
                 it.incrementalSyncRequestState,
@@ -405,27 +335,6 @@ class NewHomeDetailFragment :
         )
 
         hasUnreadRooms = it.hasUnreadMessages
-    }
-
-    private fun BadgeDrawable.render(count: Int, highlight: Boolean) {
-        isVisible = count > 0
-        number = count
-        maxCharacterCount = 3
-        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
-        backgroundColor = if (highlight) {
-            ThemeUtils.getColor(requireContext(), R.attr.colorError)
-        } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_background)
-        }
-    }
-
-    private fun HomeTab.toMenuId() = when (this) {
-        is HomeTab.DialPad -> R.id.bottom_action_dial_pad
-        is HomeTab.RoomList -> when (displayMode) {
-            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
-            else -> R.id.bottom_action_notification
-        }
     }
 
     override fun onTapToReturnToCall() {
@@ -453,4 +362,8 @@ class NewHomeDetailFragment :
     }
 
     private fun SpaceStateHandler.isRoot() = getSpaceBackstack().isEmpty()
+
+    companion object {
+        private const val HOME_ROOM_LIST_FRAGMENT_TAG = "TAG_HOME_ROOM_LIST"
+    }
 }
