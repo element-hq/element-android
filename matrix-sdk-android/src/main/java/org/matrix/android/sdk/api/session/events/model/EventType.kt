@@ -70,6 +70,9 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
     const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
+    // This type is for local purposes, it should never be processed by the server
+    const val LOCAL_STATE_ROOM_THIRD_PARTY_INVITE = "local.room.third_party_invite"
+
     // Call Events
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"

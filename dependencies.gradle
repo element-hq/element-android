@@ -104,6 +104,7 @@ ext.libs = [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
                 'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
+                'moshiAdapters'          : "com.squareup.moshi:moshi-adapters:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
         ],

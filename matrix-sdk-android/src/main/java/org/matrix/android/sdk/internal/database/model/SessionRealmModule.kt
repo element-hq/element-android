@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
             ReadReceiptEntity::class,
             RoomEntity::class,
             RoomSummaryEntity::class,
+            LocalRoomSummaryEntity::class,
             RoomTagEntity::class,
             SyncEntity::class,
             PendingThreePidEntity::class,

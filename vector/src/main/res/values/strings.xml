@@ -140,6 +140,8 @@
     <string name="start_chat">Start Chat</string>
     <string name="create_room">Create Room</string>
     <string name="explore_rooms">Explore Rooms</string>
+    <string name="a11y_expand_space_children">Expand space children</string>
+    <string name="a11y_collapse_space_children">Collapse space children</string>
 
     <!-- Last seen time -->
 
@@ -439,6 +441,9 @@
     <string name="low_priority_header">Low priority</string>
     <string name="system_alerts_header">"System Alerts"</string>
     <string name="suggested_header">Suggested Rooms</string>
+
+    <!-- Invites fragment -->
+    <string name="invites_title">Invites</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>

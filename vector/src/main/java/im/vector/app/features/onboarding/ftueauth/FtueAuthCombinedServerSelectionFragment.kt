@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.setOnImeDoneListener
+import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -91,6 +92,9 @@ class FtueAuthCombinedServerSelectionFragment :
             val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure() ?: viewModel.getDefaultHomeserverUrl()
             views.chooseServerInput.editText().setText(userUrlInput)
         }
+
+        views.chooseServerInput.editText().selectAll()
+        views.chooseServerInput.editText().showKeyboard(true)
     }
 
     override fun onError(throwable: Throwable) {
