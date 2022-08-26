@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="36sp"
     android:background="?vctr_toolbar_background"
     android:clickable="true"
     android:focusable="true"
-
     tools:viewBindingIgnore="true">
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
@@ -44,5 +43,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/invites_count_badge"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/invites_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="16dp"
+        android:background="?vctr_list_separator_system"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
