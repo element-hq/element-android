@@ -263,11 +263,11 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Session")
-        RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
-        RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
-        RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
+    override fun getDbUsageInfo() = buildString {
+        append(RealmDebugTools(realmConfiguration).getInfo("Session"))
+        append(RealmDebugTools(realmConfigurationCrypto).getInfo("Crypto"))
+        append(RealmDebugTools(realmConfigurationIdentity).getInfo("Identity"))
+        append(RealmDebugTools(realmConfigurationContentScanner).getInfo("ContentScanner"))
     }
 
     override fun getRealmConfigurations(): List<RealmConfiguration> {

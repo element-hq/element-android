@@ -26,7 +26,6 @@
     <string name="action_delete">Sil</string>
     <string name="action_rename">Yeniden Adlandır</string>
     <string name="report_content">Rapor İçeriği</string>
-
     <string name="or">veya</string>
     <string name="action_invite">Davet et</string>
     <string name="action_sign_out">Oturumu kapat</string>
@@ -49,8 +48,6 @@
     <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
     <string name="no_result_placeholder">Sonuç bulunamadı</string>
     <string name="rooms_header">Odalar</string>
-
-    <string name="groups_header">Topluluk</string>
     <string name="send_bug_report_include_logs">Sistem günlüğünü (log) gönder</string>
     <string name="send_bug_report_include_crash_logs">Çökme günlüğünü (crash log) gönder</string>
     <string name="send_bug_report_include_screenshot">Ekran görüntüsünü gönder</string>
@@ -106,7 +103,6 @@
     <string name="keys_backup_banner_update_line1">Yeni şifreli mesaj anahtarları</string>
     <string name="keys_backup_banner_update_line2">Anahtar Yedekleme\'yi Yönet</string>
     <string name="keys_backup_banner_recover_line1">Şifrelenmiş mesajları asla kaybetmeyin</string>
-
     <string name="keys_backup_settings_deleting_backup">Yedek siliniyor…</string>
     <string name="keys_backup_settings_delete_confirm_title">Yedeği Sil</string>
     <string name="keys_backup_settings_delete_confirm_message">Yedeklenmiş şifreleme anahtarlarınız sunucudan silinsin mi? Bundan sonra şifrelenmiş mesaj geçmişini okumak için kurtarma anahtarınızı kullanamayacaksınız.</string>
@@ -117,11 +113,8 @@
     <string name="auth_invalid_email">Bu, geçerli bir e-posta adresi gibi gözükmüyor</string>
     <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
     <string name="auth_forgot_password">Şifreni mi unuttun\?</string>
-
     <string name="auth_recaptcha_message">Bu ana sunucu bir robot olmadığından emin olmak istiyor</string>
-    <string name="auth_reset_password_missing_email">Hesaba bağlı e-posta adresi mutlaka girilmeli.</string>
     <string name="auth_reset_password_error_unauthorized">E-posta doğrulaması başarısız: e-postanızdaki bağlantıya tıkladığınızdan emin olun</string>
-
     <string name="auth_accept_policies">Lütfen ana sunucunun ilkelerini gözden geçirin ve kabul edin:</string>
     <string name="login_error_invalid_home_server">Lütfen geçerli bir URL girin</string>
     <string name="login_error_bad_json">Hatalı JSON</string>
@@ -150,14 +143,10 @@
     <string name="video_call_in_progress">Görüntülü Çağrıda…</string>
     <string name="call_error_user_not_responding">Uzak sunucu alınamadı.</string>
     <string name="permissions_rationale_popup_title">Bilgilendirme</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name}\'in sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name}\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
 \n
 \nLütfen çıkacak ekranda kamera ve mikrofon erişimine izin verin.</string>
-
     <string name="yes">EVET</string>
     <string name="no">HAYIR</string>
     <string name="_continue">Devam et</string>
@@ -165,16 +154,10 @@
     <string name="action_join">Katıl</string>
     <string name="action_reject">Reddet</string>
     <string name="list_members">Üyeleri Listele</string>
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d üye</item>
         <item quantity="other">%d adet üye</item>
     </plurals>
-
-
-
-
     <string name="room_participants_leave_prompt_title">Odadan ayrıl</string>
     <string name="room_participants_leave_prompt_msg">Odadan ayrılmak istediğine emin misin\?</string>
     <string name="room_participants_header_direct_chats">DİREKT SOHBETLER</string>
@@ -211,12 +194,9 @@
         <item quantity="one">%d adet seçili</item>
         <item quantity="other">%d adet seçili</item>
     </plurals>
-
     <string name="search_hint">Bul</string>
     <string name="search_members_hint">Oda üyelerini filtrele</string>
     <string name="search_no_results">Sonuç bulunamadı</string>
-
-
     <string name="room_settings_all_messages">Tüm mesajlar</string>
     <string name="room_settings_add_homescreen_shortcut">Ana ekrana ekle</string>
     <string name="settings_profile_picture">Profil Resmi</string>
@@ -347,7 +327,6 @@
     <string name="settings_preview_media_before_sending">Medyayı göndermeden önce önizleme göster</string>
     <string name="settings_deactivate_account_section">Hesabı devre dışı bırak</string>
     <string name="settings_deactivate_my_account">Hesabımı devre dışı bırak</string>
-
     <string name="settings_analytics">Analitik</string>
     <string name="settings_opt_in_of_analytics">Analitik verilerini gönder</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} uygulamayı geliştirmemiz için anonim analitik veriler toplar.</string>
@@ -356,7 +335,6 @@
     <string name="devices_details_device_name">Görünür Adı Güncelle</string>
     <string name="devices_details_last_seen_title">Son görülme</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Yetkilendirme</string>
     <string name="settings_logged_in">Olarak giriş yaptın</string>
     <string name="settings_home_server">Ana Sunucu</string>
@@ -395,7 +373,6 @@
     <string name="room_settings_labs_warning_message">Bu deneysel özellikler beklenmeyen şekilde hata verebilir. Dikkatli kullanın.</string>
     <string name="room_settings_set_main_address">Ana adres olarak ayarla</string>
     <string name="room_settings_unset_main_address">Ana adres olarak ayarlanmadı</string>
-
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Çözme hatası</string>
     <string name="encryption_information_device_name">Görünür Ad</string>
@@ -406,7 +383,6 @@
     <string name="encryption_export_room_keys_summary">Anahtarları yerel dosyaya aktar</string>
     <string name="encryption_export_export">Dışa aktar</string>
     <string name="encryption_export_notice">Lütfen dışa aktarılmış anahtarları şifrelemek için parola oluşturun. Tekrar içe aktarmak için aynı parolayı girmeniz gerekli.</string>
-
     <string name="encryption_message_recovery">Şifrelenmiş Mesajları Kurtarma</string>
     <string name="encryption_settings_manage_message_recovery_summary">Anahtar yedeklemesini yönet</string>
     <string name="encryption_import_e2e_room_keys">E2E oda anahtarlarını içe aktar</string>
@@ -420,7 +396,6 @@
     <string name="encryption_information_verify">Doğrula</string>
     <string name="encryption_information_verify_device_warning">Bu oturumun güvenilir olduğunu doğrulamak için, lütfen sahibi ile iletişime geçin (örn. yüz yüze ya da telefonla arama) ve onlara Kullanıcı Ayarları altında hangi anahtarın aşağıdaki anahtar ile uyuştuğunu sorun:</string>
     <string name="encryption_information_verify_device_warning2">Eğer uyuşursa aşağıdaki doğrulama tuşuna basın. Eğer uyuşmaz ise biri bu oturum engelliyor demektir bu durumda sen o kişi karalisteye eklemelisin. Gelecekte doğrulama işlemi daha gelişmiş olacak.</string>
-
     <string name="select_room_directory">Bir oda dizini seç</string>
     <string name="directory_server_placeholder">Ana sunucu URL</string>
     <string name="directory_server_all_rooms_on_server">%s sunucusundaki tüm odalar</string>
@@ -429,7 +404,6 @@
         <item quantity="one">%d okunmamış bildirim mesajı</item>
         <item quantity="other">%d okunmamış bildirim mesajları</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d oda</item>
         <item quantity="other">%d odalar</item>
@@ -489,8 +463,6 @@
     <string name="group_details_home">Anasayfa</string>
     <string name="rooms">Odalar</string>
     <string name="invited">Davet edildi</string>
-
-
     <string name="has_been_removed">%1$s dan/den %2$s tarafından atıldın</string>
     <string name="has_been_banned">%1$s dan/den %2$s tarafından engellendin</string>
     <string name="reason_colon">Nedeni: %1$s</string>
@@ -556,7 +528,6 @@
     <string name="keys_backup_setup_step3_copy_button_title">Kurtarma Anahtarını Kaydet</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Paylaş</string>
     <string name="keys_backup_setup_step3_save_button_title">Dosya olarak farklı kaydet</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Lütfen bir kopya oluşturun</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Kurtarma anahtarını bununla paylaş…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Parola kullanılarak Kurtarma anahtarı oluşturuluyor bu işlem birkaç saniye sürecek.</string>
@@ -616,14 +587,12 @@
     <string name="auth_login_sso">Tek oturum açma ile giriş yap</string>
     <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
     <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
-
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
 \nCihazınızın kaynak durumuna bağlı olarak, senkronizasyon işletim sistemi tarafından ertelenebilir.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Gerçek zamanlı için optimize</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.
 \nBu pil ve radyo kullanımını etkileyecek ve ${app_name}\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
-
     <string name="settings_integrations">Entegrasyonlar</string>
     <string name="settings_integrations_summary">Botları, köprüleri, widget\'ları ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.
 \n Entegrasyon yöneticileri, yapılandırma verilerini alır ve widget\'ları değiştirebilir, oda davetleri gönderebilir ve sizin adınıza güç seviyeleri ayarlayabilir.</string>
@@ -693,11 +662,8 @@
     <string name="keys_backup_setup_override_replace">Değiştir</string>
     <string name="keys_backup_setup_override_stop">Dur</string>
     <string name="keys_backup_settings_checking_backup_state">Yedek durumu kontrol ediliyor</string>
-
     <string name="sas_verified">Doğrulandı!</string>
     <string name="sas_got_it">Anlaşıldı</string>
-
-
     <string name="sas_incoming_request_notif_title">Doğrulama Talebi</string>
     <string name="sas_incoming_request_notif_content">%s oturumunu doğrulamak istiyor</string>
     <string name="sas_error_unknown">Bilinmeyen Hata</string>
@@ -727,7 +693,6 @@
     <string name="action_change">Değiştir</string>
     <string name="change_room_directory_network">Ağı değiştir</string>
     <string name="please_wait">Lütfen bekleyin…</string>
-    <string name="group_all_communities">Tüm Topluluklar</string>
     <string name="room_preview_no_preview">Bu oda ön izlenemez</string>
     <string name="fab_menu_create_room">Odalar</string>
     <string name="fab_menu_create_chat">Doğrudan Mesajlar</string>
@@ -1055,7 +1020,6 @@
     <string name="send_attachment">Ek gönder</string>
     <string name="settings_text_message_sent_wrong_code">Onay kodu doğru değil.</string>
     <string name="settings_text_message_sent_hint">Kod</string>
-
     <string name="settings_discovery_disconnect_identity_server_info">Kimlik sunucunuzdan ayrılmanız, diğer kullanıcılar tarafından keşfedilemeyeceğiniz ve başkalarını e-posta ya da telefonla davet edemeyeceğiniz anlamına gelir.</string>
     <string name="settings_discovery_identity_server_info_none">Henüz bir kimlik sunucusu kullanmıyorsunuz. Tanıdığınız mevcut kişileri bulmak ve bu kişiler tarafından görünür olmak için aşağıdakilerden birini yapılandırın.</string>
     <string name="change_identity_server">Kimlik sunucusunu değiştir</string>
@@ -1394,8 +1358,6 @@
     <string name="event_status_sent_message">Mesajı gönderildi</string>
     <string name="initial_sync_start_importing_account_data">İlk senkronizasyon:
 \nHesap verilerini içe aktarma</string>
-    <string name="initial_sync_start_importing_account_groups">İlk senkronizasyon:
-\nToplulukları içe aktarma</string>
     <string name="initial_sync_start_importing_account_left_rooms">İlk senkronizasyon:
 \nSol odalar içe aktarılıyor</string>
     <string name="initial_sync_start_importing_account_invited_rooms">İlk senkronizasyon:
@@ -1414,7 +1376,6 @@
     <string name="initial_sync_start_server_computing">İlk senkronizasyon:
 \nSunucu yanıtı bekleniyor…</string>
     <string name="room_displayname_empty_room_was">Boş oda (%s idi)</string>
-
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s ve %4$d diğer</item>
         <item quantity="other">%1$s, %2$s, %3$s ve %4$d kişi daha</item>
@@ -1640,7 +1601,6 @@
     <string name="spoiler">Spoiler</string>
     <string name="command_description_spoiler">Verilen mesajı spoiler olarak gönderir</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Tüm mesajlar (gürültülü)</string>
-
     <string name="content_reported_content">Bu içerik rapor edildi.
 \n
 \n Bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için onları yok sayabilirsiniz.</string>
@@ -1673,7 +1633,6 @@
     <string name="settings_discovery_please_enter_server">Lütfen kimlik sunucusu url\'sini girin</string>
     <string name="identity_server_consent_dialog_content_question">Bu bilgiyi göndermeyi kabul ediyor musunuz\?</string>
     <string name="identity_server_consent_dialog_content_3">Mevcut kişileri keşfetmek için, iletişim bilgilerini (e-postalar ve telefon numaraları) kimlik sunucunuza göndermeniz gerekir. Gizlilik için göndermeden önce verilerinizi hash ederiz.</string>
-
     <string name="identity_server_consent_dialog_title_2">%s\'e e-posta ve telefon numarası gönder</string>
     <string name="settings_discovery_consent_notice_off_2">Kişileriniz özeldir. Kişilerinizden kullanıcıları keşfetmek için, kimlik sunucunuza iletişim bilgilerini göndermek için izninize ihtiyacımız var.</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Size %s adresine bir onay e-postası gönderdik, lütfen önce e-postanızı kontrol edin ve onay bağlantısını tıklayın</string>
@@ -1746,7 +1705,6 @@
 \nMesajlarınız şifrelerle korunur ve yalnızca siz ve alıcı, mesajların kilidini açmak için benzersiz anahtarlara sahip olursunuz.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Buradaki mesajlar uçtan uca şifrelenmez.</string>
     <string name="room_profile_not_encrypted_subtitle">Bu odadaki mesajlar uçtan uca şifrelenmez.</string>
-
     <string name="verification_request_waiting_for">%s bekleniyor…</string>
     <string name="verification_verified_user">%s doğrulandı</string>
     <string name="verification_verify_user">%s\'yi doğrula</string>
@@ -1774,4 +1732,6 @@
     <string name="action_thread_copy_link_to_thread">Konu bağlantısını kopyala</string>
     <string name="action_thread_view_in_room">Odada görüntüle</string>
     <string name="action_view_threads">Konuları Görüntüle</string>
+    <string name="initial_sync_request_title">Başlangıç eşitleme isteği</string>
+    <string name="all_chats">Tüm Sohbetler</string>
 </resources>

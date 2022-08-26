@@ -64,7 +64,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         }
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch()
+                .compactOnLaunch(RealmCompactOnLaunch())
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {

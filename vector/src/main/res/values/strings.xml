@@ -142,6 +142,7 @@
     <string name="change_space">Change Space</string>
     <string name="explore_rooms">Explore Rooms</string>
     <string name="a11y_expand_space_children">Expand space children</string>
+    <string name="a11y_collapse_space_children">Collapse space children</string>
 
     <!-- Last seen time -->
 
@@ -180,8 +181,6 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
-    <!--TODO:delete-->
-    <string name="initial_sync_start_importing_account_groups" tools:ignore="UnusedResources">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
     <string name="initial_sync_request_title">Initial sync request</string>
@@ -444,6 +443,9 @@
     <string name="system_alerts_header">"System Alerts"</string>
     <string name="suggested_header">Suggested Rooms</string>
 
+    <!-- Invites fragment -->
+    <string name="invites_title">Invites</string>
+
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
@@ -456,10 +458,6 @@
     <string name="settings_category_room_directory">Room directory</string>
     <string name="settings_room_directory_show_all_rooms">Show rooms with explicit content</string>
     <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
-
-    <!-- Groups fragment -->
-    <!--TODO: delete-->
-    <string name="groups_header" tools:ignore="UnusedResources">Communities</string>
 
     <string name="spaces_header">Spaces</string>
 
@@ -537,9 +535,6 @@
     <string name="auth_msisdn_already_defined">This phone number is already defined.</string>
     <string name="auth_forgot_password">Forgot password?</string>
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
-
-    <!-- TODO delete  -->
-    <string name="auth_reset_password_missing_email" tools:ignore="UnusedResources">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
     <string name="auth_reset_password_error_unverified">Email not verified, check your inbox</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
@@ -1649,9 +1644,6 @@
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
-    <!--TODO: delete-->
-    <string name="group_all_communities" tools:ignore="UnusedResources">"All Communities"</string>
-
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
     <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
@@ -2012,9 +2004,6 @@
 
     <string name="ftue_display_name_title">Choose a display name</string>
 
-    <!--  TODO remove  -->
-    <!--suppress UnusedResources -->
-    <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
     <string name="ftue_display_name_entry_title">Display Name</string>
     <string name="ftue_display_name_entry_footer">You can change this later</string>
 
@@ -3154,8 +3143,6 @@
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
-    <!-- TODO remove key -->
-    <string name="live_location_bottom_sheet_stop_sharing" tools:ignore="UnusedResources">Stop sharing</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
     <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
     <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>

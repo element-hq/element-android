@@ -46,14 +46,19 @@ abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        val context = holder.root.context
         holder.root.onClick(onSpaceSelectedListener)
-        holder.root.setOnLongClickListener { onLongClickListener?.invoke(holder.root).let { true } }
+        holder.root.setOnLongClickListener {
+            onLongClickListener?.invoke(holder.root)
+            true
+        }
         holder.name.text = matrixItem.displayName
         holder.root.isChecked = selected
 
         holder.chevron.setOnClickListener(onToggleExpandListener)
         holder.chevron.isVisible = hasChildren
         holder.chevron.setImageResource(if (expanded) R.drawable.ic_expand_more else R.drawable.ic_arrow_right)
+        holder.chevron.contentDescription = context.getString(if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children)
 
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.unreadCounter.render(countState)

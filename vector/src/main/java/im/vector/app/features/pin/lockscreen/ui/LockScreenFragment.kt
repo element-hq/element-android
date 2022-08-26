@@ -35,7 +35,8 @@ import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.views.LockScreenCodeView
 
 @AndroidEntryPoint
-class LockScreenFragment : VectorBaseFragment<FragmentLockScreenBinding>() {
+class LockScreenFragment :
+        VectorBaseFragment<FragmentLockScreenBinding>() {
 
     var lockScreenListener: LockScreenListener? = null
     var onLeftButtonClickedListener: View.OnClickListener? = null

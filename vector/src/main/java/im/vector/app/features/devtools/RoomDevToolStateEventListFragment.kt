@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -29,9 +30,12 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
-class RoomDevToolStateEventListFragment @Inject constructor(
-        private val epoxyController: RoomStateListController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), DevToolsInteractionListener {
+@AndroidEntryPoint
+class RoomDevToolStateEventListFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        DevToolsInteractionListener {
+
+    @Inject lateinit var epoxyController: RoomStateListController
 
     val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 

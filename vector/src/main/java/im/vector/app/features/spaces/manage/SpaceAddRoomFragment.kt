@@ -32,6 +32,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
@@ -47,14 +48,16 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpaceAddRoomFragment @Inject constructor(
-        private val spaceEpoxyController: AddRoomListController,
-        private val roomEpoxyController: AddRoomListController,
-        private val dmEpoxyController: AddRoomListController,
-) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
+@AndroidEntryPoint
+class SpaceAddRoomFragment :
+        VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
         OnBackPressed,
         AddRoomListController.Listener,
         VectorMenuProvider {
+
+    @Inject lateinit var spaceEpoxyController: AddRoomListController
+    @Inject lateinit var roomEpoxyController: AddRoomListController
+    @Inject lateinit var dmEpoxyController: AddRoomListController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)

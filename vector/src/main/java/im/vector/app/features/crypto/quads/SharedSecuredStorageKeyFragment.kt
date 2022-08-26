@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,9 +36,10 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
-class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment<FragmentSsssAccessFromKeyBinding>() {
+@AndroidEntryPoint
+class SharedSecuredStorageKeyFragment :
+        VectorBaseFragment<FragmentSsssAccessFromKeyBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromKeyBinding {
         return FragmentSsssAccessFromKeyBinding.inflate(inflater, container, false)

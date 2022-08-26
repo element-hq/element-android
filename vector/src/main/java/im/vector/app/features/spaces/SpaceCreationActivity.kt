@@ -120,7 +120,7 @@ class SpaceCreationActivity : SimpleFragmentActivity() {
     }
 
     private fun navigateToFragment(fragmentClass: Class<out Fragment>) {
-        val frag = supportFragmentManager.findFragmentByTag(fragmentClass.name) ?: createFragment(fragmentClass)
+        val frag = supportFragmentManager.findFragmentByTag(fragmentClass.name) ?: fragmentClass.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                 .replace(

@@ -18,6 +18,7 @@ package im.vector.app.features.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference
@@ -31,10 +32,12 @@ import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
-class VectorSettingsHelpAboutFragment @Inject constructor(
-        private val versionProvider: VersionProvider,
-        private val buildMeta: BuildMeta,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsHelpAboutFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var versionProvider: VersionProvider
+    @Inject lateinit var buildMeta: BuildMeta
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about

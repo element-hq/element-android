@@ -29,6 +29,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -44,11 +45,13 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
-        private val bugReporter: BugReporter,
-        private val testManagerFactory: NotificationTroubleshootTestManagerFactory,
-        private val actionIds: NotificationActionIds,
-) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
+@AndroidEntryPoint
+class VectorSettingsNotificationsTroubleshootFragment :
+        VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
+
+    @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
+    @Inject lateinit var actionIds: NotificationActionIds
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members

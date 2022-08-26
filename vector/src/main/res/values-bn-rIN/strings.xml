@@ -102,8 +102,6 @@
 \nআমন্ত্রিত করা কক্ষগুলিতে আমদানি করা হিচ্ছে</string>
     <string name="initial_sync_start_importing_account_left_rooms">প্রাথমিক সিঙ্ক:
 \nছেড়ে দেওয়া কক্ষগুলিতে আমদানি করা হিচ্ছে</string>
-    <string name="initial_sync_start_importing_account_groups">প্রাথমিক সিঙ্ক:
-\nসম্প্রদায়গুলি আমদানি করা হচ্ছে</string>
     <string name="initial_sync_start_importing_account_data">প্রাথমিক সিঙ্ক:
 \nঅ্যাকাউন্ট ডেটা আমদানি করা হচ্ছে</string>
     <string name="event_status_sending_message">বার্তা প্রেরণ করা হচ্ছে …</string>
@@ -238,9 +236,6 @@
 
     <string name="rooms_header">রুমগুলি</string>
 
-
-    <string name="groups_header">সম্প্রদায়গুলি</string>
-
     <string name="send_bug_report_include_logs">লগগুলি পাঠান</string>
     <string name="send_bug_report_include_crash_logs">ক্র্যাশ লগগুলি পাঠান</string>
     <string name="send_bug_report_include_screenshot">স্ক্রিনশট পাঠান</string>
@@ -293,7 +288,6 @@
     <string name="auth_forgot_password">পাসওয়ার্ড ভুলে গেছেন\?</string>
 
     <string name="auth_recaptcha_message">এই হোম সার্ভার আপনি একটি রোবট না সেটা নিশ্চিত করবে</string>
-    <string name="auth_reset_password_missing_email">আপনার অ্যাকাউন্টের সাথে যুক্ত ইমেল ঠিকানা প্রবেশ করা আবশ্যক।</string>
     <string name="auth_reset_password_error_unauthorized">ইমেল ঠিকানা যাচাই করতে ব্যর্থ: ইমেলটিতে লিঙ্কে আপনি ক্লিক করেছেন তা নিশ্চিত করুন</string>
 
     <string name="auth_accept_policies">পর্যালোচনা করুন এবং এই হোমসার্ভার এর নীতিগুলি গ্রহণ করুন:</string>

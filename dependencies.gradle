@@ -22,7 +22,7 @@ def markwon = "4.6.2"
 def moshi = "1.13.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.157.0"
+def flipper = "0.161.0"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
 def glide = "4.13.2"
@@ -104,6 +104,7 @@ ext.libs = [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
                 'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
+                'moshiAdapters'          : "com.squareup.moshi:moshi-adapters:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
         ],

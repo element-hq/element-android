@@ -69,7 +69,6 @@
     <string name="matrix_only_filter">Samo kontakti u Matrixu</string>
     <string name="no_result_placeholder">Nema rezultata</string>
     <string name="rooms_header">Sobe</string>
-    <string name="groups_header">Zajednice</string>
     <string name="send_bug_report_include_logs">Pošalji zapise</string>
     <string name="send_bug_report_include_crash_logs">Pošalji zapise o rušenju</string>
     <string name="send_bug_report_include_screenshot">Pošalji sliku zaslona</string>
@@ -110,7 +109,6 @@
     <string name="auth_email_already_defined">Ova je adresa e-pošte već određena.</string>
     <string name="auth_forgot_password">Zaboravljena lozinka\?</string>
     <string name="auth_recaptcha_message">Vaš poslužitelj želi provjeriti jeste li robot</string>
-    <string name="auth_reset_password_missing_email">Nužan je unos adrese e-pošte vezane za Vaš račun.</string>
     <string name="auth_reset_password_error_unauthorized">Neuspješna provjera adrese e-pošte: pobrinite se kliknuti na poveznicu u e-pošti</string>
     <string name="auth_accept_policies">Pročitajte i prihvatite pravila ovog poslužitelja:</string>
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
@@ -507,7 +505,6 @@
     <string name="action_change">Promijeni</string>
     <string name="change_room_directory_network">Promijeni mrežu</string>
     <string name="please_wait">Pričekajte…</string>
-    <string name="group_all_communities">Sve zajednice</string>
     <string name="room_preview_no_preview">Nije moguće pregledati sobu</string>
     <string name="fab_menu_create_room">Sobe</string>
     <string name="fab_menu_create_chat">Izravne poruke</string>

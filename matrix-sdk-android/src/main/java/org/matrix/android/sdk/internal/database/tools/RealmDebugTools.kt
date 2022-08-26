@@ -19,16 +19,15 @@ package org.matrix.android.sdk.internal.database.tools
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.BuildConfig
-import timber.log.Timber
 
 internal class RealmDebugTools(
         private val realmConfiguration: RealmConfiguration
 ) {
     /**
-     * Log info about the DB.
+     * Get info about the DB.
      */
-    fun logInfo(baseName: String) {
-        buildString {
+    fun getInfo(baseName: String): String {
+        return buildString {
             append("\n$baseName Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
 
             if (BuildConfig.LOG_PRIVATE_DATA) {
@@ -54,7 +53,6 @@ internal class RealmDebugTools(
                 separator()
             }
         }
-                .let { Timber.i(it) }
     }
 
     private fun StringBuilder.separator() = append("\n==============================================")

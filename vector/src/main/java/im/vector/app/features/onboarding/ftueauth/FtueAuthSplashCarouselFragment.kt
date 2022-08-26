@@ -27,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.incrementByOneAndWrap
 import im.vector.app.core.extensions.setCurrentItem
@@ -44,13 +45,15 @@ import javax.inject.Inject
 private const val CAROUSEL_ROTATION_DELAY_MS = 5000L
 private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 
-class FtueAuthSplashCarouselFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController,
-        private val carouselStateFactory: SplashCarouselStateFactory,
-        private val buildMeta: BuildMeta,
-) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
+@AndroidEntryPoint
+class FtueAuthSplashCarouselFragment :
+        AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var carouselController: SplashCarouselController
+    @Inject lateinit var carouselStateFactory: SplashCarouselStateFactory
+    @Inject lateinit var buildMeta: BuildMeta
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
