@@ -30,7 +30,7 @@ class UnreadCounterBadgeView : MaterialTextView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun render(state: State) {
-        when(state) {
+        when (state) {
             is State.Count -> renderAsCount(state)
             is State.Text -> renderAsText(state)
         }
