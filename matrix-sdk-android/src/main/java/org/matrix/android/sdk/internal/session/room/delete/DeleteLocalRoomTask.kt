@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -69,6 +70,9 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
                         ?.deleteAllFromRealm()
                 RoomEntity.where(realm, roomId = roomId).findAll()
                         ?.also { Timber.i("## DeleteLocalRoomTask - RoomEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                LocalRoomSummaryEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - LocalRoomSummaryEntity - delete ${it.size} entries") }
                         ?.deleteAllFromRealm()
             }
         } else {

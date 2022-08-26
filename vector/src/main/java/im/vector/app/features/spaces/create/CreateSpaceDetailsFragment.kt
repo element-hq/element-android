@@ -22,29 +22,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import javax.inject.Inject
 
-class CreateSpaceDetailsFragment @Inject constructor(
-        private val epoxyController: SpaceDetailEpoxyController,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(), SpaceDetailEpoxyController.Listener,
-        GalleryOrCameraDialogHelper.Listener, OnBackPressed {
+@AndroidEntryPoint
+class CreateSpaceDetailsFragment :
+        VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
+        SpaceDetailEpoxyController.Listener,
+        GalleryOrCameraDialogHelper.Listener,
+        OnBackPressed {
+
+    @Inject lateinit var epoxyController: SpaceDetailEpoxyController
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.test.fakes
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 
@@ -37,12 +37,12 @@ internal class FakeStateEventDataSource {
         } returns event
     }
 
-    fun verifyGetStateEvent(roomId: String, eventType: String, stateKey: String) {
+    fun verifyGetStateEvent(roomId: String, eventType: String, stateKey: QueryStateEventValue) {
         verify {
             instance.getStateEvent(
                     roomId = roomId,
                     eventType = eventType,
-                    stateKey = QueryStringValue.Equals(stateKey)
+                    stateKey = stateKey
             )
         }
     }

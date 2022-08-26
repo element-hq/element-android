@@ -52,8 +52,6 @@
 \nИмпортиране на стаи, към които съм поканен</string>
     <string name="initial_sync_start_importing_account_left_rooms">Начална синхронизация.
 \nИмпортиране на стаи, които съм напуснал</string>
-    <string name="initial_sync_start_importing_account_groups">Начална синхронизация.
-\nИмпортиране на общности</string>
     <string name="initial_sync_start_importing_account_data">Начална синхронизация.
 \nИмпортиране на данни за профила</string>
     <string name="notice_room_update">%s обнови тази стая.</string>
@@ -246,7 +244,6 @@
     <string name="matrix_only_filter">Само потребители на Matrix</string>
     <string name="no_result_placeholder">Няма резултати</string>
     <string name="rooms_header">Стаи</string>
-    <string name="groups_header">Общности</string>
     <string name="send_bug_report_include_logs">Изпращане на логове</string>
     <string name="send_bug_report_include_crash_logs">Изпращане на логове за забивания</string>
     <string name="send_bug_report_include_screenshot">Изпращане на снимка на екрана</string>
@@ -279,7 +276,6 @@
     <string name="auth_email_already_defined">Този имейл адрес е вече използван.</string>
     <string name="auth_forgot_password">Забравена парола?</string>
     <string name="auth_recaptcha_message">Този Home сървър би искал да се увери, че не сте робот</string>
-    <string name="auth_reset_password_missing_email">Имейл адресът, свързан с профила Ви, трябва да бъде въведен.</string>
     <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
     <string name="send_bug_report_progress">Напредък (%s%%)</string>
     <string name="login_error_invalid_home_server">Въведете валиден URL адрес</string>
@@ -833,7 +829,6 @@
     <string name="action_change">Промени</string>
     <string name="change_room_directory_network">Промени мрежата</string>
     <string name="please_wait">Изчакайте…</string>
-    <string name="group_all_communities">Всички общности</string>
     <string name="room_preview_no_preview">Тази стая не може да бъде прегледана</string>
     <string name="fab_menu_create_room">Стаи</string>
     <string name="fab_menu_create_chat">Директни съобщения</string>

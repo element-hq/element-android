@@ -118,6 +118,12 @@ data class Interaction(
         WebLeftPanelExploreRoomsButton,
 
         /**
+         * User clicked on the avatar uploader in the profile settings of
+         * Element Web/Desktop.
+         */
+        WebProfileSettingsAvatarUploadButton,
+
+        /**
          * User interacted with pin to sidebar checkboxes in the quick settings
          * menu of Element Web/Desktop.
          */
@@ -280,6 +286,18 @@ data class Interaction(
         WebRoomListRoomsSublistPlusMenuExploreRoomsItem,
 
         /**
+         * User clicked on the button to return to the user onboarding list in
+         * the room list in Element Web/Desktop.
+         */
+        WebRoomListUserOnboardingButton,
+
+        /**
+         * User clicked on the button to close the user onboarding button in the
+         * room list in Element Web/Desktop.
+         */
+        WebRoomListUserOnboardingIgnoreButton,
+
+        /**
          * User interacted with leave action in the general tab of the room
          * settings dialog in Element Web/Desktop.
          */
@@ -349,6 +367,36 @@ data class Interaction(
          * Web/Desktop.
          */
         WebUserMenuThemeToggleButton,
+
+        /**
+         * User clicked on the send DM CTA in the header of the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingHeaderSendDm,
+
+        /**
+         * User clicked on the action of the download apps task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskDownloadApps,
+
+        /**
+         * User clicked on the action of the enable notifications task on the
+         * new user onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskEnableNotifications,
+
+        /**
+         * User clicked on the action of the find people task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskSendDm,
+
+        /**
+         * User clicked on the action of the your profile task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskSetupProfile,
     }
 
     enum class InteractionType {

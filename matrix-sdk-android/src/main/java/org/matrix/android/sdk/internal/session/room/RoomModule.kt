@@ -43,9 +43,13 @@ import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomLocalAli
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomLocalAliasesTask
+import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomStateEventsTask
 import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomTask
+import org.matrix.android.sdk.internal.session.room.create.CreateRoomFromLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
+import org.matrix.android.sdk.internal.session.room.create.DefaultCreateLocalRoomStateEventsTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateLocalRoomTask
+import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomFromLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomTask
 import org.matrix.android.sdk.internal.session.room.delete.DefaultDeleteLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask
@@ -212,6 +216,12 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindCreateLocalRoomTask(task: DefaultCreateLocalRoomTask): CreateLocalRoomTask
+
+    @Binds
+    abstract fun bindCreateLocalRoomStateEventsTask(task: DefaultCreateLocalRoomStateEventsTask): CreateLocalRoomStateEventsTask
+
+    @Binds
+    abstract fun bindCreateRoomFromLocalRoomTask(task: DefaultCreateRoomFromLocalRoomTask): CreateRoomFromLocalRoomTask
 
     @Binds
     abstract fun bindDeleteLocalRoomTask(task: DefaultDeleteLocalRoomTask): DeleteLocalRoomTask

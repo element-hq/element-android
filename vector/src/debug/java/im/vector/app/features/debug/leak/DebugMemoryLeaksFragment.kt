@@ -28,7 +28,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDebugMemoryLeaksBinding
 
 @AndroidEntryPoint
-class DebugMemoryLeaksFragment : VectorBaseFragment<FragmentDebugMemoryLeaksBinding>() {
+class DebugMemoryLeaksFragment :
+        VectorBaseFragment<FragmentDebugMemoryLeaksBinding>() {
 
     private val viewModel: DebugMemoryLeaksViewModel by fragmentViewModel()
 

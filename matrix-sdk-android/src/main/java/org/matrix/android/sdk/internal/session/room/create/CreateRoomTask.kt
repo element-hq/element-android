@@ -54,8 +54,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,
@@ -71,7 +70,6 @@ internal class DefaultCreateRoomTask @Inject constructor(
         }
 
         val createRoomBody = createRoomBodyBuilder.build(params)
-
         val createRoomResponse = try {
             executeRequest(globalErrorReceiver) {
                 roomAPI.createRoom(createRoomBody)
@@ -90,6 +88,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             }
             throw throwable
         }
+
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {

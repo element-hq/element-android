@@ -40,13 +40,13 @@ import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
-import javax.inject.Inject
 
 /**
  * Display the list of the user's devices and sessions.
  */
 @AndroidEntryPoint
-class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+class VectorSettingsDevicesFragment :
+        VectorBaseFragment<FragmentSettingsDevicesBinding>() {
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 

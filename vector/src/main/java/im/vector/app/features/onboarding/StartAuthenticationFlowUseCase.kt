@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.core.extensions.containsAllItems
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.toSsoState
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -50,8 +51,8 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     )
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
-        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders)
+        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders.toSsoState())
+        supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders.toSsoState())
         supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
         else -> LoginMode.Unsupported
     }

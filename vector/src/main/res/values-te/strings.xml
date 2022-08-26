@@ -125,7 +125,6 @@
     <string name="auth_invalid_email">ఇది చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామా లాగా లేదు</string>
     <string name="auth_email_already_defined">ఈ ఇమెయిల్ చిరునామా ఇప్పటికే నిర్వచించబడింది.</string>
     <string name="auth_recaptcha_message">ఈ హోమ్ సర్వర్ మీరు రోబోట్ కాదని నిర్ధారించుకోవాలనుకుంటుంది</string>
-    <string name="auth_reset_password_missing_email">మీ ఖాతాకు లంకె చేయబడిన ఇమెయిల్ చిరునామా తప్పక ఇవ్వాలి.</string>
     <string name="auth_reset_password_error_unauthorized">ఇమెయిల్ చిరునామాను ధృవీకరించడంలో విఫలమైంది: మీరు ఇమెయిల్ లో లంకెను క్లిక్ చేసారా లేదా అని నిర్ధారించుకోండి</string>
     <string name="login_error_invalid_home_server">చెల్లుబాటు అయ్యే URL ను ఇవ్వండి</string>
     <string name="login_error_bad_json">తప్పు JSON</string>

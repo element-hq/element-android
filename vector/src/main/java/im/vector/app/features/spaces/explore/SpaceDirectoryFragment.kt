@@ -32,6 +32,7 @@ import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -61,15 +62,17 @@ data class SpaceDirectoryArgs(
         val spaceId: String
 ) : Parcelable
 
-class SpaceDirectoryFragment @Inject constructor(
-        private val epoxyController: SpaceDirectoryController,
-        private val permalinkHandler: PermalinkHandler,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
+@AndroidEntryPoint
+class SpaceDirectoryFragment :
+        VectorBaseFragment<FragmentSpaceDirectoryBinding>(),
         SpaceDirectoryController.InteractionListener,
         TimelineEventController.UrlClickCallback,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var epoxyController: SpaceDirectoryController
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getMenuRes() = R.menu.menu_space_directory
 

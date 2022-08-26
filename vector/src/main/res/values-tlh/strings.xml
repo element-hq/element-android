@@ -52,10 +52,6 @@
     <string name="no_result_placeholder">gher\'ID tu\'lu\'be\'</string>
 
     <string name="rooms_header">pa\'mey</string>
-
-
-    <string name="groups_header">tuqmey</string>
-
     <string name="send_bug_report_include_logs">QonoS ngeH</string>
     <string name="send_bug_report_include_crash_logs">vonlu\' QonoS ngeH</string>
     <string name="send_bug_report_include_screenshot">jIH mIllogh ngeH</string>

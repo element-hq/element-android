@@ -109,8 +109,6 @@
     <string name="event_status_sending_message">Enviando mensaxe…</string>
     <string name="initial_sync_start_importing_account_data">Sincr. inicial:
 \nImportando datos da conta</string>
-    <string name="initial_sync_start_importing_account_groups">Sincr. inicial:
-\nImportando comunidades</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincr. inicial:
 \nImportando salas das que saíches</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincr. inicial:
@@ -273,8 +271,6 @@
     <string name="rooms_header">Salas</string>
     <string name="title_activity_choose_sticker">Enviar unha icona</string>
     <string name="action_download">Descargar</string>
-
-    <string name="groups_header">Comunidades</string>
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Enviar informes de fallos</string>
     <string name="send_bug_report_include_screenshot">Enviar captura de pantalla</string>
@@ -312,7 +308,6 @@
     <string name="auth_forgot_password">Esqueceu o contrasinal?</string>
 
     <string name="auth_recaptcha_message">Este servidor local quere asegurarse de que non é un robot</string>
-    <string name="auth_reset_password_missing_email">Debe introducir o correo electrónico ligado a súa conta.</string>
     <string name="auth_reset_password_error_unauthorized">Fallo na verificación do enderezo de correo: asegúrese de ter picado na ligazón do correo</string>
     <string name="call">Chamar</string>
     <string name="_continue">Continuar</string>
