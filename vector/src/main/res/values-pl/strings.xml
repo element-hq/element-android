@@ -53,8 +53,6 @@
 \nImportowanie zaproszonych pokojów</string>
     <string name="initial_sync_start_importing_account_left_rooms">Wstępna synchronizacja:
 \nImportowanie opuszczonych pokojów</string>
-    <string name="initial_sync_start_importing_account_groups">Wstępna synchronizacja:
-\nImportowanie grup</string>
     <string name="initial_sync_start_importing_account_data">Wstępna synchronizacja:
 \nImportowanie danych Konta</string>
     <string name="event_status_sending_message">Wysyłanie wiadomości…</string>
@@ -123,7 +121,6 @@
     <string name="auth_email_already_defined">Ten adres e-mail został już użyty.</string>
     <string name="auth_forgot_password">Zapomniałeś(-aś) hasła?</string>
     <string name="auth_recaptcha_message">Serwer domowy prosi o potwierdzenie, że nie jesteś robotem</string>
-    <string name="auth_reset_password_missing_email">Musi zostać wprowadzony e-mail powiązany z kontem.</string>
     <string name="auth_reset_password_error_unauthorized">Nie udało się zweryfikować adresu e-mail: upewnij się, że kliknąłeś w odnośnik z wiadomości</string>
     <string name="login_error_invalid_home_server">Proszę wprowadzić prawidłowy adres URL</string>
     <string name="login_error_not_json">Nie zawiera prawidłowego JSON</string>
@@ -268,7 +265,6 @@
     <string name="notification_silent_notifications">Ciche powiadomienia</string>
     <string name="title_activity_bug_report">Zgłoś błąd</string>
     <string name="loading">Wczytywanie…</string>
-    <string name="groups_header">Społeczności</string>
     <string name="send_bug_report_rage_shake">Potrząśnij wściekle, aby zgłosić błąd</string>
     <string name="start_voice_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć rozmowę głosową?</string>
     <string name="start_video_call_prompt_msg">Czy jesteś pewien, że chcesz rozpocząć wideorozmowę?</string>
@@ -552,7 +548,6 @@
     <string name="room_list_rooms_empty_title">Pokoje</string>
     <string name="message_add_reaction">Dodaj reakcję</string>
     <string name="create_new_room">Utwórz nowy pokój</string>
-    <string name="group_all_communities">Wszystkie społeczności</string>
     <string name="fab_menu_create_chat">Wiadomości Bezpośrednie</string>
     <string name="create_room_action_create">STWÓRZ</string>
     <string name="create_room_name_hint">Nazwa</string>
@@ -2385,7 +2380,6 @@
     <string name="ftue_display_name_entry_footer">Możesz zmienić ją później</string>
     <string name="room_message_autocomplete_notification">Powiadomienie pokoju</string>
     <string name="ftue_display_name_entry_title">Wyświetlana nazwa</string>
-    <string name="ftue_display_name_subtitle">Będzie ona widoczna podczas wysyłania wiadomości.</string>
     <string name="ftue_display_name_title">Wybierz wyświetlaną nazwę</string>
     <string name="ftue_account_created_subtitle">Twoje konto %s zostało utworzone</string>
     <string name="ftue_account_created_congratulations_title">Gratulacje!</string>
@@ -2577,7 +2571,6 @@
     <string name="live_location_bottom_sheet_last_updated_at">Zaktualizowano %1$s temu</string>
     <string name="location_share_live_remaining_time">%1$s pozostało</string>
     <string name="location_share_live_until">Na żywo do %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Przestań udostępniać</string>
     <string name="labs_enable_live_location_summary">Tymczasowa implementacja: lokalizacje pozostaną w historii pokoju</string>
     <string name="labs_enable_live_location">Włącz udostępnianie lokalizacji na żywo</string>
     <string name="location_share_live_view">Pokaż lokalizację na żywo</string>

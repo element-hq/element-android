@@ -21,16 +21,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to check their emails.
  */
-class FtueAuthLegacyWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
+@AndroidEntryPoint
+class FtueAuthLegacyWaitForEmailFragment :
+        AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
 

@@ -51,8 +51,6 @@
 \nEnportante ĉambrojn de invitoj</string>
     <string name="initial_sync_start_importing_account_left_rooms">Komenca spegulado:
 \nEnportante forlasitajn ĉambrojn</string>
-    <string name="initial_sync_start_importing_account_groups">Komenca spegulado:
-\nEnportante komunumojn</string>
     <string name="initial_sync_start_importing_account_data">Komenca spegulado:
 \nEnportante datumojn de konto</string>
     <string name="event_status_sending_message">Sendante mesaĝon…</string>
@@ -251,7 +249,6 @@
     <string name="direct_chats_header">Interparoloj</string>
     <string name="no_result_placeholder">Neniuj rezultoj</string>
     <string name="rooms_header">Ĉambroj</string>
-    <string name="groups_header">Komunumoj</string>
     <string name="send_bug_report_include_logs">Sendi protokolon</string>
     <string name="send_bug_report_include_crash_logs">Sendi protokolon pri fiasko</string>
     <string name="send_bug_report_include_screenshot">Sendi ekrankopion</string>
@@ -287,7 +284,6 @@
     <string name="auth_email_already_defined">Ĉi tiu retpoŝtadreso jam estas difinita.</string>
     <string name="auth_forgot_password">Ĉu vi forgesis pasvorton\?</string>
     <string name="auth_recaptcha_message">Ĉi tiu hejmservilo volas certiĝi, ke vi ne estas roboto</string>
-    <string name="auth_reset_password_missing_email">Necesas enigi la retpoŝtadreson ligitan al via konto.</string>
     <string name="auth_reset_password_error_unauthorized">Malsukcesis kontroli retpoŝtadreson: certiĝu, ke vi klakis la ligilon en la retletero</string>
     <string name="auth_accept_policies">Bonvolu tralegi kaj akcepti la politikojn de ĉi tiu hejmservilo:</string>
     <string name="compression_opt_list_original">Originala</string>
@@ -788,7 +784,6 @@
     <string name="fab_menu_create_chat">Individuaj ĉambroj</string>
     <string name="fab_menu_create_room">Ĉambroj</string>
     <string name="room_preview_no_preview">Ne eblas antaŭrigardi ĉi tiun ĉambron</string>
-    <string name="group_all_communities">Ĉiuj komunumoj</string>
     <string name="please_wait">Bonvolu atendi…</string>
     <string name="change_room_directory_network">Ŝanĝi reton</string>
     <string name="action_change">Ŝanĝi</string>

@@ -92,8 +92,6 @@ class UnifiedPushHelper @Inject constructor(
                 return@launch
             }
 
-            // By default, use internal solution (fcm/background sync)
-            UnifiedPush.saveDistributor(context, context.packageName)
             val distributors = UnifiedPush.getDistributors(context)
 
             if (distributors.size == 1 && !force) {
@@ -101,7 +99,14 @@ class UnifiedPushHelper @Inject constructor(
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
             } else {
-                openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+                openDistributorDialogInternal(
+                        activity = activity,
+                        pushersManager = pushersManager,
+                        onDoneRunnable = onDoneRunnable,
+                        distributors = distributors,
+                        unregisterFirst = force,
+                        cancellable = !force
+                )
             }
         }
     }
@@ -164,6 +169,12 @@ class UnifiedPushHelper @Inject constructor(
                         UnifiedPush.registerApp(context)
                         onDoneRunnable?.run()
                     }
+                }
+                .setOnCancelListener {
+                    // By default, use internal solution (fcm/background sync)
+                    UnifiedPush.saveDistributor(context, context.packageName)
+                    UnifiedPush.registerApp(context)
+                    onDoneRunnable?.run()
                 }
                 .setCancelable(cancellable)
                 .show()

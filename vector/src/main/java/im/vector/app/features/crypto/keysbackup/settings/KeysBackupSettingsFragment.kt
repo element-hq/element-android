@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -30,9 +31,12 @@ import im.vector.app.databinding.FragmentKeysBackupSettingsBinding
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import javax.inject.Inject
 
-class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController) :
+@AndroidEntryPoint
+class KeysBackupSettingsFragment :
         VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
         KeysBackupSettingsRecyclerViewController.Listener {
+
+    @Inject lateinit var keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSettingsBinding {
         return FragmentKeysBackupSettingsBinding.inflate(inflater, container, false)

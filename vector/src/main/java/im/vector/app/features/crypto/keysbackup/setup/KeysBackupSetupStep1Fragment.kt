@@ -20,12 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupSetupStep1Binding
-import javax.inject.Inject
 
-class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep1Binding>() {
+@AndroidEntryPoint
+class KeysBackupSetupStep1Fragment :
+        VectorBaseFragment<FragmentKeysBackupSetupStep1Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep1Binding {
         return FragmentKeysBackupSetupStep1Binding.inflate(inflater, container, false)

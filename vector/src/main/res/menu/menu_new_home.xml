@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/menu_home_layout_settings"
+        android:title="@string/home_layout_preferences"/>
+
+    <item
         android:id="@+id/menu_home_invite_friends"
         android:title="@string/invite_friends"
         app:showAsAction="never" />
@@ -37,6 +41,6 @@
         android:icon="@drawable/ic_home_search"
         android:title="@string/home_filter_placeholder_home"
         app:iconTint="?vctr_content_secondary"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>

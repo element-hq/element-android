@@ -49,6 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/syncStateView">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 style="@style/Widget.Vector.Material3.CollapsingToolbar.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
@@ -61,14 +62,14 @@
                     android:layout_height="?attr/actionBarSize"
                     android:elevation="0dp"
                     app:layout_collapseMode="pin"
-                    app:title="@string/all_chats">
+                    tools:title="@string/all_chats">
 
                     <ImageView
                         android:id="@+id/avatar"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:padding="6dp"
                         android:contentDescription="@string/a11y_open_settings"
+                        android:padding="6dp"
                         tools:src="@sample/user_round_avatars" />
 
                 </com.google.android.material.appbar.MaterialToolbar>
@@ -77,26 +78,13 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/roomListContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/roomListContainer"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:menu="@menu/home_bottom_navigation" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

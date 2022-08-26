@@ -39,7 +39,8 @@ data class FtueAuthResetPasswordBreakerArgument(
 ) : Parcelable
 
 @AndroidEntryPoint
-class FtueAuthResetPasswordBreakerFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordBreakerBinding>() {
+class FtueAuthResetPasswordBreakerFragment :
+        AbstractFtueAuthFragment<FragmentFtueResetPasswordBreakerBinding>() {
 
     @Inject lateinit var themeProvider: ThemeProvider
     private val params: FtueAuthResetPasswordBreakerArgument by args()

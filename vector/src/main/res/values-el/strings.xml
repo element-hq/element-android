@@ -92,7 +92,6 @@
     <string name="matrix_only_filter">Μόνο οι επαφές Matrix</string>
     <string name="no_result_placeholder">Δεν βρέθηκαν αποτελέσματα</string>
     <string name="rooms_header">Δωμάτια</string>
-    <string name="groups_header">Κοινότητες</string>
     <string name="send_bug_report_include_crash_logs">Αποστολή καταγραφών σφαλμάτων</string>
     <string name="send_bug_report">Αναφορά σφάλματος</string>
     <string name="send_bug_report_description_in_english">Εφόσον είναι δυνατό, παρακαλώ γράψτε την περιγραφή στα αγγλικά.</string>

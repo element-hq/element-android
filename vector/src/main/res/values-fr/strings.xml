@@ -52,8 +52,6 @@
 \nImportation des salons où vous avez été invité</string>
     <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
 \nImportation des salons que vous avez quittés</string>
-    <string name="initial_sync_start_importing_account_groups">Synchronisation initiale :
-\nImportation des communautés</string>
     <string name="initial_sync_start_importing_account_data">Synchronisation initiale :
 \nImportation des données du compte</string>
     <string name="notice_room_update">%s a mis à niveau ce salon.</string>
@@ -375,7 +373,6 @@
     <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse électronique valide</string>
     <string name="auth_email_already_defined">Cette adresse électronique est déjà utilisée.</string>
     <string name="auth_recaptcha_message">Ce serveur d’accueil souhaite s’assurer que vous n’êtes pas un robot</string>
-    <string name="auth_reset_password_missing_email">L’adresse électronique liée à votre compte doit être saisie.</string>
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse électronique : assurez-vous d’avoir cliqué sur le lien dans le courriel</string>
     <string name="login_error_limit_exceeded">Trop de requêtes ont été envoyées</string>
     <string name="action_leave">Quitter</string>
@@ -474,7 +471,6 @@
     <string name="notification_noisy">Notification sonore</string>
     <string name="encrypted_message">Message chiffré</string>
     <string name="loading">Chargement…</string>
-    <string name="groups_header">Communautés</string>
     <string name="start_voice_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel audio \?</string>
     <string name="start_video_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vidéo \?</string>
     <string name="room_participants_ban_prompt_msg">Bannir un utilisateur va l’expulser du salon et l’empêcher de le rejoindre à nouveau.</string>
@@ -854,7 +850,6 @@
     <string name="create_new_room">Créer un nouveau salon</string>
     <string name="error_no_network">Aucun réseau. Vérifiez votre connexion Internet.</string>
     <string name="action_change">Changer</string>
-    <string name="group_all_communities">Toutes les communautés</string>
     <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
     <string name="fab_menu_create_room">Salons</string>
     <string name="fab_menu_create_chat">Conversations privées</string>
@@ -2426,7 +2421,6 @@
     <string name="ftue_profile_picture_title">Ajouter une photo de profil</string>
     <string name="ftue_display_name_entry_footer">Vous pourrez le changer plus tard</string>
     <string name="ftue_display_name_entry_title">Nom d’affichage</string>
-    <string name="ftue_display_name_subtitle">Il sera affiché quand vous enverrez des messages.</string>
     <string name="ftue_display_name_title">Choisissez un nom d’affichage</string>
     <string name="ftue_account_created_subtitle">Votre compte %s a été créé</string>
     <string name="ftue_account_created_congratulations_title">Félicitations !</string>
@@ -2482,7 +2476,6 @@
 \nCette action va redémarrer l’application et pourra prendre du temps.</string>
     <string name="initial_sync_request_title">Requête de synchronisation initiale</string>
     <string name="live_location_bottom_sheet_last_updated_at">Mis-à-jour il y a %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Arrêter le partage</string>
     <string name="labs_enable_live_location_summary">Implémentation temporaire : les positions sont persistantes dans l’historique du salon</string>
     <string name="labs_enable_live_location">Activer le partage de position en continu</string>
     <string name="location_share_live_remaining_time">%1$s restant</string>
@@ -2603,4 +2596,8 @@
     </plurals>
     <string name="search_space_two_parents">%1$s et %2$s</string>
     <string name="auth_reset_password_error_unverified">Courriel non vérifié, relevez votre boîte de réception</string>
+    <string name="location_share_loading_map_error">Impossible de charger la carte
+\nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
+    <string name="a11y_open_settings">Ouvrir les paramètres</string>
+    <string name="all_chats">Toutes les conversations</string>
 </resources>

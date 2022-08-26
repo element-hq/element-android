@@ -54,8 +54,6 @@
 \nImportiere eingeladene Räume</string>
     <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation:
 \nImportiere verlassene Räume</string>
-    <string name="initial_sync_start_importing_account_groups">Erste Synchronisation:
-\nImportiere Communities</string>
     <string name="initial_sync_start_importing_account_data">Erste Synchronisation:
 \nImportiere Benutzerdaten</string>
     <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
@@ -293,7 +291,6 @@
     <string name="auth_email_already_defined">Diese E-Mail-Adresse wird bereits verwendet.</string>
     <string name="auth_forgot_password">Passwort vergessen?</string>
     <string name="auth_recaptcha_message">Dieser Homeserver möchte sicherstellen, dass du kein Roboter bist</string>
-    <string name="auth_reset_password_missing_email">Die E-Mail-Adresse, die mit deinem Account verknüpft ist, muss eingegeben werden.</string>
     <string name="auth_reset_password_error_unauthorized">Verifizierung der E-Mail-Adresse ist fehlgeschlagen. Stelle sicher, dass du den Link in der E-Mail geöffnet hast</string>
     <string name="login_error_invalid_home_server">Bitte eine gültige URL eingeben</string>
     <string name="login_error_bad_json">Fehlerhaftes JSON</string>
@@ -499,7 +496,6 @@
     <string name="notification_noisy">Laut</string>
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
     <string name="loading">Lädt…</string>
-    <string name="groups_header">Communities</string>
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="room_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Raum und hindert sie am erneuten Beitritt.</string>
@@ -875,7 +871,6 @@
     <string name="action_change">Ändern</string>
     <string name="change_room_directory_network">Netzwerk wechseln</string>
     <string name="please_wait">Bitte warten…</string>
-    <string name="group_all_communities">Alle Communities</string>
     <string name="room_preview_no_preview">Für diesen Raum kann keine Vorschau angezeigt werden</string>
     <string name="fab_menu_create_room">Räume</string>
     <string name="fab_menu_create_chat">Direktnachrichten</string>
@@ -2448,7 +2443,6 @@
     <string name="screen_sharing_notification_description">Bildschirmfreigabe ist in Arbeit</string>
     <string name="screen_sharing_notification_title">${app_name} Bildschirmfreigabe</string>
     <string name="live_location_bottom_sheet_last_updated_at">Aktualisiert vor %1$s</string>
-    <string name="live_location_bottom_sheet_stop_sharing">Teilen beenden</string>
     <string name="labs_enable_live_location">Aktiviere Live-Standortfreigabe</string>
     <string name="live_location_sharing_notification_description">Standortfreigabe ist in Arbeit</string>
     <string name="live_location_sharing_notification_title">${app_name} Live-Standort</string>
@@ -2522,7 +2516,6 @@
     <string name="ftue_profile_picture_title">Profilbild hinzufügen</string>
     <string name="ftue_display_name_entry_footer">Du kannst dies später ändern</string>
     <string name="ftue_display_name_entry_title">Anzeigename</string>
-    <string name="ftue_display_name_subtitle">Dies wird angezeigt, wenn Du Nachrichten sendest.</string>
     <string name="ftue_account_created_subtitle">Dein Konto %s wurde erstellt</string>
     <string name="ftue_account_created_congratulations_title">Herzlichen Glückwunsch!</string>
     <string name="ftue_account_created_personalize">Profil personalisieren</string>

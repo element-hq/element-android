@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
@@ -31,11 +32,13 @@ import im.vector.app.features.home.room.threads.ThreadsManager
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val threadsManager: ThreadsManager
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsLabsFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var lightweightSettingsStorage: LightweightSettingsStorage
+    @Inject lateinit var threadsManager: ThreadsManager
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs

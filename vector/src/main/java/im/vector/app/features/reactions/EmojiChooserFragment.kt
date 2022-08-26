@@ -20,16 +20,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.EmojiChooserFragmentBinding
 import javax.inject.Inject
 
-class EmojiChooserFragment @Inject constructor(
-        private val emojiRecyclerAdapter: EmojiRecyclerAdapter
-) : VectorBaseFragment<EmojiChooserFragmentBinding>(),
+@AndroidEntryPoint
+class EmojiChooserFragment :
+        VectorBaseFragment<EmojiChooserFragmentBinding>(),
         EmojiRecyclerAdapter.InteractionListener,
         ReactionClickListener {
+
+    @Inject lateinit var emojiRecyclerAdapter: EmojiRecyclerAdapter
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): EmojiChooserFragmentBinding {
         return EmojiChooserFragmentBinding.inflate(inflater, container, false)

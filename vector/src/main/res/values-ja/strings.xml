@@ -218,7 +218,6 @@
     <string name="logout">サインアウト</string>
     <string name="auth_submit">送信</string>
     <string name="auth_recaptcha_message">このホームサーバーは、あなたがロボットではないことの確認を求めています</string>
-    <string name="auth_reset_password_missing_email">アカウントに登録されたメールアドレスの入力が必要です。</string>
     <string name="auth_reset_password_error_unauthorized">メールアドレスの認証に失敗しました：電子メールのリンクをクリックしたことを確認してください</string>
     <string name="login_error_bad_json">不正な形式のJSON</string>
     <string name="login_error_not_json">有効なJSONを含んでいませんでした</string>
@@ -334,7 +333,6 @@
     <string name="notification_noisy">音量大</string>
     <string name="encrypted_message">暗号化されたメッセージ</string>
     <string name="loading">読み込んでいます…</string>
-    <string name="groups_header">コミュニティー</string>
     <string name="start_voice_call_prompt_msg">音声通話を開始してよろしいですか？</string>
     <string name="start_video_call_prompt_msg">ビデオ通話を開始してよろしいですか？</string>
     <string name="room_participants_ban_prompt_msg">ユーザーをブロックすると、ユーザーはこのルームから追放され、二度と参加できなくなります。</string>
@@ -500,7 +498,6 @@
     <string name="create_new_room">新しいルームを作成</string>
     <string name="action_change">変更</string>
     <string name="change_room_directory_network">ネットワークを変更</string>
-    <string name="group_all_communities">全てのコミュニティー</string>
     <string name="fab_menu_create_room">ルーム</string>
     <string name="fab_menu_create_chat">ダイレクトメッセージ</string>
     <string name="create_room_action_create">作成</string>
@@ -899,8 +896,6 @@
     <string name="event_status_sent_message">メッセージを送りました</string>
     <string name="initial_sync_start_importing_account_data">初期同期：
 \nアカウントデータをインポートしています</string>
-    <string name="initial_sync_start_importing_account_groups">初期同期：
-\nコミュニティーをインポートしています</string>
     <string name="initial_sync_start_importing_account_rooms">初期同期：
 \nルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_crypto">初期同期：
@@ -2344,7 +2339,6 @@
     <string name="ftue_profile_picture_title">プロフィール画像を追加</string>
     <string name="ftue_display_name_entry_footer">これは後から変更できます</string>
     <string name="ftue_display_name_entry_title">表示名</string>
-    <string name="ftue_display_name_subtitle">メッセージを送信する際に表示されます。</string>
     <string name="a11y_location_share_option_pinned_icon">この位置情報を共有</string>
     <string name="location_share_option_pinned">この位置情報を共有</string>
     <string name="a11y_location_share_option_user_live_icon">位置情報（ライブ）を共有</string>

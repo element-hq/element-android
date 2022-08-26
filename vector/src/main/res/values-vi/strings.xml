@@ -8,7 +8,6 @@
     <string name="send_bug_report">Báo lỗi</string>
     <string name="send_bug_report_include_screenshot">Gửi ảnh chụp màn hình</string>
     <string name="send_bug_report_include_key_share_history">Gửi lịch sử yêu cầu chia sẻ khóa</string>
-    <string name="groups_header">Cộng đồng</string>
     <string name="rooms_header">Phòng</string>
     <string name="no_more_results">Không còn kết quả nào nữa</string>
     <string name="action_ignore">Bỏ qua</string>
@@ -328,7 +327,6 @@
     <string name="notice_crypto_unable_to_decrypt_friendly">Đang đợi tin nhắn này, việc này có thể mất một lúc</string>
     <string name="notice_room_leave_with_reason_by_you">Bạn đã rời phòng. Lý do: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s đã rời phòng. Lý do: %2$s</string>
-    <string name="auth_reset_password_missing_email">Địa chỉ email được liên kết đến tài khoản của bạn phải được nhập.</string>
     <string name="auth_recaptcha_message">Máy chủ nhà này muốn chắc chắn bạn không phải rô bốt</string>
     <string name="auth_msisdn_already_defined">Số điện thoại này đã được định nghĩa rồi.</string>
     <string name="auth_email_already_defined">Địa chỉ email này đã được định nghĩa rồi.</string>
@@ -491,8 +489,6 @@
     <string name="event_status_sent_message">Đã gửi tin nhắn</string>
     <string name="initial_sync_start_importing_account_data">Đồng bộ ban đầu:
 \nĐang nhập dữ liệu tài khoản</string>
-    <string name="initial_sync_start_importing_account_groups">Đồng bộ ban đầu:
-\nĐang nhập các Community</string>
     <string name="initial_sync_start_importing_account_left_rooms">Đồng bộ ban đầu:
 \nĐang nhập các phòng đã rời khỏi</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Đồng bộ ban đầu:
@@ -1846,7 +1842,6 @@
     <string name="room_preview_not_found">Căn phòng này không thể truy cập vào thời điểm này.
 \nHãy thử lại sau, hoặc yêu cầu quản trị viên phòng kiểm tra xem bạn có quyền truy cập hay không.</string>
     <string name="room_preview_no_preview">Phòng này không thể được xem trước</string>
-    <string name="group_all_communities">Tất cả Community</string>
     <string name="please_wait">Vui lòng chờ…</string>
     <string name="change_room_directory_network">Thay đổi mạng</string>
     <string name="action_change">Thay đổi</string>

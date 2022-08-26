@@ -27,6 +27,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.mapbox.mapboxsdk.maps.MapView
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
@@ -43,11 +44,13 @@ import javax.inject.Inject
 /*
  * TODO Move locationPinProvider to a ViewModel
  */
-class LocationPreviewFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-        private val locationPinProvider: LocationPinProvider
-) : VectorBaseFragment<FragmentLocationPreviewBinding>(),
+@AndroidEntryPoint
+class LocationPreviewFragment :
+        VectorBaseFragment<FragmentLocationPreviewBinding>(),
         VectorMenuProvider {
+
+    @Inject lateinit var urlMapProvider: UrlMapProvider
+    @Inject lateinit var locationPinProvider: LocationPinProvider
 
     private val args: LocationSharingArgs by args()
 

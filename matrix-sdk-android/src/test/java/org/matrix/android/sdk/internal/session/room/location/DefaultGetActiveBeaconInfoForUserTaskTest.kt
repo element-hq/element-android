@@ -22,6 +22,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -69,7 +70,7 @@ class DefaultGetActiveBeaconInfoForUserTaskTest {
         fakeStateEventDataSource.verifyGetStateEvent(
                 roomId = params.roomId,
                 eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                stateKey = A_USER_ID
+                stateKey = QueryStringValue.Equals(A_USER_ID)
         )
     }
 }
