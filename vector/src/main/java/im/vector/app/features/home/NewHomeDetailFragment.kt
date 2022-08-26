@@ -23,10 +23,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
@@ -35,6 +37,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
@@ -74,6 +77,7 @@ class NewHomeDetailFragment :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var session: Session
+    @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -127,6 +131,7 @@ class NewHomeDetailFragment :
         setupToolbar()
         setupKeysBackupBanner()
         setupActiveCallView()
+        setupDebugButton()
 
         childFragmentManager.commitTransaction {
             add(R.id.roomListContainer, HomeRoomListFragment::class.java, null, HOME_ROOM_LIST_FRAGMENT_TAG)
@@ -169,12 +174,6 @@ class NewHomeDetailFragment :
                 }
     }
 
-    private fun navigateBack() {
-        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
-        val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
-        setCurrentSpace(previousSpaceId ?: parentSpaceId)
-    }
-
     private fun setCurrentSpace(spaceId: String?) {
         spaceStateHandler.setCurrentSpace(spaceId, isForwardNavigation = false)
         sharedActionViewModel.post(HomeActivitySharedAction.OnCloseSpace)
@@ -189,6 +188,7 @@ class NewHomeDetailFragment :
         super.onResume()
         callManager.checkForProtocolsSupportIfNeeded()
         refreshSpaceState()
+        refreshDebugButtonState()
     }
 
     private fun refreshSpaceState() {
@@ -298,6 +298,21 @@ class NewHomeDetailFragment :
         }
     }
 
+    private fun setupDebugButton() {
+        views.debugButton.debouncedClicks {
+            sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+            navigator.openDebug(requireActivity())
+        }
+
+        views.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            views.debugButton.isVisible = verticalOffset == 0
+        })
+    }
+
+    private fun refreshDebugButtonState() {
+        views.debugButton.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
+    }
+
     /* ==========================================================================================
      * KeysBackupBanner Listener
      * ========================================================================================== */
@@ -337,12 +352,15 @@ class NewHomeDetailFragment :
         }
     }
 
-    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.getCurrentSpace() != null) {
-        navigateBack()
-        true
-    } else {
+    override fun onBackPressed(toolbarButton: Boolean) = if (spaceStateHandler.isRoot()) {
         false
+    } else {
+        val lastSpace = spaceStateHandler.popSpaceBackstack()
+        spaceStateHandler.setCurrentSpace(lastSpace, isForwardNavigation = false)
+        true
     }
+
+    private fun SpaceStateHandler.isRoot() = getSpaceBackstack().isEmpty()
 
     companion object {
         private const val HOME_ROOM_LIST_FRAGMENT_TAG = "TAG_HOME_ROOM_LIST"

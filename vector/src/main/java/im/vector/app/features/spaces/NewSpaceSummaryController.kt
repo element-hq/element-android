@@ -63,10 +63,6 @@ class NewSpaceSummaryController @Inject constructor(
             homeCount: RoomAggregateNotificationCount,
             expandedStates: Map<String, Boolean>,
     ) {
-        newSpaceListHeaderItem {
-            id("space_list_header")
-        }
-
         addHomeItem(selectedSpace == null, homeCount)
         addSpaces(spaceSummaries, selectedSpace, rootSpaces, expandedStates)
         addCreateItem()
