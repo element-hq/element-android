@@ -188,7 +188,6 @@ class NewHomeDetailFragment :
         super.onResume()
         callManager.checkForProtocolsSupportIfNeeded()
         refreshSpaceState()
-        refreshDebugButtonState()
     }
 
     private fun refreshSpaceState() {
@@ -305,12 +304,8 @@ class NewHomeDetailFragment :
         }
 
         views.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-            views.debugButton.isVisible = verticalOffset == 0
+            views.debugButton.isVisible = verticalOffset == 0 && buildMeta.isDebug && vectorPreferences.developerMode()
         })
-    }
-
-    private fun refreshDebugButtonState() {
-        views.debugButton.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
     }
 
     /* ==========================================================================================
