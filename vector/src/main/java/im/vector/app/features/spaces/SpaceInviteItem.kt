@@ -50,7 +50,7 @@ abstract class SpaceInviteItem : VectorEpoxyModel<SpaceInviteItem.Holder>(R.layo
         holder.invitedBy.text = context.getString(R.string.invited_by, inviter)
 
         avatarRenderer.render(matrixItem, holder.avatar)
-        holder.notificationBadge.renderWithText("!", true)
+        holder.notificationBadge.render(UnreadCounterBadgeView.State.Text("!", true))
     }
 
     override fun unbind(holder: Holder) {

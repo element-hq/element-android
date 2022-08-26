@@ -33,7 +33,7 @@ abstract class InviteCounterItem : VectorEpoxyModel<InviteCounterItem.Holder>(R.
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(listener)
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(invitesCount, true))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State.Count(invitesCount, true))
     }
 
     class Holder : VectorEpoxyHolder() {

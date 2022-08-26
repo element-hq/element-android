@@ -38,7 +38,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 abstract class NewSubSpaceSummaryItem : VectorEpoxyModel<NewSubSpaceSummaryItem.Holder>(R.layout.item_new_sub_space) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
