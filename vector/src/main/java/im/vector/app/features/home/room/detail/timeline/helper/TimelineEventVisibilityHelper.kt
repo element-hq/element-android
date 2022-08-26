@@ -229,8 +229,9 @@ class TimelineEventVisibilityHelper @Inject constructor(
 
         // Hide fake events for local rooms
         if (RoomLocalEcho.isLocalEchoId(roomId) &&
-                root.getClearType() == EventType.STATE_ROOM_MEMBER ||
-                root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY) {
+                (root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+                        root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY ||
+                        root.getClearType() == EventType.STATE_ROOM_THIRD_PARTY_INVITE)) {
             return true
         }
 
