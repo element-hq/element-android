@@ -19,16 +19,21 @@ package im.vector.app.features.settings.devices.v2.list
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.ViewOtherSessionsBinding
 import im.vector.app.features.settings.devices.DeviceFullInfo
-import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OtherSessionsView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    @Inject lateinit var otherSessionsController: OtherSessionsController
 
     private val views: ViewOtherSessionsBinding
 
@@ -38,6 +43,8 @@ class OtherSessionsView @JvmOverloads constructor(
     }
 
     fun update(devices: List<DeviceFullInfo>) {
-        Timber.d("OtherSessionsView. Devices: " + devices.size)
+        views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = true)
+        views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, devices.size)
+        otherSessionsController.setData(devices)
     }
 }

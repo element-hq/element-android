@@ -36,10 +36,10 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
-import im.vector.app.features.settings.devices.DevicesViewState
 import javax.inject.Inject
 
 /**
@@ -124,33 +124,51 @@ class VectorSettingsDevicesFragment @Inject constructor() : VectorBaseFragment<F
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        val currentDeviceInfo = state.devices()
-                ?.firstOrNull {
-                    it.deviceInfo.deviceId == state.myDeviceId
-                }
+        if (state.devices is Success) {
+            val devices = state.devices()
+            val currentDeviceInfo = devices?.firstOrNull {
+                it.deviceInfo.deviceId == state.myDeviceId
+            }
+            val otherDevices = devices?.filter { it.deviceInfo.deviceId != state.myDeviceId }
 
-        if (state.devices is Success && currentDeviceInfo != null) {
-            renderCurrentDevice(state.accountCrossSigningIsTrusted, !state.hasAccountCrossSigning, currentDeviceInfo.deviceInfo.displayName ?: "")
+            renderCurrentDevice(currentDeviceInfo)
+            renderOtherSessionsView(otherDevices)
         } else {
             hideCurrentSessionView()
+            hideOtherSessionsView()
         }
 
         handleRequestStatus(state.request)
     }
 
+    private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?) {
+        if (otherDevices.isNullOrEmpty()) {
+            hideOtherSessionsView()
+        } else {
+            views.deviceListHeaderSectionOther.isVisible = true
+            views.deviceListOtherSessions.isVisible = true
+            views.deviceListOtherSessions.update(otherDevices)
+        }
+    }
+
+    private fun hideOtherSessionsView() {
+        views.deviceListHeaderSectionOther.isVisible = false
+        views.deviceListOtherSessions.isVisible = false
+    }
+
+    private fun renderCurrentDevice(currentDeviceInfo: DeviceFullInfo?) {
+        currentDeviceInfo?.let {
+            views.deviceListHeaderSectionCurrent.isVisible = true
+            views.deviceListCurrentSession.isVisible = true
+            views.deviceListCurrentSession.update(it)
+        } ?: run {
+            hideCurrentSessionView()
+        }
+    }
+
     private fun hideCurrentSessionView() {
         views.deviceListHeaderSectionCurrent.isVisible = false
         views.deviceListCurrentSession.isVisible = false
-    }
-
-    private fun renderCurrentDevice(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean, sessionName: String) {
-        views.deviceListHeaderSectionCurrent.isVisible = true
-        views.deviceListCurrentSession.isVisible = true
-        views.deviceListCurrentSession.update(
-                accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
-                legacyMode = legacyMode,
-                sessionName = sessionName
-        )
     }
 
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
