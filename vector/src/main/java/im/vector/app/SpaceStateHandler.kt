@@ -51,11 +51,13 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
     )
 
     /**
-     * Gets the current backstack of spaces (via their id).
+     * Gets the Space ID of the space on top of the backstack.
      *
-     * null may be an entry in the ArrayDeque to indicate the root space (All Chats)
+     * May return null to indicate the All Chats space.
      */
-    fun getSpaceBackstack(): ArrayDeque<String?>
+    fun popSpaceBackstack(): String?
+
+    fun getSpaceBackstack(): List<String?>
 
     /**
      * Gets a flow of the selected space for clients to react immediately to space changes.

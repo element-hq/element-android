@@ -139,7 +139,6 @@
     <string name="all_chats">All Chats</string>
     <string name="start_chat">Start Chat</string>
     <string name="create_room">Create Room</string>
-    <string name="change_space">Change Space</string>
     <string name="explore_rooms">Explore Rooms</string>
     <string name="a11y_expand_space_children">Expand space children</string>
     <string name="a11y_collapse_space_children">Collapse space children</string>
@@ -3209,4 +3208,16 @@
 
     <!-- Device Manager -->
     <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobile</string>
+    <string name="a11y_device_manager_device_type_web" tools:ignore="UnusedResources">Web</string>
+    <string name="a11y_device_manager_device_type_desktop" tools:ignore="UnusedResources">Desktop</string>
+    <string name="device_manager_device_type_android">${app_name} Mobile: Android</string>
+    <string name="device_manager_verification_status_verified">Verified session</string>
+    <string name="device_manager_verification_status_unverified">Unverified session</string>
+    <string name="device_manager_verification_status_detail_verified">Your current session is ready for secure messaging.</string>
+    <string name="device_manager_verification_status_detail_unverified">Verify your current session for enhanced secure messaging.</string>
+    <string name="device_manager_verify_session">Verify Session</string>
+    <string name="device_manager_view_details">View Details</string>
+    <string name="device_manager_header_section_current_session">Current Session</string>
+
 </resources>
