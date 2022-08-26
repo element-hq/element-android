@@ -63,8 +63,6 @@ class NewSpaceSummaryController @Inject constructor(
             homeCount: RoomAggregateNotificationCount,
             expandedStates: Map<String, Boolean>,
     ) {
-        val host = this
-
         addHomeItem(selectedSpace == null, homeCount)
         addSpaces(spaceSummaries, selectedSpace, rootSpaces, expandedStates)
         addCreateItem()
