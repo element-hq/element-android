@@ -71,7 +71,6 @@ class HomeRoomListFragment :
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
     }
