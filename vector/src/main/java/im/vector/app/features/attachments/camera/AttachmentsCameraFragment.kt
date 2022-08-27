@@ -25,7 +25,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.OrientationEventListener
 import android.view.ScaleGestureDetector
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -72,6 +74,7 @@ class AttachmentsCameraFragment :
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
+    private var rotation = Surface.ROTATION_0
 
     private lateinit var camera: Camera
     private lateinit var cameraExecutor: ExecutorService
@@ -97,6 +100,34 @@ class AttachmentsCameraFragment :
         }
     }
 
+    private val orientationEventListener by lazy {
+        object : OrientationEventListener(context) {
+            @SuppressLint("RestrictedApi")
+            override fun onOrientationChanged(orientation: Int) {
+                val rotation = when (orientation) {
+                    in 45 until 135 -> Surface.ROTATION_270
+                    in 135 until 225 -> Surface.ROTATION_180
+                    in 225 until 315 -> Surface.ROTATION_90
+                    else -> Surface.ROTATION_0
+                }
+                if (rotation == this@AttachmentsCameraFragment.rotation) return
+                this@AttachmentsCameraFragment.rotation = rotation
+
+                rotateButtons(
+                    when (rotation) {
+                        Surface.ROTATION_270 -> 270F
+                        Surface.ROTATION_180 -> 180F
+                        Surface.ROTATION_90 -> 90F
+                        else -> 0F
+                    }
+                )
+                imageCapture?.targetRotation = rotation
+                videoCapture?.targetRotation = rotation
+            }
+        }
+    }
+
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -112,6 +143,7 @@ class AttachmentsCameraFragment :
 
         setCaptureModeButtons()
         setFlashButton()
+        orientationEventListener.enable()
 
         views.attachmentsCameraCaptureAction.debouncedClicks {
             capture()
@@ -136,6 +168,11 @@ class AttachmentsCameraFragment :
             return@setOnTouchListener true
         }
         cameraExecutor = Executors.newSingleThreadExecutor()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        orientationEventListener.disable()
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all { permission ->
@@ -179,6 +216,17 @@ class AttachmentsCameraFragment :
             }
         }
         setFlashButton()
+    }
+
+    private fun rotateButtons(rotation: Float) {
+        arrayOf(
+                views.attachmentsCameraFlip,
+                views.attachmentsCameraFlash,
+                views.attachmentsCameraChangeAction,
+                views.attachmentsCameraCaptureAction,
+        ).forEach {
+            it.rotation = rotation
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
