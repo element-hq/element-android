@@ -185,10 +185,10 @@ internal class RoomSummaryUpdater @Inject constructor(
                 if (aggregator == null) {
                     // Do it now
                     // mmm maybe we could only refresh shield instead of checking trust also?
-                    crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
+                    crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
                 } else {
                     // Schedule it
-                    aggregator.userIdsWithDeviceUpdate.addAll(otherRoomMembers)
+                    aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)
                 }
             }
         }

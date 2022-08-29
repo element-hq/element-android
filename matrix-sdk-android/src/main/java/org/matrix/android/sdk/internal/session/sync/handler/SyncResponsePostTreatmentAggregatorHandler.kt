@@ -48,7 +48,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
         updateDirectUserIds(aggregator.directChatsToCheck)
         fetchAndUpdateUsers(aggregator.userIdsToFetch)
-        handleUserIdsWithDeviceUpdate(aggregator.userIdsWithDeviceUpdate)
+        handleUserIdsForCheckingTrustAndAffectedRoomShields(aggregator.userIdsForCheckingTrustAndAffectedRoomShields)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -105,7 +105,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 .enqueue()
     }
 
-    private fun handleUserIdsWithDeviceUpdate(userIdsWithDeviceUpdate: Iterable<String>) {
-        crossSigningService.onUsersDeviceUpdate(userIdsWithDeviceUpdate.toList())
+    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Iterable<String>) {
+        crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
     }
 }

@@ -26,6 +26,6 @@ internal class SyncResponsePostTreatmentAggregator {
     // Set of userIds to fetch and update at the end of incremental syncs
     val userIdsToFetch = mutableSetOf<String>()
 
-    // Set of users to call `crossSigningService.onUsersDeviceUpdate` once per sync
-    val userIdsWithDeviceUpdate = mutableSetOf<String>()
+    // Set of users to call `crossSigningService.checkTrustAndAffectedRoomShields` once per sync
+    val userIdsForCheckingTrustAndAffectedRoomShields = mutableSetOf<String>()
 }
