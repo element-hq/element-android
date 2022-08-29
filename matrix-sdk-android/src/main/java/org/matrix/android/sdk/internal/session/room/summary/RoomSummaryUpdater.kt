@@ -185,7 +185,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 if (aggregator == null) {
                     // Do it now
                     // mmm maybe we could only refresh shield instead of checking trust also?
-                    crossSigningService.onUsersDeviceUpdate(otherRoomMembers) // This is very long and could maybe be done once per sync response.
+                    crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
                 } else {
                     // Schedule it
                     aggregator.userIdsWithDeviceUpdate.addAll(otherRoomMembers)
