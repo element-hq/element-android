@@ -50,6 +50,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
-    override fun isNewAppLayoutEnabled(): Boolean = false
+    override fun isNewAppLayoutEnabled(): Boolean = true
     override fun isNewDeviceManagementEnabled(): Boolean = false
 }
