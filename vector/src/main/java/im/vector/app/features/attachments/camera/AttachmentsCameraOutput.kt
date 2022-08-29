@@ -26,7 +26,7 @@ enum class MediaType {
 }
 
 @Parcelize
-data class VectorCameraOutput(
+data class AttachmentsCameraOutput(
         val type: MediaType,
         val uri: Uri,
 ) : Parcelable

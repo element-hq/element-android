@@ -136,7 +136,7 @@ import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
-import im.vector.app.features.attachments.camera.VectorCameraOutput
+import im.vector.app.features.attachments.camera.AttachmentsCameraOutput
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -1383,10 +1383,10 @@ class TimelineFragment :
         }
     }
 
-    private val attachmentVectorCameraActivityResultLauncher = registerStartForActivityResult {
+    private val attachmentBuiltInCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            it.data?.getParcelableExtra<VectorCameraOutput>(MediaStore.EXTRA_OUTPUT)?.let { cameraOutput ->
-                attachmentsHelper.onVectorCameraResult(cameraOutput)
+            it.data?.getParcelableExtra<AttachmentsCameraOutput>(MediaStore.EXTRA_OUTPUT)?.let { cameraOutput ->
+                attachmentsHelper.onAttachmentsCameraResult(cameraOutput)
             }
         }
     }
@@ -2631,7 +2631,7 @@ class TimelineFragment :
         when (type) {
             AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> {
                 if (vectorPreferences.builtinCameraIsEnabled()) {
-                    attachmentsHelper.openVectorCamera(attachmentVectorCameraActivityResultLauncher)
+                    attachmentsHelper.openBuiltInCamera(attachmentBuiltInCameraActivityResultLauncher)
                 } else {
                     attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
                 }

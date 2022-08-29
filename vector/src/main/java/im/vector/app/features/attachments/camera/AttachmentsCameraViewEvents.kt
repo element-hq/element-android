@@ -22,5 +22,5 @@ sealed class AttachmentsCameraViewEvents : VectorViewEvents {
     object StartRecording: AttachmentsCameraViewEvents()
     object TakePhoto: AttachmentsCameraViewEvents()
     object SetErrorAndFinish: AttachmentsCameraViewEvents()
-    data class SetResultAndFinish(val vectorCameraOutput: VectorCameraOutput): AttachmentsCameraViewEvents()
+    data class SetResultAndFinish(val attachmentsCameraOutput: AttachmentsCameraOutput): AttachmentsCameraViewEvents()
 }

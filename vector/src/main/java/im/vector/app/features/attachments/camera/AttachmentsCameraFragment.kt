@@ -122,7 +122,7 @@ class AttachmentsCameraFragment :
                 }
                 AttachmentsCameraViewEvents.TakePhoto -> views.attachmentsCameraLoading.isVisible = true
                 AttachmentsCameraViewEvents.SetErrorAndFinish -> (activity as AttachmentsCameraActivity).setErrorAndFinish()
-                is AttachmentsCameraViewEvents.SetResultAndFinish -> (activity as AttachmentsCameraActivity).setResultAndFinish(it.vectorCameraOutput)
+                is AttachmentsCameraViewEvents.SetResultAndFinish -> (activity as AttachmentsCameraActivity).setResultAndFinish(it.attachmentsCameraOutput)
             }
         }
 

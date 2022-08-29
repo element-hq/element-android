@@ -38,7 +38,7 @@ class AttachmentsCameraActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         }
     }
 
-    fun setResultAndFinish(data: VectorCameraOutput) {
+    fun setResultAndFinish(data: AttachmentsCameraOutput) {
         val resultIntent = Intent().apply {
             putExtra(MediaStore.EXTRA_OUTPUT, data)
         }

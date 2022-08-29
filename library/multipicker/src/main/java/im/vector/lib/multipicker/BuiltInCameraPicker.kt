@@ -25,7 +25,7 @@ import im.vector.lib.multipicker.entity.MultiPickerVideoType
 import im.vector.lib.multipicker.utils.toMultiPickerImageType
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
-class VectorCameraPicker {
+class BuiltInCameraPicker {
 
     /**
      * Start camera by using a ActivityResultLauncher.

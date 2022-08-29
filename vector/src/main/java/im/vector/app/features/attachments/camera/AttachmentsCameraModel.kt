@@ -156,7 +156,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             _viewEvents.post(
                                     AttachmentsCameraViewEvents.SetResultAndFinish(
-                                            VectorCameraOutput(
+                                            AttachmentsCameraOutput(
                                                 type = MediaType.IMAGE,
                                                 uri = outputUri
                                             )
@@ -208,7 +208,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
                                 )
                                 _viewEvents.post(
                                         AttachmentsCameraViewEvents.SetResultAndFinish(
-                                                VectorCameraOutput(
+                                                AttachmentsCameraOutput(
                                                         type = MediaType.VIDEO,
                                                         uri = outputUri
                                                 )

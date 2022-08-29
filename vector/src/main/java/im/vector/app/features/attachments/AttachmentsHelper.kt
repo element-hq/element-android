@@ -24,7 +24,7 @@ import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.camera.AttachmentsCameraActivity
 import im.vector.app.features.attachments.camera.MediaType
-import im.vector.app.features.attachments.camera.VectorCameraOutput
+import im.vector.app.features.attachments.camera.AttachmentsCameraOutput
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
@@ -102,10 +102,10 @@ class AttachmentsHelper(
         captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
     }
 
-    fun openVectorCamera(vectorCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        MultiPicker.get(MultiPicker.VECTOR_CAMERA).start(
+    fun openBuiltInCamera(attachmentsCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
+        MultiPicker.get(MultiPicker.BUILTIN_CAMERA).start(
                 context,
-                vectorCameraActivityResultLauncher,
+                attachmentsCameraActivityResultLauncher,
                 AttachmentsCameraActivity::class.java
         )
     }
@@ -169,8 +169,8 @@ class AttachmentsHelper(
         }
     }
 
-    fun onVectorCameraResult(cameraOutput: VectorCameraOutput) {
-        val multiPicker = MultiPicker.get(MultiPicker.VECTOR_CAMERA)
+    fun onAttachmentsCameraResult(cameraOutput: AttachmentsCameraOutput) {
+        val multiPicker = MultiPicker.get(MultiPicker.BUILTIN_CAMERA)
         val media = if (cameraOutput.type == MediaType.IMAGE) {
             multiPicker.getTakenPhoto(context, cameraOutput.uri)
         } else {
