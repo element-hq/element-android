@@ -97,6 +97,7 @@ class UiAllScreensSanityTest {
             }
         }
 
+        testCamera()
         testThreadScreens()
 
         val spaceName = UUID.randomUUID().toString()
@@ -173,5 +174,19 @@ class UiAllScreensSanityTest {
             }
         }
         elementRobot.toggleLabFeature(LabFeature.THREAD_MESSAGES)
+    }
+
+    private fun testCamera() {
+        elementRobot.toggleLabFeature(LabFeature.BUILTIN_CAMERA)
+        elementRobot.newRoom {
+            createNewRoom {
+                createRoom {
+                    cameraPhotoBack()
+                    cameraPhotoFront()
+                    cameraVideoFront()
+                }
+            }
+        }
+        elementRobot.toggleLabFeature(LabFeature.BUILTIN_CAMERA)
     }
 }

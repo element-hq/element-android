@@ -140,6 +140,15 @@ class ElementRobot {
                 // I hereby cheat and write:
                 Thread.sleep(30_000)
             }
+            LabFeature.BUILTIN_CAMERA -> {
+                settings {
+                    labs {
+                        onView(withText(R.string.labs_enable_builtin_camera))
+                                .check(ViewAssertions.matches(isDisplayed()))
+                                .perform(ViewActions.closeSoftKeyboard(), click())
+                    }
+                }
+            }
             else -> {
             }
         }
