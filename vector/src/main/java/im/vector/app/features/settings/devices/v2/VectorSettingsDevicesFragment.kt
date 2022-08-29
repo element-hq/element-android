@@ -42,6 +42,7 @@ import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
+import javax.inject.Inject
 
 /**
  * Display the list of the user's devices and sessions.
@@ -49,6 +50,8 @@ import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationVie
 @AndroidEntryPoint
 class VectorSettingsDevicesFragment :
         VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+
+    @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -72,10 +75,10 @@ class VectorSettingsDevicesFragment :
 
         initLearnMoreButtons()
         initWaitingView()
-        observerViewEvents()
+        observeViewEvents()
     }
 
-    private fun observerViewEvents() {
+    private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
                 is DevicesViewEvents.Loading -> showLoading(it.message)
@@ -197,15 +200,34 @@ class VectorSettingsDevicesFragment :
             views.deviceListHeaderCurrentSession.isVisible = true
             views.deviceListCurrentSession.isVisible = true
             views.deviceListCurrentSession.render(it)
+            views.deviceListCurrentSession.debouncedClicks {
+                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+            }
+            views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
+                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+            }
         } ?: run {
             hideCurrentSessionView()
         }
+    }
+
+    private fun navigateToSessionOverview(sessionId: String) {
+        viewNavigator.navigateToSessionOverview(
+                context = requireActivity(),
+                sessionId = sessionId
+        )
     }
 
     private fun hideCurrentSessionView() {
         views.deviceListHeaderCurrentSession.isVisible = false
         views.deviceListCurrentSession.isVisible = false
         views.deviceListDividerCurrentSession.isVisible = false
+        views.deviceListCurrentSession.debouncedClicks {
+            // do nothing
+        }
+        views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
+            // do nothing
+        }
     }
 
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
