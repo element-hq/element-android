@@ -32,4 +32,8 @@ sealed class HomeRoomSection {
     data class RecentRoomsData(
             val list: LiveData<List<RoomSummary>>
     ) : HomeRoomSection()
+
+    data class InvitesCountData(
+            val count: LiveData<Int>
+    ) : HomeRoomSection()
 }

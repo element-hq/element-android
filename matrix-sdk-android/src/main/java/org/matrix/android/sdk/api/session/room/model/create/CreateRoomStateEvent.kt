@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.api.session.room.model.create
 
+import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 
+@JsonClass(generateAdapter = true)
 data class CreateRoomStateEvent(
         /**
          * Required. The type of event to send.

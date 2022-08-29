@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces
+package im.vector.app.test.fakes
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
-import im.vector.app.core.epoxy.VectorEpoxyHolder
-import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.features.widgets.WidgetArgsBuilder
+import io.mockk.mockk
 
-@EpoxyModelClass
-abstract class NewSpaceListHeaderItem : VectorEpoxyModel<NewSpaceListHeaderItem.Holder>(R.layout.item_new_space_list_header) {
-    class Holder : VectorEpoxyHolder()
+class FakeWidgetArgsBuilder {
+
+    val instance = mockk<WidgetArgsBuilder>()
 }

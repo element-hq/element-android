@@ -82,6 +82,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -1269,8 +1270,23 @@ class TimelineViewModel @AssistedInject constructor(
                 }
             }
             room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)?.also {
-                setState { copy(tombstoneEvent = it) }
+                onRoomTombstoneUpdated(it)
             }
+        }
+    }
+
+    private var roomTombstoneHandled = false
+    private fun onRoomTombstoneUpdated(tombstoneEvent: Event) = withState { state ->
+        if (roomTombstoneHandled) return@withState
+        if (state.isLocalRoom()) {
+            // Local room has been replaced, so navigate to the new room
+            val roomId = tombstoneEvent.getClearContent()?.toModel<RoomTombstoneContent>()
+                    ?.replacementRoomId
+                    ?: return@withState
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
+            roomTombstoneHandled = true
+        } else {
+            setState { copy(tombstoneEvent = tombstoneEvent) }
         }
     }
 

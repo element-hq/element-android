@@ -22,6 +22,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
+import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewDevicesListHeaderBinding
@@ -58,12 +59,18 @@ class DevicesListHeaderView @JvmOverloads constructor(
 
     private fun setDescription(typedArray: TypedArray) {
         val description = typedArray.getString(R.styleable.DevicesListHeaderView_devicesListHeaderDescription)
+        if (description.isNullOrEmpty()) {
+            binding.devicesListHeaderDescription.isVisible = false
+            return
+        }
+
         val learnMore = context.getString(R.string.action_learn_more)
         val stringBuilder = StringBuilder()
         stringBuilder.append(description)
         stringBuilder.append(" ")
         stringBuilder.append(learnMore)
 
+        binding.devicesListHeaderDescription.isVisible = true
         binding.devicesListHeaderDescription.setTextWithColoredPart(
                 fullText = stringBuilder.toString(),
                 coloredPart = learnMore,

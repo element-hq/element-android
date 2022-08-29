@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.di
 
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageDefaultContent
@@ -60,6 +62,12 @@ internal object MoshiProvider {
                             .registerSubtype(MessagePollResponseContent::class.java, MessageType.MSGTYPE_POLL_RESPONSE)
             )
             .add(SerializeNulls.JSON_ADAPTER_FACTORY)
+            .add(
+                    PolymorphicJsonAdapterFactory.of(ThreePid::class.java, "type")
+                            .withSubtype(ThreePid.Email::class.java, "email")
+                            .withSubtype(ThreePid.Msisdn::class.java, "msisdn")
+                            .withDefaultValue(null)
+            )
             .build()
 
     fun providesMoshi(): Moshi {

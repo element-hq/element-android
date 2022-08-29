@@ -37,7 +37,7 @@ class FakeSession(
         val fakeProfileService: FakeProfileService = FakeProfileService(),
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
-        private val fakeRoomService: FakeRoomService = FakeRoomService(),
+        val fakeRoomService: FakeRoomService = FakeRoomService(),
         private val fakeEventService: FakeEventService = FakeEventService(),
 ) : Session by mockk(relaxed = true) {
 
