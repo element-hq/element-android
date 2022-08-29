@@ -9,6 +9,26 @@
         android:layout_height="wrap_content">
 
         <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+            android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:devicesListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
+            app:devicesListHeaderTitle="@string/device_manager_header_section_security_recommendations_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/deviceListSecurityRecommendationsDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/divider_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionSecurityRecommendations" />
+
+        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
             android:id="@+id/deviceListHeaderCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -16,7 +36,7 @@
             app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />
 
         <im.vector.app.features.settings.devices.v2.list.CurrentSessionView
             android:id="@+id/deviceListCurrentSession"
