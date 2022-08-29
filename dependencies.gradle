@@ -31,6 +31,7 @@ def jjwt = "0.11.5"
 def vanniktechEmoji = "0.15.0"
 
 def fragment = "1.5.2"
+def cameraxVersion = "1.1.0"
 
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
@@ -54,12 +55,12 @@ ext.libs = [
                 'appCompat'               : "androidx.appcompat:appcompat:1.4.2",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
                 'camera': [
-                        'core'            : "androidx.camera.camera-core:1.1.0",
-                        'camera2'         : "androidx.camera.camera-camera2:1.1.0",
-                        'lifecycle'       : "androidx.camera.camera-lifecycle:1.1.0",
-                        'video'           : "androidx.camera.camera-video:1.1.0",
-                        'view'            : "androidx.camera.camera-view:1.1.0",
-                        'extensions'      : "androidx.camera.camera-extensions:1.1.0",
+                        'core'            : "androidx.camera:camera-core:$cameraxVersion",
+                        'camera2'         : "androidx.camera:camera-camera2:$cameraxVersion",
+                        'lifecycle'       : "androidx.camera:camera-lifecycle:$cameraxVersion",
+                        'video'           : "androidx.camera:camera-video:$cameraxVersion",
+                        'view'            : "androidx.camera:camera-view:$cameraxVersion",
+                        'extensions'      : "androidx.camera:camera-extensions:$cameraxVersion",
                 ],
                 'core'                    : "androidx.core:core-ktx:1.8.0",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.2.1",
