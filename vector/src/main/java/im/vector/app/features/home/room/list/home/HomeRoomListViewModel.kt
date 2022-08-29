@@ -289,7 +289,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             viewModelScope.launch {
                 try {
                     room.roomPushRuleService().setRoomNotificationState(action.notificationState)
-                } catch (failure: Exception) {
+                } catch (failure: Throwable) {
                     _viewEvents.post(HomeRoomListViewEvents.Failure(failure))
                 }
             }
