@@ -3248,6 +3248,8 @@
         <item quantity="one">Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</item>
         <item quantity="other">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</item>
     </plurals>
+    <string name="device_manager_current_session_title">Current Session</string>
+    <string name="device_manager_session_title">Session</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

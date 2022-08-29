@@ -61,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:devicesListHeaderDescription=""
-            app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
+            app:devicesListHeaderTitle="@string/device_manager_current_session_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />

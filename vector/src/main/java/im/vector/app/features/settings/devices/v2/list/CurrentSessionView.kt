@@ -39,6 +39,8 @@ class CurrentSessionView @JvmOverloads constructor(
         views = ViewCurrentSessionBinding.bind(this)
     }
 
+    val viewDetailsButton = views.currentSessionViewDetailsButton
+
     fun render(currentDeviceInfo: DeviceFullInfo) {
         renderDeviceInfo(currentDeviceInfo.deviceInfo.displayName.orEmpty())
         renderVerificationStatus(currentDeviceInfo.trustLevelForShield)

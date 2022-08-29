@@ -88,6 +88,7 @@ import im.vector.app.features.settings.account.deactivation.DeactivateAccountVie
 import im.vector.app.features.settings.crosssigning.CrossSigningSettingsViewModel
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheetViewModel
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.overview.SessionOverviewViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
@@ -630,4 +631,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(ReleaseNotesViewModel::class)
     fun releaseNotesViewModel(factory: ReleaseNotesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SessionOverviewViewModel::class)
+    fun sessionOverviewViewModelFactory(factory: SessionOverviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
