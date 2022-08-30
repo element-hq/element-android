@@ -9,6 +9,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
+apply plugin: 'shot'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
@@ -156,7 +157,8 @@ android {
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.karumi.shot.ShotTestRunner"
 
         // Keep abiFilter for the universalApk
         ndk {
@@ -601,5 +603,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
 }
