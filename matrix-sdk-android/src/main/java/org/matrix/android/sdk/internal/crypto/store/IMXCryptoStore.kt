@@ -238,6 +238,8 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
+    fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>>
+
     fun getMyDevicesInfo(): List<DeviceInfo>
 
     fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>

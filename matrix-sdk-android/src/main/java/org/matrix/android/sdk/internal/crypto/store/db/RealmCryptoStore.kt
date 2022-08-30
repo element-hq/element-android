@@ -581,6 +581,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
+        return Transformations.map(getLiveDeviceList()) { devices ->
+            devices.firstOrNull { it.deviceId == deviceId }.toOptional()
+        }
+    }
+
     override fun getMyDevicesInfo(): List<DeviceInfo> {
         return monarchy.fetchAllCopiedSync {
             it.where<MyDeviceLastSeenInfoEntity>()

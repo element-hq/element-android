@@ -122,6 +122,8 @@ interface CryptoService {
 
     fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
 
+    fun getLiveCryptoDeviceInfoWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>>
+
     fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
 
     fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
