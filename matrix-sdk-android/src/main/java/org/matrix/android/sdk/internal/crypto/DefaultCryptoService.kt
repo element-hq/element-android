@@ -273,21 +273,12 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
+    override fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>> {
         return cryptoStore.getLiveMyDevicesInfo()
     }
 
     override fun getMyDevicesInfo(): List<DeviceInfo> {
         return cryptoStore.getMyDevicesInfo()
-    }
-
-    override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
-        getDeviceInfoTask
-                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
@@ -513,12 +504,21 @@ internal class DefaultCryptoService @Inject constructor(
      * @param userId the user id
      * @param deviceId the device id
      */
-    override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
+    override fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
             cryptoStore.getUserDevice(userId, deviceId)
         } else {
             null
         }
+    }
+
+    override fun getCryptoDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
+        getDeviceInfoTask
+                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
+                    this.executionThread = TaskThread.CRYPTO
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {

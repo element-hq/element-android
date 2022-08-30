@@ -113,7 +113,17 @@ interface CryptoService {
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+    fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+
+    fun getCryptoDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+
+    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+
+    fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun requestRoomKeyForEvent(event: Event)
 
@@ -127,9 +137,7 @@ interface CryptoService {
 
     fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
-
-    fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+    fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>>
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
@@ -155,14 +163,6 @@ interface CryptoService {
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
-
-    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
-
-    fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
-
-    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
-
-    fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
     fun removeSessionListener(listener: NewSessionListener)
