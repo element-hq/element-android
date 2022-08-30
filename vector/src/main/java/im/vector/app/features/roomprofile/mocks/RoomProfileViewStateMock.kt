@@ -25,7 +25,7 @@ val mockRoomProfileViewState by lazy {
             roomSummary = Success(
                     value = RoomSummary(
                             roomId = "!CWLUCoEWXSFyTCOtfL:matrix.org",
-                            displayName = "Megolm test (E2E Encryption Testfest)",
+                            displayName = "A wrong name",
                             name = "Megolm test (E2E Encryption Testfest)",
                             topic = "Test room! Please discuss issues at #e2e:matrix.org. Requires synapse 0.18.0 or later. (0.18.4 for encrypted images); Latest version is recommended.",
                             avatarUrl = "",

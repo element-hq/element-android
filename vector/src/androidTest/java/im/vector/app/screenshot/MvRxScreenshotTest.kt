@@ -70,7 +70,7 @@ class MockRoomProfileFragment : RoomProfileFragment(), MockableMavericksView {
     ) {
         state("my-state") {
             val summary = (mockRoomProfileViewState.roomSummary as Success)().copy(
-                    displayName = "another state"
+                    displayName = "a wrong name"
             )
             mockRoomProfileViewState.copy(
                     roomSummary = Success(summary)
