@@ -33,12 +33,16 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.EspressoHelper
 import im.vector.app.R
+import im.vector.app.espresso.tools.clickOnPreference
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.onboarding.OnboardingActivity
+import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.ui.robot.settings.SettingsRobot
 import im.vector.app.ui.robot.settings.labs.LabFeature
@@ -47,6 +51,8 @@ import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot {
+
+    var features: VectorFeatures = DefaultVectorFeatures()
 
     fun onboarding(block: OnboardingRobot.() -> Unit) {
         block(OnboardingRobot())
@@ -146,8 +152,17 @@ class ElementRobot {
     }
 
     fun signout(expectSignOutWarning: Boolean) {
-        clickOn(R.id.groupToolbarAvatarImageView)
-        clickOn(R.id.homeDrawerHeaderSignoutView)
+        if (features.isNewAppLayoutEnabled()) {
+            onView(withId((R.id.avatar)))
+                    .perform(click())
+            waitUntilActivityVisible<VectorSettingsActivity> {
+                clickOn(R.string.settings_general_title)
+            }
+            clickOnPreference(R.string.action_sign_out)
+        } else {
+            clickOn(R.id.groupToolbarAvatarImageView)
+            clickOn(R.id.homeDrawerHeaderSignoutView)
+        }
 
         val isShowingSignOutWarning = kotlin.runCatching {
             waitUntilViewVisible(withId(R.id.exitAnywayButton))
