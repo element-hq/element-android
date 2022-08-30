@@ -54,6 +54,9 @@ class HomeFilteredRoomsController(
                 onFilterChangedListener(host.onFilterChanged)
             }
         }
+
+        if (models.isEmpty()) {
+        }
         super.addModels(models)
     }
 
