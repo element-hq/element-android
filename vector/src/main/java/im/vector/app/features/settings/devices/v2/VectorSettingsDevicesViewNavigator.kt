@@ -20,7 +20,6 @@ import android.content.Context
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
 import javax.inject.Inject
 
-// TODO add unit tests
 class VectorSettingsDevicesViewNavigator @Inject constructor() {
 
     fun navigateToSessionOverview(context: Context, sessionId: String) {
