@@ -73,7 +73,7 @@ class ElementRobot {
         val activity = EspressoHelper.getCurrentActivity()!!
         val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
-            waitUntilViewVisible(withId(R.id.bottomNavigationView))
+            waitUntilViewVisible(withId(R.id.roomListContainer))
         }
     }
 
@@ -82,7 +82,7 @@ class ElementRobot {
         clickOn(R.id.homeDrawerHeaderSettingsView)
         block(SettingsRobot())
         if (shouldGoBack) pressBack()
-        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+        waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
@@ -94,19 +94,19 @@ class ElementRobot {
         closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
-        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+        waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
         clickOn(R.id.bottom_action_rooms)
         RoomListRobot().newRoom { block() }
-        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+        waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun roomList(block: RoomListRobot.() -> Unit) {
         clickOn(R.id.bottom_action_rooms)
         block(RoomListRobot())
-        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+        waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun toggleLabFeature(labFeature: LabFeature) {
