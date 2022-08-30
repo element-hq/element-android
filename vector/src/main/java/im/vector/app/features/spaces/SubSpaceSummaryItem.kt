@@ -46,7 +46,7 @@ abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
 
     override fun bind(holder: Holder) {
         super.bind(holder)

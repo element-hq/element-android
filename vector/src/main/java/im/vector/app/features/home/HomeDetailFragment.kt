@@ -170,7 +170,7 @@ class HomeDetailFragment :
 
         unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
-                    UnreadCounterBadgeView.State(
+                    UnreadCounterBadgeView.State.Count(
                             count = state.otherSpacesUnread.totalCount,
                             highlighted = state.otherSpacesUnread.isHighlight
                     )

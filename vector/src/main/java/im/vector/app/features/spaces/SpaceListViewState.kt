@@ -21,6 +21,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class SpaceListViewState(
@@ -28,6 +29,7 @@ data class SpaceListViewState(
         val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
         val spaces: List<RoomSummary> = emptyList(),
         val selectedSpace: RoomSummary? = null,
+        val inviters: List<User> = emptyList(),
         val rootSpacesOrdered: List<RoomSummary>? = null,
         val spaceOrderInfo: Map<String, String?>? = null,
         val spaceOrderLocalEchos: Map<String, String?>? = null,
