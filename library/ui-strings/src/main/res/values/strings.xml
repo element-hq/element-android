@@ -3226,4 +3226,11 @@
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
 
+    <string name="home_empty_space_no_rooms_title">%s \nis looking a little empty.</string>
+    <string name="home_empty_space_no_rooms_message">Spaces are a new way to group rooms and people. Add an existing room, or create a new one, using the bottom-right button.</string>
+    <string name="home_empty_no_rooms_title">Welcome to Element,\n%s.</string>
+    <string name="home_empty_no_rooms_message">The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing room, to get started.</string>
+    <string name="home_empty_no_unreads_title">Nothing to report.</string>
+    <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
+
 </resources>

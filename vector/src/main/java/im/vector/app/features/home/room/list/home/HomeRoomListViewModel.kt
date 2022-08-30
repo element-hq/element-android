@@ -23,11 +23,13 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -52,6 +54,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
@@ -63,6 +66,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         private val session: Session,
         private val spaceStateHandler: SpaceStateHandler,
         private val preferencesStore: HomeLayoutPreferencesStore,
+        private val stringProvider: StringProvider,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -81,6 +85,10 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     private val _sections = MutableSharedFlow<Set<HomeRoomSection>>(replay = 1)
     val sections = _sections.asSharedFlow()
+
+    private var currentFilter: HomeRoomFilter? = null
+    private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
+    val emptyStateFlow = _emptyStateFlow.asSharedFlow()
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -171,6 +179,11 @@ class HomeRoomListViewModel @AssistedInject constructor(
                     liveResults.queryParams = liveResults.queryParams.copy(
                             spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
+                    currentFilter?.let { filter ->
+                        val emptyState = getEmptyStateData(filter, spaceStateHandler.getCurrentSpace())
+                        _emptyStateFlow.emit(Optional.from(emptyState))
+                    }
+
                 }.launchIn(viewModelScope)
 
         return HomeRoomSection.RoomSummaryData(
@@ -250,6 +263,31 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
     }
 
+    private fun getEmptyStateData(filter: HomeRoomFilter, selectedSpace: RoomSummary?): StateView.State.Empty? {
+        return when (filter) {
+            HomeRoomFilter.ALL ->
+                if (selectedSpace != null) {
+                    StateView.State.Empty(
+                            title = stringProvider.getString(R.string.home_empty_space_no_rooms_title, selectedSpace.displayName),
+                            message = stringProvider.getString(R.string.home_empty_space_no_rooms_message)
+                    )
+                } else {
+                    val userName = session.userService().getUser(session.myUserId)?.displayName ?: ""
+                    StateView.State.Empty(
+                            title = stringProvider.getString(R.string.home_empty_no_rooms_title, userName),
+                            message = stringProvider.getString(R.string.home_empty_no_rooms_message)
+                    )
+                }
+            HomeRoomFilter.UNREADS ->
+                StateView.State.Empty(
+                        title = stringProvider.getString(R.string.home_empty_no_unreads_title),
+                        message = stringProvider.getString(R.string.home_empty_no_unreads_message)
+                )
+            else ->
+                null
+        }
+    }
+
     override fun handle(action: HomeRoomListAction) {
         when (action) {
             is HomeRoomListAction.SelectRoom -> handleSelectRoom(action)
@@ -261,8 +299,14 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeRoomFilter(action: HomeRoomListAction.ChangeRoomFilter) {
+        currentFilter = action.filter
         filteredPagedRoomSummariesLive?.let { liveResults ->
             liveResults.queryParams = getFilteredQueryParams(action.filter, liveResults.queryParams)
+        }
+
+        viewModelScope.launch {
+            val emptyState = getEmptyStateData(action.filter, spaceStateHandler.getCurrentSpace())
+            _emptyStateFlow.emit(Optional.from(emptyState))
         }
     }
 
