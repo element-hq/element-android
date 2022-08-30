@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 
 interface CryptoService {
@@ -138,6 +139,8 @@ interface CryptoService {
     fun getMyDevicesInfo(): List<DeviceInfo>
 
     fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>>
+
+    fun getMyDevicesInfoLive(deviceId: String): LiveData<Optional<DeviceInfo>>
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
