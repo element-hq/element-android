@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
-            android:id="@+id/deviceListHeaderSectionCurrent"
+            android:id="@+id/deviceListHeaderCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:devicesListHeaderDescription=""
@@ -26,10 +26,10 @@
             android:layout_marginVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionCurrent" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderCurrentSession" />
 
         <View
-            android:id="@+id/deviceListCurrentSessionDivider"
+            android:id="@+id/deviceListDividerCurrentSession"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="24dp"
@@ -39,14 +39,14 @@
             app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
 
         <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
-            android:id="@+id/deviceListHeaderSectionOther"
+            android:id="@+id/deviceListHeaderOtherSessions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:devicesListHeaderDescription="@string/settings_sessions_other_description"
             app:devicesListHeaderTitle="@string/settings_sessions_other_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSessionDivider" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession" />
 
         <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
             android:id="@+id/deviceListOtherSessions"
@@ -55,7 +55,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionOther" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderOtherSessions" />
 
         <include
             android:id="@+id/waiting_view"

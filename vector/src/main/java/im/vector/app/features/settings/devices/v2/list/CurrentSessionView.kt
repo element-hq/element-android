@@ -39,8 +39,8 @@ class CurrentSessionView @JvmOverloads constructor(
         views = ViewCurrentSessionBinding.bind(this)
     }
 
-    fun update(currentDeviceInfo: DeviceFullInfo) {
-        renderDeviceInfo(currentDeviceInfo.deviceInfo.displayName ?: "")
+    fun render(currentDeviceInfo: DeviceFullInfo) {
+        renderDeviceInfo(currentDeviceInfo.deviceInfo.displayName.orEmpty())
         renderVerificationStatus(currentDeviceInfo.trustLevelForShield)
     }
 

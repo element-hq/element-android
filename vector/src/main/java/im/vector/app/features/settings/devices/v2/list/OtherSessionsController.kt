@@ -32,7 +32,6 @@ class OtherSessionsController @Inject constructor(
 ) : TypedEpoxyController<List<DeviceFullInfo>>() {
 
     override fun buildModels(data: List<DeviceFullInfo>?) {
-        data ?: return
         val host = this
 
         if (data.isNullOrEmpty()) {
@@ -51,10 +50,11 @@ class OtherSessionsController @Inject constructor(
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
-                    deviceType(SessionDeviceType.UNKNOWN) // TODO. We don't have this info yet. Update accordingly.
+                    deviceType(DeviceType.UNKNOWN) // TODO. We don't have this info yet. Update accordingly.
                     roomEncryptionTrustLevel(device.trustLevelForShield)
                     sessionName(device.deviceInfo.displayName)
                     sessionDescription(description)
+                    stringProvider(this@OtherSessionsController.stringProvider)
                 }
             }
         }

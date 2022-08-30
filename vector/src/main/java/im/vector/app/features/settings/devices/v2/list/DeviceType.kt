@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-enum class SessionDeviceType {
+enum class DeviceType {
     MOBILE,
     WEB,
     DESKTOP,

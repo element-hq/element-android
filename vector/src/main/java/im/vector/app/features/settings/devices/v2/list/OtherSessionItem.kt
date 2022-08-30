@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.views.ShieldImageView
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
@@ -30,7 +31,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.layout.item_other_session) {
 
     @EpoxyAttribute
-    var deviceType: SessionDeviceType = SessionDeviceType.UNKNOWN
+    var deviceType: DeviceType = DeviceType.UNKNOWN
 
     @EpoxyAttribute
     var roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
@@ -41,16 +42,29 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute
     var sessionDescription: String? = null
 
+    @EpoxyAttribute
+    lateinit var stringProvider: StringProvider
+
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.otherSessionDeviceTypeImageView.setImageResource(
-                when (deviceType) {
-                    SessionDeviceType.MOBILE -> R.drawable.ic_device_type_mobile
-                    SessionDeviceType.WEB -> R.drawable.ic_device_type_web
-                    SessionDeviceType.DESKTOP -> R.drawable.ic_device_type_desktop
-                    SessionDeviceType.UNKNOWN -> R.drawable.ic_device_type_unknown
-                }
-        )
+        when (deviceType) {
+            DeviceType.MOBILE -> {
+                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
+                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_mobile)
+            }
+            DeviceType.WEB -> {
+                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_web)
+                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_web)
+            }
+            DeviceType.DESKTOP -> {
+                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_desktop)
+                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_desktop)
+            }
+            DeviceType.UNKNOWN -> {
+                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_unknown)
+                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_unknown)
+            }
+        }
         holder.otherSessionVerificationStatusImageView.render(roomEncryptionTrustLevel)
         holder.otherSessionNameTextView.text = sessionName
         holder.otherSessionDescriptionTextView.text = sessionDescription

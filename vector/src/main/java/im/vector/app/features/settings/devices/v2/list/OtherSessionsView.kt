@@ -42,7 +42,7 @@ class OtherSessionsView @JvmOverloads constructor(
         views = ViewOtherSessionsBinding.bind(this)
     }
 
-    fun update(devices: List<DeviceFullInfo>) {
+    fun render(devices: List<DeviceFullInfo>) {
         views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = true)
         views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, devices.size)
         otherSessionsController.setData(devices)

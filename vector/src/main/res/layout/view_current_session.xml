@@ -61,7 +61,7 @@
 
     <TextView
         android:id="@+id/currentSessionVerificationStatusDetailTextView"
-        style="@style/TextAppearance.Vector.Caption"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"

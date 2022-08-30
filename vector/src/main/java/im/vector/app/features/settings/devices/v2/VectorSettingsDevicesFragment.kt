@@ -114,13 +114,13 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initLearnMoreButtons() {
-        views.deviceListHeaderSectionOther.onLearnMoreClickListener = {
+        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
             Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {
-        views.deviceListHeaderSectionOther.onLearnMoreClickListener = null
+        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = null
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -145,29 +145,29 @@ class VectorSettingsDevicesFragment :
         if (otherDevices.isNullOrEmpty()) {
             hideOtherSessionsView()
         } else {
-            views.deviceListHeaderSectionOther.isVisible = true
+            views.deviceListHeaderOtherSessions.isVisible = true
             views.deviceListOtherSessions.isVisible = true
-            views.deviceListOtherSessions.update(otherDevices)
+            views.deviceListOtherSessions.render(otherDevices)
         }
     }
 
     private fun hideOtherSessionsView() {
-        views.deviceListHeaderSectionOther.isVisible = false
+        views.deviceListHeaderOtherSessions.isVisible = false
         views.deviceListOtherSessions.isVisible = false
     }
 
     private fun renderCurrentDevice(currentDeviceInfo: DeviceFullInfo?) {
         currentDeviceInfo?.let {
-            views.deviceListHeaderSectionCurrent.isVisible = true
+            views.deviceListHeaderCurrentSession.isVisible = true
             views.deviceListCurrentSession.isVisible = true
-            views.deviceListCurrentSession.update(it)
+            views.deviceListCurrentSession.render(it)
         } ?: run {
             hideCurrentSessionView()
         }
     }
 
     private fun hideCurrentSessionView() {
-        views.deviceListHeaderSectionCurrent.isVisible = false
+        views.deviceListHeaderCurrentSession.isVisible = false
         views.deviceListCurrentSession.isVisible = false
     }
 
