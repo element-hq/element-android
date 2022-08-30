@@ -16,4 +16,4 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-const val NUMBER_OF_OTHER_DEVICES_TO_RENDER = 5
+internal const val NUMBER_OF_OTHER_DEVICES_TO_RENDER = 5
