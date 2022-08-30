@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.ViewOtherSessionsBinding
 import im.vector.app.features.settings.devices.DeviceFullInfo
@@ -46,5 +47,10 @@ class OtherSessionsView @JvmOverloads constructor(
         views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = true)
         views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, devices.size)
         otherSessionsController.setData(devices)
+    }
+
+    override fun onDetachedFromWindow() {
+        views.otherSessionsRecyclerView.cleanup()
+        super.onDetachedFromWindow()
     }
 }
