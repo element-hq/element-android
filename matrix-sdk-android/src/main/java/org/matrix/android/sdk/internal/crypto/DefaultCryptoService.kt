@@ -73,6 +73,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityConten
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -275,6 +276,10 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getMyDevicesInfoLive(): LiveData<List<DeviceInfo>> {
         return cryptoStore.getLiveMyDevicesInfo()
+    }
+
+    override fun getMyDevicesInfoLive(deviceId: String): LiveData<Optional<DeviceInfo>> {
+        return cryptoStore.getLiveMyDevicesInfo(deviceId)
     }
 
     override fun getMyDevicesInfo(): List<DeviceInfo> {

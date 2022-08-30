@@ -242,6 +242,8 @@ internal interface IMXCryptoStore {
 
     fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
+    fun getLiveMyDevicesInfo(deviceId: String): LiveData<Optional<DeviceInfo>>
+
     fun saveMyDevicesInfo(info: List<DeviceInfo>)
 
     /**
