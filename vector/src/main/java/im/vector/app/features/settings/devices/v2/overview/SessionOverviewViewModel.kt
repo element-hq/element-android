@@ -27,15 +27,15 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
 class SessionOverviewViewModel @AssistedInject constructor(
-        @Assisted val initialState: SessionOverviewState,
+        @Assisted val initialState: SessionOverviewViewState,
         session: Session,
-) : VectorViewModel<SessionOverviewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
 
-    companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> by hiltMavericksViewModelFactory()
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<SessionOverviewViewModel, SessionOverviewState> {
-        override fun create(initialState: SessionOverviewState): SessionOverviewViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> {
+        override fun create(initialState: SessionOverviewViewState): SessionOverviewViewModel
     }
 
     init {

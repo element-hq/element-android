@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import com.airbnb.mvrx.MavericksState
 
-data class SessionOverviewState(
+data class SessionOverviewViewState(
         val sessionId: String,
         val isCurrentSession: Boolean = false,
 ) : MavericksState {
