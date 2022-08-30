@@ -534,6 +534,10 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getLiveDeviceList()
     }
 
+    override fun getLiveCryptoDeviceInfoWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceWithId(deviceId)
+    }
+
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
         return cryptoStore.getLiveDeviceList(userId)
     }
