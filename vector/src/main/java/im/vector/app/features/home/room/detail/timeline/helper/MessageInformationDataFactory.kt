@@ -162,7 +162,7 @@ class MessageInformationDataFactory @Inject constructor(
                             .toModel<EncryptedEventContent>()
                             ?.deviceId
                             ?.let { deviceId ->
-                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
+                                session.cryptoService().getCryptoDeviceInfo(event.root.senderId ?: "", deviceId)
                             }
                     when {
                         sendingDevice == null -> {
