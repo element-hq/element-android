@@ -1309,7 +1309,7 @@
     <string name="settings_active_sessions_manage">管理会话</string>
     <string name="settings_active_sessions_signout_device">登出此会话</string>
     <string name="settings_failed_to_get_crypto_device_info">加密信息不可用</string>
-    <string name="settings_active_sessions_verified_device_desc">此会话对安全消息可信因为你已验证它：</string>
+    <string name="settings_active_sessions_verified_device_desc">因为你已验证此会话，所以其在安全地收发消息上可受信任：</string>
     <string name="settings_active_sessions_unverified_device_desc">验证此会话以将其标记为可信，并授予其访问加密消息的权限。如果你未登录此会话，则你的账户可能已被盗：</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d 个活动会话</item>
@@ -1323,7 +1323,7 @@
     <string name="room_member_profile_sessions_section_title">会话</string>
     <string name="trusted">可信任</string>
     <string name="not_trusted">未信任</string>
-    <string name="verification_profile_device_verified_because">此会话可信任，可以用于收发加密消息，因为 %1$s（%2$s）已验证了它：</string>
+    <string name="verification_profile_device_verified_because">可信任此会话用于安全地收发消息，因为%1$s（%2$s）已验证了它：</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) 使用新会话登录：</string>
     <string name="verification_profile_device_untrust_info">在此用户信任此会话之前，发送到该会话和从该会话发送的消息均标有警告。或者，你可以手动进行验证。</string>
     <string name="initialize_cross_signing">初始化交叉签名</string>
