@@ -48,6 +48,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.location.RedactLiveLocationShareEventUseCase
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
@@ -1216,7 +1217,7 @@ class TimelineViewModel @AssistedInject constructor(
             Timber.w("Warning, room with Id ${initialState.roomId} is not found.")
             setState {
                 copy(
-                        asyncRoomSummary = Fail(IllegalStateException("Room Not Found"))
+                        asyncRoomSummary = Fail(RoomNotFound())
                 )
             }
         } else {

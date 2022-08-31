@@ -62,6 +62,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -161,6 +162,7 @@ import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
+import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -1640,6 +1642,10 @@ class TimelineFragment :
 
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         invalidateOptionsMenu()
+        if (mainState.asyncRoomSummary is Fail) {
+            handleRoomSummaryFailure(mainState.asyncRoomSummary)
+            return@withState
+        }
         val summary = mainState.asyncRoomSummary()
         renderToolbar(summary)
         renderTypingMessageNotification(summary, mainState)
@@ -1693,6 +1699,23 @@ class TimelineFragment :
             vectorBaseActivity.finish()
         }
         updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+    }
+
+    private fun handleRoomSummaryFailure(asyncRoomSummary: Fail<RoomSummary>) {
+        views.roomNotFound.isVisible = true
+        views.roomNotFoundText.text = when (asyncRoomSummary.error) {
+            is RoomNotFound -> {
+                getString(
+                        R.string.timeline_error_room_not_found,
+                        if (vectorPreferences.developerMode()) {
+                            "\nDeveloper info: $timelineArgs"
+                        } else {
+                            ""
+                        }
+                )
+            }
+            else -> errorFormatter.toHumanReadable(asyncRoomSummary.error)
+        }
     }
 
     private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {

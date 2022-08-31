@@ -1349,6 +1349,9 @@
     <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
     <string name="widget_integration_review_terms">To continue you need to accept the Terms of this service.</string>
 
+    <!-- Room not found. %s will contain some debug info in developer mode.  -->
+    <string name="timeline_error_room_not_found">Sorry, this room has not been found.\nPlease retry later.%s</string>
+
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new session \'%s\', which is requesting encryption keys.</string>
     <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
