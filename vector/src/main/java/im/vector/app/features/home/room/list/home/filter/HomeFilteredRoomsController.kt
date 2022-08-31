@@ -23,6 +23,7 @@ import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import im.vector.app.features.home.room.list.RoomSummaryItemPlaceHolder_
+import im.vector.app.features.home.room.list.home.roomListEmptyItem
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
@@ -56,6 +57,9 @@ class HomeFilteredRoomsController(
         }
 
         if (models.isEmpty()) {
+            roomListEmptyItem {
+                id("state_item")
+            }
         }
         super.addModels(models)
     }

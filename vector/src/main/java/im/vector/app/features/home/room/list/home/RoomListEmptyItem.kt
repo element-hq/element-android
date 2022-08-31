@@ -17,11 +17,23 @@
 package im.vector.app.features.home.room.list.home
 
 import com.airbnb.epoxy.EpoxyModelClass
+import com.google.android.material.tabs.TabLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.platform.StateView
 import im.vector.app.features.home.room.list.home.filter.RoomFilterHeaderItem
 
 @EpoxyModelClass
-abstract class RoomListEmptyItem : VectorEpoxyModel<RoomFilterHeaderItem.Holder>(R.layout.item_room_list_empty) {
+abstract class RoomListEmptyItem : VectorEpoxyModel<RoomListEmptyItem.Holder>(R.layout.item_room_list_empty) {
 
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+
+        holder.stateView.state = StateView.State.Empty("title")
+    }
+
+    class Holder : VectorEpoxyHolder() {
+        val stateView by bind<StateView>(R.id.stateView)
+    }
 }
