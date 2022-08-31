@@ -195,7 +195,6 @@ class TimelineViewModel @AssistedInject constructor(
         observeActiveRoomWidgets()
         observePowerLevel()
         setupPreviewUrlObservers()
-        room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
         }
