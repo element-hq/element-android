@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.overview
 
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -24,11 +25,16 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 
+// TODO add unit tests
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
         session: Session,
+        private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
 ) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> by hiltMavericksViewModelFactory()
@@ -39,12 +45,19 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
-        val currentSessionId = session.sessionParams.deviceId.orEmpty()
+        val currentDeviceId = session.sessionParams.deviceId.orEmpty()
         setState {
-            copy(
-                    isCurrentSession = sessionId.isNotEmpty() && sessionId == currentSessionId
-            )
+            copy(isCurrentSession = sessionId.isNotEmpty() && sessionId == currentDeviceId)
         }
+
+        observeSessionInfo(currentDeviceId)
+    }
+
+    private fun observeSessionInfo(deviceId: String) {
+        getDeviceFullInfoUseCase.execute(deviceId)
+                .mapNotNull { it.getOrNull() }
+                .onEach { setState { copy(deviceInfo = Success(it)) } }
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: SessionOverviewAction) {
