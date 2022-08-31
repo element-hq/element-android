@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetDeviceFullInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
