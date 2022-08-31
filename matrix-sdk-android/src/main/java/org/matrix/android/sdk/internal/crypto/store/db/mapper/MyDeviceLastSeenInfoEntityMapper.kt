@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import javax.inject.Inject
 
-// TODO add unit tests
 internal class MyDeviceLastSeenInfoEntityMapper @Inject constructor() {
 
     fun map(entity: MyDeviceLastSeenInfoEntity): DeviceInfo {
