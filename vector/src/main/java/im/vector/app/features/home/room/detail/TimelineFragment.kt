@@ -992,9 +992,9 @@ class TimelineFragment :
         views.jumpToBottomView.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!timelineViewModel.timeline.isLive) {
+            if (timelineViewModel.timeline?.isLive == false) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                timelineViewModel.timeline.restartWithEventId(null)
+                timelineViewModel.timeline?.restartWithEventId(null)
             } else {
                 layoutManager.scrollToPosition(0)
             }
