@@ -26,6 +26,7 @@ import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
@@ -69,6 +70,10 @@ class FakeSession(
             this@FakeSession.configureAndStart(any(), startSyncing = true)
             this@FakeSession.startSyncing(any())
         }
+    }
+
+    fun givenSessionParams(sessionParams: SessionParams) {
+        every { this@FakeSession.sessionParams } returns sessionParams
     }
 
     companion object {
