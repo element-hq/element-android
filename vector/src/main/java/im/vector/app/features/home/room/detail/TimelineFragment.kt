@@ -1224,12 +1224,12 @@ class TimelineFragment :
         }
     }
 
-    private fun handleSearchAction() {
+    private fun handleSearchAction() = withState(timelineViewModel) { state ->
         navigator.openSearch(
                 context = requireContext(),
                 roomId = timelineArgs.roomId,
-                roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
-                roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                roomDisplayName = state.asyncRoomSummary()?.displayName,
+                roomAvatarUrl = state.asyncRoomSummary()?.avatarUrl
         )
     }
 
@@ -2520,15 +2520,19 @@ class TimelineFragment :
      * Navigate to Threads timeline for the specified rootThreadEventId
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
+    private fun navigateToThreadTimeline(
+            rootThreadEventId: String,
+            startsThread: Boolean = false,
+            showKeyboard: Boolean = false,
+    ) = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     startsThread = startsThread,
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
                     rootThreadEventId = rootThreadEventId,
                     showKeyboard = showKeyboard
             )
@@ -2559,14 +2563,14 @@ class TimelineFragment :
      * Navigate to Threads list for the current room
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadList() {
+    private fun navigateToThreadList() = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl
             )
             navigator.openThreadList(it, roomThreadDetailArgs)
         }

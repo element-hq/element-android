@@ -402,8 +402,6 @@ class TimelineViewModel @AssistedInject constructor(
 
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
 
-    fun getRoomSummary() = room.roomSummary()
-
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.ComposerFocusChange -> handleComposerFocusChange(action)
