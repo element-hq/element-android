@@ -126,21 +126,33 @@ internal class SyncResponseHandler @Inject constructor(
         }
 
         // Everything else we need to do outside the transaction
-        aggregatorHandler.handle(aggregator)
-
-        syncResponse.rooms?.let {
-            checkPushRules(it, isInitialSync)
-            userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
-            dispatchInvitedRoom(it)
+        measureTimeMillis {
+            aggregatorHandler.handle(aggregator)
+        }.also {
+            Timber.v("Aggregator management took $it ms")
         }
 
-        Timber.v("On sync completed")
-        cryptoSyncHandler.onSyncCompleted(syncResponse)
+        measureTimeMillis {
+            syncResponse.rooms?.let {
+                checkPushRules(it, isInitialSync)
+                userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
+                dispatchInvitedRoom(it)
+            }
+        }.also {
+            Timber.v("SyncResponse.rooms post treatment took $it ms")
+        }
+
+        measureTimeMillis {
+            cryptoSyncHandler.onSyncCompleted(syncResponse)
+        }.also {
+            Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
+        }
 
         // post sync stuffs
         monarchy.writeAsync {
             roomSyncHandler.postSyncSpaceHierarchyHandle(it)
         }
+        Timber.v("On sync completed")
     }
 
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
