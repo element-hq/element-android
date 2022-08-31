@@ -50,7 +50,9 @@ class VectorSettingsPinFragment :
     override var titleRes = R.string.settings_security_application_protection_screen_title
     override val preferenceXmlRes = R.xml.vector_settings_pin
 
-    private val biometricHelper = biometricHelperFactory.create(defaultLockScreenConfiguration.copy(mode = LockScreenMode.CREATE))
+    private val biometricHelper by lazy {
+        biometricHelperFactory.create(defaultLockScreenConfiguration.copy(mode = LockScreenMode.CREATE))
+    }
 
     private val usePinCodePref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
