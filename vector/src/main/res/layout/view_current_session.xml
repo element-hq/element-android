@@ -21,15 +21,15 @@
         tools:src="@drawable/ic_device_type_mobile" />
 
     <TextView
-        android:id="@+id/currentSessionDeviceTypeTextView"
-        style="@style/TextAppearance.Vector.Headline.Medium"
+        android:id="@+id/currentSessionNameTextView"
+        style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/currentSessionDeviceTypeImageView"
-        tools:text="@string/device_manager_device_type_android" />
+        tools:text="Element Mobile: Android" />
 
     <LinearLayout
         android:id="@+id/currentSessionVerificationStatusContainer"
@@ -40,7 +40,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentSessionDeviceTypeTextView">
+        app:layout_constraintTop_toBottomOf="@id/currentSessionNameTextView">
 
         <im.vector.app.core.ui.views.ShieldImageView
             android:id="@+id/currentSessionVerificationStatusImageView"
@@ -61,7 +61,7 @@
 
     <TextView
         android:id="@+id/currentSessionVerificationStatusDetailTextView"
-        style="@style/TextAppearance.Vector.Caption"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"

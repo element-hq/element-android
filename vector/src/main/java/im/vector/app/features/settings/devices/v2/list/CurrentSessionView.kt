@@ -22,9 +22,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCurrentSessionBinding
-import im.vector.app.features.settings.devices.TrustUtils
+import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class CurrentSessionView @JvmOverloads constructor(
         context: Context,
@@ -39,21 +39,14 @@ class CurrentSessionView @JvmOverloads constructor(
         views = ViewCurrentSessionBinding.bind(this)
     }
 
-    fun update(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean) {
-        renderDeviceType()
-        renderVerificationStatus(accountCrossSigningIsTrusted, legacyMode)
+    fun render(currentDeviceInfo: DeviceFullInfo) {
+        renderDeviceInfo(currentDeviceInfo.deviceInfo.displayName.orEmpty())
+        renderVerificationStatus(currentDeviceInfo.trustLevelForShield)
     }
 
-    private fun renderVerificationStatus(accountCrossSigningIsTrusted: Boolean, legacyMode: Boolean) {
-        val deviceTrustLevel = DeviceTrustLevel(crossSigningVerified = accountCrossSigningIsTrusted, locallyVerified = true)
-        val shield = TrustUtils.shieldForTrust(
-                currentDevice = true,
-                trustMSK = accountCrossSigningIsTrusted,
-                legacyMode = legacyMode,
-                deviceTrustLevel = deviceTrustLevel
-        )
-        views.currentSessionVerificationStatusImageView.render(shield)
-        if (deviceTrustLevel.crossSigningVerified) {
+    private fun renderVerificationStatus(trustLevelForShield: RoomEncryptionTrustLevel) {
+        views.currentSessionVerificationStatusImageView.render(trustLevelForShield)
+        if (trustLevelForShield == RoomEncryptionTrustLevel.Trusted) {
             renderCrossSigningVerified()
         } else {
             renderCrossSigningUnverified()
@@ -75,9 +68,9 @@ class CurrentSessionView @JvmOverloads constructor(
     }
 
     // TODO. We don't have this info yet. Update later accordingly.
-    private fun renderDeviceType() {
+    private fun renderDeviceInfo(sessionName: String) {
         views.currentSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
         views.currentSessionDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
-        views.currentSessionDeviceTypeTextView.text = context.getString(R.string.device_manager_device_type_android)
+        views.currentSessionNameTextView.text = sessionName
     }
 }

@@ -1,41 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
-        android:id="@+id/deviceListHeaderSectionCurrent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:devicesListHeaderDescription=""
-        app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <im.vector.app.features.settings.devices.v2.list.CurrentSessionView
-        android:id="@+id/deviceListCurrentSession"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionCurrent" />
+        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+            android:id="@+id/deviceListHeaderCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:devicesListHeaderDescription=""
+            app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
-        android:id="@+id/deviceListHeaderSectionOther"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:devicesListHeaderDescription="@string/settings_sessions_other_description"
-        app:devicesListHeaderTitle="@string/settings_sessions_other_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
+        <im.vector.app.features.settings.devices.v2.list.CurrentSessionView
+            android:id="@+id/deviceListCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderCurrentSession" />
 
-    <include
-        android:id="@+id/waiting_view"
-        layout="@layout/merge_overlay_waiting_view" />
+        <View
+            android:id="@+id/deviceListDividerCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/divider_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+            android:id="@+id/deviceListHeaderOtherSessions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:devicesListHeaderDescription="@string/settings_sessions_other_description"
+            app:devicesListHeaderTitle="@string/settings_sessions_other_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession" />
+
+        <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
+            android:id="@+id/deviceListOtherSessions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderOtherSessions" />
+
+        <include
+            android:id="@+id/waiting_view"
+            layout="@layout/merge_overlay_waiting_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
