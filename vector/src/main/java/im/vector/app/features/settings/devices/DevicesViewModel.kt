@@ -91,6 +91,7 @@ data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
         val cryptoDeviceInfo: CryptoDeviceInfo?,
         val trustLevelForShield: RoomEncryptionTrustLevel,
+        val isInactive: Boolean,
 )
 
 class DevicesViewModel @AssistedInject constructor(
@@ -148,7 +149,8 @@ class DevicesViewModel @AssistedInject constructor(
                                 deviceTrustLevel = cryptoDeviceInfo?.trustLevel,
                                 isCurrentDevice = deviceInfo.deviceId == session.sessionParams.deviceId
                         )
-                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield)
+                        val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
+                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield, isInactive)
                     }
         }
                 .distinctUntilChanged()
