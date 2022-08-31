@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/LoginFormScrollView"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
@@ -88,11 +89,11 @@
             android:id="@+id/emailEntryInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/ftue_auth_email_entry_title"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="@id/emailEntryGutterEnd"
             app:layout_constraintStart_toStartOf="@id/emailEntryGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing"
+            tools:hint="@string/ftue_auth_email_entry_title">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
