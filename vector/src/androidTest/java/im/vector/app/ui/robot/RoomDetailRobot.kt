@@ -64,6 +64,43 @@ class RoomDetailRobot {
         pressBack()
     }
 
+    fun cameraPhotoBack() {
+        clickOn(R.id.attachmentButton)
+        clickOn(R.id.attachmentCameraButton)
+        clickOn(R.id.attachmentsCameraFlash)
+        clickOn(R.id.attachmentsCameraFlash)
+        clickOn(R.id.attachmentsCameraCaptureAction)
+        waitAttachmentPreviewer()
+        clickOn(R.id.attachmentPreviewerSendButton)
+    }
+
+    fun cameraPhotoFront() {
+        clickOn(R.id.attachmentButton)
+        clickOn(R.id.attachmentCameraButton)
+        clickOn(R.id.attachmentsCameraFlip)
+        clickOn(R.id.attachmentsCameraCaptureAction)
+        waitAttachmentPreviewer()
+        clickOn(R.id.attachmentPreviewerSendButton)
+    }
+
+    fun cameraVideoFront() {
+        clickOn(R.id.attachmentButton)
+        clickOn(R.id.attachmentCameraButton)
+        clickOn(R.id.attachmentsCameraChangeAction)
+        clickOn(R.id.attachmentsCameraFlip)
+        clickOn(R.id.attachmentsCameraCaptureAction)
+        sleep(1_000)
+        clickOn(R.id.attachmentsCameraCaptureAction)
+        waitAttachmentPreviewer()
+        clickOn(R.id.attachmentPreviewerSendButton)
+    }
+
+    private fun waitAttachmentPreviewer() {
+        // haven't find a way to use waitUntilViewVisible
+        // for the attachmentPreviewer View
+        sleep(4_000)
+    }
+
     fun replyToThread(message: String) {
         openMessageMenu(message) {
             replyInThread()

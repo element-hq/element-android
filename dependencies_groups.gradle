@@ -40,8 +40,10 @@ ext.groups = [
         ],
         mavenCentral: [
                 regex: [
+                        'com\\.google\\.auto\\..*',
                 ],
                 group: [
+                        'com.google.auto',
                         'ch.qos.logback',
                         'com.adevinta.android',
                         'com.airbnb.android',

@@ -290,6 +290,8 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
+        <activity android:name=".features.attachments.camera.AttachmentsCameraActivity"
+            android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
         <activity
             android:name=".features.call.VectorCallActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

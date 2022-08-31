@@ -22,6 +22,7 @@ import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
+import im.vector.app.features.attachments.camera.AttachmentsCameraModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
@@ -604,6 +605,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VectorAttachmentViewerViewModel::class)
     fun vectorAttachmentViewerViewModelFactory(factory: VectorAttachmentViewerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AttachmentsCameraModel::class)
+    fun vectorAttachmentsCameraModelFactory(factory: AttachmentsCameraModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

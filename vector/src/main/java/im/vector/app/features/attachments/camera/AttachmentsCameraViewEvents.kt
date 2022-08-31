@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.ui.robot.settings.labs
+package im.vector.app.features.attachments.camera
 
-enum class LabFeature {
-    SWIPE_TO_REPLY,
-    TAB_UNREAD_NOTIFICATIONS,
-    LATEX_MATHEMATICS,
-    THREAD_MESSAGES,
-    AUTO_REPORT_ERRORS,
-    BUILTIN_CAMERA,
-    RENDER_USER_LOCATION
+import im.vector.app.core.platform.VectorViewEvents
+
+sealed class AttachmentsCameraViewEvents : VectorViewEvents {
+    object StartRecording: AttachmentsCameraViewEvents()
+    object TakePhoto: AttachmentsCameraViewEvents()
+    object SetErrorAndFinish: AttachmentsCameraViewEvents()
+    data class SetResultAndFinish(val attachmentsCameraOutput: AttachmentsCameraOutput): AttachmentsCameraViewEvents()
 }

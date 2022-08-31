@@ -69,7 +69,8 @@ class AttachmentTypeSelectorView(
         contentView = inflater.inflate(R.layout.view_attachment_type_selector, null, false)
         views = ViewAttachmentTypeSelectorBinding.bind(contentView)
         views.attachmentGalleryButton.configure(Type.GALLERY)
-        views.attachmentCameraButton.configure(Type.CAMERA)
+        views.attachmentCameraButton.configure(Type.PHOTO_CAMERA)
+        views.attachmentVideoCameraButton.configure(Type.VIDEO_CAMERA)
         views.attachmentFileButton.configure(Type.FILE)
         views.attachmentStickersButton.configure(Type.STICKER)
         views.attachmentContactButton.configure(Type.CONTACT)
@@ -127,7 +128,8 @@ class AttachmentTypeSelectorView(
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA -> views.attachmentCameraButton
+            Type.PHOTO_CAMERA -> views.attachmentCameraButton
+            Type.VIDEO_CAMERA -> views.attachmentVideoCameraButton
             Type.GALLERY -> views.attachmentGalleryButton
             Type.FILE -> views.attachmentFileButton
             Type.STICKER -> views.attachmentStickersButton
@@ -215,7 +217,8 @@ class AttachmentTypeSelectorView(
      * The all possible types to pick with their required permissions and tooltip resource.
      */
     enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
-        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),
+        PHOTO_CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),
+        VIDEO_CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_video),
         GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_attachment_gallery),
         FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),

@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.ui.robot.settings.labs
+package im.vector.app.features.attachments.camera
 
-enum class LabFeature {
-    SWIPE_TO_REPLY,
-    TAB_UNREAD_NOTIFICATIONS,
-    LATEX_MATHEMATICS,
-    THREAD_MESSAGES,
-    AUTO_REPORT_ERRORS,
-    BUILTIN_CAMERA,
-    RENDER_USER_LOCATION
-}
+import android.view.Surface
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import com.airbnb.mvrx.MavericksState
+
+data class AttachmentsCameraState(
+        val captureMode: MediaType = MediaType.IMAGE,
+        val cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
+        val flashMode: Int = ImageCapture.FLASH_MODE_AUTO,
+        val rotation: Int = Surface.ROTATION_0,
+) : MavericksState

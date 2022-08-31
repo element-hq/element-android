@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Spannable
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
@@ -135,6 +136,7 @@ import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
+import im.vector.app.features.attachments.camera.AttachmentsCameraOutput
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
@@ -1381,6 +1383,14 @@ class TimelineFragment :
         }
     }
 
+    private val attachmentBuiltInCameraActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            it.data?.getParcelableExtra<AttachmentsCameraOutput>(MediaStore.EXTRA_OUTPUT)?.let { cameraOutput ->
+                attachmentsHelper.onAttachmentsCameraResult(cameraOutput)
+            }
+        }
+    }
+
     private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
         val data = activityResult.data ?: return@registerStartForActivityResult
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -1571,6 +1581,9 @@ class TimelineFragment :
                     )
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
+                    )
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.VIDEO_CAMERA, !vectorPreferences.builtinCameraIsEnabled()
                     )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
@@ -2616,12 +2629,14 @@ class TimelineFragment :
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA -> attachmentsHelper.openCamera(
-                    activity = requireActivity(),
-                    vectorPreferences = vectorPreferences,
-                    cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
-                    cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
-            )
+            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> {
+                if (vectorPreferences.builtinCameraIsEnabled()) {
+                    attachmentsHelper.openBuiltInCamera(attachmentBuiltInCameraActivityResultLauncher)
+                } else {
+                    attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
+                }
+            }
+            AttachmentTypeSelectorView.Type.VIDEO_CAMERA -> attachmentsHelper.openVideoCamera(attachmentCameraVideoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
