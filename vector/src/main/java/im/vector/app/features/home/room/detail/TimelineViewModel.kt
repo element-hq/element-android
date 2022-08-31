@@ -1046,7 +1046,7 @@ class TimelineViewModel @AssistedInject constructor(
             val event = try {
                 room.reportingService().reportContent(action.eventId, -100, action.reason)
                 RoomDetailViewEvents.ActionSuccess(action)
-            } catch (failure: Exception) {
+            } catch (failure: Throwable) {
                 RoomDetailViewEvents.ActionFailure(action, failure)
             }
             _viewEvents.post(event)

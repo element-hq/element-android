@@ -2658,6 +2658,10 @@ class TimelineFragment :
         messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
     }
 
+    override fun onAttachmentError(throwable: Throwable) {
+        showFailure(throwable)
+    }
+
     private fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
