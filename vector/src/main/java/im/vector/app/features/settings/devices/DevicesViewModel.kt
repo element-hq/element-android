@@ -30,13 +30,11 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
-import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -71,7 +69,6 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -102,6 +99,7 @@ class DevicesViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
         private val matrix: Matrix,
+        private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -133,7 +131,7 @@ class DevicesViewModel @AssistedInject constructor(
                 session.flow().liveMyDevicesInfo()
         ) { cryptoList, infoList ->
             val unverifiedSessionsCount = cryptoList.count { !it.trustLevel?.isVerified().orFalse() }
-            val inactiveSessionsCount = infoList.count { isInactiveSession(it.date) }
+            val inactiveSessionsCount = infoList.count { checkIfSessionIsInactiveUseCase.execute(it.date) }
             setState {
                 copy(
                         unverifiedSessionsCount = unverifiedSessionsCount,
@@ -201,14 +199,6 @@ class DevicesViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
-    }
-
-    private fun isInactiveSession(lastSeenTs: Long): Boolean {
-        val lastSeenDate = DateProvider.toLocalDateTime(lastSeenTs)
-        val currentDate = DateProvider.currentLocalDateTime()
-        val diffMilliseconds = currentDate.toTimestamp() - lastSeenDate.toTimestamp()
-        val diffDays = TimeUnit.MILLISECONDS.toDays(diffMilliseconds)
-        return diffDays > SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
     }
 
     override fun onCleared() {
