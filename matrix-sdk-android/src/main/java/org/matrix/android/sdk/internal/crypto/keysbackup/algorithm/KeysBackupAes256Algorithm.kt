@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_AES_256_BACKUP
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAes256AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
-import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -96,7 +95,6 @@ internal class KeysBackupAes256Algorithm(keysVersions: KeysVersionResult) : Keys
     }
 
     private fun decryptSession(sessionData: JsonDict, sessionId: String, roomId: String, privateKey: ByteArray): MegolmSessionData? {
-
         val cipherRawBytes = sessionData["ciphertext"]?.toString()?.fromBase64() ?: return null
         val mac = sessionData["mac"]?.toString()?.fromBase64() ?: throw IllegalStateException("Bad mac")
         val iv = sessionData["iv"]?.toString()?.fromBase64() ?: ByteArray(16)

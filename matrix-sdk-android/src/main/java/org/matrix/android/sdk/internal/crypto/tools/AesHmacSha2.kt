@@ -148,5 +148,4 @@ internal object AesHmacSha2 {
     }
 
     private fun zeroByteArray(size: Int): ByteArray = ByteArray(size) { 0.toByte() }
-
 }

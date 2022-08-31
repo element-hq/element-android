@@ -21,17 +21,23 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_AES_256_BACKUP
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeyBackupConfig
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAes256AuthData
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.ObjectSigner
 import org.matrix.android.sdk.internal.crypto.crosssigning.CrossSigningOlm
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
+import org.matrix.android.sdk.internal.crypto.tools.AesHmacSha2
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmPkDecryption
 import timber.log.Timber
+import java.security.SecureRandom
 import javax.inject.Inject
 
 internal class PrepareKeysBackupUseCase @Inject constructor(
@@ -46,13 +52,15 @@ internal class PrepareKeysBackupUseCase @Inject constructor(
             algorithm: String,
             password: String?,
             progressListener: ProgressListener?,
+            config: KeyBackupConfig,
             callback: MatrixCallback<MegolmBackupCreationInfo>
     ) = withContext(coroutineDispatchers.io) {
+        if (!config.isAlgorithmSupported(algorithm)) return@withContext Unit.also {
+            callback.onFailure(IllegalArgumentException("Unsupported algorithm"))
+        }
         when (algorithm) {
             MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP -> prepareCurve(password, progressListener, callback)
-            /*
             MXCRYPTO_ALGORITHM_AES_256_BACKUP -> prepareAES(password, progressListener, callback)
-             */
             else -> {
                 callback.onFailure(IllegalStateException("Unknown algorithm"))
             }
@@ -62,7 +70,7 @@ internal class PrepareKeysBackupUseCase @Inject constructor(
     private fun prepareCurve(password: String?, progressListener: ProgressListener?, callback: MatrixCallback<MegolmBackupCreationInfo>) {
         val olmPkDecryption = OlmPkDecryption()
         try {
-            val signalableMegolmBackupAuthData = if (password != null) {
+            val megolmBackupAuthData = if (password != null) {
                 // Generate a private key from the password
                 val backgroundProgressListener = if (progressListener == null) {
                     null
@@ -80,40 +88,20 @@ internal class PrepareKeysBackupUseCase @Inject constructor(
                     }
                 }
                 val generatePrivateKeyResult = generatePrivateKeyWithPassword(password, backgroundProgressListener)
-                SignalableMegolmBackupAuthData(
+                MegolmBackupCurve25519AuthData(
                         publicKey = olmPkDecryption.setPrivateKey(generatePrivateKeyResult.privateKey),
                         privateKeySalt = generatePrivateKeyResult.salt,
                         privateKeyIterations = generatePrivateKeyResult.iterations
                 )
             } else {
                 val publicKey = olmPkDecryption.generateKey()
-                SignalableMegolmBackupAuthData(
+                MegolmBackupCurve25519AuthData(
                         publicKey = publicKey
                 )
             }
+            val signatures = signKeyBackup(megolmBackupAuthData)
 
-            val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableMegolmBackupAuthData.signalableJSONDictionary())
-
-            val signatures = mutableMapOf<String, MutableMap<String, String>>()
-
-            val deviceSignature = objectSigner.signObject(canonicalJson)
-            deviceSignature.forEach { (userID, content) ->
-                signatures[userID] = content.toMutableMap()
-            }
-
-            // If we have cross signing add signature, will throw if cross signing not properly configured
-            try {
-                val crossSign = crossSigningOlm.signObject(CrossSigningOlm.KeyType.MASTER, canonicalJson)
-                signatures[credentials.userId]?.putAll(crossSign)
-            } catch (failure: Throwable) {
-                // ignore and log
-                Timber.w(failure, "prepareKeysBackupVersion: failed to sign with cross signing keys")
-            }
-
-            val signedMegolmBackupCurve25519AuthData = MegolmBackupCurve25519AuthData(
-                    publicKey = signalableMegolmBackupAuthData.publicKey,
-                    privateKeySalt = signalableMegolmBackupAuthData.privateKeySalt,
-                    privateKeyIterations = signalableMegolmBackupAuthData.privateKeyIterations,
+            val signedMegolmBackupCurve25519AuthData = megolmBackupAuthData.copy(
                     signatures = signatures
             )
             val creationInfo = MegolmBackupCreationInfo(
@@ -133,9 +121,65 @@ internal class PrepareKeysBackupUseCase @Inject constructor(
         }
     }
 
-    /*
-    private fun prepareAES(password: String?, progressListener: ProgressListener?, callback: MatrixCallback<MegolmBackupCreationInfo>) {
+    private fun signKeyBackup(authData: MegolmBackupAuthData): MutableMap<String, MutableMap<String, String>> {
+        val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, authData.toSignalableJsonDict())
+        val signatures = mutableMapOf<String, MutableMap<String, String>>()
+
+        val deviceSignature = objectSigner.signObject(canonicalJson)
+        deviceSignature.forEach { (userID, content) ->
+            signatures[userID] = content.toMutableMap()
+        }
+
+        // If we have cross signing add signature, will throw if cross signing not properly configured
+        try {
+            val crossSign = crossSigningOlm.signObject(CrossSigningOlm.KeyType.MASTER, canonicalJson)
+            signatures[credentials.userId]?.putAll(crossSign)
+        } catch (failure: Throwable) {
+            // ignore and log
+            Timber.w(failure, "prepareKeysBackupVersion: failed to sign with cross signing keys")
+        }
+        return signatures
     }
 
-     */
+    private fun prepareAES(password: String?, progressListener: ProgressListener?, callback: MatrixCallback<MegolmBackupCreationInfo>) {
+        try {
+            val privateKey: ByteArray
+            val authData: MegolmBackupAes256AuthData
+            if (password == null) {
+                privateKey = ByteArray(32).also {
+                    SecureRandom().nextBytes(it)
+                }
+                authData = MegolmBackupAes256AuthData()
+            } else {
+                val result = generatePrivateKeyWithPassword(password, progressListener)
+                privateKey = result.privateKey
+                authData = MegolmBackupAes256AuthData(
+                        privateKeySalt = result.salt,
+                        privateKeyIterations = result.iterations
+                )
+            }
+            val encInfo = AesHmacSha2.calculateKeyCheck(privateKey, null)
+            val authDataWithKeyCheck = authData.copy(
+                    iv = encInfo.initializationVector.toBase64NoPadding(),
+                    mac = encInfo.mac.toBase64NoPadding()
+            )
+
+            val signatures = signKeyBackup(authDataWithKeyCheck)
+            val creationInfo = MegolmBackupCreationInfo(
+                    algorithm = MXCRYPTO_ALGORITHM_AES_256_BACKUP,
+                    authData = authDataWithKeyCheck.copy(
+                            signatures = signatures
+                    ),
+                    recoveryKey = computeRecoveryKey(privateKey)
+            )
+
+            uiHandler.post {
+                callback.onSuccess(creationInfo)
+            }
+        } catch (failure: Throwable) {
+            uiHandler.post {
+                callback.onFailure(failure)
+            }
+        }
+    }
 }

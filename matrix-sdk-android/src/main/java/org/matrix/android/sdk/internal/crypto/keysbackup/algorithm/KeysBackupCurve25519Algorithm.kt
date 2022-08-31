@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
-import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
@@ -116,7 +115,6 @@ internal class KeysBackupCurve25519Algorithm(keysVersions: KeysVersionResult) : 
     }
 
     private fun decryptSession(sessionData: JsonDict, sessionId: String, roomId: String, decryption: OlmPkDecryption): MegolmSessionData? {
-
         val ciphertext = sessionData["ciphertext"]?.toString()
         val mac = sessionData["mac"]?.toString()
         val ephemeralKey = sessionData["ephemeral"]?.toString()

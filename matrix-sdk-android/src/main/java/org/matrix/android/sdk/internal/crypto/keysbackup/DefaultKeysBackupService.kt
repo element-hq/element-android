@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeyBackupConfig
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -87,6 +88,7 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmException
 import timber.log.Timber
+import java.security.InvalidParameterException
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -128,6 +130,11 @@ internal class DefaultKeysBackupService @Inject constructor(
         private val uiHandler: Handler,
 ) : KeysBackupService {
 
+    override var keyBackupConfig = KeyBackupConfig(
+            defaultAlgorithm = MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP,
+            supportedAlgorithms = listOf(MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP)
+    )
+
     // The backup version
     override var keysBackupVersion: KeysVersionResult? = null
         private set
@@ -160,9 +167,10 @@ internal class DefaultKeysBackupService @Inject constructor(
     ) {
         cryptoCoroutineScope.launch {
             prepareKeysBackup(
-                    algorithm = algorithm ?: DEFAULT_ALGORITHM,
+                    algorithm = algorithm ?: keyBackupConfig.defaultAlgorithm,
                     password = password,
                     progressListener = progressListener,
+                    config = keyBackupConfig,
                     callback = callback
             )
         }
@@ -172,6 +180,9 @@ internal class DefaultKeysBackupService @Inject constructor(
             keysBackupCreationInfo: MegolmBackupCreationInfo,
             callback: MatrixCallback<KeysVersion>
     ) {
+        if (!keyBackupConfig.isAlgorithmSupported(keysBackupCreationInfo.algorithm)) return Unit.also {
+            callback.onFailure(IllegalArgumentException("Unsupported algorithm"))
+        }
         @Suppress("UNCHECKED_CAST")
         val createKeysBackupVersionBody = CreateKeysBackupVersionBody(
                 algorithm = keysBackupCreationInfo.algorithm,
@@ -364,6 +375,10 @@ internal class DefaultKeysBackupService @Inject constructor(
     private fun getKeysBackupTrustBg(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
+        if (!keyBackupConfig.isAlgorithmSupported(keysBackupVersion.algorithm)) {
+            return KeysBackupVersionTrust(usable = false)
+        }
+
         if (authData == null || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             return KeysBackupVersionTrust(usable = false)
@@ -452,6 +467,14 @@ internal class DefaultKeysBackupService @Inject constructor(
             callback: MatrixCallback<Unit>
     ) {
         Timber.v("trustKeyBackupVersion: $trust, version ${keysBackupVersion.version}")
+
+        if (!keyBackupConfig.isAlgorithmSupported(keysBackupVersion.algorithm)) {
+            Timber.w("trustKeyBackupVersion:trust unsupported algorithm ${keysBackupVersion.algorithm}")
+            uiHandler.post {
+                callback.onFailure(IllegalArgumentException("Missing element"))
+            }
+            return
+        }
 
         // Get auth data to update it
         val authData = keysBackupVersion.getValidAuthData()
@@ -621,23 +644,33 @@ internal class DefaultKeysBackupService @Inject constructor(
             stepProgressListener: StepProgressListener?,
             callback: MatrixCallback<ImportRoomKeysResult>
     ) {
-        Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
+        Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version} alg:${keysVersionResult.algorithm}")
 
         cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             runCatching {
+                if (!keyBackupConfig.isAlgorithmSupported(keysVersionResult.algorithm)) {
+                    throw IllegalArgumentException("Unsupported algorithm")
+                }
+                val backupAlgorithm = algorithmFactory.create(keysVersionResult)
+                val privateKey = extractCurveKeyFromRecoveryKey(recoveryKey)
+                if (privateKey == null || !backupAlgorithm.keyMatches(privateKey)) {
+                    Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key for this keys version")
+                    throw InvalidParameterException("Invalid recovery key")
+                }
                 // Save for next time and for gossiping
                 // Save now as it's valid, don't wait for the import as it could take long.
+                backupAlgorithm.setPrivateKey(privateKey)
                 saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
                 stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
                 // Get backed up keys from the homeserver
                 val data = getKeys(sessionId, roomId, keysVersionResult.version)
                 extractCurveKeyFromRecoveryKey(recoveryKey)?.also { privateKey ->
-                    algorithm?.setPrivateKey(privateKey)
+                    backupAlgorithm.setPrivateKey(privateKey)
                 }
                 val sessionsData = withContext(coroutineDispatchers.computation) {
-                    algorithm?.decryptSessions(data)
-                }.orEmpty()
+                    backupAlgorithm.decryptSessions(data)
+                }
                 // Do not trigger a backup for them if they come from the backup version we are using
                 val backUp = keysVersionResult.version != keysBackupVersion?.version
                 if (backUp) {
@@ -1002,6 +1035,10 @@ internal class DefaultKeysBackupService @Inject constructor(
     @WorkerThread
     private fun isValidRecoveryKeyForKeysBackupVersion(recoveryKey: String, keysBackupData: KeysVersionResult): Boolean {
         return try {
+            if (!keyBackupConfig.isAlgorithmSupported(keysBackupData.algorithm)) {
+                Timber.w("isValidRecoveryKeyForKeysBackupVersion: unsupported algorithm ${keysBackupData.algorithm}")
+                return false
+            }
             val algorithm = algorithmFactory.create(keysBackupData)
             val privateKey = extractCurveKeyFromRecoveryKey(recoveryKey) ?: return false
             val isValid = algorithm.keyMatches(privateKey)
@@ -1040,7 +1077,11 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     private fun enableKeysBackup(keysVersionResult: KeysVersionResult) {
         val retrievedMegolmBackupAuthData = keysVersionResult.getAuthDataAsMegolmBackupAuthData()
-
+        if (!keyBackupConfig.isAlgorithmSupported(keysVersionResult.algorithm)) {
+            Timber.w("enableKeysBackup: unsupported algorithm ${keysVersionResult.algorithm}")
+            keysBackupStateManager.state = KeysBackupState.Disabled
+            return
+        }
         if (retrievedMegolmBackupAuthData != null) {
             keysBackupVersion = keysVersionResult
             cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
@@ -1114,6 +1155,12 @@ internal class DefaultKeysBackupService @Inject constructor(
             // Do nothing if we are already backing up
             Timber.v("backupKeys: Invalid state: ${getState()}")
             return
+        }
+        val recoveryKey = cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
+        extractCurveKeyFromRecoveryKey(recoveryKey)?.also { privateKey ->
+            // symmetric algorithm need private key to backup :/
+            // a bit hugly, but all this code needs refactoring
+            algorithm?.setPrivateKey(privateKey)
         }
 
         // Get a chunk of keys to backup

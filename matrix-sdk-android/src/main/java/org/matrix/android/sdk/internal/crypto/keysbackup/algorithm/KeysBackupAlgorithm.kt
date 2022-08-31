@@ -59,4 +59,3 @@ internal fun MegolmSessionData.asBackupJson(): String {
             .adapter(Map::class.java)
             .toJson(sessionBackupData)
 }
-

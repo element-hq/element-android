@@ -33,6 +33,7 @@ const val MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP = "m.megolm_backup.v1.curve25519
 
 /**
  * Matrix algorithm value for AES-256 megolm keys backup.
+ * Symmetric megolm backup
  */
 const val MXCRYPTO_ALGORITHM_AES_256_BACKUP = "org.matrix.msc3270.v1.aes-hmac-sha2"
 
