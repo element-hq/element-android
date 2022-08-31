@@ -16,18 +16,19 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-import im.vector.app.core.resources.DateProvider
-import im.vector.app.core.resources.toTimestamp
+import im.vector.app.core.time.Clock
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class CheckIfSessionIsInactiveUseCase @Inject constructor() {
+class CheckIfSessionIsInactiveUseCase @Inject constructor(
+        private val clock: Clock,
+) {
 
     fun execute(lastSeenTs: Long): Boolean {
-        val lastSeenDate = DateProvider.toLocalDateTime(lastSeenTs)
-        val currentDate = DateProvider.currentLocalDateTime()
-        val diffMilliseconds = currentDate.toTimestamp() - lastSeenDate.toTimestamp()
-        val diffDays = TimeUnit.MILLISECONDS.toDays(diffMilliseconds)
-        return diffDays >= SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+        // In case of the server doesn't send the last seen date.
+        if (lastSeenTs == 0L) return true
+
+        val diffMilliseconds = clock.epochMillis() - lastSeenTs
+        return diffMilliseconds >= TimeUnit.DAYS.toMillis(SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS.toLong())
     }
 }

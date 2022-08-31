@@ -66,6 +66,14 @@ class SecurityRecommendationView @JvmOverloads constructor(
         views.recommendationShieldImageView.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
 
+    fun setTitle(title: String) {
+        views.recommendationTitleTextView.text = title
+    }
+
+    fun setDescription(description: String) {
+        views.recommendationDescriptionTextView.text = description
+    }
+
     fun setCount(sessionsCount: Int) {
         views.recommendationViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, sessionsCount)
     }

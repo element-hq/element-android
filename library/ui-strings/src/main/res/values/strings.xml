@@ -3231,6 +3231,6 @@
     <string name="device_manager_unverified_sessions_title">Unverified sessions</string>
     <string name="device_manager_unverified_sessions_description">Verify or sign out from unverified sessions.</string>
     <string name="device_manager_inactive_sessions_title">Inactive sessions</string>
-    <string name="device_manager_inactive_sessions_description">Consider signing out from old sessions (90 days or older) you don’t use anymore.</string>
+    <string name="device_manager_inactive_sessions_description">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</string>
 
 </resources>

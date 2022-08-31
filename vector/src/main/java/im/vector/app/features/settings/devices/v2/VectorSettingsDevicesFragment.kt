@@ -40,6 +40,7 @@ import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 
 /**
  * Display the list of the user's devices and sessions.
@@ -153,6 +154,9 @@ class VectorSettingsDevicesFragment :
             views.deviceListInactiveSessionsRecommendation.isVisible = inactiveSessionsCount > 0
             views.deviceListUnverifiedSessionsRecommendation.setCount(unverifiedSessionsCount)
             views.deviceListInactiveSessionsRecommendation.setCount(inactiveSessionsCount)
+            views.deviceListInactiveSessionsRecommendation.setDescription(
+                    getString(R.string.device_manager_inactive_sessions_description, SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS)
+            )
         }
     }
 
