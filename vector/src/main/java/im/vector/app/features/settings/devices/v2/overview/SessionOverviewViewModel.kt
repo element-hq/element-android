@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 
-// TODO add unit tests
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
         session: Session,
