@@ -76,7 +76,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageVerificationDoneStub
+        private val STUB_ID = R.id.messageVerificationDoneStub
     }
 
     /**

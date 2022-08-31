@@ -20,8 +20,8 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.firebase.appdistribution.FirebaseAppDistribution
 import com.google.firebase.appdistribution.FirebaseAppDistributionException
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.DefaultPreferences
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
 import im.vector.app.features.home.NightlyProxy
 import timber.log.Timber
@@ -31,6 +31,7 @@ class FirebaseNightlyProxy @Inject constructor(
         private val clock: Clock,
         @DefaultPreferences
         private val sharedPreferences: SharedPreferences,
+        private val buildMeta: BuildMeta,
 ) : NightlyProxy {
 
     override fun onHomeResumed() {
@@ -58,7 +59,7 @@ class FirebaseNightlyProxy @Inject constructor(
     }
 
     private fun canDisplayPopup(): Boolean {
-        if (BuildConfig.APPLICATION_ID != "im.vector.app.nightly") return false
+        if (buildMeta.applicationId != "im.vector.app.nightly") return false
         val today = clock.epochMillis() / A_DAY_IN_MILLIS
         val lastDisplayPopupDay = sharedPreferences.getLong(SHARED_PREF_KEY, 0)
         return (today > lastDisplayPopupDay)

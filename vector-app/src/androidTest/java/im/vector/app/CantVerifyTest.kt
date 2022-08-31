@@ -23,6 +23,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
 import org.junit.Rule
@@ -33,7 +34,7 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class CantVerifyTest : VerificationTestBase() {
+class CantVerifyTest {
 
     @get:Rule
     val testRule = RuleChain

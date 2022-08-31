@@ -29,6 +29,6 @@ abstract class RedactedMessageItem : AbsMessageItem<RedactedMessageItem.Holder>(
     class Holder : AbsMessageItem.Holder(STUB_ID)
 
     companion object {
-        private const val STUB_ID = R.id.messageContentRedactedStub
+        private val STUB_ID = R.id.messageContentRedactedStub
     }
 }
