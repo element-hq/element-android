@@ -62,6 +62,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -161,6 +162,7 @@ import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
+import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -992,9 +994,9 @@ class TimelineFragment :
         views.jumpToBottomView.debouncedClicks {
             timelineViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!timelineViewModel.timeline.isLive) {
+            if (timelineViewModel.timeline?.isLive == false) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                timelineViewModel.timeline.restartWithEventId(null)
+                timelineViewModel.timeline?.restartWithEventId(null)
             } else {
                 layoutManager.scrollToPosition(0)
             }
@@ -1224,12 +1226,12 @@ class TimelineFragment :
         }
     }
 
-    private fun handleSearchAction() {
+    private fun handleSearchAction() = withState(timelineViewModel) { state ->
         navigator.openSearch(
                 context = requireContext(),
                 roomId = timelineArgs.roomId,
-                roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
-                roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                roomDisplayName = state.asyncRoomSummary()?.displayName,
+                roomAvatarUrl = state.asyncRoomSummary()?.avatarUrl
         )
     }
 
@@ -1640,6 +1642,10 @@ class TimelineFragment :
 
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         invalidateOptionsMenu()
+        if (mainState.asyncRoomSummary is Fail) {
+            handleRoomSummaryFailure(mainState.asyncRoomSummary)
+            return@withState
+        }
         val summary = mainState.asyncRoomSummary()
         renderToolbar(summary)
         renderTypingMessageNotification(summary, mainState)
@@ -1693,6 +1699,23 @@ class TimelineFragment :
             vectorBaseActivity.finish()
         }
         updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+    }
+
+    private fun handleRoomSummaryFailure(asyncRoomSummary: Fail<RoomSummary>) {
+        views.roomNotFound.isVisible = true
+        views.roomNotFoundText.text = when (asyncRoomSummary.error) {
+            is RoomNotFound -> {
+                getString(
+                        R.string.timeline_error_room_not_found,
+                        if (vectorPreferences.developerMode()) {
+                            "\nDeveloper info: $timelineArgs"
+                        } else {
+                            ""
+                        }
+                )
+            }
+            else -> errorFormatter.toHumanReadable(asyncRoomSummary.error)
+        }
     }
 
     private fun updateLiveLocationIndicator(isSharingLiveLocation: Boolean) {
@@ -2520,15 +2543,19 @@ class TimelineFragment :
      * Navigate to Threads timeline for the specified rootThreadEventId
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
+    private fun navigateToThreadTimeline(
+            rootThreadEventId: String,
+            startsThread: Boolean = false,
+            showKeyboard: Boolean = false,
+    ) = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     startsThread = startsThread,
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
                     rootThreadEventId = rootThreadEventId,
                     showKeyboard = showKeyboard
             )
@@ -2559,14 +2586,14 @@ class TimelineFragment :
      * Navigate to Threads list for the current room
      * using the ThreadsActivity.
      */
-    private fun navigateToThreadList() {
+    private fun navigateToThreadList() = withState(timelineViewModel) { state ->
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     roomId = timelineArgs.roomId,
-                    displayName = timelineViewModel.getRoomSummary()?.displayName,
-                    roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+                    displayName = state.asyncRoomSummary()?.displayName,
+                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
+                    avatarUrl = state.asyncRoomSummary()?.avatarUrl
             )
             navigator.openThreadList(it, roomThreadDetailArgs)
         }
