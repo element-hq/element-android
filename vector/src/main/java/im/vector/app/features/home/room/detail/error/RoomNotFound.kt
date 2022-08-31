@@ -16,4 +16,4 @@
 
 package im.vector.app.features.home.room.detail.error
 
-class RoomNotFound: Throwable()
+class RoomNotFound : Throwable()
