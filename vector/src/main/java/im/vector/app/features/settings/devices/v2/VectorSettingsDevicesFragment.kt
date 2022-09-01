@@ -42,6 +42,7 @@ import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
+import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
 
 /**
@@ -199,7 +200,11 @@ class VectorSettingsDevicesFragment :
         currentDeviceInfo?.let {
             views.deviceListHeaderCurrentSession.isVisible = true
             views.deviceListCurrentSession.isVisible = true
-            views.deviceListCurrentSession.render(it)
+            val viewState = SessionInfoViewState(
+                    isCurrentSession = true,
+                    deviceFullInfo = it
+            )
+            views.deviceListCurrentSession.render(viewState)
             views.deviceListCurrentSession.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }

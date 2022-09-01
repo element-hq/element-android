@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sessionInfoVerificationStatusContainer"
-        tools:text="@string/device_manager_verification_status_detail_verified" />
+        tools:text="@string/device_manager_verification_status_detail_current_session_verified" />
 
     <Button
         android:id="@+id/sessionInfoVerifySessionButton"

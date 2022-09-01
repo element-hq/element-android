@@ -22,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewSessionInfoBinding
-import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
@@ -41,31 +40,42 @@ class SessionInfoView @JvmOverloads constructor(
 
     val viewDetailsButton = views.sessionInfoViewDetailsButton
 
-    fun render(deviceInfo: DeviceFullInfo) {
-        renderDeviceInfo(deviceInfo.deviceInfo.displayName.orEmpty())
-        renderVerificationStatus(deviceInfo.trustLevelForShield)
+    fun render(sessionInfoViewState: SessionInfoViewState) {
+        renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
+        renderVerificationStatus(sessionInfoViewState.deviceFullInfo.trustLevelForShield, sessionInfoViewState.isCurrentSession)
+        renderDetailsButton(sessionInfoViewState.isDetailsButtonVisible)
     }
 
-    private fun renderVerificationStatus(trustLevelForShield: RoomEncryptionTrustLevel) {
-        views.sessionInfoVerificationStatusImageView.render(trustLevelForShield)
-        if (trustLevelForShield == RoomEncryptionTrustLevel.Trusted) {
-            renderCrossSigningVerified()
+    private fun renderVerificationStatus(encryptionTrustLevel: RoomEncryptionTrustLevel, isCurrentSession: Boolean) {
+        views.sessionInfoVerificationStatusImageView.render(encryptionTrustLevel)
+        if (encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted) {
+            renderCrossSigningVerified(isCurrentSession)
         } else {
-            renderCrossSigningUnverified()
+            renderCrossSigningUnverified(isCurrentSession)
         }
     }
 
-    private fun renderCrossSigningVerified() {
+    private fun renderCrossSigningVerified(isCurrentSession: Boolean) {
         views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_verified)
         views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
-        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_verified)
+        val statusResId = if (isCurrentSession) {
+            R.string.device_manager_verification_status_detail_current_session_verified
+        } else {
+            R.string.device_manager_verification_status_detail_other_session_verified
+        }
+        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(statusResId)
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
-    private fun renderCrossSigningUnverified() {
+    private fun renderCrossSigningUnverified(isCurrentSession: Boolean) {
         views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
         views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
-        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_unverified)
+        val statusResId = if (isCurrentSession) {
+            R.string.device_manager_verification_status_detail_current_session_unverified
+        } else {
+            R.string.device_manager_verification_status_detail_other_session_unverified
+        }
+        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(statusResId)
         views.sessionInfoVerifySessionButton.isVisible = true
     }
 
@@ -74,5 +84,9 @@ class SessionInfoView @JvmOverloads constructor(
         views.sessionInfoDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
         views.sessionInfoDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
         views.sessionInfoNameTextView.text = sessionName
+    }
+
+    private fun renderDetailsButton(isDetailsButtonVisible: Boolean) {
+        views.sessionInfoViewDetailsButton.isVisible = isDetailsButtonVisible
     }
 }
