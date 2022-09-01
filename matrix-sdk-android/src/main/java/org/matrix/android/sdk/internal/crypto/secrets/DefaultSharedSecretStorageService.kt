@@ -212,7 +212,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return EncryptedSecretContent(
                 ciphertext = result.cipherRawBytes.toBase64NoPadding(),
                 initializationVector = result.initializationVector.toBase64NoPadding(),
-                mac = result.initializationVector.toBase64NoPadding()
+                mac = result.mac.toBase64NoPadding()
         )
     }
 
