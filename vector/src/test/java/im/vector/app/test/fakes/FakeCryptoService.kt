@@ -23,12 +23,16 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.util.Optional
 
-class FakeCryptoService : CryptoService by mockk() {
+class FakeCryptoService(
+        val fakeCrossSigningService: FakeCrossSigningService = FakeCrossSigningService()
+) : CryptoService by mockk() {
 
     var roomKeysExport = ByteArray(size = 1)
     var cryptoDeviceInfos = mutableMapOf<String, CryptoDeviceInfo>()
     var cryptoDeviceInfoWithIdLiveData: MutableLiveData<Optional<CryptoDeviceInfo>> = MutableLiveData()
     var myDevicesInfoWithIdLiveData: MutableLiveData<Optional<DeviceInfo>> = MutableLiveData()
+
+    override fun crossSigningService() = fakeCrossSigningService
 
     override suspend fun exportRoomKeys(password: String) = roomKeysExport
 
