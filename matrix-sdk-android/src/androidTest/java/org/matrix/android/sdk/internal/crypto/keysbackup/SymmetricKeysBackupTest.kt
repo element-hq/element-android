@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License atcle
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
