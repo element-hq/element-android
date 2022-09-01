@@ -19,6 +19,8 @@ package im.vector.app.features.settings.devices.v2.overview
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
@@ -26,12 +28,16 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import javax.inject.Inject
 
+// TODO update unit test
 class GetDeviceFullInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
+        private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
+        private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
 ) {
 
     fun execute(deviceId: String): Flow<Optional<DeviceFullInfo>> {
         return activeSessionHolder.getSafeActiveSession()?.let { session ->
+            val currentSessionCrossSigningInfo = getCurrentSessionCrossSigningInfoUseCase.execute()
             combine(
                     session.cryptoService().getMyDevicesInfoLive(deviceId).asFlow(),
                     session.cryptoService().getLiveCryptoDeviceInfoWithId(deviceId).asFlow()
@@ -39,9 +45,11 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                 val info = deviceInfo.getOrNull()
                 val cryptoInfo = cryptoDeviceInfo.getOrNull()
                 val fullInfo = if (info != null && cryptoInfo != null) {
+                    val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoInfo)
                     DeviceFullInfo(
                             deviceInfo = info,
-                            cryptoDeviceInfo = cryptoInfo
+                            cryptoDeviceInfo = cryptoInfo,
+                            trustLevelForShield = roomEncryptionTrustLevel
                     )
                 } else {
                     null
