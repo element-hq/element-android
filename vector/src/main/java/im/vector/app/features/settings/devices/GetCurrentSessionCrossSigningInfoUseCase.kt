@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices
 import im.vector.app.core.di.ActiveSessionHolder
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
