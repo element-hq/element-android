@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import javax.inject.Inject
 
-// TODO update unit test
 class GetDeviceFullInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
