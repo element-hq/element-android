@@ -15,6 +15,7 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
@@ -36,43 +37,66 @@ class TestFirebaseToken @Inject constructor(
         private val fcmHelper: FcmHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
+    // Remove FCM related shared pref, the application
+    // will then act like FCM has never been initialized
+    // and GService will generate a new, valid token
+    //
+    // That's a bit hacky
+    private fun forceRemoveFCMToken(context: Context) {
+        listOf(
+                "com.google.firebase.messaging",
+                "com.google.android.gms.appid"
+        ).map {
+            context.getSharedPreferences(it, Context.MODE_PRIVATE)
+        }.forEach { prefs ->
+            prefs.all.forEach {
+                prefs.edit().remove(it.key).apply()
+            }
+        }
+    }
+
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING
         try {
-            FirebaseMessaging.getInstance().token
-                    .addOnCompleteListener(context) { task ->
-                        if (!task.isSuccessful) {
-                            // Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
-                            description = when (val errorMsg = task.exception?.localizedMessage ?: "Unknown") {
-                                "SERVICE_NOT_AVAILABLE" -> {
-                                    stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
-                                }
-                                "TOO_MANY_REGISTRATIONS" -> {
-                                    stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
-                                }
-                                "ACCOUNT_MISSING" -> {
-                                    quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
-                                        override fun doFix() {
-                                            startAddGoogleAccountIntent(context, activityResultLauncher)
+            FirebaseMessaging.getInstance().deleteToken()
+                    .addOnCompleteListener(context) {
+                        forceRemoveFCMToken(context)
+                        FirebaseMessaging.getInstance().token
+                                .addOnCompleteListener(context) { task ->
+                                    if (!task.isSuccessful) {
+                                        // Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
+                                        description = when (val errorMsg = task.exception?.localizedMessage ?: "Unknown") {
+                                            "SERVICE_NOT_AVAILABLE" -> {
+                                                stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
+                                            }
+                                            "TOO_MANY_REGISTRATIONS" -> {
+                                                stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_too_many_registration, errorMsg)
+                                            }
+                                            "ACCOUNT_MISSING" -> {
+                                                quickFix =
+                                                        object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
+                                                            override fun doFix() {
+                                                                startAddGoogleAccountIntent(context, activityResultLauncher)
+                                                            }
+                                                        }
+                                                stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
+                                            }
+                                            else -> {
+                                                stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
+                                            }
                                         }
+                                        status = TestStatus.FAILED
+                                    } else {
+                                        task.result?.let { token ->
+                                            val tok = token.take(8) + "********************"
+                                            description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
+                                            Timber.e("Retrieved FCM token success [$tok].")
+                                            // Ensure it is well store in our local storage
+                                            fcmHelper.storeFcmToken(token)
+                                        }
+                                        status = TestStatus.SUCCESS
                                     }
-                                    stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)
                                 }
-                                else -> {
-                                    stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed, errorMsg)
-                                }
-                            }
-                            status = TestStatus.FAILED
-                        } else {
-                            task.result?.let { token ->
-                                val tok = token.take(8) + "********************"
-                                description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
-                                Timber.e("Retrieved FCM token success [$tok].")
-                                // Ensure it is well store in our local storage
-                                fcmHelper.storeFcmToken(token)
-                            }
-                            status = TestStatus.SUCCESS
-                        }
                     }
         } catch (e: Throwable) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed, e.localizedMessage)
