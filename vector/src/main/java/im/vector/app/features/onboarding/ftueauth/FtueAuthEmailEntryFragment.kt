@@ -61,9 +61,10 @@ class FtueAuthEmailEntryFragment : AbstractFtueAuthFragment<FragmentFtueEmailInp
 
     private fun setupViews() {
         views.emailEntryInput.hint = getString(if (params.mandatory) R.string.ftue_auth_email_entry_title else R.string.login_set_email_optional_hint)
-        views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit, enabledPredicate = {
-            it.isEmail() || it.isEmptyAndOptional()
-        })
+        views.emailEntryInput.associateContentStateWith(
+                button = views.emailEntrySubmit,
+                enabledPredicate = { it.isEmail() || it.isEmptyAndOptional() },
+        )
         views.emailEntryInput.setOnImeDoneListener { updateEmail() }
         views.emailEntryInput.clearErrorOnChange(viewLifecycleOwner)
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
