@@ -42,6 +42,7 @@ import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
 
@@ -76,6 +77,7 @@ class VectorSettingsDevicesFragment :
 
         initLearnMoreButtons()
         initWaitingView()
+        initOtherSessionsView()
         observeViewEvents()
     }
 
@@ -112,6 +114,14 @@ class VectorSettingsDevicesFragment :
     private fun initWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun initOtherSessionsView() {
+        views.deviceListOtherSessions.setCallback(object : OtherSessionsController.Callback {
+            override fun onItemClicked(deviceId: String) {
+                navigateToSessionOverview(deviceId)
+            }
+        })
     }
 
     override fun onDestroyView() {
