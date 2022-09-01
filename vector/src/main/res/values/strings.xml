@@ -442,6 +442,10 @@
     <string name="system_alerts_header">"System Alerts"</string>
     <string name="suggested_header">Suggested Rooms</string>
 
+    <!-- Space List fragment -->
+    <string name="space_list_empty_title">No spaces yet.</string>
+    <string name="space_list_empty_message">Spaces are a new way to group rooms and people. Create a space to get started.</string>
+
     <!-- Invites fragment -->
     <string name="invites_title">Invites</string>
 
