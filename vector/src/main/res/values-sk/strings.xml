@@ -2650,4 +2650,24 @@
 \nTento domovský server nemusí byť nakonfigurovaný na zobrazovanie máp.</string>
     <string name="a11y_open_settings">Otvoriť nastavenia</string>
     <string name="all_chats">Všetky konverzácie</string>
+    <string name="device_manager_settings_active_sessions_show_all">Zobraziť všetky relácie (V2, WIP)</string>
+    <string name="settings_sessions_other_description">V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
+    <string name="settings_sessions_other_title">Iné relácie</string>
+    <string name="settings_sessions_list">Relácie</string>
+    <string name="a11y_open_spaces">Otvoriť zoznam priestorov</string>
+    <string name="a11y_create_message">Vytvoriť novú konverzáciu alebo miestnosť</string>
+    <string name="room_list_filter_people">Ľudia</string>
+    <string name="room_list_filter_favourites">Obľúbené</string>
+    <string name="room_list_filter_unreads">Neprečítané</string>
+    <string name="room_list_filter_all">Všetky</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktivity</string>
+    <string name="home_layout_preferences_sort_by">Zoradiť podľa</string>
+    <string name="home_layout_preferences_recents">Zobraziť posledné</string>
+    <string name="home_layout_preferences_filters">Zobraziť filtre</string>
+    <string name="home_layout_preferences">Predvoľby rozmiestnenia</string>
+    <string name="explore_rooms">Preskúmať miestnosti</string>
+    <string name="change_space">Zmeniť priestor</string>
+    <string name="create_room">Vytvoriť miestnosť</string>
+    <string name="start_chat">Začať konverzáciu</string>
 </resources>

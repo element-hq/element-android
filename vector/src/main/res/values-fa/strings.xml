@@ -2600,4 +2600,24 @@
 \nشاید این کارساز خانگی برای نمایش نقشه‌ها پیکربندی نشده باشد.</string>
     <string name="a11y_open_settings">گشودن تنظیمات</string>
     <string name="all_chats">تمامی گپ‌ها</string>
+    <string name="device_manager_settings_active_sessions_show_all">نمایش تمامی نشست‌ها (ن۲، دح‌ت)</string>
+    <string name="settings_sessions_other_description">برای امنیت بیش‌تر، نشست‌هایتان را تأیید و از هر نشستی که تشخیصش نمی‌دهید یا دیگر استفاده نمی‌کنید خارج شوید.</string>
+    <string name="settings_sessions_other_title">دیگر نشست‌ها</string>
+    <string name="settings_sessions_list">نشست‌ها</string>
+    <string name="a11y_open_spaces">گشودن سیاههٔ فضاها</string>
+    <string name="a11y_create_message">ایجاد اتاق یا گفت‌وگویی جدید</string>
+    <string name="room_list_filter_people">افراد</string>
+    <string name="room_list_filter_favourites">محبوب‌ها</string>
+    <string name="room_list_filter_unreads">نخوانده‌ها</string>
+    <string name="room_list_filter_all">همه</string>
+    <string name="home_layout_preferences_sort_name">آ - ی</string>
+    <string name="home_layout_preferences_sort_activity">فعّالیت</string>
+    <string name="home_layout_preferences_sort_by">چینش بر اساس</string>
+    <string name="home_layout_preferences_recents">نمایش تازگی‌ها</string>
+    <string name="home_layout_preferences_filters">نمایش پالایه‌ها</string>
+    <string name="home_layout_preferences">ترجیحات چینش</string>
+    <string name="explore_rooms">کاوش اتاق‌ها</string>
+    <string name="change_space">تغییر فضا</string>
+    <string name="create_room">ایجاد اتاق</string>
+    <string name="start_chat">آغاز گپ</string>
 </resources>

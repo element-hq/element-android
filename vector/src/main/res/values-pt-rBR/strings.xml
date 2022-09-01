@@ -2600,4 +2600,24 @@
 \nEste servidor casa pode não estar configurado para exibir mapas.</string>
     <string name="a11y_open_settings">Abrir configurações</string>
     <string name="all_chats">Todos os Chats</string>
+    <string name="device_manager_settings_active_sessions_show_all">Mostrar Todas Sessões (V2, WIP)</string>
+    <string name="settings_sessions_other_description">Para a melhor segurança, verifique suas sessões e faça signout de qualquer sessão que você não reconhece ou usa mais.</string>
+    <string name="settings_sessions_other_title">Outras sessões</string>
+    <string name="settings_sessions_list">Sessões</string>
+    <string name="a11y_open_spaces">Abrir lista de espaços</string>
+    <string name="a11y_create_message">Criar uma nova conversa ou sala</string>
+    <string name="room_list_filter_all">Todas</string>
+    <string name="room_list_filter_people">Pessoas</string>
+    <string name="room_list_filter_favourites">Favoritas</string>
+    <string name="room_list_filter_unreads">Não-lidas</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Atividade</string>
+    <string name="home_layout_preferences_sort_by">Ordenar por</string>
+    <string name="home_layout_preferences_recents">Mostrar recentes</string>
+    <string name="home_layout_preferences_filters">Mostrar filtros</string>
+    <string name="home_layout_preferences">Preferências de layout</string>
+    <string name="explore_rooms">Explorar Salas</string>
+    <string name="change_space">Mudar Espaço</string>
+    <string name="create_room">Criar Sala</string>
+    <string name="start_chat">Começar Chat</string>
 </resources>

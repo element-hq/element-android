@@ -2596,4 +2596,28 @@
     </plurals>
     <string name="search_space_two_parents">%1$s en %2$s</string>
     <string name="auth_reset_password_error_unverified">E-mailadres niet geverifieerd, controleer je inbox</string>
+    <string name="device_manager_settings_active_sessions_show_all">Toon alle sessies (V2, WIP)</string>
+    <string name="location_share_loading_map_error">Kan kaart niet laden
+\nDeze server is mogelijk niet geconfigureerd om kaarten weer te geven.</string>
+    <string name="a11y_open_settings">Open instellingen</string>
+    <string name="settings_sessions_other_description">Voor de beste beveiliging verifieert u uw sessies en meldt u zich af bij elke sessie die u niet meer herkent of gebruikt.</string>
+    <string name="settings_sessions_other_title">Andere sessies</string>
+    <string name="settings_sessions_list">Sessies</string>
+    <string name="a11y_open_spaces">Lijst met publieke spaces</string>
+    <string name="a11y_create_message">Maak een nieuw gesprek of een nieuwe kamer</string>
+    <string name="room_list_filter_people">Personen</string>
+    <string name="room_list_filter_favourites">Favorieten</string>
+    <string name="room_list_filter_unreads">Ongelezen</string>
+    <string name="room_list_filter_all">Alles</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Activiteit</string>
+    <string name="home_layout_preferences_sort_by">Sorteer op</string>
+    <string name="home_layout_preferences_recents">Recente tonen</string>
+    <string name="home_layout_preferences_filters">Toon filters</string>
+    <string name="home_layout_preferences">Lay-outvoorkeuren</string>
+    <string name="explore_rooms">Ontdek kamers</string>
+    <string name="change_space">Verander Space</string>
+    <string name="create_room">Kamer creëren</string>
+    <string name="start_chat">Start gesprek</string>
+    <string name="all_chats">Alle gesprekken</string>
 </resources>
