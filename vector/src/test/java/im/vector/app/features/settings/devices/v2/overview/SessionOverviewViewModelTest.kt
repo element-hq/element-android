@@ -26,7 +26,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -52,7 +51,7 @@ class SessionOverviewViewModelTest {
     )
 
     @Test
-    fun `given the viewModel has been initialized then viewState is updated with session info`() = runTest {
+    fun `given the viewModel has been initialized then viewState is updated with session info`() {
         val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(Optional(deviceFullInfo))

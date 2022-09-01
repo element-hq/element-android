@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -35,7 +34,7 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
     )
 
     @Test
-    fun `given the active session when getting cross signing info then the result is correct`() = runTest {
+    fun `given the active session when getting cross signing info then the result is correct`() {
         val sessionParams = mockk<SessionParams>()
         every { sessionParams.deviceId } returns A_DEVICE_ID
         fakeActiveSessionHolder.fakeSession.givenSessionParams(sessionParams)
