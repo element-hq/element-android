@@ -2667,7 +2667,6 @@
     <string name="home_layout_preferences_filters">Zobraziť filtre</string>
     <string name="home_layout_preferences">Predvoľby rozmiestnenia</string>
     <string name="explore_rooms">Preskúmať miestnosti</string>
-    <string name="change_space">Zmeniť priestor</string>
     <string name="create_room">Vytvoriť miestnosť</string>
     <string name="start_chat">Začať konverzáciu</string>
 </resources>

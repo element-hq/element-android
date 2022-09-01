@@ -2617,7 +2617,6 @@
     <string name="home_layout_preferences_filters">Mostrar filtros</string>
     <string name="home_layout_preferences">Preferências de layout</string>
     <string name="explore_rooms">Explorar Salas</string>
-    <string name="change_space">Mudar Espaço</string>
     <string name="create_room">Criar Sala</string>
     <string name="start_chat">Começar Chat</string>
 </resources>

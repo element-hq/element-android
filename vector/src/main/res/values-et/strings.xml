@@ -2608,7 +2608,6 @@
     <string name="home_layout_preferences_filters">Näita otsinguvalikuid</string>
     <string name="home_layout_preferences">Paigutuse seadistused</string>
     <string name="explore_rooms">Tutvu jututubadega</string>
-    <string name="change_space">Muuda kogukonda</string>
     <string name="create_room">Loo jututuba</string>
     <string name="start_chat">Alusta vestlust</string>
 </resources>

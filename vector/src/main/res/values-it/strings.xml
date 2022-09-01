@@ -2608,7 +2608,6 @@
     <string name="home_layout_preferences_filters">Mostra filtri</string>
     <string name="home_layout_preferences">Preferenze disposizione</string>
     <string name="explore_rooms">Esplora le stanze</string>
-    <string name="change_space">Cambia spazio</string>
     <string name="create_room">Crea una stanza</string>
     <string name="start_chat">Inizia una chat</string>
 </resources>

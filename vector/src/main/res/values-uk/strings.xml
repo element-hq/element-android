@@ -2717,7 +2717,6 @@
     <string name="home_layout_preferences_filters">Показати фільтри</string>
     <string name="home_layout_preferences">Налаштування макета</string>
     <string name="explore_rooms">Знайти кімнати</string>
-    <string name="change_space">Змінити простір</string>
     <string name="create_room">Створити кімнату</string>
     <string name="start_chat">Розпочати бесіду</string>
 </resources>

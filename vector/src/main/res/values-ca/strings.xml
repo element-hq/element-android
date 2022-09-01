@@ -2617,7 +2617,6 @@
     <string name="home_layout_preferences_recents">Mostra recents</string>
     <string name="home_layout_preferences_filters">Mostra filtres</string>
     <string name="device_manager_settings_active_sessions_show_all">Mostra totes les sessions (V2, WIP)</string>
-    <string name="change_space">Crea espai</string>
     <string name="create_room">Crea sala</string>
     <string name="start_chat">Inicia xat</string>
 </resources>

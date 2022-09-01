@@ -2567,7 +2567,6 @@
     <string name="home_layout_preferences_filters">显示过滤条件</string>
     <string name="home_layout_preferences">布局偏好</string>
     <string name="explore_rooms">探索房间</string>
-    <string name="change_space">更改空间</string>
     <string name="create_room">创建房间</string>
     <string name="start_chat">开始聊天</string>
 </resources>
