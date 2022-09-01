@@ -16,8 +16,11 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -44,6 +47,26 @@ class SessionOverviewFragment :
         return FragmentSessionOverviewBinding.inflate(inflater, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initSessionInfoView()
+    }
+
+    private fun initSessionInfoView() {
+        views.sessionOverviewInfo.onLearnMoreClickListener = {
+            Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        cleanUpSessionInfoView()
+        super.onDestroyView()
+    }
+
+    private fun cleanUpSessionInfoView() {
+        views.sessionOverviewInfo.onLearnMoreClickListener = null
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
         if (state.deviceInfo is Success) {
@@ -65,7 +88,8 @@ class SessionOverviewFragment :
         val viewState = SessionInfoViewState(
                 isCurrentSession = isCurrentSession,
                 deviceFullInfo = deviceFullInfo,
-                isDetailsButtonVisible = false
+                isDetailsButtonVisible = false,
+                hasLearnMoreLink = true
         )
         views.sessionOverviewInfo.render(viewState)
     }
