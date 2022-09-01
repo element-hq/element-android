@@ -2591,4 +2591,24 @@
 \nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
+    <string name="device_manager_settings_active_sessions_show_all">Näita kõiki sessioone (V2, WIP)</string>
+    <string name="settings_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="settings_sessions_other_title">Muud sessioonid</string>
+    <string name="settings_sessions_list">Sessionid</string>
+    <string name="a11y_open_spaces">Ava kogukondade loend</string>
+    <string name="a11y_create_message">Alusta uut vestlust või loo uus jututuba</string>
+    <string name="room_list_filter_people">Inimesed</string>
+    <string name="room_list_filter_favourites">Lemmikud</string>
+    <string name="room_list_filter_unreads">Lugemata</string>
+    <string name="room_list_filter_all">Kõik</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktiivsuse alusel</string>
+    <string name="home_layout_preferences_sort_by">Järjestamisviis</string>
+    <string name="home_layout_preferences_recents">Näita hiljutisi sõnumeid</string>
+    <string name="home_layout_preferences_filters">Näita otsinguvalikuid</string>
+    <string name="home_layout_preferences">Paigutuse seadistused</string>
+    <string name="explore_rooms">Tutvu jututubadega</string>
+    <string name="change_space">Muuda kogukonda</string>
+    <string name="create_room">Loo jututuba</string>
+    <string name="start_chat">Alusta vestlust</string>
 </resources>

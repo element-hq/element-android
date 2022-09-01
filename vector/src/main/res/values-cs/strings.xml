@@ -2650,4 +2650,24 @@
 \nTento domovský server nemusí být nakonfigurován pro zobrazování map.</string>
     <string name="a11y_open_settings">Otevřít nastavení</string>
     <string name="all_chats">Všechny konverzace</string>
+    <string name="device_manager_settings_active_sessions_show_all">Zobrazit všechny relace (V2, WIP)</string>
+    <string name="settings_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
+    <string name="settings_sessions_other_title">Ostatní relace</string>
+    <string name="settings_sessions_list">Relace</string>
+    <string name="a11y_open_spaces">Seznam otevřených prostorů</string>
+    <string name="a11y_create_message">Vytvořit novou konverzaci nebo místnost</string>
+    <string name="room_list_filter_people">Lidé</string>
+    <string name="room_list_filter_favourites">Oblíbené</string>
+    <string name="room_list_filter_unreads">Nepřečtené</string>
+    <string name="room_list_filter_all">Všechny</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktivita</string>
+    <string name="home_layout_preferences_sort_by">Seřadit podle</string>
+    <string name="home_layout_preferences_recents">Zobrazit nedávné</string>
+    <string name="home_layout_preferences_filters">Zobrazit filtry</string>
+    <string name="home_layout_preferences">Předvolby uspořádání</string>
+    <string name="explore_rooms">Prozkoumat místnosti</string>
+    <string name="change_space">Změnit prostor</string>
+    <string name="create_room">Vytvořit místnost</string>
+    <string name="start_chat">Zahájit konverzaci</string>
 </resources>

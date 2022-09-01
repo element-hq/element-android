@@ -320,7 +320,7 @@
     <string name="room_jump_to_first_unread">Zu ungelesenen Nachrichten springen</string>
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
     <string name="room_participants_leave_prompt_msg">Raum wirklich verlassen\?</string>
-    <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
+    <string name="room_participants_header_direct_chats">Direktnachrichten</string>
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
@@ -543,21 +543,21 @@
     <string name="no_sticker_application_dialog_content">Du hast aktuell keine Stickerpakete aktiviert.
 \n
 \nMöchtest du welche hinzufügen\?</string>
-    <string name="settings_deactivate_account_section">Account deaktivieren</string>
-    <string name="settings_deactivate_my_account">Meinen Account deaktivieren</string>
+    <string name="settings_deactivate_account_section">Konto deaktivieren</string>
+    <string name="settings_deactivate_my_account">Mein Konto deaktivieren</string>
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
     <string name="widget_integration_missing_parameter">Ein benötigter Parameter fehlt.</string>
     <string name="dialog_user_consent_content">Um %1$s weiter zu verwenden, musst die Geschäftsbedingungen begutachten und ihnen zustimmen.</string>
     <string name="dialog_user_consent_submit">Jetzt prüfen</string>
-    <string name="deactivate_account_title">Account deaktivieren</string>
+    <string name="deactivate_account_title">Konto deaktivieren</string>
     <string name="deactivate_account_content">Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird denselben Nutzernamen erneut registrieren können. Du verlässt automatisch alle Räume, in denen du bist, und deine Kontoangaben werden vom Identitätsserver gelöscht. <b>Diese Aktion ist unumkehrbar</b>.
 \n
 \nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die Option unten.
 \n
 \nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzer geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihre Kopie.</string>
     <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Konto deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
-    <string name="deactivate_account_submit">Account deaktivieren</string>
+    <string name="deactivate_account_submit">Konto deaktivieren</string>
     <string name="action_download">Download</string>
     <string name="e2e_re_request_encryption_key">Schlüssel von deinen anderen Sitzungen erneut anfordern.</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne ${app_name} auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
@@ -604,7 +604,7 @@
     <string name="merged_events_collapse">zusammenklappen</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="x_plus">+%d</string>
-    <string name="room_participants_action_remove">Entfernen</string>
+    <string name="room_participants_action_remove">Aus Unterhaltung entfernen</string>
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Homeserver diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
     <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
@@ -2572,4 +2572,46 @@
     <string name="ftue_auth_choose_server_sign_in_subtitle">Wie lautet die Adresse deines Servers\?</string>
     <string name="ftue_auth_create_account_password_entry_footer">Muss 8 oder mehr Zeichen umfassen</string>
     <string name="ftue_auth_choose_server_title">Wähle deinen Server</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s und %2$d anderer</item>
+        <item quantity="other">%1$s und %2$d andere</item>
+    </plurals>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktivität</string>
+    <string name="home_layout_preferences_sort_by">Sortierung</string>
+    <string name="home_layout_preferences_filters">Filter anzeigen</string>
+    <string name="home_layout_preferences">Layouteinstellungen</string>
+    <string name="explore_rooms">Räume erkunden</string>
+    <string name="create_room">Raum erstellen</string>
+    <string name="room_list_filter_unreads">Ungelesene</string>
+    <string name="room_list_filter_people">Personen</string>
+    <string name="send_your_first_msg_to_invite">Schreibe deine erste Nachricht, um %s zur Konversation einzuladen</string>
+    <string name="device_manager_settings_active_sessions_show_all">Alle Sitzungen anzeigen (V2, in Arbeit)</string>
+    <string name="settings_sessions_other_description">Für bestmögliche Sicherheit verifiziere deine Sitzungen und melde dich von allen ab, die du nicht erkennst oder nutzt.</string>
+    <string name="settings_sessions_other_title">Andere Sitzungen</string>
+    <string name="settings_sessions_list">Sitzungen</string>
+    <string name="a11y_open_spaces">Space-Liste öffnen</string>
+    <string name="a11y_create_message">Beginne ein Gespräch oder erstelle einen Raum</string>
+    <string name="room_list_filter_favourites">Favoriten</string>
+    <string name="room_list_filter_all">Alle</string>
+    <string name="location_share_loading_map_error">Karte laden nicht möglich
+\nDieser Heimserver könnte für die Kartendarstellung nicht konfiguriert sein.</string>
+    <string name="a11y_open_settings">Einstellungen öffnen</string>
+    <string name="verify_invalid_qr_notice">Dieser QR-Code ist fehlerhaft. Bitte versuche es mit einer anderen Methode.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Du wirst deinen verschlüsselten Nachrichtenverlauf nicht abrufen können. Um neu zu beginnen, setze deine Sicherung und Verifizierungsschlüssel zurück.</string>
+    <string name="crosssigning_cannot_verify_this_session">Verifizierung dieses Gerätes nicht möglich</string>
+    <string name="updating_your_data">Aktualisiere deine Daten …</string>
+    <string name="live_location_share_location_item_share">Standort teilen</string>
+    <string name="live_location_not_enough_permission_dialog_description">Du musst die Berechtigung erhalten, um deinen Live-Standort mit diesem Raum zu teilen.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Dir fehlt die Berechtigung, deinen Live-Standort teilen zu dürfen</string>
+    <string name="ftue_auth_password_reset_confirmation">Passwort zurückgesetzt</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Code erneut schicken</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Ein Code wurde an %s gesendet</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Bestätigungscode</string>
+    <string name="ftue_auth_phone_subtitle">%s muss dein Konto verifizieren</string>
+    <string name="ftue_auth_phone_title">Gib deine Telefonnummer ein</string>
+    <string name="ftue_auth_email_subtitle">%s muss dein Konto verifizieren</string>
+    <string name="ftue_auth_choose_server_ems_cta">Kontakt aufnehmen</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) ist ein robuster und zuverlässiger Hosting-Dienst für schnelle und sichere Echtzeitkommunikation. Erfahre mehr unter <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Willst du deinen eigenen Server betreiben\?</string>
 </resources>

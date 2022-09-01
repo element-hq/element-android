@@ -2686,4 +2686,37 @@
     </plurals>
     <string name="search_space_two_parents">%1$s i %2$s</string>
     <string name="auth_reset_password_error_unverified">Email nie został zweryfikowany, sprawdź swoją skrzynkę</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Nie udało się zarejestrować tokena punktu końcowego na serwerze domowym:
+\n%1$s</string>
+    <string name="device_manager_settings_active_sessions_show_all">Wyświetl wszystkie sesje (V2, WIP)</string>
+    <string name="settings_troubleshoot_test_current_gateway">Bieżąca brama: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Wejście</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Nie można znaleźć punktu końcowego.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Bieżący punkt końcowy: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Punkt końcowy</string>
+    <string name="location_share_loading_map_error">Nie można wczytać mapy.
+\nTen serwer macierzysty może nie być skonfigurowany do wyświetlania map.</string>
+    <string name="a11y_open_settings">Otwórz ustawienia</string>
+    <string name="settings_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
+    <string name="settings_sessions_other_title">Inne sesje</string>
+    <string name="settings_sessions_list">Sesje</string>
+    <string name="a11y_open_spaces">Lista otwartych przestrzeni</string>
+    <string name="a11y_create_message">Utwórz nową rozmowę lub pokój</string>
+    <string name="room_list_filter_people">Ludzie</string>
+    <string name="room_list_filter_favourites">Ulubione</string>
+    <string name="room_list_filter_unreads">Nieprzeczytane</string>
+    <string name="room_list_filter_all">Wszystkie</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Punkt końcowy został pomyślnie zarejestrowany na serwerze domowym.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Rejestracja punktu końcowego</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktywności</string>
+    <string name="home_layout_preferences_sort_by">Sortuj według</string>
+    <string name="home_layout_preferences_recents">Wyświetl ostatnie</string>
+    <string name="home_layout_preferences_filters">Wyświetl filtry</string>
+    <string name="home_layout_preferences">Preferencje interfejsu</string>
+    <string name="explore_rooms">Przeglądaj pokoje</string>
+    <string name="change_space">Zmień przestrzeń</string>
+    <string name="create_room">Utwórz pokój</string>
+    <string name="start_chat">Zacznij rozmawiać</string>
+    <string name="all_chats">Wszystkie rozmowy</string>
 </resources>

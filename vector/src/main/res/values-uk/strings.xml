@@ -2700,4 +2700,24 @@
 \nМожливо, цей домашній сервер не налаштовано для показу карт.</string>
     <string name="a11y_open_settings">Відкрити налаштування</string>
     <string name="all_chats">Усі бесіди</string>
+    <string name="device_manager_settings_active_sessions_show_all">Показати всі сеанси (V2, WIP)</string>
+    <string name="settings_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
+    <string name="settings_sessions_other_title">Інші сеанси</string>
+    <string name="settings_sessions_list">Сеанси</string>
+    <string name="a11y_open_spaces">Відкрити список кімнат</string>
+    <string name="a11y_create_message">Створити нову розмову або кімнату</string>
+    <string name="room_list_filter_people">Люди</string>
+    <string name="room_list_filter_favourites">Обрані</string>
+    <string name="room_list_filter_unreads">Непрочитані</string>
+    <string name="room_list_filter_all">Усі</string>
+    <string name="home_layout_preferences_sort_name">А - Я</string>
+    <string name="home_layout_preferences_sort_activity">Діяльністю</string>
+    <string name="home_layout_preferences_sort_by">Упорядкувати за</string>
+    <string name="home_layout_preferences_recents">Показувати останні</string>
+    <string name="home_layout_preferences_filters">Показати фільтри</string>
+    <string name="home_layout_preferences">Налаштування макета</string>
+    <string name="explore_rooms">Знайти кімнати</string>
+    <string name="change_space">Змінити простір</string>
+    <string name="create_room">Створити кімнату</string>
+    <string name="start_chat">Розпочати бесіду</string>
 </resources>

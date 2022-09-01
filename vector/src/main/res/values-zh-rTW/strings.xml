@@ -2550,4 +2550,24 @@
 \n此家伺服器可能未設定好顯示地圖。</string>
     <string name="a11y_open_settings">開啟設定</string>
     <string name="all_chats">所有聊天</string>
+    <string name="device_manager_settings_active_sessions_show_all">顯示所有工作階段 (V2, WIP)</string>
+    <string name="settings_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出任何您無法識別或不再使用的工作階段。</string>
+    <string name="settings_sessions_other_title">其他工作階段</string>
+    <string name="settings_sessions_list">工作階段</string>
+    <string name="a11y_open_spaces">開啟空間清單</string>
+    <string name="a11y_create_message">建立新的對話或聊天室</string>
+    <string name="room_list_filter_people">聯絡人</string>
+    <string name="room_list_filter_favourites">最愛</string>
+    <string name="room_list_filter_unreads">未讀</string>
+    <string name="room_list_filter_all">全部</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_by">排序由</string>
+    <string name="home_layout_preferences_sort_activity">活動</string>
+    <string name="home_layout_preferences_recents">顯示最近的</string>
+    <string name="home_layout_preferences_filters">顯示過濾條件</string>
+    <string name="home_layout_preferences">佈局偏好設定</string>
+    <string name="explore_rooms">探索聊天室</string>
+    <string name="change_space">變更空間</string>
+    <string name="create_room">建立聊天室</string>
+    <string name="start_chat">開始聊天</string>
 </resources>
