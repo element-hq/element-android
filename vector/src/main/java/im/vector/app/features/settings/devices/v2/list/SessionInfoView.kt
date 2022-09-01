@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewSessionInfoBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -33,6 +34,8 @@ class SessionInfoView @JvmOverloads constructor(
 
     private val views: ViewSessionInfoBinding
 
+    var onLearnMoreClickListener: (() -> Unit)? = null
+
     init {
         inflate(context, R.layout.view_session_info, this)
         views = ViewSessionInfoBinding.bind(this)
@@ -42,16 +45,44 @@ class SessionInfoView @JvmOverloads constructor(
 
     fun render(sessionInfoViewState: SessionInfoViewState) {
         renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
-        renderVerificationStatus(sessionInfoViewState.deviceFullInfo.trustLevelForShield, sessionInfoViewState.isCurrentSession)
+        renderVerificationStatus(
+                sessionInfoViewState.deviceFullInfo.trustLevelForShield,
+                sessionInfoViewState.isCurrentSession,
+                sessionInfoViewState.hasLearnMoreLink
+        )
         renderDetailsButton(sessionInfoViewState.isDetailsButtonVisible)
     }
 
-    private fun renderVerificationStatus(encryptionTrustLevel: RoomEncryptionTrustLevel, isCurrentSession: Boolean) {
+    private fun renderVerificationStatus(
+            encryptionTrustLevel: RoomEncryptionTrustLevel,
+            isCurrentSession: Boolean,
+            hasLearnMoreLink: Boolean,
+    ) {
         views.sessionInfoVerificationStatusImageView.render(encryptionTrustLevel)
         if (encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted) {
             renderCrossSigningVerified(isCurrentSession)
         } else {
             renderCrossSigningUnverified(isCurrentSession)
+        }
+        if (hasLearnMoreLink) {
+            appendLearnMoreToVerificationStatus()
+        }
+    }
+
+    private fun appendLearnMoreToVerificationStatus() {
+        val status = views.sessionInfoVerificationStatusDetailTextView.text
+        val learnMore = context.getString(R.string.action_learn_more)
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(status)
+        stringBuilder.append(" ")
+        stringBuilder.append(learnMore)
+
+        views.sessionInfoVerificationStatusDetailTextView.setTextWithColoredPart(
+                fullText = stringBuilder.toString(),
+                coloredPart = learnMore,
+                underline = false
+        ) {
+            onLearnMoreClickListener?.invoke()
         }
     }
 

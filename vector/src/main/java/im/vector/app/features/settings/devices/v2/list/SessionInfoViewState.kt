@@ -22,4 +22,5 @@ data class SessionInfoViewState(
         val isCurrentSession: Boolean,
         val deviceFullInfo: DeviceFullInfo,
         val isDetailsButtonVisible: Boolean = true,
+        val hasLearnMoreLink: Boolean = false
 )
