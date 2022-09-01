@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.list.home
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import im.vector.app.core.platform.StateView
 import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
 import kotlinx.coroutines.flow.SharedFlow
 import org.matrix.android.sdk.api.session.room.model.RoomSummary

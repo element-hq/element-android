@@ -199,6 +199,9 @@ class HomeRoomListFragment :
                 ).also { controller ->
                     controller.listener = this
                     controller.onFilterChanged = ::onRoomFilterChanged
+                    roomListViewModel.emptyStateFlow.onEach { emptyStateOptional ->
+                        controller.submitEmptyStateData(emptyStateOptional.getOrNull())
+                    }.launchIn(lifecycleScope)
                     section.filtersData.onEach {
                         controller.submitFiltersData(it.getOrNull())
                     }.launchIn(lifecycleScope)
