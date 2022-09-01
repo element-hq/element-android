@@ -19,28 +19,38 @@ package im.vector.app.features.settings.devices.v2.overview
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentSettingsSessionOverviewBinding
+import im.vector.app.databinding.FragmentSessionOverviewBinding
+import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 
 /**
  * Display the overview info about a Session.
  */
 @AndroidEntryPoint
 class SessionOverviewFragment :
-        VectorBaseFragment<FragmentSettingsSessionOverviewBinding>() {
+        VectorBaseFragment<FragmentSessionOverviewBinding>() {
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsSessionOverviewBinding {
-        return FragmentSettingsSessionOverviewBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSessionOverviewBinding {
+        return FragmentSessionOverviewBinding.inflate(inflater, container, false)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
+        if (state.deviceInfo is Success) {
+            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
+        } else {
+            hideSessionInfo()
+        }
     }
 
     private fun updateToolbar(isCurrentSession: Boolean) {
@@ -48,5 +58,19 @@ class SessionOverviewFragment :
         (activity as? AppCompatActivity)
                 ?.supportActionBar
                 ?.setTitle(titleResId)
+    }
+
+    private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
+        views.sessionOverviewInfo.isVisible = true
+        val viewState = SessionInfoViewState(
+                isCurrentSession = isCurrentSession,
+                deviceFullInfo = deviceFullInfo,
+                isDetailsButtonVisible = false
+        )
+        views.sessionOverviewInfo.render(viewState)
+    }
+
+    private fun hideSessionInfo() {
+        views.sessionOverviewInfo.isGone = true
     }
 }
