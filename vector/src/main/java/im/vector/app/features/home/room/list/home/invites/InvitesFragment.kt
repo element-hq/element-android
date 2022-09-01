@@ -20,15 +20,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagedList
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentInvitesBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import javax.inject.Inject
@@ -51,6 +55,8 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
         setupToolbar(views.invitesToolbar)
                 .allowBack()
 
+        views.invitesStateView.contentView = views.invitesRecycler
+
         views.invitesRecycler.configureWith(controller)
         controller.listener = this
 
@@ -62,13 +68,32 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
             when (it) {
                 is InvitesViewEvents.Failure -> showFailure(it.throwable)
                 is InvitesViewEvents.OpenRoom -> handleOpenRoom(it.roomSummary, it.shouldCloseInviteView)
-                InvitesViewEvents.Close -> handleClose()
             }
         }
-    }
 
-    private fun handleClose() {
-        requireActivity().finish()
+        viewModel.invites.onEach {
+            when (it) {
+                is InvitesContentState.Content -> {
+                    views.invitesStateView.state = StateView.State.Content
+                    Suppress("UNCHECKED_CAST")
+                    controller.submitList(it.content as? PagedList<RoomSummary>)
+                }
+                is InvitesContentState.Empty -> {
+                    views.invitesStateView.state = StateView.State.Empty(
+                            title = it.title,
+                            image = it.image,
+                            message = it.message
+                    )
+                }
+                is InvitesContentState.Error -> {
+                    when (views.invitesStateView.state) {
+                        StateView.State.Content -> showErrorInSnackbar(it.throwable)
+                        else -> views.invitesStateView.state = StateView.State.Error(it.throwable.message)
+                    }
+                }
+                InvitesContentState.Loading -> views.invitesStateView.state = StateView.State.Loading
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleOpenRoom(roomSummary: RoomSummary, shouldCloseInviteView: Boolean) {
@@ -80,14 +105,6 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
         )
         if (shouldCloseInviteView) {
             requireActivity().finish()
-        }
-    }
-
-    override fun invalidate(): Unit = withState(viewModel) { state ->
-        super.invalidate()
-
-        state.pagedList?.observe(viewLifecycleOwner) { list ->
-            controller.submitList(list)
         }
     }
 
