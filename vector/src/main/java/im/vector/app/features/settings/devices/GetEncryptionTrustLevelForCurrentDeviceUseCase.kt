@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetEncryptionTrustLevelForCurrentDeviceUseCase @Inject constructor() {
 
     fun execute(trustMSK: Boolean, legacyMode: Boolean): RoomEncryptionTrustLevel {

@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetEncryptionTrustLevelForDeviceUseCase @Inject constructor(
         private val getEncryptionTrustLevelForCurrentDeviceUseCase: GetEncryptionTrustLevelForCurrentDeviceUseCase,
         private val getEncryptionTrustLevelForOtherDeviceUseCase: GetEncryptionTrustLevelForOtherDeviceUseCase,

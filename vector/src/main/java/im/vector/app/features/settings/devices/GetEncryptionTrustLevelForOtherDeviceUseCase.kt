@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetEncryptionTrustLevelForOtherDeviceUseCase @Inject constructor() {
 
     fun execute(trustMSK: Boolean, legacyMode: Boolean, deviceTrustLevel: DeviceTrustLevel?): RoomEncryptionTrustLevel {
