@@ -19,11 +19,15 @@ package im.vector.app.features.settings.devices.v2.list
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewSessionInfoBinding
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class SessionInfoView @JvmOverloads constructor(
@@ -43,13 +47,14 @@ class SessionInfoView @JvmOverloads constructor(
 
     val viewDetailsButton = views.sessionInfoViewDetailsButton
 
-    fun render(sessionInfoViewState: SessionInfoViewState) {
+    fun render(sessionInfoViewState: SessionInfoViewState, dateFormatter: VectorDateFormatter) {
         renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
         renderVerificationStatus(
                 sessionInfoViewState.deviceFullInfo.trustLevelForShield,
                 sessionInfoViewState.isCurrentSession,
-                sessionInfoViewState.hasLearnMoreLink
+                sessionInfoViewState.isLearnMoreLinkVisible
         )
+        renderDeviceLastSeenDetails(sessionInfoViewState.deviceFullInfo.deviceInfo, dateFormatter, sessionInfoViewState.isLastSeenDetailsVisible)
         renderDetailsButton(sessionInfoViewState.isDetailsButtonVisible)
     }
 
@@ -115,6 +120,33 @@ class SessionInfoView @JvmOverloads constructor(
         views.sessionInfoDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
         views.sessionInfoDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
         views.sessionInfoNameTextView.text = sessionName
+    }
+
+    private fun renderDeviceLastSeenDetails(
+            deviceInfo: DeviceInfo,
+            dateFormatter: VectorDateFormatter,
+            isLastSeenDetailsVisible: Boolean,
+    ) {
+        deviceInfo.lastSeenTs
+                ?.takeIf { isLastSeenDetailsVisible }
+                ?.let { timestamp ->
+                    views.sessionInfoLastActivityTextView.isVisible = true
+                    val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                    views.sessionInfoLastActivityTextView.text = context.getString(R.string.device_manager_session_last_activity, formattedTs)
+                }
+                ?: run {
+                    views.sessionInfoLastActivityTextView.isGone = true
+                }
+
+        deviceInfo.lastSeenIp
+                ?.takeIf { isLastSeenDetailsVisible }
+                ?.let { ipAddress ->
+                    views.sessionInfoLastIPAddressTextView.isVisible = true
+                    views.sessionInfoLastIPAddressTextView.text = ipAddress
+                }
+                ?: run {
+                    views.sessionInfoLastIPAddressTextView.isGone = true
+                }
     }
 
     private fun renderDetailsButton(isDetailsButtonVisible: Boolean) {

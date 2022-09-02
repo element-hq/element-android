@@ -21,5 +21,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SessionOverviewArgs(
-        val sessionId: String
+        val deviceId: String
 ) : Parcelable

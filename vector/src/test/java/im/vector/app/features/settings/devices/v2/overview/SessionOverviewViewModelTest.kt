@@ -39,7 +39,7 @@ class SessionOverviewViewModelTest {
     val mvRxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
 
     private val args = SessionOverviewArgs(
-            sessionId = A_SESSION_ID
+            deviceId = A_SESSION_ID
     )
     private val fakeSession = FakeSession()
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
@@ -56,7 +56,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(Optional(deviceFullInfo))
         val expectedState = SessionOverviewViewState(
-                sessionId = A_SESSION_ID,
+                deviceId = A_SESSION_ID,
                 isCurrentSession = true,
                 deviceInfo = Success(deviceFullInfo)
         )

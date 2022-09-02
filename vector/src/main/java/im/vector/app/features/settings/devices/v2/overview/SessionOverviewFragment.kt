@@ -29,10 +29,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import javax.inject.Inject
 
 /**
  * Display the overview info about a Session.
@@ -40,6 +42,8 @@ import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 @AndroidEntryPoint
 class SessionOverviewFragment :
         VectorBaseFragment<FragmentSessionOverviewBinding>() {
+
+    @Inject lateinit var dateFormatter: VectorDateFormatter
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
@@ -89,9 +93,10 @@ class SessionOverviewFragment :
                 isCurrentSession = isCurrentSession,
                 deviceFullInfo = deviceFullInfo,
                 isDetailsButtonVisible = false,
-                hasLearnMoreLink = true
+                isLearnMoreLinkVisible = true,
+                isLastSeenDetailsVisible = true,
         )
-        views.sessionOverviewInfo.render(viewState)
+        views.sessionOverviewInfo.render(viewState, dateFormatter)
     }
 
     private fun hideSessionInfo() {

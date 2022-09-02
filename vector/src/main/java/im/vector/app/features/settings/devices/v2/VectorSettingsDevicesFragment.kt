@@ -31,6 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
@@ -54,6 +55,8 @@ class VectorSettingsDevicesFragment :
         VectorBaseFragment<FragmentSettingsDevicesBinding>() {
 
     @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
+
+    @Inject lateinit var dateFormatter: VectorDateFormatter
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -214,7 +217,7 @@ class VectorSettingsDevicesFragment :
                     isCurrentSession = true,
                     deviceFullInfo = it
             )
-            views.deviceListCurrentSession.render(viewState)
+            views.deviceListCurrentSession.render(viewState, dateFormatter)
             views.deviceListCurrentSession.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }
@@ -226,10 +229,10 @@ class VectorSettingsDevicesFragment :
         }
     }
 
-    private fun navigateToSessionOverview(sessionId: String) {
+    private fun navigateToSessionOverview(deviceId: String) {
         viewNavigator.navigateToSessionOverview(
                 context = requireActivity(),
-                sessionId = sessionId
+                deviceId = deviceId
         )
     }
 

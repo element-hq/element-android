@@ -3256,6 +3256,7 @@
     </plurals>
     <string name="device_manager_current_session_title">Current Session</string>
     <string name="device_manager_session_title">Session</string>
+    <string name="device_manager_session_last_activity">Last activity %1$s</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
