@@ -3229,7 +3229,9 @@
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_header_section_current_session">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
+    <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
+    <!--  Examples: Unverified · Last activity Yesterday at 6PM, Unverified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
     <!--  Example: Inactive for 90+ days (Dec 25, 2021) -->
     <plurals name="device_manager_other_sessions_description_inactive">
@@ -3247,6 +3249,7 @@
     </plurals>
     <string name="device_manager_current_session_title">Current Session</string>
     <string name="device_manager_session_title">Session</string>
+    <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
 
 </resources>
