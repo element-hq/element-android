@@ -195,7 +195,7 @@ class VectorSettingsDevicesFragment :
     private fun hideCurrentSessionView() {
         views.deviceListHeaderCurrentSession.isVisible = false
         views.deviceListCurrentSession.isVisible = false
-        views.deviceListCurrentSessionDivider.isVisible = false
+        views.deviceListDividerCurrentSession.isVisible = false
     }
 
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
