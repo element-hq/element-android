@@ -46,10 +46,10 @@ class SessionOverviewViewModel @AssistedInject constructor(
     init {
         val currentDeviceId = session.sessionParams.deviceId.orEmpty()
         setState {
-            copy(isCurrentSession = sessionId.isNotEmpty() && sessionId == currentDeviceId)
+            copy(isCurrentSession = deviceId.isNotEmpty() && deviceId == currentDeviceId)
         }
 
-        observeSessionInfo(currentDeviceId)
+        observeSessionInfo(initialState.deviceId)
     }
 
     private fun observeSessionInfo(deviceId: String) {

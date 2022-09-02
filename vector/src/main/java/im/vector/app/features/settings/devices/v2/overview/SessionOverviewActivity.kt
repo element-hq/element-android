@@ -43,9 +43,9 @@ class SessionOverviewActivity : SimpleFragmentActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, sessionId: String): Intent {
+        fun newIntent(context: Context, deviceId: String): Intent {
             return Intent(context, SessionOverviewActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, SessionOverviewArgs(sessionId))
+                putExtra(Mavericks.KEY_ARG, SessionOverviewArgs(deviceId))
             }
         }
     }

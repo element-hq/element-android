@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class VectorSettingsDevicesViewNavigator @Inject constructor() {
 
-    fun navigateToSessionOverview(context: Context, sessionId: String) {
-        context.startActivity(SessionOverviewActivity.newIntent(context, sessionId))
+    fun navigateToSessionOverview(context: Context, deviceId: String) {
+        context.startActivity(SessionOverviewActivity.newIntent(context, deviceId))
     }
 }

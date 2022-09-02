@@ -22,11 +22,11 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.settings.devices.DeviceFullInfo
 
 data class SessionOverviewViewState(
-        val sessionId: String,
+        val deviceId: String,
         val isCurrentSession: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
 ) : MavericksState {
     constructor(args: SessionOverviewArgs) : this(
-            sessionId = args.sessionId
+            deviceId = args.deviceId
     )
 }
