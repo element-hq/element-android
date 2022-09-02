@@ -45,8 +45,9 @@ class OtherSessionsController @Inject constructor(
             data.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER).forEach { device ->
                 val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
                 val description = if (device.isInactive) {
-                    stringProvider.getString(
-                            R.string.device_manager_other_sessions_description_inactive,
+                    stringProvider.getQuantityString(
+                            R.plurals.device_manager_other_sessions_description_inactive,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                             formattedLastActivityDate
                     )

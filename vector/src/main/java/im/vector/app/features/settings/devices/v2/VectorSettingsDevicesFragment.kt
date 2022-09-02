@@ -155,7 +155,11 @@ class VectorSettingsDevicesFragment :
             views.deviceListUnverifiedSessionsRecommendation.setCount(unverifiedSessionsCount)
             views.deviceListInactiveSessionsRecommendation.setCount(inactiveSessionsCount)
             views.deviceListInactiveSessionsRecommendation.setDescription(
-                    getString(R.string.device_manager_inactive_sessions_description, SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS)
+                    resources.getQuantityString(
+                            R.plurals.device_manager_inactive_sessions_description,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+                    )
             )
         }
     }

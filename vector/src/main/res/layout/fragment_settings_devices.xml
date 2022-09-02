@@ -39,7 +39,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
             app:recommendationTitle="@string/device_manager_inactive_sessions_title"
-            app:recommendationDescription="@string/device_manager_inactive_sessions_description"
+            app:recommendationDescription="@plurals/device_manager_inactive_sessions_description"
             app:recommendationImageResource="@drawable/ic_inactive_sessions"
             app:recommendationImageBackgroundTint="?vctr_system"
             app:layout_constraintEnd_toEndOf="parent"
