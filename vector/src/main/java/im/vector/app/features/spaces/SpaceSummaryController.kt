@@ -76,7 +76,7 @@ class SpaceSummaryController @Inject constructor(
                         avatarRenderer(host.avatarRenderer)
                         id("invite_${roomSummary.roomId}")
                         matrixItem(roomSummary.toMatrixItem())
-                        countState(UnreadCounterBadgeView.State(1, true))
+                        countState(UnreadCounterBadgeView.State.Count(1, true))
                         selected(false)
                         description(host.stringProvider.getString(R.string.you_are_invited))
                         canDrag(false)
@@ -87,7 +87,7 @@ class SpaceSummaryController @Inject constructor(
         homeSpaceSummaryItem {
             id("space_home")
             selected(selectedSpace == null)
-            countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight))
+            countState(UnreadCounterBadgeView.State.Count(homeCount.totalCount, homeCount.isHighlight))
             listener { host.callback?.onSpaceSelected(null) }
         }
 
@@ -117,7 +117,7 @@ class SpaceSummaryController @Inject constructor(
                         listener { host.callback?.onSpaceSelected(roomSummary) }
                         toggleExpand { host.callback?.onToggleExpand(roomSummary) }
                         countState(
-                                UnreadCounterBadgeView.State(
+                                UnreadCounterBadgeView.State.Count(
                                         roomSummary.notificationCount,
                                         roomSummary.highlightCount > 0
                                 )
@@ -169,7 +169,7 @@ class SpaceSummaryController @Inject constructor(
             toggleExpand { host.callback?.onToggleExpand(childSummary) }
             indent(currentDepth)
             countState(
-                    UnreadCounterBadgeView.State(
+                    UnreadCounterBadgeView.State.Count(
                             childSummary.notificationCount,
                             childSummary.highlightCount > 0
                     )

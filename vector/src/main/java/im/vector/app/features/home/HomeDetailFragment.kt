@@ -28,6 +28,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.extensions.commitTransaction
@@ -60,18 +61,20 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class HomeDetailFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val colorProvider: ColorProvider,
-        private val alertManager: PopupAlertManager,
-        private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences,
-        private val spaceStateHandler: SpaceStateHandler,
-) : VectorBaseFragment<FragmentHomeDetailBinding>(),
+@AndroidEntryPoint
+class HomeDetailFragment :
+        VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var alertManager: PopupAlertManager
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -167,7 +170,7 @@ class HomeDetailFragment @Inject constructor(
 
         unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
-                    UnreadCounterBadgeView.State(
+                    UnreadCounterBadgeView.State.Count(
                             count = state.otherSpacesUnread.totalCount,
                             highlighted = state.otherSpacesUnread.isHighlight
                     )
@@ -183,7 +186,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun navigateBack() {
-        val previousSpaceId = spaceStateHandler.getSpaceBackstack().removeLastOrNull()
+        val previousSpaceId = spaceStateHandler.popSpaceBackstack()
         val parentSpaceId = spaceStateHandler.getCurrentSpace()?.flattenParentIds?.lastOrNull()
         setCurrentSpace(previousSpaceId ?: parentSpaceId)
     }

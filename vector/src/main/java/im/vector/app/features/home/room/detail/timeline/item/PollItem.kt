@@ -92,6 +92,6 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentPollStub
+        private val STUB_ID = R.id.messageContentPollStub
     }
 }

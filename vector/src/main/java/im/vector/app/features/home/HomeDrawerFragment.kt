@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
@@ -40,12 +41,14 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class HomeDrawerFragment @Inject constructor(
-        private val session: Session,
-        private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer,
-        private val buildMeta: BuildMeta,
-) : VectorBaseFragment<FragmentHomeDrawerBinding>() {
+@AndroidEntryPoint
+class HomeDrawerFragment :
+        VectorBaseFragment<FragmentHomeDrawerBinding>() {
+
+    @Inject lateinit var session: Session
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var buildMeta: BuildMeta
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -113,10 +116,14 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
         views.homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
     }
 }

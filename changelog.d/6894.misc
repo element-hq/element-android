@@ -1,0 +1,1 @@
+Remove FragmentModule and the Fragment factory. No need to Inject the constructor on your Fragment, just add @AndroidEntryPoint annotation and @Inject class members.

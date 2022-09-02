@@ -7,7 +7,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxPermSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run knit
         run: |
-          ./gradlew knitCheck
+          ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
   # Check the project: ktlint, detekt, lint
   lint:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
-          ./gradlew ktlintCheck --continue
+          ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Run detekt
         if: always()
         run: |
@@ -49,8 +49,8 @@ jobs:
       - name: Run lint
         # Not always, if ktlint or detekt fail, avoid running the long lint check.
         run: |
-          ./gradlew lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
-          ./gradlew lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew vector-app:lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew vector-app:lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -66,7 +66,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.1.1
+        uses: danger/danger-js@11.1.2
         with:
           args: "--dangerfile tools/danger/dangerfile-lint.js"
         env:

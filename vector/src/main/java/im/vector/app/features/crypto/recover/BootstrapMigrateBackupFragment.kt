@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -47,9 +48,11 @@ import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class BootstrapMigrateBackupFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
+@AndroidEntryPoint
+class BootstrapMigrateBackupFragment :
+        VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapMigrateBackupBinding {
         return FragmentBootstrapMigrateBackupBinding.inflate(inflater, container, false)

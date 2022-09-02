@@ -40,7 +40,7 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
     @EpoxyAttribute var text: String = ""
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
     @EpoxyAttribute var showSeparator: Boolean = false
 
     override fun getViewType(): Int {

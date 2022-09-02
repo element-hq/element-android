@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -32,10 +33,12 @@ import im.vector.app.databinding.FragmentLocalePickerBinding
 import java.util.Locale
 import javax.inject.Inject
 
-class LocalePickerFragment @Inject constructor(
-        private val controller: LocalePickerController
-) : VectorBaseFragment<FragmentLocalePickerBinding>(),
+@AndroidEntryPoint
+class LocalePickerFragment :
+        VectorBaseFragment<FragmentLocalePickerBinding>(),
         LocalePickerController.Listener {
+
+    @Inject lateinit var controller: LocalePickerController
 
     private val viewModel: LocalePickerViewModel by fragmentViewModel()
 

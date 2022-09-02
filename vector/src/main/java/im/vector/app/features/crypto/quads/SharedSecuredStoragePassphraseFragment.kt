@@ -24,20 +24,19 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
-class SharedSecuredStoragePassphraseFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentSsssAccessFromPassphraseBinding>() {
+@AndroidEntryPoint
+class SharedSecuredStoragePassphraseFragment :
+        VectorBaseFragment<FragmentSsssAccessFromPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromPassphraseBinding {
         return FragmentSsssAccessFromPassphraseBinding.inflate(inflater, container, false)

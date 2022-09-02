@@ -83,6 +83,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timel
     )
 
     companion object {
-        private const val STUB_ID = R.id.messageContentNoticeStub
+        private val STUB_ID = R.id.messageContentNoticeStub
     }
 }

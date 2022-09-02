@@ -24,6 +24,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
@@ -33,9 +34,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
-class BootstrapEnterPassphraseFragment @Inject constructor() :
+@AndroidEntryPoint
+class BootstrapEnterPassphraseFragment :
         VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {

@@ -57,6 +57,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
@@ -79,12 +80,13 @@ data class DevicesViewState(
         // TODO Replace by isLoading boolean
         val request: Async<Unit> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
-        val accountCrossSigningIsTrusted: Boolean = false
+        val accountCrossSigningIsTrusted: Boolean = false,
 ) : MavericksState
 
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?
+        val cryptoDeviceInfo: CryptoDeviceInfo?,
+        val trustLevelForShield: RoomEncryptionTrustLevel,
 )
 
 class DevicesViewModel @AssistedInject constructor(
@@ -108,11 +110,13 @@ class DevicesViewModel @AssistedInject constructor(
     private val refreshSource = PublishDataSource<Unit>()
 
     init {
+        val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
+        val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
 
         setState {
             copy(
-                    hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    hasAccountCrossSigning = hasAccountCrossSigning,
+                    accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
                     myDeviceId = session.sessionParams.deviceId ?: ""
             )
         }
@@ -125,7 +129,13 @@ class DevicesViewModel @AssistedInject constructor(
                     .sortedByDescending { it.lastSeenTs }
                     .map { deviceInfo ->
                         val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
+                        val trustLevelForShield = computeTrustLevelForShield(
+                                currentSessionCrossTrusted = accountCrossSigningIsTrusted,
+                                legacyMode = !hasAccountCrossSigning,
+                                deviceTrustLevel = cryptoDeviceInfo?.trustLevel,
+                                isCurrentDevice = deviceInfo.deviceId == session.sessionParams.deviceId
+                        )
+                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield)
                     }
         }
                 .distinctUntilChanged()
@@ -241,6 +251,20 @@ class DevicesViewModel @AssistedInject constructor(
             }
             DevicesAction.ResetSecurity -> _viewEvents.post(DevicesViewEvents.PromptResetSecrets)
         }
+    }
+
+    private fun computeTrustLevelForShield(
+            currentSessionCrossTrusted: Boolean,
+            legacyMode: Boolean,
+            deviceTrustLevel: DeviceTrustLevel?,
+            isCurrentDevice: Boolean,
+    ): RoomEncryptionTrustLevel {
+        return TrustUtils.shieldForTrust(
+                currentDevice = isCurrentDevice,
+                trustMSK = currentSessionCrossTrusted,
+                legacyMode = legacyMode,
+                deviceTrustLevel = deviceTrustLevel
+        )
     }
 
     private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {
