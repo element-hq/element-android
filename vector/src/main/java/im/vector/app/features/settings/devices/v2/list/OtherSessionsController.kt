@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.devices.DeviceFullInfo
@@ -31,6 +32,7 @@ class OtherSessionsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
         private val drawableProvider: DrawableProvider,
+        private val colorProvider: ColorProvider,
 ) : TypedEpoxyController<List<DeviceFullInfo>>() {
 
     override fun buildModels(data: List<DeviceFullInfo>?) {
@@ -57,7 +59,8 @@ class OtherSessionsController @Inject constructor(
                 } else {
                     stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
                 }
-                val descriptionDrawable = if (device.isInactive) drawableProvider.getDrawable(R.drawable.ic_inactive_sessions) else null
+                val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                val descriptionDrawable = if (device.isInactive) drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor) else null
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
