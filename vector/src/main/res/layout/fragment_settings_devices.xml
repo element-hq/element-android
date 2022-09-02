@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
             android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

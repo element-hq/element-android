@@ -21,6 +21,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
+import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
@@ -32,8 +33,10 @@ class GetDeviceFullInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
+        private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
 ) {
 
+    // TODO update unit tests
     fun execute(deviceId: String): Flow<Optional<DeviceFullInfo>> {
         return activeSessionHolder.getSafeActiveSession()?.let { session ->
             val currentSessionCrossSigningInfo = getCurrentSessionCrossSigningInfoUseCase.execute()
@@ -45,10 +48,12 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                 val cryptoInfo = cryptoDeviceInfo.getOrNull()
                 val fullInfo = if (info != null && cryptoInfo != null) {
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoInfo)
+                    val isInactive = checkIfSessionIsInactiveUseCase.execute(info.lastSeenTs ?: 0)
                     DeviceFullInfo(
                             deviceInfo = info,
                             cryptoDeviceInfo = cryptoInfo,
-                            trustLevelForShield = roomEncryptionTrustLevel
+                            trustLevelForShield = roomEncryptionTrustLevel,
+                            isInactive = isInactive
                     )
                 } else {
                     null
