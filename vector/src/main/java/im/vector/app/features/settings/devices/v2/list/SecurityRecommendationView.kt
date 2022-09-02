@@ -56,7 +56,7 @@ class SecurityRecommendationView @JvmOverloads constructor(
 
     private fun setDescription(typedArray: TypedArray) {
         val description = typedArray.getString(R.styleable.SecurityRecommendationView_recommendationDescription)
-        views.recommendationDescriptionTextView.text = description
+        setDescription(description)
     }
 
     private fun setImage(typedArray: TypedArray) {
@@ -66,15 +66,16 @@ class SecurityRecommendationView @JvmOverloads constructor(
         views.recommendationShieldImageView.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
 
-    fun setTitle(title: String) {
-        views.recommendationTitleTextView.text = title
-    }
-
-    fun setDescription(description: String) {
+    private fun setDescription(description: String?) {
         views.recommendationDescriptionTextView.text = description
     }
 
-    fun setCount(sessionsCount: Int) {
+    private fun setCount(sessionsCount: Int) {
         views.recommendationViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, sessionsCount)
+    }
+
+    fun render(viewState: SecurityRecommendationViewState) {
+        setDescription(viewState.description)
+        setCount(viewState.sessionsCount)
     }
 }

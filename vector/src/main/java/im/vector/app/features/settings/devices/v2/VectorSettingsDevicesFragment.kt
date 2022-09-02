@@ -41,6 +41,7 @@ import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 
 /**
  * Display the list of the user's devices and sessions.
@@ -152,15 +153,20 @@ class VectorSettingsDevicesFragment :
             views.deviceListSecurityRecommendationsDivider.isVisible = true
             views.deviceListUnverifiedSessionsRecommendation.isVisible = unverifiedSessionsCount > 0
             views.deviceListInactiveSessionsRecommendation.isVisible = inactiveSessionsCount > 0
-            views.deviceListUnverifiedSessionsRecommendation.setCount(unverifiedSessionsCount)
-            views.deviceListInactiveSessionsRecommendation.setCount(inactiveSessionsCount)
-            views.deviceListInactiveSessionsRecommendation.setDescription(
-                    resources.getQuantityString(
+            val unverifiedSessionsViewState = SecurityRecommendationViewState(
+                    description = getString(R.string.device_manager_unverified_sessions_description),
+                    sessionsCount = unverifiedSessionsCount,
+            )
+            views.deviceListUnverifiedSessionsRecommendation.render(unverifiedSessionsViewState)
+            val inactiveSessionsViewState = SecurityRecommendationViewState(
+                    description = resources.getQuantityString(
                             R.plurals.device_manager_inactive_sessions_description,
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
-                    )
+                    ),
+                    sessionsCount = inactiveSessionsCount,
             )
+            views.deviceListInactiveSessionsRecommendation.render(inactiveSessionsViewState)
         }
     }
 
