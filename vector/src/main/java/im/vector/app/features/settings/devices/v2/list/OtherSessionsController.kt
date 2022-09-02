@@ -43,7 +43,8 @@ class OtherSessionsController @Inject constructor(
             }
         } else {
             data.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER).forEach { device ->
-                val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                val dateFormatKind = if (device.isInactive) DateFormatKind.TIMELINE_DAY_DIVIDER else DateFormatKind.DEFAULT_DATE_AND_TIME
+                val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, dateFormatKind)
                 val description = if (device.isInactive) {
                     stringProvider.getQuantityString(
                             R.plurals.device_manager_other_sessions_description_inactive,
