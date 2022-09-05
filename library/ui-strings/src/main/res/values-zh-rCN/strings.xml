@@ -1682,7 +1682,7 @@
     <string name="topic_prefix">"话题： "</string>
     <string name="add_a_topic_link_text">添加一个话题</string>
     <string name="room_created_summary_no_topic_creation_text">%s让人们知道此房间是关于什么的。</string>
-    <string name="this_is_the_beginning_of_dm">这是你和 %s 的私聊消息历史记录的开始。</string>
+    <string name="this_is_the_beginning_of_dm">这是你和%s的私聊消息历史的开始。</string>
     <string name="this_is_the_beginning_of_room_no_name">这是此对话的开始。</string>
     <string name="this_is_the_beginning_of_room">这是 %s 的开始。</string>
     <string name="settings_export_trail">导出审计</string>
