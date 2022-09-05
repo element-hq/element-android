@@ -117,7 +117,7 @@ class AttachmentsCameraFragment :
             when (it) {
                 AttachmentsCameraViewEvents.StartRecording -> {
                     views.attachmentsCameraCaptureAction.setImageDrawable(
-                            context?.getDrawable(R.drawable.ic_video_off)
+                            context?.getDrawable(R.drawable.ic_material_stop)
                     )
                     views.attachmentsCameraFlip.isEnabled = false
                     views.attachmentsCameraFlash.isEnabled = false
