@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.OrientationEventListener
@@ -119,10 +120,19 @@ class AttachmentsCameraFragment :
                     )
                     views.attachmentsCameraChangeAction.isEnabled = false
                     views.attachmentsCameraFlip.isEnabled = false
+                    views.attachmentsCameraChronometer.isVisible = true
+                    views.attachmentsCameraChronometer.base = SystemClock.elapsedRealtime()
+                    views.attachmentsCameraChronometer.start()
                 }
                 AttachmentsCameraViewEvents.TakePhoto -> views.attachmentsCameraLoading.isVisible = true
-                AttachmentsCameraViewEvents.SetErrorAndFinish -> (activity as AttachmentsCameraActivity).setErrorAndFinish()
-                is AttachmentsCameraViewEvents.SetResultAndFinish -> (activity as AttachmentsCameraActivity).setResultAndFinish(it.attachmentsCameraOutput)
+                AttachmentsCameraViewEvents.SetErrorAndFinish -> {
+                    views.attachmentsCameraChronometer.stop()
+                    (activity as AttachmentsCameraActivity).setErrorAndFinish()
+                }
+                is AttachmentsCameraViewEvents.SetResultAndFinish -> {
+                    views.attachmentsCameraChronometer.stop()
+                    (activity as AttachmentsCameraActivity).setResultAndFinish(it.attachmentsCameraOutput)
+                }
             }
         }
 

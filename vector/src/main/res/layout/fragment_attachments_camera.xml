@@ -64,6 +64,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/attachment_camera_flip" />
 
+    <Chronometer
+        android:id="@+id/attachmentsCameraChronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/button_background_tint_selector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/attachmentsCameraCaptureAction"
+        android:layout_marginBottom="32dp"
+        android:enabled="true"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:contentDescription="@string/attachment_camera_chronometer" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/attachmentsCameraFlash"
         android:layout_width="wrap_content"
