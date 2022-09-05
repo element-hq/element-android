@@ -140,8 +140,10 @@
     <string name="start_chat">Start Chat</string>
     <string name="create_room">Create Room</string>
     <string name="explore_rooms">Explore Rooms</string>
-    <string name="a11y_expand_space_children">Expand space children</string>
-    <string name="a11y_collapse_space_children">Collapse space children</string>
+    <!-- Note to translators: %s refers to the space whose children is being expanded -->
+    <string name="a11y_expand_space_children">Expand %s children</string>
+    <!-- Note to translators: %s refers to the space whose children is being collapsed -->
+    <string name="a11y_collapse_space_children">Collapse %s children</string>
 
     <!-- Last seen time -->
 

@@ -58,7 +58,10 @@ abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder
         holder.chevron.setOnClickListener(onToggleExpandListener)
         holder.chevron.isVisible = hasChildren
         holder.chevron.setImageResource(if (expanded) R.drawable.ic_expand_more else R.drawable.ic_arrow_right)
-        holder.chevron.contentDescription = context.getString(if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children)
+        holder.chevron.contentDescription = context.getString(
+                if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children,
+                matrixItem.displayName,
+        )
 
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.unreadCounter.render(countState)
