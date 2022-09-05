@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -91,7 +90,7 @@ class GetEncryptionTrustLevelForDeviceUseCaseTest {
     }
 
     private fun givenCurrentSessionCrossSigningInfo(
-            deviceId: String?,
+            deviceId: String,
             isCrossSigningInitialized: Boolean,
             isCrossSigningVerified: Boolean
     ): CurrentSessionCrossSigningInfo {

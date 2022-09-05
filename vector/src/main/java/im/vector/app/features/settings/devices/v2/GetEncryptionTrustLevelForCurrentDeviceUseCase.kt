@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices
+package im.vector.app.features.settings.devices.v2
 
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
