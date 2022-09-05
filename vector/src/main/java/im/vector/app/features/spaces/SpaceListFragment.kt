@@ -21,6 +21,7 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -28,6 +29,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
@@ -71,6 +73,7 @@ class SpaceListFragment :
         homeActivitySharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         views.stateView.contentView = views.groupListView
+        views.spacesEmptyButton.onClick { onAddSpaceSelected() }
         setupSpaceController()
         observeViewEvents()
     }
@@ -147,13 +150,22 @@ class SpaceListFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        when (state.asyncSpaces) {
+        when (val spaces = state.asyncSpaces) {
             Uninitialized,
             is Loading -> {
                 views.stateView.state = StateView.State.Loading
                 return@withState
             }
-            is Success -> views.stateView.state = StateView.State.Content
+            is Success -> {
+                views.stateView.state = StateView.State.Content
+                if (spaces.invoke().isEmpty()) {
+                    views.spacesEmptyGroup.isVisible = true
+                    views.groupListView.isVisible = false
+                } else {
+                    views.spacesEmptyGroup.isVisible = false
+                    views.groupListView.isVisible = true
+                }
+            }
             else -> Unit
         }
 
