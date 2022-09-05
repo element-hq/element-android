@@ -411,7 +411,8 @@ class FtueAuthVariant(
     private fun onEmail(stage: Stage) {
         when {
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
-                    FtueAuthEmailEntryFragment::class.java
+                    FtueAuthEmailEntryFragment::class.java,
+                    FtueAuthEmailEntryFragmentArgument(mandatory = stage.mandatory)
             )
             else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,

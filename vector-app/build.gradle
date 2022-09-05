@@ -236,6 +236,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
+            resValue "string", "app_name", "Element dbg"
             resValue "color", "launcher_background", "#0DBD8B"
 
             if (project.hasProperty("coverage")) {
@@ -244,6 +245,7 @@ android {
         }
 
         release {
+            resValue "string", "app_name", "Element"
             resValue "color", "launcher_background", "#0DBD8B"
             postprocessing {
                 removeUnusedCode true
@@ -260,8 +262,8 @@ android {
             initWith release
             applicationIdSuffix ".nightly"
             versionNameSuffix "-nightly"
+            // Just override the background color of the launcher icon for the nightly build.
             resValue "color", "launcher_background", "#07007E"
-
             // We need to copy paste this block, this is not done automatically by `initWith release`
             postprocessing {
                 removeUnusedCode true
