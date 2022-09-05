@@ -21,6 +21,8 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.devices.DeviceFullInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -29,6 +31,8 @@ import javax.inject.Inject
 class OtherSessionsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
+        private val drawableProvider: DrawableProvider,
+        private val colorProvider: ColorProvider,
 ) : TypedEpoxyController<List<DeviceFullInfo>>() {
 
     override fun buildModels(data: List<DeviceFullInfo>?) {
@@ -41,12 +45,22 @@ class OtherSessionsController @Inject constructor(
             }
         } else {
             data.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER).forEach { device ->
-                val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                val description = if (device.trustLevelForShield == RoomEncryptionTrustLevel.Trusted) {
+                val dateFormatKind = if (device.isInactive) DateFormatKind.TIMELINE_DAY_DIVIDER else DateFormatKind.DEFAULT_DATE_AND_TIME
+                val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, dateFormatKind)
+                val description = if (device.isInactive) {
+                    stringProvider.getQuantityString(
+                            R.plurals.device_manager_other_sessions_description_inactive,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                            formattedLastActivityDate
+                    )
+                } else if (device.trustLevelForShield == RoomEncryptionTrustLevel.Trusted) {
                     stringProvider.getString(R.string.device_manager_other_sessions_description_verified, formattedLastActivityDate)
                 } else {
                     stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
                 }
+                val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                val descriptionDrawable = if (device.isInactive) drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor) else null
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
@@ -54,6 +68,7 @@ class OtherSessionsController @Inject constructor(
                     roomEncryptionTrustLevel(device.trustLevelForShield)
                     sessionName(device.deviceInfo.displayName)
                     sessionDescription(description)
+                    sessionDescriptionDrawable(descriptionDrawable)
                     stringProvider(this@OtherSessionsController.stringProvider)
                 }
             }

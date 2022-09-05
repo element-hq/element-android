@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SecurityRecommendationView">
+        <attr name="recommendationTitle" format="string" />
+        <attr name="recommendationDescription" format="string" />
+        <attr name="recommendationImageResource" format="reference" />
+        <attr name="recommendationImageBackgroundTint" format="color" />
+    </declare-styleable>
+
+</resources>

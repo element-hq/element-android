@@ -16,5 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-internal const val NUMBER_OF_OTHER_DEVICES_TO_RENDER = 5
-internal const val SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS = 90
+data class SecurityRecommendationViewState(
+        val description: String,
+        val sessionsCount: Int,
+)
