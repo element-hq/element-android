@@ -20,7 +20,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import javax.inject.Inject
 
-// TODO add unit tests
 class RefreshDevicesUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
