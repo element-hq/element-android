@@ -3236,7 +3236,8 @@
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
-    <string name="device_manager_header_section_current_session">Current Session</string>
+    <!-- TODO TO BE REMOVED: replaced by device_manager_current_session_title -->
+    <string name="device_manager_header_section_current_session" tools:ignore="UnusedResources">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
     <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
