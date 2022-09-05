@@ -22,7 +22,6 @@ import androidx.camera.core.ImageCapture
 import com.airbnb.mvrx.MavericksState
 
 data class AttachmentsCameraState(
-        val captureMode: MediaType = MediaType.IMAGE,
         val cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
         val flashMode: Int = ImageCapture.FLASH_MODE_AUTO,
         val rotation: Int = Surface.ROTATION_0,

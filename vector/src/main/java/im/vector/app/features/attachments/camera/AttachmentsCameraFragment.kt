@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.ScaleGestureDetector
 import android.view.Surface
@@ -118,8 +119,8 @@ class AttachmentsCameraFragment :
                     views.attachmentsCameraCaptureAction.setImageDrawable(
                             context?.getDrawable(R.drawable.ic_video_off)
                     )
-                    views.attachmentsCameraChangeAction.isEnabled = false
                     views.attachmentsCameraFlip.isEnabled = false
+                    views.attachmentsCameraFlash.isEnabled = false
                     views.attachmentsCameraChronometer.isVisible = true
                     views.attachmentsCameraChronometer.base = SystemClock.elapsedRealtime()
                     views.attachmentsCameraChronometer.start()
@@ -143,14 +144,20 @@ class AttachmentsCameraFragment :
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        views.attachmentsCameraCaptureAction.debouncedClicks {
-            context?.let {
-                viewModel.handle(AttachmentsCameraAction.Capture(it, imageCapture, videoCapture))
+        views.attachmentsCameraCaptureAction.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                context?.let {
+                    viewModel.handle(AttachmentsCameraAction.Capture(it, imageCapture))
+                }
             }
+            false
         }
 
-        views.attachmentsCameraChangeAction.debouncedClicks {
-            viewModel.handle(AttachmentsCameraAction.ChangeCaptureMode)
+        views.attachmentsCameraCaptureAction.setOnLongClickListener {
+            context?.let {
+                viewModel.handle(AttachmentsCameraAction.Capture(it, videoCapture = videoCapture))
+            }
+            true
         }
 
         views.attachmentsCameraFlip.debouncedClicks {
@@ -175,7 +182,6 @@ class AttachmentsCameraFragment :
         if (allPermissionsGranted()) {
             startCamera()
         }
-        setCaptureModeButtons()
         setFlashButton()
         setRotation()
     }
@@ -196,43 +202,12 @@ class AttachmentsCameraFragment :
         } == PackageManager.PERMISSION_GRANTED
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setCaptureModeButtons() {
-        withState(viewModel) { state ->
-            when (state.captureMode) {
-                MediaType.VIDEO -> {
-                    views.attachmentsCameraCaptureAction.setImageDrawable(
-                            context?.getDrawable(R.drawable.ic_video)
-                    )
-                    views.attachmentsCameraChangeAction.apply {
-                        setImageDrawable(
-                                context?.getDrawable(R.drawable.ic_camera_plain)
-                        )
-                        contentDescription = getString(R.string.attachment_camera_photo)
-                    }
-                }
-                MediaType.IMAGE -> {
-                    views.attachmentsCameraCaptureAction.setImageDrawable(
-                            context?.getDrawable(R.drawable.ic_camera_plain)
-                    )
-                    views.attachmentsCameraChangeAction.apply {
-                        setImageDrawable(
-                                context?.getDrawable(R.drawable.ic_video)
-                        )
-                        contentDescription = getString(R.string.attachment_camera_video)
-                    }
-                }
-            }
-        }
-    }
-
     @SuppressLint("RestrictedApi")
     private fun setRotation() {
         withState(viewModel) { state ->
             arrayOf(
                     views.attachmentsCameraFlip,
                     views.attachmentsCameraFlash,
-                    views.attachmentsCameraChangeAction,
                     views.attachmentsCameraCaptureAction,
             ).forEach {
                 it.rotation = when (state.rotation) {
@@ -250,7 +225,7 @@ class AttachmentsCameraFragment :
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setFlashButton() {
         withState(viewModel) { state ->
-            if (state.captureMode == MediaType.VIDEO || state.cameraSelector != CameraSelector.DEFAULT_BACK_CAMERA) {
+            if (state.cameraSelector != CameraSelector.DEFAULT_BACK_CAMERA) {
                 views.attachmentsCameraFlash.isVisible = false
             } else {
                 views.attachmentsCameraFlash.apply {

@@ -60,7 +60,6 @@ class AttachmentsCameraModel @AssistedInject constructor(
     override fun handle(action: AttachmentsCameraAction) {
         when (action) {
             AttachmentsCameraAction.ChangeLensFacing -> changeLensFacing()
-            AttachmentsCameraAction.ChangeCaptureMode -> changeCaptureMode()
             AttachmentsCameraAction.RotateFlashMode -> rotateFlashMode()
             is AttachmentsCameraAction.SetRotation -> setRotation(action.rotation)
             is AttachmentsCameraAction.Capture -> capture(action)
@@ -75,17 +74,6 @@ class AttachmentsCameraModel @AssistedInject constructor(
                 } else {
                     CameraSelector.DEFAULT_BACK_CAMERA
                 }
-            )
-        }
-    }
-
-    private fun changeCaptureMode() {
-        setState {
-            copy(
-                    captureMode = when (captureMode) {
-                        MediaType.IMAGE -> MediaType.VIDEO
-                        MediaType.VIDEO -> MediaType.IMAGE
-                    }
             )
         }
     }
@@ -111,21 +99,21 @@ class AttachmentsCameraModel @AssistedInject constructor(
         }
     }
 
-    private fun capture(action: AttachmentsCameraAction.Capture) = withState { state ->
-        when (state.captureMode) {
-            MediaType.IMAGE -> {
-                action.imageCapture?.let {
-                    capture(action.context, action.imageCapture)
-                    true
-                }
-            }
-            MediaType.VIDEO -> {
-                action.videoCapture?.let {
-                    capture(action.context, action.videoCapture)
-                    true
-                }
-            }
-        } ?: _viewEvents.post(AttachmentsCameraViewEvents.SetErrorAndFinish)
+    private fun capture(action: AttachmentsCameraAction.Capture) {
+        recording?.let {
+            recording?.stop()
+            recording = null
+            return
+        }
+        action.videoCapture?.let {
+            capture(action.context, action.videoCapture)
+            return
+        }
+        action.imageCapture?.let {
+            capture(action.context, action.imageCapture)
+            return
+        }
+        _viewEvents.post(AttachmentsCameraViewEvents.SetErrorAndFinish)
     }
 
     private fun capture(context: Context, imageCapture: ImageCapture) {
@@ -168,14 +156,11 @@ class AttachmentsCameraModel @AssistedInject constructor(
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun capture(context: Context, videoCapture: VideoCapture<Recorder>) {
+    @SuppressLint("UseCompatLoadingForDrawables", "RestrictedApi")
+    private fun capture(context: Context, videoCapture: VideoCapture<Recorder>) = withState { state ->
         Timber.d("Capturing Video")
-        recording?.let {
-            recording?.stop()
-            recording = null
-            return
-        }
+
+        videoCapture.camera?.cameraControl?.enableTorch(state.flashMode == ImageCapture.FLASH_MODE_ON)
 
         val file = createTempFile(context, MediaType.VIDEO)
         val outputUri = getUri(context, file)

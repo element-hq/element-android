@@ -23,15 +23,15 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/attachmentsCameraChangeAction"
+        android:id="@+id/attachmentsCameraFlash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:contentDescription="@string/attachment_camera_video"
+        android:contentDescription="@string/attachment_camera_disable_flash"
         android:elevation="2dp"
         android:scaleX="0.7"
         android:scaleY="0.7"
-        android:src="@drawable/ic_video"
+        android:src="@drawable/ic_flash_auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/attachmentsCameraCaptureAction"
         app:layout_constraintStart_toStartOf="parent" />
@@ -44,7 +44,7 @@
         android:elevation="2dp"
         android:scaleX="1.3"
         android:scaleY="1.3"
-        android:src="@drawable/ic_camera_plain"
+        android:src="@drawable/bg_rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,19 +77,5 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:contentDescription="@string/attachment_camera_chronometer" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/attachmentsCameraFlash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:elevation="2dp"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        android:src="@drawable/ic_flash_auto"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/attachment_camera_disable_flash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,6 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class AttachmentsCameraAction : VectorViewModelAction {
     object ChangeLensFacing : AttachmentsCameraAction()
-    object ChangeCaptureMode : AttachmentsCameraAction()
     object RotateFlashMode : AttachmentsCameraAction()
     data class SetRotation(val rotation: Int) : AttachmentsCameraAction()
     data class Capture(
