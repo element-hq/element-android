@@ -17,7 +17,6 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

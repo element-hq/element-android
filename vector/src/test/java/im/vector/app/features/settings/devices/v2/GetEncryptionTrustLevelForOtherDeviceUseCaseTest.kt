@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices
+package im.vector.app.features.settings.devices.v2
 
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
