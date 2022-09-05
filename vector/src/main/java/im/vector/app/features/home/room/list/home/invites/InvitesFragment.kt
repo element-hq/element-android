@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagedList
 import com.airbnb.mvrx.fragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.configureWith
@@ -75,8 +74,7 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
             when (it) {
                 is InvitesContentState.Content -> {
                     views.invitesStateView.state = StateView.State.Content
-                    Suppress("UNCHECKED_CAST")
-                    controller.submitList(it.content as? PagedList<RoomSummary>)
+                    controller.submitList(it.content)
                 }
                 is InvitesContentState.Empty -> {
                     views.invitesStateView.state = StateView.State.Empty(
