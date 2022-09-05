@@ -3235,7 +3235,6 @@
     <string name="onboarding_new_app_layout_feedback_title">Give Feedback</string>
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
-    <string name="onboarding_new_app_layout_button_more">Read more</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
 
 </resources>
