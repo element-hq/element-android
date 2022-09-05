@@ -354,6 +354,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(im.vector.app.features.settings.devices.v2.DevicesViewModel::class)
+    fun devicesViewModelV2Factory(factory: im.vector.app.features.settings.devices.v2.DevicesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(KeyRequestListViewModel::class)
     fun keyRequestListViewModelFactory(factory: KeyRequestListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
