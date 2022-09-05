@@ -50,7 +50,13 @@ class DevicesViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: DevicesAction) {
-        TODO("Not yet implemented")
+        when(action) {
+            is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
+        }
+    }
+
+    private fun handleMarkAsManuallyVerifiedAction() {
+        // TODO implement when needed
     }
 }
 
