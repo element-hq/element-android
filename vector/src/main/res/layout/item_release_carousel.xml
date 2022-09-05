@@ -30,7 +30,8 @@
         android:contentDescription="@null"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterStart"
-        app:layout_constraintBottom_toTopOf="@id/carousel_item_title" />
+        app:layout_constraintBottom_toTopOf="@id/carousel_item_title"
+        tools:src="@drawable/app_layout_onboarding_welcome"/>
 
     <TextView
         android:id="@+id/carousel_item_title"
@@ -44,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/carousel_item_body"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
-        tools:text="Login version" />
+        tools:text="@string/onboarding_new_app_layout_welcome_title" />
 
     <TextView
         android:id="@+id/carousel_item_body"
@@ -57,6 +58,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
-        tools:text="Login version" />
+        tools:text="@string/onboarding_new_app_layout_welcome_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
