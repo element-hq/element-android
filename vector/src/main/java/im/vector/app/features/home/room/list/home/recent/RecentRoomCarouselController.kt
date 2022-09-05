@@ -45,6 +45,12 @@ class RecentRoomCarouselController @Inject constructor(
             resources.displayMetrics
     ).toInt()
 
+    private val topPadding = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            12f,
+            resources.displayMetrics
+    ).toInt()
+
     private val itemSpacing = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             24f,
@@ -63,13 +69,13 @@ class RecentRoomCarouselController @Inject constructor(
                 id("recents_carousel")
                 padding(Carousel.Padding(
                         host.hPadding,
-                        0,
+                        host.topPadding,
                         host.hPadding,
                         0,
                         host.itemSpacing)
                 )
                 onBind { _, view, _ ->
-                    val colorSurface = MaterialColors.getColor(view, R.attr.colorSurface)
+                    val colorSurface = MaterialColors.getColor(view, R.attr.vctr_toolbar_background)
                     view.setBackgroundColor(colorSurface)
                 }
                 withModelsFrom(data) { roomSummary ->
