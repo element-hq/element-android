@@ -21,10 +21,9 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class DevicesViewState(
-        val myDeviceId: String = "",
+        val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
         val devices: Async<List<DeviceFullInfo>> = Uninitialized,
-        val hasAccountCrossSigning: Boolean = false,
-        val accountCrossSigningIsTrusted: Boolean = false,
         val unverifiedSessionsCount: Int = 0,
         val inactiveSessionsCount: Int = 0,
+        val isLoading: Boolean = false,
 ) : MavericksState

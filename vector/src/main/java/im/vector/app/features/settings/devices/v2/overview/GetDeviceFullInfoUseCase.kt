@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
@@ -51,7 +51,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                     DeviceFullInfo(
                             deviceInfo = info,
                             cryptoDeviceInfo = cryptoInfo,
-                            trustLevelForShield = roomEncryptionTrustLevel,
+                            roomEncryptionTrustLevel = roomEncryptionTrustLevel,
                             isInactive = isInactive
                     )
                 } else {

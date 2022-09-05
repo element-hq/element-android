@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices
 
+import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

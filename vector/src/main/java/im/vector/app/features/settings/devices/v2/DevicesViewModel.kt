@@ -17,29 +17,22 @@
 package im.vector.app.features.settings.devices.v2
 
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.login.ReAuthHelper
-import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
-import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
-import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.session.Session
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.orFalse
 
+// TODO add unit tests
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        private val session: Session,
-        private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider,
-        private val matrix: Matrix,
-        private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
-        getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
-        private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
+        private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
+        private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState) {
 
     @AssistedFactory
@@ -49,8 +42,43 @@ class DevicesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
+    init {
+        observeCurrentSessionCrossSigningInfo()
+        observeDevices()
+    }
+
+    private fun observeCurrentSessionCrossSigningInfo() {
+        getCurrentSessionCrossSigningInfoUseCase.execute()
+                .onEach { crossSigningInfo ->
+                    setState {
+                        copy(currentSessionCrossSigningInfo = crossSigningInfo)
+                    }
+                }
+                .launchIn(viewModelScope)
+    }
+
+    private fun observeDevices() {
+        getDeviceFullInfoListUseCase.execute()
+                .execute { async ->
+                    if (async is Success) {
+                        val deviceFullInfoList = async.invoke()
+                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isVerified().orFalse() }
+                        val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
+                        copy(
+                                devices = async,
+                                unverifiedSessionsCount = unverifiedSessionsCount,
+                                inactiveSessionsCount = inactiveSessionsCount,
+                        )
+                    } else {
+                        copy(
+                                devices = async
+                        )
+                    }
+                }
+    }
+
     override fun handle(action: DevicesAction) {
-        when(action) {
+        when (action) {
             is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
         }
     }

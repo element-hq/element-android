@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 
 data class SessionInfoViewState(
         val isCurrentSession: Boolean,
