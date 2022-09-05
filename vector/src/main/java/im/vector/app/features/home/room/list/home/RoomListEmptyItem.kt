@@ -24,14 +24,14 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.StateView
 
 @EpoxyModelClass
-abstract class RoomListEmptyItem : VectorEpoxyModel<RoomListEmptyItem.Holder>(R.layout.item_room_list_empty) {
+abstract class RoomListEmptyItem : VectorEpoxyModel<RoomListEmptyItem.Holder>(R.layout.item_state_view) {
 
     @EpoxyAttribute
-    var emptyData: StateView.State.Empty? = null
+    lateinit var emptyData: StateView.State.Empty
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.stateView.state = emptyData ?: StateView.State.Content
+        holder.stateView.state = emptyData
     }
 
     class Holder : VectorEpoxyHolder() {
