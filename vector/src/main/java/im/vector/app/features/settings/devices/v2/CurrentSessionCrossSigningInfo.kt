@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices
+package im.vector.app.features.settings.devices.v2
 
 /**
  * Used to hold some info about the cross signing of the current Session.
  */
 data class CurrentSessionCrossSigningInfo(
-        val deviceId: String?,
-        val isCrossSigningInitialized: Boolean,
-        val isCrossSigningVerified: Boolean,
+        val deviceId: String = "",
+        val isCrossSigningInitialized: Boolean = false,
+        val isCrossSigningVerified: Boolean = false,
 )

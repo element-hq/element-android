@@ -24,7 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.ViewOtherSessionsBinding
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import javax.inject.Inject
 
 @AndroidEntryPoint

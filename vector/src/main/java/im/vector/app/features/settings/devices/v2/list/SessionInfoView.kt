@@ -57,7 +57,7 @@ class SessionInfoView @JvmOverloads constructor(
     ) {
         renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
         renderVerificationStatus(
-                sessionInfoViewState.deviceFullInfo.trustLevelForShield,
+                sessionInfoViewState.deviceFullInfo.roomEncryptionTrustLevel,
                 sessionInfoViewState.isCurrentSession,
                 sessionInfoViewState.isLearnMoreLinkVisible,
         )

@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import im.vector.app.features.settings.devices.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase

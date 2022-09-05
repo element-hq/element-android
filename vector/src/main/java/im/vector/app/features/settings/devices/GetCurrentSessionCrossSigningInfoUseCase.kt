@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices
 
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import javax.inject.Inject
 
 class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
@@ -28,7 +29,7 @@ class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
         val isCrossSigningInitialized = session.cryptoService().crossSigningService().isCrossSigningInitialized()
         val isCrossSigningVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
         return CurrentSessionCrossSigningInfo(
-                deviceId = session.sessionParams.deviceId,
+                deviceId = session.sessionParams.deviceId.orEmpty(),
                 isCrossSigningInitialized = isCrossSigningInitialized,
                 isCrossSigningVerified = isCrossSigningVerified
         )
