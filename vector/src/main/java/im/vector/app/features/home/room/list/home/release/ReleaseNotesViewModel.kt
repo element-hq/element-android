@@ -24,7 +24,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
-import timber.log.Timber
 
 class ReleaseNotesViewModel @AssistedInject constructor(
         @Assisted initialState: VectorDummyViewState,
@@ -51,7 +50,6 @@ class ReleaseNotesViewModel @AssistedInject constructor(
     }
 
     private fun handlePageSelected(action: ReleaseNotesAction.PageSelected) {
-        Timber.d("carousel_index_v: ${action.selectedPageIndex}")
         selectedPageIndex = action.selectedPageIndex
     }
 
@@ -59,7 +57,6 @@ class ReleaseNotesViewModel @AssistedInject constructor(
         if (action.isLastItemSelected) {
             _viewEvents.post(ReleaseNotesViewEvents.Close)
         } else {
-            Timber.d("carousel_index_v: ${selectedPageIndex + 1}")
             _viewEvents.post(ReleaseNotesViewEvents.SelectPage(++selectedPageIndex))
         }
     }
