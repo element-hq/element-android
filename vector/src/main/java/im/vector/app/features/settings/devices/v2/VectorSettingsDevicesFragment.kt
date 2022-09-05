@@ -34,6 +34,8 @@ import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -41,9 +43,9 @@ import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
-import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
 
@@ -57,6 +59,10 @@ class VectorSettingsDevicesFragment :
     @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
     @Inject lateinit var dateFormatter: VectorDateFormatter
+
+    @Inject lateinit var drawableProvider: DrawableProvider
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -217,7 +223,7 @@ class VectorSettingsDevicesFragment :
                     isCurrentSession = true,
                     deviceFullInfo = it
             )
-            views.deviceListCurrentSession.render(viewState, dateFormatter)
+            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider)
             views.deviceListCurrentSession.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }

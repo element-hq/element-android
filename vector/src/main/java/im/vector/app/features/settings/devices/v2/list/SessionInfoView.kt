@@ -25,6 +25,8 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.setTextWithColoredPart
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.ViewSessionInfoBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -47,14 +49,26 @@ class SessionInfoView @JvmOverloads constructor(
 
     val viewDetailsButton = views.sessionInfoViewDetailsButton
 
-    fun render(sessionInfoViewState: SessionInfoViewState, dateFormatter: VectorDateFormatter) {
+    fun render(
+            sessionInfoViewState: SessionInfoViewState,
+            dateFormatter: VectorDateFormatter,
+            drawableProvider: DrawableProvider,
+            colorProvider: ColorProvider,
+    ) {
         renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
         renderVerificationStatus(
                 sessionInfoViewState.deviceFullInfo.trustLevelForShield,
                 sessionInfoViewState.isCurrentSession,
-                sessionInfoViewState.isLearnMoreLinkVisible
+                sessionInfoViewState.isLearnMoreLinkVisible,
         )
-        renderDeviceLastSeenDetails(sessionInfoViewState.deviceFullInfo.deviceInfo, dateFormatter, sessionInfoViewState.isLastSeenDetailsVisible)
+        renderDeviceLastSeenDetails(
+                sessionInfoViewState.deviceFullInfo.isInactive,
+                sessionInfoViewState.deviceFullInfo.deviceInfo,
+                sessionInfoViewState.isLastSeenDetailsVisible,
+                dateFormatter,
+                drawableProvider,
+                colorProvider,
+        )
         renderDetailsButton(sessionInfoViewState.isDetailsButtonVisible)
     }
 
@@ -123,16 +137,36 @@ class SessionInfoView @JvmOverloads constructor(
     }
 
     private fun renderDeviceLastSeenDetails(
+            isInactive: Boolean,
             deviceInfo: DeviceInfo,
-            dateFormatter: VectorDateFormatter,
             isLastSeenDetailsVisible: Boolean,
+            dateFormatter: VectorDateFormatter,
+            drawableProvider: DrawableProvider,
+            colorProvider: ColorProvider,
     ) {
         deviceInfo.lastSeenTs
                 ?.takeIf { isLastSeenDetailsVisible }
                 ?.let { timestamp ->
                     views.sessionInfoLastActivityTextView.isVisible = true
-                    val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                    views.sessionInfoLastActivityTextView.text = context.getString(R.string.device_manager_session_last_activity, formattedTs)
+                    views.sessionInfoLastActivityTextView.text = if (isInactive) {
+                        val formattedTs = dateFormatter.format(timestamp, DateFormatKind.TIMELINE_DAY_DIVIDER)
+                        context.resources.getQuantityString(
+                                R.plurals.device_manager_other_sessions_description_inactive,
+                                SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                                SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                                formattedTs
+                        )
+                    } else {
+                        val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                        context.getString(R.string.device_manager_session_last_activity, formattedTs)
+                    }
+                    val drawable = if (isInactive) {
+                        val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                        drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor)
+                    } else {
+                        null
+                    }
+                    views.sessionInfoLastActivityTextView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
                 }
                 ?: run {
                     views.sessionInfoLastActivityTextView.isGone = true

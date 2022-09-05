@@ -31,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
@@ -44,6 +46,10 @@ class SessionOverviewFragment :
         VectorBaseFragment<FragmentSessionOverviewBinding>() {
 
     @Inject lateinit var dateFormatter: VectorDateFormatter
+
+    @Inject lateinit var drawableProvider: DrawableProvider
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
@@ -96,7 +102,7 @@ class SessionOverviewFragment :
                 isLearnMoreLinkVisible = true,
                 isLastSeenDetailsVisible = true,
         )
-        views.sessionOverviewInfo.render(viewState, dateFormatter)
+        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider)
     }
 
     private fun hideSessionInfo() {
