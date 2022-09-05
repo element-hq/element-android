@@ -36,7 +36,6 @@ class GetDeviceFullInfoUseCase @Inject constructor(
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
 ) {
 
-    // TODO update unit tests
     fun execute(deviceId: String): Flow<Optional<DeviceFullInfo>> {
         return activeSessionHolder.getSafeActiveSession()?.let { session ->
             val currentSessionCrossSigningInfo = getCurrentSessionCrossSigningInfoUseCase.execute()
