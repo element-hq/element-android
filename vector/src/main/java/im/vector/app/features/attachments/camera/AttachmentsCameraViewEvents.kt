@@ -19,8 +19,8 @@ package im.vector.app.features.attachments.camera
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class AttachmentsCameraViewEvents : VectorViewEvents {
-    object StartRecording: AttachmentsCameraViewEvents()
-    object TakePhoto: AttachmentsCameraViewEvents()
-    object SetErrorAndFinish: AttachmentsCameraViewEvents()
-    data class SetResultAndFinish(val attachmentsCameraOutput: AttachmentsCameraOutput): AttachmentsCameraViewEvents()
+    object StartRecording : AttachmentsCameraViewEvents()
+    object TakePhoto : AttachmentsCameraViewEvents()
+    object SetErrorAndFinish : AttachmentsCameraViewEvents()
+    data class SetResultAndFinish(val attachmentsCameraOutput: AttachmentsCameraOutput) : AttachmentsCameraViewEvents()
 }

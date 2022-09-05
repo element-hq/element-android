@@ -58,7 +58,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<AttachmentsCameraModel, AttachmentsCameraState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: AttachmentsCameraAction) {
-        when(action) {
+        when (action) {
             AttachmentsCameraAction.ChangeLensFacing -> changeLensFacing()
             AttachmentsCameraAction.ChangeCaptureMode -> changeCaptureMode()
             AttachmentsCameraAction.RotateFlashMode -> rotateFlashMode()
@@ -69,7 +69,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
 
     private fun changeLensFacing() {
         setState {
-            copy (
+            copy(
                     cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
                     CameraSelector.DEFAULT_FRONT_CAMERA
                 } else {
@@ -105,14 +105,14 @@ class AttachmentsCameraModel @AssistedInject constructor(
 
     private fun setRotation(newRotation: Int) {
         setState {
-            copy (
+            copy(
                     rotation = newRotation
             )
         }
     }
 
     private fun capture(action: AttachmentsCameraAction.Capture) = withState { state ->
-        when(state.captureMode) {
+        when (state.captureMode) {
             MediaType.IMAGE -> {
                 action.imageCapture?.let {
                     capture(action.context, action.imageCapture)
@@ -167,7 +167,6 @@ class AttachmentsCameraModel @AssistedInject constructor(
             )
         }
     }
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun capture(context: Context, videoCapture: VideoCapture<Recorder>) {
@@ -247,7 +246,6 @@ class AttachmentsCameraModel @AssistedInject constructor(
                 context.cacheDir.also { it?.mkdirs() }!!
         )
     }
-
 
     private fun getUri(context: Context, file: File): Uri {
         return FileProvider.getUriForFile(

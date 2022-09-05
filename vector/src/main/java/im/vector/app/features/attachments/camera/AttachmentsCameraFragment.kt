@@ -40,10 +40,10 @@ import androidx.camera.video.QualitySelector
 import androidx.camera.video.Recorder
 import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider

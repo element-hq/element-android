@@ -23,8 +23,8 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.camera.AttachmentsCameraActivity
-import im.vector.app.features.attachments.camera.MediaType
 import im.vector.app.features.attachments.camera.AttachmentsCameraOutput
+import im.vector.app.features.attachments.camera.MediaType
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
