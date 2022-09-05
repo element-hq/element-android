@@ -26,6 +26,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
@@ -84,6 +85,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val analyticsConfig: AnalyticsConfig,
         private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -118,7 +120,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun observeReleaseNotes() = withState { state ->
         // we don't want to show release notes fore new users or after relogin
-        if (state.authenticationDescription == null) {
+        if (state.authenticationDescription == null && vectorFeatures.isNewAppLayoutEnabled()) {
             releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
                 if (!isAppLayoutOnboardingShown) {
                     _viewEvents.post(HomeActivityViewEvents.ShowReleaseNotes)
@@ -126,7 +128,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 }
             }.launchIn(viewModelScope)
         } else {
-            //we assume that users which came from auth flow either have seen updates already (relogin) or don't need them (new user)
+            // we assume that users which came from auth flow either have seen updates already (relogin) or don't need them (new user)
             viewModelScope.launch {
                 releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
             }
