@@ -275,8 +275,7 @@ class ImageContentRenderer @Inject constructor(
                 }
                 Mode.STICKER -> {
                     // limit on width
-                    val maxWidthDp = min(dimensionConverter.dpToPx(120), maxImageWidth / 2)
-                    finalWidth = min(dimensionConverter.dpToPx(width), maxWidthDp)
+                    finalWidth = min(dimensionConverter.dpToPx(width), maxImageWidth * 3 / 4)
                     finalHeight = finalWidth * height / width
                 }
             }
