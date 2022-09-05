@@ -26,7 +26,7 @@ data class InvitesViewState(
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
 ) : MavericksState
 
-sealed class InvitesContentState {
+sealed interface InvitesContentState {
     object Loading : InvitesContentState()
     data class Empty(
             val title: CharSequence,

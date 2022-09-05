@@ -68,7 +68,7 @@ class InvitesViewModel @AssistedInject constructor(
     private val _invites = MutableSharedFlow<InvitesContentState>(replay = 1)
     val invites = _invites.asSharedFlow()
 
-    var invitesCount = -1
+    private var invitesCount = -1
 
     init {
         observeInvites()
