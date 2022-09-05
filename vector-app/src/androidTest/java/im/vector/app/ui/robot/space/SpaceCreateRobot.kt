@@ -31,6 +31,7 @@ import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.HomeActivity
+import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 
 class SpaceCreateRobot {
@@ -85,7 +86,9 @@ class SpaceCreateRobot {
         clickOn(R.id.nextButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
         clickOn(R.id.nextButton)
-        waitUntilDialogVisible(withId(R.id.inviteByMxidButton))
+        waitUntilActivityVisible<RoomDetailActivity> {
+            waitUntilDialogVisible(withId(R.id.inviteByMxidButton))
+        }
         // close invite dialog
         pressBack()
         waitUntilViewVisible(withId(R.id.timelineRecyclerView))
