@@ -48,7 +48,7 @@ class AudioMessageHelper @Inject constructor(
 ) {
     private var mediaPlayer: MediaPlayer? = null
     private var currentPlayingId: String? = null
-    private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
+    private val voiceRecorder: VoiceRecorder by lazy { voiceRecorderProvider.provideVoiceRecorder() }
 
     private val amplitudeList = mutableListOf<Int>()
 
