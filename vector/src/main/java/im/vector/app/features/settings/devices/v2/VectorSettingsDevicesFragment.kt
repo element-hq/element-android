@@ -40,6 +40,8 @@ import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 
 /**
  * Display the list of the user's devices and sessions.
@@ -131,14 +133,48 @@ class VectorSettingsDevicesFragment :
             }
             val otherDevices = devices?.filter { it.deviceInfo.deviceId != state.myDeviceId }
 
+            renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount)
             renderCurrentDevice(currentDeviceInfo)
             renderOtherSessionsView(otherDevices)
         } else {
+            hideSecurityRecommendations()
             hideCurrentSessionView()
             hideOtherSessionsView()
         }
 
         handleRequestStatus(state.request)
+    }
+
+    private fun renderSecurityRecommendations(inactiveSessionsCount: Int, unverifiedSessionsCount: Int) {
+        if (unverifiedSessionsCount == 0 && inactiveSessionsCount == 0) {
+            hideSecurityRecommendations()
+        } else {
+            views.deviceListHeaderSectionSecurityRecommendations.isVisible = true
+            views.deviceListSecurityRecommendationsDivider.isVisible = true
+            views.deviceListUnverifiedSessionsRecommendation.isVisible = unverifiedSessionsCount > 0
+            views.deviceListInactiveSessionsRecommendation.isVisible = inactiveSessionsCount > 0
+            val unverifiedSessionsViewState = SecurityRecommendationViewState(
+                    description = getString(R.string.device_manager_unverified_sessions_description),
+                    sessionsCount = unverifiedSessionsCount,
+            )
+            views.deviceListUnverifiedSessionsRecommendation.render(unverifiedSessionsViewState)
+            val inactiveSessionsViewState = SecurityRecommendationViewState(
+                    description = resources.getQuantityString(
+                            R.plurals.device_manager_inactive_sessions_description,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                            SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+                    ),
+                    sessionsCount = inactiveSessionsCount,
+            )
+            views.deviceListInactiveSessionsRecommendation.render(inactiveSessionsViewState)
+        }
+    }
+
+    private fun hideSecurityRecommendations() {
+        views.deviceListHeaderSectionSecurityRecommendations.isVisible = false
+        views.deviceListUnverifiedSessionsRecommendation.isVisible = false
+        views.deviceListInactiveSessionsRecommendation.isVisible = false
+        views.deviceListSecurityRecommendationsDivider.isVisible = false
     }
 
     private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?) {
@@ -169,6 +205,7 @@ class VectorSettingsDevicesFragment :
     private fun hideCurrentSessionView() {
         views.deviceListHeaderCurrentSession.isVisible = false
         views.deviceListCurrentSession.isVisible = false
+        views.deviceListDividerCurrentSession.isVisible = false
     }
 
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
