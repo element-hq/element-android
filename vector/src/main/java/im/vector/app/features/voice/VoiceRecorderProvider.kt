@@ -17,6 +17,8 @@
 package im.vector.app.features.voice
 
 import android.content.Context
+import android.media.MediaCodecList
+import android.media.MediaFormat
 import android.os.Build
 import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.Dispatchers
@@ -27,10 +29,20 @@ class VoiceRecorderProvider @Inject constructor(
         private val vectorFeatures: VectorFeatures,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorFeatures.forceUsageOfOpusEncoder().not()) {
-            VoiceRecorderQ(context)
-        } else {
+        return if (useFallbackRecorder()) {
             VoiceRecorderL(context, Dispatchers.IO)
+        } else {
+            VoiceRecorderQ(context)
         }
+    }
+
+    private fun useFallbackRecorder(): Boolean {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || !hasOpusEncoder() || vectorFeatures.forceUsageOfOpusEncoder()
+    }
+
+    private fun hasOpusEncoder(): Boolean {
+        val codecList = MediaCodecList(MediaCodecList.ALL_CODECS)
+        val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_OPUS, 48000, 1)
+        return codecList.findEncoderForFormat(format) != null
     }
 }
