@@ -117,6 +117,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     }
 
     private fun observeReleaseNotes() = withState { state ->
+        // we don't want to show release notes fore new users or after relogin
         if (state.authenticationDescription == null) {
             releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
                 if (!isAppLayoutOnboardingShown) {
@@ -124,6 +125,11 @@ class HomeActivityViewModel @AssistedInject constructor(
                     releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
                 }
             }.launchIn(viewModelScope)
+        } else {
+            //we assume that users which came from auth flow either have seen updates already (relogin) or don't need them (new user)
+            viewModelScope.launch {
+                releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
+            }
         }
     }
 
