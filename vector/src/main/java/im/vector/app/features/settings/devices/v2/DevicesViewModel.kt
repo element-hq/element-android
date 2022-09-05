@@ -21,19 +21,30 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.PublishDataSource
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import kotlin.time.Duration.Companion.seconds
 
 // TODO add unit tests
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
-) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState) {
+        private val refreshDevicesUseCase: RefreshDevicesUseCase,
+        private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
+) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState), VerificationService.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
@@ -42,9 +53,35 @@ class DevicesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
+    private val refreshSource = PublishDataSource<Unit>()
+    private val refreshThrottleDelayMs = 4.seconds.inWholeMilliseconds
+
     init {
+        addVerificationListener()
         observeCurrentSessionCrossSigningInfo()
         observeDevices()
+        observeRefreshSource()
+        refreshDevicesOnCryptoDevicesChange()
+        queryRefreshDevicesList()
+    }
+
+    override fun onCleared() {
+        removeVerificationListener()
+        super.onCleared()
+    }
+
+    private fun addVerificationListener() {
+        activeSessionHolder.getSafeActiveSession()
+                ?.cryptoService()
+                ?.verificationService()
+                ?.addListener(this)
+    }
+
+    private fun removeVerificationListener() {
+        activeSessionHolder.getSafeActiveSession()
+                ?.cryptoService()
+                ?.verificationService()
+                ?.removeListener(this)
     }
 
     private fun observeCurrentSessionCrossSigningInfo() {
@@ -75,6 +112,34 @@ class DevicesViewModel @AssistedInject constructor(
                         )
                     }
                 }
+    }
+
+    private fun refreshDevicesOnCryptoDevicesChange() {
+        viewModelScope.launch {
+            refreshDevicesOnCryptoDevicesChangeUseCase.execute()
+        }
+    }
+
+    private fun observeRefreshSource() {
+        refreshSource.stream()
+                .throttleFirst(refreshThrottleDelayMs)
+                .onEach { refreshDevicesUseCase.execute() }
+                .launchIn(viewModelScope)
+    }
+
+    override fun transactionUpdated(tx: VerificationTransaction) {
+        if (tx.state == VerificationTxState.Verified) {
+            queryRefreshDevicesList()
+        }
+    }
+
+    /**
+     * Force the refresh of the devices list.
+     * The devices list is the list of the devices where the user is logged in.
+     * It can be any mobile devices, and any browsers.
+     */
+    private fun queryRefreshDevicesList() {
+        refreshSource.post(Unit)
     }
 
     override fun handle(action: DevicesAction) {
