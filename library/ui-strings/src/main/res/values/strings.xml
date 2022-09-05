@@ -3254,4 +3254,13 @@
     <string name="home_empty_no_unreads_title">Nothing to report.</string>
     <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
 
+    <string name="onboarding_new_app_layout_welcome_title">Welcome to a new view!</string>
+    <string name="onboarding_new_app_layout_welcome_message">To simplify your Element, tabs are now optional. Manage them using the top-right menu.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Access Spaces</string>
+    <string name="onboarding_new_app_layout_spaces_message">Access your Spaces (bottom-right) faster and easier than ever before.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Give Feedback</string>
+    <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
+    <string name="onboarding_new_app_layout_button_more">Read more</string>
+    <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
 </resources>

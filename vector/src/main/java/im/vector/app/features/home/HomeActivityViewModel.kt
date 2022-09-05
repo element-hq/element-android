@@ -31,6 +31,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
 import im.vector.app.features.analytics.store.AnalyticsStore
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesPreferencesStore
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.raw.wellknown.ElementWellKnown
@@ -82,6 +83,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val vectorPreferences: VectorPreferences,
         private val analyticsTracker: AnalyticsTracker,
         private val analyticsConfig: AnalyticsConfig,
+        private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -110,7 +112,17 @@ class HomeActivityViewModel @AssistedInject constructor(
         checkSessionPushIsOn()
         observeCrossSigningReset()
         observeAnalytics()
+        observeReleaseNotes()
         initThreadsMigration()
+    }
+
+    private fun observeReleaseNotes() {
+        releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
+            if (!isAppLayoutOnboardingShown) {
+                _viewEvents.post(HomeActivityViewEvents.ShowReleaseNotes)
+                releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun observeAnalytics() {
