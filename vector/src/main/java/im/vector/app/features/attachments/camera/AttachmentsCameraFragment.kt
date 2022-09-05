@@ -133,8 +133,6 @@ class AttachmentsCameraFragment :
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
 
-        orientationEventListener.enable()
-
         views.attachmentsCameraCaptureAction.debouncedClicks {
             context?.let {
                 viewModel.handle(AttachmentsCameraAction.Capture(it, imageCapture, videoCapture))
@@ -170,6 +168,11 @@ class AttachmentsCameraFragment :
         setCaptureModeButtons()
         setFlashButton()
         setRotation()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        orientationEventListener.enable()
     }
 
     override fun onStop() {
