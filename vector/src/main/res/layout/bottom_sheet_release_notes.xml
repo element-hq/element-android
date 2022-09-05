@@ -16,15 +16,6 @@
         android:tint="?vctr_content_secondary"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/release_notes_carousel"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/release_notes_vertical_margin_small"
-        android:layout_marginBottom="@dimen/release_notes_vertical_margin"
-        app:layout_constraintBottom_toTopOf="@+id/release_notes_carousel_indicator"
-        app:layout_constraintTop_toBottomOf="@id/release_notes_btn_close" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/release_notes_carousel_indicator"
         android:layout_width="match_parent"
@@ -50,5 +41,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/action_next" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/release_notes_carousel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/release_notes_vertical_margin_small"
+        android:layout_marginBottom="@dimen/release_notes_vertical_margin"
+        app:layout_constraintBottom_toTopOf="@id/release_notes_carousel_indicator"
+        app:layout_constraintTop_toBottomOf="@id/release_notes_btn_close" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
