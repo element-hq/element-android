@@ -3227,8 +3227,10 @@
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
 
     <string name="onboarding_new_app_layout_welcome_title">Welcome to a new view!</string>
-    <string name="onboarding_new_app_layout_welcome_message">To simplify your Element, tabs are now optional. Manage them using the top-right menu.</string>
+    <!--    Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="onboarding_new_app_layout_welcome_message">To simplify your ${app_name}, tabs are now optional. Manage them using the top-right menu.</string>
     <string name="onboarding_new_app_layout_spaces_title">Access Spaces</string>
+    <!--    Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
     <string name="onboarding_new_app_layout_spaces_message">Access your Spaces (bottom-right) faster and easier than ever before.</string>
     <string name="onboarding_new_app_layout_feedback_title">Give Feedback</string>
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>

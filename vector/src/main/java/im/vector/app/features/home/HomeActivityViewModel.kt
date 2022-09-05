@@ -83,7 +83,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val vectorPreferences: VectorPreferences,
         private val analyticsTracker: AnalyticsTracker,
         private val analyticsConfig: AnalyticsConfig,
-        private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore
+        private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -116,13 +116,15 @@ class HomeActivityViewModel @AssistedInject constructor(
         initThreadsMigration()
     }
 
-    private fun observeReleaseNotes() {
-        releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
-            if (!isAppLayoutOnboardingShown) {
-                _viewEvents.post(HomeActivityViewEvents.ShowReleaseNotes)
-                releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
-            }
-        }.launchIn(viewModelScope)
+    private fun observeReleaseNotes() = withState { state ->
+        if (state.authenticationDescription == null) {
+            releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
+                if (!isAppLayoutOnboardingShown) {
+                    _viewEvents.post(HomeActivityViewEvents.ShowReleaseNotes)
+                    releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
+                }
+            }.launchIn(viewModelScope)
+        }
     }
 
     private fun observeAnalytics() {

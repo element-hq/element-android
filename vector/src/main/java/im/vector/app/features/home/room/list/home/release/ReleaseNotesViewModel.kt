@@ -40,7 +40,7 @@ class ReleaseNotesViewModel @AssistedInject constructor(
     private var selectedPageIndex = 0
 
     init {
-        _viewEvents.post(ReleaseNotesViewEvents.SelectPage(selectedPageIndex))
+        _viewEvents.post(ReleaseNotesViewEvents.SelectPage(0))
     }
 
     override fun handle(action: ReleaseNotesAction) {

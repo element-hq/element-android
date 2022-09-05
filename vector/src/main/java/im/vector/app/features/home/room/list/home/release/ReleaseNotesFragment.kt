@@ -20,6 +20,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -51,10 +53,20 @@ class ReleaseNotesFragment : VectorBaseFragment<BottomSheetReleaseNotesBinding>(
         tabLayoutMediator = TabLayoutMediator(views.releaseNotesCarouselIndicator, views.releaseNotesCarousel) { _, _ -> }
                 .also { it.attach() }
 
-        views.releaseNotesCarousel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        val pageCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.handle(ReleaseNotesAction.PageSelected(position))
                 updateButtonText(position)
+            }
+        }
+
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onCreate(owner: LifecycleOwner) {
+                views.releaseNotesCarousel.registerOnPageChangeCallback(pageCallback)
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                views.releaseNotesCarousel.unregisterOnPageChangeCallback(pageCallback)
             }
         })
 
@@ -99,7 +111,7 @@ class ReleaseNotesFragment : VectorBaseFragment<BottomSheetReleaseNotesBinding>(
     }
 
     private fun close() {
-        requireActivity().onBackPressed()
+        requireActivity().finish()
     }
 
     private fun selectPage(index: Int) {
