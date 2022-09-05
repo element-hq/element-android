@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterStart"
         app:layout_constraintBottom_toTopOf="@id/carousel_item_title"
-        tools:src="@drawable/app_layout_onboarding_welcome"/>
+        tools:src="@drawable/ill_app_layout_onboarding_rooms"/>
 
     <TextView
         android:id="@+id/carousel_item_title"
