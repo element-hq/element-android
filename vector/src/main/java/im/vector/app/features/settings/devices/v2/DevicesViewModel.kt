@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import kotlin.time.Duration.Companion.seconds
 
-// TODO add unit tests
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val activeSessionHolder: ActiveSessionHolder,
@@ -99,7 +98,7 @@ class DevicesViewModel @AssistedInject constructor(
                 .execute { async ->
                     if (async is Success) {
                         val deviceFullInfoList = async.invoke()
-                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isVerified().orFalse() }
+                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.isVerified.orFalse() }
                         val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
                         copy(
                                 devices = async,
