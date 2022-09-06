@@ -44,6 +44,7 @@ import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
@@ -54,7 +55,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class VectorSettingsDevicesFragment :
-        VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+        VectorBaseFragment<FragmentSettingsDevicesBinding>(),
+        OtherSessionsView.Callback {
 
     @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
@@ -126,6 +128,7 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initOtherSessionsView() {
+        views.deviceListOtherSessions.callback = this
         views.deviceListOtherSessions.setCallback(object : OtherSessionsController.Callback {
             override fun onItemClicked(deviceId: String) {
                 navigateToSessionOverview(deviceId)
@@ -259,5 +262,9 @@ class VectorSettingsDevicesFragment :
             is Loading -> true
             else -> false
         }
+    }
+
+    override fun onViewAllOtherSessionsClicked() {
+        viewNavigator.navigateToOtherSessions(requireActivity())
     }
 }

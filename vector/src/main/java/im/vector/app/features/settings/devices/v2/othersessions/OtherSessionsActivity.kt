@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.othersessions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
@@ -28,6 +29,8 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        views.toolbar.visibility = View.GONE
 
         if (isFirstCreation()) {
             addFragment(

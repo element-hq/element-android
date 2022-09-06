@@ -34,13 +34,22 @@ class OtherSessionsView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    interface Callback {
+        fun onViewAllOtherSessionsClicked()
+    }
+
     @Inject lateinit var otherSessionsController: OtherSessionsController
 
     private val views: ViewOtherSessionsBinding
+    var callback: Callback? = null
 
     init {
         inflate(context, R.layout.view_other_sessions, this)
         views = ViewOtherSessionsBinding.bind(this)
+
+        views.otherSessionsViewAllButton.setOnClickListener {
+            callback?.onViewAllOtherSessionsClicked()
+        }
     }
 
     fun render(devices: List<DeviceFullInfo>) {
