@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject

@@ -66,7 +66,7 @@ class GetDeviceFullInfoListUseCaseTest {
     }
 
     @Test
-    fun `given active session when getting list of device full info then the result list is correct and sorted in descending order`() = runTest(testDispatcher) {
+    fun `given active session when getting list of device full info then the list is correct and sorted in descending order`() = runTest(testDispatcher) {
         // Given
         val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
         val fakeFlowSession = fakeActiveSessionHolder.fakeSession.givenFlowSession()

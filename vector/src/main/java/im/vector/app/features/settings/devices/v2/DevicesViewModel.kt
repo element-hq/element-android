@@ -151,4 +151,3 @@ class DevicesViewModel @AssistedInject constructor(
         // TODO implement when needed
     }
 }
-
