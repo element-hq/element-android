@@ -45,7 +45,7 @@ data class UserProperties(
          */
         val webMetaSpacePeopleEnabled: Boolean? = null,
         /**
-         * The active filter in the All Chats screen
+         * The active filter in the All Chats screen.
          */
         val allChatsActiveFilter: AllChatsActiveFilter? = null,
         /**
@@ -87,22 +87,22 @@ data class UserProperties(
     enum class AllChatsActiveFilter {
 
         /**
-         * Filters are activated and All is selected
+         * Filters are activated and All is selected.
          */
         All,
 
         /**
-         * Filters are activated and Favourites is selected
+         * Filters are activated and Favourites is selected.
          */
         Favourites,
 
         /**
-         * Filters are activated and People is selected
+         * Filters are activated and People is selected.
          */
         People,
 
         /**
-         * Filters are activated and Unreads is selected
+         * Filters are activated and Unreads is selected.
          */
         Unreads,
     }
