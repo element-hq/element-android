@@ -80,7 +80,7 @@ interface SpaceService {
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
-     * @return the [LiveData] of List[SpaceSummary]
+     * @return the [LiveData] of List[RoomSummary]
      */
     fun getSpaceSummariesLive(
             queryParams: SpaceSummaryQueryParams,
