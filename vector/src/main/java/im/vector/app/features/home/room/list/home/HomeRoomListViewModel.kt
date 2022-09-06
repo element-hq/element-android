@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -202,24 +203,38 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private fun getFiltersDataFlow(): SharedFlow<Optional<List<HomeRoomFilter>>> {
         val flow = MutableSharedFlow<Optional<List<HomeRoomFilter>>>(replay = 1)
 
-        val favouritesFlow = session.flow()
-                .liveRoomSummaries(
-                        RoomSummaryQueryParams.Builder().also { builder ->
-                            builder.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
-                        }.build()
-                )
-                .map { it.isNotEmpty() }
+        val spaceFLow = spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
+                .onStart {
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
+                }
 
-        val dmsFLow = session.flow()
-                .liveRoomSummaries(
-                        RoomSummaryQueryParams.Builder().also { builder ->
-                            builder.memberships = listOf(Membership.JOIN)
-                            builder.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                        }.build()
-                )
-                .map { it.isNotEmpty() }
-                .distinctUntilChanged()
+        val favouritesFlow =
+                spaceFLow.flatMapLatest { selectedSpace ->
+                    session.flow()
+                            .liveRoomSummaries(
+                                    RoomSummaryQueryParams.Builder().also { builder ->
+                                        builder.spaceFilter = selectedSpace.orNull()?.roomId.toActiveSpaceOrNoFilter()
+                                        builder.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+                                    }.build()
+                            )
+                }
+                        .map { it.isNotEmpty() }
+                        .distinctUntilChanged()
+
+        val dmsFLow =
+                spaceFLow.flatMapLatest { selectedSpace ->
+                    session.flow()
+                            .liveRoomSummaries(
+                                    RoomSummaryQueryParams.Builder().also { builder ->
+                                        builder.spaceFilter = selectedSpace.orNull()?.roomId.toActiveSpaceOrNoFilter()
+                                        builder.memberships = listOf(Membership.JOIN)
+                                        builder.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                    }.build()
+                            )
+                }
+                        .map { it.isNotEmpty() }
+                        .distinctUntilChanged()
 
         combine(favouritesFlow, dmsFLow, preferencesStore.areFiltersEnabledFlow) { hasFavourite, hasDm, areFiltersEnabled ->
             Triple(hasFavourite, hasDm, areFiltersEnabled)
