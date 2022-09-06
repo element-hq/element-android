@@ -120,7 +120,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun observeReleaseNotes() = withState { state ->
         // we don't want to show release notes for new users or after relogin
-        if (state.authenticationDescription == null && vectorFeatures.isNewAppLayoutEnabled()) {
+        if (state.authenticationDescription == null && vectorFeatures.isNewAppLayoutFeatureEnabled()) {
             releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
                 if (!isAppLayoutOnboardingShown) {
                     releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)

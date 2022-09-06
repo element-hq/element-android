@@ -152,7 +152,7 @@ class ElementRobot {
     }
 
     fun signout(expectSignOutWarning: Boolean) {
-        if (features.isNewAppLayoutEnabled()) {
+        if (features.isNewAppLayoutFeatureEnabled()) {
             onView(withId((R.id.avatar)))
                     .perform(click())
             waitUntilActivityVisible<VectorSettingsActivity> {
