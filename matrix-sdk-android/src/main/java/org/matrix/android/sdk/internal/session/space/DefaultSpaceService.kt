@@ -198,10 +198,14 @@ internal class DefaultSpaceService @Inject constructor(
                 .orEmpty()
     }
 
-    private fun SpaceChildSummaryEvent.isChildOf(space: SpaceChildSummaryResponse) = stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
+    private fun SpaceChildSummaryEvent.isChildOf(space: SpaceChildSummaryResponse): Boolean {
+        return stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
+    }
 
-    private fun SpaceChildSummaryEvent.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse) = content.toModel<SpaceChildContent>()?.let { content ->
-        createSpaceChildInfo(spaceId, summary, content)
+    private fun SpaceChildSummaryEvent.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse): SpaceChildInfo? {
+        return content.toModel<SpaceChildContent>()?.let { content ->
+            createSpaceChildInfo(spaceId, summary, content)
+        }
     }
 
     private fun createSpaceChildInfo(
