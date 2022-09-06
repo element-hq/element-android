@@ -50,6 +50,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
+        android:importantForAccessibility="no"
         android:lines="1"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -50,6 +50,7 @@ abstract class NewSubSpaceSummaryItem : VectorEpoxyModel<NewSubSpaceSummaryItem.
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        val context = holder.root.context
         holder.root.onClick(onSubSpaceSelectedListener)
         holder.name.text = matrixItem.displayName
         holder.root.isChecked = selected
@@ -63,6 +64,10 @@ abstract class NewSubSpaceSummaryItem : VectorEpoxyModel<NewSubSpaceSummaryItem.
         )
         holder.chevron.onClick(onToggleExpandListener)
         holder.chevron.isVisible = hasChildren
+        holder.chevron.contentDescription = context.getString(
+                if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children,
+                matrixItem.displayName,
+        )
 
         holder.indent.isVisible = indent > 0
         holder.indent.updateLayoutParams {

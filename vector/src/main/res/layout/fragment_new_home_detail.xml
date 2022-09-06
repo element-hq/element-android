@@ -127,7 +127,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:accessibilityTraversalBefore="@id/roomListView"
         android:contentDescription="@string/a11y_create_message"
         android:src="@drawable/ic_new_chat"
         android:visibility="gone"
