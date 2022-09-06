@@ -18,13 +18,11 @@ package im.vector.app.push.fcm
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
-import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushStore
@@ -35,28 +33,11 @@ import javax.inject.Inject
  * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
  * It has an alter ego in the fdroid variant.
  */
-class GoogleFcmHelper @Inject constructor(
-        context: Context,
-) : FcmHelper {
-    companion object {
-        private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
-    }
+class GoogleFcmHelper @Inject constructor() : FcmHelper {
 
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
-    private val sharedPrefs = DefaultSharedPreferences.getInstance(context)
 
     override fun isFirebaseAvailable(): Boolean = true
-
-    override fun getFcmToken(): String? {
-        return sharedPrefs.getString(PREFS_KEY_FCM_TOKEN, null)
-    }
-
-    override fun storeFcmToken(token: String?) {
-        // TODO Store in realm
-        sharedPrefs.edit {
-            putString(PREFS_KEY_FCM_TOKEN, token)
-        }
-    }
 
     override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         //        if (TextUtils.isEmpty(getFcmToken(activity))) {

@@ -23,20 +23,6 @@ interface FcmHelper {
     fun isFirebaseAvailable(): Boolean
 
     /**
-     * Retrieves the FCM registration token.
-     *
-     * @return the FCM token or null if not received from FCM.
-     */
-    fun getFcmToken(): String?
-
-    /**
-     * Store FCM token to the SharedPrefs.
-     *
-     * @param token the token to store.
-     */
-    fun storeFcmToken(token: String?)
-
-    /**
      * onNewToken may not be called on application upgrade, so ensure my shared pref is set.
      *
      * @param activity the first launch Activity.

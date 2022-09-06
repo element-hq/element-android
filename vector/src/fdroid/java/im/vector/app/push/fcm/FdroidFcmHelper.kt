@@ -36,14 +36,6 @@ class FdroidFcmHelper @Inject constructor(
 
     override fun isFirebaseAvailable(): Boolean = false
 
-    override fun getFcmToken(): String? {
-        return null
-    }
-
-    override fun storeFcmToken(token: String?) {
-        // No op
-    }
-
     override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         // No op
     }
