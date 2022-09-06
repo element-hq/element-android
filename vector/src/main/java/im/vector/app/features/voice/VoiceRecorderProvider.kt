@@ -20,6 +20,7 @@ import android.content.Context
 import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
@@ -40,7 +41,8 @@ class VoiceRecorderProvider @Inject constructor(
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || !hasOpusEncoder() || vectorFeatures.forceUsageOfOpusEncoder()
     }
 
-    private fun hasOpusEncoder(): Boolean {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun hasOpusEncoder(): Boolean {
         val codecList = MediaCodecList(MediaCodecList.ALL_CODECS)
         val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_OPUS, 48000, 1)
         return codecList.findEncoderForFormat(format) != null
