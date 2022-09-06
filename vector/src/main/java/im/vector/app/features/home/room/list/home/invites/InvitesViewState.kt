@@ -27,13 +27,13 @@ data class InvitesViewState(
 ) : MavericksState
 
 sealed interface InvitesContentState {
-    object Loading : InvitesContentState()
+    object Loading : InvitesContentState
     data class Empty(
             val title: CharSequence,
             val image: Drawable?,
             val message: CharSequence
-    ) : InvitesContentState()
+    ) : InvitesContentState
 
-    data class Content(val content: PagedList<RoomSummary>) : InvitesContentState()
-    data class Error(val throwable: Throwable) : InvitesContentState()
+    data class Content(val content: PagedList<RoomSummary>) : InvitesContentState
+    data class Error(val throwable: Throwable) : InvitesContentState
 }
