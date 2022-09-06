@@ -3252,5 +3252,13 @@
     <string name="device_manager_session_title">Session</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filter</string>
+    <string name="device_manager_filter_option_all_sessions">All session</string>
+    <string name="device_manager_filter_option_verified">Verified</string>
+    <string name="device_manager_filter_option_verified_description">Ready for secure messaging</string>
+    <string name="device_manager_filter_option_unverified">Unverified</string>
+    <string name="device_manager_filter_option_unverified_description">Not ready for secure messaging</string>
+    <string name="device_manager_filter_option_inactive">Inactive</string>
+    <string name="device_manager_filter_option_inactive_description">Inactive for %1$d days or longer</string>
 
 </resources>
