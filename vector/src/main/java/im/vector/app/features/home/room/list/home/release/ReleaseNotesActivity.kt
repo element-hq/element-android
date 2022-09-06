@@ -16,17 +16,20 @@
 
 package im.vector.app.features.home.room.list.home.release
 
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReleaseNotesActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     @Inject lateinit var orientationLocker: ScreenOrientationLocker
+    @Inject lateinit var releaseNotesPreferencesStore: ReleaseNotesPreferencesStore
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
@@ -36,6 +39,13 @@ class ReleaseNotesActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         orientationLocker.lockPhonesToPortrait(this)
         if (isFirstCreation()) {
             addFragment(views.simpleFragmentContainer, ReleaseNotesFragment::class.java)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
         }
     }
 }

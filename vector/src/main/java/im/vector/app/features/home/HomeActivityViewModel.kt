@@ -123,7 +123,6 @@ class HomeActivityViewModel @AssistedInject constructor(
         if (state.authenticationDescription == null && vectorFeatures.isNewAppLayoutEnabled()) {
             releaseNotesPreferencesStore.appLayoutOnboardingShown.onEach { isAppLayoutOnboardingShown ->
                 if (!isAppLayoutOnboardingShown) {
-                    releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
                     _viewEvents.post(HomeActivityViewEvents.ShowReleaseNotes)
                 }
             }.launchIn(viewModelScope)
