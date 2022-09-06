@@ -3259,6 +3259,9 @@
     <string name="device_manager_filter_option_unverified">Unverified</string>
     <string name="device_manager_filter_option_unverified_description">Not ready for secure messaging</string>
     <string name="device_manager_filter_option_inactive">Inactive</string>
-    <string name="device_manager_filter_option_inactive_description">Inactive for %1$d days or longer</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inactive for %1$d day or longer</item>
+        <item quantity="other">Inactive for %1$d days or longer</item>
+    </plurals>
 
 </resources>
