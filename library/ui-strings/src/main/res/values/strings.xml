@@ -139,6 +139,7 @@
     <string name="all_chats">All Chats</string>
     <string name="start_chat">Start Chat</string>
     <string name="create_room">Create Room</string>
+    <string name="change_space">Change Space</string>
     <string name="explore_rooms">Explore Rooms</string>
     <!-- Note to translators: %s refers to the space whose children is being expanded -->
     <string name="a11y_expand_space_children">Expand %s children</string>

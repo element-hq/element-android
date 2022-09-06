@@ -52,10 +52,17 @@ class NewSpaceSummaryController @Inject constructor(
     }
 
     private fun buildGroupModels(viewState: SpaceListViewState) = with(viewState) {
+        addHeaderItem()
         addHomeItem(selectedSpace == null, homeAggregateCount)
         addSpaces(spaces, selectedSpace, rootSpacesOrdered, expandedStates)
         addInvites(selectedSpace, rootSpacesOrdered, inviters)
         addCreateItem()
+    }
+
+    private fun addHeaderItem() {
+        newSpaceListHeaderItem {
+            id("space_list_header")
+        }
     }
 
     private fun addHomeItem(selected: Boolean, homeCount: RoomAggregateNotificationCount) {
