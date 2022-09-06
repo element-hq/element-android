@@ -128,7 +128,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
             // If the endpoint has changed
             // or the gateway has changed
             if (unifiedPushStore.getEndpointOrToken() != endpoint) {
-                unifiedPushStore.storeUpEndpoint(endpoint)
+                unifiedPushStore.storeFcmOrUpEndpoint(endpoint)
                 coroutineScope.launch {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
                         unifiedPushStore.getPushGateway()?.let {

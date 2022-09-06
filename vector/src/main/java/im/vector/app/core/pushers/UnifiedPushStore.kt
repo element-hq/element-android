@@ -40,7 +40,7 @@ class UnifiedPushStore @Inject constructor(
      *
      * @param endpoint the endpoint to store
      */
-    fun storeUpEndpoint(endpoint: String?) {
+    fun storeFcmOrUpEndpoint(endpoint: String?) {
         defaultPrefs.edit {
             putString(PREFS_ENDPOINT_OR_TOKEN, endpoint)
         }

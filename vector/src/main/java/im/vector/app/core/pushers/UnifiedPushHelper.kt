@@ -188,7 +188,7 @@ class UnifiedPushHelper @Inject constructor(
         } catch (e: Exception) {
             Timber.d(e, "Probably unregistering a non existing pusher")
         }
-        unifiedPushStore.storeUpEndpoint(null)
+        unifiedPushStore.storeFcmOrUpEndpoint(null)
         unifiedPushStore.storePushGateway(null)
         UnifiedPush.unregisterApp(context)
     }

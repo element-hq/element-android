@@ -20,7 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
-import im.vector.app.core.pushers.FcmHelper
+import im.vector.app.core.pushers.UnifiedPushStore
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.startAddGoogleAccountIntent
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class TestFirebaseToken @Inject constructor(
         private val context: FragmentActivity,
         private val stringProvider: StringProvider,
-        private val fcmHelper: FcmHelper,
+        private val unifiedPushStore: UnifiedPushStore,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
@@ -69,7 +69,7 @@ class TestFirebaseToken @Inject constructor(
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                 Timber.e("Retrieved FCM token success [$tok].")
                                 // Ensure it is well store in our local storage
-                                fcmHelper.storeFcmToken(token)
+                                unifiedPushStore.storeFcmOrUpEndpoint(token)
                             }
                             status = TestStatus.SUCCESS
                         }

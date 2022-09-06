@@ -23,8 +23,8 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import org.matrix.android.sdk.api.session.pushers.PusherState
@@ -38,13 +38,13 @@ class TestTokenRegistration @Inject constructor(
         private val stringProvider: StringProvider,
         private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val fcmHelper: FcmHelper,
+        private val unifiedPushHelper: UnifiedPushHelper,
 ) :
         TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
-        val fcmToken = fcmHelper.getFcmToken() ?: run {
+        val fcmToken = unifiedPushHelper.getPrivacyFriendlyUpEndpoint() ?: run {
             status = TestStatus.FAILED
             return
         }

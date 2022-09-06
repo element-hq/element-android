@@ -27,6 +27,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushStore
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,6 +42,7 @@ class GoogleFcmHelper @Inject constructor(
         private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
     }
 
+    @Inject lateinit var unifiedPushStore: UnifiedPushStore
     private val sharedPrefs = DefaultSharedPreferences.getInstance(context)
 
     override fun isFirebaseAvailable(): Boolean = true
@@ -63,7 +65,7 @@ class GoogleFcmHelper @Inject constructor(
             try {
                 FirebaseMessaging.getInstance().token
                         .addOnSuccessListener { token ->
-                            storeFcmToken(token)
+                            unifiedPushStore.storeFcmOrUpEndpoint(token)
                             if (registerPusher) {
                                 pushersManager.enqueueRegisterPusherWithFcmKey(token)
                             }
