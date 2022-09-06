@@ -18,6 +18,7 @@ package im.vector.app.features.attachments.camera
 
 import android.content.Intent
 import android.provider.MediaStore
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -26,6 +27,7 @@ import im.vector.app.features.themes.ActivityOtherThemes
 
 @AndroidEntryPoint
 class AttachmentsCameraActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+
     override fun getOtherThemes() = ActivityOtherThemes.AttachmentsPreview
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
@@ -50,5 +52,9 @@ class AttachmentsCameraActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         val resultIntent = Intent()
         setResult(RESULT_CANCELED, resultIntent)
         finish()
+    }
+
+    fun showWaitingView() {
+        views.simpleActivityWaitingView.isVisible = true
     }
 }

@@ -52,8 +52,6 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentAttachmentsCameraBinding
 import timber.log.Timber
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,10 +64,10 @@ class AttachmentsCameraFragment :
 
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
+    private var preview: Preview? = null
     private var currentLens: Int? = null
 
     private lateinit var camera: Camera
-    private lateinit var cameraExecutor: ExecutorService
 
     private val gestureListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
@@ -125,7 +123,12 @@ class AttachmentsCameraFragment :
                     views.attachmentsCameraChronometer.base = SystemClock.elapsedRealtime()
                     views.attachmentsCameraChronometer.start()
                 }
-                AttachmentsCameraViewEvents.TakePhoto -> views.attachmentsCameraLoading.isVisible = true
+                AttachmentsCameraViewEvents.TakePhoto -> {
+                    (activity as AttachmentsCameraActivity?)?.showWaitingView()
+                    context?.let { context ->
+                        ProcessCameraProvider.getInstance(context).get().unbind(preview)
+                    }
+                }
                 AttachmentsCameraViewEvents.SetErrorAndFinish -> {
                     views.attachmentsCameraChronometer.stop()
                     (activity as AttachmentsCameraActivity).setErrorAndFinish()
@@ -174,7 +177,6 @@ class AttachmentsCameraFragment :
             scaleGestureDetector.onTouchEvent(event)
             return@setOnTouchListener true
         }
-        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     override fun invalidate() {
@@ -268,7 +270,7 @@ class AttachmentsCameraFragment :
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
                 // Preview
-                val preview = Preview.Builder()
+                preview = Preview.Builder()
                         .build()
                         .also {
                             it.setSurfaceProvider(views.viewFinder.surfaceProvider)
@@ -298,11 +300,6 @@ class AttachmentsCameraFragment :
                 }
             }, ContextCompat.getMainExecutor(context))
         }
-    }
-
-    override fun onDestroyView() {
-        cameraExecutor.shutdown()
-        super.onDestroyView()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentAttachmentsCameraBinding {

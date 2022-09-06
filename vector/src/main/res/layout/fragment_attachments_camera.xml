@@ -9,20 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/attachmentsCameraLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:trackColor="?colorBackgroundFloating"
-        app:indicatorColor="?colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/attachmentsCameraFlash"
         android:layout_width="wrap_content"
@@ -70,14 +56,13 @@
         android:id="@+id/attachmentsCameraChronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?colorPrimary"
+        style="@style/Widget.Vector.TextView.Floating"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/attachmentsCameraCaptureAction"
         android:layout_marginBottom="32dp"
         android:enabled="true"
-        android:textStyle="bold"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:contentDescription="@string/attachment_camera_chronometer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
