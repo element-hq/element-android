@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.every
@@ -30,11 +31,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.SessionParams
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.flow.FlowSession
-import org.matrix.android.sdk.flow.flow
 
 private const val A_DEVICE_ID = "device-id"
 
@@ -59,7 +57,7 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
     @Test
     fun `given the active session and existing cross signing info when getting these info then the result is correct`() = runTest(testDispatcher) {
         val fakeSession = givenSession(A_DEVICE_ID)
-        val fakeFlowSession = givenFlowSession(fakeSession)
+        val fakeFlowSession = fakeSession.givenFlowSession()
         val isCrossSigningVerified = true
         val mxCrossSigningInfo = givenMxCrossSigningInfo(isCrossSigningVerified)
         every { fakeFlowSession.liveCrossSigningInfo(any()) } returns flowOf(mxCrossSigningInfo.toOptional())
@@ -80,7 +78,7 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
     @Test
     fun `given the active session and no existing cross signing info when getting these info then the result is correct`() = runTest(testDispatcher) {
         val fakeSession = givenSession(A_DEVICE_ID)
-        val fakeFlowSession = givenFlowSession(fakeSession)
+        val fakeFlowSession = fakeSession.givenFlowSession()
         val mxCrossSigningInfo = null
         every { fakeFlowSession.liveCrossSigningInfo(any()) } returns flowOf(mxCrossSigningInfo.toOptional())
         val expectedResult = CurrentSessionCrossSigningInfo(
@@ -108,7 +106,7 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
                 .finish()
     }
 
-    private fun givenSession(deviceId: String): Session {
+    private fun givenSession(deviceId: String): FakeSession {
         val sessionParams = mockk<SessionParams>()
         every { sessionParams.deviceId } returns deviceId
 
@@ -116,12 +114,6 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
         fakeSession.givenSessionParams(sessionParams)
 
         return fakeSession
-    }
-
-    private fun givenFlowSession(session: Session): FlowSession {
-        val fakeFlowSession = mockk<FlowSession>()
-        every { session.flow() } returns fakeFlowSession
-        return fakeFlowSession
     }
 
     private fun givenMxCrossSigningInfo(isTrusted: Boolean) = mockk<MXCrossSigningInfo>()
