@@ -27,7 +27,6 @@ import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-// TODO add unit tests
 class RefreshDevicesOnCryptoDevicesChangeUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
@@ -42,9 +41,7 @@ class RefreshDevicesOnCryptoDevicesChangeUseCase @Inject constructor(
                             .sample(samplingPeriodMs)
                             .onEach {
                                 // If we have a new crypto device change, we might want to trigger refresh of device info
-                                activeSessionHolder.getSafeActiveSession()
-                                        ?.cryptoService()
-                                        ?.fetchDevicesList(NoOpMatrixCallback())
+                                session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                             }
                             .collect()
                 }
