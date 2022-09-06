@@ -28,7 +28,6 @@ import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
-import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -102,7 +101,7 @@ class VectorSettingsPreferencesFragment :
             }
         }
 
-        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME_CATEGORY)!!.let { pref ->
+        findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
             pref.isVisible = !vectorFeatures.isNewAppLayoutEnabled()
         }
 

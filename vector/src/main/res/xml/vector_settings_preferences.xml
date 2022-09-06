@@ -32,7 +32,7 @@
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/spaces"
-        android:key="SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME_CATEGORY">
+        android:key="SETTINGS_PREF_SPACE_CATEGORY">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"

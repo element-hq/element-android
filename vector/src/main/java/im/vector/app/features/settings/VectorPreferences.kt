@@ -168,7 +168,7 @@ class VectorPreferences @Inject constructor(
         /**
          * This is not preference, but category on preferences screen which contains [SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME].
          * Needed to show/hide this category, depending on visibility of [SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME]. */
-        const val SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME_CATEGORY = "SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME_CATEGORY"
+        const val SETTINGS_PREF_SPACE_CATEGORY = "SETTINGS_PREF_SPACE_CATEGORY"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
