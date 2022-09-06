@@ -451,6 +451,9 @@
     <!-- Invites fragment -->
     <string name="invites_title">Invites</string>
 
+    <string name="invites_empty_title">Nothing new.</string>
+    <string name="invites_empty_message">This is where your new requests and invites will be.</string>
+
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
