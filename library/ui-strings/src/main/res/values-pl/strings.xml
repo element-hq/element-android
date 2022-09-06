@@ -735,7 +735,7 @@
     <string name="settings_discovery_manage">Ustal jak inni mogą odnaleść twoje konto.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
-    <string name="encryption_message_recovery">Odzyskiwanie zaszyforwanych wiadomości</string>
+    <string name="encryption_message_recovery">Odzyskiwanie zaszyfrowanych wiadomości</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d wiadomość</item>
         <item quantity="few">%1$s: %2$d wiadomości</item>
@@ -1058,12 +1058,12 @@
     <string name="verification_request_you_accepted">Zaakceptowałeś(-łaś)</string>
     <string name="verification_sent">Żądanie weryfikacji wysłane</string>
     <string name="verification_request">Żądanie weryfikacji</string>
-    <string name="verification_verify_device">Zweryfikuj tą sesję</string>
+    <string name="verification_verify_device">Zweryfikuj tę sesję</string>
     <string name="verification_scan_notice">Zeskanuj kod z urządzenia innego użytkownika aby bezpiecznie zweryfikować siebie nawzajem</string>
     <string name="verification_scan_their_code">Zeskanuj ich kod</string>
     <string name="verification_scan_emoji_title">Nie można zeskanować</string>
     <string name="verification_scan_emoji_subtitle">Jeżeli nie jesteś z tą osobą, zamiast tego porównaj emoji</string>
-    <string name="verification_no_scan_emoji_title">Zweryfikuj porównując emoji</string>
+    <string name="verification_no_scan_emoji_title">Zweryfikuj porównując emotikony</string>
     <string name="verification_verify_user">Zweryfikuj %s</string>
     <string name="verification_verified_user">Zweryfikowano %s</string>
     <string name="verification_request_waiting_for">Oczekiwanie na %s…</string>
@@ -1099,7 +1099,7 @@
     <string name="room_settings_enable_encryption_dialog_title">Aktywować szyfrowanie\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Raz włączone szyfrowanie w pokoju nie może zostać wyłączone. Wiadomości wysłane w zaszyfrowanym pokoju nie są widziane przez serwer, a jedynie przez uczestników w pokoju. Aktywowanie szyfrowania może uniemożliwić wielu botom i mostkom prawidłowe działanie.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Aktywuj szyfrowanie</string>
-    <string name="verification_request_notice">Aby być bezpiecznym, zweryfikuj %s poprzez sprawdzenie jednorazowego kodu.</string>
+    <string name="verification_request_notice">Aby zachować bezpieczeństwo, zweryfikuj %s poprzez sprawdzenie jednorazowego kodu.</string>
     <string name="verification_request_start_notice">Aby być bezpiecznym, zrób to osobiście lub użyj innej metody komunikacji.</string>
     <string name="verification_emoji_notice">Porównaj unikalny ciąg emoji, upewniając się, że pojawiają się w identycznym porządku.</string>
     <string name="verification_code_notice">Porównaj kod wyświetlany na ekranie innego użytkownika.</string>
@@ -1120,7 +1120,7 @@
     <string name="settings_active_sessions_signout_device">Wyloguj z tej sesji</string>
     <string name="settings_failed_to_get_crypto_device_info">Brak dostępnej informacji o kryptografii</string>
     <string name="settings_active_sessions_verified_device_desc">Ta sesja jest zaufana dla bezpiecznej wymiany wiadomości, ponieważ ją zweryfikowałeś(-łaś):</string>
-    <string name="settings_active_sessions_unverified_device_desc">Zweryfikuj tą sesję aby oznaczyć ją jako zaufaną i przyznać jej dostęp do zaszyfrowanych wiadomości. Jeżeli nie logowałeś(-łaś) się do tej sesji, twoje konto mogło zostać naruszone:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Zweryfikuj tę sesję aby oznaczyć ją jako zaufaną i przyznać jej dostęp do zaszyfrowanych wiadomości. Jeżeli nie logowałeś(-łaś) się do tej sesji, twoje konto mogło zostać zaatakowane:</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d aktywna sesja</item>
         <item quantity="few">%d aktywne sesje</item>
@@ -1330,12 +1330,12 @@
     <string name="recovery_passphrase">Hasło odzyskiwania</string>
     <string name="verification_cancelled">Weryfikacja anulowana</string>
     <string name="verify_cancelled_notice">Weryfikacja anulowana. Możesz rozpocząć jej proces ponownie.</string>
-    <string name="verify_not_me_self_verification">Jedno z poniższych mogło zostać skompromitowane:
+    <string name="verify_not_me_self_verification">Jedno z poniższych może być zagrożone:
 \n
-\n-Twoje hasło
-\n-Twój serwer domowy
-\n-To urządzenie albo inne urządzenie
-\n-Połączenie internetowe używane przez urządzenie
+\n- Twoje hasło
+\n- Twój serwer domowy
+\n- To lub drugie urządzenie
+\n- Połączenie internetowe używane przez dowolne z urządzeń
 \n
 \nZalecamy natychmiastową zmianę Twojego hasła oraz klucza odzyskiwania w Ustawieniach.</string>
     <string name="verify_cancel_self_verification_from_trusted">Jeżeli anulujesz, nie będziesz w stanie czytać zaszyfrowanych wiadomości na nowym urządzeniu, a inni użytkownicy nie będą mu ufali</string>
@@ -1388,7 +1388,7 @@
     <string name="create_room_disable_federation_title">Zablokuj wszystkich nie będących członkami %s przed dołączeniem do tego pokoju</string>
     <string name="hide_advanced">Ukryj zaawansowane</string>
     <string name="show_advanced">Pokaż zaawansowane</string>
-    <string name="autodiscover_well_known_error">Nie można znaleźć właściwego serwera domowego. Zweryfikuj swój identyfikator</string>
+    <string name="autodiscover_well_known_error">Nie można znaleźć właściwego serwera domowego. Sprawdź swój identyfikator</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: \"@user:homeserver.org\"</string>
     <string name="login_signin_matrix_id_password_notice">Jeżeli nie pamiętasz hasła, cofnij się aby je zresetować.</string>
     <string name="login_signin_matrix_id_hint">Matrix ID</string>
@@ -1492,7 +1492,7 @@
     <string name="disabled_integration_dialog_content">Włącz \"Zezwalaj na integracje\" w Ustawieniach żeby to zrobić.</string>
     <string name="disabled_integration_dialog_title">Integracje są zablokowane</string>
     <string name="reset_secure_backup_warning">To zastąpi obecny Klucz bądź Hasło.</string>
-    <string name="reset_secure_backup_title">Wygeneruj nowy Klucz Bezpieczeństwa albo Hasło dla istniejącej kopii zapasowej.</string>
+    <string name="reset_secure_backup_title">Wygeneruj nowy klucz bezpieczeństwa albo hasło dla istniejącej kopii zapasowej.</string>
     <string name="settings_secure_backup_section_info">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Powiadomienie zostało kliknięte!</string>
     <string name="settings_troubleshoot_test_notification_notice">Proszę kliknąć na powiadomieniu, Jeżeli nie widzisz powiadomienia, sprawdź ustawienia systemowe.</string>
@@ -1649,7 +1649,7 @@
     <string name="user_code_my_code">Mój kod</string>
     <string name="user_code_share">Udostępnij mój kod</string>
     <string name="user_code_scan">Zeskanuj kod QR</string>
-    <string name="invite_users_to_room_failure">Nie możemy zaprosić użytkowników. Zweryfikuj osoby, które chcesz zaprosić i spróbuj ponownie.</string>
+    <string name="invite_users_to_room_failure">Nie udało się zaprosić użytkowników. Sprawdź osoby, które chcesz zaprosić i spróbuj ponownie.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Zaproszenia wysłane do %1$s i jeszcze jednej osoby</item>
         <item quantity="few">Zaproszenia wysłane do %1$s i %2$d innych osób</item>
@@ -1985,7 +1985,7 @@
     <string name="invite_by_link">Udostępnij link</string>
     <string name="invite_by_username_or_mail">Zaproś przez nazwę użytkownika lub email</string>
     <string name="invite_by_email">Zaproś przez email</string>
-    <string name="invite_people_to_your_space_desc">Aktualnie jesteś tylko Ty. %s będzie jeszcze lepsza kiedy dołączą inni.</string>
+    <string name="invite_people_to_your_space_desc">Aktualnie jesteś tu tylko ty. %s będzie jeszcze lepszą przestrzenią, gdy dołączą do niej inni.</string>
     <string name="invite_to_space">Zaproś do %s</string>
     <string name="invite_people_menu">Zaproś osoby</string>
     <string name="invite_people_to_your_space">Zaproś osoby do Twojej przestrzeni</string>
@@ -2127,7 +2127,7 @@
     <string name="settings_server_upload_size_title">Limit wielkości pliku na serwerze</string>
     <string name="settings_server_version">Wersja serwera</string>
     <string name="settings_server_name">Nazwa serwera</string>
-    <string name="verification_scan_self_emoji_subtitle">Zweryfikuj zgodność wyświetlonych emotikon</string>
+    <string name="verification_scan_self_emoji_subtitle">Zamiast tego, zweryfikuj porównując emotikony</string>
     <string name="verification_scan_with_this_device">Zeskanuj za pomocą tego urządzenia</string>
     <string name="verification_scan_self_notice">Zeskanuj kod Twoim drugim urządzeniem lub przełącz się i zeskanuj za pomocą tego urządzenia</string>
     <string name="sent_a_voice_message">Głos</string>
@@ -2311,8 +2311,8 @@
     </plurals>
     <string name="room_member_override_nick_color">Zastąp kolor wyświetlanej nazwy</string>
     <string name="login_splash_already_have_account">Posiadam już konto</string>
-    <string name="ftue_auth_carousel_encrypted_title">Połącz się z każdym.</string>
-    <string name="ftue_auth_carousel_control_title">Ty jesteś w kontroli.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Bezpieczna komunikacja.</string>
+    <string name="ftue_auth_carousel_control_title">Masz wszystko pod kontrolą.</string>
     <string name="ftue_auth_carousel_secure_title">Przejmij swoje konwersacje.</string>
     <string name="identity_server_consent_dialog_content_3">By odkryć istniejące kontakty, musisz najpierw przesłać swoje dane kontaktowe (adresy e-mail i numer telefonu) do serwera tożsamości. Przed wysłaniem Twoje dane zostaną zaszyfrowane w celu zachowania prywatności.</string>
     <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z ${app_name}</string>
@@ -2392,12 +2392,12 @@
     <string name="ftue_auth_use_case_option_three">Społeczności</string>
     <string name="ftue_auth_use_case_option_two">Zespoły</string>
     <string name="ftue_auth_use_case_option_one">Przyjaciele i rodzina</string>
-    <string name="ftue_auth_use_case_subtitle">Pomożemy Ci się połączyć</string>
+    <string name="ftue_auth_use_case_subtitle">Pomożemy Ci nawiązać kontakt</string>
     <string name="ftue_auth_use_case_title">Z kim będziesz najczęściej rozmawiać\?</string>
-    <string name="ftue_auth_carousel_encrypted_body">Szyfrowane od-końca-do-końca i nie wymaga numeru telefonu. Brak reklam i dataminingu.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Szyfrowane od-końca-do-końca, bez konieczności podawania numeru telefonu. Zero reklam i dataminingu.</string>
     <string name="ftue_auth_carousel_control_body">Wybierz, gdzie prowadzone są Twoje rozmowy, dając Ci kontrolę i niezależność. Połączenie przez sieć Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Bezpieczna i niezależna komunikacja, która zapewnia ten sam poziom prywatności, co rozmowa twarzą w twarz we własnym domu.</string>
-    <string name="ftue_auth_carousel_workplace_title">Wiadomości dla Twojego zespołu.</string>
+    <string name="ftue_auth_carousel_workplace_title">Komunikacja dla Twojego zespołu.</string>
     <string name="attachment_type_location">Położenie</string>
     <string name="preference_root_legals">Zagadnienia prawne</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Już przeglądasz ten wątek!</string>
@@ -2521,7 +2521,7 @@
     <string name="upgrade_room_for_restricted_no_param">Każdy w przestrzeni nadrzędnej będzie mógł znaleźć ten pokój i dołączyć do niego — nie ma potrzeby ręcznego zapraszania wszystkich. W każdej chwili możesz to zmienić w ustawieniach pokoju.</string>
     <string name="upgrade_room_update_parent_space">Automatycznie aktualizuj nadrzędną przestrzeń</string>
     <string name="labs_auto_report_uisi_desc">Twój system automatycznie wyśle dzienniki, gdy wystąpi błąd niemożności odszyfrowania</string>
-    <string name="labs_auto_report_uisi">Błędy automatycznego deszyfrowania raportów.</string>
+    <string name="labs_auto_report_uisi">Automatycznie zgłaszaj błędy deszyfrowania.</string>
     <string name="command_description_leave_room">Opuść pokój o podanym identyfikatorze (lub aktualny pokój, jeśli null)</string>
     <string name="sent_location">Udostępnili swoją lokalizację</string>
     <string name="room_message_notify_everyone">Powiadom cały pokój</string>
@@ -2718,4 +2718,20 @@
     <string name="create_room">Utwórz pokój</string>
     <string name="start_chat">Zacznij rozmawiać</string>
     <string name="all_chats">Wszystkie rozmowy</string>
+    <string name="device_manager_other_sessions_description_unverified">Nie zweryfikowano · Ostatnia aktywność %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Zweryfikowano · Ostatnia aktywność %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Pokaż wszystkie (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Obecna sesja</string>
+    <string name="device_manager_view_details">Pokaż szczegóły</string>
+    <string name="device_manager_verify_session">Zweryfikuj sesję</string>
+    <string name="device_manager_verification_status_detail_verified">Twoja obecna sesja jest przygotowana do bezpiecznej komunikacji.</string>
+    <string name="device_manager_verification_status_unverified">Niezweryfikowana sesja</string>
+    <string name="device_manager_verification_status_verified">Zweryfikowana sesja</string>
+    <string name="a11y_device_manager_device_type_unknown">Nieznany typ urządzenia</string>
+    <string name="a11y_device_manager_device_type_desktop">Komputer</string>
+    <string name="a11y_device_manager_device_type_web">Przeglądarka</string>
+    <string name="a11y_device_manager_device_type_mobile">Urządzenie przenośne</string>
+    <string name="timeline_error_room_not_found">Niestety, ten pokój nie został znaleziony.
+\nSpróbuj ponownie później.%s</string>
+    <string name="invites_title">Zaproszenia</string>
 </resources>
