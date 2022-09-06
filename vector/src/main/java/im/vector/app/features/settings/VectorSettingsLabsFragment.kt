@@ -78,6 +78,10 @@ class VectorSettingsLabsFragment :
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_NEW_APP_LAYOUT_KEY)?.let { pref ->
             pref.isVisible = vectorFeatures.isNewAppLayoutEnabled()
         }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)?.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutEnabled()
+        }
     }
 
     /**

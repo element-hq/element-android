@@ -31,6 +31,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.font.FontScaleSettingActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -44,6 +45,7 @@ class VectorSettingsPreferencesFragment :
 
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
@@ -97,6 +99,10 @@ class VectorSettingsPreferencesFragment :
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
                 true
             }
+        }
+
+        findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutEnabled()
         }
 
         // Url preview
