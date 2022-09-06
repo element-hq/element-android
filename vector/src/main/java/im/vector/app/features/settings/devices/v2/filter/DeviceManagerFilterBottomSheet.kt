@@ -40,7 +40,7 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
     }
 
     private fun initFilterRadioGroup() {
-        views.filterOptionInactiveRadioButton.text = resources.getQuantityString(
+        views.filterOptionInactiveRadioButtonDescription.text = resources.getQuantityString(
                 R.plurals.device_manager_filter_option_inactive_description,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS

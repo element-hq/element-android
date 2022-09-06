@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="24dp">
+    android:paddingHorizontal="24dp"
+    android:paddingBottom="32dp">
 
     <View
         android:layout_width="36dp"
@@ -29,6 +30,7 @@
 
         <RadioButton
             android:id="@+id/filterOptionAllSessionsRadioButton"
+            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
@@ -37,6 +39,7 @@
 
         <RadioButton
             android:id="@+id/filterOptionVerifiedRadioButton"
+            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -52,6 +55,7 @@
 
         <RadioButton
             android:id="@+id/filterOptionUnverifiedRadioButton"
+            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -67,6 +71,7 @@
 
         <RadioButton
             android:id="@+id/filterOptionInactiveRadioButton"
+            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -74,6 +79,7 @@
             android:text="@string/device_manager_filter_option_inactive" />
 
         <TextView
+            android:id="@+id/filterOptionInactiveRadioButtonDescription"
             style="@style/TextAppearance.Vector.Body.DevicesManagement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

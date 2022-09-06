@@ -9,6 +9,6 @@
 
     <stroke
         android:width="3dp"
-        android:color="?android:colorBackground" />
+        android:color="?vctr_toolbar_background" />
 
 </shape>
