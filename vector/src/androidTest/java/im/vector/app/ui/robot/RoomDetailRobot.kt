@@ -28,6 +28,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
@@ -86,11 +87,8 @@ class RoomDetailRobot {
     fun cameraVideoFront() {
         clickOn(R.id.attachmentButton)
         clickOn(R.id.attachmentCameraButton)
-        clickOn(R.id.attachmentsCameraChangeAction)
         clickOn(R.id.attachmentsCameraFlip)
-        clickOn(R.id.attachmentsCameraCaptureAction)
-        sleep(1_000)
-        clickOn(R.id.attachmentsCameraCaptureAction)
+        longClickOn(R.id.attachmentsCameraCaptureAction)
         waitAttachmentPreviewer()
         clickOn(R.id.attachmentPreviewerSendButton)
     }
