@@ -27,7 +27,6 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetDeviceFullInfoListUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
@@ -58,9 +57,9 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
                 .sortedByDescending { it.lastSeenTs }
                 .map { deviceInfo ->
                     val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                    val trustLevelForShield = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
+                    val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
                     val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
-                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield, isInactive)
+                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, roomEncryptionTrustLevel, isInactive)
                 }
     }
 }
