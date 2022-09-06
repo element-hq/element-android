@@ -92,7 +92,6 @@ class SpaceRobot {
                     )
         }
 
-
         waitUntilDialogVisible(ViewMatchers.withId(R.id.spaceNameView))
     }
 
