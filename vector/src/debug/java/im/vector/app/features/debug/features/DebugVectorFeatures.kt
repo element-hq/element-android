@@ -76,6 +76,9 @@ class DebugVectorFeatures(
     override fun shouldStartDmOnFirstMessage(): Boolean = read(DebugFeatureKeys.startDmOnFirstMsg)
             ?: vectorFeatures.shouldStartDmOnFirstMessage()
 
+    override fun isNewAppLayoutEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
+            ?: vectorFeatures.isNewAppLayoutEnabled()
+
     override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
             ?: vectorFeatures.isNewDeviceManagementEnabled()
 
@@ -138,5 +141,6 @@ object DebugFeatureKeys {
     val screenSharing = booleanPreferencesKey("screen-sharing")
     val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
     val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
+    val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
 }

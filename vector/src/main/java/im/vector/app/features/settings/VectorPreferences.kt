@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.time.Clock
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
@@ -39,6 +40,7 @@ class VectorPreferences @Inject constructor(
         private val context: Context,
         private val clock: Clock,
         private val buildMeta: BuildMeta,
+        private val vectorFeatures: VectorFeatures,
 ) {
 
     companion object {
@@ -1151,7 +1153,8 @@ class VectorPreferences @Inject constructor(
      * Indicates whether or not new app layout is enabled.
      */
     fun isNewAppLayoutEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
+        return vectorFeatures.isNewAppLayoutEnabled() &&
+                defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
     }
 
     fun showLiveSenderInfo(): Boolean {
