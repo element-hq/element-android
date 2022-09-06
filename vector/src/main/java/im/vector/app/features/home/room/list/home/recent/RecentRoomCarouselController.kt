@@ -23,6 +23,8 @@ import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.carousel
+import com.google.android.material.color.MaterialColors
+import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomListListener
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -40,6 +42,12 @@ class RecentRoomCarouselController @Inject constructor(
     private val hPadding = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             16f,
+            resources.displayMetrics
+    ).toInt()
+
+    private val topPadding = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            12f,
             resources.displayMetrics
     ).toInt()
 
@@ -61,11 +69,15 @@ class RecentRoomCarouselController @Inject constructor(
                 id("recents_carousel")
                 padding(Carousel.Padding(
                         host.hPadding,
-                        0,
+                        host.topPadding,
                         host.hPadding,
                         0,
                         host.itemSpacing)
                 )
+                onBind { _, view, _ ->
+                    val colorSurface = MaterialColors.getColor(view, R.attr.vctr_toolbar_background)
+                    view.setBackgroundColor(colorSurface)
+                }
                 withModelsFrom(data) { roomSummary ->
                     val onClick = host.listener?.let { it::onRoomClicked }
                     val onLongClick = host.listener?.let { it::onRoomLongClicked }
