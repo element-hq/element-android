@@ -28,7 +28,7 @@ class NewRoomRobot(
         var createdRoom: Boolean = false
 ) {
 
-    var features: VectorFeatures = DefaultVectorFeatures()
+    private var features: VectorFeatures = DefaultVectorFeatures()
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
         if (features.isNewAppLayoutEnabled()) {
