@@ -3207,6 +3207,7 @@
     <string name="attachment_camera_enable_flash">Enable flash</string>
     <string name="attachment_camera_auto_flash">Set flash automatically</string>
     <string name="attachment_camera_chronometer">Chronometer</string>
+    <string name="attachment_camera_action_description">Tap for photo, hold for video</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>

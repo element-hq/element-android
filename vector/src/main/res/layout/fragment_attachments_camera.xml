@@ -9,17 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/attachmentCameraActionDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="@string/attachment_camera_action_description"
+        style="@style/Widget.Vector.TextView.Floating" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/attachmentsCameraFlash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/attachment_camera_disable_flash"
         android:elevation="2dp"
         android:scaleX="0.7"
         android:scaleY="0.7"
         android:src="@drawable/ic_flash_auto"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/attachmentCameraActionDescription"
         app:layout_constraintEnd_toStartOf="@id/attachmentsCameraCaptureAction"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -27,12 +38,12 @@
         android:id="@+id/attachmentsCameraCaptureAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="24dp"
         android:elevation="2dp"
         android:scaleX="1.7"
         android:scaleY="1.7"
         android:src="@drawable/ic_material_record"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/attachmentCameraActionDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:fabSize="mini"
@@ -42,12 +53,12 @@
         android:id="@+id/attachmentsCameraFlip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="24dp"
         android:elevation="2dp"
         android:scaleX="0.7"
         android:scaleY="0.7"
         android:src="@drawable/ic_video_flip"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/attachmentCameraActionDescription"
         app:layout_constraintStart_toEndOf="@id/attachmentsCameraCaptureAction"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/attachment_camera_flip" />
@@ -56,13 +67,13 @@
         android:id="@+id/attachmentsCameraChronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.Vector.TextView.Floating"
+        style="@style/Widget.Vector.TextView.Floating.Bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/attachmentsCameraCaptureAction"
         android:layout_marginBottom="32dp"
         android:enabled="true"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:contentDescription="@string/attachment_camera_chronometer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

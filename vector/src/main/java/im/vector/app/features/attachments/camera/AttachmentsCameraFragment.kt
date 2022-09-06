@@ -19,6 +19,7 @@ package im.vector.app.features.attachments.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -148,6 +149,7 @@ class AttachmentsCameraFragment :
         }
 
         views.attachmentsCameraCaptureAction.setOnTouchListener { _, motionEvent ->
+            views.attachmentCameraActionDescription.visibility = View.INVISIBLE
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 context?.let {
                     viewModel.handle(AttachmentsCameraAction.Capture(it, imageCapture))

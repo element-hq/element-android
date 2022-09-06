@@ -56,6 +56,10 @@
     <style name="Widget.Vector.TextView.Floating">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_caption</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Floating.Bold">
         <item name="android:textStyle">bold</item>
     </style>
 
