@@ -16,13 +16,24 @@
 
 package im.vector.app.features.home.room.list.home.invites
 
-import androidx.lifecycle.LiveData
+import android.graphics.drawable.Drawable
 import androidx.paging.PagedList
 import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class InvitesViewState(
-        val pagedList: LiveData<PagedList<RoomSummary>>? = null,
         val roomMembershipChanges: Map<String, ChangeMembershipState> = emptyMap(),
 ) : MavericksState
+
+sealed interface InvitesContentState {
+    object Loading : InvitesContentState
+    data class Empty(
+            val title: CharSequence,
+            val image: Drawable?,
+            val message: CharSequence
+    ) : InvitesContentState
+
+    data class Content(val content: PagedList<RoomSummary>) : InvitesContentState
+    data class Error(val throwable: Throwable) : InvitesContentState
+}
