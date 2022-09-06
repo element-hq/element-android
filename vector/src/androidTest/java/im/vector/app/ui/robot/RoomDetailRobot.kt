@@ -28,7 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
@@ -39,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
+import im.vector.app.ui.robot.interaction.ClickInteractions.veryLongClickOn
 import im.vector.app.withRetry
 import java.lang.Thread.sleep
 
@@ -88,7 +88,7 @@ class RoomDetailRobot {
         clickOn(R.id.attachmentButton)
         clickOn(R.id.attachmentCameraButton)
         clickOn(R.id.attachmentsCameraFlip)
-        longClickOn(R.id.attachmentsCameraCaptureAction)
+        veryLongClickOn(R.id.attachmentsCameraCaptureAction)
         waitAttachmentPreviewer()
         clickOn(R.id.attachmentPreviewerSendButton)
     }
