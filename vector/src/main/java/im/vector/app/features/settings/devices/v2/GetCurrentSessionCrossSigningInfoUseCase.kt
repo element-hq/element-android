@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
