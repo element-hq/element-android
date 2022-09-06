@@ -63,6 +63,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
+        const val SETTINGS_LABS_NEW_APP_LAYOUT_KEY = "SETTINGS_LABS_ENABLE_NEW_LAYOUT"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -1144,6 +1145,13 @@ class VectorPreferences @Inject constructor(
     fun getSpaceBackstack(): List<String?> {
         val spaceIdsJoined = defaultPrefs.getString(SETTINGS_PERSISTED_SPACE_BACKSTACK, null)
         return spaceIdsJoined?.takeIf { it.isNotEmpty() }?.split(",").orEmpty()
+    }
+
+    /**
+     * Indicates whether or not new app layout is enabled
+     */
+    fun isNewAppLayoutEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
     }
 
     fun showLiveSenderInfo(): Boolean {

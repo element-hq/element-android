@@ -33,7 +33,6 @@ interface VectorFeatures {
     fun isLocationSharingEnabled(): Boolean
     fun forceUsageOfOpusEncoder(): Boolean
     fun shouldStartDmOnFirstMessage(): Boolean
-    fun isNewAppLayoutEnabled(): Boolean
     fun isNewDeviceManagementEnabled(): Boolean
 }
 
@@ -50,6 +49,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun shouldStartDmOnFirstMessage(): Boolean = false
-    override fun isNewAppLayoutEnabled(): Boolean = true
     override fun isNewDeviceManagementEnabled(): Boolean = false
 }

@@ -83,4 +83,10 @@
         android:summary="@string/labs_enable_element_call_permission_shortcuts_summary"
         android:title="@string/labs_enable_element_call_permission_shortcuts" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ENABLE_NEW_LAYOUT"
+        android:summary="@string/labs_enable_new_app_layout_summary"
+        android:title="@string/labs_enable_new_app_layout_title" />
+
 </androidx.preference.PreferenceScreen>
