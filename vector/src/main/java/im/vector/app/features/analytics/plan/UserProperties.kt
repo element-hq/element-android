@@ -45,6 +45,10 @@ data class UserProperties(
          */
         val webMetaSpacePeopleEnabled: Boolean? = null,
         /**
+         * The active filter in the All Chats screen
+         */
+        val allChatsActiveFilter: AllChatsActiveFilter? = null,
+        /**
          * The selected messaging use case during the onboarding flow.
          */
         val ftueUseCaseSelection: FtueUseCaseSelection? = null,
@@ -80,6 +84,29 @@ data class UserProperties(
         WorkMessaging,
     }
 
+    enum class AllChatsActiveFilter {
+
+        /**
+         * Filters are activated and All is selected
+         */
+        All,
+
+        /**
+         * Filters are activated and Favourites is selected
+         */
+        Favourites,
+
+        /**
+         * Filters are activated and People is selected
+         */
+        People,
+
+        /**
+         * Filters are activated and Unreads is selected
+         */
+        Unreads,
+    }
+
     fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
             webMetaSpaceFavouritesEnabled?.let { put("WebMetaSpaceFavouritesEnabled", it) }
@@ -87,6 +114,7 @@ data class UserProperties(
             webMetaSpaceHomeEnabled?.let { put("WebMetaSpaceHomeEnabled", it) }
             webMetaSpaceOrphansEnabled?.let { put("WebMetaSpaceOrphansEnabled", it) }
             webMetaSpacePeopleEnabled?.let { put("WebMetaSpacePeopleEnabled", it) }
+            allChatsActiveFilter?.let { put("allChatsActiveFilter", it.name) }
             ftueUseCaseSelection?.let { put("ftueUseCaseSelection", it.name) }
             numFavouriteRooms?.let { put("numFavouriteRooms", it) }
             numSpaces?.let { put("numSpaces", it) }
