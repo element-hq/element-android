@@ -1148,7 +1148,7 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
-     * Indicates whether or not new app layout is enabled
+     * Indicates whether or not new app layout is enabled.
      */
     fun isNewAppLayoutEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
