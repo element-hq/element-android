@@ -74,4 +74,9 @@
 
     <!-- Material 3 -->
     <dimen name="collapsing_toolbar_layout_medium_size">112dp</dimen>
+
+
+    <dimen name="release_notes_vertical_margin_small">8dp</dimen>
+    <dimen name="release_notes_vertical_margin">16dp</dimen>
+    <dimen name="release_notes_vertical_margin_large">28dp</dimen>
 </resources>

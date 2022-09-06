@@ -3256,4 +3256,15 @@
     <string name="home_empty_no_unreads_title">Nothing to report.</string>
     <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
 
+    <string name="onboarding_new_app_layout_welcome_title">Welcome to a new view!</string>
+    <!--    Note to translators: for RTL languages, menu will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="onboarding_new_app_layout_welcome_message">To simplify your ${app_name}, tabs are now optional. Manage them using the top-right menu.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Access Spaces</string>
+    <!--    Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="onboarding_new_app_layout_spaces_message">Access your Spaces (bottom-right) faster and easier than ever before.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Give Feedback</string>
+    <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
+    <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
+    <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
 </resources>

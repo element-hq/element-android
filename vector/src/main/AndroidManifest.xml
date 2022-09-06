@@ -338,6 +338,7 @@
         <activity android:name=".features.settings.font.FontScaleSettingActivity"/>
         <activity android:name=".features.call.dialpad.PstnDialActivity" />
         <activity android:name=".features.home.room.list.home.invites.InvitesActivity"/>
+        <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity"/>
 
         <!-- Services -->
 
