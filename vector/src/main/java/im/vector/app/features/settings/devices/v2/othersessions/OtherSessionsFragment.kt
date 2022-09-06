@@ -37,11 +37,12 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar(views.otherSessionsToolbar)
         initFilterView()
     }
 
     private fun initFilterView() {
-        views.otherSessionsFilterFrameLayout.setOnClickListener {
+        views.otherSessionsFilterFrameLayout.debouncedClicks {
             DeviceManagerFilterBottomSheet
                     .newInstance(this)
                     .show(requireActivity().supportFragmentManager, "SHOW_DEVICE_MANAGER_FILTER_BOTTOM_SHEET")
@@ -50,7 +51,7 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
         if (resultCode == RESULT_OK && data != null) {
-            Toast.makeText(requireContext(), data.toString(), Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), data.toString(), Toast.LENGTH_LONG).show()
         }
     }
 }
