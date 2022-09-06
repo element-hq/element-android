@@ -33,8 +33,7 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 
 class RoomListRobot {
-
-    private var features: VectorFeatures = DefaultVectorFeatures()
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun openRoom(roomName: String, block: RoomDetailRobot.() -> Unit) {
         clickOn(roomName)

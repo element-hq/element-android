@@ -33,7 +33,6 @@ import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.waitForView
 
 class OnboardingRobot {
-
     private val defaultVectorFeatures = DefaultVectorFeatures()
 
     fun crawl() {

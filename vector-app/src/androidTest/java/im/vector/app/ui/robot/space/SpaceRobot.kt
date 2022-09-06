@@ -33,8 +33,7 @@ import im.vector.app.features.VectorFeatures
 import org.hamcrest.Matchers
 
 class SpaceRobot {
-
-    private var features: VectorFeatures = DefaultVectorFeatures()
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createSpace(isFirstSpace: Boolean, block: SpaceCreateRobot.() -> Unit) {
         if (features.isNewAppLayoutEnabled()) {

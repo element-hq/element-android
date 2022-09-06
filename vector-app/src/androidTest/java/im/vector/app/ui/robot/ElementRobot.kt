@@ -51,8 +51,7 @@ import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot {
-
-    var features: VectorFeatures = DefaultVectorFeatures()
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun onboarding(block: OnboardingRobot.() -> Unit) {
         block(OnboardingRobot())

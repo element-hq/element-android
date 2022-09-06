@@ -27,8 +27,7 @@ import im.vector.app.features.VectorFeatures
 class NewRoomRobot(
         var createdRoom: Boolean = false
 ) {
-
-    private var features: VectorFeatures = DefaultVectorFeatures()
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
         if (features.isNewAppLayoutEnabled()) {
