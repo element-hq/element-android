@@ -121,10 +121,8 @@ class DevicesViewModelTest {
 
         // Then
         viewModelTest.assertLatestState {
-            it.devices is Success
-                    && it.devices.invoke() == deviceFullInfoList
-                    && it.inactiveSessionsCount == 1
-                    && it.unverifiedSessionsCount == 1
+            it.devices is Success && it.devices.invoke() == deviceFullInfoList &&
+                    it.inactiveSessionsCount == 1 && it.unverifiedSessionsCount == 1
         }
         viewModelTest.finish()
     }
