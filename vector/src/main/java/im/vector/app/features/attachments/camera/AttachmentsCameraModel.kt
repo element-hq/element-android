@@ -19,11 +19,14 @@ package im.vector.app.features.attachments.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.video.FileOutputOptions
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
@@ -41,7 +44,10 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.time.Clock
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.ByteBuffer
 
 class AttachmentsCameraModel @AssistedInject constructor(
         @Assisted val initialState: AttachmentsCameraState,
@@ -117,42 +123,51 @@ class AttachmentsCameraModel @AssistedInject constructor(
     }
 
     private fun capture(context: Context, imageCapture: ImageCapture) {
-        _viewEvents.post(AttachmentsCameraViewEvents.TakePhoto)
         withState { state ->
             imageCapture.flashMode = state.flashMode
 
             val file = createTempFile(context, MediaType.IMAGE)
             val outputUri = getUri(context, file)
 
-            // Create output options object which contains file + metadata
-            val outputOptions = ImageCapture.OutputFileOptions
-                    .Builder(file)
-                    .build()
-
-            // Set up image capture listener, which is triggered after photo has
-            // been taken
             imageCapture.takePicture(
-                    outputOptions,
                     ContextCompat.getMainExecutor(context),
-                    object : ImageCapture.OnImageSavedCallback {
-                        override fun onError(exc: ImageCaptureException) {
-                            Timber.e("Photo capture failed: ${exc.message}", exc)
+                    object : ImageCapture.OnImageCapturedCallback() {
+                        override fun onCaptureSuccess(image: ImageProxy) {
+                            _viewEvents.post(AttachmentsCameraViewEvents.TakePhoto)
+                            saveImageProxyToFile(image, file)?.let {
+                                _viewEvents.post(
+                                        AttachmentsCameraViewEvents.SetResultAndFinish(
+                                                AttachmentsCameraOutput(
+                                                        type = MediaType.IMAGE,
+                                                        uri = outputUri
+                                                )
+                                        )
+                                )
+                            } ?: _viewEvents.post(AttachmentsCameraViewEvents.SetErrorAndFinish)
+                        }
+
+                        override fun onError(exception: ImageCaptureException) {
+                            Timber.e("Photo capture failed: ${exception.message}", exception)
                             Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show()
                             _viewEvents.post(AttachmentsCameraViewEvents.SetErrorAndFinish)
                         }
-
-                        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                            _viewEvents.post(
-                                    AttachmentsCameraViewEvents.SetResultAndFinish(
-                                            AttachmentsCameraOutput(
-                                                type = MediaType.IMAGE,
-                                                uri = outputUri
-                                            )
-                                    )
-                            )
-                        }
                     }
             )
+        }
+    }
+
+    private fun saveImageProxyToFile(image: ImageProxy, file: File): Boolean? {
+        val buffer: ByteBuffer = image.planes[0].buffer
+        val bytes = ByteArray(buffer.capacity())
+        buffer.get(bytes)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)?.let { bitmap ->
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(CompressFormat.JPEG, 90, bos)
+            val fd = FileOutputStream(file)
+            fd.write(bos.toByteArray())
+            fd.flush()
+            fd.close()
+            true
         }
     }
 
