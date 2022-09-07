@@ -109,7 +109,7 @@
         android:layout_marginBottom="20dp"
         android:accessibilityTraversalAfter="@id/newLayoutCreateChatButton"
         android:contentDescription="@string/a11y_open_spaces"
-        android:src="@drawable/ic_open_spaces"
+        android:src="@drawable/ic_spaces"
         android:visibility="gone"
         app:backgroundTint="?attr/vctr_toolbar_background"
         app:fabSize="mini"
