@@ -1,0 +1,1 @@
+Clarify that setting up a FCM Rewrite Proxy is not necessary for use of the UnifiedPush FCM distributor.

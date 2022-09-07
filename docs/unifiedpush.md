@@ -18,7 +18,7 @@ The recently started UnifiedPush project is an Android protocol and library for 
 
 The *F-Droid* and *Gplay* flavors of Element Android support UnifiedPush, so the user can use any distributor installed on their devices. This would make it possible to have push notifications without depending on Google services or libraries. Currently, the main distributors are [ntfy](https://ntfy.sh) which does not require any setup (like manual registration) to use the public server and [NextPush](https://github.com/UP-NextPush/android), available as a nextcloud application.
 
-The *Gplay* variant uses a UnifiedPush library which basically embed a FCM distributor built into the application (so a user doesn't need to do anything other than install the app to get FCM notifications). This variant uses Google Services to receive notifications if the user has not installed any distributor.
+The *Gplay* variant uses a UnifiedPush library which basically embed a FCM distributor built into the application (so a user doesn't need to do anything other than install the app to get FCM notifications). This variant uses Google Services to receive notifications if the user has not installed any distributor. A [FCM Rewrite Proxy](https://unifiedpush.org/developers/embedded_fcm/#fcm-rewrite-proxy) is not required for Element Android's implementation of the FCM distributor - it will work with an existing Matrix push provider, such as [Sygnal](https://github.com/matrix-org/sygnal).
 
 The *F-Droid* variant does not use this library to avoid any proprietary blob. It will use a polling service if the user has not installed any distributor.
 
