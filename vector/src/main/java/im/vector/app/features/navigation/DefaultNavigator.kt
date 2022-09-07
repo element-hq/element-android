@@ -30,6 +30,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
@@ -347,18 +348,16 @@ class DefaultNavigator @Inject constructor(
         }.start(context)
     }
 
-    override fun openInviteUsersToRoom(context: Context, roomId: String) {
+    override fun openInviteUsersToRoom(fragmentActivity: FragmentActivity, roomId: String) {
         when (val currentSpace = spaceStateHandler.getCurrentSpace()) {
-            null -> InviteUsersToRoomActivity.getIntent(context, roomId).start(context)
-            else -> showInviteToDialog(context, currentSpace, roomId)
+            null -> InviteUsersToRoomActivity.getIntent(fragmentActivity, roomId).start(fragmentActivity)
+            else -> showInviteToDialog(fragmentActivity, currentSpace, roomId)
         }
     }
 
-    private fun showInviteToDialog(context: Context, currentSpace: RoomSummary, roomId: String) {
-        (context as? AppCompatActivity)?.supportFragmentManager?.let { fragmentManager ->
-            InviteRoomSpaceChooserBottomSheet.showInstance(fragmentManager, currentSpace.roomId, roomId) { itemId ->
-                InviteUsersToRoomActivity.getIntent(context, itemId).start(context)
-            }
+    private fun showInviteToDialog(fragmentActivity: FragmentActivity, currentSpace: RoomSummary, roomId: String) {
+        InviteRoomSpaceChooserBottomSheet.showInstance(fragmentActivity.supportFragmentManager, currentSpace.roomId, roomId) { itemId ->
+            InviteUsersToRoomActivity.getIntent(fragmentActivity, itemId).start(fragmentActivity)
         }
     }
 

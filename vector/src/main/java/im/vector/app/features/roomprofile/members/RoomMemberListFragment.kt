@@ -76,7 +76,7 @@ class RoomMemberListFragment :
 
     private fun setupInviteUsersButton() {
         views.inviteUsersButton.debouncedClicks {
-            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+            navigator.openInviteUsersToRoom(requireActivity(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
         views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(

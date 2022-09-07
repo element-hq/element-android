@@ -23,6 +23,7 @@ import android.net.Uri
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
@@ -98,7 +99,7 @@ interface Navigator {
 
     fun openCreateDirectRoom(context: Context)
 
-    fun openInviteUsersToRoom(context: Context, roomId: String)
+    fun openInviteUsersToRoom(fragmentActivity: FragmentActivity, roomId: String)
 
     fun openRoomDirectory(context: Context, initialFilter: String = "")
 
