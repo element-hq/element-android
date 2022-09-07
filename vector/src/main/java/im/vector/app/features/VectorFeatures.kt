@@ -36,9 +36,9 @@ interface VectorFeatures {
     fun shouldStartDmOnFirstMessage(): Boolean
 
     /**
-     * This is only to enable if the labs flag should be visible and effective
+     * This is only to enable if the labs flag should be visible and effective.
      * If on the client-side you want functionality that should be enabled with the new layout,
-     * use [VectorPreferences.isNewAppLayoutEnabled] instead
+     * use [VectorPreferences.isNewAppLayoutEnabled] instead.
      */
     fun isNewAppLayoutFeatureEnabled(): Boolean
     fun isNewDeviceManagementEnabled(): Boolean
