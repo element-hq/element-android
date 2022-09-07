@@ -58,14 +58,11 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.spaces.SpaceListBottomSheet
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -322,12 +319,6 @@ class NewHomeDetailFragment :
     private fun setupToolbar() {
         setupToolbar(views.toolbar)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            session.userService().getUser(session.myUserId)?.let { user ->
-                avatarRenderer.render(user.toMatrixItem(), views.avatar)
-            }
-        }
-
         views.collapsingToolbar.debouncedClicks(::openSpaceSettings)
         views.toolbar.debouncedClicks(::openSpaceSettings)
 
@@ -373,7 +364,14 @@ class NewHomeDetailFragment :
                 vectorPreferences.developerShowDebugInfo()
         )
 
+        refreshAvatar()
         hasUnreadRooms = it.hasUnreadMessages
+    }
+
+    private fun refreshAvatar() = withState(viewModel) { state ->
+        state.myMatrixItem?.let { user ->
+            avatarRenderer.render(user, views.avatar)
+        }
     }
 
     override fun onTapToReturnToCall() {

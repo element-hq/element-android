@@ -4,6 +4,7 @@
     package="im.vector.application">
 
     <application
+        android:name="im.vector.app.VectorApplication"
         android:allowBackup="false"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"

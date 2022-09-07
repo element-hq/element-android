@@ -43,7 +43,6 @@ import im.vector.app.features.settings.devices.DeviceFullInfo
 import im.vector.app.features.settings.devices.DevicesAction
 import im.vector.app.features.settings.devices.DevicesViewEvents
 import im.vector.app.features.settings.devices.DevicesViewModel
-import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
@@ -129,11 +128,6 @@ class VectorSettingsDevicesFragment :
 
     private fun initOtherSessionsView() {
         views.deviceListOtherSessions.callback = this
-        views.deviceListOtherSessions.setCallback(object : OtherSessionsController.Callback {
-            override fun onItemClicked(deviceId: String) {
-                navigateToSessionOverview(deviceId)
-            }
-        })
     }
 
     override fun onDestroyView() {
@@ -262,6 +256,10 @@ class VectorSettingsDevicesFragment :
             is Loading -> true
             else -> false
         }
+    }
+
+    override fun onOtherSessionClicked(deviceId: String) {
+        navigateToSessionOverview(deviceId)
     }
 
     override fun onViewAllOtherSessionsClicked() {

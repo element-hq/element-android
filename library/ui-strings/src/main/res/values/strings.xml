@@ -140,8 +140,10 @@
     <string name="start_chat">Start Chat</string>
     <string name="create_room">Create Room</string>
     <string name="explore_rooms">Explore Rooms</string>
-    <string name="a11y_expand_space_children">Expand space children</string>
-    <string name="a11y_collapse_space_children">Collapse space children</string>
+    <!-- Note to translators: %s refers to the space whose children is being expanded -->
+    <string name="a11y_expand_space_children">Expand %s children</string>
+    <!-- Note to translators: %s refers to the space whose children is being collapsed -->
+    <string name="a11y_collapse_space_children">Collapse %s children</string>
 
     <!-- Last seen time -->
 
@@ -442,8 +444,15 @@
     <string name="system_alerts_header">"System Alerts"</string>
     <string name="suggested_header">Suggested Rooms</string>
 
+    <!-- Space List fragment -->
+    <string name="space_list_empty_title">No spaces yet.</string>
+    <string name="space_list_empty_message">Spaces are a new way to group rooms and people. Create a space to get started.</string>
+
     <!-- Invites fragment -->
     <string name="invites_title">Invites</string>
+
+    <string name="invites_empty_title">Nothing new.</string>
+    <string name="invites_empty_message">This is where your new requests and invites will be.</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
@@ -3252,6 +3261,27 @@
     <string name="device_manager_session_title">Session</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
+    <!-- Note to translators: %s will be replaces with selected space name -->
+    <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
+    <!-- Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="home_empty_space_no_rooms_message">Spaces are a new way to group rooms and people. Add an existing room, or create a new one, using the bottom-right button.</string>
+    <!--  Note to translators: %s will be replaces with current user displayname -->
+    <string name="home_empty_no_rooms_title">Welcome to ${app_name},\n%s.</string>
+    <string name="home_empty_no_rooms_message">The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing room, to get started.</string>
+    <string name="home_empty_no_unreads_title">Nothing to report.</string>
+    <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
+
+    <string name="onboarding_new_app_layout_welcome_title">Welcome to a new view!</string>
+    <!--    Note to translators: for RTL languages, menu will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="onboarding_new_app_layout_welcome_message">To simplify your ${app_name}, tabs are now optional. Manage them using the top-right menu.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Access Spaces</string>
+    <!--    Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
+    <string name="onboarding_new_app_layout_spaces_message">Access your Spaces (bottom-right) faster and easier than ever before.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Give Feedback</string>
+    <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
+    <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
+    <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
     <string name="device_manager_filter_bottom_sheet_title">Filter</string>
     <string name="device_manager_filter_option_all_sessions">All session</string>
     <string name="device_manager_filter_option_verified">Verified</string>

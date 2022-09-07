@@ -32,9 +32,10 @@ class OtherSessionsView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : ConstraintLayout(context, attrs, defStyleAttr), OtherSessionsController.Callback {
 
     interface Callback {
+        fun onOtherSessionClicked(deviceId: String)
         fun onViewAllOtherSessionsClicked()
     }
 
@@ -47,6 +48,8 @@ class OtherSessionsView @JvmOverloads constructor(
         inflate(context, R.layout.view_other_sessions, this)
         views = ViewOtherSessionsBinding.bind(this)
 
+        otherSessionsController.callback = this
+
         views.otherSessionsViewAllButton.setOnClickListener {
             callback?.onViewAllOtherSessionsClicked()
         }
@@ -58,13 +61,13 @@ class OtherSessionsView @JvmOverloads constructor(
         otherSessionsController.setData(devices)
     }
 
-    fun setCallback(callback: OtherSessionsController.Callback) {
-        otherSessionsController.callback = callback
-    }
-
     override fun onDetachedFromWindow() {
         otherSessionsController.callback = null
         views.otherSessionsRecyclerView.cleanup()
         super.onDetachedFromWindow()
+    }
+
+    override fun onItemClicked(deviceId: String) {
+        callback?.onOtherSessionClicked(deviceId)
     }
 }

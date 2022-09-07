@@ -340,10 +340,6 @@ android {
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         ]
     }
-
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {

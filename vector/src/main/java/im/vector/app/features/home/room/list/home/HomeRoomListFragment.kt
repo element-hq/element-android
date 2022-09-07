@@ -199,11 +199,17 @@ class HomeRoomListFragment :
                 ).also { controller ->
                     controller.listener = this
                     controller.onFilterChanged = ::onRoomFilterChanged
+                    roomListViewModel.emptyStateFlow.onEach { emptyStateOptional ->
+                        controller.submitEmptyStateData(emptyStateOptional.getOrNull())
+                    }.launchIn(lifecycleScope)
                     section.filtersData.onEach {
                         controller.submitFiltersData(it.getOrNull())
                     }.launchIn(lifecycleScope)
                     section.list.observe(viewLifecycleOwner) { list ->
                         controller.submitList(list)
+                        if (list.isEmpty()) {
+                            controller.requestForcedModelBuild()
+                        }
                     }
                 }.adapter
             }
