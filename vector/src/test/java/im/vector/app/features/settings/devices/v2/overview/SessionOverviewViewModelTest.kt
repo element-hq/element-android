@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import io.mockk.every

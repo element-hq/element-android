@@ -34,6 +34,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
