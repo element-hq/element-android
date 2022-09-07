@@ -174,8 +174,8 @@ class VectorMessagingReceiver : MessagingReceiver() {
         super.onReceive(context, intent)
 
         // if it is from FirebaseReceiver, then the token has been rejected
-        if (unifiedPushHelper.isEmbeddedDistributor()
-                && intent.getStringExtra(EXTRA_TOKEN) == fcmHelper.getFcmToken()) {
+        if (unifiedPushHelper.isEmbeddedDistributor() &&
+                intent.getStringExtra(EXTRA_TOKEN) == fcmHelper.getFcmToken()) {
             intent.getByteArrayExtra(EXTRA_BYTES_MESSAGE)?.let {
                 onMessage(context, it, "")
             }
