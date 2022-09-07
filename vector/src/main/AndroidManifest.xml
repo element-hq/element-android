@@ -423,6 +423,20 @@
                 <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".core.pushers.KeepInternalDistributor"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <!--
+                This action is checked to track installed and uninstalled distributors.
+                We declare it to keep the background sync as an internal
+                unifiedpush distributor.
+                -->
+                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
