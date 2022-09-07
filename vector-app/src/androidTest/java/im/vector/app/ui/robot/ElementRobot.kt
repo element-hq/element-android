@@ -51,8 +51,7 @@ import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot {
-
-    var features: VectorFeatures = DefaultVectorFeatures()
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun onboarding(block: OnboardingRobot.() -> Unit) {
         block(OnboardingRobot())
@@ -84,33 +83,56 @@ class ElementRobot {
     }
 
     fun settings(shouldGoBack: Boolean = true, block: SettingsRobot.() -> Unit) {
-        openDrawer()
-        clickOn(R.id.homeDrawerHeaderSettingsView)
+        if (features.isNewAppLayoutEnabled()) {
+            onView(withId((R.id.avatar))).perform(click())
+        } else {
+            openDrawer()
+            clickOn(R.id.homeDrawerHeaderSettingsView)
+        }
+
         block(SettingsRobot())
         if (shouldGoBack) pressBack()
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
-        clickOn(R.id.bottom_action_people)
-        clickOn(R.id.createChatRoomButton)
+        if (features.isNewAppLayoutEnabled()) {
+            clickOn(R.id.newLayoutCreateChatButton)
+            waitUntilDialogVisible(withId(R.id.start_chat))
+            clickOn(R.id.start_chat)
+        } else {
+            clickOn(R.id.bottom_action_people)
+            clickOn(R.id.createChatRoomButton)
+        }
+
         waitUntilActivityVisible<CreateDirectRoomActivity> {
             waitUntilViewVisible(withId(R.id.userListSearch))
         }
         closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
+        if (features.isNewAppLayoutEnabled()) {
+            pressBack() // close create dialog
+        }
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
-        clickOn(R.id.bottom_action_rooms)
+        if (!features.isNewAppLayoutEnabled()) {
+            clickOn(R.id.bottom_action_rooms)
+        }
         RoomListRobot().newRoom { block() }
+        if (features.isNewAppLayoutEnabled()) {
+            pressBack() // close create dialog
+        }
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
     fun roomList(block: RoomListRobot.() -> Unit) {
-        clickOn(R.id.bottom_action_rooms)
+        if (!features.isNewAppLayoutEnabled()) {
+            clickOn(R.id.bottom_action_rooms)
+        }
+
         block(RoomListRobot())
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
