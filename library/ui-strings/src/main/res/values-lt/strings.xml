@@ -447,4 +447,238 @@
         <item quantity="other">%d praleistų balso skambučių</item>
     </plurals>
     <string name="call_ended">Skambutis baigtas</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} reikia leidimo prieiti prie jūsų mikrofono, kad galėtumėte atlikti garso skambučius.</string>
+    <string name="call_remove_jitsi_widget_progress">Baigiamas skambutis…</string>
+    <string name="call_error_user_not_responding">Nuotolinio ryšio pusėje nepavyko prisijungti.</string>
+    <string name="call_ended_invite_timeout_title">Jokio atsakymo</string>
+    <string name="call_ended_user_busy_description">Naudotojas, kuriam skambinote, yra užimtas.</string>
+    <string name="call_ended_user_busy_title">Naudotojas užimtas</string>
+    <string name="call_held_by_you">Sulaikėte skambutį</string>
+    <string name="call_held_by_user">%s sulaikė skambutį</string>
+    <string name="call_hold_action">Sulaikyti</string>
+    <string name="call_resume_action">Tęsti</string>
+    <string name="audio_call_with_participant">Balso skambutis su %s</string>
+    <string name="video_call_with_participant">Vaizdo skambutis su %s</string>
+    <string name="video_call_in_progress">Vaizdo skambutis vyksta…</string>
+    <string name="call_in_progress">Skambutis vyksta…</string>
+    <string name="incoming_voice_call">Įeinantis balso skambutis</string>
+    <string name="incoming_video_call">Įeinantis vaizdo skambutis</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Praleistas vaizdo skambutis</item>
+        <item quantity="few">%d praleisti vaizdo skambučiai</item>
+        <item quantity="other">%d praleistų vaizdo skambučių</item>
+    </plurals>
+    <string name="call_ringing">Skambutis skamba…</string>
+    <string name="call_connecting">Jungiamasi prie skambučio…</string>
+    <string name="settings_call_ringtone_dialog_title">Pasirinkite skambučių melodiją:</string>
+    <string name="settings_call_ringtone_title">Įeinančio skambučio melodija</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Įeinantiems skambučiams naudoti numatytąją ${app_name} melodiją</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Prieš pradedant skambutį prašyti patvirtinimo</string>
+    <string name="settings_call_show_confirmation_dialog_title">Užkirsti kelią atsitiktiniam skambučiui</string>
+    <string name="compression_opt_list_small">Mažas</string>
+    <string name="compression_opt_list_medium">Vidutinis</string>
+    <string name="compression_opt_list_large">Didelis</string>
+    <string name="compression_opt_list_original">Originalas</string>
+    <plurals name="membership_changes">
+        <item quantity="one">%d narystės pokytis</item>
+        <item quantity="few">%d narystės pokyčiai</item>
+        <item quantity="other">%d narystės pokyčių</item>
+    </plurals>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prašome paleisti ${app_name} kitame įrenginyje, kuris gali iššifruoti žinutę, kad galėtų išsiųsti raktus į šią sesiją.</string>
+    <string name="e2e_re_request_encryption_key">Pakartotinai paprašykite šifravimo raktų iš kitų seansų.</string>
+    <string name="login_error_limit_exceeded">Išsiųsta per daug užklausų</string>
+    <string name="login_error_not_json">Nebuvo tinkamo JSON</string>
+    <string name="login_error_bad_json">Klaidingas JSON</string>
+    <string name="error_unauthorized">Neautorizuotas, trūksta galiojančių tapatumo duomenų</string>
+    <string name="login_error_ssl_other">SSL klaida.</string>
+    <string name="login_error_ssl_peer_unverified">SSL klaida: bendrakeleivio tapatybė nepatvirtinta.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Pasirinkti namų serverį</string>
+    <string name="login_error_homeserver_from_url_not_found">Nepavyko pasiekti namų serverio URL adresu %s. Patikrinkite nuorodą arba pasirinkite namų serverį rankiniu būdu.</string>
+    <string name="login_error_homeserver_not_found">Nepavyko pasiekti namų serverio šiuo URL adresu, prašome jį patikrinti</string>
+    <string name="login_error_no_homeserver_found">Tai nėra galiojantis \"Matrix\" serverio adresas</string>
+    <string name="login_error_invalid_home_server">Prašome įvesti tinkamą URL adresą</string>
+    <string name="auth_accept_policies">Peržiūrėkite ir sutikite su šio namų serverio taisyklėmis:</string>
+    <string name="notice_room_leave_with_reason">%1$s išėjo iš kambario. Priežastis: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Prisijungėte. Priežastis: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s prisijungė. Priežastis: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Prisijungėte prie kambario. Priežastis: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s prisijungė prie kambario. Priežastis: %2$s</string>
+    <string name="event_status_sending_message">Siunčiama žinutė…</string>
+    <string name="event_status_sent_message">Žinutė išsiųsta</string>
+    <string name="initial_sync_request_reason_unignored_users">- Kai kurie naudotojai nebeignoruojami</string>
+    <string name="initial_sync_request_content">${app_name} turi išvalyti talpyklą, kad ji būtų atnaujinta dėl šios priežasties:
+\n%s
+\n
+\nAtkreipkite dėmesį, kad atlikus šį veiksmą programa bus paleista iš naujo ir tai gali šiek tiek užtrukti.</string>
+    <string name="initial_sync_request_title">Pradinio sinchronizavimo užklausa</string>
+    <string name="initial_sync_start_importing_account_data">Pradinė sinchronizacija:
+\nImportuojame paskyros duomenis</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Pradinė sinchronizacija:
+\nImportuojame išeitus kambarius</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Pradinė sinchronizacija:
+\nImportuojame kambarių kvietimus</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Pradinė sinchronizacija:
+\nĮkeliame jūsų pokalbius
+\nJei prisijungėte prie daugybės kambarių, tai gali užtrukti</string>
+    <string name="initial_sync_start_importing_account_rooms">Pradinė sinchronizacija:
+\nImportuojame kambarius</string>
+    <string name="initial_sync_start_importing_account_crypto">Pradinė sinchronizacija:
+\nImportuojame kriptografija</string>
+    <string name="initial_sync_start_importing_account">Pradinė sinchronizacija:
+\nImportuojame paskyrą…</string>
+    <string name="initial_sync_start_server_computing">Pradinė sinchronizacija:
+\nLaukiame serverio atsakymo…</string>
+    <string name="initial_sync_start_downloading">Pradinė sinchronizacija:
+\nAtsisiunčiame duomenis…</string>
+    <string name="room_displayname_empty_room_was">Tuščias kambarys (buvo %s)</string>
+    <string name="room_displayname_empty_room">Tuščias kambarys</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s ir %4$d kitas</item>
+        <item quantity="few">%1$s, %2$s, %3$s ir %4$d kiti</item>
+        <item quantity="other">%1$s, %2$s, %3$s ir %4$d kitų</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ir %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s ir %3$s</string>
+    <string name="room_displayname_two_members">%1$s ir %2$s</string>
+    <string name="room_displayname_room_invite">Kvietimas į kambarį</string>
+    <string name="medium_phone_number">Telefono numeris</string>
+    <string name="medium_email">El. pašto adresas</string>
+    <string name="room_error_access_unauthorized">Jums neleidžiama prisijungti prie šio kambario</string>
+    <string name="create_room">Sukurti kambarį</string>
+    <string name="explore_rooms">Naršyti kambarius</string>
+    <string name="notice_direct_room_update_by_you">Jūs atnaujinote čia.</string>
+    <string name="auth_reset_password_error_unverified">El. paštas nepatvirtintas, patikrinkite savo pašto dėžutę</string>
+    <string name="auth_reset_password_error_unauthorized">Nepavyko patvirtinti el. pašto adreso: įsitikinkite, kad paspaudėte el. laiške esančią nuorodą</string>
+    <string name="auth_recaptcha_message">Šis namų serveris norėtų įsitikinti, kad nesate robotas</string>
+    <string name="auth_forgot_password">Pamiršote slaptažodį\?</string>
+    <string name="auth_msisdn_already_defined">Šis telefono numeris jau yra įrašytas.</string>
+    <string name="auth_email_already_defined">Šis el. pašto adresas jau yra įrašytas.</string>
+    <string name="auth_invalid_email">Tai neatrodo kaip tinkamas el. pašto adresas</string>
+    <string name="auth_invalid_login_param">Neteisingas naudotojo vardas ir (arba) slaptažodis</string>
+    <string name="auth_submit">Pateikti</string>
+    <string name="auth_login_sso">Prisijungimas vienkartiniu prisijungimu</string>
+    <string name="auth_login">Prisijungti</string>
+    <string name="error_no_external_application_found">Atsiprašome, nerastos jokios išorinės programos šiam veiksmui atlikti.</string>
+    <string name="no_sticker_application_dialog_content">Šiuo metu nėra įjungti jokie lipdukų paketai.
+\n
+\nAr norite pridėti keletą dabar\?</string>
+    <string name="use_as_default_and_do_not_ask_again">Naudoti kaip numatytąjį ir daugiau neklausti</string>
+    <string name="option_take_video">Filmuoti</string>
+    <string name="option_take_photo">Fotografuoti</string>
+    <string name="option_take_photo_video">Fotografuoti arba filmuoti</string>
+    <string name="option_send_sticker">Siųsti lipduką</string>
+    <string name="option_send_files">Siųsti failus</string>
+    <string name="call_stop_screen_sharing">Sustabdyti ekrano bendrinimą</string>
+    <string name="call_start_screen_sharing">Bendrinti ekraną</string>
+    <string name="call_format_turn_hd_on">Įjungti HD</string>
+    <string name="call_format_turn_hd_off">Išjungti HD</string>
+    <string name="call_camera_back">Atgalinė</string>
+    <string name="call_camera_front">Priekinė</string>
+    <string name="call_switch_camera">Perjungti kamerą</string>
+    <string name="call_select_sound_device">Pasirinkite garso įrenginį</string>
+    <string name="invites_title">Kvietimai</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Veikla</string>
+    <string name="home_layout_preferences_sort_by">Rikiuoti pagal</string>
+    <string name="home_layout_preferences_recents">Rodyti naujausius</string>
+    <string name="home_layout_preferences_filters">Rodyti filtrus</string>
+    <string name="home_layout_preferences">Išdėstymo parinktys</string>
+    <string name="action_next">Kitas</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">val</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s pakeitė alternatyvius šio kambario adresus.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Pašalinote alternatyvų šio kambario adresą %1$s.</item>
+        <item quantity="few">Pašalinote alternatyvius šio kambario adresus %1$s.</item>
+        <item quantity="other">Pašalinote alternatyvius šio kambario adresus %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s pašalino alternatyvų šio kambario adresą %2$s.</item>
+        <item quantity="few">%1$s pašalino alternatyvius šio kambario adresus %2$s.</item>
+        <item quantity="other">%1$s pašalino alternatyvius šio kambario adresus %2$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Pridėjote alternatyvų šio kambario adresą %1$s.</item>
+        <item quantity="few">Pridėjote alternatyvius šio kambario adresus %1$s.</item>
+        <item quantity="other">Pridėjote alternatyvius šio kambario adresus %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s pridėjo alternatyvų šio kambario adresą %2$s.</item>
+        <item quantity="few">%1$s pridėjo alternatyvius šio kambario adresus %2$s.</item>
+        <item quantity="other">%1$s pridėjo alternatyvius šio kambario adresus %2$s.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Pašalinote pagrindinį šio kambario adresą.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s pašalino pagrindinį šio kambario adresą.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Nustatėte pagrindinį šio kambario adresą į %1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s nustatė pagrindinį šio kambario adresą į %2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Pridėjote %1$s ir pašalinote %2$s kaip šio kambario adresus.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s pridėjo %2$s ir pašalino %3$s kaip šio kambario adresus.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Pašalinote %1$s kaip šio kambario adresą.</item>
+        <item quantity="few">Pašalinote %1$s iš šio kambario adresų.</item>
+        <item quantity="other">Pašalinote %1$s iš šio kambario adresų.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s pašalino %2$s kaip šio kambario adresą.</item>
+        <item quantity="few">%1$s pašalino %2$s iš šio kambario adresų.</item>
+        <item quantity="other">%1$s pašalino %2$s iš šio kambario adresų.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Pridėjote %1$s kaip šio kambario adresą.</item>
+        <item quantity="few">Pridėjote %1$s kaip šio kambario adresus.</item>
+        <item quantity="other">Pridėjote %1$s kaip šio kambario adresus.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s pridėjo %2$s kaip šio kambario adresą.</item>
+        <item quantity="few">%1$s pridėjo %2$s kaip šio kambario adresus.</item>
+        <item quantity="other">%1$s pridėjo %2$s kaip šio kambario adresus.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">Atšaukėte %1$s kvietimą. Priežastis: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s atšaukė %2$s kvietimą. Priežastis: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Priėmėte %1$s kvietimą. Priežastis: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s priėmė %2$s kvietimą. Priežastis: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Jūs užblokavote %1$s. Priežastis: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s užblokavo %2$s. Priežastis: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Atblokavote %1$s. Priežastis: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s atblokavo %2$s. Priežastis: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Pašalinote %1$s. Priežastis: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s pašalino %2$s. Priežastis: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Kvietimą atmetėte. Priežastis: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s atmetė kvietimą. Priežastis: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Išėjote. Priežastis: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s išėjo. Priežastis: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Išėjote iš kambario. Priežastis: %1$s</string>
+    <string name="all_chats">Visi pokalbiai</string>
+    <string name="matrix_error">Matricos klaida</string>
+    <string name="unable_to_send_message">Nepavyksta išsiųsti žinutės</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Siuntėjo įrenginys neatsiuntė mums šios žinutės raktų.</string>
+    <string name="notice_crypto_unable_to_decrypt">** Nepavyksta iššifruoti: %s **</string>
+    <string name="notice_power_level_diff">%1$s nuo %2$s iki %3$s</string>
+    <string name="notice_power_level_changed">%1$s pakeitė %2$s galios lygį.</string>
+    <string name="notice_power_level_changed_by_you">Pakeitėte %1$s galios lygį.</string>
+    <string name="power_level_custom_no_value">Pasirinktinis</string>
+    <string name="power_level_custom">Pasirinktinis (%1$d)</string>
+    <string name="power_level_default">Standartinis</string>
+    <string name="power_level_moderator">Moderatorius</string>
+    <string name="power_level_admin">Adminas</string>
+    <string name="notice_widget_modified_by_you">Pakeitėte %1$s valdiklį</string>
+    <string name="notice_widget_modified">%1$s pakeitė %2$s valdiklį</string>
+    <string name="notice_widget_removed_by_you">Pašalinote %1$s valdiklį</string>
+    <string name="notice_widget_removed">%1$s pašalino %2$s valdiklį</string>
+    <string name="notice_widget_added_by_you">Pridėjote %1$s valdiklį</string>
+    <string name="notice_widget_added">%1$s pridėjo %2$s valdiklį</string>
+    <string name="notice_room_third_party_invite">%1$s išsiuntė kvietimą %2$s prisijungti prie kambario</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s atšaukė %2$s kvietimą prisijungti prie kambario</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Priėmėte kvietimą į %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s priėmė kvietimą į %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Atšaukėte kvietimą %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s atšaukė %2$s kvietimą</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Atšaukėte %1$s kvietimą prisijungti prie kambario</string>
+    <string name="notice_room_server_acl_updated_no_change">Pakeitimų nėra.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Serveriai atitinkantys %s buvo pašalinti iš leidžiamų sąrašo.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Serveriai atitinkantys %s dabar yra leidžiami.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serveriai atitinkantys %s buvo pašalinti iš draudimų sąrašo.</string>
+    <string name="notice_room_server_acl_updated_banned">• Serveriai atitinkantys %s dabar yra uždrausti.</string>
+    <string name="notice_room_server_acl_set_allowed">• Serveriai atitinkantys %s yra leidžiami.</string>
+    <string name="notice_room_server_acl_set_banned">• Serveriai atitinkantys %s yra uždrausti.</string>
 </resources>

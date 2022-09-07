@@ -1682,7 +1682,7 @@
     <string name="topic_prefix">"话题： "</string>
     <string name="add_a_topic_link_text">添加一个话题</string>
     <string name="room_created_summary_no_topic_creation_text">%s让人们知道此房间是关于什么的。</string>
-    <string name="this_is_the_beginning_of_dm">这是你和 %s 的私聊消息历史记录的开始。</string>
+    <string name="this_is_the_beginning_of_dm">这是你和%s的私聊消息历史的开始。</string>
     <string name="this_is_the_beginning_of_room_no_name">这是此对话的开始。</string>
     <string name="this_is_the_beginning_of_room">这是 %s 的开始。</string>
     <string name="settings_export_trail">导出审计</string>
@@ -2569,4 +2569,18 @@
     <string name="explore_rooms">探索房间</string>
     <string name="create_room">创建房间</string>
     <string name="start_chat">开始聊天</string>
+    <string name="timeline_error_room_not_found">抱歉，未发现此房间。
+\n请晚些重试。%s</string>
+    <string name="device_manager_other_sessions_description_unverified">未验证 · 上次活跃 %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">已验证 · 上次活跃 %1$s</string>
+    <string name="device_manager_other_sessions_view_all">查看全部（%1$d）</string>
+    <string name="device_manager_header_section_current_session">当前会话</string>
+    <string name="device_manager_view_details">查看详情</string>
+    <string name="device_manager_verify_session">验证会话</string>
+    <string name="device_manager_verification_status_detail_unverified">为了获得增强的安全的消息传送，请验证你当前的会话。</string>
+    <string name="device_manager_verification_status_detail_verified">你的当前会话已准备好安全地收发消息。</string>
+    <string name="device_manager_verification_status_unverified">未验证的会话</string>
+    <string name="device_manager_verification_status_verified">已验证的会话</string>
+    <string name="a11y_device_manager_device_type_unknown">未知的设备类型</string>
+    <string name="invites_title">邀请</string>
 </resources>
