@@ -2636,4 +2636,39 @@
     <string name="timeline_error_room_not_found">Desculpe, esta sala não tem sido encontrada.
 \nPor favor retente mais tarde.%s</string>
     <string name="invites_title">Convites</string>
+    <string name="onboarding_new_app_layout_button_try">Teste aí</string>
+    <string name="onboarding_new_app_layout_feedback_message">Toque na direita topo para ver a opção para feedback.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Dar Feedback</string>
+    <string name="onboarding_new_app_layout_spaces_message">Acessar seus Espaços (direito fundo) mais rápido e fácio que jamais antes.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Acessar Espaços</string>
+    <string name="onboarding_new_app_layout_welcome_message">Para simplificar seu ${app_name}, abas são agora opcionais. Gerencie-as usando o menu direito topo.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Boas vindas a uma nova visão!</string>
+    <string name="home_empty_no_unreads_message">Isto é onde suas mensagens não-lidas vão aparecer, quando você tiver algumas.</string>
+    <string name="home_empty_no_unreads_title">Nada a reportar.</string>
+    <string name="home_empty_no_rooms_message">O app de chat seguro tudo-em-um para equipes, amigas(os) e organizações. Crie um chat, ou junte-se a uma sala existe, para começar.</string>
+    <string name="home_empty_no_rooms_title">Boas vindas a ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Espaços são uma nova maneira de agrupar salas e pessoas. Adicione uma sala existente, ou crie uma nova, usando o botão direito fundo.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nestá parecendo um pouco vazio.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Considere fazer signout de sessões antigas (%1$d dia ou mais) que você não usa mais.</item>
+        <item quantity="other">Considere fazer signout de sessões antigas (%1$d dias ou mais) que você não usa mais.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Sessões inativas</string>
+    <string name="device_manager_unverified_sessions_description">Verificar ou fazer signout de sessões não-verificadas.</string>
+    <string name="device_manager_unverified_sessions_title">Sessões não-verificadas</string>
+    <string name="device_manager_header_section_security_recommendations_description">Melhore a segurança de sua conta ao seguir estas recomendações.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Recomendações de segurança</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Inativa(o) por %1$d+ dia (%2$s)</item>
+        <item quantity="other">Inativa(o) por %1$d+ dias (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Isto é onde suas novas requisições e convites vão estar.</string>
+    <string name="invites_empty_title">Nada novo.</string>
+    <string name="space_list_empty_message">Espaços são uma nova maneira de agrupar salas e pessoas. Crie um espaço para começar.</string>
+    <string name="space_list_empty_title">Nenhum espaço ainda.</string>
+    <string name="a11y_collapse_space_children">Colapsar filhos de %s</string>
+    <string name="a11y_expand_space_children">Expandir filhos de %s</string>
+    <string name="change_space">Mudar Espaço</string>
 </resources>
