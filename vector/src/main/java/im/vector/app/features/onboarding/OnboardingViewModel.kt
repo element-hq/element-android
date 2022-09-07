@@ -628,6 +628,7 @@ class OnboardingViewModel @AssistedInject constructor(
             }
             AuthenticationDescription.Login -> {
                 setState { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(authenticationDescription)) }
+                awaitState()
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
         }
