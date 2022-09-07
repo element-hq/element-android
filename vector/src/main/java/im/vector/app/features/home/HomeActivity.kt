@@ -377,7 +377,7 @@ class HomeActivity :
 
             lifecycleScope.launch {
                 val isHandled = permalinkHandler.launch(
-                        context = this@HomeActivity,
+                        fragmentActivity = this@HomeActivity,
                         deepLink = resolvedLink,
                         navigationInterceptor = this@HomeActivity,
                         buildTask = true
