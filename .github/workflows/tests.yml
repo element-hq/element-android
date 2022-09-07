@@ -77,7 +77,7 @@ jobs:
 
       # we may have failed a previous step and retried, that's OK
       - name: Publish results to Sonar
-        if: ${{ env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        if: ${{ always() && env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
         run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
 
       - name: Format unit test results
