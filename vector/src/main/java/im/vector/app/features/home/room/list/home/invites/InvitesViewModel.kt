@@ -28,6 +28,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.list.home.HomeRoomListViewEvents
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
@@ -76,9 +77,18 @@ class InvitesViewModel @AssistedInject constructor(
 
     override fun handle(action: InvitesAction) {
         when (action) {
+            is InvitesAction.SelectRoom -> handleSelectRoom(action)
             is InvitesAction.AcceptInvitation -> handleAcceptInvitation(action)
             is InvitesAction.RejectInvitation -> handleRejectInvitation(action)
         }
+    }
+
+    private fun handleSelectRoom(action: InvitesAction.SelectRoom) {
+        _viewEvents.post(InvitesViewEvents.OpenRoom(
+                roomSummary = action.roomSummary,
+                shouldCloseInviteView = false,
+                isInviteAlreadySelected = false,
+        ))
     }
 
     private fun handleRejectInvitation(action: InvitesAction.RejectInvitation) = withState { state ->
@@ -129,7 +139,7 @@ class InvitesViewModel @AssistedInject constructor(
             )
         }
 
-        _viewEvents.post(InvitesViewEvents.OpenRoom(action.roomSummary, shouldCloseInviteView))
+        _viewEvents.post(InvitesViewEvents.OpenRoom(action.roomSummary, shouldCloseInviteView, isInviteAlreadySelected = true))
     }
 
     private fun observeInvites() {

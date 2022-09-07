@@ -66,7 +66,7 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
         viewModel.observeViewEvents {
             when (it) {
                 is InvitesViewEvents.Failure -> showFailure(it.throwable)
-                is InvitesViewEvents.OpenRoom -> handleOpenRoom(it.roomSummary, it.shouldCloseInviteView)
+                is InvitesViewEvents.OpenRoom -> handleOpenRoom(it.roomSummary, it.shouldCloseInviteView, it.isInviteAlreadySelected)
             }
         }
 
@@ -94,11 +94,15 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun handleOpenRoom(roomSummary: RoomSummary, shouldCloseInviteView: Boolean) {
+    private fun handleOpenRoom(
+            roomSummary: RoomSummary,
+            shouldCloseInviteView: Boolean,
+            isInviteAlreadyAccepted: Boolean,
+    ) {
         navigator.openRoom(
                 context = requireActivity(),
                 roomId = roomSummary.roomId,
-                isInviteAlreadyAccepted = true,
+                isInviteAlreadyAccepted = isInviteAlreadyAccepted,
                 trigger = ViewRoom.Trigger.RoomList // #6508
         )
         if (shouldCloseInviteView) {
@@ -120,7 +124,9 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
 
     override fun onSuggestedRoomClicked(room: SpaceChildInfo) = Unit
 
-    override fun onRoomClicked(room: RoomSummary) = Unit
+    override fun onRoomClicked(room: RoomSummary) {
+        viewModel.handle(InvitesAction.SelectRoom(room))
+    }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean = false
 }
