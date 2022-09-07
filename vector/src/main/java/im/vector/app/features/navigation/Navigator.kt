@@ -23,6 +23,7 @@ import android.net.Uri
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
@@ -76,15 +77,15 @@ interface Navigator {
 
     fun openSpacePreview(context: Context, spaceId: String)
 
-    fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
+    fun performDeviceVerification(fragmentActivity: FragmentActivity, otherUserId: String, sasTransactionId: String)
 
-    fun requestSessionVerification(context: Context, otherSessionId: String)
+    fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String)
 
-    fun requestSelfSessionVerification(context: Context)
+    fun requestSelfSessionVerification(fragmentActivity: FragmentActivity)
 
-    fun waitSessionVerification(context: Context)
+    fun waitSessionVerification(fragmentActivity: FragmentActivity)
 
-    fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean)
+    fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean)
 
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
@@ -92,13 +93,13 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
-    fun openMatrixToBottomSheet(context: Context, link: String, origin: OriginOfMatrixTo)
+    fun openMatrixToBottomSheet(fragmentActivity: FragmentActivity, link: String, origin: OriginOfMatrixTo)
 
     fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 
     fun openCreateDirectRoom(context: Context)
 
-    fun openInviteUsersToRoom(context: Context, roomId: String)
+    fun openInviteUsersToRoom(fragmentActivity: FragmentActivity, roomId: String)
 
     fun openRoomDirectory(context: Context, initialFilter: String = "")
 
@@ -110,9 +111,9 @@ interface Navigator {
 
     fun openDebug(context: Context)
 
-    fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
+    fun openKeysBackupSetup(fragmentActivity: FragmentActivity, showManualExport: Boolean)
 
-    fun open4SSetup(context: Context, setupMode: SetupMode)
+    fun open4SSetup(fragmentActivity: FragmentActivity, setupMode: SetupMode)
 
     fun openKeysBackupManager(context: Context)
 

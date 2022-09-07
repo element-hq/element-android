@@ -188,7 +188,7 @@ class RoomListFragment :
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link, OriginOfMatrixTo.ROOM_LIST)
+        navigator.openMatrixToBottomSheet(requireActivity(), link, OriginOfMatrixTo.ROOM_LIST)
     }
 
     override fun onDestroyView() {
