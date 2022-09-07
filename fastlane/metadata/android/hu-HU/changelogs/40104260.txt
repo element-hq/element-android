@@ -1,0 +1,2 @@
+Főbb változások ebben a verzióban: UnifiedPush használata, és lehetővé teszi a felhasználó számára, hogy FCM nélkül tolja.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases
