@@ -2619,8 +2619,6 @@
     <string name="device_manager_settings_active_sessions_show_all">Mostra totes les sessions (V2, WIP)</string>
     <string name="create_room">Crea sala</string>
     <string name="start_chat">Inicia xat</string>
-    <string name="a11y_collapse_space_children">Amaga el contingut de l\'espai</string>
-    <string name="a11y_expand_space_children">Mostra el contingut de l\'espai</string>
     <string name="device_manager_verification_status_detail_unverified">Verifica la teva sessió actual per a missatges segurs millorats.</string>
     <string name="device_manager_other_sessions_description_verified">Verificada · Última activitat %1$s</string>
     <string name="device_manager_other_sessions_description_unverified">No verificada · Última activitat %1$s</string>

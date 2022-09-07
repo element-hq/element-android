@@ -2627,6 +2627,4 @@
     <string name="timeline_error_room_not_found">Spiacenti, questa stanza non è stata trovata.
 \nRiprova più tardi.%s</string>
     <string name="invites_title">Inviti</string>
-    <string name="a11y_collapse_space_children">Riduci contenuto dello spazio</string>
-    <string name="a11y_expand_space_children">Espandi contenuto dello spazio</string>
 </resources>

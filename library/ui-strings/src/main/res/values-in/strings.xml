@@ -2588,6 +2588,4 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_mobile">Ponsel</string>
     <string name="invites_title">Undangan</string>
-    <string name="a11y_collapse_space_children">Tutup anak space</string>
-    <string name="a11y_expand_space_children">Buka anak space</string>
 </resources>

@@ -2636,6 +2636,4 @@
     <string name="timeline_error_room_not_found">Desculpe, esta sala não tem sido encontrada.
 \nPor favor retente mais tarde.%s</string>
     <string name="invites_title">Convites</string>
-    <string name="a11y_collapse_space_children">Colapsar filhos de espaço</string>
-    <string name="a11y_expand_space_children">Expandir filhos de espaço</string>
 </resources>

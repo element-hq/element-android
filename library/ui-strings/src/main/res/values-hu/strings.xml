@@ -2633,8 +2633,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="home_layout_preferences_recents">Legfrissebbek megjelenítése</string>
     <string name="home_layout_preferences_filters">Szűrők megjelenítése</string>
     <string name="home_layout_preferences">Elrendezési beállítások</string>
-    <string name="a11y_collapse_space_children">Alterem összeomlása</string>
-    <string name="a11y_expand_space_children">Az alterem bővítése</string>
     <string name="explore_rooms">Szobák felfedezése</string>
     <string name="create_room">Szoba létrehozása</string>
     <string name="start_chat">Chat indítása</string>

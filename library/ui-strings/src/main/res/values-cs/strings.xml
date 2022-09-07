@@ -2686,6 +2686,4 @@
     <string name="timeline_error_room_not_found">Je nám líto, tato místnost nebyla nalezena.
 \nZkuste to prosím později.%s</string>
     <string name="invites_title">Pozvánky</string>
-    <string name="a11y_collapse_space_children">Sbalit podprostory</string>
-    <string name="a11y_expand_space_children">Rozbalit podprostory</string>
 </resources>

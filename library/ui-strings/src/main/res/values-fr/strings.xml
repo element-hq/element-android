@@ -2636,6 +2636,4 @@
     <string name="timeline_error_room_not_found">Désolé, impossible de trouver ce salon.
 \nVeuillez réessayer plus tard.%s</string>
     <string name="invites_title">Invitations</string>
-    <string name="a11y_collapse_space_children">Réduire les enfants de l’espace</string>
-    <string name="a11y_expand_space_children">Développer les enfants de l’espace</string>
 </resources>

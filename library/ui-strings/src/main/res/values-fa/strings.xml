@@ -2636,6 +2636,4 @@
     <string name="timeline_error_room_not_found">متأسفانه این اتاق پیدا نشد.
 \nلطفاً بعداً دوباره تلاش کنید.%s</string>
     <string name="invites_title">دعوت‌ها</string>
-    <string name="a11y_collapse_space_children">جمع کردن فرزندان فضا</string>
-    <string name="a11y_expand_space_children">گسترش فرزندان فضا</string>
 </resources>

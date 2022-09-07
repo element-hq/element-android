@@ -2736,6 +2736,4 @@
     <string name="timeline_error_room_not_found">Перепрошуємо, цю кімнату не знайдено.
 \nСпробуйте пізніше.%s</string>
     <string name="invites_title">Запрошення</string>
-    <string name="a11y_collapse_space_children">Згорнути дочірні елементи простору</string>
-    <string name="a11y_expand_space_children">Розгорнути дочірні елементи простору</string>
 </resources>

@@ -2627,6 +2627,4 @@
     <string name="timeline_error_room_not_found">Vabandust, aga seda jututuba ei õnnestu leida.
 \nPalun proovi hiljem uuesti.%s</string>
     <string name="invites_title">Kutsed</string>
-    <string name="a11y_collapse_space_children">Ahenda seotud kogukondade loend</string>
-    <string name="a11y_expand_space_children">Ava seotud kogukondade loend</string>
 </resources>

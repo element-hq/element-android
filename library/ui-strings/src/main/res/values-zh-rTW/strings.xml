@@ -2586,6 +2586,4 @@
     <string name="timeline_error_room_not_found">抱歉，找不到此聊天室。
 \n請稍後再試。%s</string>
     <string name="invites_title">邀請</string>
-    <string name="a11y_collapse_space_children">折疊子空間</string>
-    <string name="a11y_expand_space_children">展開子空間</string>
 </resources>
