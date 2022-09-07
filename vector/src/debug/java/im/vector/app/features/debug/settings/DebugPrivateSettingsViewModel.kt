@@ -27,11 +27,13 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.debug.features.DebugVectorOverrides
 import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetAvatarCapabilityOverride
 import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetDisplayNameCapabilityOverride
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesPreferencesStore
 import kotlinx.coroutines.launch
 
 class DebugPrivateSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DebugPrivateSettingsViewState,
-        private val debugVectorOverrides: DebugVectorOverrides
+        private val debugVectorOverrides: DebugVectorOverrides,
+        private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
 ) : VectorViewModel<DebugPrivateSettingsViewState, DebugPrivateSettingsViewActions, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -43,6 +45,15 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
 
     init {
         observeVectorOverrides()
+        observeReleaseNotesPreferencesStore()
+    }
+
+    private fun observeReleaseNotesPreferencesStore() {
+        releaseNotesPreferencesStore.appLayoutOnboardingShown.setOnEach {
+            copy(
+                    releaseNotesActivityHasBeenDisplayed = it
+            )
+        }
     }
 
     private fun observeVectorOverrides() {
@@ -72,6 +83,13 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
             is SetDisplayNameCapabilityOverride -> handleSetDisplayNameCapabilityOverride(action)
             is SetAvatarCapabilityOverride -> handleSetAvatarCapabilityOverride(action)
+            DebugPrivateSettingsViewActions.ResetReleaseNotesActivityHasBeenDisplayed -> handleResetReleaseNotesActivityHasBeenDisplayed()
+        }
+    }
+
+    private fun handleResetReleaseNotesActivityHasBeenDisplayed() {
+        viewModelScope.launch {
+            releaseNotesPreferencesStore.setAppLayoutOnboardingShown(false)
         }
     }
 
