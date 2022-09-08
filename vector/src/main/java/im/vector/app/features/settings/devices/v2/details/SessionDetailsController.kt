@@ -22,6 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.DimensionConverter
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
@@ -30,6 +31,7 @@ class SessionDetailsController @Inject constructor(
         private val checkIfSectionDeviceIsVisibleUseCase: CheckIfSectionDeviceIsVisibleUseCase,
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
+        private val dimensionConverter: DimensionConverter,
 ) : TypedEpoxyController<DeviceInfo>() {
 
     var callback: Callback? = null
@@ -40,27 +42,30 @@ class SessionDetailsController @Inject constructor(
 
     override fun buildModels(data: DeviceInfo?) {
         data?.let { info ->
-            if (hasSectionSession(data)) {
+            val hasSectionSession = hasSectionSession(data)
+            if (hasSectionSession) {
                 buildSectionSession(info)
             }
 
             if (hasSectionDevice(data)) {
-                // TODO add a marginTop of 48dp if the session section is visible
-                buildSectionDevice(info)
+                buildSectionDevice(info, addExtraTopMargin = hasSectionSession)
             }
         }
     }
 
-    private fun buildHeaderItem(@StringRes titleResId: Int) {
+    private fun buildHeaderItem(@StringRes titleResId: Int, addExtraTopMargin: Boolean = false) {
         val host = this
         sessionDetailsHeaderItem {
             id(titleResId)
             title(host.stringProvider.getString(titleResId))
+            addExtraTopMargin(addExtraTopMargin)
+            dimensionConverter(host.dimensionConverter)
         }
     }
 
     private fun buildContentItem(@StringRes titleResId: Int, value: String) {
         val host = this
+        // TODO bind the longClickListener to copy the description to the clipboard
         sessionDetailsContentItem {
             id(titleResId)
             title(host.stringProvider.getString(titleResId))
@@ -96,10 +101,10 @@ class SessionDetailsController @Inject constructor(
         return checkIfSectionDeviceIsVisibleUseCase.execute(data)
     }
 
-    private fun buildSectionDevice(data: DeviceInfo) {
+    private fun buildSectionDevice(data: DeviceInfo, addExtraTopMargin: Boolean) {
         val lastSeenIp = data.lastSeenIp
 
-        buildHeaderItem(R.string.device_manager_session_details_section_device_title)
+        buildHeaderItem(R.string.device_manager_session_details_section_device_title, addExtraTopMargin)
 
         // TODO hide divider on the last visible item
         lastSeenIp?.let {
