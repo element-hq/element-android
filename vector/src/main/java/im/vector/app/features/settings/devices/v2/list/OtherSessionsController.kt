@@ -24,7 +24,7 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -60,7 +60,7 @@ class OtherSessionsController @Inject constructor(
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                             formattedLastActivityDate
                     )
-                } else if (device.trustLevelForShield == RoomEncryptionTrustLevel.Trusted) {
+                } else if (device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted) {
                     stringProvider.getString(R.string.device_manager_other_sessions_description_verified, formattedLastActivityDate)
                 } else {
                     stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
@@ -71,7 +71,7 @@ class OtherSessionsController @Inject constructor(
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
                     deviceType(DeviceType.UNKNOWN) // TODO. We don't have this info yet. Update accordingly.
-                    roomEncryptionTrustLevel(device.trustLevelForShield)
+                    roomEncryptionTrustLevel(device.roomEncryptionTrustLevel)
                     sessionName(device.deviceInfo.displayName)
                     sessionDescription(description)
                     sessionDescriptionDrawable(descriptionDrawable)

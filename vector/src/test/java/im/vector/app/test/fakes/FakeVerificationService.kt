@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.list
+package im.vector.app.test.fakes
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 
-data class SessionInfoViewState(
-        val isCurrentSession: Boolean,
-        val deviceFullInfo: DeviceFullInfo,
-        val isDetailsButtonVisible: Boolean = true,
-        val isLearnMoreLinkVisible: Boolean = false,
-        val isLastSeenDetailsVisible: Boolean = false,
-)
+class FakeVerificationService : VerificationService by mockk()

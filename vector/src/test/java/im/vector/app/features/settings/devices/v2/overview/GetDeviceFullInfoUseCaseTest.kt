@@ -18,10 +18,10 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import im.vector.app.features.settings.devices.CurrentSessionCrossSigningInfo
-import im.vector.app.features.settings.devices.DeviceFullInfo
-import im.vector.app.features.settings.devices.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.GetEncryptionTrustLevelForDeviceUseCase
+import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeFlowLiveDataConversions
@@ -31,6 +31,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
@@ -90,7 +91,7 @@ class GetDeviceFullInfoUseCaseTest {
                 DeviceFullInfo(
                         deviceInfo = deviceInfo,
                         cryptoDeviceInfo = cryptoDeviceInfo,
-                        trustLevelForShield = trustLevel,
+                        roomEncryptionTrustLevel = trustLevel,
                         isInactive = isInactive,
                 )
         )
@@ -134,7 +135,7 @@ class GetDeviceFullInfoUseCaseTest {
                 isCrossSigningInitialized = true,
                 isCrossSigningVerified = false
         )
-        every { getCurrentSessionCrossSigningInfoUseCase.execute() } returns currentSessionCrossSigningInfo
+        every { getCurrentSessionCrossSigningInfoUseCase.execute() } returns flowOf(currentSessionCrossSigningInfo)
         return currentSessionCrossSigningInfo
     }
 

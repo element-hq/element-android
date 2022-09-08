@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.list
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-
-data class SessionInfoViewState(
-        val isCurrentSession: Boolean,
-        val deviceFullInfo: DeviceFullInfo,
-        val isDetailsButtonVisible: Boolean = true,
-        val isLearnMoreLinkVisible: Boolean = false,
-        val isLastSeenDetailsVisible: Boolean = false,
+/**
+ * Used to hold some info about the cross signing of the current Session.
+ */
+data class CurrentSessionCrossSigningInfo(
+        val deviceId: String = "",
+        val isCrossSigningInitialized: Boolean = false,
+        val isCrossSigningVerified: Boolean = false,
 )

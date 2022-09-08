@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices
+package im.vector.app.features.settings.devices.v2
 
-/**
- * Used to hold some info about the cross signing of the current Session.
- */
-data class CurrentSessionCrossSigningInfo(
-        val deviceId: String?,
-        val isCrossSigningInitialized: Boolean,
-        val isCrossSigningVerified: Boolean,
-)
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.Uninitialized
+
+data class DevicesViewState(
+        val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
+        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
+        val unverifiedSessionsCount: Int = 0,
+        val inactiveSessionsCount: Int = 0,
+        val isLoading: Boolean = false,
+) : MavericksState

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.list
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
-data class SessionInfoViewState(
-        val isCurrentSession: Boolean,
-        val deviceFullInfo: DeviceFullInfo,
-        val isDetailsButtonVisible: Boolean = true,
-        val isLearnMoreLinkVisible: Boolean = false,
-        val isLastSeenDetailsVisible: Boolean = false,
+data class DeviceFullInfo(
+        val deviceInfo: DeviceInfo,
+        val cryptoDeviceInfo: CryptoDeviceInfo?,
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
+        val isInactive: Boolean,
 )

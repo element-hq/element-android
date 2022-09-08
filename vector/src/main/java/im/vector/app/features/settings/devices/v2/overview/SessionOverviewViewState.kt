@@ -19,7 +19,7 @@ package im.vector.app.features.settings.devices.v2.overview
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.features.settings.devices.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 
 data class SessionOverviewViewState(
         val deviceId: String,

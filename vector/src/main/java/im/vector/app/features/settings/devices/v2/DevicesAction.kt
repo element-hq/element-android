@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.list
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
-data class SessionInfoViewState(
-        val isCurrentSession: Boolean,
-        val deviceFullInfo: DeviceFullInfo,
-        val isDetailsButtonVisible: Boolean = true,
-        val isLearnMoreLinkVisible: Boolean = false,
-        val isLastSeenDetailsVisible: Boolean = false,
-)
+sealed class DevicesAction : VectorViewModelAction {
+    data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
+}
