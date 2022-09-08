@@ -47,11 +47,8 @@ import javax.inject.Inject
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
-/**
- * Hilt injection happen at super.onReceive().
- */
 
-class VectorMessagingHelper @Inject constructor(
+class VectorPushHandler @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val notifiableEventResolver: NotifiableEventResolver,
     private val activeSessionHolder: ActiveSessionHolder,

@@ -24,7 +24,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.core.pushers.VectorMessagingHelper
+import im.vector.app.core.pushers.VectorPushHandler
 import im.vector.app.features.settings.VectorPreferences
 import org.json.JSONObject
 import timber.log.Timber
@@ -36,7 +36,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushersManager: PushersManager
-    @Inject lateinit var vectorMessagingHelper: VectorMessagingHelper
+    @Inject lateinit var vectorPushHandler: VectorPushHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
     override fun onNewToken(token: String) {
@@ -53,6 +53,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.d("New Firebase message")
-        vectorMessagingHelper.onMessage(JSONObject(message.data as Map<*, *>).toString())
+        vectorPushHandler.onMessage(JSONObject(message.data as Map<*, *>).toString())
     }
 }

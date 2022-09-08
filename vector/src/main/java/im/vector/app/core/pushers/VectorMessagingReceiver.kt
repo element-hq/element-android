@@ -42,7 +42,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var vectorMessagingHelper: VectorMessagingHelper
+    @Inject lateinit var vectorPushHandler: VectorPushHandler
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
@@ -57,7 +57,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
-        vectorMessagingHelper.onMessage(String(message))
+        vectorPushHandler.onMessage(String(message))
     }
 
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
