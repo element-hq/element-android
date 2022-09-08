@@ -3266,6 +3266,7 @@
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
     <string name="device_manager_session_details_title">Session details</string>
+    <string name="device_manager_session_details_description">Application, device, and activity information.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

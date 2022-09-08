@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="SessionsListHeaderView">
-        <attr name="devicesListHeaderTitle" format="string" />
-        <attr name="devicesListHeaderDescription" format="string" />
+        <attr name="sessionsListHeaderTitle" format="string" />
+        <attr name="sessionsListHeaderDescription" format="string" />
     </declare-styleable>
 
 </resources>

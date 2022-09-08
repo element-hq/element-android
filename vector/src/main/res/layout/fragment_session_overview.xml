@@ -17,4 +17,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
+    <im.vector.app.features.settings.devices.v2.overview.SessionOverviewEntryView
+        android:id="@+id/sessionOverviewEntryDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:sessionOverviewEntryTitle="@string/device_manager_session_details_title"
+        app:sessionOverviewEntryDescription="@string/device_manager_session_details_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionOverviewInfo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
