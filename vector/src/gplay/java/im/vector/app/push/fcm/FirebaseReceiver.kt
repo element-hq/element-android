@@ -16,7 +16,6 @@
 
 package im.vector.app.push.fcm
 
-import android.content.Intent
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,11 +23,9 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.VectorMessagingHelper
 import im.vector.app.features.settings.VectorPreferences
 import org.json.JSONObject
-import org.unifiedpush.android.connector.ACTION_MESSAGE
-import org.unifiedpush.android.connector.EXTRA_BYTES_MESSAGE
-import org.unifiedpush.android.connector.EXTRA_TOKEN
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,6 +35,7 @@ class FirebaseReceiver : FirebaseMessagingService() {
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var vectorMessagingHelper: VectorMessagingHelper
 
     override fun onNewToken(token: String) {
         Timber.d("New Firebase token")
@@ -49,11 +47,6 @@ class FirebaseReceiver : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.d("New Firebase message")
-        val intent = Intent()
-        intent.action = ACTION_MESSAGE
-        intent.setPackage(baseContext.packageName)
-        intent.putExtra(EXTRA_BYTES_MESSAGE, JSONObject(message.data as Map<*, *>).toString().toByteArray())
-        intent.putExtra(EXTRA_TOKEN, fcmHelper.getFcmToken())
-        baseContext.sendBroadcast(intent)
+        vectorMessagingHelper.onMessage(JSONObject(message.data as Map<*, *>).toString())
     }
 }
