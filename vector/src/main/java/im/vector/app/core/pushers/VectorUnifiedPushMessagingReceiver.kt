@@ -40,6 +40,7 @@ private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 @AndroidEntryPoint
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var pushParser: PushParser
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorPushHandler: VectorPushHandler
@@ -57,7 +58,10 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
-        vectorPushHandler.onMessage(String(message))
+        Timber.tag(loggerTag.value).d("New message")
+        pushParser.parsePushDataUnifiedPush(message)?.let {
+            vectorPushHandler.handle(it)
+        }
     }
 
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {

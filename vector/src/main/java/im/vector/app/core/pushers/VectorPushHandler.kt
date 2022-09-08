@@ -55,8 +55,6 @@ class VectorPushHandler @Inject constructor(
     private val vectorPreferences: VectorPreferences,
     private val vectorDataStore: VectorDataStore,
     private val wifiDetector: WifiDetector,
-    private val unifiedPushHelper: UnifiedPushHelper,
-    private val pushParser: PushParser,
     private val actionIds: NotificationActionIds,
     private val context: Context,
     private val buildMeta: BuildMeta
@@ -74,19 +72,16 @@ class VectorPushHandler @Inject constructor(
      *
      * @param message the message
      */
-    fun onMessage(message: String) {
-        Timber.tag(loggerTag.value).d("## onMessage() received")
+    fun handle(pushData: PushData) {
+        Timber.tag(loggerTag.value).d("## handling pushData")
 
         if (buildMeta.lowPrivacyLoggingEnabled) {
-            Timber.tag(loggerTag.value).d("## onMessage() $message")
+            Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
 
         runBlocking {
             vectorDataStore.incrementPushCounter()
         }
-
-        val pushData = pushParser.parseData(message, unifiedPushHelper.isEmbeddedDistributor())
-                ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
@@ -105,7 +100,7 @@ class VectorPushHandler @Inject constructor(
                 // we are in foreground, let the sync do the things?
                 Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
-                coroutineScope.launch(Dispatchers.IO) { onMessageReceivedInternal(pushData) }
+                coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
             }
         }
     }
@@ -115,12 +110,12 @@ class VectorPushHandler @Inject constructor(
      *
      * @param pushData Object containing message data.
      */
-    private suspend fun onMessageReceivedInternal(pushData: PushData) {
+    private suspend fun handleInternal(pushData: PushData) {
         try {
             if (buildMeta.lowPrivacyLoggingEnabled) {
-                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $pushData")
+                Timber.tag(loggerTag.value).d("## handleInternal() : $pushData")
             } else {
-                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
+                Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
             val session = activeSessionHolder.getOrInitializeSession(startSync = false)
@@ -140,7 +135,7 @@ class VectorPushHandler @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Timber.tag(loggerTag.value).e(e, "## onMessageReceivedInternal() failed")
+            Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }
     }
 

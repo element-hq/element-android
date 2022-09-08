@@ -22,11 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
+import im.vector.app.core.pushers.PushParser
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.pushers.VectorPushHandler
 import im.vector.app.features.settings.VectorPreferences
-import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,6 +36,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var pushParser: PushParser
     @Inject lateinit var vectorPushHandler: VectorPushHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
@@ -53,6 +54,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.d("New Firebase message")
-        vectorPushHandler.onMessage(JSONObject(message.data as Map<*, *>).toString())
+        pushParser.parsePushDataFcm(message.data)?.let {
+            vectorPushHandler.handle(it)
+        }
     }
 }

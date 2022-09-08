@@ -20,6 +20,7 @@ import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.pushers.model.PushDataFcm
 import im.vector.app.core.pushers.model.PushDataUnifiedPush
 import im.vector.app.core.pushers.model.toPushData
+import org.json.JSONObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import javax.inject.Inject
@@ -40,12 +41,15 @@ class PushParser @Inject constructor() {
      * [3] https://spec.matrix.org/latest/push-gateway-api/
      * [4] https://github.com/p1gp1g/sygnal/blob/unifiedpush/sygnal/upfcmpushkin.py (Not tested for a while)
      */
-    fun parseData(message: String, firebaseFormat: Boolean): PushData? {
-        val moshi = MatrixJsonParser.getMoshi()
-        return if (firebaseFormat) {
-            tryOrNull { moshi.adapter(PushDataFcm::class.java).fromJson(message) }?.toPushData()
-        } else {
-            tryOrNull { moshi.adapter(PushDataUnifiedPush::class.java).fromJson(message) }?.toPushData()
+    fun parsePushDataUnifiedPush(message: ByteArray): PushData? {
+        return MatrixJsonParser.getMoshi().let {
+            tryOrNull { it.adapter(PushDataUnifiedPush::class.java).fromJson(String(message)) }?.toPushData()
+        }
+    }
+
+    fun parsePushDataFcm(message: Map<*, *>): PushData? {
+        return MatrixJsonParser.getMoshi().let {
+            tryOrNull { it.adapter(PushDataFcm::class.java).fromJson(JSONObject(message).toString()) }?.toPushData()
         }
     }
 }
