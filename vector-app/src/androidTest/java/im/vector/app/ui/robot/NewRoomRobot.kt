@@ -32,9 +32,7 @@ class NewRoomRobot(
     private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
-        if (labsPreferences.isNewAppLayoutEnabled) {
-            clickOn(R.string.create_new_room)
-        }
+        clickOn(R.string.create_new_room)
         waitUntilViewVisible(withId(R.id.createRoomForm))
         val createNewRoomRobot = CreateNewRoomRobot()
         block(createNewRoomRobot)
