@@ -158,7 +158,7 @@ class VectorSettingsNotificationPreferenceFragment :
             if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    unifiedPushHelper.openDistributorDialog(requireActivity(), pushersManager) {
+                    unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
                         it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()

@@ -46,6 +46,9 @@ class UnifiedPushHelper @Inject constructor(
         private val vectorFeatures: VectorFeatures,
         private val fcmHelper: FcmHelper,
 ) {
+
+    // Called when the home activity starts
+    // or when notifications are enabled
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -56,7 +59,14 @@ class UnifiedPushHelper @Inject constructor(
         )
     }
 
-    fun reRegister(
+    // If registration is forced:
+    // * the current distributor (if any) is removed
+    // * The dialog is opened
+    //
+    // The registration is forced in 2 cases :
+    // * in the settings
+    // * in the troubleshoot list (doFix)
+    fun forceRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
             onDoneRunnable: Runnable? = null
@@ -86,7 +96,8 @@ class UnifiedPushHelper @Inject constructor(
                 // Un-register first
                 unregister(pushersManager)
             }
-            if (UnifiedPush.getDistributor(context).isNotEmpty()) {
+            // the !force should not be needed
+            if (!force && UnifiedPush.getDistributor(context).isNotEmpty()) {
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
                 return@launch
@@ -94,45 +105,26 @@ class UnifiedPushHelper @Inject constructor(
 
             val distributors = UnifiedPush.getDistributors(context)
 
-            if (distributors.size == 1 && !force) {
+            if (!force && distributors.size == 1) {
                 UnifiedPush.saveDistributor(context, distributors.first())
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
             } else {
                 openDistributorDialogInternal(
                         activity = activity,
-                        pushersManager = pushersManager,
                         onDoneRunnable = onDoneRunnable,
-                        distributors = distributors,
-                        unregisterFirst = force,
-                        cancellable = !force
+                        distributors = distributors
                 )
             }
         }
     }
 
-    fun openDistributorDialog(
-            activity: FragmentActivity,
-            pushersManager: PushersManager,
-            onDoneRunnable: Runnable,
-    ) {
-        val distributors = UnifiedPush.getDistributors(activity)
-        openDistributorDialogInternal(
-                activity,
-                pushersManager,
-                onDoneRunnable, distributors,
-                unregisterFirst = true,
-                cancellable = true,
-        )
-    }
-
+    // There is no case where this function is called
+    // with a saved distributor and/or a pusher
     private fun openDistributorDialogInternal(
             activity: FragmentActivity,
-            pushersManager: PushersManager?,
             onDoneRunnable: Runnable?,
-            distributors: List<String>,
-            unregisterFirst: Boolean,
-            cancellable: Boolean,
+            distributors: List<String>
     ) {
         val internalDistributorName = stringProvider.getString(
                 if (fcmHelper.isFirebaseAvailable()) {
@@ -154,16 +146,8 @@ class UnifiedPushHelper @Inject constructor(
                 .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                 .setItems(distributorsName.toTypedArray()) { _, which ->
                     val distributor = distributors[which]
-                    if (distributor == UnifiedPush.getDistributor(context)) {
-                        Timber.d("Same distributor selected again, no action")
-                        return@setItems
-                    }
 
                     activity.lifecycleScope.launch {
-                        if (unregisterFirst) {
-                            // Un-register first
-                            unregister(pushersManager)
-                        }
                         UnifiedPush.saveDistributor(context, distributor)
                         Timber.i("Saving distributor: $distributor")
                         UnifiedPush.registerApp(context)
@@ -176,7 +160,7 @@ class UnifiedPushHelper @Inject constructor(
                     UnifiedPush.registerApp(context)
                     onDoneRunnable?.run()
                 }
-                .setCancelable(cancellable)
+                .setCancelable(true)
                 .show()
     }
 
