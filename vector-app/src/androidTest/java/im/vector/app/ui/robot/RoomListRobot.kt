@@ -28,12 +28,10 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
-import im.vector.app.features.DefaultVectorFeatures
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 
-class RoomListRobot {
-    private val features: VectorFeatures = DefaultVectorFeatures()
+class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
 
     fun openRoom(roomName: String, block: RoomDetailRobot.() -> Unit) {
         clickOn(roomName)
@@ -53,7 +51,7 @@ class RoomListRobot {
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
-        if (features.isNewAppLayoutEnabled()) {
+        if (labsPreferences.isNewAppLayoutEnabled) {
             clickOn(R.id.newLayoutCreateChatButton)
             waitUntilDialogVisible(ViewMatchers.withId(R.id.create_room))
             clickOn(R.id.create_room)
@@ -63,7 +61,7 @@ class RoomListRobot {
                 BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
             }
         }
-        val newRoomRobot = NewRoomRobot()
+        val newRoomRobot = NewRoomRobot(false, labsPreferences)
         block(newRoomRobot)
         if (!newRoomRobot.createdRoom) {
             pressBack()

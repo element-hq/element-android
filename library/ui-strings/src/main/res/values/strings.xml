@@ -439,6 +439,9 @@
     <string name="home_layout_preferences_sort_activity">Activity</string>
     <string name="home_layout_preferences_sort_name">A - Z</string>
 
+    <string name="labs_enable_new_app_layout_title">Enable new layout</string>
+    <string name="labs_enable_new_app_layout_summary">A simplified Element with optional tabs</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>

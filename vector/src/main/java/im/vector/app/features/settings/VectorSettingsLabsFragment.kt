@@ -75,8 +75,22 @@ class VectorSettingsLabsFragment :
             }
         }
 
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)!!.let {
-            it.isVisible = !vectorFeatures.isNewAppLayoutEnabled()
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_NEW_APP_LAYOUT_KEY)?.let { pref ->
+            pref.isVisible = vectorFeatures.isNewAppLayoutFeatureEnabled()
+
+            pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                onNewLayoutPreferenceClicked()
+                true
+            }
+        }
+
+        configureUnreadNotificationsAsTabPreference()
+    }
+
+    private fun configureUnreadNotificationsAsTabPreference() {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)?.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
         }
     }
 
@@ -118,5 +132,12 @@ class VectorSettingsLabsFragment :
         lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
         displayLoadingView()
         MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+    }
+
+    /**
+     * Action when new layout preference switch is actually clicked.
+     */
+    private fun onNewLayoutPreferenceClicked() {
+        configureUnreadNotificationsAsTabPreference()
     }
 }

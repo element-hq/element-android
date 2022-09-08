@@ -30,13 +30,14 @@ import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import org.hamcrest.Matchers
 
-class SpaceRobot {
+class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
     private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createSpace(isFirstSpace: Boolean, block: SpaceCreateRobot.() -> Unit) {
-        if (features.isNewAppLayoutEnabled()) {
+        if (labsPreferences.isNewAppLayoutEnabled) {
             clickOn(R.id.newLayoutOpenSpacesButton)
             if (isFirstSpace) {
                 waitUntilDialogVisible(ViewMatchers.withId(R.id.spaces_empty_group))
@@ -59,7 +60,7 @@ class SpaceRobot {
     }
 
     fun spaceMenu(spaceName: String, block: SpaceMenuRobot.() -> Unit) {
-        if (features.isNewAppLayoutEnabled()) {
+        if (labsPreferences.isNewAppLayoutEnabled) {
             clickOn(R.id.newLayoutOpenSpacesButton)
             waitUntilDialogVisible(ViewMatchers.withId(R.id.groupListView))
         } else {
@@ -73,7 +74,7 @@ class SpaceRobot {
 
     fun openMenu(spaceName: String) {
         waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
-        if (features.isNewAppLayoutEnabled()) {
+        if (labsPreferences.isNewAppLayoutEnabled) {
             Espresso.onView(ViewMatchers.withId(R.id.groupListView))
                     .perform(
                             RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
@@ -95,7 +96,7 @@ class SpaceRobot {
     }
 
     fun selectSpace(spaceName: String) {
-        if (!features.isNewAppLayoutEnabled()) {
+        if (!labsPreferences.isNewAppLayoutEnabled) {
             openDrawer()
             waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
         }

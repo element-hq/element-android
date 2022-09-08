@@ -201,7 +201,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isNewAppLayoutEnabled = vectorFeatures.isNewAppLayoutEnabled()
+        isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         unifiedPushHelper.register(this) {
@@ -217,12 +217,13 @@ class HomeActivity :
         roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            if (vectorFeatures.isNewAppLayoutEnabled()) {
+            if (vectorPreferences.isNewAppLayoutEnabled()) {
                 views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
             } else {
                 replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                 replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
         }
 
@@ -581,12 +582,12 @@ class HomeActivity :
     }
 
     private fun checkNewAppLayoutFlagChange() {
-        if (buildMeta.isDebug && vectorFeatures.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+        if (buildMeta.isDebug && vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
             restart()
         }
     }
 
-    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
+    override fun getMenuRes() = if (vectorPreferences.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()

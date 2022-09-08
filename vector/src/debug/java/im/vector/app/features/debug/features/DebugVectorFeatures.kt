@@ -76,8 +76,8 @@ class DebugVectorFeatures(
     override fun shouldStartDmOnFirstMessage(): Boolean = read(DebugFeatureKeys.startDmOnFirstMsg)
             ?: vectorFeatures.shouldStartDmOnFirstMessage()
 
-    override fun isNewAppLayoutEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
-            ?: vectorFeatures.isNewAppLayoutEnabled()
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
+            ?: vectorFeatures.isNewAppLayoutFeatureEnabled()
 
     override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
             ?: vectorFeatures.isNewDeviceManagementEnabled()
