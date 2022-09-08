@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
@@ -172,15 +173,7 @@ class SessionInfoView @JvmOverloads constructor(
                     views.sessionInfoLastActivityTextView.isGone = true
                 }
 
-        deviceInfo.lastSeenIp
-                ?.takeIf { isLastSeenDetailsVisible }
-                ?.let { ipAddress ->
-                    views.sessionInfoLastIPAddressTextView.isVisible = true
-                    views.sessionInfoLastIPAddressTextView.text = ipAddress
-                }
-                ?: run {
-                    views.sessionInfoLastIPAddressTextView.isGone = true
-                }
+        views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isLastSeenDetailsVisible })
     }
 
     private fun renderDetailsButton(isDetailsButtonVisible: Boolean) {
