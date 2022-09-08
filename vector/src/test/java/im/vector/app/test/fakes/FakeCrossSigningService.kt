@@ -16,18 +16,17 @@
 
 package im.vector.app.test.fakes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
 import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+class FakeCrossSigningService : CrossSigningService by mockk() {
+
+    fun givenIsCrossSigningInitializedReturns(isInitialized: Boolean) {
+        every { isCrossSigningInitialized() } returns isInitialized
     }
-}
 
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
+    fun givenIsCrossSigningVerifiedReturns(isVerified: Boolean) {
+        every { isCrossSigningVerified() } returns isVerified
+    }
 }

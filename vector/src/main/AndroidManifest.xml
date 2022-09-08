@@ -339,6 +339,7 @@
         <activity android:name=".features.call.dialpad.PstnDialActivity" />
         <activity android:name=".features.home.room.list.home.invites.InvitesActivity"/>
         <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity"/>
+        <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity"/>
 
         <!-- Services -->
 

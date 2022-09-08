@@ -25,15 +25,15 @@ import androidx.core.content.res.use
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
-import im.vector.app.databinding.ViewDevicesListHeaderBinding
+import im.vector.app.databinding.ViewSessionsListHeaderBinding
 
-class DevicesListHeaderView @JvmOverloads constructor(
+class SessionsListHeaderView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding = ViewDevicesListHeaderBinding.inflate(
+    private val binding = ViewSessionsListHeaderBinding.inflate(
             LayoutInflater.from(context),
             this
     )
@@ -43,7 +43,7 @@ class DevicesListHeaderView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.DevicesListHeaderView,
+                R.styleable.SessionsListHeaderView,
                 0,
                 0
         ).use {
@@ -53,14 +53,14 @@ class DevicesListHeaderView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.DevicesListHeaderView_devicesListHeaderTitle)
-        binding.devicesListHeaderTitle.text = title
+        val title = typedArray.getString(R.styleable.SessionsListHeaderView_devicesListHeaderTitle)
+        binding.sessionsListHeaderTitle.text = title
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.DevicesListHeaderView_devicesListHeaderDescription)
+        val description = typedArray.getString(R.styleable.SessionsListHeaderView_devicesListHeaderDescription)
         if (description.isNullOrEmpty()) {
-            binding.devicesListHeaderDescription.isVisible = false
+            binding.sessionsListHeaderDescription.isVisible = false
             return
         }
 
@@ -70,8 +70,8 @@ class DevicesListHeaderView @JvmOverloads constructor(
         stringBuilder.append(" ")
         stringBuilder.append(learnMore)
 
-        binding.devicesListHeaderDescription.isVisible = true
-        binding.devicesListHeaderDescription.setTextWithColoredPart(
+        binding.sessionsListHeaderDescription.isVisible = true
+        binding.sessionsListHeaderDescription.setTextWithColoredPart(
                 fullText = stringBuilder.toString(),
                 coloredPart = learnMore,
                 underline = false

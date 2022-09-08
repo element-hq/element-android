@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
             android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,17 +56,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListInactiveSessionsRecommendation" />
 
-        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
             android:id="@+id/deviceListHeaderCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:devicesListHeaderDescription=""
-            app:devicesListHeaderTitle="@string/device_manager_header_section_current_session"
+            app:devicesListHeaderTitle="@string/device_manager_current_session_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />
 
-        <im.vector.app.features.settings.devices.v2.list.CurrentSessionView
+        <im.vector.app.features.settings.devices.v2.list.SessionInfoView
             android:id="@+id/deviceListCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
 
-        <im.vector.app.features.settings.devices.v2.list.DevicesListHeaderView
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
             android:id="@+id/deviceListHeaderOtherSessions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

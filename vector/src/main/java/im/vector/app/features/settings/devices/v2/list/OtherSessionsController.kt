@@ -35,6 +35,12 @@ class OtherSessionsController @Inject constructor(
         private val colorProvider: ColorProvider,
 ) : TypedEpoxyController<List<DeviceFullInfo>>() {
 
+    var callback: Callback? = null
+
+    interface Callback {
+        fun onItemClicked(deviceId: String)
+    }
+
     override fun buildModels(data: List<DeviceFullInfo>?) {
         val host = this
 
@@ -70,6 +76,7 @@ class OtherSessionsController @Inject constructor(
                     sessionDescription(description)
                     sessionDescriptionDrawable(descriptionDrawable)
                     stringProvider(this@OtherSessionsController.stringProvider)
+                    clickListener { device.deviceInfo.deviceId?.let { host.callback?.onItemClicked(it) } }
                 }
             }
         }

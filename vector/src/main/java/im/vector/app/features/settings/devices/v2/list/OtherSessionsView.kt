@@ -49,7 +49,12 @@ class OtherSessionsView @JvmOverloads constructor(
         otherSessionsController.setData(devices)
     }
 
+    fun setCallback(callback: OtherSessionsController.Callback) {
+        otherSessionsController.callback = callback
+    }
+
     override fun onDetachedFromWindow() {
+        otherSessionsController.callback = null
         views.otherSessionsRecyclerView.cleanup()
         super.onDetachedFromWindow()
     }

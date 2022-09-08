@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2.overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.settings.devices.DeviceFullInfo
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
-    }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
+data class SessionOverviewViewState(
+        val deviceId: String,
+        val isCurrentSession: Boolean = false,
+        val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
+) : MavericksState {
+    constructor(args: SessionOverviewArgs) : this(
+            deviceId = args.deviceId
+    )
 }

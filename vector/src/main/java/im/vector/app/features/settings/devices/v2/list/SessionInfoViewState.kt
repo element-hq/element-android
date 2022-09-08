@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import im.vector.app.features.settings.devices.DeviceFullInfo
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
-    }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
-}
+data class SessionInfoViewState(
+        val isCurrentSession: Boolean,
+        val deviceFullInfo: DeviceFullInfo,
+        val isDetailsButtonVisible: Boolean = true,
+        val isLearnMoreLinkVisible: Boolean = false,
+        val isLastSeenDetailsVisible: Boolean = false,
+)

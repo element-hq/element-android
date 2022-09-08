@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2.overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
-    }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
-}
+@Parcelize
+data class SessionOverviewArgs(
+        val deviceId: String
+) : Parcelable

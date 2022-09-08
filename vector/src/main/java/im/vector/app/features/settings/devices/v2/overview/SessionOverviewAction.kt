@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2.overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import im.vector.app.core.platform.VectorViewModelAction
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
-    }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
-}
+sealed class SessionOverviewAction : VectorViewModelAction

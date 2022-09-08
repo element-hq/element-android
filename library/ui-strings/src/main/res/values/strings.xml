@@ -3227,13 +3227,22 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
-    <string name="device_manager_verification_status_detail_verified">Your current session is ready for secure messaging.</string>
-    <string name="device_manager_verification_status_detail_unverified">Verify your current session for enhanced secure messaging.</string>
+    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_verified -->
+    <string name="device_manager_verification_status_detail_verified" tools:ignore="UnusedResources">Your current session is ready for secure messaging.</string>
+    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_unverified -->
+    <string name="device_manager_verification_status_detail_unverified" tools:ignore="UnusedResources">Verify your current session for enhanced secure messaging.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
-    <string name="device_manager_header_section_current_session">Current Session</string>
+    <!-- TODO TO BE REMOVED: replaced by device_manager_current_session_title -->
+    <string name="device_manager_header_section_current_session" tools:ignore="UnusedResources">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
+    <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
+    <!--  Examples: Unverified · Last activity Yesterday at 6PM, Unverified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
     <!--  Example: Inactive for 90+ days (Dec 25, 2021) -->
     <plurals name="device_manager_other_sessions_description_inactive">
@@ -3249,6 +3258,10 @@
         <item quantity="one">Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</item>
         <item quantity="other">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</item>
     </plurals>
+    <string name="device_manager_current_session_title">Current Session</string>
+    <string name="device_manager_session_title">Session</string>
+    <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
+    <string name="device_manager_session_last_activity">Last activity %1$s</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

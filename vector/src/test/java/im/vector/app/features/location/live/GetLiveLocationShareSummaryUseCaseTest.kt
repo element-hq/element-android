@@ -18,7 +18,7 @@ package im.vector.app.features.location.live
 
 import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.FakeSession
-import im.vector.app.test.fakes.givenAsFlowReturns
+import im.vector.app.test.fakes.givenAsFlow
 import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -28,7 +28,6 @@ import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
-import org.matrix.android.sdk.api.util.Optional
 
 private const val A_ROOM_ID = "room_id"
 private const val AN_EVENT_ID = "event_id"
@@ -64,7 +63,7 @@ class GetLiveLocationShareSummaryUseCaseTest {
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenLiveLocationShareSummaryReturns(AN_EVENT_ID, summary)
-                .givenAsFlowReturns(Optional(summary))
+                .givenAsFlow()
 
         val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
 
@@ -77,7 +76,7 @@ class GetLiveLocationShareSummaryUseCaseTest {
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenLiveLocationShareSummaryReturns(AN_EVENT_ID, null)
-                .givenAsFlowReturns(Optional(null))
+                .givenAsFlow()
 
         val result = getLiveLocationShareSummaryUseCase.execute(A_ROOM_ID, AN_EVENT_ID).first()
 

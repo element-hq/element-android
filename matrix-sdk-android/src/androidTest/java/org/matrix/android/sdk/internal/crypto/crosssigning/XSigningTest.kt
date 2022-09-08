@@ -193,7 +193,7 @@ class XSigningTest : InstrumentedTest {
             fail("Bob should see the new device")
         }
 
-        val bobSecondDevicePOVFirstDevice = bobSession.cryptoService().getDeviceInfo(bobUserId, bobSecondDeviceId)
+        val bobSecondDevicePOVFirstDevice = bobSession.cryptoService().getCryptoDeviceInfo(bobUserId, bobSecondDeviceId)
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session

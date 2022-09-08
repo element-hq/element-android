@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
-
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
-    }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
-}
+/**
+ * Used to hold some info about the cross signing of the current Session.
+ */
+data class CurrentSessionCrossSigningInfo(
+        val deviceId: String?,
+        val isCrossSigningInitialized: Boolean,
+        val isCrossSigningVerified: Boolean,
+)

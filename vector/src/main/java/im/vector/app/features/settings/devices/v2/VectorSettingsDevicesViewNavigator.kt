@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import io.mockk.every
-import io.mockk.mockkStatic
-import kotlinx.coroutines.flow.flowOf
+import android.content.Context
+import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
+import javax.inject.Inject
 
-class FakeFlowLiveDataConversions {
-    fun setup() {
-        mockkStatic("androidx.lifecycle.FlowLiveDataConversions")
+class VectorSettingsDevicesViewNavigator @Inject constructor() {
+
+    fun navigateToSessionOverview(context: Context, deviceId: String) {
+        context.startActivity(SessionOverviewActivity.newIntent(context, deviceId))
     }
-}
-
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
 }
