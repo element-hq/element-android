@@ -58,9 +58,11 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
 
     private fun initFilterView() {
         views.otherSessionsFilterFrameLayout.debouncedClicks {
-            DeviceManagerFilterBottomSheet
-                    .newInstance(this)
-                    .show(requireActivity().supportFragmentManager, "SHOW_DEVICE_MANAGER_FILTER_BOTTOM_SHEET")
+            withState(viewModel) { state ->
+                DeviceManagerFilterBottomSheet
+                        .newInstance(state.currentFilter, this)
+                        .show(requireActivity().supportFragmentManager, "SHOW_DEVICE_MANAGER_FILTER_BOTTOM_SHEET")
+            }
         }
     }
 

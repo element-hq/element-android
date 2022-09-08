@@ -17,18 +17,28 @@
 package im.vector.app.features.settings.devices.v2.filter
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.databinding.BottomSheetDeviceManagerFilterBinding
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class DeviceManagerFilterBottomSheetArgs(
+        val initialFilterType: DeviceManagerFilterType,
+) : Parcelable
 
 @AndroidEntryPoint
 class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetDeviceManagerFilterBinding>() {
+
+    private val args: DeviceManagerFilterBottomSheetArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetDeviceManagerFilterBinding {
         return BottomSheetDeviceManagerFilterBinding.inflate(inflater, container, false)
@@ -45,6 +55,14 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
         )
+
+        val radioButtonId = when (args.initialFilterType) {
+            DeviceManagerFilterType.ALL_SESSIONS -> R.id.filterOptionAllSessionsRadioButton
+            DeviceManagerFilterType.VERIFIED -> R.id.filterOptionVerifiedRadioButton
+            DeviceManagerFilterType.UNVERIFIED -> R.id.filterOptionUnverifiedRadioButton
+            DeviceManagerFilterType.INACTIVE -> R.id.filterOptionInactiveRadioButton
+        }
+        views.filterOptionsRadioGroup.check(radioButtonId)
 
         views.filterOptionsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             onFilterTypeChanged(checkedId)
@@ -64,10 +82,11 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
     }
 
     companion object {
-        fun newInstance(resultListener: ResultListener): DeviceManagerFilterBottomSheet {
-            val bottomSheet = DeviceManagerFilterBottomSheet()
-            bottomSheet.resultListener = resultListener
-            return bottomSheet
+        fun newInstance(initialFilterType: DeviceManagerFilterType, resultListener: ResultListener): DeviceManagerFilterBottomSheet {
+            return DeviceManagerFilterBottomSheet().apply {
+                this.resultListener = resultListener
+                setArguments(DeviceManagerFilterBottomSheetArgs(initialFilterType))
+            }
         }
     }
 }
