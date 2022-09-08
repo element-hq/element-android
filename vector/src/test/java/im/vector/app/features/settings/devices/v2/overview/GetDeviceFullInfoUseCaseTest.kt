@@ -72,6 +72,7 @@ class GetDeviceFullInfoUseCaseTest {
 
     @Test
     fun `given current session and info for device when getting device info then the result is correct`() = runTest {
+        // Given
         val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
         val deviceInfo = DeviceInfo(
                 lastSeenTs = A_TIMESTAMP
@@ -85,15 +86,15 @@ class GetDeviceFullInfoUseCaseTest {
         val isInactive = false
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
 
+        // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
 
-        deviceFullInfo shouldBeEqualTo Optional(
-                DeviceFullInfo(
-                        deviceInfo = deviceInfo,
-                        cryptoDeviceInfo = cryptoDeviceInfo,
-                        roomEncryptionTrustLevel = trustLevel,
-                        isInactive = isInactive,
-                )
+        // Then
+        deviceFullInfo shouldBeEqualTo DeviceFullInfo(
+                deviceInfo = deviceInfo,
+                cryptoDeviceInfo = cryptoDeviceInfo,
+                roomEncryptionTrustLevel = trustLevel,
+                isInactive = isInactive,
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }
@@ -104,16 +105,19 @@ class GetDeviceFullInfoUseCaseTest {
     }
 
     @Test
-    fun `given current session and no info for device when getting device info then the result is null`() = runTest {
+    fun `given current session and no info for device when getting device info then the result is empty`() = runTest {
+        // Given
         givenCurrentSessionCrossSigningInfo()
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData = MutableLiveData(Optional(null))
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData.givenAsFlow()
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData = MutableLiveData(Optional(null))
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData.givenAsFlow()
 
+        // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
 
-        deviceFullInfo shouldBeEqualTo Optional(null)
+        // Then
+        deviceFullInfo shouldBeEqualTo null
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getMyDevicesInfoLive(A_DEVICE_ID).asFlow() }
         verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getLiveCryptoDeviceInfoWithId(A_DEVICE_ID).asFlow() }
@@ -121,10 +125,13 @@ class GetDeviceFullInfoUseCaseTest {
 
     @Test
     fun `given no current session when getting device info then the result is empty`() = runTest {
+        // Given
         fakeActiveSessionHolder.givenGetSafeActiveSessionReturns(null)
 
+        // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
 
+        // Then
         deviceFullInfo shouldBeEqualTo null
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
     }

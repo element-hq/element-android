@@ -54,7 +54,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun observeSessionInfo(deviceId: String) {
         getDeviceFullInfoUseCase.execute(deviceId)
-                .mapNotNull { it.getOrNull() }
                 .onEach { setState { copy(deviceInfo = Success(it)) } }
                 .launchIn(viewModelScope)
     }

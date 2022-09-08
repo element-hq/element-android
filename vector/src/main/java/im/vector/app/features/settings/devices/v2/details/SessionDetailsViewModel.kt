@@ -27,7 +27,6 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
 // TODO add unit tests
@@ -49,7 +48,6 @@ class SessionDetailsViewModel @AssistedInject constructor(
 
     private fun observeSessionInfo(deviceId: String) {
         getDeviceFullInfoUseCase.execute(deviceId)
-                .mapNotNull { it.getOrNull() }
                 .onEach { setState { copy(deviceInfo = Success(it.deviceInfo)) } }
                 .launchIn(viewModelScope)
     }

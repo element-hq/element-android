@@ -54,7 +54,7 @@ class SessionOverviewViewModelTest {
     fun `given the viewModel has been initialized then viewState is updated with session info`() {
         val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(Optional(deviceFullInfo))
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
         val expectedState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID,
                 isCurrentSession = true,
