@@ -18,7 +18,6 @@ package im.vector.app.core.pushers
 
 import android.content.Context
 import androidx.core.content.edit
-import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import javax.inject.Inject
 
@@ -53,9 +52,8 @@ class UnifiedPushStore @Inject constructor(
      *
      * @return the Push Gateway or null if not defined
      */
-    fun getPushGateway(): String {
+    fun getPushGateway(): String? {
         return defaultPrefs.getString(PREFS_PUSH_GATEWAY, null)
-                ?: context.getString(R.string.pusher_http_url)
     }
 
     /**

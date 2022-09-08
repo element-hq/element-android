@@ -266,4 +266,9 @@ class UnifiedPushHelper @Inject constructor(
         return if (isEmbeddedDistributor()) fcmHelper.getFcmToken()
         else unifiedPushStore.getEndpoint()
     }
+
+    fun getPushGateway(): String? {
+        return if (isEmbeddedDistributor()) context.getString(R.string.pusher_http_url)
+        else unifiedPushStore.getPushGateway()
+    }
 }
