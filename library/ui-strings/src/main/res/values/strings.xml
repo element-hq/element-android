@@ -3267,6 +3267,12 @@
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
+    <string name="device_manager_session_details_section_session_title">Session</string>
+    <string name="device_manager_session_details_session_name">Session name</string>
+    <string name="device_manager_session_details_session_id">Session ID</string>
+    <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_section_device_title">Device</string>
+    <string name="device_manager_session_details_device_ip_address">IP address</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

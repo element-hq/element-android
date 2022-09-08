@@ -21,11 +21,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionDetailsBinding
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import javax.inject.Inject
 
 /**
  * Display the details info about a Session.
@@ -33,6 +41,8 @@ import im.vector.app.databinding.FragmentSessionDetailsBinding
 @AndroidEntryPoint
 class SessionDetailsFragment :
         VectorBaseFragment<FragmentSessionDetailsBinding>() {
+
+    @Inject lateinit var sessionDetailsController: SessionDetailsController
 
     private val viewModel: SessionDetailsViewModel by fragmentViewModel()
 
@@ -43,6 +53,7 @@ class SessionDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        initSessionDetails()
     }
 
     private fun initToolbar() {
@@ -51,14 +62,33 @@ class SessionDetailsFragment :
                 ?.setTitle(R.string.device_manager_session_details_title)
     }
 
-    /*override fun invalidate() = withState(viewModel) { state ->
+    private fun initSessionDetails() {
+        views.sessionDetails.configureWith(sessionDetailsController)
+    }
+
+    override fun onDestroyView() {
+        cleanUpSessionDetails()
+        super.onDestroyView()
+    }
+
+    private fun cleanUpSessionDetails() {
+        views.sessionDetails.cleanup()
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
         if (state.deviceInfo is Success) {
             renderSessionDetails(state.deviceInfo.invoke())
         } else {
-            hideSessionInfo()
+            hideSessionDetails()
         }
     }
 
     private fun renderSessionDetails(deviceInfo: DeviceInfo) {
-    }*/
+        views.sessionDetails.isVisible = true
+        sessionDetailsController.setData(deviceInfo)
+    }
+
+    private fun hideSessionDetails() {
+        views.sessionDetails.isGone = true
+    }
 }

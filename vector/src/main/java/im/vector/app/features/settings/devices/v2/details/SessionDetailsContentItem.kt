@@ -25,7 +25,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass
-abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsContentItem.Holder>(R.layout.item_session_details_header) {
+abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsContentItem.Holder>(R.layout.item_session_details_content) {
 
     @EpoxyAttribute
     var title: String? = null
