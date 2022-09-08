@@ -27,8 +27,11 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.pushers.VectorPushHandler
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 @AndroidEntryPoint
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
@@ -41,7 +44,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
     override fun onNewToken(token: String) {
-        Timber.d("New Firebase token")
+        Timber.tag(loggerTag.value).d("New Firebase token")
         fcmHelper.storeFcmToken(token)
         if (
                 vectorPreferences.areNotificationEnabledForDevice() &&
@@ -53,9 +56,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Timber.d("New Firebase message")
+        Timber.tag(loggerTag.value).d("New Firebase message")
         pushParser.parsePushDataFcm(message.data)?.let {
             vectorPushHandler.handle(it)
+        } ?: run {
+            Timber.tag(loggerTag.value).w("Invalid received data Json format")
         }
     }
 }

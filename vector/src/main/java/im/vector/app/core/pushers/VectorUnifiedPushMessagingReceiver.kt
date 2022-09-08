@@ -61,6 +61,8 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         Timber.tag(loggerTag.value).d("New message")
         pushParser.parsePushDataUnifiedPush(message)?.let {
             vectorPushHandler.handle(it)
+        } ?: run {
+            Timber.tag(loggerTag.value).w("Invalid received data Json format")
         }
     }
 
