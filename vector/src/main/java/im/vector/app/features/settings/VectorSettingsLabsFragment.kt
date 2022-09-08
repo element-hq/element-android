@@ -138,6 +138,6 @@ class VectorSettingsLabsFragment :
      * Action when new layout preference switch is actually clicked.
      */
     private fun onNewLayoutPreferenceClicked() {
-        configureUnreadNotificationsAsTabPreference()
+        MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
     }
 }
