@@ -23,7 +23,6 @@ import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
@@ -76,7 +75,6 @@ class VectorMessagingHelper @Inject constructor(
     /**
      * Called when message is received.
      *
-     * @param context the Android context
      * @param message the message
      */
     fun onMessage(message: String) {
