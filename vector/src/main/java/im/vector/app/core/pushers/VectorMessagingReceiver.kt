@@ -65,11 +65,11 @@ class VectorMessagingReceiver : MessagingReceiver() {
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             // If the endpoint has changed
             // or the gateway has changed
-            if (unifiedPushStore.getEndpointOrToken() != endpoint) {
+            if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
                 unifiedPushStore.storeUpEndpoint(endpoint)
                 coroutineScope.launch {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
-                        unifiedPushStore.getPushGateway()?.let {
+                        unifiedPushStore.getPushGateway().let {
                             pushersManager.enqueueRegisterPusher(endpoint, it)
                         }
                     }
@@ -97,7 +97,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
         guardServiceStarter.start()
         runBlocking {
             try {
-                pushersManager.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
+                pushersManager.unregisterPusher(unifiedPushHelper.getEndpointOrToken().orEmpty())
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
             }

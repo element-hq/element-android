@@ -30,6 +30,7 @@ private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
         private val unifiedPushStore: UnifiedPushStore,
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val activeSessionHolder: ActiveSessionHolder,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
@@ -39,9 +40,9 @@ class PushersManager @Inject constructor(
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.pushersService().testPush(
-                unifiedPushStore.getPushGateway()!!,
+                unifiedPushStore.getPushGateway(),
                 stringProvider.getString(R.string.pusher_app_id),
-                unifiedPushStore.getEndpointOrToken().orEmpty(),
+                unifiedPushHelper.getEndpointOrToken().orEmpty(),
                 TEST_EVENT_ID
         )
     }

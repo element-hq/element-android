@@ -41,7 +41,7 @@ class FirebaseReceiver : FirebaseMessagingService() {
         Timber.d("New Firebase token")
         fcmHelper.storeFcmToken(token)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            pushersManager.enqueueRegisterPusher(token, getString(R.string.default_push_gateway_http_url))
+            pushersManager.enqueueRegisterPusher(token, getString(R.string.pusher_http_url))
         }
     }
 
