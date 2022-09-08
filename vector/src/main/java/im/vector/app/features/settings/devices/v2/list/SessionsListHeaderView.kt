@@ -65,14 +65,15 @@ class SessionsListHeaderView @JvmOverloads constructor(
         }
 
         val learnMore = context.getString(R.string.action_learn_more)
-        val stringBuilder = StringBuilder()
-        stringBuilder.append(description)
-        stringBuilder.append(" ")
-        stringBuilder.append(learnMore)
+        val fullDescription = buildString {
+            append(description)
+            append(" ")
+            append(learnMore)
+        }
 
         binding.sessionsListHeaderDescription.isVisible = true
         binding.sessionsListHeaderDescription.setTextWithColoredPart(
-                fullText = stringBuilder.toString(),
+                fullText = fullDescription,
                 coloredPart = learnMore,
                 underline = false
         ) {

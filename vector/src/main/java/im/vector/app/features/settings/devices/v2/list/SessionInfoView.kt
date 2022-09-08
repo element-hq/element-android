@@ -92,13 +92,14 @@ class SessionInfoView @JvmOverloads constructor(
     private fun appendLearnMoreToVerificationStatus() {
         val status = views.sessionInfoVerificationStatusDetailTextView.text
         val learnMore = context.getString(R.string.action_learn_more)
-        val stringBuilder = StringBuilder()
-        stringBuilder.append(status)
-        stringBuilder.append(" ")
-        stringBuilder.append(learnMore)
+        val statusText = buildString {
+            append(status)
+            append(" ")
+            append(learnMore)
+        }
 
         views.sessionInfoVerificationStatusDetailTextView.setTextWithColoredPart(
-                fullText = stringBuilder.toString(),
+                fullText = statusText,
                 coloredPart = learnMore,
                 underline = false
         ) {
