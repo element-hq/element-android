@@ -54,7 +54,12 @@ class SessionsListHeaderView @JvmOverloads constructor(
 
     private fun setTitle(typedArray: TypedArray) {
         val title = typedArray.getString(R.styleable.SessionsListHeaderView_devicesListHeaderTitle)
-        binding.sessionsListHeaderTitle.text = title
+        if (title.isNullOrEmpty()) {
+            binding.sessionsListHeaderTitle.isVisible = false
+        } else {
+            binding.sessionsListHeaderTitle.isVisible = true
+            binding.sessionsListHeaderTitle.text = title
+        }
     }
 
     private fun setDescription(typedArray: TypedArray) {

@@ -19,6 +19,8 @@ package im.vector.app.features.settings.devices.v2
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import org.matrix.android.sdk.api.extensions.orFalse
 
 data class DevicesViewState(
         val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
@@ -26,4 +28,17 @@ data class DevicesViewState(
         val unverifiedSessionsCount: Int = 0,
         val inactiveSessionsCount: Int = 0,
         val isLoading: Boolean = false,
-) : MavericksState
+        val currentFilter: DeviceManagerFilterType = DeviceManagerFilterType.ALL_SESSIONS,
+) : MavericksState {
+
+    fun List<DeviceFullInfo>?.filteredDevices(): List<DeviceFullInfo>? {
+        return this?.filter {
+            when (currentFilter) {
+                DeviceManagerFilterType.ALL_SESSIONS -> true
+                DeviceManagerFilterType.VERIFIED -> it.cryptoDeviceInfo?.isVerified.orFalse()
+                DeviceManagerFilterType.UNVERIFIED -> !it.cryptoDeviceInfo?.isVerified.orFalse()
+                DeviceManagerFilterType.INACTIVE -> it.isInactive
+            }
+        }
+    }
+}

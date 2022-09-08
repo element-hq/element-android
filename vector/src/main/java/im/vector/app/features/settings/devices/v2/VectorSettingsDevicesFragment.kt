@@ -37,10 +37,11 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
-import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import javax.inject.Inject
 
 /**
@@ -198,7 +199,7 @@ class VectorSettingsDevicesFragment :
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
             views.deviceListOtherSessions.isVisible = true
-            views.deviceListOtherSessions.render(otherDevices)
+            views.deviceListOtherSessions.render(otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER), otherDevices.size)
         }
     }
 
