@@ -20,25 +20,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DevicesAction
 import im.vector.app.features.settings.devices.v2.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.themes.ThemeUtils
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>(), VectorBaseBottomSheetDialogFragment.ResultListener {
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
@@ -59,8 +65,8 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
-        if (resultCode == RESULT_OK && data != null) {
-            Toast.makeText(requireContext(), data.toString(), Toast.LENGTH_LONG).show()
+        if (resultCode == RESULT_OK && data != null && data is DeviceManagerFilterType) {
+            viewModel.handle(DevicesAction.FilterDevices(data))
         }
     }
 
@@ -77,10 +83,51 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
 
     private fun renderDevices(devices: List<DeviceFullInfo>?, currentFilter: DeviceManagerFilterType) {
         views.otherSessionsFilterBadgeImageView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
+        views.otherSessionsSecurityRecommendationView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
+        views.deviceListHeaderOtherSessions.isVisible = currentFilter == DeviceManagerFilterType.ALL_SESSIONS
+
+        when (currentFilter) {
+            DeviceManagerFilterType.VERIFIED -> {
+                views.otherSessionsSecurityRecommendationView.render(
+                        OtherSessionsSecurityRecommendationViewState(
+                                title = getString(R.string.device_manager_other_sessions_recommendation_title_verified),
+                                description = getString(R.string.device_manager_other_sessions_recommendation_description_verified),
+                                imageResourceId = R.drawable.ic_shield_trusted_no_border,
+                                imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_trust_background)
+                        )
+                )
+            }
+            DeviceManagerFilterType.UNVERIFIED -> {
+                views.otherSessionsSecurityRecommendationView.render(
+                        OtherSessionsSecurityRecommendationViewState(
+                                title = getString(R.string.device_manager_other_sessions_recommendation_title_unverified),
+                                description = getString(R.string.device_manager_other_sessions_recommendation_description_unverified),
+                                imageResourceId = R.drawable.ic_shield_warning_no_border,
+                                imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_warning_background)
+                        )
+                )
+            }
+            DeviceManagerFilterType.INACTIVE -> {
+                views.otherSessionsSecurityRecommendationView.render(
+                        OtherSessionsSecurityRecommendationViewState(
+                                title = getString(R.string.device_manager_other_sessions_recommendation_title_inactive),
+                                description = resources.getQuantityString(
+                                        R.plurals.device_manager_other_sessions_recommendation_description_inactive,
+                                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+                                ),
+                                imageResourceId = R.drawable.ic_inactive_sessions,
+                                imageTintColorResourceId = ThemeUtils.getColor(requireContext(), R.attr.vctr_system)
+                        )
+                )
+            }
+            DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */ }
+        }
 
         if (devices.isNullOrEmpty()) {
-            // TODO. Render empty state
+            views.deviceListOtherSessions.isVisible = false
         } else {
+            views.deviceListOtherSessions.isVisible = true
             views.deviceListOtherSessions.render(devices, devices.size)
         }
     }

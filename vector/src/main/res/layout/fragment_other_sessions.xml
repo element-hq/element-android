@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,7 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="16dp">
+                android:padding="8dp"
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -47,7 +49,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
     <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
         android:id="@+id/deviceListHeaderOtherSessions"
         android:layout_width="0dp"
@@ -56,15 +57,31 @@
         app:devicesListHeaderTitle=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"/>
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsSecurityRecommendationView
+        android:id="@+id/otherSessionsSecurityRecommendationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/deviceListHeaderOtherSessions"
+        app:otherSessionsRecommendationDescription="@string/device_manager_other_sessions_recommendation_description_unverified"
+        app:otherSessionsRecommendationImageBackgroundTint="@color/shield_color_warning_background"
+        app:otherSessionsRecommendationImageResource="@drawable/ic_shield_warning_no_border"
+        app:otherSessionsRecommendationTitle="@string/device_manager_other_sessions_recommendation_title_unverified"
+        tools:visibility="visible" />
 
     <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
         android:id="@+id/deviceListOtherSessions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deviceListHeaderOtherSessions" />
+        app:layout_constraintTop_toBottomOf="@id/otherSessionsSecurityRecommendationView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

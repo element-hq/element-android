@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.othersessions
 
-import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-
-sealed class DevicesAction : VectorViewModelAction {
-    data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
-    data class FilterDevices(val filterType: DeviceManagerFilterType) : DevicesAction()
-}
+data class OtherSessionsSecurityRecommendationViewState(
+        val title: String,
+        val description: String,
+        val imageResourceId: Int,
+        val imageTintColorResourceId: Int,
+)

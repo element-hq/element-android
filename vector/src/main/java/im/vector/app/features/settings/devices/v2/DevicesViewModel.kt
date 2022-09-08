@@ -144,7 +144,17 @@ class DevicesViewModel @AssistedInject constructor(
     override fun handle(action: DevicesAction) {
         when (action) {
             is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
+            is DevicesAction.FilterDevices -> handleFilterDevices(action)
         }
+    }
+
+    private fun handleFilterDevices(action: DevicesAction.FilterDevices) {
+        setState {
+            copy(
+                    currentFilter = action.filterType
+            )
+        }
+        queryRefreshDevicesList()
     }
 
     private fun handleMarkAsManuallyVerifiedAction() {
