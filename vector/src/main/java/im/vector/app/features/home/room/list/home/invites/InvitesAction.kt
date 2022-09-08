@@ -20,6 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class InvitesAction : VectorViewModelAction {
+    data class SelectRoom(val roomSummary: RoomSummary) : InvitesAction()
     data class AcceptInvitation(val roomSummary: RoomSummary) : InvitesAction()
     data class RejectInvitation(val roomSummary: RoomSummary) : InvitesAction()
 }
