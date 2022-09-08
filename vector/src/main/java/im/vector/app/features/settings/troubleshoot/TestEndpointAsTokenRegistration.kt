@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.core.pushers.UnifiedPushStore
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject

@@ -128,7 +128,7 @@ class HomeActivity :
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
@@ -208,7 +208,7 @@ class HomeActivity :
             if (unifiedPushHelper.isEmbeddedDistributor()) {
                 fcmHelper.ensureFcmTokenIsRetrieved(
                         this,
-                        pushManager,
+                        pushersManager,
                         vectorPreferences.areNotificationEnabledForDevice()
                 )
             }
