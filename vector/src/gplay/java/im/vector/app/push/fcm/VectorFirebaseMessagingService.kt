@@ -31,7 +31,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FirebaseReceiver : FirebaseMessagingService() {
+class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
