@@ -38,7 +38,7 @@ private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
  * Hilt injection happen at super.onReceive().
  */
 @AndroidEntryPoint
-class VectorMessagingReceiver : MessagingReceiver() {
+class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences

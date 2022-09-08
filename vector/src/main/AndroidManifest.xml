@@ -412,7 +412,7 @@
 
         <!-- UnifiedPush -->
         <receiver
-            android:name=".core.pushers.VectorMessagingReceiver"
+            android:name=".core.pushers.VectorUnifiedPushMessagingReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
