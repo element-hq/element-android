@@ -23,6 +23,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.pushers.VectorMessagingHelper
 import im.vector.app.features.settings.VectorPreferences
 import org.json.JSONObject
@@ -36,11 +37,16 @@ class FirebaseReceiver : FirebaseMessagingService() {
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var vectorMessagingHelper: VectorMessagingHelper
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
     override fun onNewToken(token: String) {
         Timber.d("New Firebase token")
         fcmHelper.storeFcmToken(token)
-        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
+        if (
+                vectorPreferences.areNotificationEnabledForDevice() &&
+                activeSessionHolder.hasActiveSession() &&
+                unifiedPushHelper.isEmbeddedDistributor()
+        ) {
             pushersManager.enqueueRegisterPusher(token, getString(R.string.pusher_http_url))
         }
     }

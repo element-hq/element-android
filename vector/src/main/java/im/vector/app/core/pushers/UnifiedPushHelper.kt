@@ -240,11 +240,17 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun isEmbeddedDistributor(): Boolean {
-        return UnifiedPush.getDistributor(context) == context.packageName && fcmHelper.isFirebaseAvailable()
+        return isInternalDistributor() && fcmHelper.isFirebaseAvailable()
     }
 
     fun isBackgroundSync(): Boolean {
-        return UnifiedPush.getDistributor(context) == context.packageName && !fcmHelper.isFirebaseAvailable()
+        return isInternalDistributor() && !fcmHelper.isFirebaseAvailable()
+    }
+
+    private fun isInternalDistributor(): Boolean {
+        return UnifiedPush.getDistributor(context).isEmpty() ||
+                UnifiedPush.getDistributor(context) == context.packageName
+
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
