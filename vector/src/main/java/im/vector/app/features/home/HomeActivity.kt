@@ -582,7 +582,7 @@ class HomeActivity :
     }
 
     private fun checkNewAppLayoutFlagChange() {
-        if (buildMeta.isDebug && vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+        if (vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
             restart()
         }
     }
