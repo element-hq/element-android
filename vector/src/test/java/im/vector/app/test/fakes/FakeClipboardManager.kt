@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details
+package im.vector.app.test.fakes
 
-import im.vector.app.core.platform.VectorViewModelAction
+import android.content.ClipData
+import android.content.ClipboardManager
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 
-sealed class SessionDetailsAction : VectorViewModelAction {
-    data class CopyToClipboard(val content: String) : SessionDetailsAction()
+class FakeClipboardManager {
+    val instance = mockk<ClipboardManager>()
+
+    fun givenSetPrimaryClip() {
+        every { instance.setPrimaryClip(any()) } just runs
+    }
+
+    fun verifySetPrimaryClip(clipData: ClipData) {
+        verify { instance.setPrimaryClip(clipData) }
+    }
 }

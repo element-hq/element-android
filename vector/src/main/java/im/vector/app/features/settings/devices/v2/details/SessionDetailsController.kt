@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.details
 
+import android.view.View
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
@@ -33,6 +34,12 @@ class SessionDetailsController @Inject constructor(
         private val dateFormatter: VectorDateFormatter,
         private val dimensionConverter: DimensionConverter,
 ) : TypedEpoxyController<DeviceInfo>() {
+
+    var callback: Callback? = null
+
+    interface Callback {
+        fun onItemLongClicked(content: String)
+    }
 
     override fun buildModels(data: DeviceInfo?) {
         data?.let { info ->
@@ -64,6 +71,10 @@ class SessionDetailsController @Inject constructor(
             title(host.stringProvider.getString(titleResId))
             description(value)
             hasDivider(hasDivider)
+            onLongClickListener(View.OnLongClickListener {
+                host.callback?.onItemLongClicked(value)
+                true
+            })
         }
     }
 

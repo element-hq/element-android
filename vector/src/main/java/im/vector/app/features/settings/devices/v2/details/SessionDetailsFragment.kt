@@ -31,6 +31,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.FragmentSessionDetailsBinding
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
@@ -54,6 +55,7 @@ class SessionDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSessionDetails()
+        observeViewEvents()
     }
 
     private fun initToolbar() {
@@ -63,7 +65,20 @@ class SessionDetailsFragment :
     }
 
     private fun initSessionDetails() {
+        sessionDetailsController.callback = object : SessionDetailsController.Callback {
+            override fun onItemLongClicked(content: String) {
+                viewModel.handle(SessionDetailsAction.CopyToClipboard(content))
+            }
+        }
         views.sessionDetails.configureWith(sessionDetailsController)
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                SessionDetailsViewEvent.ContentCopiedToClipboard -> view?.showOptimizedSnackbar(getString(R.string.copied_to_clipboard))
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -72,6 +87,7 @@ class SessionDetailsFragment :
     }
 
     private fun cleanUpSessionDetails() {
+        sessionDetailsController.callback = null
         views.sessionDetails.cleanup()
     }
 

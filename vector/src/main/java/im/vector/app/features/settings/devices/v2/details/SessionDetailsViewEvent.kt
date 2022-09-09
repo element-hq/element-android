@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package im.vector.app.features.settings.devices.v2.details
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class SessionDetailsAction : VectorViewModelAction {
-    data class CopyToClipboard(val content: String) : SessionDetailsAction()
+sealed class SessionDetailsViewEvent : VectorViewEvents {
+    object ContentCopiedToClipboard : SessionDetailsViewEvent()
 }
