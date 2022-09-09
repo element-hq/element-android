@@ -63,13 +63,14 @@ class SessionDetailsController @Inject constructor(
         }
     }
 
-    private fun buildContentItem(@StringRes titleResId: Int, value: String) {
+    private fun buildContentItem(@StringRes titleResId: Int, value: String, hasDivider: Boolean) {
         val host = this
         // TODO bind the longClickListener to copy the description to the clipboard
         sessionDetailsContentItem {
             id(titleResId)
             title(host.stringProvider.getString(titleResId))
             description(value)
+            hasDivider(hasDivider)
         }
     }
 
@@ -84,16 +85,18 @@ class SessionDetailsController @Inject constructor(
 
         buildHeaderItem(R.string.device_manager_session_details_section_session_title)
 
-        // TODO hide divider on the last visible item
         sessionName?.let {
-            buildContentItem(R.string.device_manager_session_details_session_name, it)
+            val hasDivider = sessionId != null || sessionLastSeenTs != null
+            buildContentItem(R.string.device_manager_session_details_session_name, it, hasDivider)
         }
         sessionId?.let {
-            buildContentItem(R.string.device_manager_session_details_session_id, it)
+            val hasDivider = sessionLastSeenTs != null
+            buildContentItem(R.string.device_manager_session_details_session_id, it, hasDivider)
         }
         sessionLastSeenTs?.let {
             val formattedDate = dateFormatter.format(it, DateFormatKind.MESSAGE_DETAIL)
-            buildContentItem(R.string.device_manager_session_details_session_last_activity, formattedDate)
+            val hasDivider = false
+            buildContentItem(R.string.device_manager_session_details_session_last_activity, formattedDate, hasDivider)
         }
     }
 
@@ -106,9 +109,9 @@ class SessionDetailsController @Inject constructor(
 
         buildHeaderItem(R.string.device_manager_session_details_section_device_title, addExtraTopMargin)
 
-        // TODO hide divider on the last visible item
         lastSeenIp?.let {
-            buildContentItem(R.string.device_manager_session_details_device_ip_address, it)
+            val hasDivider = false
+            buildContentItem(R.string.device_manager_session_details_device_ip_address, it, hasDivider)
         }
     }
 }

@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices.v2.details
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -33,6 +34,9 @@ abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsConten
     @EpoxyAttribute
     var description: String? = null
 
+    @EpoxyAttribute
+    var hasDivider: Boolean = true
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onLongClickListener: View.OnLongClickListener? = null
 
@@ -42,10 +46,12 @@ abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsConten
         holder.sessionDetailsContentDescription.text = description
         holder.view.isClickable = onLongClickListener != null
         holder.view.setOnLongClickListener(onLongClickListener)
+        holder.sessionDetailsContentDivider.isVisible = hasDivider
     }
 
     class Holder : VectorEpoxyHolder() {
         val sessionDetailsContentTitle by bind<TextView>(R.id.sessionDetailsContentTitle)
         val sessionDetailsContentDescription by bind<TextView>(R.id.sessionDetailsContentDescription)
+        val sessionDetailsContentDivider by bind<View>(R.id.sessionDetailsContentDivider)
     }
 }
