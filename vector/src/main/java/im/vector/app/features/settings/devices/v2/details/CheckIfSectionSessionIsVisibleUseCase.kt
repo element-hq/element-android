@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
-// TODO add unit tests
 class CheckIfSectionSessionIsVisibleUseCase @Inject constructor() {
 
     fun execute(deviceInfo: DeviceInfo): Boolean {
