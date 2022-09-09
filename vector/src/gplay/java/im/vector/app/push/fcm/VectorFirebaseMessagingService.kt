@@ -57,10 +57,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).d("New Firebase message")
-        pushParser.parsePushDataFcm(message.data)?.let {
+        pushParser.parsePushDataFcm(message.data).let {
             vectorPushHandler.handle(it)
-        } ?: run {
-            Timber.tag(loggerTag.value).w("Invalid received data Json format")
         }
     }
 }

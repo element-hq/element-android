@@ -38,13 +38,11 @@ class PushParserTest {
     fun `test edge cases Firebase`() {
         val pushParser = PushParser()
         // Empty Json
-        pushParser.parsePushDataFcm(emptyMap<String, Any>()) shouldBeEqualTo emptyData
+        pushParser.parsePushDataFcm(emptyMap()) shouldBeEqualTo emptyData
         // Bad Json
-        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", 5)) shouldBe null
-        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", 5)) shouldBe null
-        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("unread", "str")) shouldBe null
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("unread", "str")) shouldBeEqualTo validData.copy(unread = null)
         // Extra data
-        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("extra", 5)) shouldBeEqualTo validData
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("extra", "5")) shouldBeEqualTo validData
     }
 
     @Test
@@ -74,6 +72,7 @@ class PushParserTest {
     fun `test empty roomId`() {
         val pushParser = PushParser()
         val expected = validData.copy(roomId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", null)) shouldBeEqualTo expected
         pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", "")) shouldBeEqualTo expected
         pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", "").toByteArray()) shouldBeEqualTo expected
     }
@@ -90,6 +89,7 @@ class PushParserTest {
     fun `test empty eventId`() {
         val pushParser = PushParser()
         val expected = validData.copy(eventId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", null)) shouldBeEqualTo expected
         pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", "")) shouldBeEqualTo expected
         pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.mutate("\$anEventId", "")) shouldBeEqualTo expected
     }
@@ -108,13 +108,13 @@ class PushParserTest {
         private val FIREBASE_PUSH_DATA = mapOf(
                 "event_id" to "\$anEventId",
                 "room_id" to "!aRoomId:domain",
-                "unread" to 1,
+                "unread" to "1",
                 "prio" to "high",
         )
     }
 }
 
-private fun <K, V> Map<K, V?>.mutate(key: K, value: V?): Map<K, V?> {
+private fun Map<String, String?>.mutate(key: String, value: String?): Map<String, String?> {
     return toMutableMap().apply { put(key, value) }
 }
 

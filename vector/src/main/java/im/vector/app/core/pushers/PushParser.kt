@@ -46,16 +46,11 @@ class PushParser @Inject constructor() {
         }
     }
 
-    fun parsePushDataFcm(message: Map<*, *>): PushData? {
-        if ((message.containsKey("event_id") && message["event_id"] !is String) ||
-                message.containsKey("room_id") && message["room_id"] !is String ||
-                message.containsKey("unread") && message["unread"] !is Int) {
-            return null
-        }
+    fun parsePushDataFcm(message: Map<String, String?>): PushData {
         val pushDataFcm = PushDataFcm(
-                eventId = message["event_id"] as String?,
-                roomId = message["room_id"] as String?,
-                unread = message["unread"] as Int?,
+                eventId = message["event_id"],
+                roomId = message["room_id"],
+                unread = message["unread"]?.let { tryOrNull { Integer.parseInt(it) } },
         )
         return pushDataFcm.toPushData()
     }
