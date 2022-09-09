@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.copyOnLongClick
 
 @EpoxyModelClass
 abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsContentItem.Holder>(R.layout.item_session_details_content) {
@@ -37,15 +38,11 @@ abstract class SessionDetailsContentItem : VectorEpoxyModel<SessionDetailsConten
     @EpoxyAttribute
     var hasDivider: Boolean = true
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    var onLongClickListener: View.OnLongClickListener? = null
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.sessionDetailsContentTitle.text = title
         holder.sessionDetailsContentDescription.text = description
-        holder.view.isClickable = onLongClickListener != null
-        holder.view.setOnLongClickListener(onLongClickListener)
+        holder.sessionDetailsContentDescription.copyOnLongClick()
         holder.sessionDetailsContentDivider.isVisible = hasDivider
     }
 

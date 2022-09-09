@@ -34,12 +34,6 @@ class SessionDetailsController @Inject constructor(
         private val dimensionConverter: DimensionConverter,
 ) : TypedEpoxyController<DeviceInfo>() {
 
-    var callback: Callback? = null
-
-    interface Callback {
-        fun onItemLongClicked(content: String)
-    }
-
     override fun buildModels(data: DeviceInfo?) {
         data?.let { info ->
             val hasSectionSession = hasSectionSession(data)
@@ -65,7 +59,6 @@ class SessionDetailsController @Inject constructor(
 
     private fun buildContentItem(@StringRes titleResId: Int, value: String, hasDivider: Boolean) {
         val host = this
-        // TODO bind the longClickListener to copy the description to the clipboard
         sessionDetailsContentItem {
             id(titleResId)
             title(host.stringProvider.getString(titleResId))
