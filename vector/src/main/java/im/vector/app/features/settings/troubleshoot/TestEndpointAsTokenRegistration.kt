@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.core.pushers.UnifiedPushStore
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject
@@ -37,12 +36,11 @@ class TestEndpointAsTokenRegistration @Inject constructor(
         private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val unifiedPushHelper: UnifiedPushHelper,
-        private val unifiedPushStore: UnifiedPushStore,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
-        val endpoint = unifiedPushStore.getEndpointOrToken() ?: run {
+        val endpoint = unifiedPushHelper.getEndpointOrToken() ?: run {
             status = TestStatus.FAILED
             return
         }
@@ -60,7 +58,7 @@ class TestEndpointAsTokenRegistration @Inject constructor(
             )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_endpoint_registration_quick_fix) {
                 override fun doFix() {
-                    unifiedPushHelper.reRegister(
+                    unifiedPushHelper.forceRegister(
                             context,
                             pushersManager
                     )

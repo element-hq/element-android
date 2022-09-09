@@ -28,20 +28,6 @@
             android:enabled="true"
             android:exported="false" />
 
-        <receiver
-            android:name=".fdroid.receiver.KeepInternalDistributor"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <!--
-                This action is checked to track installed and uninstalled distributors.
-                We declare it to keep the background sync as an internal
-                unifiedpush distributor.
-                -->
-                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".fdroid.service.GuardAndroidService"
             android:exported="false"
