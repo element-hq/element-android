@@ -2627,4 +2627,8 @@
     <string name="timeline_error_room_not_found">Vabandust, aga seda jututuba ei õnnestu leida.
 \nPalun proovi hiljem uuesti.%s</string>
     <string name="invites_title">Kutsed</string>
+    <string name="invites_empty_title">Uut teavet ei leidu.</string>
+    <string name="space_list_empty_message">Kogukonnad on viis jututubade ja inimeste ühendamiseks. Alustamiseks võid luua uue kogukonna.</string>
+    <string name="space_list_empty_title">Siin veel pole kogukondi.</string>
+    <string name="change_space">Vaheta kogukonda</string>
 </resources>
