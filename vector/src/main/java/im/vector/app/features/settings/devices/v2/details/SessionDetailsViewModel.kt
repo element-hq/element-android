@@ -29,7 +29,6 @@ import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseC
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-// TODO add unit tests
 class SessionDetailsViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionDetailsViewState,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,

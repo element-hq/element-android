@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.features.settings.devices.v2.details
 
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.test.fakes.FakeSession
+import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.every
@@ -28,37 +28,35 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 private const val A_SESSION_ID = "session-id"
 
-class SessionOverviewViewModelTest {
+class SessionDetailsViewModelTest {
 
     @get:Rule
     val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
 
-    private val args = SessionOverviewArgs(
+    private val args = SessionDetailsArgs(
             deviceId = A_SESSION_ID
     )
-    private val fakeSession = FakeSession()
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
 
-    private fun createViewModel() = SessionOverviewViewModel(
-            initialState = SessionOverviewViewState(args),
-            session = fakeSession,
+    private fun createViewModel() = SessionDetailsViewModel(
+            initialState = SessionDetailsViewState(args),
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase
     )
 
     @Test
     fun `given the viewModel has been initialized then viewState is updated with session info`() {
         // Given
-        val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
+        val deviceInfo = mockk<DeviceInfo>()
+        every { deviceFullInfo.deviceInfo } returns deviceInfo
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
-        val expectedState = SessionOverviewViewState(
+        val expectedState = SessionDetailsViewState(
                 deviceId = A_SESSION_ID,
-                isCurrentSession = true,
-                deviceInfo = Success(deviceFullInfo)
+                deviceInfo = Success(deviceInfo)
         )
 
         // When
@@ -68,14 +66,6 @@ class SessionOverviewViewModelTest {
         viewModel.test()
                 .assertLatestState { state -> state == expectedState }
                 .finish()
-        verify { sessionParams.deviceId }
         verify { getDeviceFullInfoUseCase.execute(A_SESSION_ID) }
-    }
-
-    private fun givenIdForSession(deviceId: String): SessionParams {
-        val sessionParams = mockk<SessionParams>()
-        every { sessionParams.deviceId } returns deviceId
-        fakeSession.givenSessionParams(sessionParams)
-        return sessionParams
     }
 }
