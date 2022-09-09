@@ -20,20 +20,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -46,30 +42,23 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
-/**
- * Hilt injection happen at super.onReceive().
- */
-@AndroidEntryPoint
-class VectorMessagingReceiver : MessagingReceiver() {
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
-    @Inject lateinit var pushersManager: PushersManager
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var vectorDataStore: VectorDataStore
-    @Inject lateinit var wifiDetector: WifiDetector
-    @Inject lateinit var guardServiceStarter: GuardServiceStarter
-    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
-    @Inject lateinit var unifiedPushStore: UnifiedPushStore
-    @Inject lateinit var pushParser: PushParser
-    @Inject lateinit var actionIds: NotificationActionIds
-    @Inject lateinit var buildMeta: BuildMeta
+
+class VectorPushHandler @Inject constructor(
+    private val notificationDrawerManager: NotificationDrawerManager,
+    private val notifiableEventResolver: NotifiableEventResolver,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val vectorPreferences: VectorPreferences,
+    private val vectorDataStore: VectorDataStore,
+    private val wifiDetector: WifiDetector,
+    private val actionIds: NotificationActionIds,
+    private val context: Context,
+    private val buildMeta: BuildMeta
+) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -81,24 +70,18 @@ class VectorMessagingReceiver : MessagingReceiver() {
     /**
      * Called when message is received.
      *
-     * @param context the Android context
      * @param message the message
-     * @param instance connection, for multi-account
      */
-    override fun onMessage(context: Context, message: ByteArray, instance: String) {
-        Timber.tag(loggerTag.value).d("## onMessage() received")
+    fun handle(pushData: PushData) {
+        Timber.tag(loggerTag.value).d("## handling pushData")
 
-        val sMessage = String(message)
         if (buildMeta.lowPrivacyLoggingEnabled) {
-            Timber.tag(loggerTag.value).d("## onMessage() $sMessage")
+            Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
 
         runBlocking {
             vectorDataStore.incrementPushCounter()
         }
-
-        val pushData = pushParser.parseData(sMessage, unifiedPushHelper.isEmbeddedDistributor())
-                ?: return Unit.also { Timber.tag(loggerTag.value).w("Invalid received data Json format") }
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
@@ -117,51 +100,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 // we are in foreground, let the sync do the things?
                 Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
-                coroutineScope.launch(Dispatchers.IO) { onMessageReceivedInternal(pushData) }
-            }
-        }
-    }
-
-    override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
-        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            // If the endpoint has changed
-            // or the gateway has changed
-            if (unifiedPushStore.getEndpointOrToken() != endpoint) {
-                unifiedPushStore.storeUpEndpoint(endpoint)
-                coroutineScope.launch {
-                    unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
-                        unifiedPushStore.getPushGateway()?.let {
-                            pushersManager.enqueueRegisterPusher(endpoint, it)
-                        }
-                    }
-                }
-            } else {
-                Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
-            }
-        }
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
-        guardServiceStarter.stop()
-    }
-
-    override fun onRegistrationFailed(context: Context, instance: String) {
-        Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
-        guardServiceStarter.start()
-    }
-
-    override fun onUnregistered(context: Context, instance: String) {
-        Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
-        guardServiceStarter.start()
-        runBlocking {
-            try {
-                pushersManager.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d("Probably unregistering a non existing pusher")
+                coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
             }
         }
     }
@@ -171,12 +110,12 @@ class VectorMessagingReceiver : MessagingReceiver() {
      *
      * @param pushData Object containing message data.
      */
-    private suspend fun onMessageReceivedInternal(pushData: PushData) {
+    private suspend fun handleInternal(pushData: PushData) {
         try {
             if (buildMeta.lowPrivacyLoggingEnabled) {
-                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $pushData")
+                Timber.tag(loggerTag.value).d("## handleInternal() : $pushData")
             } else {
-                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
+                Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
             val session = activeSessionHolder.getOrInitializeSession(startSync = false)
@@ -196,7 +135,7 @@ class VectorMessagingReceiver : MessagingReceiver() {
                 }
             }
         } catch (e: Exception) {
-            Timber.tag(loggerTag.value).e(e, "## onMessageReceivedInternal() failed")
+            Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }
     }
 

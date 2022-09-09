@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.push.fcm
+package im.vector.app.core.pushers
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import org.unifiedpush.android.embedded_fcm_distributor.EmbeddedDistributorReceiver
+import android.content.Intent
 
-class EmbeddedFCMDistributor : EmbeddedDistributorReceiver() {
-    override fun getEndpoint(context: Context, token: String, instance: String): String {
-        // Here token is the FCM Token, used by the gateway (sygnal)
-        return token
-    }
+/**
+ * UnifiedPush lib tracks an action to check installed and uninstalled distributors.
+ * We declare it to keep the background sync as an internal unifiedpush distributor.
+ * This class is used to declare this action.
+ */
+class KeepInternalDistributor : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
 }

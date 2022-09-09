@@ -8,18 +8,12 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
 
-        <receiver
-            android:name="im.vector.app.push.fcm.EmbeddedFCMDistributor"
-            android:enabled="true"
-            android:exported="false">
-
+        <service android:name="im.vector.app.push.fcm.VectorFirebaseMessagingService"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
-                <action android:name="org.unifiedpush.android.distributor.UNREGISTER" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
-        </receiver>
-
+        </service>
     </application>
 
 </manifest>
