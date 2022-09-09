@@ -69,7 +69,7 @@ class VectorPushHandler @Inject constructor(
     /**
      * Called when message is received.
      *
-     * @param message the message
+     * @param pushData the data received in the push.
      */
     fun handle(pushData: PushData) {
         Timber.tag(loggerTag.value).d("## handling pushData")
