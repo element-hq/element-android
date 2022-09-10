@@ -1,1 +1,0 @@
-Suggest @room when @channel, @everyone, or @here is typed in composer

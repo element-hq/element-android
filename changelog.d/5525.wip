@@ -1,1 +1,0 @@
-Create DM room only on first message - Create the DM and navigate to the new room after sending an event
