@@ -1,1 +1,0 @@
-CI: only run sonarqube task when token is known
