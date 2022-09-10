@@ -7,6 +7,7 @@
 
     <style name="TextAppearance.Vector.Body.DevicesManagement">
         <item name="android:textColor">?vctr_content_secondary</item>
+        <item name="android:drawablePadding">12dp</item>
     </style>
 
 </resources>

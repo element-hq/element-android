@@ -17,6 +17,7 @@ package im.vector.app.features.settings.notifications
 
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference
@@ -25,9 +26,9 @@ import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
-import javax.inject.Inject
 
-class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor() :
+@AndroidEntryPoint
+class VectorSettingsAdvancedNotificationPreferenceFragment :
         VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notification_advanced

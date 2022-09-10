@@ -25,6 +25,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
@@ -34,9 +35,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
-class BootstrapConfirmPassphraseFragment @Inject constructor() :
+@AndroidEntryPoint
+class BootstrapConfirmPassphraseFragment :
         VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {

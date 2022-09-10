@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
@@ -27,6 +28,7 @@ import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.setOnImeDoneListener
+import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -37,9 +39,10 @@ import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
-import javax.inject.Inject
 
-class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
+@AndroidEntryPoint
+class FtueAuthCombinedServerSelectionFragment :
+        AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueServerSelectionCombinedBinding {
         return FragmentFtueServerSelectionCombinedBinding.inflate(inflater, container, false)
@@ -89,6 +92,9 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
             val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure() ?: viewModel.getDefaultHomeserverUrl()
             views.chooseServerInput.editText().setText(userUrlInput)
         }
+
+        views.chooseServerInput.editText().selectAll()
+        views.chooseServerInput.editText().showKeyboard(true)
     }
 
     override fun onError(throwable: Throwable) {

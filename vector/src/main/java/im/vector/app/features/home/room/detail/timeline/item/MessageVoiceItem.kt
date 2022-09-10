@@ -179,6 +179,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentVoiceStub
+        private val STUB_ID = R.id.messageContentVoiceStub
     }
 }

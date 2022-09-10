@@ -676,8 +676,8 @@ class E2eeSanityTests : InstrumentedTest {
         assertEquals("Decimal code should have matched", oldCode, newCode)
 
         // Assert that devices are verified
-        val newDeviceFromOldPov: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceNewSession.sessionParams.deviceId)
-        val oldDeviceFromNewPov: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
+        val newDeviceFromOldPov: CryptoDeviceInfo? = aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceNewSession.sessionParams.deviceId)
+        val oldDeviceFromNewPov: CryptoDeviceInfo? = aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
 
         Assert.assertTrue("new device should be verified from old point of view", newDeviceFromOldPov!!.isVerified)
         Assert.assertTrue("old device should be verified from new point of view", oldDeviceFromNewPov!!.isVerified)

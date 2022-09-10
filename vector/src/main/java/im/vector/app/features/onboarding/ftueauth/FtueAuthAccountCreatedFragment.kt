@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.di.ActiveSessionHolder
@@ -34,9 +35,11 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
-class FtueAuthAccountCreatedFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder
-) : AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
+@AndroidEntryPoint
+class FtueAuthAccountCreatedFragment :
+        AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var hasPlayedConfetti = false
 

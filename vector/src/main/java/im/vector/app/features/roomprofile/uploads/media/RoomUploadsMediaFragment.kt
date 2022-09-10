@@ -32,6 +32,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.trackItemsVisibilityChange
@@ -53,12 +54,14 @@ import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import javax.inject.Inject
 
-class RoomUploadsMediaFragment @Inject constructor(
-        private val controller: UploadsMediaController,
-        private val dimensionConverter: DimensionConverter
-) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
+@AndroidEntryPoint
+class RoomUploadsMediaFragment :
+        VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
         UploadsMediaController.Listener,
         StateView.EventCallback {
+
+    @Inject lateinit var controller: UploadsMediaController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 

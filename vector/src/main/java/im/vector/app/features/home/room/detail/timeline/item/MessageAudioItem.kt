@@ -210,6 +210,6 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentAudioStub
+        private val STUB_ID = R.id.messageContentAudioStub
     }
 }

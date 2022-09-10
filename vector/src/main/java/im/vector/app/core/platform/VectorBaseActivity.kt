@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,8 +38,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -67,7 +64,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
@@ -169,7 +165,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     lateinit var navigator: Navigator
         private set
-    private lateinit var fragmentFactory: FragmentFactory
 
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
@@ -210,8 +205,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         val singletonEntryPoint = singletonEntryPoint()
         val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = activityEntryPoint.fragmentFactory()
-        supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
         addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
@@ -256,7 +249,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         initUiAndData()
 
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             tryOrNull { // Add to XML theme when feature flag is removed
                 val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
                 window.statusBarColor = toolbarBackground
@@ -462,12 +455,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val onMultiWindowModeChangedListener = Consumer<MultiWindowModeChangedInfo> {
         Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: ${it.isInMultiWindowMode}")
         bugReporter.inMultiWindowMode = it.isInMultiWindowMode
-    }
-
-    protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
-        return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
-            arguments = argsParcelable?.toMvRxBundle()
-        }
     }
 
     /* ==========================================================================================

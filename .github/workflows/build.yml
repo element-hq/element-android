@@ -40,7 +40,7 @@ jobs:
         with:
           name: vector-${{ matrix.target }}-debug
           path: |
-            vector/build/outputs/apk/*/debug/*.apk
+            vector-app/build/outputs/apk/*/debug/*.apk
 
   release:
     name: Build unsigned GPlay APKs
@@ -65,7 +65,7 @@ jobs:
         with:
           name: vector-gplay-release-unsigned
           path: |
-            vector/build/outputs/apk/*/release/*.apk
+            vector-app/build/outputs/apk/*/release/*.apk
 
   exodus:
     runs-on: ubuntu-latest

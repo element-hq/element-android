@@ -123,7 +123,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
         analyticsTracker = singletonEntryPoint.analyticsTracker()
         unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
         viewModelFactory = activityEntryPoint.viewModelFactory()
-        childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
         super.onAttach(context)
     }
 

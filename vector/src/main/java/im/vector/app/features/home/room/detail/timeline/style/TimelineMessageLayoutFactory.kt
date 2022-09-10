@@ -68,6 +68,7 @@ class TimelineMessageLayoutFactory @Inject constructor(
         private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_STICKER_LOCAL,
                 MessageType.MSGTYPE_BEACON_INFO,
                 MessageType.MSGTYPE_LOCATION,
                 MessageType.MSGTYPE_BEACON_LOCATION_DATA,

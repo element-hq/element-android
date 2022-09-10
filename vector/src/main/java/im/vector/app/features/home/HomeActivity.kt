@@ -41,6 +41,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
@@ -56,7 +57,10 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -110,6 +114,7 @@ class HomeActivity :
         VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
 
@@ -123,7 +128,7 @@ class HomeActivity :
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
@@ -135,6 +140,8 @@ class HomeActivity :
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
+
+    private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -155,8 +162,9 @@ class HomeActivity :
                 navigator.switchToSpace(
                         context = this,
                         spaceId = spaceId,
-                        postSwitchOption
+                        postSwitchOption,
                 )
+                roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
     }
@@ -193,26 +201,29 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         unifiedPushHelper.register(this) {
             if (unifiedPushHelper.isEmbeddedDistributor()) {
                 fcmHelper.ensureFcmTokenIsRetrieved(
                         this,
-                        pushManager,
+                        pushersManager,
                         vectorPreferences.areNotificationEnabledForDevice()
                 )
             }
         }
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            if (vectorFeatures.isNewAppLayoutEnabled()) {
+            if (vectorPreferences.isNewAppLayoutEnabled()) {
                 views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
             } else {
                 replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                 replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
         }
 
@@ -259,6 +270,7 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
             }
@@ -271,6 +283,10 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowReleaseNotes() {
+        startActivity(Intent(this, ReleaseNotesActivity::class.java))
     }
 
     private fun showSpaceSettings(spaceId: String) {
@@ -362,7 +378,7 @@ class HomeActivity :
 
             lifecycleScope.launch {
                 val isHandled = permalinkHandler.launch(
-                        context = this@HomeActivity,
+                        fragmentActivity = this@HomeActivity,
                         deepLink = resolvedLink,
                         navigationInterceptor = this@HomeActivity,
                         buildTask = true
@@ -561,9 +577,17 @@ class HomeActivity :
 
         // Check nightly
         nightlyProxy.onHomeResumed()
+
+        checkNewAppLayoutFlagChange()
     }
 
-    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
+    private fun checkNewAppLayoutFlagChange() {
+        if (vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+            restart()
+        }
+    }
+
+    override fun getMenuRes() = if (vectorPreferences.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()

@@ -34,6 +34,7 @@ import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -79,16 +80,18 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
-class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val pinCodeStore: PinCodeStore,
-        private val keysExporter: KeysExporter,
-        private val keysImporter: KeysImporter,
-        private val rawService: RawService,
-        private val navigator: Navigator,
-        private val analyticsConfig: AnalyticsConfig,
-        private val vectorFeatures: VectorFeatures,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsSecurityPrivacyFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var keysExporter: KeysExporter
+    @Inject lateinit var keysImporter: KeysImporter
+    @Inject lateinit var rawService: RawService
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var analyticsConfig: AnalyticsConfig
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -582,7 +585,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         // crypto section: device key (fingerprint)
-        val deviceInfo = session.cryptoService().getDeviceInfo(userId, deviceId)
+        val deviceInfo = session.cryptoService().getCryptoDeviceInfo(userId, deviceId)
 
         val fingerprint = deviceInfo?.fingerprint()
         if (fingerprint?.isNotEmpty() == true) {

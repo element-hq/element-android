@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailMapper
@@ -68,6 +69,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
@@ -112,6 +114,7 @@ internal class RealmCryptoStore @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         private val clock: Clock,
+        private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
 ) : IMXCryptoStore {
 
     /* ==========================================================================================
@@ -578,6 +581,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
+        return Transformations.map(getLiveDeviceList()) { devices ->
+            devices.firstOrNull { it.deviceId == deviceId }.toOptional()
+        }
+    }
+
     override fun getMyDevicesInfo(): List<DeviceInfo> {
         return monarchy.fetchAllCopiedSync {
             it.where<MyDeviceLastSeenInfoEntity>()
@@ -596,15 +605,22 @@ internal class RealmCryptoStore @Inject constructor(
                 { realm: Realm ->
                     realm.where<MyDeviceLastSeenInfoEntity>()
                 },
-                { entity ->
-                    DeviceInfo(
-                            deviceId = entity.deviceId,
-                            lastSeenIp = entity.lastSeenIp,
-                            lastSeenTs = entity.lastSeenTs,
-                            displayName = entity.displayName
-                    )
-                }
+                { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
         )
+    }
+
+    override fun getLiveMyDevicesInfo(deviceId: String): LiveData<Optional<DeviceInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where<MyDeviceLastSeenInfoEntity>()
+                            .equalTo(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, deviceId)
+                },
+                { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
+        )
+
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
+        }
     }
 
     override fun saveMyDevicesInfo(info: List<DeviceInfo>) {

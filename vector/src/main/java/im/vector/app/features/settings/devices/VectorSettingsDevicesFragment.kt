@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.extensions.cleanup
@@ -46,10 +47,12 @@ import javax.inject.Inject
 /**
  * Display the list of the user's device.
  */
-class VectorSettingsDevicesFragment @Inject constructor(
-        private val devicesController: DevicesController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class VectorSettingsDevicesFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DevicesController.Callback {
+
+    @Inject lateinit var devicesController: DevicesController
 
     // used to avoid requesting to enter the password for each deletion
     // Note: Sonar does not like to use password for member name.
@@ -91,7 +94,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                     }
                 }
                 is DevicesViewEvents.PromptResetSecrets -> {
-                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
             }
         }

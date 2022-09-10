@@ -22,16 +22,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
 import im.vector.app.features.login.SocialLoginButtonsView.Mode
-import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginSignupSigninSelectionBinding>() {
+@AndroidEntryPoint
+class LoginSignUpSignInSelectionFragment :
+        AbstractSSOLoginFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
         return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)

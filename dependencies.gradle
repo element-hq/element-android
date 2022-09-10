@@ -22,7 +22,7 @@ def markwon = "4.6.2"
 def moshi = "1.13.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.157.0"
+def flipper = "0.163.0"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
 def glide = "4.13.2"
@@ -85,6 +85,8 @@ ext.libs = [
                 'material'                : "com.google.android.material:material:1.6.1",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
+                // Phone number https://github.com/google/libphonenumber
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.54"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -104,6 +106,7 @@ ext.libs = [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
                 'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
+                'moshiAdapters'          : "com.squareup.moshi:moshi-adapters:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
         ],

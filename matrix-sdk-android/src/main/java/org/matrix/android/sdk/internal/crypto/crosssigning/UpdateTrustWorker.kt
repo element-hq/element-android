@@ -207,6 +207,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
     private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
         awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
+            Timber.d("## CrossSigning - Updating shields for impacted rooms - in transaction")
             Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
                 sessionRealm.where(RoomMemberSummaryEntity::class.java)
                         .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
@@ -239,6 +240,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         }
             }
         }
+        Timber.d("## CrossSigning - Updating shields for impacted rooms - END")
     }
 
     private fun getCrossSigningInfo(cryptoRealm: Realm, userId: String): MXCrossSigningInfo? {

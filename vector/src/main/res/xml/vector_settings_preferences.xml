@@ -30,7 +30,9 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/spaces">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/spaces"
+        android:key="SETTINGS_PREF_SPACE_CATEGORY">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"

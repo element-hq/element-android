@@ -31,6 +31,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -65,14 +66,15 @@ data class RoomProfileArgs(
         val roomId: String
 ) : Parcelable
 
-class RoomProfileFragment @Inject constructor(
-        private val roomProfileController: RoomProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-) :
+@AndroidEntryPoint
+class RoomProfileFragment :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var roomProfileController: RoomProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 

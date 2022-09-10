@@ -28,6 +28,7 @@ import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -307,6 +308,7 @@ class PopupAlertManager @Inject constructor(
                 activity !is PinActivity &&
                 activity !is SignedOutActivity &&
                 activity !is AnalyticsOptInActivity &&
+                activity !is ReleaseNotesActivity &&
                 activity is VectorBaseActivity<*> &&
                 alert.shouldBeDisplayedIn.invoke(activity)
     }

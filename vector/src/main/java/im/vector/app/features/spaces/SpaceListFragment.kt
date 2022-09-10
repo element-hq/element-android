@@ -21,22 +21,25 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -47,11 +50,15 @@ import javax.inject.Inject
  * In the New App Layout this fragment will instead be displayed in a Bottom Sheet [SpaceListBottomSheet]
  * and will only display spaces that are direct children of the currently selected space (or root spaces if none)
  */
-class SpaceListFragment @Inject constructor(
-        private val spaceController: SpaceSummaryController,
-        private val newSpaceController: NewSpaceSummaryController,
-        private val vectorFeatures: VectorFeatures,
-) : VectorBaseFragment<FragmentSpaceListBinding>(), SpaceSummaryController.Callback, NewSpaceSummaryController.Callback {
+@AndroidEntryPoint
+class SpaceListFragment :
+        VectorBaseFragment<FragmentSpaceListBinding>(),
+        SpaceSummaryController.Callback,
+        NewSpaceSummaryController.Callback {
+
+    @Inject lateinit var spaceController: SpaceSummaryController
+    @Inject lateinit var newSpaceController: NewSpaceSummaryController
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private lateinit var homeActivitySharedActionViewModel: HomeSharedActionViewModel
     private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
@@ -66,13 +73,13 @@ class SpaceListFragment @Inject constructor(
         homeActivitySharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         views.stateView.contentView = views.groupListView
+        views.spacesEmptyButton.onClick { onAddSpaceSelected() }
         setupSpaceController()
         observeViewEvents()
     }
 
     private fun setupSpaceController() {
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
-            enableDragAndDropForNewSpaceController()
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.callback = this
             views.groupListView.configureWith(newSpaceController)
         } else {
@@ -80,49 +87,6 @@ class SpaceListFragment @Inject constructor(
             spaceController.callback = this
             views.groupListView.configureWith(spaceController)
         }
-    }
-
-    private fun enableDragAndDropForNewSpaceController() {
-        EpoxyTouchHelper.initDragging(newSpaceController)
-                .withRecyclerView(views.groupListView)
-                .forVerticalList()
-                .withTarget(NewSpaceSummaryItem::class.java)
-                .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<NewSpaceSummaryItem>() {
-                    var toPositionM: Int? = null
-                    var fromPositionM: Int? = null
-                    var initialElevation: Float? = null
-
-                    override fun onDragStarted(model: NewSpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
-                        toPositionM = null
-                        fromPositionM = null
-                        model?.matrixItem?.id?.let {
-                            viewModel.handle(SpaceListAction.OnStartDragging(it, false))
-                        }
-                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        initialElevation = itemView?.elevation
-                        itemView?.elevation = 6f
-                    }
-
-                    override fun onDragReleased(model: NewSpaceSummaryItem?, itemView: View?) {
-                        if (toPositionM == null || fromPositionM == null) return
-                        val movedSpaceId = model?.matrixItem?.id ?: return
-                        viewModel.handle(SpaceListAction.MoveSpace(movedSpaceId, toPositionM!! - fromPositionM!!))
-                    }
-
-                    override fun clearView(model: NewSpaceSummaryItem?, itemView: View?) {
-                        itemView?.elevation = initialElevation ?: 0f
-                    }
-
-                    override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: NewSpaceSummaryItem?, itemView: View?) {
-                        if (fromPositionM == null) {
-                            fromPositionM = fromPosition
-                        }
-                        if (toPositionM != toPosition) {
-                            toPositionM = toPosition
-                            itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        }
-                    }
-                })
     }
 
     private fun enableDragAndDropForSpaceController() {
@@ -186,14 +150,26 @@ class SpaceListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        when (state.asyncSpaces) {
+        when (val spaces = state.asyncSpaces) {
             Uninitialized,
-            is Loading -> views.stateView.state = StateView.State.Loading
-            is Success -> views.stateView.state = StateView.State.Content
+            is Loading -> {
+                views.stateView.state = StateView.State.Loading
+                return@withState
+            }
+            is Success -> {
+                views.stateView.state = StateView.State.Content
+                if (spaces.invoke().isEmpty()) {
+                    views.spacesEmptyGroup.isVisible = true
+                    views.groupListView.isVisible = false
+                } else {
+                    views.spacesEmptyGroup.isVisible = false
+                    views.groupListView.isVisible = true
+                }
+            }
             else -> Unit
         }
 
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.update(state)
         } else {
             spaceController.update(state)

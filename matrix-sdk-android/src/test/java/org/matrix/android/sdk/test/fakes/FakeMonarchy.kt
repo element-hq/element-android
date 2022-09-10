@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 internal class FakeMonarchy {
 
     val instance = mockk<Monarchy>()
-    private val fakeRealm = FakeRealm()
+    val fakeRealm = FakeRealm()
 
     init {
         mockkStatic("org.matrix.android.sdk.internal.util.MonarchyKt")
@@ -42,6 +42,12 @@ internal class FakeMonarchy {
         } coAnswers {
             secondArg<suspend (Realm) -> Any>().invoke(fakeRealm.instance)
         }
+        coEvery {
+            instance.doWithRealm(any())
+        } coAnswers {
+            firstArg<Monarchy.RealmBlock>().doWithRealm(fakeRealm.instance)
+        }
+        every { instance.realmConfiguration } returns mockk()
     }
 
     inline fun <reified T : RealmModel> givenWhere(): RealmQuery<T> {
