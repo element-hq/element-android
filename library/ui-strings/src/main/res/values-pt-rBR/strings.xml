@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="notice_room_invite_no_invitee">convite de %s</string>
+    <string name="notice_room_invite_no_invitee">Convite de %s</string>
     <string name="notice_room_invite">%1$s convidou %2$s</string>
     <string name="notice_room_invite_you">%1$s convidou você</string>
     <string name="notice_room_join">%1$s juntou-se à sala</string>
