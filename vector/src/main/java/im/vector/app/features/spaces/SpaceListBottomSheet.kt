@@ -16,10 +16,14 @@
 
 package im.vector.app.features.spaces
 
+import android.app.Dialog
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.FloatRange
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceChildFragment
@@ -35,6 +39,21 @@ class SpaceListBottomSheet : BottomSheetDialogFragment() {
             replaceChildFragment(R.id.space_list, SpaceListFragment::class.java)
         }
         return binding.root
+    }
+
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            (this as BottomSheetDialog).setPeekHeightAsScreenPercentage(0.75f)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun BottomSheetDialog.setPeekHeightAsScreenPercentage(@FloatRange(from = 0.0, to = 1.0) percentage: Float) {
+        val displayMetrics = DisplayMetrics()
+        window?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        behavior.setPeekHeight((height * percentage).toInt(), true)
     }
 
     companion object {
