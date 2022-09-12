@@ -16,12 +16,15 @@
 
 package im.vector.app.features.home.room.list.home
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.setPeekHeightAsScreenPercentage
 import im.vector.app.databinding.FragmentNewChatBottomSheetBinding
 import im.vector.app.features.navigation.Navigator
 import javax.inject.Inject
@@ -50,6 +53,12 @@ class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
 
         binding.exploreRooms.setOnClickListener {
             navigator.openRoomDirectory(requireContext())
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            (this as BottomSheetDialog).setPeekHeightAsScreenPercentage(0.5f)
         }
     }
 
