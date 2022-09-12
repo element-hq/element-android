@@ -2553,7 +2553,7 @@
     <string name="device_manager_settings_active_sessions_show_all">显示全部会话（V2, WIP）</string>
     <string name="device_manager_sessions_other_description">为获得最佳安全性，请验证你的会话，并从任何你不认识或不再使用的会话登出。</string>
     <string name="device_manager_sessions_other_title">其他会话</string>
-    <string name="settings_sessions_list">会话</string>
+    <string name="device_manager_sessions_list_title">会话</string>
     <string name="a11y_open_spaces">打开空间列表</string>
     <string name="a11y_create_message">创建新对话或房间</string>
     <string name="room_list_filter_people">人</string>

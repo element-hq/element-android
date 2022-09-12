@@ -90,6 +90,7 @@ import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsViewModel
 import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsViewModel
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreViewModel
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewViewModel
 import im.vector.app.features.settings.devices.v2.rename.RenameSessionViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
@@ -659,4 +660,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RenameSessionViewModel::class)
     fun renameSessionViewModelFactory(factory: RenameSessionViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SessionLearnMoreViewModel::class)
+    fun sessionLearnMoreViewModelFactory(factory: SessionLearnMoreViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

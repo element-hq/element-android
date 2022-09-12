@@ -2602,7 +2602,7 @@
     <string name="a11y_open_settings">Open instellingen</string>
     <string name="device_manager_sessions_other_description">Voor de beste beveiliging verifieert u uw sessies en meldt u zich af bij elke sessie die u niet meer herkent of gebruikt.</string>
     <string name="device_manager_sessions_other_title">Andere sessies</string>
-    <string name="settings_sessions_list">Sessies</string>
+    <string name="device_manager_sessions_list_title">Sessies</string>
     <string name="a11y_open_spaces">Lijst met publieke spaces</string>
     <string name="a11y_create_message">Nieuw gesprek of nieuwe kamer aanmaken</string>
     <string name="room_list_filter_people">Personen</string>

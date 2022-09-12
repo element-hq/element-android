@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -44,6 +43,7 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import javax.inject.Inject
 
 /**
@@ -76,7 +76,7 @@ class VectorSettingsDevicesFragment :
     private fun initToolbar() {
         (activity as? AppCompatActivity)
                 ?.supportActionBar
-                ?.setTitle(R.string.settings_sessions_list)
+                ?.setTitle(R.string.device_manager_sessions_list_title)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -157,8 +157,20 @@ class VectorSettingsDevicesFragment :
 
     private fun initLearnMoreButtons() {
         views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
+            showLearnMoreInfoOtherSessions()
         }
+    }
+
+    private fun showLearnMoreInfoOtherSessions() {
+        val args = SessionLearnMoreBottomSheet.Args(
+                title = getString(R.string.device_manager_sessions_other_title),
+                description = buildString {
+                    append(getString(R.string.device_manager_learn_more_sessions_unverified))
+                    append("\n\n")
+                    append(getString(R.string.device_manager_learn_more_sessions_inactive))
+                }
+        )
+        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {

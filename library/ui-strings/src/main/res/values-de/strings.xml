@@ -2589,7 +2589,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Alle Sitzungen anzeigen (V2, in Arbeit)</string>
     <string name="device_manager_sessions_other_description">Für bestmögliche Sicherheit verifiziere deine Sitzungen und melde dich von allen ab, die du nicht erkennst oder nutzt.</string>
     <string name="device_manager_sessions_other_title">Andere Sitzungen</string>
-    <string name="settings_sessions_list">Sitzungen</string>
+    <string name="device_manager_sessions_list_title">Sitzungen</string>
     <string name="a11y_open_spaces">Space-Liste öffnen</string>
     <string name="a11y_create_message">Beginne ein Gespräch oder erstelle einen Raum</string>
     <string name="room_list_filter_favourites">Favoriten</string>

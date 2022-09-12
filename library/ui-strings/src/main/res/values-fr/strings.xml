@@ -2603,7 +2603,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Afficher toutes les sessions (V2, en cours)</string>
     <string name="device_manager_sessions_other_description">Pour une meilleure sécurité, vérifiez vos sessions et déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.</string>
     <string name="device_manager_sessions_other_title">Autres sessions</string>
-    <string name="settings_sessions_list">Sessions</string>
+    <string name="device_manager_sessions_list_title">Sessions</string>
     <string name="a11y_open_spaces">Ouvrir la liste des espaces</string>
     <string name="a11y_create_message">Créer une nouvelle conversation ou salon</string>
     <string name="room_list_filter_people">Personnes</string>

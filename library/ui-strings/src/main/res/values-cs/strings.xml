@@ -2653,7 +2653,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Zobrazit všechny relace (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
     <string name="device_manager_sessions_other_title">Ostatní relace</string>
-    <string name="settings_sessions_list">Relace</string>
+    <string name="device_manager_sessions_list_title">Relace</string>
     <string name="a11y_open_spaces">Seznam otevřených prostorů</string>
     <string name="a11y_create_message">Vytvořit novou konverzaci nebo místnost</string>
     <string name="room_list_filter_people">Lidé</string>

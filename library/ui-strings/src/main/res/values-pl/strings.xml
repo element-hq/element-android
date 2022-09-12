@@ -2699,7 +2699,7 @@
     <string name="a11y_open_settings">Otwórz ustawienia</string>
     <string name="device_manager_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
     <string name="device_manager_sessions_other_title">Inne sesje</string>
-    <string name="settings_sessions_list">Sesje</string>
+    <string name="device_manager_sessions_list_title">Sesje</string>
     <string name="a11y_open_spaces">Lista otwartych przestrzeni</string>
     <string name="a11y_create_message">Utwórz nową rozmowę lub pokój</string>
     <string name="room_list_filter_people">Ludzie</string>

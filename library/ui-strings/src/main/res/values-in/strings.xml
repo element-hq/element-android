@@ -2555,7 +2555,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
     <string name="device_manager_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
     <string name="device_manager_sessions_other_title">Sesi lainnya</string>
-    <string name="settings_sessions_list">Sesi</string>
+    <string name="device_manager_sessions_list_title">Sesi</string>
     <string name="a11y_open_spaces">Buka daftar space</string>
     <string name="a11y_create_message">Buat percakapan atau ruangan baru</string>
     <string name="room_list_filter_people">Orang</string>
