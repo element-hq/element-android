@@ -74,6 +74,7 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
         get() = monarchy.realmConfiguration
 
     override suspend fun execute(params: CreateRoomFromLocalRoomTask.Params): String {
+        // If a room has already been created for the given local room, return the existing roomId
         val replacementRoomId = stateEventDataSource.getStateEvent(params.localRoomId, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
                 ?.content.toModel<RoomTombstoneContent>()
                 ?.replacementRoomId
