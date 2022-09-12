@@ -16,6 +16,7 @@
 
 package im.vector.app.fdroid.receiver
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -65,6 +66,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     companion object {
         private const val REQUEST_CODE = 0
 
+        @SuppressLint("WrongConstant") // PendingIntentCompat.FLAG_IMMUTABLE is a false positive
         fun scheduleAlarm(context: Context, sessionId: String, delayInSeconds: Int, clock: Clock) {
             // Reschedule
             Timber.v("## Sync: Scheduling alarm for background sync in $delayInSeconds seconds")
@@ -87,6 +89,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
+        @SuppressLint("WrongConstant") // PendingIntentCompat.FLAG_IMMUTABLE is a false positive
         fun cancelAlarm(context: Context) {
             Timber.v("## Sync: Cancel alarm for background sync")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
