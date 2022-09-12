@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.kotlin.where
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -36,11 +35,11 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -86,8 +85,7 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
         var createRoomParams: CreateRoomParams? = null
         var isEncrypted = false
         monarchy.doWithRealm { realm ->
-            realm.where<LocalRoomSummaryEntity>()
-                    .equalTo(LocalRoomSummaryEntityFields.ROOM_ID, params.localRoomId)
+            LocalRoomSummaryEntity.where(realm, params.localRoomId)
                     .findFirst()
                     ?.let {
                         createRoomParams = it.createRoomParams
