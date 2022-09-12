@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
             app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             app:sessionsListHeaderDescription=""
             app:sessionsListHeaderTitle="@string/device_manager_current_session_title"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />
@@ -92,6 +94,7 @@
             android:layout_height="wrap_content"
             app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
             app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title"
+            app:sessionsListHeaderHasLearnMoreLink="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession" />
