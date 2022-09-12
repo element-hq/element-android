@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home.filter
+package im.vector.app.features.home.room.list.home.header
 
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -32,13 +32,20 @@ abstract class RoomFilterHeaderItem : VectorEpoxyModel<RoomFilterHeaderItem.Hold
     @EpoxyAttribute
     var filtersData: List<HomeRoomFilter>? = null
 
+    @EpoxyAttribute
+    var selectedFilter: HomeRoomFilter? = null
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         with(holder.tabLayout) {
             removeAllTabs()
+            clearOnTabSelectedListeners()
 
             filtersData?.forEach { filter ->
-                addTab(newTab().setText(filter.titleRes).setTag(filter))
+                addTab(
+                        newTab().setText(filter.titleRes).setTag(filter),
+                        filter == (selectedFilter ?: HomeRoomFilter.ALL)
+                )
             }
 
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

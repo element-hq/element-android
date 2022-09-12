@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home.filter
+package im.vector.app.features.home.room.list.home.header
 
-import androidx.annotation.StringRes
-import im.vector.app.R
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-enum class HomeRoomFilter(@StringRes val titleRes: Int) {
-    ALL(R.string.room_list_filter_all),
-    UNREADS(R.string.room_list_filter_unreads),
-    FAVOURITES(R.string.room_list_filter_favourites),
-    PEOPlE(R.string.room_list_filter_people),
-}
+data class RoomsHeadersData(
+        val invitesCount: Int = 0,
+        val filtersList: List<HomeRoomFilter>? = null,
+        val currentFilter: HomeRoomFilter? = null,
+        val recents: List<RoomSummary>? = null
+)

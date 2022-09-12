@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home.invites
+package im.vector.app.features.home.room.list.home.header
 
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass

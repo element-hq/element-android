@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home.recent
+package im.vector.app.features.home.room.list.home.header
 
 import android.view.HapticFeedbackConstants
 import android.view.View
