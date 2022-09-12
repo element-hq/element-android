@@ -16,8 +16,10 @@
 
 package im.vector.app.features.settings.devices.v2.more
 
+import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,6 +44,17 @@ class SessionLearnMoreBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSessionLearnMoreBinding {
         return BottomSheetSessionLearnMoreBinding.inflate(inflater, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initCloseButton()
+    }
+
+    private fun initCloseButton() {
+        views.bottomSheetSessionLearnMoreCloseButton.debouncedClicks {
+            dismiss()
+        }
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
