@@ -73,7 +73,7 @@
         app:layout_constraintBottom_toTopOf="@id/attachmentsCameraCaptureAction"
         android:layout_marginBottom="32dp"
         android:enabled="true"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:contentDescription="@string/attachment_camera_chronometer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
