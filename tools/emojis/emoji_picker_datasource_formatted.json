@@ -2368,7 +2368,8 @@
                 "stare",
                 "scared",
                 "frightening",
-                "embarrassing"
+                "embarrassing",
+                "shy"
             ]
         },
         "shushing-face": {
@@ -9662,7 +9663,8 @@
                 "flower",
                 "wilted",
                 "plant",
-                "nature"
+                "nature",
+                "rose"
             ]
         },
         "hibiscus": {
@@ -11080,7 +11082,8 @@
                 "tea",
                 "caffeine",
                 "latte",
-                "espresso"
+                "espresso",
+                "mug"
             ]
         },
         "teapot": {
