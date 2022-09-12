@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home.filter
+package im.vector.app.features.home.room.list.home
 
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
@@ -24,11 +24,11 @@ import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import im.vector.app.features.home.room.list.RoomSummaryItemPlaceHolder_
-import im.vector.app.features.home.room.list.home.roomListEmptyItem
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import javax.inject.Inject
 
-class HomeFilteredRoomsController(
+class HomeFilteredRoomsController @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
@@ -43,22 +43,11 @@ class HomeFilteredRoomsController(
         }
 
     var listener: RoomListListener? = null
-    var onFilterChanged: ((HomeRoomFilter) -> Unit)? = null
 
-    private var filtersData: List<HomeRoomFilter>? = null
     private var emptyStateData: StateView.State.Empty? = null
     private var currentState: StateView.State = StateView.State.Content
 
     override fun addModels(models: List<EpoxyModel<*>>) {
-        val host = this
-        if (host.filtersData != null) {
-            roomFilterHeaderItem {
-                id("filter_header")
-                filtersData(host.filtersData)
-                onFilterChangedListener(host.onFilterChanged)
-            }
-        }
-
         if (models.isEmpty() && emptyStateData != null) {
             emptyStateData?.let { emptyState ->
                 roomListEmptyItem {
@@ -77,10 +66,6 @@ class HomeFilteredRoomsController(
         this.emptyStateData = state
     }
 
-    fun submitFiltersData(data: List<HomeRoomFilter>?) {
-        this.filtersData = data
-        requestForcedModelBuild()
-    }
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
         return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), RoomListDisplayMode.ROOMS, listener)

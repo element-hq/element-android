@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.list.home
+package im.vector.app.features.home.room.list.home.header
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
-import com.airbnb.mvrx.MavericksState
-import im.vector.app.core.platform.StateView
-import im.vector.app.features.home.room.list.home.header.RoomsHeadersData
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import androidx.annotation.StringRes
+import im.vector.app.R
 
-data class HomeRoomListViewState(
-        val state: StateView.State = StateView.State.Content,
-        val headersData: RoomsHeadersData = RoomsHeadersData(),
-        val roomsLivePagedList: LiveData<PagedList<RoomSummary>>? = null
-) : MavericksState
+enum class HomeRoomFilter(@StringRes val titleRes: Int) {
+    ALL(R.string.room_list_filter_all),
+    UNREADS(R.string.room_list_filter_unreads),
+    FAVOURITES(R.string.room_list_filter_favourites),
+    PEOPlE(R.string.room_list_filter_people),
+}
