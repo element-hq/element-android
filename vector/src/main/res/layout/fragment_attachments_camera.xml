@@ -71,7 +71,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/attachmentsCameraCaptureAction"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="24dp"
         android:enabled="true"
         android:visibility="invisible"
         android:contentDescription="@string/attachment_camera_chronometer" />
