@@ -49,11 +49,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.os.ParcelUuid
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -70,7 +69,6 @@ import java.nio.ByteBuffer
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
-import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
 
 class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -100,6 +98,8 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
     private var connecting: MutableMap<String, Boolean> = mutableMapOf<String, Boolean>()
     private var connections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
     private var conduits: MutableMap<String, Conduit> = mutableMapOf<String, Conduit>()
+
+    private lateinit var multicastLock: WifiManager.MulticastLock
 
     private val bleReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {

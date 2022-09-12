@@ -35,6 +35,7 @@ def generateVersionCodeFromVersionName() {
 }
 
 def getVersionCode() {
+    return 104
     if (gitBranchName() == "develop") {
         return generateVersionCodeFromTimestamp()
     } else if (gitBranchName() == "neilalexander/p2p") {
