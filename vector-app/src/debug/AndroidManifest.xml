@@ -15,8 +15,6 @@
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />
 
-        <!-- Used for UI tests to display the BiometricPrompt. It's normal that it appears as an error. -->
-        <activity android:exported="false" android:name=".features.pin.lockscreen.tests.LockScreenTestActivity" />
     </application>
 
 </manifest>
