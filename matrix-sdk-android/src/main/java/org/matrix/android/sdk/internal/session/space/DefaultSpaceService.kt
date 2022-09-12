@@ -21,7 +21,6 @@ import androidx.lifecycle.LiveData
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -45,6 +44,7 @@ import org.matrix.android.sdk.api.session.space.SpaceHierarchyData
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import org.matrix.android.sdk.api.session.space.model.SpaceChildSummaryEvent
 import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
 import org.matrix.android.sdk.internal.di.UserId
@@ -128,7 +128,7 @@ internal class DefaultSpaceService @Inject constructor(
             suggestedOnly: Boolean?,
             limit: Int?,
             from: String?,
-            knownStateList: List<Event>?
+            knownStateList: List<SpaceChildSummaryEvent>?
     ): SpaceHierarchyData {
         val spacesResponse = getSpacesResponse(spaceId, suggestedOnly, limit, from)
         val spaceRootResponse = spacesResponse.getRoot(spaceId)
@@ -180,7 +180,7 @@ internal class DefaultSpaceService @Inject constructor(
     private fun List<SpaceChildSummaryResponse>?.mapSpaceChildren(
             spaceId: String,
             spaceRootResponse: SpaceChildSummaryResponse?,
-            knownStateList: List<Event>?,
+            knownStateList: List<SpaceChildSummaryEvent>?,
     ) = this?.filterIdIsNot(spaceId)
             ?.toSpaceChildInfoList(spaceId, spaceRootResponse, knownStateList)
             .orEmpty()
@@ -190,7 +190,7 @@ internal class DefaultSpaceService @Inject constructor(
     private fun List<SpaceChildSummaryResponse>.toSpaceChildInfoList(
             spaceId: String,
             rootRoomResponse: SpaceChildSummaryResponse?,
-            knownStateList: List<Event>?,
+            knownStateList: List<SpaceChildSummaryEvent>?,
     ) = flatMap { spaceChildSummary ->
         (rootRoomResponse?.childrenState ?: knownStateList)
                 ?.filter { it.isChildOf(spaceChildSummary) }
@@ -198,10 +198,14 @@ internal class DefaultSpaceService @Inject constructor(
                 .orEmpty()
     }
 
-    private fun Event.isChildOf(space: SpaceChildSummaryResponse) = stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
+    private fun SpaceChildSummaryEvent.isChildOf(space: SpaceChildSummaryResponse): Boolean {
+        return stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
+    }
 
-    private fun Event.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse) = content.toModel<SpaceChildContent>()?.let { content ->
-        createSpaceChildInfo(spaceId, summary, content)
+    private fun SpaceChildSummaryEvent.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse): SpaceChildInfo? {
+        return content.toModel<SpaceChildContent>()?.let { content ->
+            createSpaceChildInfo(spaceId, summary, content)
+        }
     }
 
     private fun createSpaceChildInfo(
@@ -255,7 +259,7 @@ internal class DefaultSpaceService @Inject constructor(
                     stateKey = QueryStringValue.IsEmpty
             )
             val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
-                    ?: throw UnsupportedOperationException("Cannot add canonical child, missing powerlevel")
+                    ?: throw UnsupportedOperationException("Cannot add canonical child, missing power level")
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             if (!powerLevelsHelper.isUserAllowedToSend(userId, true, EventType.STATE_SPACE_CHILD)) {
                 throw UnsupportedOperationException("Cannot add canonical child, not enough power level")
