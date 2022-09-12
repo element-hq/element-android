@@ -291,6 +291,12 @@ android {
         }
     }
 
+    sourceSets {
+        nightly {
+            java.srcDirs += "src/release/java"
+        }
+    }
+
     flavorDimensions "store"
 
     productFlavors {
