@@ -47,7 +47,6 @@ class OtherSessionsView @JvmOverloads constructor(
     private val recyclerViewDataObserver: RecyclerView.AdapterDataObserver
     var callback: Callback? = null
 
-
     init {
         inflate(context, R.layout.view_other_sessions, this)
         views = ViewOtherSessionsBinding.bind(this)

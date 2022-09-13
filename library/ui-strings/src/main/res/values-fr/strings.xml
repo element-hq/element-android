@@ -2619,4 +2619,21 @@
     <string name="explore_rooms">Parcourir les salons</string>
     <string name="create_room">Créer un salon</string>
     <string name="start_chat">Commencer une discussion</string>
+    <string name="device_manager_other_sessions_description_unverified">Non vérifiée · Dernière activité %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Vérifié · Dernière activité %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Tout voir (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Cette session</string>
+    <string name="device_manager_view_details">Voir les détails</string>
+    <string name="device_manager_verify_session">Vérifier la session</string>
+    <string name="device_manager_verification_status_detail_unverified">Vérifiez votre session pour une sécurité renforcée de votre messagerie.</string>
+    <string name="device_manager_verification_status_detail_verified">Votre session est prête pour l’envoi de messages sécurisés.</string>
+    <string name="device_manager_verification_status_unverified">Session non vérifiée</string>
+    <string name="device_manager_verification_status_verified">Session vérifiée</string>
+    <string name="a11y_device_manager_device_type_unknown">Type de périphérique inconnu</string>
+    <string name="a11y_device_manager_device_type_desktop">Ordinateur</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Portable</string>
+    <string name="timeline_error_room_not_found">Désolé, impossible de trouver ce salon.
+\nVeuillez réessayer plus tard.%s</string>
+    <string name="invites_title">Invitations</string>
 </resources>

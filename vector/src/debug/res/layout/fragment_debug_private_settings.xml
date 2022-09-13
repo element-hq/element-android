@@ -49,6 +49,27 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp" />
 
+            <TextView
+                android:id="@+id/releaseNotesActivityHasBeenDisplayed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:text="ReleaseNotesActivity has been displayed: " />
+
+            <Button
+                android:id="@+id/releaseNotesActivityHasBeenDisplayedReset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Reset" />
+
+            <Button
+                android:id="@+id/showReleaseNotesActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SHOW ReleaseNotesActivity"
+                android:textAllCaps="false" />
+
         </LinearLayout>
 
     </ScrollView>

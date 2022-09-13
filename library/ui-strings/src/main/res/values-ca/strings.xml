@@ -2619,4 +2619,21 @@
     <string name="device_manager_settings_active_sessions_show_all">Mostra totes les sessions (V2, WIP)</string>
     <string name="create_room">Crea sala</string>
     <string name="start_chat">Inicia xat</string>
+    <string name="device_manager_verification_status_detail_unverified">Verifica la teva sessió actual per a missatges segurs millorats.</string>
+    <string name="device_manager_other_sessions_description_verified">Verificada · Última activitat %1$s</string>
+    <string name="device_manager_other_sessions_description_unverified">No verificada · Última activitat %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Veure-ho tot (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Sessió actual</string>
+    <string name="device_manager_view_details">Veure detalls</string>
+    <string name="device_manager_verify_session">Verifica sessió</string>
+    <string name="device_manager_verification_status_detail_verified">La sessió actual està llesta per la missatgeria segura.</string>
+    <string name="device_manager_verification_status_unverified">Sessió no verificada</string>
+    <string name="device_manager_verification_status_verified">Sessió verificada</string>
+    <string name="a11y_device_manager_device_type_unknown">Tipus de dispositiu desconegut</string>
+    <string name="a11y_device_manager_device_type_desktop">Ordinador</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Mòbil</string>
+    <string name="timeline_error_room_not_found">Aquesta sala no s\'ha trobat.
+\nTorna-ho a provar més tard.%s</string>
+    <string name="invites_title">Invitacions</string>
 </resources>

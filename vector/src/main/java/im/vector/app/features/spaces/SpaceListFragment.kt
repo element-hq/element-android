@@ -35,11 +35,11 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -58,7 +58,7 @@ class SpaceListFragment :
 
     @Inject lateinit var spaceController: SpaceSummaryController
     @Inject lateinit var newSpaceController: NewSpaceSummaryController
-    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private lateinit var homeActivitySharedActionViewModel: HomeSharedActionViewModel
     private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
@@ -79,7 +79,7 @@ class SpaceListFragment :
     }
 
     private fun setupSpaceController() {
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.callback = this
             views.groupListView.configureWith(newSpaceController)
         } else {
@@ -169,7 +169,7 @@ class SpaceListFragment :
             else -> Unit
         }
 
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.update(state)
         } else {
             spaceController.update(state)

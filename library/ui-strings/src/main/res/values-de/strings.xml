@@ -834,9 +834,9 @@
 \nSitzungsname: %1$s
 \nZuletzt gesehen: %2$s
 \nWenn du nicht mit einer anderen Sitzung angemeldet bist, ignoriere diese Anfrage.</string>
-    <string name="your_unverified_device_requesting_with_info">Eine unverifizierte Sitzung fordert Verschlüsselungs-Schlüssel an. 
-\nSitzungsname: %1$s 
-\nZuletzt gesehen: %2$s 
+    <string name="your_unverified_device_requesting_with_info">Eine nicht verifizierte Sitzung fordert Verschlüsselungs-Schlüssel an.
+\nSitzungsname: %1$s
+\nZuletzt gesehen: %2$s
 \nWenn du nicht eine andere Sitzung angemeldet hast, ignoriere diese Anfrage.</string>
     <string name="share_without_verifying_short_label">Teilen</string>
     <string name="ignore_request_short_label">Ignorieren</string>
@@ -1426,7 +1426,7 @@
     <string name="enter_secret_storage_input_key">Wähle deinen Wiederherstellungsschlüssel, gib ihn ein oder füge ihn aus der Zwischenablage ein</string>
     <string name="failed_to_access_secure_storage">Konnte nicht auf gesicherten Speicher zugreifen</string>
     <string name="unencrypted">Unverschlüsselt</string>
-    <string name="encrypted_unverified">Verschlüsselt von einem unbekannten Gerät</string>
+    <string name="encrypted_unverified">Verschlüsselt von einem nicht verifiziertem Gerät</string>
     <string name="review_logins">Überprüfe, wo du angemeldet bist</string>
     <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto und deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
@@ -2614,4 +2614,12 @@
     <string name="ftue_auth_choose_server_ems_cta">Kontakt aufnehmen</string>
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) ist ein robuster und zuverlässiger Hosting-Dienst für schnelle und sichere Echtzeitkommunikation. Erfahre mehr unter <a href="${ftue_ems_url}">element.io/ems</a></string>
     <string name="ftue_auth_choose_server_ems_title">Willst du deinen eigenen Server betreiben\?</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobil</string>
+    <string name="timeline_error_room_not_found">Entschuldigung, dieser Raum wurde nicht gefunden.
+\nBitte versuche es später erneut.%s</string>
+    <string name="invites_title">Einladungen</string>
+    <string name="device_manager_other_sessions_description_unverified">Nicht verifiziert · Letzte Aktivität %1$s</string>
+    <string name="device_manager_verification_status_detail_unverified">Verifiziere deine aktuelle Sitzung für besonders sichere Nachrichtenübertragung.</string>
+    <string name="device_manager_verification_status_unverified">Nicht verifizierte Sitzung</string>
 </resources>

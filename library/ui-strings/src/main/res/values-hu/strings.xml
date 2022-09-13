@@ -157,7 +157,7 @@
     <string name="notice_room_server_acl_updated_title">%s megváltoztatta a szerver ACL-eket ehhez a szobához.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP címet hosztnévként használó szerverek tiltva vannak.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• IP címet hosztnévként használó szerverek engedélyezve vannak.</string>
-    <string name="notice_room_server_acl_set_allowed">• Engedélyezve vannak azok a szerverek, amik illeszkednek erre: %s</string>
+    <string name="notice_room_server_acl_set_allowed">• Engedélyezve vannak azok a szerverek, amik illeszkednek erre: %s.</string>
     <string name="notice_room_server_acl_set_banned">• Tiltva vannak azok a szerverek, amik illeszkednek erre: %s</string>
     <string name="notice_room_server_acl_set_title_by_you">Beállítottad a szerver ACL-eket ehhez a szobához.</string>
     <string name="notice_room_server_acl_set_title">%s beállította a szerver ACL-eket ehhez a szobához.</string>
@@ -2600,4 +2600,40 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="search_space_two_parents">%1$s és %2$s</string>
     <string name="all_chats">Minden beszélgetés</string>
+    <string name="device_manager_other_sessions_description_unverified">Nem ellenőrzött - Utolsó aktivitás %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Ellenőrzött - Utolsó tevékenység %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Összes megtekintése (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Jelenlegi munkamenet</string>
+    <string name="device_manager_view_details">Részletek megtekintése</string>
+    <string name="device_manager_verify_session">Munkamenet hitelesítése</string>
+    <string name="device_manager_verification_status_detail_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_detail_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_unverified">Ellenőrizetlen munkamenet</string>
+    <string name="device_manager_verification_status_verified">Ellenőrzött munkamenet</string>
+    <string name="a11y_device_manager_device_type_unknown">Ismeretlen eszköztípus</string>
+    <string name="a11y_device_manager_device_type_desktop">Asztali</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobil</string>
+    <string name="device_manager_settings_active_sessions_show_all">Minden munkamenet megjelenítése (V2, WIP)</string>
+    <string name="settings_sessions_other_description">A legjobb biztonság érdekében ellenőrizd a munkameneteket, és jelentkezz ki minden olyan munkamenetből, melyet már nem ismersz fel vagy nem használsz.</string>
+    <string name="settings_sessions_other_title">Más munkamenetek</string>
+    <string name="settings_sessions_list">Munkamenetek</string>
+    <string name="a11y_open_spaces">Nyitott területek listája</string>
+    <string name="a11y_create_message">Új beszélgetés vagy szoba létrehozása</string>
+    <string name="room_list_filter_people">Résztvevők</string>
+    <string name="room_list_filter_favourites">Kedvencek</string>
+    <string name="room_list_filter_unreads">Olvasatlan</string>
+    <string name="room_list_filter_all">Mind</string>
+    <string name="timeline_error_room_not_found">Sajnáljuk, ez a szoba nem található.
+\nKérjük, próbáld meg később újra.%s</string>
+    <string name="invites_title">Meghívók</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Aktivitás</string>
+    <string name="home_layout_preferences_sort_by">Rendezés</string>
+    <string name="home_layout_preferences_recents">Legfrissebbek megjelenítése</string>
+    <string name="home_layout_preferences_filters">Szűrők megjelenítése</string>
+    <string name="home_layout_preferences">Elrendezési beállítások</string>
+    <string name="explore_rooms">Szobák felfedezése</string>
+    <string name="create_room">Szoba létrehozása</string>
+    <string name="start_chat">Chat indítása</string>
 </resources>

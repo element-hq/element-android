@@ -2619,4 +2619,21 @@
     <string name="explore_rooms">Explorar Salas</string>
     <string name="create_room">Criar Sala</string>
     <string name="start_chat">Começar Chat</string>
+    <string name="device_manager_other_sessions_description_unverified">Não-verificada · Última atividade %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Verificada · Última atividade %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Ver Todas (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Sessão Atual</string>
+    <string name="device_manager_view_details">Visualizar Detalhes</string>
+    <string name="device_manager_verify_session">Verificar Sessão</string>
+    <string name="device_manager_verification_status_detail_unverified">Verifique sua sessão atual para mensageria segura melhorada.</string>
+    <string name="device_manager_verification_status_detail_verified">Sua sessão atual está pronta para mensageria segura.</string>
+    <string name="device_manager_verification_status_unverified">Sessão não-verificada</string>
+    <string name="device_manager_verification_status_verified">Sessão verificada</string>
+    <string name="a11y_device_manager_device_type_unknown">Tipo de dispositivo desconhecido</string>
+    <string name="a11y_device_manager_device_type_desktop">Desktop</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobile</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="timeline_error_room_not_found">Desculpe, esta sala não tem sido encontrada.
+\nPor favor retente mais tarde.%s</string>
+    <string name="invites_title">Convites</string>
 </resources>

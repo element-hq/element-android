@@ -18,6 +18,8 @@ package im.vector.app.ui.robot.space
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
@@ -26,18 +28,44 @@ import com.adevinta.android.barista.internal.viewaction.ClickChildAction
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import org.hamcrest.Matchers
 
-class SpaceRobot {
+class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
-    fun createSpace(block: SpaceCreateRobot.() -> Unit) {
-        openDrawer()
-        clickOn(R.string.create_space)
+    fun createSpace(isFirstSpace: Boolean, block: SpaceCreateRobot.() -> Unit) {
+        if (labsPreferences.isNewAppLayoutEnabled) {
+            clickOn(R.id.newLayoutOpenSpacesButton)
+            if (isFirstSpace) {
+                waitUntilDialogVisible(ViewMatchers.withId(R.id.spaces_empty_group))
+                clickOn(R.id.spaces_empty_button)
+            } else {
+                waitUntilDialogVisible(ViewMatchers.withId(R.id.groupListView))
+                Espresso.onView(ViewMatchers.withId(R.id.groupListView))
+                        .perform(
+                                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                        ViewMatchers.hasDescendant(ViewMatchers.withId(R.id.plus)),
+                                        click()
+                                ).atPosition(0)
+                        )
+            }
+        } else {
+            openDrawer()
+            clickOn(R.string.create_space)
+        }
         block(SpaceCreateRobot())
     }
 
     fun spaceMenu(spaceName: String, block: SpaceMenuRobot.() -> Unit) {
-        openDrawer()
+        if (labsPreferences.isNewAppLayoutEnabled) {
+            clickOn(R.id.newLayoutOpenSpacesButton)
+            waitUntilDialogVisible(ViewMatchers.withId(R.id.groupListView))
+        } else {
+            openDrawer()
+        }
         with(SpaceMenuRobot()) {
             openMenu(spaceName)
             block()
@@ -46,19 +74,32 @@ class SpaceRobot {
 
     fun openMenu(spaceName: String) {
         waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
-        Espresso.onView(ViewMatchers.withId(R.id.groupListView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.groupNameView), ViewMatchers.withText(spaceName))),
-                                ClickChildAction.clickChildWithId(R.id.groupTmpLeave)
-                        ).atPosition(0)
-                )
+        if (labsPreferences.isNewAppLayoutEnabled) {
+            Espresso.onView(ViewMatchers.withId(R.id.groupListView))
+                    .perform(
+                            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                    ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.name), ViewMatchers.withText(spaceName))),
+                                    longClick()
+                            ).atPosition(0)
+                    )
+        } else {
+            Espresso.onView(ViewMatchers.withId(R.id.groupListView))
+                    .perform(
+                            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                    ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.groupNameView), ViewMatchers.withText(spaceName))),
+                                    ClickChildAction.clickChildWithId(R.id.groupTmpLeave)
+                            ).atPosition(0)
+                    )
+        }
+
         waitUntilDialogVisible(ViewMatchers.withId(R.id.spaceNameView))
     }
 
     fun selectSpace(spaceName: String) {
-        openDrawer()
-        waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
+        if (!labsPreferences.isNewAppLayoutEnabled) {
+            openDrawer()
+            waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
+        }
         clickOn(spaceName)
     }
 }

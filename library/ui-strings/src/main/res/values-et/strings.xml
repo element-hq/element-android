@@ -2610,4 +2610,21 @@
     <string name="explore_rooms">Tutvu jututubadega</string>
     <string name="create_room">Loo jututuba</string>
     <string name="start_chat">Alusta vestlust</string>
+    <string name="device_manager_other_sessions_description_unverified">Verifitseerimata · Viimati kasutusel %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Verifitseeritud · Viimati kasutusel %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Näita kõiki (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Praegune sessioon</string>
+    <string name="device_manager_view_details">Vaata lisateavet</string>
+    <string name="device_manager_verify_session">Verifitseeri sessioon</string>
+    <string name="device_manager_verification_status_detail_unverified">Turvalise sõnumivahetuse nimel palun verifitseeri oma praegune sessioon.</string>
+    <string name="device_manager_verification_status_detail_verified">Sinu praegune sessioon on valmis turvaliseks sõnumivahetuseks.</string>
+    <string name="device_manager_verification_status_unverified">Verifitseerimata sessioon</string>
+    <string name="device_manager_verification_status_verified">Verifitseeritud sessioon</string>
+    <string name="a11y_device_manager_device_type_unknown">Tundmatu seadme tüüp</string>
+    <string name="a11y_device_manager_device_type_desktop">Töölauarakendus</string>
+    <string name="a11y_device_manager_device_type_web">Veebiliides</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobiiltelefon</string>
+    <string name="timeline_error_room_not_found">Vabandust, aga seda jututuba ei õnnestu leida.
+\nPalun proovi hiljem uuesti.%s</string>
+    <string name="invites_title">Kutsed</string>
 </resources>

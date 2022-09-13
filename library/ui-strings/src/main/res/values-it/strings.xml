@@ -2610,4 +2610,21 @@
     <string name="explore_rooms">Esplora le stanze</string>
     <string name="create_room">Crea una stanza</string>
     <string name="start_chat">Inizia una chat</string>
+    <string name="device_manager_other_sessions_description_unverified">Non verificata · Ultima attività %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Verificata · Ultima attività %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Vedi tutte (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Sessione attuale</string>
+    <string name="device_manager_view_details">Vedi dettagli</string>
+    <string name="device_manager_verify_session">Verifica la sessione</string>
+    <string name="device_manager_verification_status_detail_unverified">Verifica la tua sessione attuale per messaggi più sicuri.</string>
+    <string name="device_manager_verification_status_detail_verified">La tua sessione attuale è pronta per i messaggi sicuri.</string>
+    <string name="device_manager_verification_status_unverified">Sessione non verificata</string>
+    <string name="device_manager_verification_status_verified">Sessione verificata</string>
+    <string name="a11y_device_manager_device_type_unknown">Tipo di dispositivo sconosciuto</string>
+    <string name="a11y_device_manager_device_type_desktop">Desktop</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobile</string>
+    <string name="timeline_error_room_not_found">Spiacenti, questa stanza non è stata trovata.
+\nRiprova più tardi.%s</string>
+    <string name="invites_title">Inviti</string>
 </resources>

@@ -88,7 +88,7 @@ class DebugFeaturesStateFactory @Inject constructor(
                         createBooleanFeature(
                                 label = "Enable New App Layout",
                                 key = DebugFeatureKeys.newAppLayoutEnabled,
-                                factory = VectorFeatures::isNewAppLayoutEnabled
+                                factory = VectorFeatures::isNewAppLayoutFeatureEnabled
                         ),
                         createBooleanFeature(
                                 label = "Enable New Device Management",

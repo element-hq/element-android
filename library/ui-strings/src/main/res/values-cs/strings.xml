@@ -2669,4 +2669,21 @@
     <string name="explore_rooms">Prozkoumat místnosti</string>
     <string name="create_room">Vytvořit místnost</string>
     <string name="start_chat">Zahájit konverzaci</string>
+    <string name="device_manager_other_sessions_description_unverified">Neověřeno · Poslední aktivita %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Ověřeno · Poslední aktivita %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Zobrazit všechny (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Aktuální relace</string>
+    <string name="device_manager_view_details">Zobrazit podrobnosti</string>
+    <string name="device_manager_verify_session">Ověřit relaci</string>
+    <string name="device_manager_verification_status_detail_unverified">Ověřte svou aktuální relaci pro vylepšené zabezpečené zasílání zpráv.</string>
+    <string name="device_manager_verification_status_detail_verified">Vaše aktuální relace je připravena pro bezpečné zasílání zpráv.</string>
+    <string name="device_manager_verification_status_unverified">Neověřená relace</string>
+    <string name="device_manager_verification_status_verified">Ověřená relace</string>
+    <string name="a11y_device_manager_device_type_unknown">Neznámý typ zařízení</string>
+    <string name="a11y_device_manager_device_type_desktop">Desktop</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobil</string>
+    <string name="timeline_error_room_not_found">Je nám líto, tato místnost nebyla nalezena.
+\nZkuste to prosím později.%s</string>
+    <string name="invites_title">Pozvánky</string>
 </resources>

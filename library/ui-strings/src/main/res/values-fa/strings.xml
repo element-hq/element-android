@@ -2619,4 +2619,21 @@
     <string name="explore_rooms">کاوش اتاق‌ها</string>
     <string name="create_room">ایجاد اتاق</string>
     <string name="start_chat">آغاز گپ</string>
+    <string name="device_manager_other_sessions_description_unverified">تأیید نشده · آخرین فعّالیت %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">تأیید شده · آخرین فعّالیت %1$s</string>
+    <string name="device_manager_other_sessions_view_all">دیدن همه (%1$d)</string>
+    <string name="device_manager_header_section_current_session">نشست کنونی</string>
+    <string name="device_manager_view_details">دیدن جزییات</string>
+    <string name="device_manager_verify_session">تأیید نشست</string>
+    <string name="device_manager_verification_status_detail_unverified">نشست کنونیتان را برای پیام‌رسانی امن بهبود یافته تأیید کنید.</string>
+    <string name="device_manager_verification_status_detail_verified">نشست کنونیتان برای پیام‌رسانی امن آماده است.</string>
+    <string name="device_manager_verification_status_unverified">نشست تأیید نشده</string>
+    <string name="device_manager_verification_status_verified">نشست تأیید شده</string>
+    <string name="a11y_device_manager_device_type_unknown">گونهٔ افزاره ناشناخته</string>
+    <string name="a11y_device_manager_device_type_desktop">میزکار</string>
+    <string name="a11y_device_manager_device_type_web">وب</string>
+    <string name="a11y_device_manager_device_type_mobile">تلفن همراه</string>
+    <string name="timeline_error_room_not_found">متأسفانه این اتاق پیدا نشد.
+\nلطفاً بعداً دوباره تلاش کنید.%s</string>
+    <string name="invites_title">دعوت‌ها</string>
 </resources>

@@ -20,6 +20,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
@@ -41,7 +42,7 @@ class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
         return CurrentSessionCrossSigningInfo(
                 deviceId = deviceId,
                 isCrossSigningInitialized = mxCrossSigningInfo.getOrNull() != null,
-                isCrossSigningVerified = mxCrossSigningInfo.getOrNull()?.isTrusted() == true
+                isCrossSigningVerified = mxCrossSigningInfo.getOrNull()?.isTrusted().orFalse()
         )
     }
 }

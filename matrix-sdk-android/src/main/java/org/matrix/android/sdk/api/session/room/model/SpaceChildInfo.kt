@@ -34,5 +34,4 @@ data class SpaceChildInfo(
         val canonicalAlias: String?,
         val aliases: List<String>?,
         val worldReadable: Boolean
-
 )

@@ -110,7 +110,7 @@ class VectorSettingsDevicesFragment :
                     }
                 }
                 is DevicesViewEvent.PromptResetSecrets -> {
-                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
             }
         }

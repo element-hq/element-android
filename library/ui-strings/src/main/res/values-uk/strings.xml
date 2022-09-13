@@ -2719,4 +2719,21 @@
     <string name="explore_rooms">Знайти кімнати</string>
     <string name="create_room">Створити кімнату</string>
     <string name="start_chat">Розпочати бесіду</string>
+    <string name="device_manager_other_sessions_description_unverified">Не звірений · Остання активність %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Звірений · Остання активність %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Переглянути всі (%1$d)</string>
+    <string name="device_manager_header_section_current_session">Поточний сеанс</string>
+    <string name="device_manager_view_details">Переглянути подробиці</string>
+    <string name="device_manager_verify_session">Звірити сеанс</string>
+    <string name="device_manager_verification_status_detail_unverified">Звірте свій поточний сеанс для безпечнішого обміну повідомленнями.</string>
+    <string name="device_manager_verification_status_detail_verified">Ваш поточний сеанс готовий для безпечного обміну повідомленнями.</string>
+    <string name="device_manager_verification_status_unverified">Не звірений сеанс</string>
+    <string name="device_manager_verification_status_verified">Звірений сеанс</string>
+    <string name="a11y_device_manager_device_type_unknown">Невідомий тип пристрою</string>
+    <string name="a11y_device_manager_device_type_desktop">Комп\'ютер</string>
+    <string name="a11y_device_manager_device_type_web">Браузер</string>
+    <string name="a11y_device_manager_device_type_mobile">Мобільний</string>
+    <string name="timeline_error_room_not_found">Перепрошуємо, цю кімнату не знайдено.
+\nСпробуйте пізніше.%s</string>
+    <string name="invites_title">Запрошення</string>
 </resources>

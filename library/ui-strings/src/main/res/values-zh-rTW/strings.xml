@@ -2569,4 +2569,21 @@
     <string name="explore_rooms">探索聊天室</string>
     <string name="create_room">建立聊天室</string>
     <string name="start_chat">開始聊天</string>
+    <string name="device_manager_other_sessions_description_unverified">未驗證 · 最後活動 %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">已驗證 · 最後活動 %1$s</string>
+    <string name="device_manager_other_sessions_view_all">檢視全部 (%1$d)</string>
+    <string name="device_manager_header_section_current_session">目前工作階段</string>
+    <string name="device_manager_view_details">檢視詳細資訊</string>
+    <string name="device_manager_verify_session">驗證工作階段</string>
+    <string name="device_manager_verification_status_detail_unverified">驗證您目前的工作階段以強化安全通訊。</string>
+    <string name="device_manager_verification_status_detail_verified">您目前的工作階段已準備好進行安全通訊。</string>
+    <string name="device_manager_verification_status_unverified">未驗證的工作階段</string>
+    <string name="device_manager_verification_status_verified">已驗證的工作階段</string>
+    <string name="a11y_device_manager_device_type_unknown">未知的裝置類型</string>
+    <string name="a11y_device_manager_device_type_desktop">桌面</string>
+    <string name="a11y_device_manager_device_type_web">網頁</string>
+    <string name="a11y_device_manager_device_type_mobile">行動裝置</string>
+    <string name="timeline_error_room_not_found">抱歉，找不到此聊天室。
+\n請稍後再試。%s</string>
+    <string name="invites_title">邀請</string>
 </resources>
