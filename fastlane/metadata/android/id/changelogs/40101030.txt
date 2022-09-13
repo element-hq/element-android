@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: peningkatan kinerja dan perbaikan bug!
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.1.3

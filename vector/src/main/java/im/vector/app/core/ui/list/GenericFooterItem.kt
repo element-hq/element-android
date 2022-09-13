@@ -21,10 +21,13 @@ import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 /**
  * A generic list item.
@@ -32,17 +35,17 @@ import im.vector.app.features.themes.ThemeUtils
  * Can display an accessory on the right, that can be an image or an indeterminate progress.
  * If provided with an action, will display a button at the bottom of the list item.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_footer)
-abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>(R.layout.item_generic_footer) {
 
     @EpoxyAttribute
-    var text: CharSequence? = null
+    var text: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
-    var itemClickAction: GenericItem.Action? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute
     var centered: Boolean = true
@@ -54,7 +57,7 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.text.setTextOrHide(text)
+        holder.text.setTextOrHide(text?.charSequence)
         holder.text.typeface = style.toTypeFace()
         holder.text.textSize = style.toTextSize()
         holder.text.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
@@ -62,12 +65,10 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
         if (textColor != null) {
             holder.text.setTextColor(textColor!!)
         } else {
-            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary))
+            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
         }
 
-        holder.view.setOnClickListener {
-            itemClickAction?.perform?.run()
-        }
+        holder.view.onClick(itemClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

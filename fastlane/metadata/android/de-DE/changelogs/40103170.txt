@@ -1,0 +1,2 @@
+Wichtigste Änderungen in dieser Version: Versende deinen Standort an jeden Raum deiner Wahl. Bearbeite Umfragen.
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.3.17

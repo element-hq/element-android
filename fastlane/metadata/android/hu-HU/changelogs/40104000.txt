@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Üzenetszálak kezdeti implementációja. Buborék üzenetek.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.4.0

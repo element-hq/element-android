@@ -1,0 +1,4 @@
+Hauptänderungen: 
+- Anwesenheiten in Direktnachrichten anzeigen (Momentan auf Matrix.org deaktiviert)
+- Android Auto wird wieder unterstützt
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.3.4

@@ -37,7 +37,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value1 = "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value1 =
+            "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode2 = QrCodeData.SelfVerifyingMasterKeyTrusted(
             transactionId = "MaTransaction",
@@ -46,7 +47,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value2 = "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value2 =
+            "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode3 = QrCodeData.SelfVerifyingMasterKeyNotTrusted(
             transactionId = "MaTransaction",
@@ -55,7 +57,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value3 = "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
+    private val value3 =
+            "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
 
     private val sharedSecretByteArray = "12345678".toByteArray(Charsets.ISO_8859_1)
 
@@ -226,12 +229,12 @@ class QrCodeTest : InstrumentedTest {
 
     private fun checkHeader(byteArray: ByteArray) {
         // MATRIX
-        byteArray[0] shouldBeEqualTo 'M'.toByte()
-        byteArray[1] shouldBeEqualTo 'A'.toByte()
-        byteArray[2] shouldBeEqualTo 'T'.toByte()
-        byteArray[3] shouldBeEqualTo 'R'.toByte()
-        byteArray[4] shouldBeEqualTo 'I'.toByte()
-        byteArray[5] shouldBeEqualTo 'X'.toByte()
+        byteArray[0] shouldBeEqualTo 'M'.code.toByte()
+        byteArray[1] shouldBeEqualTo 'A'.code.toByte()
+        byteArray[2] shouldBeEqualTo 'T'.code.toByte()
+        byteArray[3] shouldBeEqualTo 'R'.code.toByte()
+        byteArray[4] shouldBeEqualTo 'I'.code.toByte()
+        byteArray[5] shouldBeEqualTo 'X'.code.toByte()
 
         // Version
         byteArray[6] shouldBeEqualTo 2

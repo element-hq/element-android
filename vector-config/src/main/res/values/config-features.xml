@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This file contains values to show or hide some features, that are not available from
+    settings & labs. Values here are mainly modified by developers and are not exposed
+    to the users.
+     -->
+
+    <bool name="feature_threads_beta_feedback_enabled">true</bool>
+
+</resources>

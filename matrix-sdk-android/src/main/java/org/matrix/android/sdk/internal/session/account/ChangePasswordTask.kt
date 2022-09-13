@@ -26,7 +26,8 @@ import javax.inject.Inject
 internal interface ChangePasswordTask : Task<ChangePasswordTask.Params, Unit> {
     data class Params(
             val password: String,
-            val newPassword: String
+            val newPassword: String,
+            val logoutAllDevices: Boolean
     )
 }
 
@@ -37,7 +38,7 @@ internal class DefaultChangePasswordTask @Inject constructor(
 ) : ChangePasswordTask {
 
     override suspend fun execute(params: ChangePasswordTask.Params) {
-        val changePasswordParams = ChangePasswordParams.create(userId, params.password, params.newPassword)
+        val changePasswordParams = ChangePasswordParams.create(userId, params.password, params.newPassword, params.logoutAllDevices)
         try {
             executeRequest(globalErrorReceiver) {
                 accountAPI.changePassword(changePasswordParams)
@@ -45,9 +46,9 @@ internal class DefaultChangePasswordTask @Inject constructor(
         } catch (throwable: Throwable) {
             val registrationFlowResponse = throwable.toRegistrationFlowResponse()
 
-            if (registrationFlowResponse != null
+            if (registrationFlowResponse != null &&
                     /* Avoid infinite loop */
-                    && changePasswordParams.auth?.session == null) {
+                    changePasswordParams.auth?.session == null) {
                 // Retry with authentication
                 executeRequest(globalErrorReceiver) {
                     accountAPI.changePassword(

@@ -19,6 +19,6 @@ package im.vector.app.features.spaces.manage
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class SpaceManageRoomViewEvents : VectorViewEvents {
-//    object BulkActionSuccess: SpaceManageRoomViewEvents()
+    //    object BulkActionSuccess: SpaceManageRoomViewEvents()
     data class BulkActionFailure(val errorList: List<Throwable>) : SpaceManageRoomViewEvents()
 }

@@ -16,6 +16,8 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Paint
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -26,14 +28,17 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.themes.ThemeUtils
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     @EpoxyAttribute
-    var filename: CharSequence = ""
+    var filename: String = ""
 
     @EpoxyAttribute
     var mxcUrl: String = ""
@@ -42,14 +47,13 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @DrawableRes
     var iconRes: Int = 0
 
-//    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-//    var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute
+    @JvmField
+    var isLocalFile = false
 
     @EpoxyAttribute
-    var izLocalFile = false
-
-    @EpoxyAttribute
-    var izDownloaded = false
+    @JvmField
+    var isDownloaded = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -60,30 +64,37 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.fileLayout, holder.filenameView)
+
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
             holder.fileImageView.setImageResource(R.drawable.ic_cross)
             holder.progressLayout.isVisible = false
         }
+
         holder.filenameView.text = filename
+
         if (attributes.informationData.sendState.isSending()) {
             holder.fileImageView.setImageResource(iconRes)
         } else {
-            if (izDownloaded) {
+            if (isDownloaded) {
                 holder.fileImageView.setImageResource(iconRes)
-                holder.fileDownloadProgress.progress = 100
+                holder.fileDownloadProgress.progress = 0
             } else {
                 contentDownloadStateTrackerBinder.bind(mxcUrl, holder)
                 holder.fileImageView.setImageResource(R.drawable.ic_download)
-                holder.fileDownloadProgress.progress = 0
             }
         }
-//        holder.view.setOnClickListener(clickListener)
 
-        holder.filenameView.setOnClickListener(attributes.itemClickListener)
+        val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
+            Color.TRANSPARENT
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
+        }
+        holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
+        holder.filenameView.onClick(attributes.itemClickListener)
         holder.filenameView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.fileImageWrapper.setOnClickListener(attributes.itemClickListener)
+        holder.fileImageWrapper.onClick(attributes.itemClickListener)
         holder.fileImageWrapper.setOnLongClickListener(attributes.itemLongClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }
@@ -94,9 +105,10 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
+        val mainLayout by bind<ViewGroup>(R.id.messageFileMainLayout)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileIconView)
@@ -106,6 +118,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentFileStub
+        private val STUB_ID = R.id.messageContentFileStub
     }
 }

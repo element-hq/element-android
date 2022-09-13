@@ -20,10 +20,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.FoundThreePid
@@ -32,26 +39,20 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.extensions.observeNotNull
 import org.matrix.android.sdk.internal.network.RetrofitFactory
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
 import org.matrix.android.sdk.internal.session.profile.BindThreePidsTask
 import org.matrix.android.sdk.internal.session.profile.UnbindThreePidsTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.util.ensureProtocol
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -77,8 +78,9 @@ internal class DefaultIdentityService @Inject constructor(
         private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
         private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
-        private val accountDataDataSource: AccountDataDataSource,
+        private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val sign3pidInvitationTask: Sign3pidInvitationTask,
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
@@ -191,7 +193,7 @@ internal class DefaultIdentityService @Inject constructor(
         } else {
             // Disconnect previous one if any, first, because the token will change.
             // In case of error when configuring the new identity server, this is not a big deal,
-            // we will ask for a new token on the previous Identity server
+            // we will ask for a new token on the previous identity server
             runCatching { identityDisconnectTask.execute(Unit) }
                     .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
@@ -200,6 +202,8 @@ internal class DefaultIdentityService @Inject constructor(
 
             identityStore.setUrl(urlCandidate)
             identityStore.setToken(token)
+            // could we remember if it was previously given?
+            identityStore.setUserConsent(false)
             updateIdentityAPI(urlCandidate)
 
             updateAccountData(urlCandidate)
@@ -214,9 +218,11 @@ internal class DefaultIdentityService @Inject constructor(
             listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
-                identityContent = IdentityServerContent(baseUrl = url)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.IdentityParams(
+                        identityContent = IdentityServerContent(baseUrl = url)
+                )
+        )
     }
 
     override fun getUserConsent(): Boolean {
@@ -228,6 +234,8 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid> {
+        if (getCurrentIdentityServerUrl() == null) throw IdentityServiceError.NoIdentityServerConfigured
+
         if (!getUserConsent()) {
             throw IdentityServiceError.UserConsentNotProvided
         }
@@ -241,7 +249,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     override suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState> {
         // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
-        // to the home server, and not emails and phone numbers from the contact book of the user
+        // to the homeserver, and not emails and phone numbers from the contact book of the user
 
         if (threePids.isEmpty()) {
             return emptyMap()
@@ -275,8 +283,8 @@ internal class DefaultIdentityService @Inject constructor(
                     identityStore.setToken(null)
                     lookUpInternal(false, threePids)
                 }
-                throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
-                else                                   -> throw throwable
+                throwable.isTermsNotSigned() -> throw IdentityServiceError.TermsNotSignedException
+                else -> throw throwable
             }
         }
     }
@@ -288,6 +296,16 @@ internal class DefaultIdentityService @Inject constructor(
         val token = identityRegisterTask.execute(IdentityRegisterTask.Params(api, openIdToken))
 
         return token.token
+    }
+
+    override suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult {
+        return sign3pidInvitationTask.execute(
+                Sign3pidInvitationTask.Params(
+                        url = identiyServer,
+                        token = token,
+                        privateKey = secret
+                )
+        )
     }
 
     override fun addListener(listener: IdentityServiceListener) {
@@ -306,12 +324,12 @@ internal class DefaultIdentityService @Inject constructor(
 }
 
 private fun Throwable.isInvalidToken(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
 }
 
 private fun Throwable.isTermsNotSigned(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */
-            && error.code == MatrixError.M_TERMS_NOT_SIGNED
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_FORBIDDEN && /* 403 */
+            error.code == MatrixError.M_TERMS_NOT_SIGNED
 }

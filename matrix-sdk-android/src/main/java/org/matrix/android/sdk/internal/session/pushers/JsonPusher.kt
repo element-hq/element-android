@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.pushers
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.di.SerializeNulls
+import java.security.InvalidParameterException
 
 /**
  * Example:
- *
  * <code>
  *     {
  *      "pushers": [
@@ -39,6 +39,7 @@ import org.matrix.android.sdk.internal.di.SerializeNulls
  *      }]
  *  }
  * </code>
+ * .
  */
 @JsonClass(generateAdapter = true)
 internal data class JsonPusher(
@@ -112,4 +113,11 @@ internal data class JsonPusher(
          */
         @Json(name = "append")
         val append: Boolean? = false
-)
+) {
+    init {
+        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
+        if (pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
+    }
+}

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.text.Spanned
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -24,21 +25,29 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import io.noties.markwon.MarkwonPlugin
+import org.matrix.android.sdk.api.extensions.orFalse
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var searchForPills: Boolean = false
 
     @EpoxyAttribute
-    var message: CharSequence? = null
+    var message: EpoxyCharSequence? = null
+
+    @EpoxyAttribute
+    var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -55,6 +64,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var markwonPlugins: (List<MarkwonPlugin>)? = null
+
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
     override fun bind(holder: Holder) {
@@ -68,6 +80,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
         }
         holder.previewUrlView.delegate = previewUrlCallback
+        holder.previewUrlView.renderMessageLayout(attributes.informationData.messageLayout)
 
         if (useBigFont) {
             holder.messageView.textSize = 44F
@@ -75,22 +88,31 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.textSize = 14F
         }
         if (searchForPills) {
-            message?.findPillsAndProcess(coroutineScope) {
+            message?.charSequence?.findPillsAndProcess(coroutineScope) {
                 // mmm.. not sure this is so safe in regards to cell reuse
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = PrecomputedTextCompat.getTextFuture(
-                message ?: "",
-                TextViewCompat.getTextMetricsParams(holder.messageView),
-                null)
+        message?.charSequence.let { charSequence ->
+            markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, charSequence as Spanned) }
+        }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
-
         renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(attributes.itemClickListener)
-        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.messageView.setTextFuture(textFuture)
+        holder.messageView.onClick(attributes.itemClickListener)
+        holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
+        holder.messageView.setTextWithEmojiSupport(message?.charSequence, bindingOptions)
+        markwonPlugins?.forEach { plugin -> plugin.afterSetText(holder.messageView) }
+    }
+
+    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
+        if (bindingOptions?.canUseTextFuture.orFalse() && message != null) {
+            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+            setTextFuture(textFuture)
+        } else {
+            setTextFuture(null)
+            text = message
+        }
     }
 
     override fun unbind(holder: Holder) {
@@ -100,7 +122,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         previewUrlRetriever?.removeListener(attributes.informationData.eventId, previewUrlViewUpdater)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)
@@ -120,7 +142,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             previewUrlView?.render(state, safeImageContentRenderer)
         }
     }
+
     companion object {
-        private const val STUB_ID = R.id.messageContentTextStub
+        private val STUB_ID = R.id.messageContentTextStub
     }
 }

@@ -16,6 +16,8 @@
 
 package im.vector.app.features.crypto.recover
 
+import im.vector.app.features.raw.wellknown.SecureBackupMethod
+
 /**
  * TODO The schema is not up to date
  *
@@ -89,15 +91,15 @@ sealed class BootstrapStep {
     object CheckingMigration : BootstrapStep()
 
     // Use will be asked to choose between passphrase or recovery key, or to start process if a key backup exists
-    data class FirstForm(val keyBackUpExist: Boolean, val reset: Boolean = false) : BootstrapStep()
+    data class FirstForm(val keyBackUpExist: Boolean, val reset: Boolean = false, val methods: SecureBackupMethod) : BootstrapStep()
 
-    data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
-    data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
+    object SetupPassphrase : BootstrapStep()
+    object ConfirmPassphrase : BootstrapStep()
 
     data class AccountReAuth(val failure: String? = null) : BootstrapStep()
 
     abstract class GetBackupSecretForMigration : BootstrapStep()
-    data class GetBackupSecretPassForMigration(val isPasswordVisible: Boolean, val useKey: Boolean) : GetBackupSecretForMigration()
+    data class GetBackupSecretPassForMigration(val useKey: Boolean) : GetBackupSecretForMigration()
     object GetBackupSecretKeyForMigration : GetBackupSecretForMigration()
 
     object Initializing : BootstrapStep()
@@ -108,6 +110,6 @@ sealed class BootstrapStep {
 fun BootstrapStep.GetBackupSecretForMigration.useKey(): Boolean {
     return when (this) {
         is BootstrapStep.GetBackupSecretPassForMigration -> useKey
-        else                                             -> true
+        else -> true
     }
 }

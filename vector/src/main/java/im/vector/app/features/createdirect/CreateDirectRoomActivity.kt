@@ -22,141 +22,154 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.contactsbook.ContactsBookFragment
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.contactsbook.ContactsBookViewState
+import im.vector.app.features.qrcode.QrCodeScannerEvents
+import im.vector.app.features.qrcode.QrCodeScannerFragment
+import im.vector.app.features.qrcode.QrCodeScannerViewModel
+import im.vector.app.features.qrcode.QrScannerArgs
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
-import im.vector.app.features.userdirectory.UserListViewModel
-import im.vector.app.features.userdirectory.UserListViewState
-
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, CreateDirectRoomViewModel.Factory, ContactsBookViewModel.Factory {
+@AndroidEntryPoint
+class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
+    private val qrViewModel: QrCodeScannerViewModel by viewModel()
+
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
-    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
-
-    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
-
-    override fun create(initialState: CreateDirectRoomViewState) = createDirectRoomViewModelFactory.create(initialState)
-
-    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.StartChat
         views.toolbar.visibility = View.GONE
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
-                .observe()
-                .subscribe { action ->
+                .stream()
+                .onEach { action ->
                     when (action) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
-                        UserListSharedAction.AddByQrCode           -> openAddByQrCode()
-                    }.exhaustive
+                        UserListSharedAction.Close -> finish()
+                        UserListSharedAction.GoBack -> onBackPressed()
+                        is UserListSharedAction.OnMenuItemSubmitClick -> handleOnMenuItemSubmitClick(action)
+                        UserListSharedAction.OpenPhoneBook -> openPhoneBook()
+                        UserListSharedAction.AddByQrCode -> openAddByQrCode()
+                    }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room
+                            menuResId = R.menu.vector_create_direct_room,
+                            submitMenuItemId = R.id.action_create_direct_room,
                     )
             )
         }
-        viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
+        viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                CreateDirectRoomViewEvents.InvalidCode -> {
+                    Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                CreateDirectRoomViewEvents.DmSelf -> {
+                    Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+        }
+
+        qrViewModel.observeViewEvents {
+            when (it) {
+                is QrCodeScannerEvents.CodeParsed -> {
+                    viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
+                }
+                is QrCodeScannerEvents.ParseFailed -> {
+                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else -> Unit
+            }
         }
     }
 
     private fun openAddByQrCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA, 0)) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                        this,
-                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                        0)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
+            addFragmentToBackstack(views.container, ContactsBookFragment::class.java)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
-            } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
-            }
-        } else {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
-            } else if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
-            }
+    private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
     }
 
-    private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
-        if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(
-                    action.selections,
-                    null
-            ))
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }
+    }
+
+    private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
+        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
     }
 
     private fun renderCreateAndInviteState(state: Async<String>) {
         when (state) {
             is Loading -> renderCreationLoading()
             is Success -> renderCreationSuccess(state())
-            is Fail    -> renderCreationFailure(state.error)
+            is Fail -> renderCreationFailure(state.error)
+            else -> Unit
         }
     }
 
@@ -167,24 +180,24 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
     private fun renderCreationFailure(error: Throwable) {
         hideWaitingView()
         when (error) {
-            is CreateRoomFailure.CreatedWithTimeout           -> {
+            is CreateRoomFailure.CreatedWithTimeout -> {
                 finish()
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok) { _, _ -> finish() }
                         .show()
             }
-            else                                              -> {
+            else -> {
                 val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
                     // This error happen if the invited userId does not exist.
                     getString(R.string.create_room_dm_failure)
                 } else {
                     errorFormatter.toHumanReadable(error)
                 }
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()
@@ -192,11 +205,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
         }
     }
 
-    private fun renderCreationSuccess(roomId: String?) {
-        // Navigate to freshly created room
-        if (roomId != null) {
-            navigator.openRoom(this, roomId)
-        }
+    private fun renderCreationSuccess(roomId: String) {
+        navigator.openRoom(
+                context = this,
+                roomId = roomId,
+                trigger = ViewRoom.Trigger.MessageUser
+        )
         finish()
     }
 

@@ -62,6 +62,11 @@
             android:title="@string/settings_active_sessions_show_all"
             app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
+            android:title="@string/settings_active_sessions_show_all"
+            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
@@ -79,7 +84,6 @@
             android:persistent="false"
             android:summary="@string/settings_secure_backup_section_info" />
     </im.vector.app.core.preference.VectorPreferenceCategory>
-
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -103,13 +107,25 @@
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_IGNORED_USERS_PREFERENCE_CATEGORY_KEY"
+        android:title="@string/settings_ignored_users"
+        app:isPreferenceVisible="@bool/settings_ignored_users_visible">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:icon="@drawable/ic_settings_root_ignored_users"
+            android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
+            android:title="@string/settings_ignored_users"
+            app:fragment="im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
-        android:title="@string/settings_analytics"
-        app:isPreferenceVisible="@bool/false_not_implemented">
+        android:title="@string/settings_analytics">
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
-            android:key="SETTINGS_USE_ANALYTICS_KEY"
+            android:key="SETTINGS_USER_ANALYTICS_CONSENT_KEY"
             android:summary="@string/settings_opt_in_of_analytics_summary"
             android:title="@string/settings_opt_in_of_analytics" />
 

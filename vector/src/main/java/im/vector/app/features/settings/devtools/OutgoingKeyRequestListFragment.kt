@@ -22,16 +22,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
 import javax.inject.Inject
-class OutgoingKeyRequestListFragment @Inject constructor(
-        val viewModelFactory: KeyRequestListViewModel.Factory,
-        private val epoxyController: OutgoingKeyRequestPagedController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
+
+@AndroidEntryPoint
+class OutgoingKeyRequestListFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>() {
+
+    @Inject lateinit var epoxyController: OutgoingKeyRequestPagedController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -45,7 +48,7 @@ class OutgoingKeyRequestListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
 //        epoxyController.interactionListener = this
     }
 

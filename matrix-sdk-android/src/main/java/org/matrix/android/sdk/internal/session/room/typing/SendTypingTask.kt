@@ -17,11 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.typing
 
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import kotlinx.coroutines.delay
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import javax.inject.Inject
 
 internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
@@ -29,9 +28,7 @@ internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
     data class Params(
             val roomId: String,
             val isTyping: Boolean,
-            val typingTimeoutMillis: Int? = 30_000,
-            // Optional delay before sending the request to the homeserver
-            val delay: Long? = null
+            val typingTimeoutMillis: Int? = 30_000
     )
 }
 
@@ -42,8 +39,6 @@ internal class DefaultSendTypingTask @Inject constructor(
 ) : SendTypingTask {
 
     override suspend fun execute(params: SendTypingTask.Params) {
-        delay(params.delay ?: -1)
-
         executeRequest(globalErrorReceiver) {
             roomAPI.sendTypingState(
                     params.roomId,

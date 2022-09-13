@@ -1,0 +1,2 @@
+此版本的主要变化：实验室设置下的语音消息实现。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.1.15

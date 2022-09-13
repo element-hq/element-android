@@ -24,6 +24,6 @@ sealed class UserCodeActions : VectorViewModelAction {
     data class SwitchMode(val mode: UserCodeState.Mode) : UserCodeActions()
     data class DecodedQRCode(val code: String) : UserCodeActions()
     data class StartChattingWithUser(val matrixItem: MatrixItem) : UserCodeActions()
-    object CameraPermissionNotGranted : UserCodeActions()
+    data class CameraPermissionNotGranted(val deniedPermanently: Boolean) : UserCodeActions()
     object ShareByText : UserCodeActions()
 }

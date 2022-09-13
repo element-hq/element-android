@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class represents the body to /keys/query
+ * This class represents the body to /keys/query.
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysQueryBody(

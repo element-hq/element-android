@@ -19,7 +19,7 @@ package im.vector.app.features.roomdirectory
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for room directory screen
+ * Transient events for room directory screen.
  */
 sealed class RoomDirectoryViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomDirectoryViewEvents()

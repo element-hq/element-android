@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -32,10 +33,12 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewMod
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-class VerificationConclusionFragment @Inject constructor(
-        val controller: VerificationConclusionController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+@AndroidEntryPoint
+class VerificationConclusionFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationConclusionController.Listener {
+
+    @Inject lateinit var controller: VerificationConclusionController
 
     @Parcelize
     data class Args(
@@ -73,7 +76,7 @@ class VerificationConclusionFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onButtonTapped() {
-        sharedViewModel.handle(VerificationAction.GotItConclusion)
+    override fun onButtonTapped(success: Boolean) {
+        sharedViewModel.handle(VerificationAction.GotItConclusion(success))
     }
 }

@@ -21,12 +21,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
-import android.os.Build
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
 /**
- * Dynamic broadcast receiver to detect headset plug/unplug
+ * Dynamic broadcast receiver to detect headset plug/unplug.
  */
 class WiredHeadsetStateReceiver : BroadcastReceiver() {
 
@@ -49,14 +48,14 @@ class WiredHeadsetStateReceiver : BroadcastReceiver() {
         //  microphone 1 if headset has a microphone, 0 otherwise
 
         val isPlugged = when (intent?.getIntExtra("state", -1)) {
-            0    -> false
-            1    -> true
+            0 -> false
+            1 -> true
             else -> return Unit.also {
                 Timber.v("## VOIP WiredHeadsetStateReceiver invalid state")
             }
         }
         val hasMicrophone = when (intent.getIntExtra("microphone", -1)) {
-            1    -> true
+            1 -> true
             else -> false
         }
 
@@ -69,11 +68,7 @@ class WiredHeadsetStateReceiver : BroadcastReceiver() {
         fun createAndRegister(context: Context, listener: HeadsetEventListener): WiredHeadsetStateReceiver {
             val receiver = WiredHeadsetStateReceiver()
             receiver.delegate = WeakReference(listener)
-            val action = if (Build.VERSION.SDK_INT >= 21) {
-                AudioManager.ACTION_HEADSET_PLUG
-            } else {
-                Intent.ACTION_HEADSET_PLUG
-            }
+            val action = AudioManager.ACTION_HEADSET_PLUG
             context.registerReceiver(receiver, IntentFilter(action))
             return receiver
         }

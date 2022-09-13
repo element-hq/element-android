@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
@@ -29,11 +30,11 @@ import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import javax.inject.Inject
 
 /**
- * Possible previous worker: None
- * Possible next worker    : None
+ * Possible previous worker: None.
+ * Possible next worker    : None.
  */
-internal class RedactEventWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, Params::class.java) {
+internal class RedactEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+        SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -70,12 +71,16 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
                 {
                     when (it) {
                         is Failure.NetworkConnection -> Result.retry()
-                        else                         -> {
+                        else -> {
                             // TODO mark as failed to send?
                             // always return success, or the chain will be stuck for ever!
-                            Result.success(WorkerParamsFactory.toData(params.copy(
-                                    lastFailureMessage = it.localizedMessage
-                            )))
+                            Result.success(
+                                    WorkerParamsFactory.toData(
+                                            params.copy(
+                                                    lastFailureMessage = it.localizedMessage
+                                            )
+                                    )
+                            )
                         }
                     }
                 }

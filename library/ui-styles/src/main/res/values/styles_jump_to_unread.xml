@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="vctr_jump_to_unread_style" format="reference" />
+
+    <style name="Widget.Vector.JumpToUnread.Base" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
+        <item name="chipEndPadding">12dp</item>
+        <item name="chipIconSize">24dp</item>
+        <item name="chipMinHeight">44dp</item>
+        <item name="chipStartPadding">12dp</item>
+        <item name="closeIconVisible">true</item>
+        <item name="android:elevation">6dp</item>
+        <item name="closeIconSize">24dp</item>
+    </style>
+
+    <style name="Widget.Vector.JumpToUnread.Light" parent="Widget.Vector.JumpToUnread.Base">
+        <item name="chipBackgroundColor">@color/element_background_light</item>
+        <item name="closeIconTint">?vctr_content_secondary</item>
+    </style>
+
+    <style name="Widget.Vector.JumpToUnread.Dark" parent="Widget.Vector.JumpToUnread.Base">
+        <item name="chipBackgroundColor">@color/element_system_dark</item>
+        <item name="closeIconTint">?vctr_content_quaternary</item>
+    </style>
+
+</resources>

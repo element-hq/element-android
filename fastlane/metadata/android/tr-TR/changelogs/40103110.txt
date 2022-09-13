@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Hata düzeltmeleri!
+Tam değişiklik listesi: https://github.com/vector-im/element-android/releases/tag/v1.3.11

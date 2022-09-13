@@ -17,38 +17,44 @@
 
 package im.vector.app.features.roomprofile
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
+import im.vector.app.features.analytics.plan.Interaction
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
-import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.app.features.home.room.detail.RoomDetailPendingAction
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -60,13 +66,15 @@ data class RoomProfileArgs(
         val roomId: String
 ) : Parcelable
 
-class RoomProfileFragment @Inject constructor(
-        private val roomProfileController: RoomProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) :
+@AndroidEntryPoint
+class RoomProfileFragment :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomProfileController.Callback {
+        RoomProfileController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var roomProfileController: RoomProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
@@ -83,6 +91,17 @@ class RoomProfileFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.vector_room_profile
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomDetails
+        setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
+            bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
+                roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenRoom(replacementRoomId, closeCurrentRoom = true)
+                vectorBaseActivity.finish()
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
@@ -94,26 +113,30 @@ class RoomProfileFragment @Inject constructor(
         headerViews = ViewStubRoomProfileHeaderBinding.bind(headerView)
         setupWaitingView()
         setupToolbar(views.matrixProfileToolbar)
+                .allowBack()
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
-                listOf(views.matrixProfileToolbarAvatarImageView,
+                listOf(
+                        views.matrixProfileToolbarAvatarImageView,
                         views.matrixProfileToolbarTitleView,
-                        views.matrixProfileDecorationToolbarAvatarImageView)
+                        views.matrixProfileDecorationToolbarAvatarImageView
+                )
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
-                is RoomProfileViewEvents.Loading          -> showLoading(it.message)
-                is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
+                is RoomProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
-                is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
-            }.exhaustive
+                is RoomProfileViewEvents.OnShortcutReady -> addShortcut(it)
+                RoomProfileViewEvents.DismissLoading -> dismissLoadingDialog()
+            }
         }
         roomListQuickActionsSharedActionViewModel
-                .observe()
-                .subscribe { handleQuickActions(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleQuickActions(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         setupClicks()
         setupLongClicks()
     }
@@ -129,12 +152,12 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileNameView,
                 views.matrixProfileToolbarTitleView
         ).forEach {
-            it.setOnClickListener {
+            it.debouncedClicks {
                 roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
             }
         }
         // Shortcut to room alias
-        headerViews.roomProfileAliasView.setOnClickListener {
+        headerViews.roomProfileAliasView.debouncedClicks {
             roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
         }
         // Open Avatar
@@ -142,7 +165,7 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileAvatarView,
                 views.matrixProfileToolbarAvatarImageView
         ).forEach { view ->
-            view.setOnClickListener { onAvatarClicked(view) }
+            view.debouncedClicks { onAvatarClicked(view) }
         }
     }
 
@@ -151,30 +174,30 @@ class RoomProfileFragment @Inject constructor(
         headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomProfileShareAction -> {
                 roomProfileViewModel.handle(RoomProfileAction.ShareRoomProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
-        is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+        is RoomListQuickActionsSharedAction.NotificationsAllNoisy -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES_NOISY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+        is RoomListQuickActionsSharedAction.NotificationsAll -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.ALL_MESSAGES))
         }
         is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MENTIONS_ONLY))
         }
-        is RoomListQuickActionsSharedAction.NotificationsMute         -> {
+        is RoomListQuickActionsSharedAction.NotificationsMute -> {
             roomProfileViewModel.handle(RoomProfileAction.ChangeRoomNotificationState(RoomNotificationState.MUTE))
         }
-        else                                                          -> Timber.v("$action not handled")
+        else -> Timber.v("$action not handled")
     }
 
     private fun setupRecyclerView() {
@@ -205,6 +228,8 @@ class RoomProfileFragment @Inject constructor(
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
                 headerViews.roomProfileDecorationImageView.render(it.roomEncryptionTrustLevel)
                 views.matrixProfileDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
+                headerViews.roomProfilePresenceImageView.render(it.isDirect, it.directUserPresence)
+                headerViews.roomProfilePublicImageView.isVisible = it.isPublic && !it.isDirect
             }
         }
         roomProfileController.setData(state)
@@ -217,10 +242,10 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onEnableEncryptionClicked() {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.room_settings_enable_encryption_dialog_title)
                 .setMessage(R.string.room_settings_enable_encryption_dialog_content)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.EnableEncryption)
                 }
@@ -240,9 +265,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onNotificationsClicked() {
-        RoomListQuickActionsBottomSheet
-                .newInstance(roomProfileArgs.roomId, RoomListActionsArgs.Mode.NOTIFICATIONS)
-                .show(childFragmentManager, "ROOM_PROFILE_NOTIFICATIONS")
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
     }
 
     override fun onUploadsClicked() {
@@ -252,6 +275,13 @@ class RoomProfileFragment @Inject constructor(
     override fun createShortcut() {
         // Ask the view model to prepare it...
         roomProfileViewModel.handle(RoomProfileAction.CreateShortcut)
+        analyticsTracker.capture(
+                Interaction(
+                        index = null,
+                        interactionType = null,
+                        name = Interaction.Name.MobileRoomAddHome
+                )
+        )
     }
 
     private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {
@@ -268,19 +298,14 @@ class RoomProfileFragment @Inject constructor(
                 append(getString(R.string.room_participants_leave_private_warning))
             }
         }
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.leave) { _, _ ->
+                .setPositiveButton(R.string.action_leave) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
-                .apply {
-                    if (!isPublicRoom) {
-                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
-                    }
-                }
     }
 
     override fun onRoomAliasesClicked() {
@@ -289,6 +314,10 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onRoomPermissionsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
+    override fun restoreEncryptionState() {
+        roomProfileViewModel.handle(RoomProfileAction.RestoreEncryptionState)
     }
 
     override fun onRoomIdClicked() {
@@ -303,9 +332,14 @@ class RoomProfileFragment @Inject constructor(
         copyToClipboard(requireContext(), url, true)
     }
 
+    override fun doMigrateToVersion(newVersion: String) {
+        MigrateRoomBottomSheet.newInstance(roomProfileArgs.roomId, newVersion)
+                .show(parentFragmentManager, "migrate")
+    }
+
     private fun onShareRoomProfile(permalink: String) {
         startSharePlainTextIntent(
-                fragment = this,
+                context = requireContext(),
                 activityResultLauncher = null,
                 chooserTitle = null,
                 text = permalink

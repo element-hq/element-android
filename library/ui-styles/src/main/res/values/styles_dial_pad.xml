@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+
+    <!-- This file contain styles to override the style from the library android-dialer-1.2.5.aar
+    This is why we ignore the lint error UnusedResources -->
+
+    <style name="DialpadKeyNumberStyle">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:textSize">@dimen/dialpad_key_numbers_default_size</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/dialpad_key_number_default_margin_bottom</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="DialpadKeyLettersStyle">
+        <item name="android:textColor">?attr/vctr_content_secondary</item>
+        <item name="android:textSize">@dimen/dialpad_key_letters_size</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="DialpadKeyPoundStyle" parent="DialpadKeyNumberStyle">
+        <item name="android:textSize">@dimen/dialpad_key_pound_size</item>
+        <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
+    </style>
+
+    <style name="DialpadKeyStarStyle" parent="DialpadKeyNumberStyle">
+        <item name="android:textSize">@dimen/dialpad_key_star_size</item>
+        <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
+    </style>
+
+</resources>

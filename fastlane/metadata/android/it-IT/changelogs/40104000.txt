@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: prima implementazione delle discussioni. Messaggi a bolla.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.4.0

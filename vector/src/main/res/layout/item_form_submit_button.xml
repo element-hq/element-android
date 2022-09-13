@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
-    android:minHeight="64dp">
+    android:background="?android:colorBackground"
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/form_submit_button"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"

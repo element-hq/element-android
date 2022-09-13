@@ -46,3 +46,5 @@ data class UnsignedData(
         @Json(name = "replaces_state") val replacesState: String? = null
 
 )
+
+fun UnsignedData?.isRedacted() = this?.redactedEvent != null

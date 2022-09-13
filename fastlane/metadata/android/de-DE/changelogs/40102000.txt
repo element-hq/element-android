@@ -1,0 +1,2 @@
+Hauptänderungen: Sprachnachrichten standardmäßig aktiviert.
+Ganze Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.2.0

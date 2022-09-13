@@ -22,13 +22,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.navigationClicks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -37,10 +38,12 @@ import im.vector.app.databinding.FragmentSpacePreviewBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.SpacePreviewSharedAction
 import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
+import im.vector.lib.core.utils.flow.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MatrixItem
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.navigationClicks
 import javax.inject.Inject
 
 @Parcelize
@@ -48,11 +51,12 @@ data class SpacePreviewArgs(
         val idOrAlias: String
 ) : Parcelable
 
-class SpacePreviewFragment @Inject constructor(
-        private val viewModelFactory: SpacePreviewViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer,
-        private val epoxyController: SpacePreviewController
-) : VectorBaseFragment<FragmentSpacePreviewBinding>(), SpacePreviewViewModel.Factory {
+@AndroidEntryPoint
+class SpacePreviewFragment :
+        VectorBaseFragment<FragmentSpacePreviewBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var epoxyController: SpacePreviewController
 
     private val viewModel by fragmentViewModel(SpacePreviewViewModel::class)
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
@@ -66,8 +70,6 @@ class SpacePreviewFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
     }
 
-    override fun create(initialState: SpacePreviewState) = viewModelFactory.create(initialState)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -75,11 +77,11 @@ class SpacePreviewFragment @Inject constructor(
             handleViewEvents(it)
         }
 
-        views.roomPreviewNoPreviewToolbar.navigationClicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
-                .disposeOnDestroyView()
+        views.roomPreviewNoPreviewToolbar
+                .navigationClicks()
+                .throttleFirst(300)
+                .onEach { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.spacePreviewRecyclerView.configureWith(epoxyController)
 
@@ -122,7 +124,7 @@ class SpacePreviewFragment @Inject constructor(
 
         when (it.inviteTermination) {
             is Loading -> sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
-            else       -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
+            else -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
         }
     }
 
@@ -148,8 +150,8 @@ class SpacePreviewFragment @Inject constructor(
 //                val roomPeekResult = preview.summary.roomPeekResult
         val spaceName = spacePreviewState.spaceInfo.invoke()?.name ?: spacePreviewState.name ?: ""
         val spaceAvatarUrl = spacePreviewState.spaceInfo.invoke()?.avatarUrl ?: spacePreviewState.avatarUrl
-        val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
-        avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
+        val mxItem = MatrixItem.SpaceItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
+        avatarRenderer.render(mxItem, views.spacePreviewToolbarAvatar)
         views.roomPreviewNoPreviewToolbarTitle.text = spaceName
 //            }
 //            is SpacePeekResult.SpacePeekError,

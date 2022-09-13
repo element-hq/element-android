@@ -13,7 +13,7 @@
         android:id="@+id/createRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_touch_guard_bg"
+        android:background="?vctr_touch_guard_bg"
         android:clickable="true"
         android:contentDescription="@string/a11y_create_menu_close"
         android:focusable="true" />
@@ -24,13 +24,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@+id/roomListView"
+        android:accessibilityTraversalBefore="@id/roomListView"
         android:contentDescription="@string/a11y_create_room"
         android:src="@drawable/ic_fab_add_room"
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="26dp"
-        app:tint="@color/black" />
+        app:tint="@android:color/black" />
 
     <TextView
         android:id="@+id/createRoomItemGroupLabel"
@@ -48,13 +48,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@+id/createRoomItemGroup"
+        android:accessibilityTraversalBefore="@id/createRoomItemGroup"
         android:contentDescription="@string/a11y_create_direct_message"
         android:src="@drawable/ic_fab_add_chat"
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
         app:maxImageSize="29dp"
-        app:tint="@color/black" />
+        app:tint="@android:color/black" />
 
     <TextView
         android:id="@+id/createRoomItemChatLabel"
@@ -71,7 +71,7 @@
         android:id="@+id/createRoomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:accessibilityTraversalBefore="@+id/createRoomItemChat"
+        android:accessibilityTraversalBefore="@id/createRoomItemChat"
         android:contentDescription="@string/a11y_create_menu_open"
         android:src="@drawable/ic_fab_add"
         app:maxImageSize="14dp" />

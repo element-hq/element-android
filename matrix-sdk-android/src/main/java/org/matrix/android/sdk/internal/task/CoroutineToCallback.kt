@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.task
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.extensions.foldToCallback
-import org.matrix.android.sdk.internal.util.toCancelable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.extensions.foldToCallback
+import org.matrix.android.sdk.internal.util.toCancelable
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 

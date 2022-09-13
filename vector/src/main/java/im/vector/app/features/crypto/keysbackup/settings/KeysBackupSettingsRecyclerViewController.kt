@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.crypto.keysbackup.settings
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -29,15 +28,20 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrustSignature
 import java.util.UUID
 import javax.inject.Inject
 
-class KeysBackupSettingsRecyclerViewController @Inject constructor(private val stringProvider: StringProvider,
-                                                                   private val vectorPreferences: VectorPreferences,
-                                                                   private val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
+class KeysBackupSettingsRecyclerViewController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences,
+        private val session: Session
+) : TypedEpoxyController<KeysBackupSettingViewState>() {
 
     var listener: Listener? = null
 
@@ -46,17 +50,18 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
             return
         }
 
+        val host = this
         var isBackupAlreadySetup = false
 
         val keyBackupState = data.keysBackupState
         val keyVersionResult = data.keysBackupVersion
 
         when (keyBackupState) {
-            KeysBackupState.Unknown                    -> {
+            KeysBackupState.Unknown -> {
                 errorWithRetryItem {
                     id("summary")
-                    text(stringProvider.getString(R.string.keys_backup_unable_to_get_keys_backup_data))
-                    listener { listener?.loadKeysBackupState() }
+                    text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_keys_backup_data))
+                    listener { host.listener?.loadKeysBackupState() }
                 }
 
                 // Nothing else to display
@@ -65,17 +70,17 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
             KeysBackupState.CheckingBackUpOnHomeserver -> {
                 loadingItem {
                     id("summary")
-                    loadingText(stringProvider.getString(R.string.keys_backup_settings_checking_backup_state))
+                    loadingText(host.stringProvider.getString(R.string.keys_backup_settings_checking_backup_state))
                 }
             }
-            KeysBackupState.Disabled                   -> {
+            KeysBackupState.Disabled -> {
                 genericItem {
                     id("summary")
-                    title(stringProvider.getString(R.string.keys_backup_settings_status_not_setup))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_not_setup).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     }
                 }
 
@@ -83,30 +88,30 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
             }
             KeysBackupState.WrongBackUpVersion,
             KeysBackupState.NotTrusted,
-            KeysBackupState.Enabling                   -> {
+            KeysBackupState.Enabling -> {
                 genericItem {
                     id("summary")
-                    title(stringProvider.getString(R.string.keys_backup_settings_status_ko))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(keyBackupState.toString())
+                        description(keyBackupState.toString().toEpoxyCharSequence())
                     }
                     endIconResourceId(R.drawable.unit_test_ko)
                 }
 
                 isBackupAlreadySetup = true
             }
-            KeysBackupState.ReadyToBackUp              -> {
+            KeysBackupState.ReadyToBackUp -> {
                 genericItem {
                     id("summary")
-                    title(stringProvider.getString(R.string.keys_backup_settings_status_ok))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up))
+                        description(host.stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up).toEpoxyCharSequence())
                     }
                     endIconResourceId(R.drawable.unit_test_ok)
                 }
@@ -114,41 +119,46 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 isBackupAlreadySetup = true
             }
             KeysBackupState.WillBackUp,
-            KeysBackupState.BackingUp                  -> {
+            KeysBackupState.BackingUp -> {
                 genericItem {
                     id("summary")
-                    title(stringProvider.getString(R.string.keys_backup_settings_status_ok))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     hasIndeterminateProcess(true)
 
-                    val totalKeys = session.cryptoService().inboundGroupSessionsCount(false)
-                    val backedUpKeys = session.cryptoService().inboundGroupSessionsCount(true)
+                    val totalKeys = host.session.cryptoService().inboundGroupSessionsCount(false)
+                    val backedUpKeys = host.session.cryptoService().inboundGroupSessionsCount(true)
 
                     val remainingKeysToBackup = totalKeys - backedUpKeys
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(stringProvider.getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup))
+                        description(
+                                host.stringProvider
+                                        .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                                        .toEpoxyCharSequence()
+                        )
                     }
                 }
 
                 isBackupAlreadySetup = true
             }
+            null -> Unit
         }
 
         if (isBackupAlreadySetup) {
             // Add infos
             genericItem {
                 id("version")
-                title(stringProvider.getString(R.string.keys_backup_info_title_version))
-                description(keyVersionResult?.version ?: "")
+                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
+                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
             }
 
             genericItem {
                 id("algorithm")
-                title(stringProvider.getString(R.string.keys_backup_info_title_algorithm))
-                description(keyVersionResult?.algorithm ?: "")
+                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
+                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
             }
 
             if (vectorPreferences.developerMode()) {
@@ -161,72 +171,133 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
             id("footer")
 
             if (isBackupAlreadySetup) {
-                textButton1(stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
-                clickOnButton1(View.OnClickListener { listener?.didSelectRestoreMessageRecovery() })
+                textButton1(host.stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
+                clickOnButton1 { host.listener?.didSelectRestoreMessageRecovery() }
 
-                textButton2(stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
-                clickOnButton2(View.OnClickListener { listener?.didSelectDeleteSetupMessageRecovery() })
+                textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
+                clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
             } else {
-                textButton1(stringProvider.getString(R.string.keys_backup_setup))
-                clickOnButton1(View.OnClickListener { listener?.didSelectSetupMessageRecovery() })
+                textButton1(host.stringProvider.getString(R.string.keys_backup_setup))
+                clickOnButton1 { host.listener?.didSelectSetupMessageRecovery() }
             }
         }
     }
 
     private fun buildKeysBackupTrust(keysVersionTrust: Async<KeysBackupVersionTrust>) {
+        val host = this
         when (keysVersionTrust) {
             is Uninitialized -> Unit
-            is Loading       -> {
+            is Loading -> {
                 loadingItem {
                     id("trust")
                 }
             }
-            is Success       -> {
-                keysVersionTrust().signatures.forEach {
-                    genericItem {
-                        id(UUID.randomUUID().toString())
-                        title(stringProvider.getString(R.string.keys_backup_info_title_signature))
-
-                        val isDeviceKnown = it.device != null
-                        val isDeviceVerified = it.device?.isVerified ?: false
-                        val isSignatureValid = it.valid
-                        val deviceId: String = it.deviceId ?: ""
-
-                        if (!isDeviceKnown) {
-                            description(stringProvider.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId))
-                            endIconResourceId(R.drawable.e2e_warning)
-                        } else {
-                            if (isSignatureValid) {
-                                if (session.sessionParams.deviceId == it.deviceId) {
-                                    description(stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_this_device))
+            is Success -> {
+                keysVersionTrust()
+                        .signatures
+                        .filterIsInstance<KeysBackupVersionTrustSignature.UserSignature>()
+                        .forEach {
+                            val isUserVerified = it.cryptoCrossSigningKey?.trustLevel?.isVerified().orFalse()
+                            val isSignatureValid = it.valid
+                            val userId: String = it.cryptoCrossSigningKey?.userId ?: ""
+                            if (userId == session.sessionParams.userId && isSignatureValid && isUserVerified) {
+                                genericItem {
+                                    id(UUID.randomUUID().toString())
+                                    title(host.stringProvider.getString(R.string.keys_backup_info_title_signature).toEpoxyCharSequence())
+                                    description(
+                                            host.stringProvider
+                                                    .getString(R.string.keys_backup_settings_signature_from_this_user)
+                                                    .toEpoxyCharSequence()
+                                    )
                                     endIconResourceId(R.drawable.e2e_verified)
-                                } else {
-                                    if (isDeviceVerified) {
-                                        description(stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId))
-                                        endIconResourceId(R.drawable.e2e_verified)
-                                    } else {
-                                        description(stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId))
-                                        endIconResourceId(R.drawable.e2e_warning)
-                                    }
-                                }
-                            } else {
-                                // Invalid signature
-                                endIconResourceId(R.drawable.e2e_warning)
-                                if (isDeviceVerified) {
-                                    description(stringProvider.getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId))
-                                } else {
-                                    description(stringProvider.getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId))
                                 }
                             }
                         }
-                    }
-                } // end for each
+
+                keysVersionTrust()
+                        .signatures
+                        .filterIsInstance<KeysBackupVersionTrustSignature.DeviceSignature>()
+                        .forEach {
+                            genericItem {
+                                id(UUID.randomUUID().toString())
+                                title(host.stringProvider.getString(R.string.keys_backup_info_title_signature).toEpoxyCharSequence())
+
+                                val isDeviceKnown = it.device != null
+                                val isDeviceVerified = it.device?.isVerified ?: false
+                                val isSignatureValid = it.valid
+                                val deviceId: String = it.deviceId ?: ""
+
+                                if (!isDeviceKnown) {
+                                    description(
+                                            host.stringProvider
+                                                    .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                                                    .toEpoxyCharSequence()
+                                    )
+                                    endIconResourceId(R.drawable.e2e_warning)
+                                } else {
+                                    if (isSignatureValid) {
+                                        if (host.session.sessionParams.deviceId == it.deviceId) {
+                                            description(
+                                                    host.stringProvider
+                                                            .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                                                            .toEpoxyCharSequence()
+                                            )
+                                            endIconResourceId(R.drawable.e2e_verified)
+                                        } else {
+                                            if (isDeviceVerified) {
+                                                description(
+                                                        host.stringProvider
+                                                                .getString(
+                                                                        R.string.keys_backup_settings_valid_signature_from_verified_device,
+                                                                        deviceId
+                                                                )
+                                                                .toEpoxyCharSequence()
+                                                )
+                                                endIconResourceId(R.drawable.e2e_verified)
+                                            } else {
+                                                description(
+                                                        host.stringProvider
+                                                                .getString(
+                                                                        R.string.keys_backup_settings_valid_signature_from_unverified_device,
+                                                                        deviceId
+                                                                )
+                                                                .toEpoxyCharSequence()
+                                                )
+                                                endIconResourceId(R.drawable.e2e_warning)
+                                            }
+                                        }
+                                    } else {
+                                        // Invalid signature
+                                        endIconResourceId(R.drawable.e2e_warning)
+                                        if (isDeviceVerified) {
+                                            description(
+                                                    host.stringProvider
+                                                            .getString(
+                                                                    R.string.keys_backup_settings_invalid_signature_from_verified_device,
+                                                                    deviceId
+                                                            )
+                                                            .toEpoxyCharSequence()
+                                            )
+                                        } else {
+                                            description(
+                                                    host.stringProvider
+                                                            .getString(
+                                                                    R.string.keys_backup_settings_invalid_signature_from_unverified_device,
+                                                                    deviceId
+                                                            )
+                                                            .toEpoxyCharSequence()
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        } // end for each
             }
-            is Fail          -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("trust")
-                    text(stringProvider.getString(R.string.keys_backup_unable_to_get_trust_info))
-                    listener { listener?.loadTrustData() }
+                    text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_trust_info))
+                    listener { host.listener?.loadTrustData() }
                 }
             }
         }

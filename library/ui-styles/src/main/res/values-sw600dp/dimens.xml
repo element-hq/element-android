@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Drawer -->
+    <dimen name="navigation_drawer_max_width">400dp</dimen>
+
+    <!--  Onboarding   -->
+    <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.25</item>
+    <item name="ftue_auth_gutter_end_percent" format="float" type="dimen">0.75</item>
+</resources>

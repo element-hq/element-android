@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: aktualizace vzhledu a stylu a nové funkce prostorů (bugfix pro 1.1.10)
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.11

@@ -27,8 +27,12 @@ data class SpaceChildInfo(
         val avatarUrl: String?,
         val order: String?,
         val activeMemberCount: Int?,
-        val autoJoin: Boolean,
+//        val autoJoin: Boolean,
         val viaServers: List<String>,
         val parentRoomId: String?,
-        val suggested: Boolean?
+        val suggested: Boolean?,
+        val canonicalAlias: String?,
+        val aliases: List<String>?,
+        val worldReadable: Boolean
+
 )

@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Szoba jogosultságok szerkesztése, automatikus sötét/világos téma és sok hibajavítás.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.0.14

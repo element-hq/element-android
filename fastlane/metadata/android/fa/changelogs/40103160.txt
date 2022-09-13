@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: فرستادن مکانتان به هر اتاقی. ویرایش نظرسنجی.
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.16

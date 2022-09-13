@@ -20,22 +20,20 @@ package im.vector.app.fdroid.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.extensions.vectorComponent
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.fdroid.BackgroundSyncStarter
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var backgroundSyncStarter: BackgroundSyncStarter
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.v("## onReceive() ${intent.action}")
-        val appContext = context.applicationContext
-        if (appContext is HasVectorInjector) {
-            BackgroundSyncStarter.start(
-                    context,
-                    appContext.vectorComponent().vectorPreferences(),
-                    appContext.injector().activeSessionHolder()
-            )
-        }
+        backgroundSyncStarter.start(activeSessionHolder)
     }
 }

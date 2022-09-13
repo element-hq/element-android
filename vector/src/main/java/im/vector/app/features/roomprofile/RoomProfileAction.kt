@@ -26,4 +26,5 @@ sealed class RoomProfileAction : VectorViewModelAction {
     data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
     object ShareRoomProfile : RoomProfileAction()
     object CreateShortcut : RoomProfileAction()
+    object RestoreEncryptionState : RoomProfileAction()
 }

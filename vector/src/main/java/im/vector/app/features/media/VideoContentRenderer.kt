@@ -25,19 +25,25 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.files.LocalFilesHelper
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val errorFormatter: ErrorFormatter) {
+class VideoContentRenderer @Inject constructor(
+        private val localFilesHelper: LocalFilesHelper,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val errorFormatter: ErrorFormatter
+) {
+
+    private val sessionScope: CoroutineScope
+        get() = activeSessionHolder.getActiveSession().coroutineScope
 
     @Parcelize
     data class Data(
@@ -51,11 +57,13 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
             override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
 
-    fun render(data: Data,
-               thumbnailView: ImageView,
-               loadingView: ProgressBar,
-               videoView: VideoView,
-               errorView: TextView) {
+    fun render(
+            data: Data,
+            thumbnailView: ImageView,
+            loadingView: ProgressBar,
+            videoView: VideoView,
+            errorView: TextView
+    ) {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         if (data.elementToDecrypt != null) {
@@ -76,14 +84,15 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                GlobalScope.launch {
+                sessionScope.launch {
                     val result = runCatching {
                         activeSessionHolder.getActiveSession().fileService()
                                 .downloadFile(
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = data.elementToDecrypt)
+                                        elementToDecrypt = data.elementToDecrypt
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(
@@ -119,14 +128,15 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                GlobalScope.launch {
+                sessionScope.launch {
                     val result = runCatching {
                         activeSessionHolder.getActiveSession().fileService()
                                 .downloadFile(
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = null)
+                                        elementToDecrypt = null
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(

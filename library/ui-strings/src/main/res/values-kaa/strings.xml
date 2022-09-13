@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notice_direct_room_created">%1$s Tartıs dúzildi</string>
+    <string name="notice_room_created_by_you">Siz bólme jarattıńız</string>
+    <string name="notice_room_created">%1$s Xananı jarattı</string>
+    <string name="notice_room_invite_no_invitee_by_you">Sizdiń usınıs</string>
+    <string name="notice_room_invite_no_invitee">%s Usınıs</string>
+</resources>

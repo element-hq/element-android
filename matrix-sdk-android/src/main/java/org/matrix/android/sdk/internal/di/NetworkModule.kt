@@ -20,15 +20,20 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import okhttp3.ConnectionSpec
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.logging.HttpLoggingInterceptor
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentInterceptor
+import org.matrix.android.sdk.internal.network.httpclient.applyMatrixConfiguration
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.interceptors.FormattedJsonHttpLogger
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.matrix.android.sdk.internal.network.ApiInterceptor
+import java.util.Collections
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -37,7 +42,7 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val logger = FormattedJsonHttpLogger()
+        val logger = FormattedJsonHttpLogger(BuildConfig.OKHTTP_LOGGING_LEVEL)
         val interceptor = HttpLoggingInterceptor(logger)
         interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL
         return interceptor
@@ -59,14 +64,22 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     @Unauthenticated
-    fun providesOkHttpClient(matrixConfiguration: MatrixConfiguration,
-                             stethoInterceptor: StethoInterceptor,
-                             timeoutInterceptor: TimeOutInterceptor,
-                             userAgentInterceptor: UserAgentInterceptor,
-                             httpLoggingInterceptor: HttpLoggingInterceptor,
-                             curlLoggingInterceptor: CurlLoggingInterceptor,
-                             apiInterceptor: ApiInterceptor): OkHttpClient {
+    fun providesOkHttpClient(
+            matrixConfiguration: MatrixConfiguration,
+            stethoInterceptor: StethoInterceptor,
+            timeoutInterceptor: TimeOutInterceptor,
+            userAgentInterceptor: UserAgentInterceptor,
+            httpLoggingInterceptor: HttpLoggingInterceptor,
+            curlLoggingInterceptor: CurlLoggingInterceptor,
+            apiInterceptor: ApiInterceptor
+    ): OkHttpClient {
+        val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
+        val dispatcher = Dispatcher().apply {
+            maxRequestsPerHost = 20
+        }
         return OkHttpClient.Builder()
+                // workaround for #4669
+                .protocols(listOf(Protocol.HTTP_1_1))
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -83,10 +96,10 @@ internal object NetworkModule {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)
                     }
-                    matrixConfiguration.proxy?.let {
-                        proxy(it)
-                    }
                 }
+                .dispatcher(dispatcher)
+                .connectionSpecs(Collections.singletonList(spec))
+                .applyMatrixConfiguration(matrixConfiguration)
                 .build()
     }
 

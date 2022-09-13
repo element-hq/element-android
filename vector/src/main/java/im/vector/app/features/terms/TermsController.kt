@@ -15,11 +15,11 @@
  */
 package im.vector.app.features.terms
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -36,25 +36,28 @@ class TermsController @Inject constructor(
 
     override fun buildModels(data: ReviewTermsViewState?) {
         data ?: return
+        val host = this
 
         when (data.termsList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry")
-                    text(errorFormatter.toHumanReadable(data.termsList.error))
-                    listener { listener?.retry() }
+                    text(host.errorFormatter.toHumanReadable(data.termsList.error))
+                    listener { host.listener?.retry() }
                 }
             }
-            is Success    -> buildTerms(data.termsList.invoke())
+            is Success -> buildTerms(data.termsList.invoke())
         }
     }
 
     private fun buildTerms(termsList: List<Term>) {
+        val host = this
         settingsSectionTitleItem {
             id("header")
             titleResId(R.string.widget_integration_review_terms)
@@ -63,12 +66,12 @@ class TermsController @Inject constructor(
             termItem {
                 id(term.url)
                 name(term.name)
-                description(description)
+                description(host.description)
                 checked(term.accepted)
 
-                clickListener(View.OnClickListener { listener?.review(term) })
+                clickListener { host.listener?.review(term) }
                 checkChangeListener { _, isChecked ->
-                    listener?.setChecked(term, isChecked)
+                    host.listener?.setChecked(term, isChecked)
                 }
             }
         }

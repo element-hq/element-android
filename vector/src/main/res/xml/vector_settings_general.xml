@@ -28,10 +28,10 @@
             app:fragment="im.vector.app.features.settings.threepids.ThreePidsSettingsFragment" />
 
         <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
             android:persistent="false"
             android:summary="@string/settings_discovery_manage"
-            android:title="@string/settings_discovery_category"
-            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment" />
+            android:title="@string/settings_discovery_category" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -87,7 +87,6 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference

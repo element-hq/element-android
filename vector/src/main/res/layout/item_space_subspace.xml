@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="16dp"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clipToPadding="false"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.features.spaces.preview.SpaceTabView
         android:id="@+id/childSpaceTab"
@@ -32,20 +33,21 @@
         app:layout_constraintStart_toEndOf="@id/childSpaceTab"
         app:layout_constraintTop_toTopOf="@id/childSpaceName"
         tools:ignore="MissingPrefix"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/space_avatars" />
 
     <View
         android:layout_width="2dp"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="2dp"
-        android:background="?riotx_list_bottom_sheet_divider_color"
+        android:background="?vctr_list_separator_on_surface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/childSpaceAvatar" />
 
     <TextView
         android:id="@+id/childSpaceName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -55,13 +57,12 @@
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/childSpaceAvatar"
+        app:layout_constraintStart_toEndOf="@id/childSpaceAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/spaces.json/data/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

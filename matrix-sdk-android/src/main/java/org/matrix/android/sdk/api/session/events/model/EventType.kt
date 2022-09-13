@@ -31,9 +31,7 @@ object EventType {
     const val TYPING = "m.typing"
     const val REDACTION = "m.room.redaction"
     const val RECEIPT = "m.receipt"
-    const val TAG = "m.tag"
     const val ROOM_KEY = "m.room_key"
-    const val FULLY_READ = "m.fully_read"
     const val PLUMBING = "m.room.plumbing"
     const val BOT_OPTIONS = "m.room.bot.options"
     const val PREVIEW_URLS = "org.matrix.room.preview_urls"
@@ -51,6 +49,8 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+    val STATE_ROOM_BEACON_INFO = listOf("org.matrix.msc3672.beacon_info", "m.beacon_info")
+    val BEACON_LOCATION_DATA = listOf("org.matrix.msc3672.beacon", "m.beacon")
 
     const val STATE_SPACE_CHILD = "m.space.child"
 
@@ -70,6 +70,9 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
     const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
+    // This type is for local purposes, it should never be processed by the server
+    const val LOCAL_STATE_ROOM_THIRD_PARTY_INVITE = "local.room.third_party_invite"
+
     // Call Events
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
@@ -78,6 +81,8 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_ASSERTED_IDENTITY = "m.call.asserted_identity"
+    const val CALL_ASSERTED_IDENTITY_PREFIX = "org.matrix.call.asserted_identity"
 
     // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"
@@ -85,7 +90,10 @@ object EventType {
     // Key share events
     const val ROOM_KEY_REQUEST = "m.room_key_request"
     const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
-    const val ROOM_KEY_WITHHELD = "org.matrix.room_key.withheld"
+    val ROOM_KEY_WITHHELD = StableUnstableId(
+            stable = "m.room_key.withheld",
+            unstable = "org.matrix.room_key.withheld"
+    )
 
     const val REQUEST_SECRET = "m.secret.request"
     const val SEND_SECRET = "m.secret.send"
@@ -102,17 +110,22 @@ object EventType {
     // Relation Events
     const val REACTION = "m.reaction"
 
+    // Poll
+    val POLL_START = listOf("org.matrix.msc3381.poll.start", "m.poll.start")
+    val POLL_RESPONSE = listOf("org.matrix.msc3381.poll.response", "m.poll.response")
+    val POLL_END = listOf("org.matrix.msc3381.poll.end", "m.poll.end")
+
     // Unwedging
     internal const val DUMMY = "m.dummy"
 
     fun isCallEvent(type: String): Boolean {
-        return type == CALL_INVITE
-                || type == CALL_CANDIDATES
-                || type == CALL_ANSWER
-                || type == CALL_HANGUP
-                || type == CALL_SELECT_ANSWER
-                || type == CALL_NEGOTIATE
-                || type == CALL_REJECT
-                || type == CALL_REPLACES
+        return type == CALL_INVITE ||
+                type == CALL_CANDIDATES ||
+                type == CALL_ANSWER ||
+                type == CALL_HANGUP ||
+                type == CALL_SELECT_ANSWER ||
+                type == CALL_NEGOTIATE ||
+                type == CALL_REJECT ||
+                type == CALL_REPLACES
     }
 }

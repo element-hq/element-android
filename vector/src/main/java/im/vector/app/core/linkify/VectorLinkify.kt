@@ -22,7 +22,7 @@ import androidx.core.text.util.LinkifyCompat
 
 object VectorLinkify {
     /**
-     * Better support for auto link than the default implementation
+     * Better support for auto link than the default implementation.
      */
     fun addLinks(spannable: Spannable, keepExistingUrlSpan: Boolean = false) {
         // we might want to modify some matches
@@ -30,7 +30,7 @@ object VectorLinkify {
 
         if (keepExistingUrlSpan) {
             // Keep track of existing URLSpans, and mark them as important
-            spannable.forEachSpanIndexed { _, urlSpan, start, end ->
+            spannable.forEachUrlSpanIndexed { _, urlSpan, start, end ->
                 createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end, important = true))
             }
         }
@@ -39,7 +39,7 @@ object VectorLinkify {
         LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS)
 
         // we might want to modify some matches
-        spannable.forEachSpanIndexed { _, urlSpan, start, end ->
+        spannable.forEachUrlSpanIndexed { _, urlSpan, start, end ->
             spannable.removeSpan(urlSpan)
 
             // remove short PN, too much false positive
@@ -47,7 +47,7 @@ object VectorLinkify {
                 if (end - start > 6) { // Do not match under 7 digit
                     createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
                 }
-                return@forEachSpanIndexed
+                return@forEachUrlSpanIndexed
             }
 
             // include mailto: if found before match
@@ -60,7 +60,7 @@ object VectorLinkify {
                     createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
                 }
 
-                return@forEachSpanIndexed
+                return@forEachUrlSpanIndexed
             }
 
             // Handle url matches
@@ -70,7 +70,7 @@ object VectorLinkify {
                 // modify the span to include the slash
                 val spec = LinkSpec(URLSpan(urlSpan.url + "/"), start, end + 1)
                 createdSpans.add(spec)
-                return@forEachSpanIndexed
+                return@forEachUrlSpanIndexed
             }
             // Try to do something for ending ) issues/3020
             if (spannable[end - 1] == ')') {
@@ -87,7 +87,7 @@ object VectorLinkify {
                     val span = URLSpan(spannable.substring(start, end - 1))
                     val spec = LinkSpec(span, start, end - 1)
                     createdSpans.add(spec)
-                    return@forEachSpanIndexed
+                    return@forEachUrlSpanIndexed
                 }
             }
 
@@ -95,7 +95,7 @@ object VectorLinkify {
         }
 
         LinkifyCompat.addLinks(spannable, VectorAutoLinkPatterns.GEO_URI.toPattern(), "geo:", arrayOf("geo:"), geoMatchFilter, null)
-        spannable.forEachSpanIndexed { _, urlSpan, start, end ->
+        spannable.forEachUrlSpanIndexed { _, urlSpan, start, end ->
             spannable.removeSpan(urlSpan)
             createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
         }
@@ -121,7 +121,7 @@ object VectorLinkify {
                     remove = if (a.important) i + 1 else i
                 } else {
                     when {
-                        b.end <= a.end                    ->
+                        b.end <= a.end ->
                             // b is inside a -> b should be removed
                             remove = i + 1
                         a.end - a.start > b.end - b.start ->
@@ -143,10 +143,12 @@ object VectorLinkify {
         }
     }
 
-    private data class LinkSpec(val span: URLSpan,
-                                val start: Int,
-                                val end: Int,
-                                val important: Boolean = false)
+    private data class LinkSpec(
+            val span: URLSpan,
+            val start: Int,
+            val end: Int,
+            val important: Boolean = false
+    )
 
     private val COMPARATOR = Comparator<LinkSpec> { (_, startA, endA), (_, startB, endB) ->
         if (startA < startB) {
@@ -174,7 +176,7 @@ object VectorLinkify {
         return@MatchFilter true
     }
 
-    private inline fun Spannable.forEachSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit) {
+    private inline fun Spannable.forEachUrlSpanIndexed(action: (index: Int, urlSpan: URLSpan, start: Int, end: Int) -> Unit) {
         getSpans(0, length, URLSpan::class.java)
                 .forEachIndexed { index, urlSpan ->
                     val start = getSpanStart(urlSpan)

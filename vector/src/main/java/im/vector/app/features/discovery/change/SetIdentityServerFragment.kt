@@ -21,15 +21,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.textChanges
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.platform.VectorBaseFragment
@@ -37,14 +37,17 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.terms.TermsService
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class SetIdentityServerFragment @Inject constructor(
-        val viewModelFactory: SetIdentityServerViewModel.Factory,
-        val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
+@AndroidEntryPoint
+class SetIdentityServerFragment :
+        VectorBaseFragment<FragmentSetIdentityServerBinding>() {
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSetIdentityServerBinding {
         return FragmentSetIdentityServerBinding.inflate(inflater, container, false)
@@ -67,8 +70,10 @@ class SetIdentityServerFragment @Inject constructor(
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
-                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                    .colorizeMatchingText(
+                            state.defaultIdentityServerUrl.toReducedUrl(),
+                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary)
+                    )
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
@@ -92,11 +97,11 @@ class SetIdentityServerFragment @Inject constructor(
 
         views.identityServerSetDefaultAlternativeTextInput
                 .textChanges()
-                .subscribe {
+                .onEach {
                     views.identityServerSetDefaultAlternativeTil.error = null
                     views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.identityServerSetDefaultSubmit.debouncedClicks {
             viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)
@@ -108,30 +113,31 @@ class SetIdentityServerFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is SetIdentityServerViewEvents.Loading       -> showLoading(it.message)
-                is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
-                is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
-                is SetIdentityServerViewEvents.NoTerms       -> {
-                    AlertDialog.Builder(requireActivity())
+                is SetIdentityServerViewEvents.Loading -> showLoading(it.message)
+                is SetIdentityServerViewEvents.Failure -> handleFailure(it)
+                is SetIdentityServerViewEvents.OtherFailure -> showFailure(it.failure)
+                is SetIdentityServerViewEvents.NoTerms -> {
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.settings_discovery_no_terms_title)
                             .setMessage(R.string.settings_discovery_no_terms)
                             .setPositiveButton(R.string._continue) { _, _ ->
                                 processIdentityServerChange()
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                     Unit
                 }
                 is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
-                is SetIdentityServerViewEvents.ShowTerms     -> {
+                is SetIdentityServerViewEvents.ShowTerms -> {
                     navigator.openTerms(
                             requireContext(),
                             termsActivityResultLauncher,
                             TermsService.ServiceType.IdentityService,
                             it.identityServerUrl,
-                            null)
+                            null
+                    )
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -139,7 +145,7 @@ class SetIdentityServerFragment @Inject constructor(
         val message = getString(failure.errorMessageId)
         if (failure.forDefault) {
             // Display the error in a dialog
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(message)
                     .setPositiveButton(R.string.ok, null)

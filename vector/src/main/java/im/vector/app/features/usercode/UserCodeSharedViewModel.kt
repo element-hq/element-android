@@ -16,23 +16,21 @@
 
 package im.vector.app.features.usercode
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
@@ -43,17 +41,9 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
+) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
-        override fun create(viewModelContext: ViewModelContext, state: UserCodeState): UserCodeSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
 
     init {
         val user = session.getUser(initialState.userId)
@@ -66,8 +56,8 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UserCodeState): UserCodeSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
+        override fun create(initialState: UserCodeState): UserCodeSharedViewModel
     }
 
     override fun handle(action: UserCodeActions) {
@@ -76,7 +66,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
             is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
             is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
             is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
-            UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted)
+            is UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted(action.deniedPermanently))
             UserCodeActions.ShareByText -> handleShareByText()
         }
     }
@@ -84,11 +74,13 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     private fun handleShareByText() {
         session.permalinkService().createPermalink(session.myUserId)?.let { permalink ->
             val text = stringProvider.getString(R.string.invite_friends_text, permalink)
-            _viewEvents.post(UserCodeShareViewEvents.SharePlainText(
-                    text,
-                    stringProvider.getString(R.string.invite_friends),
-                    stringProvider.getString(R.string.invite_friends_rich_title)
-            ))
+            _viewEvents.post(
+                    UserCodeShareViewEvents.SharePlainText(
+                            text,
+                            stringProvider.getString(R.string.invite_friends),
+                            stringProvider.getString(R.string.invite_friends_rich_title)
+                    )
+            )
         }
     }
 
@@ -125,7 +117,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
                 is PermalinkData.UserLink -> {
-                    val user = tryOrNull { session.resolveUser(linkedId.userId) }
+                    val user = tryOrNull { session.userService().resolveUser(linkedId.userId) }
                     // Create raw Uxid in case the user is not searchable
                             ?: User(linkedId.userId, null, null)
 
@@ -135,10 +127,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                is PermalinkData.GroupLink -> {
-                    // not yet supported
-                    _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
-                }
+                is PermalinkData.RoomEmailInviteLink,
                 is PermalinkData.FallbackLink -> {
                     // not yet supported
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))

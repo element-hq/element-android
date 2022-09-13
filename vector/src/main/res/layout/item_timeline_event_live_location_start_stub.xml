@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Size will be overrode -->
+    <ImageView
+        android:id="@+id/liveLocationStartMap"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/a11y_static_map_image"
+        android:src="@drawable/bg_no_location_map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/liveLocationStartBanner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:alpha="0.75"
+        android:src="?android:colorBackground"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartMap"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartMap"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/liveLocationStartIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?vctr_content_quaternary"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartBanner"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartBanner"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartBanner"
+        app:srcCompat="@drawable/ic_attachment_live_location_white"
+        app:tint="?android:colorBackground"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/liveLocationStartTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="@string/location_share_live_started"
+        android:textColor="?vctr_content_tertiary"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartBanner"
+        app:layout_constraintStart_toEndOf="@id/liveLocationStartIcon"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartBanner" />
+
+    <ProgressBar
+        android:id="@+id/liveLocationStartLoader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="?vctr_content_quaternary"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationStartBanner"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationStartMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationStartMap"
+        app:layout_constraintTop_toTopOf="@id/liveLocationStartMap" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

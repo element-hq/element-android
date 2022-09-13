@@ -31,8 +31,8 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
@@ -44,18 +44,12 @@ abstract class BaseAttachmentProvider<Type>(
         private val attachments: List<Type>,
         private val imageContentRenderer: ImageContentRenderer,
         protected val fileService: FileService,
+        private val coroutineScope: CoroutineScope,
         private val dateFormatter: VectorDateFormatter,
         private val stringProvider: StringProvider
 ) : AttachmentSourceProvider {
 
-    interface InteractionListener {
-        fun onDismissTapped()
-        fun onShareTapped()
-        fun onPlayPause(play: Boolean)
-        fun videoSeekTo(percent: Int)
-    }
-
-    var interactionListener: InteractionListener? = null
+    var interactionListener: AttachmentInteractionListener? = null
 
     private var overlayView: AttachmentOverlayView? = null
 
@@ -67,18 +61,7 @@ abstract class BaseAttachmentProvider<Type>(
         if (position == -1) return null
         if (overlayView == null) {
             overlayView = AttachmentOverlayView(context)
-            overlayView?.onBack = {
-                interactionListener?.onDismissTapped()
-            }
-            overlayView?.onShareCallback = {
-                interactionListener?.onShareTapped()
-            }
-            overlayView?.onPlayPause = { play ->
-                interactionListener?.onPlayPause(play)
-            }
-            overlayView?.videoSeekTo = { percent ->
-                interactionListener?.videoSeekTo(percent)
-            }
+            overlayView?.interactionListener = interactionListener
         }
 
         val timelineEvent = getTimelineEventAtPosition(position)
@@ -155,7 +138,7 @@ abstract class BaseAttachmentProvider<Type>(
             target.onVideoURLReady(info.uid, data.url)
         } else {
             target.onVideoFileLoading(info.uid)
-            GlobalScope.launch(Dispatchers.Main) {
+            coroutineScope.launch(Dispatchers.IO) {
                 val result = runCatching {
                     fileService.downloadFile(
                             fileName = data.filename,
@@ -178,5 +161,5 @@ abstract class BaseAttachmentProvider<Type>(
         // TODO("Not yet implemented")
     }
 
-    abstract fun getFileForSharing(position: Int, callback: ((File?) -> Unit))
+    abstract suspend fun getFileForSharing(position: Int): File?
 }

@@ -19,8 +19,9 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.getRetryDelay
+import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import retrofit2.HttpException
@@ -31,17 +32,21 @@ import java.io.IOException
  * Execute a request from the requestBlock and handle some of the Exception it could generate
  * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
+ * @param DATA type of data return by the [requestBlock]
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
- * @param maxDelayBeforeRetry the max delay to wait before a retry
+ * @param maxDelayBeforeRetry the max delay to wait before a retry. Note that in the case of a 429, if the provided delay exceeds this value, the error will
+ * be propagated as it does not make sense to retry it with a shorter delay.
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
-internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  canRetry: Boolean = false,
-                                                  maxDelayBeforeRetry: Long = 32_000L,
-                                                  maxRetriesCount: Int = 4,
-                                                  noinline requestBlock: suspend () -> DATA): DATA {
+internal suspend inline fun <DATA> executeRequest(
+        globalErrorReceiver: GlobalErrorReceiver?,
+        canRetry: Boolean = false,
+        maxDelayBeforeRetry: Long = 32_000L,
+        maxRetriesCount: Int = 4,
+        noinline requestBlock: suspend () -> DATA
+): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
 
@@ -51,8 +56,8 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
         } catch (throwable: Throwable) {
             val exception = when (throwable) {
                 is KotlinNullPointerException -> IllegalStateException("The request returned a null body")
-                is HttpException              -> throwable.toFailure(globalErrorReceiver)
-                else                          -> throwable
+                is HttpException -> throwable.toFailure(globalErrorReceiver)
+                else -> throwable
             }
 
             // Log some details about the request which has failed.
@@ -74,23 +79,26 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
 
             currentRetryCount++
 
-            if (exception is Failure.ServerError
-                    && exception.httpCode == 429
-                    && exception.error.code == MatrixError.M_LIMIT_EXCEEDED
-                    && currentRetryCount < maxRetriesCount) {
+            if (exception.isLimitExceededError() && currentRetryCount < maxRetriesCount) {
                 // 429, we can retry
-                delay(exception.getRetryDelay(1_000))
+                val retryDelay = exception.getRetryDelay(1_000)
+                if (retryDelay <= maxDelayBeforeRetry) {
+                    delay(retryDelay)
+                } else {
+                    // delay is too high to be retried, propagate the exception
+                    throw exception
+                }
             } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException              -> Failure.NetworkConnection(exception)
+                    is IOException -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
-                    is CancellationException    -> exception
-                    else                        -> Failure.Unknown(exception)
+                    is CancellationException -> exception
+                    else -> Failure.Unknown(exception)
                 }
             }
         }

@@ -1,0 +1,2 @@
+تغییرات اصلی در این نگارش: رفع اشکال‌هایی عمدتاً مربوط به آگاهی‌ها.
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

@@ -1,0 +1,2 @@
+Principaux changements pour cette version : correction d’une erreur lors de l’envoi d’un message chiffré si quelqu’un du salon se déconnecte.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.16

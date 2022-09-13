@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.common
 
 import androidx.annotation.CallSuper
-import org.matrix.android.sdk.api.MatrixCallback
 import org.junit.Assert.fail
+import org.matrix.android.sdk.api.MatrixCallback
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -27,8 +27,10 @@ import java.util.concurrent.CountDownLatch
  * @param onlySuccessful true to fail if an error occurs. This is the default behavior
  * @param <T>
  */
-open class TestMatrixCallback<T>(private val countDownLatch: CountDownLatch,
-                                 private val onlySuccessful: Boolean = true) : MatrixCallback<T> {
+open class TestMatrixCallback<T>(
+        private val countDownLatch: CountDownLatch,
+        private val onlySuccessful: Boolean = true
+) : MatrixCallback<T> {
 
     @CallSuper
     override fun onSuccess(data: T) {

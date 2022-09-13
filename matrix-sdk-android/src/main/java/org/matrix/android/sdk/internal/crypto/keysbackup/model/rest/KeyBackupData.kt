@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.network.parsing.ForceToBoolean
  * Backup data for one key.
  */
 @JsonClass(generateAdapter = true)
-data class KeyBackupData(
+internal data class KeyBackupData(
         /**
          * Required. The index of the first message in the session that the key can decrypt.
          */
@@ -50,5 +50,12 @@ data class KeyBackupData(
          * Algorithm-dependent data.
          */
         @Json(name = "session_data")
-        val sessionData: JsonDict
+        val sessionData: JsonDict,
+
+        /**
+         * Flag that indicates whether or not the current inboundSession will be shared to
+         * invited users to decrypt past messages.
+         */
+        @Json(name = "org.matrix.msc3061.shared_history")
+        val sharedHistory: Boolean = false
 )

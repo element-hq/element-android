@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.UserEntity
-import org.matrix.android.sdk.internal.database.model.UserEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.UserEntity
+import org.matrix.android.sdk.internal.database.model.UserEntityFields
 
 internal fun UserEntity.Companion.where(realm: Realm, userId: String): RealmQuery<UserEntity> {
     return realm

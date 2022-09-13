@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import dagger.Lazy
+import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -29,7 +31,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
 import org.matrix.android.sdk.internal.network.ssl.UnrecognizedCertificateException
 import org.matrix.android.sdk.internal.task.Task
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {
@@ -37,7 +38,8 @@ internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {
             val homeServerConnectionConfig: HomeServerConnectionConfig,
             val userId: String,
             val password: String,
-            val deviceName: String
+            val deviceName: String,
+            val deviceId: String?
     )
 }
 
@@ -50,12 +52,17 @@ internal class DefaultDirectLoginTask @Inject constructor(
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
         val client = buildClient(params.homeServerConnectionConfig)
-        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)
 
-        val loginParams = PasswordLoginParams.userIdentifier(params.userId, params.password, params.deviceName)
+        val loginParams = PasswordLoginParams.userIdentifier(
+                user = params.userId,
+                password = params.password,
+                deviceDisplayName = params.deviceName,
+                deviceId = params.deviceId
+        )
 
         val credentials = try {
             executeRequest(null) {
@@ -67,11 +74,11 @@ internal class DefaultDirectLoginTask @Inject constructor(
                         homeServerUrl,
                         throwable.fingerprint
                 )
-                else                                -> throwable
+                else -> throwable
             }
         }
 
-        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig, LoginType.DIRECT)
     }
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {

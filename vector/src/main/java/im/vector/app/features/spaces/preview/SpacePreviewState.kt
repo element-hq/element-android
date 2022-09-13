@@ -17,18 +17,18 @@
 package im.vector.app.features.spaces.preview
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class SpacePreviewState(
         val idOrAlias: String,
-        val name: String?  = null,
-        val topic: String?  = null,
+        val name: String? = null,
+        val topic: String? = null,
         val avatarUrl: String? = null,
         val spaceInfo: Async<ChildInfo> = Uninitialized,
         val childInfoList: Async<List<ChildInfo>> = Uninitialized,
         val inviteTermination: Async<Unit> = Uninitialized
-) : MvRxState {
+) : MavericksState {
     constructor(args: SpacePreviewArgs) : this(idOrAlias = args.idOrAlias)
 }
 

@@ -22,6 +22,5 @@ sealed class ReAuthActions : VectorViewModelAction {
     object StartSSOFallback : ReAuthActions()
     object FallBackPageLoaded : ReAuthActions()
     object FallBackPageClosed : ReAuthActions()
-    object TogglePassVisibility : ReAuthActions()
     data class ReAuthWithPass(val password: String) : ReAuthActions()
 }

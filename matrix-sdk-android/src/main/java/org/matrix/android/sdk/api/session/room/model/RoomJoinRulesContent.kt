@@ -23,24 +23,26 @@ import com.squareup.moshi.JsonClass
 import timber.log.Timber
 
 /**
- * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content
+ * Class representing the EventType.STATE_ROOM_JOIN_RULES state event content.
  */
 @JsonClass(generateAdapter = true)
 data class RoomJoinRulesContent(
-        @Json(name = "join_rule") val _joinRules: String? = null,
+        @Json(name = "join_rule") val joinRulesStr: String? = null,
         /**
-         * If the allow key is an empty list (or not a list at all), then the room reverts to standard public join rules
+         * If the allow key is an empty list (or not a list at all),
+         * then no users are allowed to join without an invite.
+         * Each entry is expected to be an object with the following keys:
          */
         @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
 ) {
-    val joinRules: RoomJoinRules? = when (_joinRules) {
+    val joinRules: RoomJoinRules? = when (joinRulesStr) {
         "public" -> RoomJoinRules.PUBLIC
         "invite" -> RoomJoinRules.INVITE
         "knock" -> RoomJoinRules.KNOCK
         "private" -> RoomJoinRules.PRIVATE
         "restricted" -> RoomJoinRules.RESTRICTED
-        else         -> {
-            Timber.w("Invalid value for RoomJoinRules: `$_joinRules`")
+        else -> {
+            Timber.w("Invalid value for RoomJoinRules: `$joinRulesStr`")
             null
         }
     }

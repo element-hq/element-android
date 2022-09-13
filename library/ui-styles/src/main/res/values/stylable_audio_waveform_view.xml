@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AudioWaveformView">
+
+        <attr name="alignment" format="enum">
+            <enum name="center" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="top" value="2" />
+        </attr>
+        <attr name="flow" format="enum">
+            <enum name="leftToRight" value="0" />
+            <enum name="rightToLeft" value="1" />
+        </attr>
+        <attr name="verticalPadding" format="dimension" />
+        <attr name="horizontalPadding" format="dimension" />
+
+        <attr name="barWidth" format="dimension" />
+        <attr name="barSpace" format="dimension" />
+        <attr name="barMinHeight" format="dimension" />
+        <attr name="isBarRounded" format="boolean" />
+    </declare-styleable>
+</resources>

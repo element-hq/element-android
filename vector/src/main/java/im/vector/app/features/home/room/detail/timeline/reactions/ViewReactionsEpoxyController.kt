@@ -18,46 +18,51 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.app.EmojiCompatWrapper
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericLoaderItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 /**
- * Epoxy controller for reaction event list
+ * Epoxy controller for reaction event list.
  */
 class ViewReactionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val emojiCompatWrapper: EmojiCompatWrapper)
-    : TypedEpoxyController<DisplayReactionsViewState>() {
+        private val emojiSpanify: EmojiSpanify
+) :
+        TypedEpoxyController<DisplayReactionsViewState>() {
 
     var listener: Listener? = null
 
     override fun buildModels(state: DisplayReactionsViewState) {
+        val host = this
         when (state.mapReactionKeyToMemberList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 genericLoaderItem {
                     id("Spinner")
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
-                    text(stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
-            is Success    -> {
-                state.mapReactionKeyToMemberList()?.forEach {
+            is Success -> {
+                state.mapReactionKeyToMemberList()?.forEach { reactionInfo ->
                     reactionInfoSimpleItem {
-                        id(it.eventId)
-                        timeStamp(it.timestamp)
-                        reactionKey(emojiCompatWrapper.safeEmojiSpanify(it.reactionKey))
-                        authorDisplayName(it.authorName ?: it.authorId)
-                        userClicked { listener?.didSelectUser(it.authorId) }
+                        id(reactionInfo.eventId)
+                        timeStamp(reactionInfo.timestamp)
+                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey).toEpoxyCharSequence())
+                        authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
+                        userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }
                 }
             }

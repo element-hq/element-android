@@ -16,30 +16,49 @@
 
 package im.vector.app.features.settings
 
+import android.os.Bundle
 import androidx.preference.Preference
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
-import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.version.VersionProvider
-import im.vector.app.openOssLicensesMenuActivity
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
-class VectorSettingsHelpAboutFragment @Inject constructor(
-        private val versionProvider: VersionProvider
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsHelpAboutFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var versionProvider: VersionProvider
+    @Inject lateinit var buildMeta: BuildMeta
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
 
     private val firstThrottler = FirstThrottler(1000)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsHelp
+    }
+
     override fun bindPref() {
+        // Help
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+            }
+            false
+        }
+
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -51,14 +70,14 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = buildString {
                 append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
-                if (BuildConfig.DEBUG) {
+                if (buildMeta.isDebug) {
                     append(" ")
-                    append(BuildConfig.GIT_BRANCH_NAME)
+                    append(buildMeta.gitBranchName)
                 }
             }
 
             it.setOnPreferenceClickListener { pref ->
-                copyToClipboard(requireContext(), pref.summary)
+                copyToClipboard(requireContext(), pref.summary.orEmpty())
                 true
             }
         }
@@ -68,7 +87,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
             it.summary = Matrix.getSdkVersion()
 
             it.setOnPreferenceClickListener { pref ->
-                copyToClipboard(requireContext(), pref.summary)
+                copyToClipboard(requireContext(), pref.summary.orEmpty())
                 true
             }
         }
@@ -76,44 +95,6 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
                 .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
-
-        // copyright
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.COPYRIGHT)
-            false
-        }
-
-        // terms & conditions
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.TAC)
-            false
-        }
-
-        // privacy policy
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.PRIVACY_POLICY)
-            false
-        }
-
-        // third party notice
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
-            }
-            false
-        }
-
-        // Note: preference is not visible on F-Droid build
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            // See https://developers.google.com/android/guides/opensource
-            openOssLicensesMenuActivity(requireActivity())
-            false
-        }
     }
 
     companion object {

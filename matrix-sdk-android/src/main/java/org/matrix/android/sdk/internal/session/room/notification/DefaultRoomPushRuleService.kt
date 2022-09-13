@@ -18,21 +18,23 @@ package org.matrix.android.sdk.internal.session.room.notification
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.pushrules.RuleScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 
-internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                      private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      @SessionDatabase private val monarchy: Monarchy)
-    : RoomPushRuleService {
+internal class DefaultRoomPushRuleService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
+        @SessionDatabase private val monarchy: Monarchy
+) :
+        RoomPushRuleService {
 
     @AssistedFactory
     interface Factory {

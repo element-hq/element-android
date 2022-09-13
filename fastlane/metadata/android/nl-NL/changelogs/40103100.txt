@@ -1,0 +1,2 @@
+Belangrijkste wijzigingen in deze versie: Ondersteuning toevoegen voor polls (in labs). Nieuw URL-voorbeeldontwerp.
+Volledige changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.10

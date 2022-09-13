@@ -19,24 +19,24 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class describes the device information
+ * This class describes the device information.
  */
 @JsonClass(generateAdapter = true)
 internal data class DeviceInfo(
         /**
-         * The owner user id
+         * The owner user id.
          */
         @Json(name = "user_id")
         val userId: String? = null,
 
         /**
-         * The device id
+         * The device id.
          */
         @Json(name = "device_id")
         val deviceId: String? = null,
 
         /**
-         * The device display name
+         * The device display name.
          */
         @Json(name = "display_name")
         val displayName: String? = null,
@@ -48,7 +48,7 @@ internal data class DeviceInfo(
         val lastSeenTs: Long = 0,
 
         /**
-         * The last ip address
+         * The last ip address.
          */
         @Json(name = "last_seen_ip")
         val lastSeenIp: String? = null

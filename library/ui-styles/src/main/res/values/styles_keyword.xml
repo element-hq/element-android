@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="vctr_keyword_style" format="reference" />
+
+    <style name="Widget.Vector.Keyword" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body</item>
+        <item name="chipBackgroundColor">@color/keyword_background_selector</item>
+        <item name="closeIconTint">@color/keyword_foreground_selector</item>
+        <item name="closeIconVisible">true</item>
+        <item name="android:textColor">@color/keyword_foreground_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:checkable">false</item>
+    </style>
+</resources>

@@ -21,6 +21,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 
@@ -35,21 +36,21 @@ interface ProfileService {
     }
 
     /**
-     * Return the current display name for this user
+     * Return the current display name for this user.
      * @param userId the userId param to look for
      *
      */
     suspend fun getDisplayName(userId: String): Optional<String>
 
     /**
-     * Update the display name for this user
+     * Update the display name for this user.
      * @param userId the userId to update the display name of
      * @param newDisplayName the new display name of the user
      */
     suspend fun setDisplayName(userId: String, newDisplayName: String)
 
     /**
-     * Update the avatar for this user
+     * Update the avatar for this user.
      * @param userId the userId to update the avatar of
      * @param newAvatarUri the new avatar uri of the user
      * @param fileName the fileName of selected image
@@ -73,12 +74,12 @@ interface ProfileService {
     suspend fun getProfile(userId: String): JsonDict
 
     /**
-     * Get the current user 3Pids
+     * Get the current user 3Pids.
      */
     fun getThreePids(): List<ThreePid>
 
     /**
-     * Get the current user 3Pids Live
+     * Get the current user 3Pids Live.
      * @param refreshData set to true to fetch data from the homeserver
      */
     fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>>
@@ -89,7 +90,7 @@ interface ProfileService {
     fun getPendingThreePids(): List<ThreePid>
 
     /**
-     * Get the pending 3Pids Live
+     * Get the pending 3Pids Live.
      */
     fun getPendingThreePidsLive(): LiveData<List<ThreePid>>
 
@@ -99,18 +100,20 @@ interface ProfileService {
     suspend fun addThreePid(threePid: ThreePid)
 
     /**
-     * Validate a code received by text message
+     * Validate a code received by text message.
      */
     suspend fun submitSmsCode(threePid: ThreePid.Msisdn, code: String)
 
     /**
-     * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
+     * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid.
      */
-    suspend fun finalizeAddingThreePid(threePid: ThreePid,
-                                       userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
+    suspend fun finalizeAddingThreePid(
+            threePid: ThreePid,
+            userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor
+    )
 
     /**
-     * Cancel adding a threepid. It will remove locally stored data about this ThreePid
+     * Cancel adding a threepid. It will remove locally stored data about this ThreePid.
      */
     suspend fun cancelAddingThreePid(threePid: ThreePid)
 
@@ -118,4 +121,17 @@ interface ProfileService {
      * Remove a 3Pid from the Matrix account.
      */
     suspend fun deleteThreePid(threePid: ThreePid)
+
+    /**
+     * Return a User object from a userId.
+     */
+    suspend fun getProfileAsUser(userId: String): User {
+        return getProfile(userId).let { dict ->
+            User(
+                    userId = userId,
+                    displayName = dict[DISPLAY_NAME_KEY] as? String,
+                    avatarUrl = dict[AVATAR_URL_KEY] as? String
+            )
+        }
+    }
 }

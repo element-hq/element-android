@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Mnohá vylepšení VoIP a prostorů (stále v beta verzi).
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.2.1

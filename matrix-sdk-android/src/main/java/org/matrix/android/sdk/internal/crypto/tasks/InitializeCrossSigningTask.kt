@@ -18,13 +18,14 @@ package org.matrix.android.sdk.internal.crypto.tasks
 
 import dagger.Lazy
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
+import org.matrix.android.sdk.api.session.uia.UiaResult
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MyDeviceInfoHolder
 import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.KeyUsage
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
@@ -97,7 +98,7 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
 
-            // Sign userSigningKey with master
+            // Sign selfSigningKey with master
             val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
                     .key(sskPublicKey)
                     .build()
@@ -125,14 +126,14 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             try {
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
-                if (params.interactiveAuthInterceptor == null
-                        || !handleUIA(
+                if (params.interactiveAuthInterceptor == null ||
+                        handleUIA(
                                 failure = failure,
                                 interceptor = params.interactiveAuthInterceptor,
                                 retryBlock = { authUpdate ->
                                     uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
                                 }
-                        )
+                        ) != UiaResult.SUCCESS
                 ) {
                     Timber.d("## UIA: propagate failure")
                     throw failure

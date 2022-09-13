@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_pf"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        style="?attr/lockscreen_theme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/LockScreenStyle"
+        android:contentDescription="@string/lockscreen_description_logo"/>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:paddingBottom="60dp">
+
+        <TextView
+            android:id="@+id/title_text_view"
+            style="?attr/lockscreen_title_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:text="@string/lockscreen_title"
+            android:theme="@style/LockScreenTitleTextStyle" />
+
+        <TextView
+            android:id="@+id/subtitle_text_view"
+            style="?attr/lockscreen_subtitle_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:visibility="gone"
+            android:theme="@style/LockScreenTitleTextStyle" />
+
+        <im.vector.app.features.pin.lockscreen.views.LockScreenCodeView
+            android:id="@+id/code_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_1"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_1"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_2"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_2"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_3"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_3"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_4"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_4"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_5"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_5"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_6"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_6"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_7"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_7"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_8"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_8"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_9"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_9"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_left"
+                    style="?attr/lockscreen_hint_theme"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/lockscreen_side_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_forgot"
+                    android:theme="@style/LockScreenHintTextStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_0"
+                    style="?attr/lockscreen_key_button_theme"
+                    android:layout_width="@dimen/lockscreen_button_size"
+                    android:layout_height="@dimen/lockscreen_button_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/lockscreen_num_0"
+                    android:theme="@style/LockScreenButtonStyle" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/button_right"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/button_delete"
+                    style="?attr/lockscreen_delete_button_theme"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/lockscreen_side_button_background"
+                    android:gravity="center"
+                    tools:text="delete"
+                    android:theme="@style/LockScreenDeleteButtonStyle"
+                    android:visibility="gone"
+                    android:contentDescription="@string/action_delete"/>
+
+                <ImageView
+                    android:id="@+id/button_finger_print"
+                    style="?attr/lockscreen_fingerprint_button_theme"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/lockscreen_side_button_background"
+                    android:gravity="center"
+                    tools:text="fp"
+                    android:theme="@style/LockScreenFingerPrintButtonStyle"
+                    android:contentDescription="@string/lockscreen_description_fingerprint_icon"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

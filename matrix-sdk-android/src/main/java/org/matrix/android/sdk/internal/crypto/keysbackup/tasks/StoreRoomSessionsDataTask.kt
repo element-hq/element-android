@@ -42,7 +42,8 @@ internal class DefaultStoreRoomSessionsDataTask @Inject constructor(
             roomKeysApi.storeRoomSessionsData(
                     params.roomId,
                     params.version,
-                    params.roomKeysBackupData)
+                    params.roomKeysBackupData
+            )
         }
     }
 }

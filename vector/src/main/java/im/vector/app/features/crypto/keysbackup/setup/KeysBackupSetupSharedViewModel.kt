@@ -22,21 +22,25 @@ import androidx.lifecycle.ViewModel
 import com.nulabinc.zxcvbn.Strength
 import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.LiveEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * The shared view model between all fragments.
  */
-class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
+class KeysBackupSetupSharedViewModel @Inject constructor(
+        private val clock: Clock,
+) : ViewModel() {
 
     companion object {
         const val NAVIGATE_TO_STEP_2 = "NAVIGATE_TO_STEP_2"
@@ -64,29 +68,19 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     var confirmPassphraseError: MutableLiveData<String> = MutableLiveData()
 
     var passwordStrength: MutableLiveData<Strength> = MutableLiveData()
-    var showPasswordMode: MutableLiveData<Boolean> = MutableLiveData()
 
     // Step 3
     // Var to ignore events from previous request(s) to generate a recovery key
     private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
-    var recoveryKey: MutableLiveData<String> = MutableLiveData()
-    var prepareRecoverFailError: MutableLiveData<Throwable> = MutableLiveData()
+    var recoveryKey: MutableLiveData<String?> = MutableLiveData(null)
+    var prepareRecoverFailError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false
-    var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData()
-    var creatingBackupError: MutableLiveData<Throwable> = MutableLiveData()
+    var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData(false)
+    var creatingBackupError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var keysVersion: MutableLiveData<KeysVersion> = MutableLiveData()
 
-    var loadingStatus: MutableLiveData<WaitingViewData> = MutableLiveData()
-
-    init {
-        showPasswordMode.value = false
-        recoveryKey.value = null
-        isCreatingBackupVersion.value = false
-        prepareRecoverFailError.value = null
-        creatingBackupError.value = null
-        loadingStatus.value = null
-    }
+    var loadingStatus: MutableLiveData<WaitingViewData?> = MutableLiveData(null)
 
     fun initSession(session: Session) {
         this.session = session
@@ -94,11 +88,8 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
     fun prepareRecoveryKey(context: Context, withPassphrase: String?) {
         // Update requestId
-        currentRequestId.value = System.currentTimeMillis()
+        currentRequestId.value = clock.epochMillis()
         isCreatingBackupVersion.value = true
-
-        // Ensure passphrase is hidden during the process
-        showPasswordMode.value = false
 
         recoveryKey.value = null
         prepareRecoverFailError.value = null
@@ -113,9 +104,11 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                                 return
                             }
 
-                            loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_step3_generating_key_status),
+                            loadingStatus.value = WaitingViewData(
+                                    context.getString(R.string.keys_backup_setup_step3_generating_key_status),
                                     progress,
-                                    total)
+                                    total
+                            )
                         }
                     },
                     object : MatrixCallback<MegolmBackupCreationInfo> {
@@ -163,9 +156,9 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
         creatingBackupError.value = null
 
-        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
-            override fun onSuccess(data: KeysVersionResult?) {
-                if (data?.version.isNullOrBlank() || forceOverride) {
+        keysBackup.getCurrentVersion(object : MatrixCallback<KeysBackupLastVersionResult> {
+            override fun onSuccess(data: KeysBackupLastVersionResult) {
+                if (data.toKeysVersionResult()?.version.isNullOrBlank() || forceOverride) {
                     processOnCreate()
                 } else {
                     loadingStatus.value = null

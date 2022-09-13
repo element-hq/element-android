@@ -28,7 +28,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/roomDetailDrawerContainer"
         android:layout_width="wrap_content"

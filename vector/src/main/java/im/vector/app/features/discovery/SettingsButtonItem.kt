@@ -19,17 +19,17 @@ import android.widget.Button
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.resources.ColorProvider
 
-@EpoxyModelClass(layout = R.layout.item_settings_button)
-abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsButtonItem : VectorEpoxyModel<SettingsButtonItem.Holder>(R.layout.item_settings_button) {
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
@@ -44,7 +44,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     @EpoxyAttribute
     var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -56,11 +56,11 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
         }
 
         when (buttonStyle) {
-            ButtonStyle.POSITIVE    -> {
-                holder.button.setTextColor(colorProvider.getColor(R.color.riotx_accent))
+            ButtonStyle.POSITIVE -> {
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             }
             ButtonStyle.DESTRUCTIVE -> {
-                holder.button.setTextColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
             }
         }
 

@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: implementazione messaggi vocali nelle impostazioni Laboratori.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.1.15

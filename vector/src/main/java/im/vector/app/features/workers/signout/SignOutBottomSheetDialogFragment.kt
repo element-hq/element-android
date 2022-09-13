@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -31,8 +30,9 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -41,16 +41,12 @@ import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
-
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import timber.log.Timber
-import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
+@AndroidEntryPoint
 class SignOutBottomSheetDialogFragment :
-        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(),
-        SignoutCheckViewModel.Factory {
+        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>() {
 
     var onSignOut: Runnable? = null
 
@@ -62,18 +58,7 @@ class SignOutBottomSheetDialogFragment :
         isCancelable = true
     }
 
-    @Inject
-    lateinit var viewModelFactory: SignoutCheckViewModel.Factory
-
-    override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
     private val viewModel: SignoutCheckViewModel by fragmentViewModel(SignoutCheckViewModel::class)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -89,7 +74,7 @@ class SignOutBottomSheetDialogFragment :
 
         views.exitAnywayButton.action = {
             context?.let {
-                AlertDialog.Builder(it)
+                MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
                         .setPositiveButton(R.string.backup, null)
@@ -112,31 +97,6 @@ class SignOutBottomSheetDialogFragment :
 
         views.setupMegolmBackupButton.action = {
             setupBackupActivityResultLauncher.launch(KeysBackupSetupActivity.intent(requireContext(), true))
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is SignoutCheckViewModel.ViewEvents.ExportKeys -> {
-                    it.exporter
-                            .export(requireContext(),
-                                    it.passphrase,
-                                    it.uri,
-                                    object : MatrixCallback<Boolean> {
-                                        override fun onSuccess(data: Boolean) {
-                                            if (data) {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
-                                            } else {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                            }
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            Timber.e("## Failed to export manually keys ${failure.localizedMessage}")
-                                            viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                        }
-                                    })
-                }
-            }
         }
     }
 
@@ -186,7 +146,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
                 KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp     -> {
+                KeysBackupState.BackingUp -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
@@ -200,7 +160,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                KeysBackupState.NotTrusted    -> {
+                KeysBackupState.NotTrusted -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     views.backingUpStatusGroup.isVisible = false
@@ -211,7 +171,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                else                          -> {
+                else -> {
                     // mmm.. strange state
 
                     views.exitAnywayButton.isVisible = true
@@ -243,7 +203,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
             }
-            else       -> {
+            else -> {
             }
         }
         super.invalidate()

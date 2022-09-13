@@ -1,0 +1,2 @@
+Hauptänderungen: Bedingungen des Identitätsservers in Einstellungen anzeigen. Unterstützung für Android Auto temporär entfernt.
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.3.3

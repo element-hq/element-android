@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.network.ssl
 
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import okhttp3.ConnectionSpec
 import okhttp3.internal.tls.OkHostnameVerifier
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.MessageDigest
@@ -33,7 +33,7 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 /**
- * Various utility classes for dealing with X509Certificates
+ * Various utility classes for dealing with X509Certificates.
  */
 internal object CertUtil {
 
@@ -43,7 +43,7 @@ internal object CertUtil {
     private val hexArray = "0123456789ABCDEF".toCharArray()
 
     /**
-     * Generates the SHA-256 fingerprint of the given certificate
+     * Generates the SHA-256 fingerprint of the given certificate.
      *
      * @param cert the certificate.
      * @return the finger print
@@ -55,7 +55,7 @@ internal object CertUtil {
     }
 
     /**
-     * Generates the SHA-1 fingerprint of the given certificate
+     * Generates the SHA-1 fingerprint of the given certificate.
      *
      * @param cert the certificated
      * @return the SHA1 fingerprint
@@ -94,6 +94,7 @@ internal object CertUtil {
      * Convert the fingerprint to an hexa string.
      *
      * @param fingerprint the fingerprint
+     * @param sep the separator character, default to space
      * @return the hexa string.
      */
     fun fingerprintToHexString(fingerprint: ByteArray, sep: Char = ' '): String {
@@ -109,7 +110,7 @@ internal object CertUtil {
 
     /**
      * Recursively checks the exception to see if it was caused by an
-     * UnrecognizedCertificateException
+     * UnrecognizedCertificateException.
      *
      * @param root the throwable.
      * @return The UnrecognizedCertificateException if exists, else null.
@@ -177,15 +178,13 @@ internal object CertUtil {
 
             val trustPinned = arrayOf<TrustManager>(PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager))
 
-            val sslSocketFactory: SSLSocketFactory
-
-            if (hsConfig.forceUsageTlsVersions && hsConfig.tlsVersions != null) {
+            val sslSocketFactory = if (hsConfig.forceUsageTlsVersions && !hsConfig.tlsVersions.isNullOrEmpty()) {
                 // Force usage of accepted Tls Versions for Android < 20
-                sslSocketFactory = TLSSocketFactory(trustPinned, hsConfig.tlsVersions)
+                TLSSocketFactory(trustPinned, hsConfig.tlsVersions)
             } else {
                 val sslContext = SSLContext.getInstance("TLS")
                 sslContext.init(null, trustPinned, java.security.SecureRandom())
-                sslSocketFactory = sslContext.socketFactory
+                sslContext.socketFactory
             }
 
             return PinnedSSLSocketFactory(sslSocketFactory, defaultTrustManager!!)
@@ -237,14 +236,14 @@ internal object CertUtil {
      * @return a list of accepted TLS specifications.
      */
     fun newConnectionSpecs(hsConfig: HomeServerConnectionConfig): List<ConnectionSpec> {
-        val builder = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+        val builder = ConnectionSpec.Builder(ConnectionSpec.RESTRICTED_TLS)
         val tlsVersions = hsConfig.tlsVersions
-        if (null != tlsVersions && tlsVersions.isNotEmpty()) {
+        if (!tlsVersions.isNullOrEmpty()) {
             builder.tlsVersions(*tlsVersions.toTypedArray())
         }
 
         val tlsCipherSuites = hsConfig.tlsCipherSuites
-        if (null != tlsCipherSuites && tlsCipherSuites.isNotEmpty()) {
+        if (!tlsCipherSuites.isNullOrEmpty()) {
             builder.cipherSuites(*tlsCipherSuites.toTypedArray())
         }
 
@@ -252,8 +251,8 @@ internal object CertUtil {
         builder.supportsTlsExtensions(hsConfig.shouldAcceptTlsExtensions)
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
-        // TODO: we should display a warning if user enter an http url
-        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
+        // TODO we should display a warning if user enter an http url
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUriBase.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list

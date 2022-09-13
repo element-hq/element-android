@@ -24,8 +24,8 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_title)
-abstract class LoginTitleItem : VectorEpoxyModel<LoginTitleItem.Holder>() {
+@EpoxyModelClass
+abstract class LoginTitleItem : VectorEpoxyModel<LoginTitleItem.Holder>(R.layout.item_login_title) {
 
     @EpoxyAttribute var text: String? = null
 

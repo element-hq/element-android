@@ -1,0 +1,83 @@
+name: Sync Data From External Sources
+on:
+  schedule:
+    # At 00:00 on every Monday UTC
+    - cron: '0 0 * * 1'
+
+jobs:
+  sync-emojis:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install Prerequisite dependencies
+        run: |
+          pip install BeautifulSoup4
+          pip install requests
+      - name: Run Emoji script
+        run: ./tools/import_emojis.py
+      - name: Create Pull Request for Emojis
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Sync Emojis
+          title: Sync Emojis
+          body: |
+            - Update Emojis from Unicode.org
+          branch: sync-emojis
+          base: develop
+
+  sync-sas-strings:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install Prerequisite dependencies
+        run: |
+          pip install requests
+      - name: Run SAS String script
+        run: ./tools/import_sas_strings.py
+      - name: Create Pull Request for SAS Strings
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Sync SAS Strings
+          title: Sync SAS Strings
+          body: |
+            - Update SAS Strings from matrix-doc.
+          branch: sync-sas-strings
+          base: develop
+
+  sync-analytics-plan:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run analytics import script
+        run: ./tools/import_analytic_plan.sh
+      - name: Create Pull Request for analytics plan
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Sync analytics plan
+          title: Sync analytics plan
+          body: |
+            ### Update analytics plan
+            Reviewers:
+            - [ ] Please remove usage of Event or Enum which may have been removed or updated
+            - [ ] please ensure new Events or new Enums are used to send analytics by pushing new commit(s) to this PR.
+
+            *Note*: Change are coming from [this project](https://github.com/matrix-org/matrix-analytics-events)
+          branch: sync-analytics-plan
+          base: develop

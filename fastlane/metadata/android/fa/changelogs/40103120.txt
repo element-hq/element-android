@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش:‌ تعمیر مشکلات!
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.12

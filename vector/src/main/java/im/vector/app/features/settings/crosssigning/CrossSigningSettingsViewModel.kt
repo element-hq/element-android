@@ -15,22 +15,21 @@
  */
 package im.vector.app.features.settings.crosssigning
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
-import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -38,14 +37,11 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
-import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -55,17 +51,17 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         @Assisted private val initialState: CrossSigningSettingsViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
-        Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
-                session.rx().liveMyDevicesInfo(),
-                session.rx().liveCrossSigningInfo(session.myUserId),
-                { myDevicesInfo, mxCrossSigningInfo ->
-                    myDevicesInfo to mxCrossSigningInfo
-                }
-        )
+        combine(
+                session.flow().liveMyDevicesInfo(),
+                session.flow().liveCrossSigningInfo(session.myUserId)
+        ) { myDevicesInfo, mxCrossSigningInfo ->
+            myDevicesInfo to mxCrossSigningInfo
+        }
                 .execute { data ->
                     val crossSigningKeys = data.invoke()?.second?.getOrNull()
                     val xSigningIsEnableInAccount = crossSigningKeys != null
@@ -85,8 +81,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {
+        override fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
     }
 
     override fun handle(action: CrossSigningSettingsAction) {
@@ -98,12 +94,14 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                         awaitCallback<Unit> {
                             session.cryptoService().crossSigningService().initializeCrossSigning(
                                     object : UserInteractiveAuthInterceptor {
-                                        override fun performStage(flowResponse: RegistrationFlowResponse,
-                                                                  errCode: String?,
-                                                                  promise: Continuation<UIABaseAuth>) {
+                                        override fun performStage(
+                                                flowResponse: RegistrationFlowResponse,
+                                                errCode: String?,
+                                                promise: Continuation<UIABaseAuth>
+                                        ) {
                                             Timber.d("## UIA : initializeCrossSigning UIA")
-                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                    && reAuthHelper.data != null && errCode == null) {
+                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                    reAuthHelper.data != null && errCode == null) {
                                                 UserPasswordAuth(
                                                         session = null,
                                                         user = session.myUserId,
@@ -116,7 +114,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                                 uiaContinuation = promise
                                             }
                                         }
-                                    }, it)
+                                    }, it
+                            )
                         }
                     } catch (failure: Throwable) {
                         handleInitializeXSigningError(failure)
@@ -135,7 +134,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 }
             }
             is CrossSigningSettingsAction.PasswordAuthDone -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = matrix.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -151,7 +151,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 uiaContinuation = null
                 pendingAuth = null
             }
-        }.exhaustive
+        }
     }
 
     private fun handleInitializeXSigningError(failure: Throwable) {
@@ -159,12 +159,5 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Exception(stringProvider.getString(R.string.failed_to_initialize_cross_signing))))
     }
 
-    companion object : MvRxViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CrossSigningSettingsViewState): CrossSigningSettingsViewModel? {
-            val fragment: CrossSigningSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> by hiltMavericksViewModelFactory()
 }

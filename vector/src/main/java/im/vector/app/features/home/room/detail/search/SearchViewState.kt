@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.search
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.search.EventAndSender
 
@@ -32,7 +32,7 @@ data class SearchViewState(
         val roomId: String = "",
         // Current pagination request
         val asyncSearchRequest: Async<Unit> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: SearchArgs) : this(roomId = args.roomId)
 }

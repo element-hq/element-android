@@ -1,0 +1,42 @@
+Element är både en säker meddelandeapp och en samarbetsapp för produktivitet som är ideal för gruppchattar vid distansarbete. Appen använder totalsträckskryptering för att tillhandahålla kraftfulla videogruppsamtal, fildelning och röstsamtal.
+
+<b>Elements funktioner inkluderar:</b>
+- Avancerade kommunikationsverktyg
+- Fullt krypterade meddelanden för att tillåta säkrare företagskommunikation, även för distansarbetare
+- Decentraliserad chatt baserad på det öppna ramverket Matrix
+- Säker fildelning med krypterad data vid hantering av projekt
+- Videochattar med Voice over IP och skärmdelning
+- Enkel integration med dina föredragna onlinesamarbetsverktyg, projektledningsverktyg, VoIP-tjänster och andra teammeddelandeappar
+
+Element är helt olik andra meddelande- och samarbetsappar. Den använder Matrix, ett öppet nätverk för säkra meddelanden och decentraliserad kommunikation. Den låter dig driva en igen server för att ge användare maximalt ägandeskap över sin data och sina meddelanden.
+
+<b>Sekretess och krypterade meddelanden</b>
+Element skyddar dig från oönskad reklam, datainsamling och inlåsning. Den skyddar även all din data, en-till-en-video- och röstkommunikation genom totalsträckskryptering och korssignerad enhetsverifiering.
+
+Element sätter dig i kontroll över ditt privatliv och låter dig kommunicera säkert med vem som helst i Matrix-nätverket, eller andra samarbetsverktyg genom att integrera med appar som Slack.
+
+<b>Du kan driva Element själv</b>
+För att tillåta större kontroll över din känsliga data och konversationer, så kan du lägga Element på en egen server eller använda valfri Matrix-baserad värd - standarden för open source-baserad, decentraliserad kommunikation. Element ger dig sekretess, säkerhetsefterlevnad och integrationsflexibilitet.
+
+<b>Äg din data</b>
+Du bestämmer vart du vill lagra din data och dina meddelanden, utan rist för datainsamling eller åtkomst av tredje parter.
+
+Element sätter dig i kontroll på olika sätt:
+1. Få ett gratiskonto på den offentliga servern matrix.org som drivas av Matrixutvecklarna, eller välj bland tusentals offentliga servrar som drivs av volontärer
+2. Självdriv ditt konto genom att driva en server på din egen IT-infrastruktur
+3. Skapa ett konto på en anpassad server genom att abonnera på värdplattformen Element Matrix Services
+
+<b>Öppen meddelandehantering och kommunikation</b>
+Du kan chatta med vem som helst i Matrix-nätverket, oavsett om de använder Matrix, en annan Matrix-app eller till och med en annan meddelandeapp.
+
+<b>Supersäker</b>
+Riktig totalsträckskryptering (bara de i konversationen kan avkryptera meddelanden), och korssignerad enhetsverifiering.
+
+<b>Komplett kommunikation och integration</b>
+Meddelanden, röst- och videosamtal, fildelning, skärmdelning och massa integrationer, bottar och widgets. Bygg rum och gemenskaper, håll kontakten och få saker gjorda.
+
+<b>Fortsätt där du lämnade</b>
+Håll kontakten vart du än är med fullt synkroniserad meddelandehistorik på alla dina enheter och på webben på https://app.element.io
+
+<b>Öppen källkod</b>
+Element Android är projekt baserat på öppen källkod, som ligger på GitHub. Vänligen rapportera buggar och/eller bidra till dess utveckling på https://github.com/vector-im/element-android

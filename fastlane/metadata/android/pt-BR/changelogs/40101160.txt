@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Consertar erro quando enviando mensagem encriptada se alguém na sala faz logout.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.1.16

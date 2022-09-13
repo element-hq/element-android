@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Adicionar suporte a Presença, para sala de Mensagem Direta (nota: presença está desabilitada em matrix.org). Adicionar de novo suporte a Android Auto.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.3.4

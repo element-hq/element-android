@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Změna na úvodních obrazovkách, včetně přihlášení do služby Analytics. V experimentálních funkcích byla přidána podpora pro události s matematikou.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.3.15

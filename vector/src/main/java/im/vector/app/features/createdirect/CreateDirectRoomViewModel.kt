@@ -16,77 +16,103 @@
 
 package im.vector.app.features.createdirect
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.user.model.User
 
-class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
-                                                            initialState: CreateDirectRoomViewState,
-                                                            private val rawService: RawService,
-                                                            val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+class CreateDirectRoomViewModel @AssistedInject constructor(
+        @Assisted initialState: CreateDirectRoomViewState,
+        private val rawService: RawService,
+        val session: Session,
+        val analyticsTracker: AnalyticsTracker,
+        val vectorFeatures: VectorFeatures
+) :
+        VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
+        override fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 
-    companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CreateDirectRoomViewState): CreateDirectRoomViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action)
-        }.exhaustive
+            is CreateDirectRoomAction.PrepareRoomWithSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onCreateRoomWithInvitees()
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
+        }
+    }
+
+    private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
+        val mxid = (PermalinkParser.parse(action.result) as? PermalinkData.UserLink)?.userId
+
+        if (mxid === null) {
+            _viewEvents.post(CreateDirectRoomViewEvents.InvalidCode)
+        } else {
+            // The following assumes MXIDs are case insensitive
+            if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
+            } else {
+                // Try to get user from known users and fall back to creating a User object from MXID
+                val qrInvitee = if (session.getUser(mxid) != null) {
+                    session.getUser(mxid)!!
+                } else {
+                    User(mxid, null, null)
+                }
+                onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
+            }
+        }
     }
 
     /**
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
-    private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
-        if (action.existingDmRoomId != null) {
+    private fun onSubmitInvitees(selections: Set<PendingSelection>) {
+        val existingRoomId = selections.singleOrNull()?.getMxId()?.let { userId ->
+            session.roomService().getExistingDirectRoomWithUser(userId)
+        }
+        if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
-            setState {
-                copy(createAndInviteState = Success(action.existingDmRoomId))
-            }
+            setState { copy(createAndInviteState = Success(existingRoomId)) }
         } else {
-            // Create the DM
-            createRoomAndInviteSelectedUsers(action.selections)
+            createLocalRoomWithSelectedUsers(selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+    private fun onCreateRoomWithInvitees() {
+        // Create the DM
+        withState { createLocalRoomWithSelectedUsers(it.pendingSelections) }
+    }
+
+    private fun createLocalRoomWithSelectedUsers(selections: Set<PendingSelection>) {
         setState { copy(createAndInviteState = Loading()) }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
+            val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
                     ?.isE2EByDefault()
                     ?: true
 
@@ -94,16 +120,21 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     .apply {
                         selections.forEach {
                             when (it) {
-                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
+                                is PendingSelection.UserPendingSelection -> invitedUserIds.add(it.user.userId)
                                 is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
-                            }.exhaustive
+                            }
                         }
                         setDirectMessage()
                         enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
                     }
 
             val result = runCatchingToAsync {
-                session.createRoom(roomParams)
+                if (vectorFeatures.shouldStartDmOnFirstMessage()) {
+                    session.roomService().createLocalRoom(roomParams)
+                } else {
+                    analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
+                    session.roomService().createRoom(roomParams)
+                }
             }
 
             setState {

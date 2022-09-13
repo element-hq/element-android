@@ -17,12 +17,43 @@
 package im.vector.app.core.epoxy
 
 import android.view.View
+import android.widget.TextView
+import im.vector.app.core.utils.DebouncedClickListener
 
 /**
- * Generally we do not care about the View parameter in [View.OnClickListener.onClick()], so create facility to remove it.
+ * View.OnClickListener lambda.
  */
-typealias ClickListener = () -> Unit
+typealias ClickListener = (View) -> Unit
 
 fun View.onClick(listener: ClickListener?) {
-    setOnClickListener { listener?.invoke() }
+    if (listener == null) {
+        setOnClickListener(null)
+    } else {
+        setOnClickListener(DebouncedClickListener(listener))
+    }
 }
+
+fun TextView.onLongClickIgnoringLinks(listener: View.OnLongClickListener?) {
+    if (listener == null) {
+        setOnLongClickListener(null)
+    } else {
+        setOnLongClickListener(object : View.OnLongClickListener {
+            override fun onLongClick(v: View): Boolean {
+                if (hasLongPressedLink()) {
+                    return false
+                }
+                return listener.onLongClick(v)
+            }
+
+            /**
+             * Infer that a Clickable span has been click by the presence of a selection.
+             */
+            private fun hasLongPressedLink() = selectionStart != -1 || selectionEnd != -1
+        })
+    }
+}
+
+/**
+ * Simple Text listener lambda.
+ */
+typealias TextListener = (String) -> Unit

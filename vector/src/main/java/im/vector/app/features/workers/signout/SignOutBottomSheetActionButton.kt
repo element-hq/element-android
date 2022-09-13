@@ -73,8 +73,8 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton) {
             title = getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""
             leftIcon = getDrawable(R.styleable.SignOutBottomSheetActionButton_leftIcon)
-            tint = getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, R.attr.riotx_text_primary))
-            textColor = getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+            tint = getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, R.attr.vctr_content_primary))
+            textColor = getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, R.attr.vctr_content_primary))
         }
 
         views.signedOutActionClickable.setOnClickListener {

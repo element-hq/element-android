@@ -18,11 +18,9 @@ package org.matrix.android.sdk.internal.legacy.riot
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
  * <pre>
  * {

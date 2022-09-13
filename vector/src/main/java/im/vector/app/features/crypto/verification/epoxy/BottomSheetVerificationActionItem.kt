@@ -25,25 +25,27 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_action)
-abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetVerificationActionItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetVerificationActionItem.Holder>(R.layout.item_verification_action) {
 
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = -1
 
     @EpoxyAttribute
-    var title: CharSequence = ""
+    var title: String = ""
 
     @EpoxyAttribute
-    var subTitle: CharSequence? = null
+    var subTitle: String? = null
 
     @EpoxyAttribute
     var titleColor: Int = 0
@@ -51,15 +53,12 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var iconColor: Int = -1
 
-    @EpoxyAttribute
-    lateinit var listener: () -> Unit
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.invoke()
-        }
-
+        holder.view.onClick(listener)
         holder.title.text = title
         holder.title.setTextColor(titleColor)
 

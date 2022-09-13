@@ -16,51 +16,60 @@
 
 package im.vector.app.features.settings.devices
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
+import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
-import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -74,62 +83,75 @@ data class DevicesViewState(
         // TODO Replace by isLoading boolean
         val request: Async<Unit> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
-        val accountCrossSigningIsTrusted: Boolean = false
-) : MvRxState
+        val accountCrossSigningIsTrusted: Boolean = false,
+        val unverifiedSessionsCount: Int = 0,
+        val inactiveSessionsCount: Int = 0,
+) : MavericksState
 
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?
+        val cryptoDeviceInfo: CryptoDeviceInfo?,
+        val trustLevelForShield: RoomEncryptionTrustLevel,
+        val isInactive: Boolean,
 )
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
+        private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
+        getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
+        private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DevicesViewState): DevicesViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
+        override fun create(initialState: DevicesViewState): DevicesViewModel
     }
 
-    companion object : MvRxViewModelFactory<DevicesViewModel, DevicesViewState> {
+    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DevicesViewState): DevicesViewModel? {
-            val fragment: VectorSettingsDevicesFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.devicesViewModelFactory.create(state)
-        }
-    }
-
-    private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
+    private val refreshSource = PublishDataSource<Unit>()
 
     init {
+        val currentSessionCrossSigningInfo = getCurrentSessionCrossSigningInfoUseCase.execute()
+        val hasAccountCrossSigning = currentSessionCrossSigningInfo.isCrossSigningInitialized
+        val accountCrossSigningIsTrusted = currentSessionCrossSigningInfo.isCrossSigningVerified
 
         setState {
             copy(
-                    hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    hasAccountCrossSigning = hasAccountCrossSigning,
+                    accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
                     myDeviceId = session.sessionParams.deviceId ?: ""
             )
         }
 
-        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
-                session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDevicesInfo(),
-                { cryptoList, infoList ->
-                    infoList
-                            .sortedByDescending { it.lastSeenTs }
-                            .map { deviceInfo ->
-                                val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                                DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
-                            }
-                }
-        )
+        combine(
+                session.flow().liveUserCryptoDevices(session.myUserId),
+                session.flow().liveMyDevicesInfo()
+        ) { cryptoList, infoList ->
+            val unverifiedSessionsCount = cryptoList.count { !it.trustLevel?.isVerified().orFalse() }
+            val inactiveSessionsCount = infoList.count { checkIfSessionIsInactiveUseCase.execute(it.date) }
+            setState {
+                copy(
+                        unverifiedSessionsCount = unverifiedSessionsCount,
+                        inactiveSessionsCount = inactiveSessionsCount
+                )
+            }
+            infoList
+                    .sortedByDescending { it.lastSeenTs }
+                    .map { deviceInfo ->
+                        val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
+                        val trustLevelForShield = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
+                        val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
+                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield, isInactive)
+                    }
+        }
                 .distinctUntilChanged()
                 .execute { async ->
                     copy(
@@ -137,7 +159,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
 
-        session.rx().liveCrossSigningInfo(session.myUserId)
+        session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
                             hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
@@ -146,36 +168,36 @@ class DevicesViewModel @AssistedInject constructor(
                 }
         session.cryptoService().verificationService().addListener(this)
 
-//        session.rx().liveMyDeviceInfo()
+//        session.flow().liveMyDeviceInfo()
 //                .execute {
 //                    copy(
 //                            devices = it
 //                    )
 //                }
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .distinctUntilChanged()
-                .throttleLast(5_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .sample(5_000)
+                .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
 
-//        session.rx().liveUserCryptoDevices(session.myUserId)
+//        session.flow().liveUserCryptoDevices(session.myUserId)
 //                .execute {
 //                    copy(
 //                            cryptoDevices = it
 //                    )
 //                }
 
-        refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+        refreshSource.stream().throttleFirst(4_000)
+                .onEach {
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
     }
@@ -197,20 +219,20 @@ class DevicesViewModel @AssistedInject constructor(
      * It can be any mobile devices, and any browsers.
      */
     private fun queryRefreshDevicesList() {
-        refreshPublisher.onNext(Unit)
+        refreshSource.post(Unit)
     }
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh                -> queryRefreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh -> queryRefreshDevicesList()
+            is DevicesAction.Delete -> handleDelete(action)
+            is DevicesAction.Rename -> handleRename(action)
+            is DevicesAction.PromptRename -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone            -> {
+            is DevicesAction.SsoAuthDone -> {
                 // we should use token based auth
                 // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 // will release the interactive auth interceptor
@@ -222,8 +244,9 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is DevicesAction.PasswordAuthDone       -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+            is DevicesAction.PasswordAuthDone -> {
+                val decryptedPass = matrix.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -233,13 +256,14 @@ class DevicesViewModel @AssistedInject constructor(
                 )
                 Unit
             }
-            DevicesAction.ReAuthCancelled           -> {
+            DevicesAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
 //                _viewEvents.post(DevicesViewEvents.Loading)
                 uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
             }
+            DevicesAction.ResetSecurity -> _viewEvents.post(DevicesViewEvents.PromptResetSecrets)
         }
     }
 
@@ -247,10 +271,12 @@ class DevicesViewModel @AssistedInject constructor(
         val txID = session.cryptoService()
                 .verificationService()
                 .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
-        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
-                session.myUserId,
-                txID
-        ))
+        _viewEvents.post(
+                DevicesViewEvents.ShowVerifyDevice(
+                        session.myUserId,
+                        txID
+                )
+        )
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
@@ -277,7 +303,8 @@ class DevicesViewModel @AssistedInject constructor(
                 session.cryptoService().setDeviceVerification(
                         DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                         action.cryptoDeviceInfo.userId,
-                        action.cryptoDeviceInfo.deviceId)
+                        action.cryptoDeviceInfo.deviceId
+                )
             }
         }
     }

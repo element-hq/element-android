@@ -1,0 +1,42 @@
+Element est à la fois une messagerie sécurisée et une application de collaboration en équipe, idéale pour les conversations de groupe en télétravail. Cette application utilise le chiffrement de bout en bout. Elle permet de mettre en place des téléconférences vidéo, du partage de fichier et des appels vocaux.
+
+<b>Les fonctionnalités d’Element incluent :</b>
+- Outils de communication en ligne avancés
+- Communication d’entreprise sécurisée par le chiffrement de bout en bout des messages, même pour les travailleurs à distance
+- Messagerie décentralisée basée sur le framework open source Matrix
+- Partage sécurisé de fichiers avec chiffrement des données lors de la gestion de projet
+- Conversations vidéo par voix sur IP et partage d’écran
+- Intégration facile avec vos outils de collaboration, de gestion de projet, services de VoIP et autres applications de messagerie
+
+Element est complètement différente des autres applications de messagerie et de collaboration. Elle s’appuie sur Matrix, un réseau ouvert de communication décentralisée. Elle permet l’auto-hébergement pour que ses utilisateurs restent le plus en contrôle possible de leurs données et leurs messages.
+
+<b>Confidentialité et messagerie chiffrée</b>
+Element vous protège des publicités non désirées, du minage de données et des prisons dorées. Elle protègé vos données et vos communications vocales grâce au chiffrement de bout en bout et à la vérification de signature croisée entre appareils.
+
+Element vous donne la main sur votre confidentialité en vous permettant de communiquer de manière sécurisée avec tout le réseau Matrix ou d’autres applications de communication d’entreprise au travers d’intégrations d’applications comme Slack.
+
+<b>Element peut être auto-hébergé</b>
+Pour une meilleure souveraineté sur vos données et conversations, Element peut être auto-hébergé ou vous pouvez choisir votre hôte Matrix - la norme open source pour les communications décentralisées. Element garantit votre confidentialité, conformité aux normes de sécurité, tout en proposant une intégration souple.
+
+<b>Vos données vous appartiennent</b>
+Vous décidez où stocker vos données et messages. Aucun risque de minage de données où d’accès par des tierce parties.
+
+Element vous place aux commandes de différente manières :
+1. Inscrivez vous sur le serveur public matrix.org hébergé par les développeurs de Matrix ou choisissez parmi des milliers de serveurs publics hébergés par des bénévoles
+2. Auto-hébergez votre compte sur un serveur de votre proper infrastructure informatique
+3. Inscrivez vous à la plateforme d’hébergement Element Matrix Services
+
+<b>Messagerie et collaboration ouvertes</b>
+Vous pouvez discuter avec tout le réseau Matrix, que vos interlocuteurs utilisent Element, une autre application Matrix, ou même s’ils utilisent une application complètement différente.
+
+<b>Ultra sécurisé</b>
+Chiffrement de bout en bout (seules les personnes dans la conversation peuvent déchiffrer les messages) et vérification de signature croisée entre appareils.
+
+<b>Communication et intégration parfaites</b>
+Messagerie instantannée, appels audio et vidéo, partage de fichier, partage d’écran et bien d’autres intégrations, bots et widgets. Lancez des salons, des communautés, restez en contact et menez vos projets à bien.
+
+<b>Reprenez où vous vous êtes arrêté</b>
+Restez en contact où que vous soyez grâce à l’historique des messages synchronisé entre tous vos appareils et sur le web sur https://app.element.io
+
+<b>Open source</b>
+Element Adroid est un projet libre, hébergé par GitHub. Veuillez signaler tous les problèmes et / ou contribuer à son développement sur https://github.com/vector-im/element-android

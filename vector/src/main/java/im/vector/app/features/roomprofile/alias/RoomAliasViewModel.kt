@@ -16,48 +16,45 @@
 
 package im.vector.app.features.roomprofile.alias
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
-class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
-                                                     private val session: Session)
-    : VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
+class RoomAliasViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomAliasViewState,
+        private val session: Session
+) :
+        VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomAliasViewState): RoomAliasViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
+        override fun create(initialState: RoomAliasViewState): RoomAliasViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomAliasViewState): RoomAliasViewModel? {
-            val fragment: RoomAliasFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomAliasViewModel, RoomAliasViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 
@@ -78,7 +75,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
         viewModelScope.launch {
             runCatching {
-                session.getRoomDirectoryVisibility(room.roomId)
+                session.roomDirectoryService().getRoomDirectoryVisibility(room.roomId)
             }.fold(
                     {
                         setState {
@@ -101,7 +98,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.substringAfter(":")
+                    homeServerName = session.myUserId.getServerName()
             )
         }
     }
@@ -114,7 +111,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
 
         viewModelScope.launch {
-            runCatching { room.getRoomAliases() }
+            runCatching { room.aliasService().getRoomAliases() }
                     .fold(
                             {
                                 setState { copy(localAliases = Success(it.sorted())) }
@@ -127,7 +124,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(
@@ -137,9 +134,9 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomAliasViewState.ActionPermissions(
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
@@ -152,7 +149,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                         val newPublishManuallyState = if (permissions.canChangeCanonicalAlias) {
                             when (publishManuallyState) {
                                 RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Closed
-                                else                                    -> publishManuallyState
+                                else -> publishManuallyState
                             }
                         } else {
                             RoomAliasViewState.AddAliasState.Hidden
@@ -162,50 +159,56 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                                 publishManuallyState = newPublishManuallyState
                         )
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     /**
      * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
      */
     private fun observeRoomCanonicalAlias() {
-        room.rx()
-                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+        room.flow()
+                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
-                .subscribe {
-                    setState {
-                        copy(
-                                canonicalAlias = it.canonicalAlias,
-                                alternativeAliases = it.alternativeAliases.orEmpty().sorted()
-                        )
-                    }
+                .setOnEach {
+                    copy(
+                            canonicalAlias = it.canonicalAlias,
+                            alternativeAliases = it.alternativeAliases.orEmpty().sorted()
+                    )
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            RoomAliasAction.ToggleManualPublishForm       -> handleToggleManualPublishForm()
-            is RoomAliasAction.SetNewAlias                -> handleSetNewAlias(action)
-            is RoomAliasAction.ManualPublishAlias         -> handleManualPublishAlias()
-            is RoomAliasAction.UnpublishAlias             -> handleUnpublishAlias(action)
-            is RoomAliasAction.SetCanonicalAlias          -> handleSetCanonicalAlias(action)
+            RoomAliasAction.ToggleManualPublishForm -> handleToggleManualPublishForm()
+            is RoomAliasAction.SetNewAlias -> handleSetNewAlias(action)
+            is RoomAliasAction.ManualPublishAlias -> handleManualPublishAlias()
+            is RoomAliasAction.UnpublishAlias -> handleUnpublishAlias(action)
+            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
             is RoomAliasAction.SetRoomDirectoryVisibility -> handleSetRoomDirectoryVisibility(action)
-            RoomAliasAction.ToggleAddLocalAliasForm       -> handleToggleAddLocalAliasForm()
-            is RoomAliasAction.SetNewLocalAliasLocalPart  -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias                 -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias           -> handleRemoveLocalAlias(action)
-            is RoomAliasAction.PublishAlias               -> handlePublishAlias(action)
-        }.exhaustive
+            RoomAliasAction.ToggleAddLocalAliasForm -> handleToggleAddLocalAliasForm()
+            is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
+            RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.PublishAlias -> handlePublishAlias(action)
+            RoomAliasAction.Retry -> handleRetry()
+        }
+    }
+
+    private fun handleRetry() = withState { state ->
+        if (state.localAliases is Fail) {
+            fetchRoomAlias()
+        }
+        if (state.roomDirectoryVisibility is Fail) {
+            fetchRoomDirectoryVisibility()
+        }
     }
 
     private fun handleSetRoomDirectoryVisibility(action: RoomAliasAction.SetRoomDirectoryVisibility) {
         postLoading(true)
         viewModelScope.launch {
             runCatching {
-                session.setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
+                session.roomDirectoryService().setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
             }.fold(
                     {
                         setState {
@@ -228,8 +231,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         setState {
             copy(
                     newLocalAliasState = when (newLocalAliasState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                        RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                        RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
                         is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
                     }
             )
@@ -240,8 +243,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         setState {
             copy(
                     publishManuallyState = when (publishManuallyState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                        RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                        RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
                         is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
                     }
             )
@@ -303,7 +306,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             try {
-                room.updateCanonicalAlias(canonicalAlias, alternativeAliases)
+                room.stateService().updateCanonicalAlias(canonicalAlias, alternativeAliases)
                 setState {
                     copy(
                             isLoading = false,
@@ -327,7 +330,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             )
         }
         viewModelScope.launch {
-            runCatching { room.addAlias(previousState.value) }
+            runCatching { room.aliasService().addAlias(previousState.value) }
                     .onFailure {
                         setState {
                             copy(
@@ -354,7 +357,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleRemoveLocalAlias(action: RoomAliasAction.RemoveLocalAlias) {
         postLoading(true)
         viewModelScope.launch {
-            runCatching { session.deleteRoomAlias(action.alias) }
+            runCatching { session.roomService().deleteRoomAlias(action.alias) }
                     .onFailure {
                         setState {
                             copy(isLoading = false)

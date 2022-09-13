@@ -22,20 +22,21 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-
 import javax.inject.Inject
 
-class VerificationEmojiCodeFragment @Inject constructor(
-        val viewModelFactory: VerificationEmojiCodeViewModel.Factory,
-        val controller: VerificationEmojiCodeController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+@AndroidEntryPoint
+class VerificationEmojiCodeFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationEmojiCodeController.Listener {
+
+    @Inject lateinit var controller: VerificationEmojiCodeController
 
     private val viewModel by fragmentViewModel(VerificationEmojiCodeViewModel::class)
 

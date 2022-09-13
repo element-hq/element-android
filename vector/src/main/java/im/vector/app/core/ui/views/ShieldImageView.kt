@@ -22,7 +22,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
 import im.vector.app.R
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class ShieldImageView @JvmOverloads constructor(
         context: Context,
@@ -36,22 +36,36 @@ class ShieldImageView @JvmOverloads constructor(
         }
     }
 
-    fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
         isVisible = roomEncryptionTrustLevel != null
 
         when (roomEncryptionTrustLevel) {
             RoomEncryptionTrustLevel.Default -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_default)
-                setImageResource(R.drawable.ic_shield_black)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_black_no_border
+                        else R.drawable.ic_shield_black
+                )
             }
             RoomEncryptionTrustLevel.Warning -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_warning)
-                setImageResource(R.drawable.ic_shield_warning)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_warning_no_border
+                        else R.drawable.ic_shield_warning
+                )
             }
             RoomEncryptionTrustLevel.Trusted -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_trusted)
-                setImageResource(R.drawable.ic_shield_trusted)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_trusted_no_border
+                        else R.drawable.ic_shield_trusted
+                )
             }
+            RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_trusted)
+                setImageResource(R.drawable.ic_warning_badge)
+            }
+            null -> Unit
         }
     }
 }
@@ -62,5 +76,6 @@ fun RoomEncryptionTrustLevel.toDrawableRes(): Int {
         RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_black
         RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
         RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
+        RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
     }
 }

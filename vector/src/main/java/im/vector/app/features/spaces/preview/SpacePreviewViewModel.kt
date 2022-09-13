@@ -16,28 +16,27 @@
 
 package im.vector.app.features.spaces.preview
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpaceSubChildPeekResult
 import timber.log.Timber
 
 class SpacePreviewViewModel @AssistedInject constructor(
@@ -58,19 +57,11 @@ class SpacePreviewViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpacePreviewState): SpacePreviewViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpacePreviewViewModel, SpacePreviewState> {
+        override fun create(initialState: SpacePreviewState): SpacePreviewViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpacePreviewViewModel, SpacePreviewState> {
-        override fun create(viewModelContext: ViewModelContext, state: SpacePreviewState): SpacePreviewViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpacePreviewViewModel, SpacePreviewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: SpacePreviewViewAction) {
         when (action) {
@@ -151,7 +142,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
         setState {
             copy(
                     spaceInfo = Success(
-                            resolveResult.first.let {
+                            resolveResult.rootSummary.let {
                                 ChildInfo(
                                         roomId = it.roomId,
                                         avatarUrl = it.avatarUrl,
@@ -165,7 +156,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                             }
                     ),
                     childInfoList = Success(
-                            resolveResult.second.map {
+                            resolveResult.children.map {
                                 ChildInfo(
                                         roomId = it.childRoomId,
                                         avatarUrl = it.avatarUrl,
@@ -224,7 +215,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                                     }
                                     Success(emptyList())
                                 }
-                                else                       -> {
+                                else -> {
                                     Fail(Exception("Failed to get info"))
                                 }
                             }

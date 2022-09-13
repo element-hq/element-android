@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BadgeFloatingActionButton">
+        <attr name="badgeBackgroundColor" format="color" />
+        <attr name="badgeTextColor" format="color" />
+        <attr name="badgeTextPadding" format="dimension" />
+        <attr name="badgeTextSize" format="dimension" />
+    </declare-styleable>
+
+</resources>

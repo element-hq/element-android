@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces.manage
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class SpaceAddRoomsState(
@@ -26,10 +26,13 @@ data class SpaceAddRoomsState(
         val currentFilter: String = "",
         val spaceName: String = "",
         val ignoreRooms: List<String> = emptyList(),
-        val isSaving: Async<List<String>> = Uninitialized
+        val isSaving: Async<List<String>> = Uninitialized,
+        val shouldShowDMs: Boolean = false,
+        val onlyShowSpaces: Boolean = false
 //        val selectionList: Map<String, Boolean> = emptyMap()
-) : MvRxState {
+) : MavericksState {
     constructor(args: SpaceManageArgs) : this(
-            spaceId = args.spaceId
+            spaceId = args.spaceId,
+            onlyShowSpaces = args.manageType == ManageType.AddRoomsOnlySpaces
     )
 }

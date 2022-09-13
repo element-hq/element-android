@@ -31,9 +31,9 @@ class WidgetArgsBuilder @Inject constructor(
         val session = sessionHolder.getActiveSession()
         val integrationManagerConfig = session.integrationManagerService().getPreferredConfig()
         val normalizedScreen = when {
-            screen == null             -> null
+            screen == null -> null
             screen.startsWith("type_") -> screen
-            else                       -> "type_$screen"
+            else -> "type_$screen"
         }
         return WidgetArgs(
                 baseUrl = integrationManagerConfig.uiUrl,
@@ -76,6 +76,13 @@ class WidgetArgsBuilder @Inject constructor(
                 roomId = roomId,
                 widgetId = widgetId
         )
+    }
+
+    fun buildElementCallWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
+        return buildRoomWidgetArgs(roomId, widget)
+                .copy(
+                        kind = WidgetKind.ELEMENT_CALL
+                )
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -18,13 +18,31 @@ package org.matrix.android.sdk.api.auth.registration
 
 import org.matrix.android.sdk.api.session.Session
 
-// Either a session or an object containing data about registration stages
+/**
+ * Either a session or an object containing data about registration stages.
+ */
 sealed class RegistrationResult {
+    /**
+     * The registration is successful, the [Session] is provided.
+     */
     data class Success(val session: Session) : RegistrationResult()
+
+    /**
+     * The registration still miss some steps. See [FlowResult] to know the details.
+     */
     data class FlowResponse(val flowResult: FlowResult) : RegistrationResult()
 }
 
+/**
+ * Information about the missing and completed [Stage].
+ */
 data class FlowResult(
+        /**
+         * List of missing stages.
+         */
         val missingStages: List<Stage>,
+        /**
+         * List of completed stages.
+         */
         val completedStages: List<Stage>
 )

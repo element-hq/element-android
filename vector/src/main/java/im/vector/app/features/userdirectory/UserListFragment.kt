@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
@@ -31,28 +30,36 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
-import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-
+import im.vector.app.features.settings.VectorSettingsActivity
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class UserListFragment @Inject constructor(
-        private val userListController: UserListController,
-        private val dimensionConverter: DimensionConverter,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
-) : VectorBaseFragment<FragmentUserListBinding>(),
-        UserListController.Callback {
+@AndroidEntryPoint
+class UserListFragment :
+        VectorBaseFragment<FragmentUserListBinding>(),
+        UserListController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var userListController: UserListController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
@@ -69,9 +76,9 @@ class UserListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
         if (args.showToolbar) {
-            views.userListTitle.text = args.title
-            vectorBaseActivity.setSupportActionBar(views.userListToolbar)
-            setupCloseView()
+            setupToolbar(views.userListToolbar)
+                    .setTitle(args.title)
+                    .allowBack(useCross = true)
             views.userListToolbar.isVisible = true
         } else {
             views.userListToolbar.isVisible = false
@@ -79,11 +86,11 @@ class UserListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.subscribe {
+        homeServerCapabilitiesViewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(this, UserListViewState::pendingSelections) {
+        viewModel.onEach(UserListViewState::pendingSelections) {
             renderSelectedUsers(it)
         }
 
@@ -92,13 +99,15 @@ class UserListFragment @Inject constructor(
                 is UserListViewEvents.OpenShareMatrixToLink -> {
                     val text = getString(R.string.invite_friends_text, it.link)
                     startSharePlainTextIntent(
-                            fragment = this,
+                            context = requireContext(),
                             activityResultLauncher = null,
                             chooserTitle = getString(R.string.invite_friends),
                             text = text,
                             extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
+                is UserListViewEvents.Failure -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }
         }
     }
@@ -108,19 +117,24 @@ class UserListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun handlePrepareMenu(menu: Menu) {
+        if (args.submitMenuItemId == -1) return
         withState(viewModel) {
             val showMenuItem = it.pendingSelections.isNotEmpty()
-            menu.forEach { menuItem ->
-                menuItem.isVisible = showMenuItem
-            }
+            menu.findItem(args.submitMenuItemId).isVisible = showMenuItem
         }
-        super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
-        return@withState true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            args.submitMenuItemId -> {
+                withState(viewModel) {
+                    sharedActionViewModel.post(UserListSharedAction.OnMenuItemSubmitClick(it.pendingSelections))
+                }
+                true
+            }
+            else -> false
+        }
     }
 
     private fun setupRecyclerView() {
@@ -130,13 +144,10 @@ class UserListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint)
-        }
         views.userListSearch
                 .textChanges()
-                .startWith(views.userListSearch.text)
-                .subscribe { text ->
+                .onStart { emit(views.userListSearch.text) }
+                .onEach { text ->
                     val searchValue = text.trim()
                     val action = if (searchValue.isBlank()) {
                         UserListAction.ClearSearchUsers
@@ -145,16 +156,10 @@ class UserListFragment @Inject constructor(
                     }
                     viewModel.handle(action)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.userListSearch.setupAsSearch()
         views.userListSearch.requestFocus()
-    }
-
-    private fun setupCloseView() {
-        views.userListClose.debouncedClicks {
-            requireActivity().finish()
-        }
     }
 
     override fun invalidate() = withState(viewModel) {
@@ -215,6 +220,29 @@ class UserListFragment @Inject constructor(
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
         viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
+    }
+
+    override fun onSetupDiscovery() {
+        navigator.openSettings(
+                requireContext(),
+                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(UserListAction.Resumed)
+    }
+
+    override fun giveIdentityServerConsent() {
+        viewModel.handle(UserListAction.UserConsentRequest)
+    }
+
+    private fun showConsentDialog(event: UserListViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+        )
     }
 
     override fun onUseQRCode() {

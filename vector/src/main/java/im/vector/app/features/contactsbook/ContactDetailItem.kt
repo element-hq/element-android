@@ -26,12 +26,14 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_contact_detail)
-abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>() {
+@EpoxyModelClass
+abstract class ContactDetailItem : VectorEpoxyModel<ContactDetailItem.Holder>(R.layout.item_contact_detail) {
 
     @EpoxyAttribute lateinit var threePid: String
     @EpoxyAttribute var matrixId: String? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)

@@ -5,7 +5,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -20,30 +20,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix"
                 tools:src="@drawable/ic_logo_matrix_org" />
 
             <TextView
                 android:id="@+id/loginTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 tools:text="@string/login_signin_to" />
 
             <TextView
                 android:id="@+id/loginNotice"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_server_matrix_org_text" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFieldTil"
-                style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -59,53 +60,37 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <FrameLayout
-                android:id="@+id/passwordContainer"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordFieldTil"
+                style="@style/Widget.Vector.TextInputLayout.Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:hint="@string/login_signup_password_hint"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@null">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/passwordFieldTil"
-                    style="@style/VectorTextInputLayout"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/login_signup_password_hint"
-                    app:errorEnabled="true"
-                    app:errorIconDrawable="@null">
+                    android:ems="10"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:paddingEnd="48dp"
+                    tools:ignore="RtlSymmetry" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/passwordField"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:imeOptions="actionDone"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:paddingEnd="48dp"
-                        tools:ignore="RtlSymmetry" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <im.vector.app.core.ui.views.RevealPasswordImageView
-                    android:id="@+id/passwordReveal"
-                    android:layout_width="@dimen/layout_touch_size"
-                    android:layout_height="@dimen/layout_touch_size"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="8dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:scaleType="center"
-                    app:tint="?attr/colorAccent" />
-
-            </FrameLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/loginPasswordNotice"
+                style="@style/Widget.Vector.TextView.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/login_signin_matrix_id_password_notice"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textColor="?vctr_content_secondary"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
@@ -114,17 +99,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp">
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/forgetPasswordButton"
-                    style="@style/Style.Vector.Login.Button.Text"
+                    style="@style/Widget.Vector.Button.Text.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:text="@string/auth_forgot_password" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/loginSubmit"
-                    style="@style/Style.Vector.Login.Button"
+                    style="@style/Widget.Vector.Button.Login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -146,13 +131,13 @@
 
                 <TextView
                     android:id="@+id/loginSocialLoginHeader"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textSize="14sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
                     android:id="@+id/loginSocialLoginButtons"

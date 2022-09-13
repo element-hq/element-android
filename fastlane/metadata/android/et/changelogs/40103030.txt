@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: Isikutuvastusserveri kasutustingimused on leitavad seadistustest ja ajutiselt eemaldasime Android Auto toe.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.3.3

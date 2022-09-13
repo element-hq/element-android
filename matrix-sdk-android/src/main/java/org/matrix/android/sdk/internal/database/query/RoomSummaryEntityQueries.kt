@@ -16,13 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 
 internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
     val query = realm.where<RoomSummaryEntity>()
@@ -48,8 +49,14 @@ internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
     return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }
 
-internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm,
-                                                        excludeRoomIds: Set<String>? = null): RealmResults<RoomSummaryEntity> {
+internal fun RoomSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String): RoomSummaryEntity? {
+    return where(realm, roomId).findFirst()
+}
+
+internal fun RoomSummaryEntity.Companion.getDirectRooms(
+        realm: Realm,
+        excludeRoomIds: Set<String>? = null
+): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
             .apply {
@@ -66,4 +73,12 @@ internal fun RoomSummaryEntity.Companion.isDirect(realm: Realm, roomId: String):
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
             .findAll()
             .isNotEmpty()
+}
+
+internal fun RoomSummaryEntity.Companion.updateDirectUserPresence(realm: Realm, directUserId: String, userPresenceEntity: UserPresenceEntity) {
+    RoomSummaryEntity.where(realm)
+            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .equalTo(RoomSummaryEntityFields.DIRECT_USER_ID, directUserId)
+            .findFirst()
+            ?.directUserPresence = userPresenceEntity
 }

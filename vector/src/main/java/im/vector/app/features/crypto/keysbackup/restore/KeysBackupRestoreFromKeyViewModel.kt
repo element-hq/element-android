@@ -29,13 +29,8 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor(
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
-    var recoveryCode: MutableLiveData<String> = MutableLiveData()
-    var recoveryCodeErrorText: MutableLiveData<String> = MutableLiveData()
-
-    init {
-        recoveryCode.value = null
-        recoveryCodeErrorText.value = null
-    }
+    var recoveryCode: MutableLiveData<String?> = MutableLiveData(null)
+    var recoveryCodeErrorText: MutableLiveData<String?> = MutableLiveData(null)
 
     // ========= Actions =========
     fun updateCode(newValue: String) {

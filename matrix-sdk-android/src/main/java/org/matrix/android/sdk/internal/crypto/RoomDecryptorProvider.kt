@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
@@ -47,7 +49,7 @@ internal class RoomDecryptorProvider @Inject constructor(
      * If we already have a decryptor for the given room and algorithm, return
      * it. Otherwise try to instantiate it.
      *
-     * @param roomId    the room id
+     * @param roomId the room id
      * @param algorithm the crypto algorithm
      * @return the decryptor
      * // TODO Create another method for the case of roomId is null
@@ -74,16 +76,16 @@ internal class RoomDecryptorProvider @Inject constructor(
                     this.newSessionListener = object : NewSessionListener {
                         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
                             // PR reviewer: the parameter has been renamed so is now in conflict with the parameter of getOrCreateRoomDecryptor
-                            newSessionListeners.forEach {
+                            newSessionListeners.toList().forEach {
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)
-                                } catch (e: Throwable) {
+                                } catch (ignore: Throwable) {
                                 }
                             }
                         }
                     }
                 }
-                else                      -> olmDecryptionFactory.create()
+                else -> olmDecryptionFactory.create()
             }
             if (!roomId.isNullOrEmpty()) {
                 synchronized(roomDecryptors) {

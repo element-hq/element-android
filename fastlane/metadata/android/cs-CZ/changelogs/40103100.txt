@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Přidání podpory pro hlasování (v experimentálních funkcích). Nový design náhledu URL.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.3.10

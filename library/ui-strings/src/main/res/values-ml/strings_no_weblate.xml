@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="resources_language">ml</string>
+    <string name="resources_country_code">IN</string>
+    <string name="resources_script">Mlym</string>
+
+</resources>

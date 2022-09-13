@@ -7,5 +7,6 @@
     android:layout_height="120dp"
     android:layout_margin="16dp"
     android:importantForAccessibility="no"
-    app:tint="@color/riotx_accent"
-    tools:src="@drawable/ic_layers" />
+    app:tint="?colorPrimary"
+    tools:src="@drawable/ic_layers"
+    tools:viewBindingIgnore="true" />

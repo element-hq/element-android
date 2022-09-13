@@ -1,0 +1,2 @@
+Main changes in this version: Organize your rooms using Spaces!
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.0

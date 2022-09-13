@@ -16,21 +16,22 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.exceptions.RealmPrimaryKeyConstraintException
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.di.AuthDatabase
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.exceptions.RealmPrimaryKeyConstraintException
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
-                                                           @AuthDatabase
-                                                           private val realmConfiguration: RealmConfiguration
+internal class RealmSessionParamsStore @Inject constructor(
+        private val mapper: SessionParamsMapper,
+        @AuthDatabase
+        private val realmConfiguration: RealmConfiguration
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {

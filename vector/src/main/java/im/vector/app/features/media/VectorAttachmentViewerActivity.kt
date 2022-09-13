@@ -17,6 +17,7 @@ package im.vector.app.features.media
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -28,26 +29,36 @@ import androidx.core.transition.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.transition.Transition
+import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.intent.getMimeTypeFromUri
+import im.vector.app.core.platform.showOptimizedSnackbar
+import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.attachmentviewer.AttachmentCommands
 import im.vector.lib.attachmentviewer.AttachmentViewerActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.system.measureTimeMillis
 
-class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmentProvider.InteractionListener {
+@AndroidEntryPoint
+class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInteractionListener {
 
     @Parcelize
     data class Args(
@@ -65,22 +76,25 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
 
-    private lateinit var screenComponent: ScreenComponent
-
+    private val viewModel: VectorAttachmentViewerViewModel by viewModel()
+    private val errorFormatter by lazy(LazyThreadSafetyMode.NONE) { singletonEntryPoint().errorFormatter() }
     private var initialIndex = 0
     private var isAnimatingOut = false
-
     private var currentSourceProvider: BaseAttachmentProvider<*>? = null
+    private val downloadActionResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            viewModel.pendingAction?.let {
+                viewModel.handle(it)
+            }
+        } else if (deniedPermanently) {
+            onPermissionDeniedDialog(R.string.denied_permission_generic)
+        }
+        viewModel.pendingAction = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
-        val timeForInjection = measureTimeMillis {
-            screenComponent.inject(this)
-        }
-        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         val args = args() ?: throw IllegalArgumentException("Missing arguments")
@@ -119,11 +133,11 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
         val sourceProvider = if (inMemoryData != null) {
             initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
-            dataSourceFactory.createProvider(inMemoryData, room)
+            dataSourceFactory.createProvider(inMemoryData, room, lifecycleScope)
         } else {
-            val events = room?.getAttachmentMessages().orEmpty()
+            val events = room?.timelineService()?.getAttachmentMessages().orEmpty()
             initialIndex = events.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
-            dataSourceFactory.createProvider(events)
+            dataSourceFactory.createProvider(events, lifecycleScope)
         }
         sourceProvider.interactionListener = this
         setSourceProvider(sourceProvider)
@@ -138,6 +152,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
+
+        observeViewEvents()
     }
 
     override fun onResume() {
@@ -150,12 +166,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         Timber.i("onPause Activity ${javaClass.simpleName}")
     }
 
-    private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
-
-    override fun shouldAnimateDismiss(): Boolean {
-        return currentPosition != initialIndex
-    }
-
     override fun onBackPressed() {
         if (currentPosition == initialIndex) {
             // show back the transition view
@@ -164,6 +174,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         }
         isAnimatingOut = true
         super.onBackPressed()
+    }
+
+    override fun shouldAnimateDismiss(): Boolean {
+        return currentPosition != initialIndex
     }
 
     override fun animateClose() {
@@ -176,9 +190,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         ActivityCompat.finishAfterTransition(this)
     }
 
-    // ==========================================================================================
-    // PRIVATE METHODS
-    // ==========================================================================================
+    private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
 
     /**
      * Try and add a [Transition.TransitionListener] to the entering shared element
@@ -217,10 +229,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
     private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
 
-    private fun getVectorComponent(): VectorComponent {
-        return (application as HasVectorInjector).injector()
-    }
-
     private fun scheduleStartPostponedTransition(sharedElement: View) {
         sharedElement.viewTreeObserver.addOnPreDrawListener(
                 object : ViewTreeObserver.OnPreDrawListener {
@@ -232,26 +240,28 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                 })
     }
 
-    companion object {
-        const val EXTRA_ARGS = "EXTRA_ARGS"
-        const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
-        const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
+    private fun observeViewEvents() {
+        viewModel.viewEvents
+                .stream()
+                .onEach(::handleViewEvents)
+                .launchIn(lifecycleScope)
+    }
 
-        fun newIntent(context: Context,
-                      mediaData: AttachmentData,
-                      roomId: String?,
-                      eventId: String,
-                      inMemoryData: List<AttachmentData>,
-                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
-            it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
-            it.putExtra(EXTRA_IMAGE_DATA, mediaData)
-            if (inMemoryData.isNotEmpty()) {
-                it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
-            }
+    private fun handleViewEvents(event: VectorAttachmentViewerViewEvents) {
+        when (event) {
+            is VectorAttachmentViewerViewEvents.ErrorDownloadingMedia -> showSnackBarError(event.error)
         }
     }
 
-    override fun onDismissTapped() {
+    private fun showSnackBarError(error: Throwable) {
+        rootView.showOptimizedSnackbar(errorFormatter.toHumanReadable(error))
+    }
+
+    private fun hasWritePermission() =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
+                    checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, downloadActionResultLauncher)
+
+    override fun onDismiss() {
         animateClose()
     }
 
@@ -263,10 +273,52 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         handle(AttachmentCommands.SeekTo(percent))
     }
 
-    override fun onShareTapped() {
-        currentSourceProvider?.getFileForSharing(currentPosition) { data ->
-            if (data != null && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                shareMedia(this@VectorAttachmentViewerActivity, data, getMimeTypeFromUri(this@VectorAttachmentViewerActivity, data.toUri()))
+    override fun onShare() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
+
+            withContext(Dispatchers.Main) {
+                shareMedia(
+                        this@VectorAttachmentViewerActivity,
+                        file,
+                        getMimeTypeFromUri(this@VectorAttachmentViewerActivity, file.toUri())
+                )
+            }
+        }
+    }
+
+    override fun onDownload() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val hasWritePermission = withContext(Dispatchers.Main) {
+                hasWritePermission()
+            }
+
+            val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
+            if (hasWritePermission) {
+                viewModel.handle(VectorAttachmentViewerAction.DownloadMedia(file))
+            } else {
+                viewModel.pendingAction = VectorAttachmentViewerAction.DownloadMedia(file)
+            }
+        }
+    }
+
+    companion object {
+        private const val EXTRA_ARGS = "EXTRA_ARGS"
+        private const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
+        private const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
+
+        fun newIntent(
+                context: Context,
+                mediaData: AttachmentData,
+                roomId: String?,
+                eventId: String,
+                inMemoryData: List<AttachmentData>,
+                sharedTransitionName: String?
+        ) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
+            it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
+            it.putExtra(EXTRA_IMAGE_DATA, mediaData)
+            if (inMemoryData.isNotEmpty()) {
+                it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
             }
         }
     }

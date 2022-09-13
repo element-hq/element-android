@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 @JsonClass(generateAdapter = true)
 internal data class LoginFlowResponse(
         /**
-         * The homeserver's supported login types
+         * The homeserver's supported login types.
          */
         @Json(name = "flows")
         val flows: List<LoginFlow>?
@@ -39,10 +39,10 @@ internal data class LoginFlow(
 
         /**
          * Augments m.login.sso flow discovery definition to include metadata on the supported IDPs
-         * the client can show a button for each of the supported providers
+         * the client can show a button for each of the supported providers.
          * See MSC #2858
          */
-        @Json(name = "org.matrix.msc2858.identity_providers")
+        @Json(name = "identity_providers")
         val ssoIdentityProvider: List<SsoIdentityProvider>? = null
 
 )

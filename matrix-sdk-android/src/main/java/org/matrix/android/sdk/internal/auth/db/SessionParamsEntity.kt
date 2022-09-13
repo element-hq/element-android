@@ -26,5 +26,6 @@ internal open class SessionParamsEntity(
         var homeServerConnectionConfigJson: String = "",
         // Set to false when the token is invalid and the user has been soft logged out
         // In case of hard logout, this object is deleted from DB
-        var isTokenValid: Boolean = true
+        var isTokenValid: Boolean = true,
+        var loginType: String = "",
 ) : RealmObject()

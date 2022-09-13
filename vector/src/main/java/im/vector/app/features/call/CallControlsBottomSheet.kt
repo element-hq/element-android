@@ -20,33 +20,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
-import im.vector.app.features.call.audio.CallAudioManager
+import im.vector.app.features.VectorFeatures
+import javax.inject.Inject
 
-import me.gujun.android.span.span
-
+@AndroidEntryPoint
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
         return BottomSheetCallControlsBinding.inflate(inflater, container, false)
     }
+
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        callViewModel.subscribe(this) {
+        callViewModel.onEach {
             renderState(it)
-        }
-
-        views.callControlsSoundDevice.views.bottomSheetActionClickableZone.debouncedClicks {
-            callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
         views.callControlsSwitchCamera.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -73,73 +71,16 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             dismiss()
         }
 
-        callViewModel.observeViewEvents {
-            when (it) {
-                is VectorCallViewEvents.ShowSoundDeviceChooser -> {
-                    showSoundDeviceChooser(it.available, it.current)
-                }
-                else                                           -> {
-                }
-            }
+        views.callControlsShareScreen.isVisible = vectorFeatures.isScreenSharingEnabled()
+        views.callControlsShareScreen.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleScreenSharing)
+            dismiss()
         }
-    }
-
-    private fun showSoundDeviceChooser(available: Set<CallAudioManager.Device>, current: CallAudioManager.Device) {
-        val soundDevices = available.map {
-            when (it) {
-                CallAudioManager.Device.WIRELESS_HEADSET -> span {
-                    text = getString(R.string.sound_device_wireless_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.PHONE            -> span {
-                    text = getString(R.string.sound_device_phone)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.SPEAKER          -> span {
-                    text = getString(R.string.sound_device_speaker)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.HEADSET          -> span {
-                    text = getString(R.string.sound_device_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-            }
-        }
-        AlertDialog.Builder(requireContext())
-                .setItems(soundDevices.toTypedArray()) { d, n ->
-                    d.cancel()
-                    when (soundDevices[n].toString()) {
-                        // TODO Make an adapter and handle multiple Bluetooth headsets. Also do not use translations.
-                        getString(R.string.sound_device_phone) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.PHONE))
-                        }
-                        getString(R.string.sound_device_speaker) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.SPEAKER))
-                        }
-                        getString(R.string.sound_device_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.HEADSET))
-                        }
-                        getString(R.string.sound_device_wireless_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.WIRELESS_HEADSET))
-                        }
-                    }
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     private fun renderState(state: VectorCallViewState) {
-        views.callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
-        views.callControlsSoundDevice.subTitle = when (state.device) {
-            CallAudioManager.Device.PHONE            -> getString(R.string.sound_device_phone)
-            CallAudioManager.Device.SPEAKER          -> getString(R.string.sound_device_speaker)
-            CallAudioManager.Device.HEADSET          -> getString(R.string.sound_device_headset)
-            CallAudioManager.Device.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
-        }
-
         views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
         views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
-
         if (state.isVideoCall) {
             views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {
@@ -164,5 +105,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
         views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
+        views.callControlsShareScreen.title = getString(if (state.isSharingScreen) R.string.call_stop_screen_sharing else R.string.call_start_screen_sharing)
     }
 }

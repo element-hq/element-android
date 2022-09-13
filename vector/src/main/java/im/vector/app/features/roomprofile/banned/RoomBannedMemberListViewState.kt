@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.banned
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -30,7 +30,7 @@ data class RoomBannedMemberListViewState(
         val filter: String = "",
         val onGoingModerationAction: List<String> = emptyList(),
         val canUserBan: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

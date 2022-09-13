@@ -24,14 +24,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.set
 import androidx.core.widget.doOnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
 
-import javax.inject.Inject
-
-class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
+@AndroidEntryPoint
+class KeysBackupRestoreFromPassphraseFragment :
+        VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromPassphraseBinding {
         return FragmentKeysBackupRestoreFromPassphraseBinding.inflate(inflater, container, false)
@@ -39,10 +39,6 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
 
     private lateinit var viewModel: KeysBackupRestoreFromPassphraseViewModel
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
-
-    private fun toggleVisibilityMode() {
-        viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,12 +52,6 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
 
         views.helperTextWithLink.text = spannableStringForHelperText()
 
-        viewModel.showPasswordMode.observe(viewLifecycleOwner) {
-            val shouldBeVisible = it ?: false
-            views.keysBackupPassphraseEnterEdittext.showPassword(shouldBeVisible)
-            views.keysBackupViewShowPassword.render(shouldBeVisible)
-        }
-
         views.keysBackupPassphraseEnterEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onRestoreBackup()
@@ -70,9 +60,8 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
             return@setOnEditorActionListener false
         }
 
-        views.keysBackupViewShowPassword.setOnClickListener { toggleVisibilityMode() }
-        views.helperTextWithLink.setOnClickListener { onUseRecoveryKey() }
-        views.keysBackupRestoreWithPassphraseSubmit.setOnClickListener { onRestoreBackup() }
+        views.helperTextWithLink.debouncedClicks { onUseRecoveryKey() }
+        views.keysBackupRestoreWithPassphraseSubmit.debouncedClicks { onRestoreBackup() }
         views.keysBackupPassphraseEnterEdittext.doOnTextChanged { text, _, _, _ -> onPassphraseTextEditChange(text) }
     }
 

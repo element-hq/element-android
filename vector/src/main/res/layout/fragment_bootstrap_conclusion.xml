@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?colorSurface"
     android:minHeight="200dp"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/bootstrapConclusionText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/bootstrap_cross_signing_success"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Space
@@ -26,11 +26,10 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vctr_list_divider_color" />
+        android:background="?vctr_list_separator_on_surface" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/bootstrapConclusionContinue"
@@ -40,11 +39,11 @@
         app:actionTitle="@string/finish"
         app:forceStartPadding="false"
         app:rightIcon="@drawable/ic_arrow_right"
-        app:tint="?colorAccent" />
+        app:tint="?colorSecondary" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/vctr_list_divider_color" />
+        android:background="?vctr_list_separator_on_surface" />
 
 </LinearLayout>

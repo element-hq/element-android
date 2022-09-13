@@ -1,0 +1,2 @@
+Belangrijkste wijzigingen in deze versie: Bugfixes voornamelijk met betrekking tot de meldingen.
+Volledige changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

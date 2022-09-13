@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:minHeight="@dimen/item_form_min_height"
+    tools:viewBindingIgnore="true">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/formTextInputTextInputLayout"
+        style="@style/Widget.Vector.TextInputLayout.Form"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/formTextInputDeleteButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/formTextInputTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:hint="@string/create_room_name_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/formTextInputDeleteButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:background="@drawable/circle"
+        android:contentDescription="@string/action_delete"
+        android:scaleType="center"
+        android:src="@drawable/ic_delete_10dp"
+        app:layout_constraintBottom_toBottomOf="@id/formTextInputTextInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/formTextInputTextInputLayout"
+        app:tint="?vctr_content_secondary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

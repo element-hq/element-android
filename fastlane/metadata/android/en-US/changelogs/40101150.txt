@@ -1,0 +1,2 @@
+Main changes in this version: voice message implementation under labs settings.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.1.15

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/roomToolbarThreadConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    tools:layout_height="?actionBarSize"
+    tools:visibility="visible">
+
+    <TextView
+        android:id="@+id/roomToolbarThreadTitleTextView"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintBottom_toTopOf="@id/roomToolbarThreadImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/thread_timeline_title" />
+
+    <ImageView
+        android:id="@+id/roomToolbarThreadImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_presence_offline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbarThreadTitleTextView"
+        tools:src="@sample/room_round_avatars" />
+
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/roomToolbarThreadShieldImageView"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:layout_constraintCircle="@id/roomToolbarThreadImageView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="10dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/roomToolbarThreadSubtitleTextView"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="@id/roomToolbarThreadImageView"
+        app:layout_constraintStart_toEndOf="@id/roomToolbarThreadImageView"
+        app:layout_constraintTop_toTopOf="@id/roomToolbarThreadImageView"
+        tools:text="@sample/rooms.json/data/name"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

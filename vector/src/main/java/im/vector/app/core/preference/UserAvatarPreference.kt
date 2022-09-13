@@ -23,7 +23,7 @@ import android.widget.ProgressBar
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -33,7 +33,7 @@ class UserAvatarPreference : Preference {
     private var mAvatarView: ImageView? = null
     private var mLoadingProgressBar: ProgressBar? = null
 
-    private var avatarRenderer: AvatarRenderer = context.vectorComponent().avatarRenderer()
+    private var avatarRenderer: AvatarRenderer = context.singletonEntryPoint().avatarRenderer()
 
     private var userItem: MatrixItem.UserItem? = null
 

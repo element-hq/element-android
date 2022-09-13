@@ -20,21 +20,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomMemberListBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -42,29 +44,31 @@ import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomMemberListViewModel.Factory,
-        private val roomMemberListController: RoomMemberListController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback,
-        RoomMemberListViewModel.Factory {
+@AndroidEntryPoint
+class RoomMemberListFragment :
+        VectorBaseFragment<FragmentRoomMemberListBinding>(),
+        RoomMemberListController.Callback {
+
+    @Inject lateinit var roomMemberListController: RoomMemberListController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
         return FragmentRoomMemberListBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomMembers
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingGeneric.roomSettingsToolbar)
+                .allowBack()
         setupSearchView()
         setupInviteUsersButton()
         views.roomSettingGeneric.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
@@ -72,14 +76,14 @@ class RoomMemberListFragment @Inject constructor(
 
     private fun setupInviteUsersButton() {
         views.inviteUsersButton.debouncedClicks {
-            navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+            navigator.openInviteUsersToRoom(requireActivity(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
         views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
                                 if (withState(viewModel) { it.actionsPermissions.canInvite }) {
                                     views.inviteUsersButton.show()
                                 }
@@ -114,6 +118,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
+        views.roomSettingGeneric.progressBar.isGone = viewState.areAllMembersLoaded
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
         views.inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
@@ -130,11 +135,11 @@ class RoomMemberListFragment @Inject constructor(
         val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
         val stateKey = event.stateKey ?: return
         if (withState(viewModel) { it.actionsPermissions.canRevokeThreePidInvite }) {
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.three_pid_revoke_invite_dialog_title)
                     .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
-                    .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton(R.string.revoke) { _, _ ->
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .setPositiveButton(R.string.action_revoke) { _, _ ->
                         viewModel.handle(RoomMemberListAction.RevokeThreePidInvite(stateKey))
                     }
                     .show()

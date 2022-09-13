@@ -25,7 +25,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.session.coroutineScope
@@ -48,8 +48,8 @@ class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderF
     }
 }
 
-class VectorGlideModelLoader(private val context: Context)
-    : ModelLoader<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoader(private val context: Context) :
+        ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
@@ -60,14 +60,16 @@ class VectorGlideModelLoader(private val context: Context)
     }
 }
 
-class VectorGlideDataFetcher(context: Context,
-                             private val data: ImageContentRenderer.Data,
-                             private val width: Int,
-                             private val height: Int)
-    : DataFetcher<InputStream> {
+class VectorGlideDataFetcher(
+        context: Context,
+        private val data: ImageContentRenderer.Data,
+        private val width: Int,
+        private val height: Int
+) :
+        DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
-    private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
+    private val activeSessionHolder = context.singletonEntryPoint().activeSessionHolder()
 
     private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 
@@ -121,7 +123,8 @@ class VectorGlideDataFetcher(context: Context,
                         fileName = data.filename,
                         mimeType = data.mimeType,
                         url = data.url,
-                        elementToDecrypt = data.elementToDecrypt)
+                        elementToDecrypt = data.elementToDecrypt
+                )
             }
             withContext(Dispatchers.Main) {
                 result.fold(

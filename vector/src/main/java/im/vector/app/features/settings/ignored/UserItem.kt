@@ -21,8 +21,10 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -30,8 +32,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A list item for User.
  */
-@EpoxyModelClass(layout = R.layout.item_user)
-abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
+@EpoxyModelClass
+abstract class UserItem : VectorEpoxyModel<UserItem.Holder>(R.layout.item_user) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
@@ -39,12 +41,12 @@ abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
 
-    @EpoxyAttribute
-    var itemClickAction: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.root.setOnClickListener { itemClickAction?.invoke() }
+        holder.root.onClick(itemClickAction)
 
         avatarRenderer.render(matrixItem, holder.avatarImage)
         holder.userIdText.setTextOrHide(matrixItem.id)

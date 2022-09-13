@@ -1,0 +1,2 @@
+Main changes in this version: Add support for voice message draft. Many bugfixes!
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.9

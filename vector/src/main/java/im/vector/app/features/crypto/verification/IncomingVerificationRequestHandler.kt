@@ -18,9 +18,12 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.time.Clock
+import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import org.matrix.android.sdk.api.session.Session
@@ -41,7 +44,9 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager,
+        private val clock: Clock,
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -62,8 +67,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
         when (tx.state) {
             is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
-                val user = session?.getUser(tx.otherUserId)
-                val name = user?.getBestName() ?: tx.otherUserId
+                val user = session?.userService()?.getUser(tx.otherUserId)
+                val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
@@ -91,7 +96,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 tx.cancel()
                             }
                             addButton(
-                                    context.getString(R.string.ignore),
+                                    context.getString(R.string.action_ignore),
                                     { tx.cancel() }
                             )
                             addButton(
@@ -103,7 +108,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     }
                             )
                             // 10mn expiration
-                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                            expirationTimestamp = clock.epochMillis() + (10 * 60 * 1000L)
                         }
                 popupAlertManager.postVectorAlert(alert)
             }
@@ -111,7 +116,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 // cancel related notification
                 popupAlertManager.cancelAlert(uid)
             }
-            else                                   -> Unit
+            else -> Unit
         }
     }
 
@@ -126,7 +131,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 // XXX this is a bit hard coded :/
                 popupAlertManager.cancelAlert("review_login")
             }
-            val user = session?.getUser(pr.otherUserId)?.toMatrixItem()
+            val user = session?.userService()?.getUser(pr.otherUserId)?.toMatrixItem()
             val name = user?.getBestName() ?: pr.otherUserId
             val description = if (name == pr.otherUserId) {
                 name
@@ -141,7 +146,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     R.drawable.ic_shield_black,
                     shouldBeDisplayedIn = { activity ->
                         if (activity is RoomDetailActivity) {
-                            activity.intent?.extras?.getParcelable<RoomDetailArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
+                            activity.intent?.extras?.getParcelable<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true
@@ -155,19 +160,25 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
+                                    it.navigator.openRoom(
+                                            context = it,
+                                            roomId = roomId,
+                                            eventId = pr.transactionId,
+                                            trigger = ViewRoom.Trigger.VerificationRequest
+                                    )
                                 }
                             }
                         }
                         dismissedAction = Runnable {
-                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
+                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(
+                                    pr.otherUserId,
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""
                             )
                         }
                         colorAttribute = R.attr.vctr_notice_secondary
                         // 5mn expiration
-                        expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
+                        expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }
             popupAlertManager.postVectorAlert(alert)
         }

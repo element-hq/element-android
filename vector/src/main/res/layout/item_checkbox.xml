@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.checkbox.MaterialCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/checkbox"
@@ -10,5 +10,6 @@
     android:layout_marginEnd="@dimen/layout_horizontal_margin"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/phoneBookFilterContainer"
-    tools:text="@string/matrix_only_filter" />
+    app:layout_constraintTop_toBottomOf="@id/phoneBookFilterContainer"
+    tools:text="@string/matrix_only_filter"
+    tools:viewBindingIgnore="true" />

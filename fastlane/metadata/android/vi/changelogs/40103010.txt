@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: Sắp xếp các phòng của bạn bằng Space! V1.3.1 khắc phục sự cố có thể xảy ra ở v1.3.0
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.3.1

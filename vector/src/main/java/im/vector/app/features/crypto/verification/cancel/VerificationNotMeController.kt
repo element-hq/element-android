@@ -18,13 +18,14 @@ package im.vector.app.features.crypto.verification.cancel
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationNotMeController @Inject constructor(
@@ -43,35 +44,36 @@ class VerificationNotMeController @Inject constructor(
     }
 
     override fun buildModels() {
+        val host = this
         bottomSheetVerificationNoticeItem {
             id("notice")
-            notice(eventHtmlRenderer.render(stringProvider.getString(R.string.verify_not_me_self_verification)))
+            notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verify_not_me_self_verification)).toEpoxyCharSequence())
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep0")
         }
 
         bottomSheetVerificationActionItem {
             id("skip")
-            title(stringProvider.getString(R.string.skip))
-            titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+            title(host.stringProvider.getString(R.string.action_skip))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-            listener { listener?.onTapSkip() }
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            listener { host.listener?.onTapSkip() }
         }
 
-        dividerItem {
+        bottomSheetDividerItem {
             id("sep1")
         }
 
         bottomSheetVerificationActionItem {
             id("settings")
-            title(stringProvider.getString(R.string.settings))
-            titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
+            title(host.stringProvider.getString(R.string.settings))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
-            listener { listener?.onTapSettings() }
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            listener { host.listener?.onTapSettings() }
         }
     }
 

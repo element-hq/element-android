@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This file contains string that I do not want to be translated by Weblate translators. -->
+
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+    <string name="resources_language">en</string>
+    <string name="resources_country_code">US</string>
+    <!-- Value MUST have 4 letters and MUST be in this list: https://www.unicode.org/iso15924/iso15924-codes.html. Example:  "Arab", "Cyrl", "Latn", etc. -->
+    <string name="resources_script">Latn</string>
+
+    <string name="lockscreen_num_0">0</string>
+    <string name="lockscreen_num_1">1</string>
+    <string name="lockscreen_num_2">2</string>
+    <string name="lockscreen_num_3">3</string>
+    <string name="lockscreen_num_4">4</string>
+    <string name="lockscreen_num_5">5</string>
+    <string name="lockscreen_num_6">6</string>
+    <string name="lockscreen_num_7">7</string>
+    <string name="lockscreen_num_8">8</string>
+    <string name="lockscreen_num_9">9</string>
+</resources>

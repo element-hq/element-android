@@ -26,8 +26,8 @@ internal class FakeGetContextOfEventTask constructor(private val tokenChunkEvent
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)
         val tokenChunkEvent = FakeTokenChunkEvent(
-                Random.nextLong(System.currentTimeMillis()).toString(),
-                Random.nextLong(System.currentTimeMillis()).toString(),
+                Random.nextLong().toString(),
+                Random.nextLong().toString(),
                 fakeEvents
         )
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, PaginationDirection.BACKWARDS)

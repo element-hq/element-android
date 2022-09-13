@@ -13,62 +13,64 @@
         android:paddingEnd="?dialogPreferredPadding">
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/encryption_information_verify_device_warning"
-            android:textSize="12sp" />
+            android:text="@string/encryption_information_verify_device_warning" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/encryption_information_device_name"
-            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_name"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             tools:text="a device name" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/encryption_information_device_id"
-            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_id"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             tools:text="a device id" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="@string/encryption_information_device_key"
-            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/encrypted_device_info_device_key"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             tools:text="a device key" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/encryption_information_verify_device_warning2"
-            android:textSize="12sp" />
+            android:text="@string/encryption_information_verify_device_warning2" />
+
     </LinearLayout>
+
 </ScrollView>

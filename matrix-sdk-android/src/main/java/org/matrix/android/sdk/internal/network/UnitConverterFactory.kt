@@ -21,9 +21,11 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
-object UnitConverterFactory : Converter.Factory() {
-    override fun responseBodyConverter(type: Type, annotations: Array<out Annotation>,
-                                       retrofit: Retrofit): Converter<ResponseBody, *>? {
+internal object UnitConverterFactory : Converter.Factory() {
+    override fun responseBodyConverter(
+            type: Type, annotations: Array<out Annotation>,
+            retrofit: Retrofit
+    ): Converter<ResponseBody, *>? {
         return if (type == Unit::class.java) UnitConverter else null
     }
 

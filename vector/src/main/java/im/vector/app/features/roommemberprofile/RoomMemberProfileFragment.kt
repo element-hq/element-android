@@ -23,14 +23,16 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -38,22 +40,26 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -64,13 +70,16 @@ data class RoomMemberProfileArgs(
         val roomId: String? = null
 ) : Parcelable
 
-class RoomMemberProfileFragment @Inject constructor(
-        val viewModelFactory: RoomMemberProfileViewModel.Factory,
-        private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
-) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomMemberProfileController.Callback {
+@AndroidEntryPoint
+class RoomMemberProfileFragment :
+        VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        RoomMemberProfileController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var roomMemberProfileController: RoomMemberProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
 
     private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
@@ -85,9 +94,15 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.vector_room_member_profile
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.User
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.matrixProfileToolbar)
+                .allowBack()
         val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
@@ -101,7 +116,8 @@ class RoomMemberProfileFragment @Inject constructor(
         headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
         views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
+                headerView,
                 listOf(
                         views.matrixProfileToolbarAvatarImageView,
                         views.matrixProfileToolbarTitleView,
@@ -111,18 +127,20 @@ class RoomMemberProfileFragment @Inject constructor(
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                     -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.StartVerification           -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
-                is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
-                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
-                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
-                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
-            }.exhaustive
+                is RoomMemberProfileViewEvents.OpenRoom -> handleOpenRoom(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
+                RoomMemberProfileViewEvents.GoBack -> handleGoBack()
+            }
         }
         setupLongClicks()
     }
@@ -130,6 +148,10 @@ class RoomMemberProfileFragment @Inject constructor(
     private fun setupLongClicks() {
         headerViews.memberProfileNameView.copyOnLongClick()
         headerViews.memberProfileIdView.copyOnLongClick()
+    }
+
+    private fun handleOpenRoom(event: RoomMemberProfileViewEvents.OpenRoom) {
+        navigator.openRoom(requireContext(), event.roomId, null)
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -144,14 +166,14 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.roomMemberProfileShareAction -> {
                 viewModel.handle(RoomMemberProfileAction.ShareRoomMemberProfile)
-                return true
+                true
             }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
@@ -160,7 +182,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     .withArgs(roomId = null, otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
@@ -168,7 +190,7 @@ class RoomMemberProfileFragment @Inject constructor(
                                 .withArgs(roomId = null, otherUserId = startVerification.userId)
                                 .show(parentFragmentManager, "VERIF")
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }
@@ -183,23 +205,25 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         when (val asyncUserMatrixItem = state.userMatrixItem) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 views.matrixProfileToolbarTitleView.text = state.userId
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 headerViews.memberProfileStateView.state = StateView.State.Loading
             }
-            is Fail       -> {
+            is Fail -> {
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
                 headerViews.memberProfileStateView.state = StateView.State.Error(failureMessage)
             }
-            is Success    -> {
+            is Success -> {
                 val userMatrixItem = asyncUserMatrixItem()
                 headerViews.memberProfileStateView.state = StateView.State.Content
                 headerViews.memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
                 headerViews.memberProfileNameView.text = bestName
+                headerViews.memberProfileNameView.setTextColor(matrixItemColorProvider.getColor(userMatrixItem))
                 views.matrixProfileToolbarTitleView.text = bestName
                 avatarRenderer.render(userMatrixItem, headerViews.memberProfileAvatarView)
                 avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
@@ -286,7 +310,11 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onOpenDmClicked() {
-        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
+        viewModel.handle(RoomMemberProfileAction.OpenOrCreateDm(fragmentArgs.userId))
+    }
+
+    private fun handleGoBack() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.DoNothing
         vectorBaseActivity.finish()
     }
 
@@ -304,21 +332,41 @@ class RoomMemberProfileFragment @Inject constructor(
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
-        AlertDialog.Builder(requireContext())
-            .setView(view)
-            .setNeutralButton(R.string.ok, null)
-            .setPositiveButton(R.string.share_by_text) { _, _ ->
-                startSharePlainTextIntent(
-                        fragment = this,
-                        activityResultLauncher = null,
-                        chooserTitle = null,
-                        text = permalink
-                )
-            }.show()
+        MaterialAlertDialogBuilder(requireContext())
+                .setView(view)
+                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.share_by_text) { _, _ ->
+                    startSharePlainTextIntent(
+                            context = requireContext(),
+                            activityResultLauncher = null,
+                            chooserTitle = null,
+                            text = permalink
+                    )
+                }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
+    }
+
+    override fun onOverrideColorClicked(): Unit = withState(viewModel) { state ->
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
+        val views = DialogBaseEditTextBinding.bind(layout)
+        views.editText.setText(state.userColorOverride)
+        views.editText.hint = "#000000"
+
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.room_member_override_nick_color)
+                .setView(layout)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    val newColor = views.editText.text.toString()
+                    if (newColor != state.userColorOverride) {
+                        viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
+                    }
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
@@ -327,30 +375,33 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onKickClicked() {
+    override fun onKickClicked(isSpace: Boolean) {
         ConfirmationDialogBuilder
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = R.string.room_participants_kick_prompt_msg,
-                        positiveRes = R.string.room_participants_action_kick,
-                        reasonHintRes = R.string.room_participants_kick_reason,
-                        titleRes = R.string.room_participants_kick_title
+                        confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
+                        else R.string.room_participants_remove_prompt_msg,
+                        positiveRes = R.string.room_participants_action_remove,
+                        reasonHintRes = R.string.room_participants_remove_reason,
+                        titleRes = R.string.room_participants_remove_title
                 ) { reason ->
                     viewModel.handle(RoomMemberProfileAction.KickUser(reason))
                 }
     }
 
-    override fun onBanClicked(isUserBanned: Boolean) {
+    override fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean) {
         val titleRes: Int
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isUserBanned) {
-            confirmationRes = R.string.room_participants_unban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_unban_prompt_msg
+            else R.string.room_participants_unban_prompt_msg
             titleRes = R.string.room_participants_unban_title
             positiveButtonRes = R.string.room_participants_action_unban
         } else {
-            confirmationRes = R.string.room_participants_ban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_ban_prompt_msg
+            else R.string.room_participants_ban_prompt_msg
             titleRes = R.string.room_participants_ban_title
             positiveButtonRes = R.string.room_participants_action_ban
         }

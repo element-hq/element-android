@@ -32,3 +32,12 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
     val imm = context?.getSystemService<InputMethodManager>()
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
+
+fun View.setHorizontalPadding(padding: Int) {
+    setPadding(
+            padding,
+            paddingTop,
+            padding,
+            paddingBottom
+    )
+}

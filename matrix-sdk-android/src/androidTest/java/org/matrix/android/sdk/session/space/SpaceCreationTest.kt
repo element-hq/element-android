@@ -16,24 +16,23 @@
 
 package org.matrix.android.sdk.session.space
 
-import kotlinx.coroutines.GlobalScope
+import androidx.test.filters.LargeTest
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -42,71 +41,76 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class SpaceCreationTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-
     @Test
-    fun createSimplePublicSpace() {
+    fun createSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
         var spaceId: String = ""
+        commonTestHelper.runBlockingTest {
+            spaceId = session.spaceService().createSpace(roomName, topic, null, true)
+        }
+
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                spaceId = session.spaceService().createSpace(roomName, topic, null, true)
-                // wait a bit to let the summary update it self :/
-                it.countDown()
+            commonTestHelper.retryPeriodicallyWithLatch(it) {
+                session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()?.name != null
             }
         }
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
-        commonTestHelper.waitWithLatch {
-            commonTestHelper.retryPeriodicallyWithLatch(it) {
-                syncedSpace?.asRoom()?.roomSummary()?.name != null
-            }
-        }
         assertEquals("Room name should be set", roomName, syncedSpace?.asRoom()?.roomSummary()?.name)
         assertEquals("Room topic should be set", topic, syncedSpace?.asRoom()?.roomSummary()?.topic)
         // assertEquals(topic, syncedSpace.asRoom().roomSummary()?., "Room topic should be set")
 
         assertNotNull("Space should be found by Id", syncedSpace)
-        val creationEvent = syncedSpace!!.asRoom().getStateEvent(EventType.STATE_ROOM_CREATE)
-        val createContent = creationEvent?.content.toModel<RoomCreateContent>()
+        val createContent = syncedSpace!!.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomCreateContent>()
         assertEquals("Room type should be space", RoomType.SPACE, createContent?.type)
 
         var powerLevelsContent: PowerLevelsContent? = null
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                val toModel = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)?.content.toModel<PowerLevelsContent>()
-                powerLevelsContent = toModel
-                toModel != null
+                powerLevelsContent = syncedSpace.asRoom()
+                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+                        ?.content
+                        ?.toModel<PowerLevelsContent>()
+                powerLevelsContent != null
             }
         }
         assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
-        val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
-                ?.toModel<RoomGuestAccessContent>()?.guestAccess
+        val guestAccess = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomGuestAccessContent>()
+                ?.guestAccess
 
         assertEquals("Public space room should be peekable by guest", GuestAccess.CanJoin, guestAccess)
 
-        val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
-                ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val historyVisibility = syncedSpace.asRoom()
+                .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<RoomHistoryVisibilityContent>()
+                ?.historyVisibility
 
         assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
-
-        commonTestHelper.signOutAndClose(session)
     }
 
     @Test
-    fun testJoinSimplePublicSpace() {
+    @Ignore
+    fun testJoinSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
+
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
@@ -137,7 +141,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
-    fun testSimplePublicSpaceWithChildren() {
+    fun testSimplePublicSpaceWithChildren() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
@@ -150,50 +154,40 @@ class SpaceCreationTest : InstrumentedTest {
         // create a room
         var firstChild: String? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                firstChild = aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "FirstRoom"
-                    this.topic = "Description of first room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                })
-                it.countDown()
-            }
+            firstChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+                this.name = "FirstRoom"
+                this.topic = "Description of first room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
+            it.countDown()
         }
 
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", true, suggested = true)
-                it.countDown()
-            }
+            syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
+            it.countDown()
         }
 
         var secondChild: String? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                secondChild = aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "SecondRoom"
-                    this.topic = "Description of second room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                })
-                it.countDown()
-            }
+            secondChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+                this.name = "SecondRoom"
+                this.topic = "Description of second room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
+            it.countDown()
         }
 
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", false, suggested = true)
-                it.countDown()
-            }
+            syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
+            it.countDown()
         }
 
         // Try to join from bob, it's a public space no need to invite
         var joinResult: JoinSpaceResult? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                joinResult = bobSession.spaceService().joinSpace(spaceId)
-                // wait a bit to let the summary update it self :/
-                it.countDown()
-            }
+            joinResult = bobSession.spaceService().joinSpace(spaceId)
+            // wait a bit to let the summary update it self :/
+            it.countDown()
         }
 
         assertEquals(JoinSpaceResult.Success, joinResult)
@@ -202,21 +196,19 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals("Room name should be set", roomName, spaceBobPov?.asRoom()?.roomSummary()?.name)
         assertEquals("Room topic should be set", topic, spaceBobPov?.asRoom()?.roomSummary()?.topic)
 
+        // /!\ AUTO_JOIN has been descoped
         // check if bob has joined automatically the first room
 
-        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
-        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
-        RoomSummaryQueryParams.Builder()
-
-        val childCount = bobSession.getRoomSummaries(
-                roomSummaryQueryParams {
-                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
-                }
-        ).size
-
-        assertEquals("Unexpected number of joined children", 1, childCount)
-
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
+//        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
+//        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
+//        RoomSummaryQueryParams.Builder()
+//
+//        val childCount = bobSession.getRoomSummaries(
+//                roomSummaryQueryParams {
+//                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
+//                }
+//        ).size
+//
+//        assertEquals("Unexpected number of joined children", 1, childCount)
     }
 }

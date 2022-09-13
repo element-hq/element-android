@@ -1,70 +1,115 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    // Ref: https://kotlinlang.org/releases.html
-    ext.kotlin_version = '1.4.32'
-    ext.kotlin_coroutines_version = "1.4.2"
+    apply from: 'dependencies.gradle'
+    apply from: 'dependencies_groups.gradle'
+
     repositories {
-        google()
-        jcenter()
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+        }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
-        classpath 'com.google.gms:google-services:4.3.5'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1'
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'
-        classpath "com.likethesalad.android:string-reference:1.2.2"
 
+    dependencies {
+        // Release notes of Android Gradle Plugin (AGP):
+        // https://developer.android.com/studio/releases/gradle-plugin
+        classpath libs.gradle.gradlePlugin
+        classpath libs.gradle.kotlinPlugin
+        classpath libs.gradle.hiltPlugin
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.3'
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+        classpath "com.likethesalad.android:stem-plugin:2.2.2"
+        classpath 'org.owasp:dependency-check-gradle:7.1.2'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
+plugins {
+    // ktlint Plugin
+    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
+    // Detekt
+    id "io.gitlab.arturbosch.detekt" version "1.21.0"
+
+    // Dependency Analysis
+    id 'com.autonomousapps.dependency-analysis' version "1.13.1"
+}
+
+// https://github.com/jeremylong/DependencyCheck
+apply plugin: 'org.owasp.dependencycheck'
+
+dependencyCheck {
+    // See https://jeremylong.github.io/DependencyCheck/general/suppression.html
+    suppressionFiles = [
+            "./tools/dependencycheck/suppressions.xml"
+    ]
+}
+
 allprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
+
     repositories {
         // For dendrite/gobind
         flatDir {
             dirs 'libs/'
         }
 
-        // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+            content {
+                groups.mavenCentral.regex.each { includeGroupByRegex it }
+                groups.mavenCentral.group.each { includeGroup it }
+            }
+        }
         maven {
             url 'https://jitpack.io'
             content {
-                // Use this repo only for olm library
-                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
-                // And also for FilePicker
-                includeGroupByRegex "com\\.github\\.jaiselrahman"
-                // And monarchy
-                includeGroupByRegex "com\\.github\\.Zhuinden"
-                // And ucrop
-                includeGroupByRegex "com\\.github\\.yalantis"
-                // JsonViewer
-                includeGroupByRegex 'com\\.github\\.BillCarsonFr'
-                // PhotoView
-                includeGroupByRegex 'com\\.github\\.chrisbanes'
-                // PFLockScreen-Android
-                includeGroupByRegex 'com\\.github\\.vector-im'
-
-                // Chat effects
-                includeGroupByRegex 'com\\.github\\.jetradarmobile'
-                includeGroupByRegex 'nl\\.dionsegijn'
+                groups.jitpack.regex.each { includeGroupByRegex it }
+                groups.jitpack.group.each { includeGroup it }
             }
         }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-3.1.0"
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-5.0.2"
             // Note: to test Jitsi release you can use a local file like this:
-            // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.1.0"
+            // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.10.0"
+            content {
+                groups.jitsi.regex.each { includeGroupByRegex it }
+                groups.jitsi.group.each { includeGroup it }
+            }
         }
-        google()
-        mavenCentral()
-        jcenter()
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+            content {
+                groups.google.regex.each { includeGroupByRegex it }
+                groups.google.group.each { includeGroup it }
+            }
+        }
+        //noinspection JcenterRepositoryObsolete
+        // Do not use `jcenter`, it prevents Dependabot from working properly
+        maven {
+            url 'https://jcenter.bintray.com'
+            content {
+                groups.jcenter.regex.each { includeGroupByRegex it }
+                groups.jcenter.group.each { includeGroup it }
+            }
+        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -72,36 +117,101 @@ allprojects {
         // You can override by passing `-PallWarningsAsErrors=false` in the command line
         kotlinOptions.allWarningsAsErrors = project.getProperties().getOrDefault("allWarningsAsErrors", "true").toBoolean()
     }
+
+    // Fix "Java heap space" issue
+    tasks.withType(org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask).configureEach {
+        it.workerMaxHeapSize.set("2G")
+    }
+
+    // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
+    ktlint {
+        // See https://github.com/pinterest/ktlint/releases/
+        version = "0.45.1"
+        android = true
+        ignoreFailures = false
+        enableExperimentalRules = true
+        // display the corresponding rule
+        verbose = true
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+            // To have XML report for Danger
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
+        disabledRules = [
+                // TODO Re-enable these 4 rules after reformatting project
+                "indent",
+                "experimental:argument-list-wrapping",
+                "max-line-length",
+                "parameter-list-wrapping",
+
+                "spacing-between-declarations-with-comments",
+                "no-multi-spaces",
+                "experimental:spacing-between-declarations-with-annotations",
+                "experimental:annotation",
+                // - Missing newline after "("
+                // - Missing newline before ")"
+                "wrapping",
+                // - Unnecessary trailing comma before ")"
+                "experimental:trailing-comma",
+                // - A block comment in between other elements on the same line is disallowed
+                "experimental:comment-wrapping",
+                // - A KDoc comment after any other element on the same line must be separated by a new line
+                "experimental:kdoc-wrapping",
+                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
+                "string-template",
+        ]
+    }
+
+    detekt {
+        // preconfigure defaults
+        buildUponDefaultConfig = true
+        // activate all available (even unstable) rules.
+        allRules = true
+        // point to your custom config defining rules to run, overwriting default behavior
+        config = files("$rootDir/tools/detekt/detekt.yml")
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+def launchTask = getGradle()
+        .getStartParameter()
+        .getTaskRequests()
+        .toString()
+        .toLowerCase()
+
+if (launchTask.contains("coverage".toLowerCase())) {
+    apply from: 'coverage.gradle'
+}
+
 apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
 // Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
-// The SONAR_KEY is stored in passbolt
+// The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
 sonarqube {
     properties {
-        property "sonar.projectName", "Element-Android"
-        property "sonar.projectKey", "im.vector.app.android"
+        property "sonar.projectName", "element-android"
+        property "sonar.projectKey", "vector-im_element-android"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
-        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/element-android"
+        property "sonar.links.ci", "https://github.com/vector-im/element-android/actions"
         property "sonar.links.scm", "https://github.com/vector-im/element-android/"
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }
 
 project(":vector") {
-    sonarqube {
+        sonarqube {
         properties {
             property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
             // exclude source code from analyses separated by a colon (:)
@@ -111,7 +221,7 @@ project(":vector") {
     }
 }
 
-project(":diff-match-patch") {
+project(":library:diff-match-patch") {
     sonarqube {
         skipProject = true
     }
@@ -126,13 +236,59 @@ project(":diff-match-patch") {
 //        }
 //    }
 //}
-//
-//project(":matrix-sdk-android-rx") {
-//    sonarqube {
-//        properties {
-//            property "sonar.sources", project(":matrix-sdk-android-rx").android.sourceSets.main.java.srcDirs
-//            // exclude source code from analyses separated by a colon (:)
-//            // property "sonar.exclusions", "**/*.*"
-//        }
-//    }
-//}
+
+dependencyAnalysis {
+    dependencies {
+        bundle("kotlin-stdlib") {
+            includeGroup("org.jetbrains.kotlin")
+        }
+        bundle("react") {
+            includeGroup("com.facebook.react")
+        }
+    }
+    issues {
+        all {
+            ignoreKtx(true)
+            onUsedTransitiveDependencies {
+                // Transitively used dependencies that should be declared directly
+                severity("ignore")
+            }
+            onUnusedDependencies {
+                severity("fail")
+            }
+            onUnusedAnnotationProcessors {
+                severity("fail")
+                exclude("com.airbnb.android:epoxy-processor", "com.google.dagger:hilt-compiler") // False positives
+            }
+        }
+        project(":library:jsonviewer") {
+            onUnusedDependencies {
+                exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
+            }
+        }
+        project(":library:ui-styles")
+        project(":matrix-sdk-android") {
+            onUnusedDependencies {
+                exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx
+            }
+        }
+        project(":matrix-sdk-android-flow") {
+            onUnusedDependencies {
+                exclude("androidx.paging:paging-runtime-ktx") // False positive
+            }
+        }
+        project(":vector") {
+            onUnusedDependencies {
+                // False positives
+                exclude(
+                        "androidx.fragment:fragment-testing",
+                        "com.facebook.soloader:soloader",
+                        "com.vanniktech:emoji-google",
+                        "com.vanniktech:emoji-material",
+                        "org.maplibre.gl:android-plugin-annotation-v9",
+                        "org.maplibre.gl:android-sdk",
+                )
+            }
+        }
+    }
+}

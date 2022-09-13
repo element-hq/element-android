@@ -16,17 +16,17 @@
 
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
-import org.matrix.android.sdk.MatrixTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.MatrixTest
 
 @FixMethodOrder(MethodSorters.JVM)
 class BinaryStringTest : MatrixTest {
 
     /**
-     * I want to put bytes to a String, and vice versa
+     * I want to put bytes to a String, and vice versa.
      */
     @Test
     fun testNominalCase() {

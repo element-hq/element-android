@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.Button.Text.OnPrimary.LiveLocation">
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetRight">8dp</item>
+        <item name="android:insetLeft">8dp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Text.LiveLocation">
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
+        <item name="android:textColor">?colorError</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetRight">12dp</item>
+        <item name="android:insetLeft">12dp</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Body.BottomSheetDisplayName">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Body.BottomSheetRemainingTime">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Body.BottomSheetLastUpdatedAt">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?vctr_content_tertiary</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Text.BottomSheetStopSharing">
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
+        <item name="android:textColor">?colorError</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetRight">16dp</item>
+        <item name="android:insetLeft">16dp</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Nano.Copyright">
+        <!-- Static map view is always light in both light and dark theme. So we need to use a static dark color -->
+        <item name="android:textColor">@color/element_content_primary_light</item>
+    </style>
+
+</resources>

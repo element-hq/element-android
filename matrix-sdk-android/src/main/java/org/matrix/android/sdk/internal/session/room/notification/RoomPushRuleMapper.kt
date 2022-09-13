@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room.notification
 
-import org.matrix.android.sdk.api.pushrules.Action
-import org.matrix.android.sdk.api.pushrules.Kind
-import org.matrix.android.sdk.api.pushrules.RuleSetKey
-import org.matrix.android.sdk.api.pushrules.getActions
-import org.matrix.android.sdk.api.pushrules.rest.PushCondition
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.api.session.pushrules.Action
+import org.matrix.android.sdk.api.session.pushrules.Kind
+import org.matrix.android.sdk.api.session.pushrules.RuleSetKey
+import org.matrix.android.sdk.api.session.pushrules.getActions
+import org.matrix.android.sdk.api.session.pushrules.rest.PushCondition
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.toJson
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
@@ -33,10 +33,10 @@ internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
         RuleSetKey.OVERRIDE -> {
             PushRulesMapper.map(this)
         }
-        RuleSetKey.ROOM     -> {
+        RuleSetKey.ROOM -> {
             PushRulesMapper.mapRoomRule(this)
         }
-        else                -> null
+        else -> null
     }
     return if (pushRule == null || kind == null) {
         null
@@ -47,7 +47,7 @@ internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
 
 internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule? {
     return when {
-        this == RoomNotificationState.ALL_MESSAGES       -> null
+        this == RoomNotificationState.ALL_MESSAGES -> null
         this == RoomNotificationState.ALL_MESSAGES_NOISY -> {
             val rule = PushRule(
                     actions = listOf(Action.Notify, Action.Sound()).toJson(),
@@ -56,7 +56,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
             )
             return RoomPushRule(RuleSetKey.ROOM, rule)
         }
-        else                                             -> {
+        else -> {
             val condition = PushCondition(
                     kind = Kind.EventMatch.value,
                     key = "room_id",

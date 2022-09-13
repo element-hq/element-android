@@ -4,7 +4,7 @@
     <item
         android:id="@+id/roomProfileShareAction"
         android:icon="@drawable/ic_material_share"
-        android:title="@string/share"
-        app:iconTint="?attr/riotx_text_secondary"
+        android:title="@string/action_share"
+        app:iconTint="?colorSecondary"
         app:showAsAction="ifRoom" />
 </menu>

@@ -19,12 +19,12 @@ package im.vector.app.features.home
 import im.vector.app.core.platform.VectorSharedAction
 
 /**
- * Supported navigation actions for [HomeActivity]
+ * Supported navigation actions for [HomeActivity].
  */
 sealed class HomeActivitySharedAction : VectorSharedAction {
     object OpenDrawer : HomeActivitySharedAction()
     object CloseDrawer : HomeActivitySharedAction()
-    data class OpenGroup(val clearFragment: Boolean) : HomeActivitySharedAction()
+    object OnCloseSpace : HomeActivitySharedAction()
     object AddSpace : HomeActivitySharedAction()
     data class OpenSpacePreview(val spaceId: String) : HomeActivitySharedAction()
     data class OpenSpaceInvite(val spaceId: String) : HomeActivitySharedAction()

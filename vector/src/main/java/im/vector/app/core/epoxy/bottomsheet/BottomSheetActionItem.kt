@@ -30,15 +30,17 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_action)
-abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Holder>(R.layout.item_bottom_sheet_action) {
 
     @EpoxyAttribute
     @DrawableRes
@@ -70,18 +72,19 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     var destructive = false
 
     @EpoxyAttribute
-    lateinit var listener: View.OnClickListener
+    var showBetaLabel = false
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.onClick(it)
-        }
+        holder.view.onClick(listener)
         holder.startSpace.isVisible = subMenuItem
         val tintColor = if (destructive) {
-            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
         }
         holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)
@@ -95,9 +98,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         holder.selected.isInvisible = !selected
         if (showExpand) {
             val expandDrawable = if (expanded) {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_less)
             } else {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_more)
             }
             expandDrawable?.also {
                 DrawableCompat.setTint(it, tintColor)
@@ -106,6 +109,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         } else {
             holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
+        holder.betaLabel.isVisible = showBetaLabel
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -113,5 +117,6 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         val icon by bind<ImageView>(R.id.actionIcon)
         val text by bind<TextView>(R.id.actionTitle)
         val selected by bind<ImageView>(R.id.actionSelected)
+        val betaLabel by bind<TextView>(R.id.actionBetaTextView)
     }
 }

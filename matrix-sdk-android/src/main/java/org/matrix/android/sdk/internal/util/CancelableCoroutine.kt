@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.util
 
-import org.matrix.android.sdk.api.util.Cancelable
 import kotlinx.coroutines.Job
+import org.matrix.android.sdk.api.util.Cancelable
 
 internal fun Job.toCancelable(): Cancelable {
     return CancelableCoroutine(this)
 }
 
 /**
- * Private, use the extension above
+ * Private, use the extension above.
  */
 private class CancelableCoroutine(private val job: Job) : Cancelable {
 

@@ -4,13 +4,20 @@
 
     <application>
         <activity android:name=".features.debug.TestLinkifyActivity" />
+        <activity android:name=".features.debug.DebugPermissionActivity" />
+        <activity android:name=".features.debug.analytics.DebugAnalyticsActivity" />
+        <activity android:name=".features.debug.settings.DebugPrivateSettingsActivity" />
         <activity android:name=".features.debug.sas.DebugSasEmojiActivity" />
+        <activity android:name=".features.debug.features.DebugFeaturesSettingsActivity" />
+        <activity android:name=".features.debug.DebugMenuActivity" />
+        <activity android:name=".features.debug.leak.DebugMemoryLeaksActivity" />
+
         <activity
-            android:name=".features.debug.DebugMaterialThemeLightActivity"
-            android:theme="@style/VectorMaterialThemeDebugLight" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeDarkActivity"
-            android:theme="@style/VectorMaterialThemeDebugDark" />
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
+
+        <!-- Used for UI tests to display the BiometricPrompt. It's normal that it appears as an error. -->
+        <activity android:exported="false" android:name=".features.pin.lockscreen.tests.LockScreenTestActivity" />
     </application>
 
 </manifest>

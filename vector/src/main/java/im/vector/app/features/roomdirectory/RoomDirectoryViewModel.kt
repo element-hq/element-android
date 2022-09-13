@@ -16,52 +16,49 @@
 
 package im.vector.app.features.roomdirectory
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import com.airbnb.mvrx.appendAt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: PublicRoomsViewState,
         vectorPreferences: VectorPreferences,
         private val session: Session,
+        private val analyticsTracker: AnalyticsTracker,
         private val explicitTermFilter: ExplicitTermFilter
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+        override fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+    companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> by hiltMavericksViewModelFactory() {
         private const val PUBLIC_ROOMS_LIMIT = 20
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
-            val activity: RoomDirectoryActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.roomDirectoryViewModelFactory.create(state)
-        }
     }
 
     private val showAllRooms = vectorPreferences.showAllPublicRooms()
@@ -81,36 +78,32 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .rx()
+                .flow()
                 .liveRoomSummaries(queryParams)
-                .subscribe { list ->
-                    val joinedRoomIds = list
-                            ?.map { it.roomId }
-                            ?.toSet()
-                            .orEmpty()
-
-                    setState {
-                        copy(joinedRoomsIds = joinedRoomIds)
-                    }
+                .map { roomSummaries ->
+                    roomSummaries
+                            .map { it.roomId }
+                            .toSet()
                 }
-                .disposeOnClear()
+                .setOnEach {
+                    copy(joinedRoomsIds = it)
+                }
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(changeMembershipStates = it) }
+                .setOnEach {
+                    copy(changeMembershipStates = it)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomDirectoryAction) {
         when (action) {
             is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryAction.FilterWith           -> filterWith(action)
-            RoomDirectoryAction.LoadMore                -> loadMore()
-            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
+            is RoomDirectoryAction.FilterWith -> filterWith(action)
+            RoomDirectoryAction.LoadMore -> loadMore()
+            is RoomDirectoryAction.JoinRoom -> joinRoom(action)
         }
     }
 
@@ -173,7 +166,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
         currentJob = viewModelScope.launch {
             val data = try {
-                session.getPublicRooms(roomDirectoryData.homeServer,
+                session.roomDirectoryService().getPublicRooms(
+                        roomDirectoryData.homeServer,
                         PublicRoomsParams(
                                 limit = PUBLIC_ROOMS_LIMIT,
                                 filter = PublicRoomsFilter(searchTerm = filter),
@@ -224,18 +218,17 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
-        val roomMembershipChange = state.changeMembershipStates[action.roomId]
+        val roomMembershipChange = state.changeMembershipStates[action.publicRoom.roomId]
         if (roomMembershipChange?.isInProgress().orFalse()) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        val viaServers = state.roomDirectoryData.homeServer
-                ?.let { listOf(it) }
-                .orEmpty()
+        val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomId, viaServers = viaServers)
+                session.roomService().joinRoom(action.publicRoom.roomId, viaServers = viaServers)
+                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             } catch (failure: Throwable) {
@@ -243,10 +236,5 @@ class RoomDirectoryViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDirectoryViewEvents.Failure(failure))
             }
         }
-    }
-
-    override fun onCleared() {
-        currentJob?.cancel()
-        super.onCleared()
     }
 }

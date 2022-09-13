@@ -1,0 +1,2 @@
+此版本中的主要變動：為直接訊息聊天室新增 Presence 支援（請注意：此功能在 matrix.org 上停用）。加回 Android Auto 支援。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.4

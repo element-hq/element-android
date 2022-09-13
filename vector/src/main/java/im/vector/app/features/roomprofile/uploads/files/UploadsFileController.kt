@@ -43,22 +43,19 @@ class UploadsFileController @Inject constructor(
 
     private var idx = 0
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
+        val host = this
 
         buildFileItems(data.fileEvents)
 
         if (data.hasMore) {
             loadingItem {
                 // Always use a different id, because we can be notified several times of visibility state changed
-                id("loadMore${idx++}")
+                id("loadMore${host.idx++}")
                 onVisibilityStateChanged { _, _, visibilityState ->
                     if (visibilityState == VisibilityState.VISIBLE) {
-                        listener?.loadMore()
+                        host.listener?.loadMore()
                     }
                 }
             }
@@ -66,24 +63,29 @@ class UploadsFileController @Inject constructor(
     }
 
     private fun buildFileItems(fileEvents: List<UploadEvent>) {
+        val host = this
         fileEvents.forEach { uploadEvent ->
             uploadsFileItem {
                 id(uploadEvent.eventId)
                 title(uploadEvent.contentWithAttachmentContent.body)
-                subtitle(stringProvider.getString(R.string.uploads_files_subtitle,
-                        uploadEvent.senderInfo.disambiguatedDisplayName,
-                        dateFormatter.format(uploadEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)))
+                subtitle(
+                        host.stringProvider.getString(
+                                R.string.uploads_files_subtitle,
+                                uploadEvent.senderInfo.disambiguatedDisplayName,
+                                host.dateFormatter.format(uploadEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                        )
+                )
                 listener(object : UploadsFileItem.Listener {
                     override fun onItemClicked() {
-                        listener?.onOpenClicked(uploadEvent)
+                        host.listener?.onOpenClicked(uploadEvent)
                     }
 
                     override fun onDownloadClicked() {
-                        listener?.onDownloadClicked(uploadEvent)
+                        host.listener?.onDownloadClicked(uploadEvent)
                     }
 
                     override fun onShareClicked() {
-                        listener?.onShareClicked(uploadEvent)
+                        host.listener?.onShareClicked(uploadEvent)
                     }
                 })
             }

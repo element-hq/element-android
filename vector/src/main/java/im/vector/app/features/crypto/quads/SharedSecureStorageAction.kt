@@ -21,8 +21,6 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.platform.WaitingViewData
 
 sealed class SharedSecureStorageAction : VectorViewModelAction {
-
-    object TogglePasswordVisibility : SharedSecureStorageAction()
     object UseKey : SharedSecureStorageAction()
     object Back : SharedSecureStorageAction()
     object Cancel : SharedSecureStorageAction()

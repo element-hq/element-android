@@ -25,7 +25,7 @@ internal interface Task<PARAMS, RESULT> {
 
     suspend fun execute(params: PARAMS): RESULT
 
-    suspend fun executeRetry(params: PARAMS, remainingRetry: Int) : RESULT {
+    suspend fun executeRetry(params: PARAMS, remainingRetry: Int): RESULT {
         return try {
             execute(params)
         } catch (failure: Throwable) {

@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-data class UpdateKeysBackupVersionBody(
+internal data class UpdateKeysBackupVersionBody(
         /**
          * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
          */
@@ -29,7 +29,7 @@ data class UpdateKeysBackupVersionBody(
         override val algorithm: String,
 
         /**
-         * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2"
+         * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2".
          * see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
          */
         @Json(name = "auth_data")

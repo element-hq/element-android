@@ -18,7 +18,7 @@ package im.vector.app.features.widgets
 
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -33,10 +33,15 @@ enum class WidgetStatus {
 enum class WidgetKind(@StringRes val nameRes: Int, val screenId: String?) {
     ROOM(R.string.room_widget_activity_title, null),
     STICKER_PICKER(R.string.title_activity_choose_sticker, WidgetType.StickerPicker.preferred),
-    INTEGRATION_MANAGER(0, null);
+    INTEGRATION_MANAGER(0, null),
+    ELEMENT_CALL(0, null);
 
     fun isAdmin(): Boolean {
         return this == STICKER_PICKER || this == INTEGRATION_MANAGER
+    }
+
+    fun supportsPictureInPictureMode(): Boolean {
+        return this == ELEMENT_CALL
     }
 }
 
@@ -52,7 +57,7 @@ data class WidgetViewState(
         val widgetName: String = "",
         val canManageWidgets: Boolean = false,
         val asyncWidget: Async<Widget> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(widgetArgs: WidgetArgs) : this(
             widgetKind = widgetArgs.kind,

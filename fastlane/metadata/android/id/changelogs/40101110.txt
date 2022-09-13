@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: pembaruan tema dan gaya dan fitur baru untuk spaces (perbaikan bug untuk 1.1.10)
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.1.11

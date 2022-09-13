@@ -17,6 +17,9 @@ cd ..
 rm -rf jitsi-meet
 git clone https://github.com/jitsi/jitsi-meet
 
+# Android SDK
+export ANDROID_SDK_ROOT=~/Library/Android/sdk
+
 # We want a libre build!
 export LIBRE_BUILD=true
 
@@ -25,8 +28,9 @@ cd jitsi-meet
 # This is commit after version 2.2.2, which does not compile
 # git checkout 5a934c071a5cbe64de275a25d0ed62d8193cdd03
 
-# Version android-sdk-3.1.0, commit 7a64bf006ea027b77564d8847570e1ac46ff0ec0
-git checkout android-sdk-3.1.0
+# Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
+
+git checkout android-sdk-5.0.2
 
 echo
 echo "##################################################"

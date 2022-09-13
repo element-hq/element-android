@@ -26,26 +26,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetBootstrapBinding
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBootstrapBinding>() {
 
     @Parcelize
@@ -55,14 +55,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     override val showExpanded = true
 
-    @Inject
-    lateinit var bootstrapViewModelFactory: BootstrapSharedViewModel.Factory
-
     private val viewModel by fragmentViewModel(BootstrapSharedViewModel::class)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetBootstrapBinding {
         return BottomSheetBootstrapBinding.inflate(inflater, container, false)
@@ -78,7 +71,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(BootstrapActions.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(BootstrapActions.ReAuthCancelled)
                 }
             }
@@ -91,12 +84,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents { event ->
             when (event) {
-                is BootstrapViewEvents.Dismiss       -> {
+                is BootstrapViewEvents.Dismiss -> {
                     bottomSheetResult = if (event.success) ResultListener.RESULT_OK else ResultListener.RESULT_CANCEL
                     dismiss()
                 }
-                is BootstrapViewEvents.ModalError    -> {
-                    AlertDialog.Builder(requireActivity())
+                is BootstrapViewEvents.ModalError -> {
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(event.error)
                             .setPositiveButton(R.string.ok, null)
@@ -109,10 +102,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                     promptSkip()
                 }
                 is BootstrapViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             event.flowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)).let { intent ->
+                            getString(R.string.initialize_cross_signing)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
@@ -121,11 +116,11 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
     }
 
     private fun promptSkip() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.are_you_sure)
                 .setMessage(R.string.bootstrap_cancel_text)
                 .setPositiveButton(R.string._continue, null)
-                .setNegativeButton(R.string.skip) { _, _ ->
+                .setNegativeButton(R.string.action_skip) { _, _ ->
                     bottomSheetResult = ResultListener.RESULT_CANCEL
                     dismiss()
                 }
@@ -158,89 +153,88 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     override fun invalidate() = withState(viewModel) { state ->
         when (state.step) {
-            is BootstrapStep.CheckingMigration           -> {
+            is BootstrapStep.CheckingMigration -> {
                 views.bootstrapIcon.isVisible = false
                 views.bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
-                showFragment(BootstrapWaitingFragment::class, Bundle())
+                showFragment(BootstrapWaitingFragment::class)
             }
-            is BootstrapStep.FirstForm                   -> {
+            is BootstrapStep.FirstForm -> {
                 views.bootstrapIcon.isVisible = false
                 views.bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
-                showFragment(BootstrapSetupRecoveryKeyFragment::class, Bundle())
+                showFragment(BootstrapSetupRecoveryKeyFragment::class)
             }
-            is BootstrapStep.SetupPassphrase             -> {
+            is BootstrapStep.SetupPassphrase -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_phrase_24dp))
                 views.bootstrapTitleText.text = getString(R.string.set_a_security_phrase_title)
-                showFragment(BootstrapEnterPassphraseFragment::class, Bundle())
+                showFragment(BootstrapEnterPassphraseFragment::class)
             }
-            is BootstrapStep.ConfirmPassphrase           -> {
+            is BootstrapStep.ConfirmPassphrase -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_phrase_24dp))
                 views.bootstrapTitleText.text = getString(R.string.set_a_security_phrase_title)
-                showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
+                showFragment(BootstrapConfirmPassphraseFragment::class)
             }
-            is BootstrapStep.AccountReAuth               -> {
+            is BootstrapStep.AccountReAuth -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 views.bootstrapTitleText.text = getString(R.string.re_authentication_activity_title)
-                showFragment(BootstrapReAuthFragment::class, Bundle())
+                showFragment(BootstrapReAuthFragment::class)
             }
-            is BootstrapStep.Initializing                -> {
+            is BootstrapStep.Initializing -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 views.bootstrapTitleText.text = getString(R.string.bootstrap_loading_title)
-                showFragment(BootstrapWaitingFragment::class, Bundle())
+                showFragment(BootstrapWaitingFragment::class)
             }
-            is BootstrapStep.SaveRecoveryKey             -> {
+            is BootstrapStep.SaveRecoveryKey -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 views.bootstrapTitleText.text = getString(R.string.bottom_sheet_save_your_recovery_key_title)
-                showFragment(BootstrapSaveRecoveryKeyFragment::class, Bundle())
+                showFragment(BootstrapSaveRecoveryKeyFragment::class)
             }
-            is BootstrapStep.DoneSuccess                 -> {
+            is BootstrapStep.DoneSuccess -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_security_key_24dp))
                 views.bootstrapTitleText.text = getString(R.string.bootstrap_finish_title)
-                showFragment(BootstrapConclusionFragment::class, Bundle())
+                showFragment(BootstrapConclusionFragment::class)
             }
             is BootstrapStep.GetBackupSecretForMigration -> {
                 val isKey = state.step.useKey()
                 val drawableRes = if (isKey) R.drawable.ic_security_key_24dp else R.drawable.ic_security_phrase_24dp
                 views.bootstrapIcon.isVisible = true
-                views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
-                        requireContext(),
-                        drawableRes)
+                views.bootstrapIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                                requireContext(),
+                                drawableRes
+                        )
                 )
                 views.bootstrapTitleText.text = getString(R.string.upgrade_security)
-                showFragment(BootstrapMigrateBackupFragment::class, Bundle())
+                showFragment(BootstrapMigrateBackupFragment::class)
             }
-        }.exhaustive
+        }
         super.invalidate()
     }
 
     companion object {
 
-        const val EXTRA_ARGS = "EXTRA_ARGS"
-
         fun show(fragmentManager: FragmentManager, mode: SetupMode): BootstrapBottomSheet {
             return BootstrapBottomSheet().apply {
                 isCancelable = false
-                arguments = Bundle().apply {
-                    this.putParcelable(EXTRA_ARGS, Args(setUpMode = mode))
-                }
+                setArguments(Args(setUpMode = mode))
             }.also {
                 it.show(fragmentManager, "BootstrapBottomSheet")
             }
         }
     }
 
-    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+    private fun showFragment(fragmentClass: KClass<out Fragment>, argsParcelable: Parcelable? = null) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
+                replace(
+                        R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
-                        bundle,
+                        argsParcelable?.toMvRxBundle(),
                         fragmentClass.simpleName
                 )
             }

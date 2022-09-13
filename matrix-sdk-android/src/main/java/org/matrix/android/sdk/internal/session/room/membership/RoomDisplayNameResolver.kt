@@ -33,26 +33,30 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
+import org.matrix.android.sdk.internal.util.Normalizer
 import javax.inject.Inject
 
 /**
- * This class computes room display name
+ * This class computes room display name.
  */
 internal class RoomDisplayNameResolver @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
+        private val displayNameResolver: DisplayNameResolver,
+        private val normalizer: Normalizer,
         @UserId private val userId: String
 ) {
 
     private val roomDisplayNameFallbackProvider = matrixConfiguration.roomDisplayNameFallbackProvider
 
     /**
-     * Compute the room display name
+     * Compute the room display name.
      *
-     * @param realm: the current instance of realm
-     * @param roomId: the roomId to resolve the name of.
+     * @param realm the current instance of realm
+     * @param roomId the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(realm: Realm, roomId: String): String {
+    fun resolve(realm: Realm, roomId: String): RoomName {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
@@ -64,12 +68,12 @@ internal class RoomDisplayNameResolver @Inject constructor(
         val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
         if (!name.isNullOrEmpty()) {
-            return name
+            return name.toRoomName()
         }
         val canonicalAlias = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
         name = ContentMapper.map(canonicalAlias?.content).toModel<RoomCanonicalAliasContent>()?.canonicalAlias
         if (!name.isNullOrEmpty()) {
-            return name
+            return name.toRoomName()
         }
 
         val roomMembers = RoomMemberHelper(realm, roomId)
@@ -83,7 +87,8 @@ internal class RoomDisplayNameResolver @Inject constructor(
                         activeMembers.where()
                                 .equalTo(RoomMemberSummaryEntityFields.USER_ID, it)
                                 .findFirst()
-                                ?.getBestName()
+                                ?.toMatrixItem()
+                                ?.let { matrixItem -> displayNameResolver.getBestName(matrixItem) }
                     }
                     ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
@@ -105,32 +110,32 @@ internal class RoomDisplayNameResolver @Inject constructor(
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
-                0    -> {
+                0 -> {
                     // Get left members if any
                     val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
                             .findAll()
-                            .map { it.getBestName() }
+                            .map { displayNameResolver.getBestName(it.toMatrixItem()) }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
-                1    -> {
+                1 -> {
                     roomDisplayNameFallbackProvider.getNameFor1member(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers)
                     )
                 }
-                2    -> {
+                2 -> {
                     roomDisplayNameFallbackProvider.getNameFor2members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers)
                     )
                 }
-                3    -> {
+                3 -> {
                     roomDisplayNameFallbackProvider.getNameFor3members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers)
                     )
                 }
-                4    -> {
+                4 -> {
                     roomDisplayNameFallbackProvider.getNameFor4members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
@@ -149,17 +154,23 @@ internal class RoomDisplayNameResolver @Inject constructor(
                 }
             }
         }
-        return name ?: roomId
+        return (name ?: roomId).toRoomName()
     }
 
-    /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName] */
-    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity,
-                                      roomMemberHelper: RoomMemberHelper): String {
+    /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName]. */
+    private fun resolveRoomMemberName(
+            roomMemberSummary: RoomMemberSummaryEntity,
+            roomMemberHelper: RoomMemberHelper
+    ): String {
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
-            roomMemberSummary.getBestName()
+            displayNameResolver.getBestName(roomMemberSummary.toMatrixItem())
         } else {
             "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
         }
     }
+
+    private fun String.toRoomName() = RoomName(this, normalizedName = normalizer.normalize(this))
 }
+
+internal data class RoomName(val name: String, val normalizedName: String)

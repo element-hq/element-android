@@ -18,9 +18,9 @@ package org.matrix.android.sdk.internal.session.widgets.token
 
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
-import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.internal.session.widgets.WidgetsAPI
 import org.matrix.android.sdk.internal.session.widgets.WidgetsAPIProvider
 import org.matrix.android.sdk.internal.task.Task
@@ -37,9 +37,11 @@ internal interface GetScalarTokenTask : Task<GetScalarTokenTask.Params, String> 
 
 private const val WIDGET_API_VERSION = "1.1"
 
-internal class DefaultGetScalarTokenTask @Inject constructor(private val widgetsAPIProvider: WidgetsAPIProvider,
-                                                             private val scalarTokenStore: ScalarTokenStore,
-                                                             private val getOpenIdTokenTask: GetOpenIdTokenTask) : GetScalarTokenTask {
+internal class DefaultGetScalarTokenTask @Inject constructor(
+        private val widgetsAPIProvider: WidgetsAPIProvider,
+        private val scalarTokenStore: ScalarTokenStore,
+        private val getOpenIdTokenTask: GetOpenIdTokenTask
+) : GetScalarTokenTask {
 
     override suspend fun execute(params: GetScalarTokenTask.Params): String {
         val widgetsAPI = widgetsAPIProvider.get(params.serverUrl)

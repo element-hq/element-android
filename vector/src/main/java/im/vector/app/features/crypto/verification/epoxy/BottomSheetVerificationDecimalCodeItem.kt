@@ -26,11 +26,13 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_decimal_code)
-abstract class BottomSheetVerificationDecimalCodeItem : VectorEpoxyModel<BottomSheetVerificationDecimalCodeItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationDecimalCodeItem : VectorEpoxyModel<BottomSheetVerificationDecimalCodeItem.Holder>(
+        R.layout.item_verification_decimal_code
+) {
 
     @EpoxyAttribute
-    var code: CharSequence = ""
+    var code: String = ""
 
     override fun bind(holder: Holder) {
         super.bind(holder)

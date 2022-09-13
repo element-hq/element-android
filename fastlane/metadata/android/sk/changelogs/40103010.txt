@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Usporiadajte svoje miestnosti pomocou Priestorov! Verzia v1.3.1 opravuje pád, ktorý sa môže vyskytnúť vo verzii v1.3.0.
+Úplný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.3.1

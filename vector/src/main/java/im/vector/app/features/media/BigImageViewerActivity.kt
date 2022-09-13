@@ -20,34 +20,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityBigImageViewerBinding
-
 import javax.inject.Inject
 
 /**
- * Simple Activity to display an avatar in fullscreen
+ * Simple Activity to display an avatar in fullscreen.
  */
+@AndroidEntryPoint
 class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
 
     override fun getBinding() = ActivityBigImageViewerBinding.inflate(layoutInflater)
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(views.bigImageViewerToolbar)
-        supportActionBar?.apply {
-            title = intent.getStringExtra(EXTRA_TITLE)
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(views.bigImageViewerToolbar)
+                .setTitle(intent.getStringExtra(EXTRA_TITLE))
+                .allowBack()
 
         val uri = sessionHolder.getSafeActiveSession()
                 ?.contentUrlResolver()

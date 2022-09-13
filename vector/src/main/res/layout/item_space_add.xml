@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <im.vector.app.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemGroupLayout"
     android:layout_width="match_parent"
     android:layout_height="65dp"
     android:background="@drawable/bg_space_item"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
-
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/groupAvatarImageView"
@@ -18,7 +19,6 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:background="@drawable/rounded_rect_shape_8"
         android:backgroundTint="?colorPrimary"
-        android:contentDescription="@string/avatar"
         android:duplicateParentState="true"
         android:importantForAccessibility="no"
         android:padding="10dp"
@@ -29,27 +29,18 @@
 
     <TextView
         android:id="@+id/groupNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/add_space"
+        android:text="@string/create_space"
         android:textColor="?colorPrimary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintStart_toEndOf="@id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    <View-->
-    <!--        android:id="@+id/groupBottomSeparator"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="1dp"-->
-    <!--        android:background="?riotx_header_panel_border_mobile"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </im.vector.app.core.platform.CheckableConstraintLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/messageAvatarImageView"
@@ -12,13 +13,14 @@
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/messageMemberNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -27,37 +29,99 @@
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
-        app:layout_constraintStart_toEndOf="@+id/messageAvatarImageView"
+        app:layout_constraintEnd_toStartOf="@id/messageTimeView"
+        app:layout_constraintStart_toEndOf="@id/messageAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/messageTimeView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/messageMemberNameView"
+        android:layout_alignBaseline="@id/messageMemberNameView"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/messageMemberNameView"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="@id/messageMemberNameView"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
         android:id="@+id/messageContentView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/messageMemberNameView"
-        app:layout_constraintTop_toBottomOf="@+id/messageMemberNameView"
-        tools:text="@sample/matrix.json/data/message" />
+        app:layout_constraintStart_toStartOf="@id/messageMemberNameView"
+        app:layout_constraintTop_toBottomOf="@id/messageMemberNameView"
+        tools:text="@sample/messages.json/data/message" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchThreadSummaryContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        android:layout_below="@id/informationBottom"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:contentDescription="@string/room_threads_filter"
+        android:maxWidth="496dp"
+        android:minWidth="144dp"
+        android:paddingStart="13dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="13dp"
+        android:paddingBottom="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@id/messageContentView"
+        app:layout_constraintStart_toStartOf="@id/messageContentView"
+        app:layout_constraintTop_toBottomOf="@id/messageContentView"
+        tools:visibility="gone">
+
+        <include layout="@layout/view_thread_room_summary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchFromThreadConstraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/messageContentView"
+        app:layout_constraintTop_toBottomOf="@id/messageContentView"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/searchFromThreadImageView"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/room_threads_filter"
+            android:src="@drawable/ic_thread_summary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/searchFromThreadTextView"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minEms="1"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/searchFromThreadImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/search_thread_from_a_thread" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

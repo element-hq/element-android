@@ -39,9 +39,9 @@ private const val ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqr
 private val BASE = BigInteger.valueOf(58)
 
 /**
- * Encode a byte array to a human readable string with base58 chars
+ * Encode a byte array to a human readable string with base58 chars.
  */
-fun base58encode(input: ByteArray): String {
+internal fun base58encode(input: ByteArray): String {
     var bi = BigInteger(1, input)
     val s = StringBuffer()
     while (bi >= BASE) {
@@ -62,9 +62,9 @@ fun base58encode(input: ByteArray): String {
 }
 
 /**
- * Decode a base58 String to a byte array
+ * Decode a base58 String to a byte array.
  */
-fun base58decode(input: String): ByteArray {
+internal fun base58decode(input: String): ByteArray {
     var result = decodeToBigInteger(input).toByteArray()
 
     // Remove the first leading zero if any

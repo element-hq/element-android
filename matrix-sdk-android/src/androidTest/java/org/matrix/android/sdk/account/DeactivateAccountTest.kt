@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import kotlin.coroutines.Continuation
@@ -39,15 +39,13 @@ import kotlin.coroutines.resume
 @FixMethodOrder(MethodSorters.JVM)
 class DeactivateAccountTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-
     @Test
-    fun deactivateAccountTest() {
+    fun deactivateAccountTest() = runSessionTest(context(), false /* session will be deactivated */) { commonTestHelper ->
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
-            session.deactivateAccount(
+            session.accountService().deactivateAccount(
                     eraseAllData = false,
                     userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
@@ -67,9 +65,11 @@ class DeactivateAccountTest : InstrumentedTest {
         val throwable = commonTestHelper.logAccountWithError(session.myUserId, TestConstants.PASSWORD)
 
         // Test the error
-        assertTrue(throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_USER_DEACTIVATED
-                && throwable.error.message == "This account has been deactivated")
+        assertTrue(
+                throwable is Failure.ServerError &&
+                        throwable.error.code == MatrixError.M_USER_DEACTIVATED &&
+                        throwable.error.message == "This account has been deactivated"
+        )
 
         // Try to create an account with the deactivate account user id, it will fail (M_USER_IN_USE)
         val hs = commonTestHelper.createHomeServerConfig()
@@ -95,8 +95,10 @@ class DeactivateAccountTest : InstrumentedTest {
 
         // Test the error
         accountCreationError.let {
-            assertTrue(it is Failure.ServerError
-                    && it.error.code == MatrixError.M_USER_IN_USE)
+            assertTrue(
+                    it is Failure.ServerError &&
+                            it.error.code == MatrixError.M_USER_IN_USE
+            )
         }
 
         // No need to close the session, it has been deactivated

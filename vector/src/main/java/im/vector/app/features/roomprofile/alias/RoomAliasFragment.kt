@@ -16,43 +16,44 @@
 
 package im.vector.app.features.roomprofile.alias
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedAction
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
-
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomAliasFragment @Inject constructor(
-        val viewModelFactory: RoomAliasViewModel.Factory,
-        private val controller: RoomAliasController,
-        private val avatarRenderer: AvatarRenderer
-) :
+@AndroidEntryPoint
+class RoomAliasFragment :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomAliasController.Callback {
+
+    @Inject lateinit var controller: RoomAliasController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomAliasViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
@@ -63,12 +64,18 @@ class RoomAliasFragment @Inject constructor(
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomAddresses
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomAliasBottomSheetSharedActionViewModel::class.java)
 
         controller.callback = this
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
@@ -76,25 +83,25 @@ class RoomAliasFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
-                RoomAliasViewEvents.Success    -> showSuccess()
-            }.exhaustive
+                RoomAliasViewEvents.Success -> showSuccess()
+            }
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe { handleAliasAction(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleAliasAction(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleAliasAction(action: RoomAliasBottomSheetSharedAction?) {
         when (action) {
-            is RoomAliasBottomSheetSharedAction.ShareAlias     -> shareAlias(action.matrixTo)
-            is RoomAliasBottomSheetSharedAction.PublishAlias   -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
+            is RoomAliasBottomSheetSharedAction.ShareAlias -> shareAlias(action.matrixTo)
+            is RoomAliasBottomSheetSharedAction.PublishAlias -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
             is RoomAliasBottomSheetSharedAction.UnPublishAlias -> unpublishAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.DeleteAlias    -> removeLocalAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.SetMainAlias   -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
-            RoomAliasBottomSheetSharedAction.UnsetMainAlias    -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
-            null                                               -> Unit
+            is RoomAliasBottomSheetSharedAction.DeleteAlias -> removeLocalAlias(action.alias)
+            is RoomAliasBottomSheetSharedAction.SetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
+            RoomAliasBottomSheetSharedAction.UnsetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
+            null -> Unit
         }
     }
 
@@ -133,15 +140,14 @@ class RoomAliasFragment @Inject constructor(
     }
 
     private fun unpublishAlias(alias: String) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_unpublish_confirmation, alias))
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.action_unpublish) { _, _ ->
                     viewModel.handle(RoomAliasAction.UnpublishAlias(alias))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     override fun toggleManualPublishForm() {
@@ -184,15 +190,18 @@ class RoomAliasFragment @Inject constructor(
                 .show(childFragmentManager, "ROOM_ALIAS_ACTIONS")
     }
 
+    override fun retry() {
+        viewModel.handle(RoomAliasAction.Retry)
+    }
+
     private fun removeLocalAlias(alias: String) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_delete_confirmation, alias))
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete) { _, _ ->
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_delete) { _, _ ->
                     viewModel.handle(RoomAliasAction.RemoveLocalAlias(alias))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 }

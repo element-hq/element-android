@@ -19,7 +19,7 @@ package im.vector.app.features.roommemberprofile
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Transient events for RoomMemberProfile
+ * Transient events for RoomMemberProfile.
  */
 sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomMemberProfileViewEvents()
@@ -39,4 +39,6 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     ) : RoomMemberProfileViewEvents()
 
     data class ShareRoomMemberProfile(val permalink: String) : RoomMemberProfileViewEvents()
+    data class OpenRoom(val roomId: String) : RoomMemberProfileViewEvents()
+    object GoBack : RoomMemberProfileViewEvents()
 }

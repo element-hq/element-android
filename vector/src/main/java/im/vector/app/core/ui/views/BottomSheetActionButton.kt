@@ -21,12 +21,12 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.setDrawableOrHide
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -81,7 +81,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            views.bottomSheetActionIcon.setImageDrawable(value)
+            views.bottomSheetActionIcon.setDrawableOrHide(value)
         }
 
     var tint: Int? = null
@@ -94,6 +94,12 @@ class BottomSheetActionButton @JvmOverloads constructor(
         set(value) {
             field = value
             value?.let { views.bottomSheetActionTitle.setTextColor(it) }
+        }
+
+    var isBetaAction: Boolean? = null
+        set(value) {
+            field = value
+            views.bottomSheetActionBeta.isVisible = field ?: false
         }
 
     init {
@@ -109,7 +115,9 @@ class BottomSheetActionButton @JvmOverloads constructor(
             rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
 
             tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
-            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ContextCompat.getColor(context, R.color.riotx_accent))
+            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ThemeUtils.getColor(context, R.attr.colorPrimary))
+
+            isBetaAction = getBoolean(R.styleable.BottomSheetActionButton_betaAction, false)
         }
     }
 }

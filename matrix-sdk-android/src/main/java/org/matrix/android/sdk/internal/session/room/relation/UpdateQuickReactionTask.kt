@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.room.relation
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
@@ -23,7 +24,6 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.Realm
 import javax.inject.Inject
 
 internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params, UpdateQuickReactionTask.Result> {
@@ -41,8 +41,10 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                                  @UserId private val userId: String) : UpdateQuickReactionTask {
+internal class DefaultUpdateQuickReactionTask @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        @UserId private val userId: String
+) : UpdateQuickReactionTask {
 
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null

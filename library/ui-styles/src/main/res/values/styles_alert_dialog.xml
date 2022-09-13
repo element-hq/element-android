@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Vector.Title.Text</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.Vector.Body.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog.Destructive">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
+    </style>
+
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog.NegativeDestructive">
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
+    </style>
+
+    <!-- Title -->
+    <style name="MaterialAlertDialog.Vector.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle</item>
+    </style>
+
+    <!-- Body -->
+    <style name="MaterialAlertDialog.Vector.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body</item>
+        <item name="lineHeight">20sp</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Widget.Vector.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+    </style>
+
+    <style name="Widget.Vector.Button.TextButton.Dialog.Destructive">
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
+    </style>
+
+</resources>

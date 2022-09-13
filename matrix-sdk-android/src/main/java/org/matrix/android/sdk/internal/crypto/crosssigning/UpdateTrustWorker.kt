@@ -22,9 +22,13 @@ import com.squareup.moshi.JsonClass
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
@@ -50,9 +54,8 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class UpdateTrustWorker(context: Context,
-                                 params: WorkerParameters)
-    : SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, Params::class.java) {
+internal class UpdateTrustWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+        SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -96,7 +99,7 @@ internal class UpdateTrustWorker(context: Context,
         if (userList.isNotEmpty()) {
             // Unfortunately we don't have much info on what did exactly changed (is it the cross signing keys of that user,
             // or a new device?) So we check all again :/
-            Timber.d("## CrossSigning - Updating trust for users: ${userList.logLimit()}")
+            Timber.v("## CrossSigning - Updating trust for users: ${userList.logLimit()}")
             updateTrust(userList)
         }
 
@@ -146,9 +149,9 @@ internal class UpdateTrustWorker(context: Context,
             val trusts = otherInfos.mapValues { entry ->
                 when (entry.key) {
                     myUserId -> myTrustResult
-                    else     -> {
+                    else -> {
                         crossSigningService.checkOtherMSKTrusted(myCrossSigningInfo, entry.value).also {
-                            Timber.d("## CrossSigning - user:${entry.key} result:$it")
+                            Timber.v("## CrossSigning - user:${entry.key} result:$it")
                         }
                     }
                 }
@@ -178,7 +181,7 @@ internal class UpdateTrustWorker(context: Context,
                 // Update trust if needed
                 devicesEntities?.forEach { device ->
                     val crossSignedVerified = trustMap?.get(device)?.isCrossSignedVerified()
-                    Timber.d("## CrossSigning - Trust for ${device.userId}|${device.deviceId} : cross verified: ${trustMap?.get(device)}")
+                    Timber.v("## CrossSigning - Trust for ${device.userId}|${device.deviceId} : cross verified: ${trustMap?.get(device)}")
                     if (device.trustLevelEntity?.crossSignedVerified != crossSignedVerified) {
                         Timber.d("## CrossSigning - Trust change detected for ${device.userId}|${device.deviceId} : cross verified: $crossSignedVerified")
                         // need to save
@@ -204,6 +207,7 @@ internal class UpdateTrustWorker(context: Context,
     private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
         awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
+            Timber.d("## CrossSigning - Updating shields for impacted rooms - in transaction")
             Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
                 sessionRealm.where(RoomMemberSummaryEntity::class.java)
                         .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
@@ -216,7 +220,7 @@ internal class UpdateTrustWorker(context: Context,
                                     .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
                                     .findFirst()
                                     ?.let { roomSummary ->
-                                        Timber.d("## CrossSigning - Check shield state for room $roomId")
+                                        Timber.v("## CrossSigning - Check shield state for room $roomId")
                                         val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
                                         try {
                                             val updatedTrust = computeRoomShield(
@@ -236,6 +240,7 @@ internal class UpdateTrustWorker(context: Context,
                         }
             }
         }
+        Timber.d("## CrossSigning - Updating shields for impacted rooms - END")
     }
 
     private fun getCrossSigningInfo(cryptoRealm: Realm, userId: String): MXCrossSigningInfo? {
@@ -273,11 +278,13 @@ internal class UpdateTrustWorker(context: Context,
                 }
     }
 
-    private fun computeRoomShield(myCrossSigningInfo: MXCrossSigningInfo?,
-                                  cryptoRealm: Realm,
-                                  activeMemberUserIds: List<String>,
-                                  roomSummaryEntity: RoomSummaryEntity): RoomEncryptionTrustLevel {
-        Timber.d("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> ${activeMemberUserIds.logLimit()}")
+    private fun computeRoomShield(
+            myCrossSigningInfo: MXCrossSigningInfo?,
+            cryptoRealm: Realm,
+            activeMemberUserIds: List<String>,
+            roomSummaryEntity: RoomSummaryEntity
+    ): RoomEncryptionTrustLevel {
+        Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> ${activeMemberUserIds.logLimit()}")
         // The set of “all users” depends on the type of room:
         // For regular / topic rooms which have more than 2 members (including yourself) are considered when decorating a room
         // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room

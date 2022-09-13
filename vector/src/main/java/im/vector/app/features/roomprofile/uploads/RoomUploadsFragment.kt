@@ -21,31 +21,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.databinding.FragmentRoomUploadsBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomUploadsFragment @Inject constructor(
-        private val viewModelFactory: RoomUploadsViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer,
-        private val notificationUtils: NotificationUtils
-) : VectorBaseFragment<FragmentRoomUploadsBinding>(),
-        RoomUploadsViewModel.Factory by viewModelFactory {
+@AndroidEntryPoint
+class RoomUploadsFragment :
+        VectorBaseFragment<FragmentRoomUploadsBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var clock: Clock
 
     private val roomProfileArgs: RoomProfileArgs by args()
 
@@ -53,6 +57,11 @@ class RoomUploadsFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomUploadsBinding {
         return FragmentRoomUploadsBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomUploads
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,23 +78,33 @@ class RoomUploadsFragment @Inject constructor(
         }.attach()
 
         setupToolbar(views.roomUploadsToolbar)
+                .allowBack()
 
         viewModel.observeViewEvents {
             when (it) {
                 is RoomUploadsViewEvents.FileReadyForSharing -> {
                     shareMedia(requireContext(), it.file, getMimeTypeFromUri(requireContext(), it.file.toUri()))
                 }
-                is RoomUploadsViewEvents.FileReadyForSaving  -> {
-                    saveMedia(
-                            context = requireContext(),
-                            file = it.file,
-                            title = it.title,
-                            mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
-                            notificationUtils = notificationUtils
-                    )
+                is RoomUploadsViewEvents.FileReadyForSaving -> {
+                    lifecycleScope.launch {
+                        runCatching {
+                            saveMedia(
+                                    context = requireContext(),
+                                    file = it.file,
+                                    title = it.title,
+                                    mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
+                                    notificationUtils = notificationUtils,
+                                    currentTimeMillis = clock.epochMillis()
+                            )
+                        }.onFailure { failure ->
+                            if (!isAdded) return@onFailure
+                            showErrorInSnackbar(failure)
+                        }
+                    }
+                    Unit
                 }
-                is RoomUploadsViewEvents.Failure             -> showFailure(it.throwable)
-            }.exhaustive
+                is RoomUploadsViewEvents.Failure -> showFailure(it.throwable)
+            }
         }
     }
 

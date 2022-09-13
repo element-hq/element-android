@@ -1,0 +1,2 @@
+此版本中的主要變動：主要是穩定性與臭蟲修復更新。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.13

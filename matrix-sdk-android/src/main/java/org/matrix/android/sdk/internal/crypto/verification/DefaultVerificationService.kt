@@ -19,11 +19,17 @@ package org.matrix.android.sdk.internal.crypto.verification
 import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
@@ -38,6 +44,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
@@ -52,14 +59,10 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
 import org.matrix.android.sdk.api.session.room.model.message.ValidVerificationDone
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.MyDeviceInfoHolder
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationAccept
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
@@ -81,9 +84,7 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -94,8 +95,8 @@ internal class DefaultVerificationService @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        private val secretShareManager: SecretShareManager,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         private val deviceListManager: DeviceListManager,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
@@ -104,7 +105,8 @@ internal class DefaultVerificationService @Inject constructor(
         private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val clock: Clock,
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -127,31 +129,31 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START         -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_CANCEL        -> {
+                EventType.KEY_VERIFICATION_CANCEL -> {
                     onCancelReceived(event)
                 }
-                EventType.KEY_VERIFICATION_ACCEPT        -> {
+                EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY           -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC           -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY         -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE          -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onDoneReceived(event)
                 }
                 MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
                 }
-                else                                     -> {
+                else -> {
                     // ignore
                 }
             }
@@ -161,7 +163,7 @@ internal class DefaultVerificationService @Inject constructor(
     fun onRoomEvent(event: Event) {
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -171,24 +173,24 @@ internal class DefaultVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onRoomAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onRoomKeyRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onRoomMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY  -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onRoomReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE   -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onRoomDoneReceived(event)
                 }
-                EventType.MESSAGE                 -> {
+                EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                         onRoomRequestReceived(event)
                     }
                 }
-                else                              -> {
+                else -> {
                     // ignore
                 }
             }
@@ -261,9 +263,11 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
+        setDeviceVerificationAction.handle(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                 userId,
-                deviceID)
+                deviceID
+        )
 
         listeners.forEach {
             try {
@@ -313,7 +317,7 @@ internal class DefaultVerificationService @Inject constructor(
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
-                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
+                ageLocalTs = event.ageLocalTs ?: clock.epochMillis(),
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = null,
@@ -352,7 +356,7 @@ internal class DefaultVerificationService @Inject constructor(
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
-                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
+                ageLocalTs = event.ageLocalTs ?: clock.epochMillis(),
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = event.roomId,
@@ -364,14 +368,14 @@ internal class DefaultVerificationService @Inject constructor(
         dispatchRequestAdded(pendingVerificationRequest)
 
         /*
-        * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
-        * to begin the verification.
-        * If both parties send an m.key.verification.start event, and they both specify the same verification method,
-        * then the event sent by the user whose user ID is the smallest is used, and the other m.key.verification.start
-        * event is ignored.
-        * In the case of a single user verifying two of their devices, the device ID is compared instead.
-        * If both parties send an m.key.verification.start event, but they specify different verification methods,
-        * the verification should be cancelled with a code of m.unexpected_message.
+         * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
+         * to begin the verification.
+         * If both parties send an m.key.verification.start event, and they both specify the same verification method,
+         * then the event sent by the user whose user ID is the smallest is used, and the other m.key.verification.start
+         * event is ignored.
+         * In the case of a single user verifying two of their devices, the device ID is compared instead.
+         * If both parties send an m.key.verification.start event, but they specify different verification methods,
+         * the verification should be cancelled with a code of m.unexpected_message.
          */
     }
 
@@ -468,9 +472,11 @@ internal class DefaultVerificationService @Inject constructor(
     /**
      * Return a CancelCode to make the caller cancel the verification. Else return null
      */
-    private suspend fun handleStart(otherUserId: String?,
-                                    startReq: ValidVerificationInfoStart,
-                                    txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
+    private suspend fun handleStart(
+            otherUserId: String?,
+            startReq: ValidVerificationInfoStart,
+            txConfigure: (DefaultVerificationTransaction) -> Unit
+    ): CancelCode? {
         Timber.d("## SAS onStartRequestReceived $startReq")
         if (otherUserId?.let { checkKeysAreDownloaded(it, startReq.fromDevice) } != null) {
             val tid = startReq.transactionId
@@ -501,9 +507,9 @@ internal class DefaultVerificationService @Inject constructor(
             }
 
             when (startReq) {
-                is ValidVerificationInfoStart.SasVerificationInfoStart         -> {
+                is ValidVerificationInfoStart.SasVerificationInfoStart -> {
                     when (existing) {
-                        is SasVerificationTransaction    -> {
+                        is SasVerificationTransaction -> {
                             // should cancel both!
                             Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionId}")
                             existing.cancel(CancelCode.UnexpectedMessage)
@@ -513,7 +519,7 @@ internal class DefaultVerificationService @Inject constructor(
                         is QrCodeVerificationTransaction -> {
                             // Nothing to do?
                         }
-                        null                             -> {
+                        null -> {
                             getExistingTransactionsForUser(otherUserId)
                                     ?.filterIsInstance(SasVerificationTransaction::class.java)
                                     ?.takeIf { it.isNotEmpty() }
@@ -537,8 +543,8 @@ internal class DefaultVerificationService @Inject constructor(
                     // as we are the one requesting in first place (or we accepted the request)
                     // I need to check if the pending request was related to this device also
                     val autoAccept = getExistingVerificationRequests(otherUserId).any {
-                        it.transactionId == startReq.transactionId
-                                && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
+                        it.transactionId == startReq.transactionId &&
+                                (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
@@ -547,12 +553,13 @@ internal class DefaultVerificationService @Inject constructor(
                             deviceId,
                             cryptoStore,
                             crossSigningService,
-                            outgoingGossipingRequestManager,
-                            incomingGossipingRequestManager,
+                            outgoingKeyRequestManager,
+                            secretShareManager,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionId,
                             otherUserId,
-                            autoAccept).also { txConfigure(it) }
+                            autoAccept
+                    ).also { txConfigure(it) }
                     addTransaction(tx)
                     tx.onVerificationStart(startReq)
                     return null
@@ -584,8 +591,10 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     // TODO Refacto: It could just return a boolean
-    private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               otherDeviceId: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
+    private suspend fun checkKeysAreDownloaded(
+            otherUserId: String,
+            otherDeviceId: String
+    ): MXUsersDevicesMap<CryptoDeviceInfo>? {
         return try {
             var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
             if (keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true) {
@@ -644,9 +653,11 @@ internal class DefaultVerificationService @Inject constructor(
 
         if (existingRequest != null) {
             // Mark this request as cancelled
-            updatePendingRequest(existingRequest.copy(
-                    cancelConclusion = safeValueOf(cancelReq.code)
-            ))
+            updatePendingRequest(
+                    existingRequest.copy(
+                            cancelConclusion = safeValueOf(cancelReq.code)
+                    )
+            )
         }
 
         existingTransaction?.state = VerificationTxState.Cancelled(safeValueOf(cancelReq.code), false)
@@ -764,8 +775,15 @@ internal class DefaultVerificationService @Inject constructor(
             return
         }
 
+        val roomId = event.roomId
+        if (roomId == null) {
+            Timber.e("## SAS Verification missing roomId for event")
+            // TODO cancel?
+            return
+        }
+
         handleReadyReceived(event.senderId, readyReq) {
-            verificationTransportRoomMessageFactory.createTransport(event.roomId!!, it)
+            verificationTransportRoomMessageFactory.createTransport(roomId, it)
         }
     }
 
@@ -807,17 +825,15 @@ internal class DefaultVerificationService @Inject constructor(
             getExistingTransaction(userId, doneReq.transactionId)
                     ?: getOldTransaction(userId, doneReq.transactionId)
                             ?.let { vt ->
-                                val otherDeviceId = vt.otherDeviceId
+                                val otherDeviceId = vt.otherDeviceId ?: return@let
                                 if (!crossSigningService.canCrossSign()) {
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(MASTER_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
+                                    cryptoCoroutineScope.launch {
+                                        secretShareManager.requestSecretTo(otherDeviceId, MASTER_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, SELF_SIGNING_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, USER_SIGNING_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, KEYBACKUP_SECRET_SSSS_NAME)
+                                    }
                                 }
-                                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                        ?: "*")))
                             }
         }
     }
@@ -887,9 +903,11 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private fun handleReadyReceived(senderId: String,
-                                    readyReq: ValidVerificationInfoReady,
-                                    transportCreator: (DefaultVerificationTransaction) -> VerificationTransport) {
+    private fun handleReadyReceived(
+            senderId: String,
+            readyReq: ValidVerificationInfoReady,
+            transportCreator: (DefaultVerificationTransaction) -> VerificationTransport
+    ) {
         val existingRequest = getExistingVerificationRequests(senderId).find { it.transactionId == readyReq.transactionId }
         if (existingRequest == null) {
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionId} fromDevice ${readyReq.fromDevice}")
@@ -911,22 +929,41 @@ internal class DefaultVerificationService @Inject constructor(
                     otherUserId = senderId,
                     otherDeviceId = readyReq.fromDevice,
                     crossSigningService = crossSigningService,
-                    outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager = incomingGossipingRequestManager,
+                    outgoingKeyRequestManager = outgoingKeyRequestManager,
+                    secretShareManager = secretShareManager,
                     cryptoStore = cryptoStore,
                     qrCodeData = qrCodeData,
                     userId = userId,
                     deviceId = deviceId ?: "",
-                    isIncoming = false)
+                    isIncoming = false
+            )
 
             tx.transport = transportCreator.invoke(tx)
 
             addTransaction(tx)
         }
 
-        updatePendingRequest(existingRequest.copy(
-                readyInfo = readyReq
-        ))
+        updatePendingRequest(
+                existingRequest.copy(
+                        readyInfo = readyReq
+                )
+        )
+
+        notifyOthersOfAcceptance(readyReq.transactionId, readyReq.fromDevice)
+    }
+
+    /**
+     * Gets a list of device ids excluding the current one.
+     */
+    private fun getMyOtherDeviceIds(): List<String> = cryptoStore.getUserDevices(userId)?.keys?.filter { it != deviceId }.orEmpty()
+
+    /**
+     * Notifies other devices that the current verification transaction is being handled by [acceptedByDeviceId].
+     */
+    private fun notifyOthersOfAcceptance(transactionId: String, acceptedByDeviceId: String) {
+        val deviceIds = getMyOtherDeviceIds().filter { it != acceptedByDeviceId }
+        val transport = verificationTransportToDeviceFactory.createTransport(null)
+        transport.cancelTransaction(transactionId, userId, deviceIds, CancelCode.AcceptedByAnotherDevice)
     }
 
     private fun createQrCodeData(requestId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
@@ -936,12 +973,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         return when {
-            userId != otherUserId                        ->
+            userId != otherUserId ->
                 createQrCodeDataForDistinctUser(requestId, otherUserId)
             crossSigningService.isCrossSigningVerified() ->
                 // This is a self verification and I am the old device (Osborne2)
                 createQrCodeDataForVerifiedDevice(requestId, otherDeviceId)
-            else                                         ->
+            else ->
                 // This is a self verification and I am the new device (Dynabook)
                 createQrCodeDataForUnVerifiedDevice(requestId)
         }
@@ -1110,12 +1147,13 @@ internal class DefaultVerificationService @Inject constructor(
                     deviceId,
                     cryptoStore,
                     crossSigningService,
-                    outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
+                    outgoingKeyRequestManager,
+                    secretShareManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     otherUserId,
-                    otherDeviceId)
+                    otherDeviceId
+            )
             tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
@@ -1126,8 +1164,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String?)
-            : PendingVerificationRequest {
+    override fun requestKeyVerificationInDMs(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            roomId: String,
+            localId: String?
+    ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
@@ -1148,7 +1190,7 @@ internal class DefaultVerificationService @Inject constructor(
         val validLocalId = localId ?: LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
-                ageLocalTs = System.currentTimeMillis(),
+                ageLocalTs = clock.epochMillis(),
                 isIncoming = false,
                 roomId = roomId,
                 localId = validLocalId,
@@ -1171,16 +1213,18 @@ internal class DefaultVerificationService @Inject constructor(
         }
                 .distinct()
 
+        requestsForUser.add(verificationRequest)
         transport.sendVerificationRequest(methodValues, validLocalId, otherUserId, roomId, null) { syncedId, info ->
             // We need to update with the syncedID
-            updatePendingRequest(verificationRequest.copy(
-                    transactionId = syncedId,
-                    // localId stays different
-                    requestInfo = info
-            ))
+            updatePendingRequest(
+                    verificationRequest.copy(
+                            transactionId = syncedId,
+                            // localId stays different
+                            requestInfo = info
+                    )
+            )
         }
 
-        requestsForUser.add(verificationRequest)
         dispatchRequestAdded(verificationRequest)
 
         return verificationRequest
@@ -1226,7 +1270,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         val verificationRequest = PendingVerificationRequest(
                 transactionId = localId,
-                ageLocalTs = System.currentTimeMillis(),
+                ageLocalTs = clock.epochMillis(),
                 isIncoming = false,
                 roomId = null,
                 localId = localId,
@@ -1252,10 +1296,12 @@ internal class DefaultVerificationService @Inject constructor(
 
         transport.sendVerificationRequest(methodValues, localId, otherUserId, null, targetDevices) { _, info ->
             // Nothing special to do in to device mode
-            updatePendingRequest(verificationRequest.copy(
-                    // localId stays different
-                    requestInfo = info
-            ))
+            updatePendingRequest(
+                    verificationRequest.copy(
+                            // localId stays different
+                            requestInfo = info
+                    )
+            )
         }
 
         requestsForUser.add(verificationRequest)
@@ -1269,17 +1315,19 @@ internal class DefaultVerificationService @Inject constructor(
                 .cancelTransaction(transactionId, otherUserId, null, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
-            updatePendingRequest(it.copy(
-                    cancelConclusion = CancelCode.User
-            ))
+            updatePendingRequest(
+                    it.copy(
+                            cancelConclusion = CancelCode.User
+                    )
+            )
         }
     }
 
     private fun updatePendingRequest(updated: PendingVerificationRequest) {
         val requestsForUser = pendingRequests.getOrPut(updated.otherUserId) { mutableListOf() }
         val index = requestsForUser.indexOfFirst {
-            it.transactionId == updated.transactionId
-                    || it.transactionId == null && it.localId == updated.localId
+            it.transactionId == updated.transactionId ||
+                    it.transactionId == null && it.localId == updated.localId
         }
         if (index != -1) {
             requestsForUser.removeAt(index)
@@ -1288,11 +1336,13 @@ internal class DefaultVerificationService @Inject constructor(
         dispatchRequestUpdated(updated)
     }
 
-    override fun beginKeyVerificationInDMs(method: VerificationMethod,
-                                           transactionId: String,
-                                           roomId: String,
-                                           otherUserId: String,
-                                           otherDeviceId: String): String {
+    override fun beginKeyVerificationInDMs(
+            method: VerificationMethod,
+            transactionId: String,
+            roomId: String,
+            otherUserId: String,
+            otherDeviceId: String
+    ): String {
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,
@@ -1300,12 +1350,13 @@ internal class DefaultVerificationService @Inject constructor(
                     deviceId,
                     cryptoStore,
                     crossSigningService,
-                    outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
+                    outgoingKeyRequestManager,
+                    secretShareManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     transactionId,
                     otherUserId,
-                    otherDeviceId)
+                    otherDeviceId
+            )
             tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
@@ -1316,10 +1367,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
-                                               otherUserId: String,
-                                               roomId: String,
-                                               transactionId: String): Boolean {
+    override fun readyPendingVerificationInDMs(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            roomId: String,
+            transactionId: String
+    ): Boolean {
         Timber.v("## SAS readyPendingVerificationInDMs $otherUserId room:$roomId tx:$transactionId")
         // Let's find the related request
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
@@ -1331,7 +1384,8 @@ internal class DefaultVerificationService @Inject constructor(
                     otherUserId,
                     existingRequest.requestInfo?.fromDevice ?: "",
                     existingRequest.requestInfo?.methods,
-                    methods) {
+                    methods
+            ) {
                 verificationTransportRoomMessageFactory.createTransport(roomId, it)
             }
             if (methods.isNullOrEmpty()) {
@@ -1341,7 +1395,8 @@ internal class DefaultVerificationService @Inject constructor(
             }
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, deviceId ?: "", computedMethods)
-            transport.sendToOther(EventType.KEY_VERIFICATION_READY,
+            transport.sendToOther(
+                    EventType.KEY_VERIFICATION_READY,
                     readyMsg,
                     VerificationTxState.None,
                     CancelCode.User,
@@ -1356,9 +1411,11 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun readyPendingVerification(methods: List<VerificationMethod>,
-                                          otherUserId: String,
-                                          transactionId: String): Boolean {
+    override fun readyPendingVerification(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            transactionId: String
+    ): Boolean {
         Timber.v("## SAS readyPendingVerification $otherUserId tx:$transactionId")
         // Let's find the related request
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
@@ -1370,7 +1427,8 @@ internal class DefaultVerificationService @Inject constructor(
                     otherUserId,
                     existingRequest.requestInfo?.fromDevice ?: "",
                     existingRequest.requestInfo?.methods,
-                    methods) {
+                    methods
+            ) {
                 verificationTransportToDeviceFactory.createTransport(it)
             }
             if (methods.isNullOrEmpty()) {
@@ -1401,7 +1459,8 @@ internal class DefaultVerificationService @Inject constructor(
             otherDeviceId: String,
             otherUserMethods: List<String>?,
             methods: List<VerificationMethod>,
-            transportCreator: (DefaultVerificationTransaction) -> VerificationTransport): List<String> {
+            transportCreator: (DefaultVerificationTransaction) -> VerificationTransport
+    ): List<String> {
         if (otherUserMethods.isNullOrEmpty()) {
             return emptyList()
         }
@@ -1438,13 +1497,14 @@ internal class DefaultVerificationService @Inject constructor(
                         otherUserId = otherUserId,
                         otherDeviceId = otherDeviceId,
                         crossSigningService = crossSigningService,
-                        outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                        incomingGossipingRequestManager = incomingGossipingRequestManager,
+                        outgoingKeyRequestManager = outgoingKeyRequestManager,
+                        secretShareManager = secretShareManager,
                         cryptoStore = cryptoStore,
                         qrCodeData = qrCodeData,
                         userId = userId,
                         deviceId = deviceId ?: "",
-                        isIncoming = false)
+                        isIncoming = false
+                )
 
                 tx.transport = transportCreator.invoke(tx)
 
@@ -1456,7 +1516,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     /**
-     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
+     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
      */
     private fun createUniqueIDForTransaction(otherUserId: String, otherDeviceID: String): String {
         return buildString {

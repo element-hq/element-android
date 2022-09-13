@@ -15,32 +15,30 @@
  */
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.isReply
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import java.util.UUID
 
-class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
-                                                           initialState: ViewEditHistoryViewState,
-                                                           val session: Session,
-                                                           val dateFormatter: VectorDateFormatter
+class ViewEditHistoryViewModel @AssistedInject constructor(
+        @Assisted initialState: ViewEditHistoryViewState,
+        private val session: Session
 ) : VectorViewModel<ViewEditHistoryViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId
@@ -49,18 +47,11 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
+        override fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
     }
 
-    companion object : MvRxViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ViewEditHistoryViewState): ViewEditHistoryViewModel? {
-            val fragment: ViewEditHistoryBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewEditHistoryViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> by hiltMavericksViewModelFactory()
 
     init {
         loadHistory()
@@ -71,7 +62,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
 
         viewModelScope.launch {
             val data = try {
-                room.fetchEditHistory(eventId)
+                room.relationService().fetchEditHistory(eventId)
             } catch (failure: Throwable) {
                 setState {
                     copy(editList = Fail(failure))

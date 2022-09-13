@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Szavazások támogatása (a laborok között). Új URL előnézet.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.10

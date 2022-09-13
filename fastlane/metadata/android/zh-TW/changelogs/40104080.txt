@@ -1,0 +1,2 @@
+此版本中的主要變動：討論串時間軸現已更新，而且更快了。多個臭蟲修復與穩定性改善。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases

@@ -15,51 +15,53 @@
  */
 package im.vector.app.features.crypto.keysbackup.settings
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.platform.EmptyViewEvents
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.toBase64NoPadding
+import timber.log.Timber
 
-class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
-                                                              session: Session
-) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, EmptyViewEvents>(initialState),
+class KeysBackupSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: KeysBackupSettingViewState,
+        private val session: Session
+) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, KeysBackupViewEvents>(initialState),
         KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
+        override fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: KeysBackupSettingViewState): KeysBackupSettingsViewModel? {
-            val activity: KeysBackupManageActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.keysBackupSettingsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> by hiltMavericksViewModelFactory()
 
     private val keysBackupService: KeysBackupService = session.cryptoService().keysBackupService()
+
+    var pendingBackupCreationInfo: MegolmBackupCreationInfo? = null
 
     init {
         setState {
             this.copy(
-                    keysBackupState = keysBackupService.state,
+                    keysBackupState = keysBackupService.getState(),
                     keysBackupVersion = keysBackupService.keysBackupVersion
             )
         }
@@ -69,9 +71,18 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     override fun handle(action: KeyBackupSettingsAction) {
         when (action) {
-            KeyBackupSettingsAction.Init              -> init()
+            KeyBackupSettingsAction.Init -> init()
             KeyBackupSettingsAction.GetKeyBackupTrust -> getKeysBackupTrust()
-            KeyBackupSettingsAction.DeleteKeyBackup   -> deleteCurrentBackup()
+            KeyBackupSettingsAction.DeleteKeyBackup -> deleteCurrentBackup()
+            KeyBackupSettingsAction.SetUpKeyBackup -> viewModelScope.launch {
+                setUpKeyBackup()
+            }
+            KeyBackupSettingsAction.StoreIn4SReset,
+            KeyBackupSettingsAction.StoreIn4SFailure -> {
+                pendingBackupCreationInfo = null
+                // nothing to do just stay on fragment
+            }
+            is KeyBackupSettingsAction.StoreIn4SSuccess -> viewModelScope.launch { completeBackupCreation() }
         }
     }
 
@@ -127,6 +138,41 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         getKeysBackupTrust()
     }
 
+    suspend fun setUpKeyBackup() {
+        // We need to check if 4S is enabled first.
+        // If it is we need to use it, generate a random key
+        // for the backup and store it in the 4S
+        if (session.sharedSecretStorageService().isRecoverySetup()) {
+            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+            }
+            pendingBackupCreationInfo = creationInfo
+            val recoveryKey = extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()
+            _viewEvents.post(KeysBackupViewEvents.RequestStore4SSecret(recoveryKey!!))
+        } else {
+            // No 4S so we can open legacy flow
+            _viewEvents.post(KeysBackupViewEvents.OpenLegacyCreateBackup)
+        }
+    }
+
+    suspend fun completeBackupCreation() {
+        val info = pendingBackupCreationInfo ?: return
+        try {
+            val version = awaitCallback<KeysVersion> {
+                session.cryptoService().keysBackupService().createKeysBackupVersion(info, it)
+            }
+            // Save it for gossiping
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
+            session.cryptoService().keysBackupService().saveBackupRecoveryKey(info.recoveryKey, version = version.version)
+        } catch (failure: Throwable) {
+            // XXX mm... failed we should remove what we put in 4S, as it was not created?
+
+            // for now just stay on the screen, user can retry, there is no api to delete account data
+        } finally {
+            pendingBackupCreationInfo = null
+        }
+    }
+
     private fun deleteCurrentBackup() {
         val keysBackupService = keysBackupService
 
@@ -161,9 +207,9 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     fun canExit(): Boolean {
-        val currentBackupState = keysBackupService.state
+        val currentBackupState = keysBackupService.getState()
 
-        return currentBackupState == KeysBackupState.Unknown
-                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
+        return currentBackupState == KeysBackupState.Unknown ||
+                currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

@@ -1,0 +1,2 @@
+Main changes in this version: typing indicator UI updates. Various bug fixes and stability improvements.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.4.4

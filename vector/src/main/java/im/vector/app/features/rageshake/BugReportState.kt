@@ -16,8 +16,8 @@
 
 package im.vector.app.features.rageshake
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 data class BugReportState(
         val serverVersion: String = ""
-) : MvRxState
+) : MavericksState

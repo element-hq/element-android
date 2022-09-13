@@ -25,15 +25,13 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class IgnoredUsersController @Inject constructor(private val stringProvider: StringProvider,
-                                                 private val avatarRenderer: AvatarRenderer) : EpoxyController() {
+class IgnoredUsersController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer
+) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: IgnoredUsersViewState? = null
-
-    init {
-        requestModelBuild()
-    }
 
     fun update(viewState: IgnoredUsersViewState) {
         this.viewState = viewState
@@ -46,18 +44,19 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
     }
 
     private fun buildIgnoredUserModels(users: List<User>) {
+        val host = this
         if (users.isEmpty()) {
             noResultItem {
                 id("empty")
-                text(stringProvider.getString(R.string.no_ignored_users))
+                text(host.stringProvider.getString(R.string.no_ignored_users))
             }
         } else {
             users.forEach { user ->
                 userItem {
                     id(user.userId)
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                     matrixItem(user.toMatrixItem())
-                    itemClickAction { callback?.onUserIdClicked(user.userId) }
+                    itemClickAction { host.callback?.onUserIdClicked(user.userId) }
                 }
             }
         }

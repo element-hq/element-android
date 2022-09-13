@@ -19,7 +19,6 @@ package im.vector.app.core.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewFailedMessagesWarningBinding
 
@@ -48,9 +47,5 @@ class FailedMessagesWarningView @JvmOverloads constructor(
 
         views.failedMessagesDeleteAllButton.setOnClickListener { callback?.onDeleteAllClicked() }
         views.failedMessagesRetryButton.setOnClickListener { callback?.onRetryClicked() }
-    }
-
-    fun render(hasFailedMessages: Boolean) {
-        isVisible = hasFailedMessages
     }
 }

@@ -1,0 +1,2 @@
+Főbb változtatások ebben a verzióban: URL előnézet, új emoji billentyűzet, új szoba beállitási lehetőségek, és hó karácsonyra!
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.0.13

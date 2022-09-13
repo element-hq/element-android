@@ -16,18 +16,18 @@
 
 package im.vector.app.features.workers.signout
 
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cannotLogoutSafely
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
 
     fun perform() {
-        val session = activity.vectorComponent().activeSessionHolder().getSafeActiveSession() ?: return
+        val session = activity.singletonEntryPoint().activeSessionHolder().getSafeActiveSession() ?: return
         if (session.cannotLogoutSafely()) {
             // The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance()
@@ -37,13 +37,13 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
             signOutDialog.show(activity.supportFragmentManager, "SO")
         } else {
             // Display a simple confirmation dialog
-            AlertDialog.Builder(activity)
+            MaterialAlertDialogBuilder(activity)
                     .setTitle(R.string.action_sign_out)
                     .setMessage(R.string.action_sign_out_confirmation_simple)
                     .setPositiveButton(R.string.action_sign_out) { _, _ ->
                         doSignOut()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }

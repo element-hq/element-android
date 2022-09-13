@@ -18,18 +18,28 @@ package org.matrix.android.sdk.api.session.events.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.json.JSONObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
+import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.util.ContentUtils
+import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixJsonParser
+import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -38,7 +48,7 @@ typealias Content = JsonDict
  * This methods is a facility method to map a json content to a model.
  */
 inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
-    val moshi = MoshiProvider.providesMoshi()
+    val moshi = MatrixJsonParser.getMoshi()
     val moshiAdapter = moshi.adapter(T::class.java)
     return try {
         moshiAdapter.fromJsonValue(this)
@@ -53,11 +63,11 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
 }
 
 /**
- * This methods is a facility method to map a model to a json Content
+ * This methods is a facility method to map a model to a json Content.
  */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> T.toContent(): Content {
-    val moshi = MoshiProvider.providesMoshi()
+    val moshi = MatrixJsonParser.getMoshi()
     val moshiAdapter = moshi.adapter(T::class.java)
     return moshiAdapter.toJsonValue(this) as Content
 }
@@ -95,6 +105,9 @@ data class Event(
     @Transient
     var sendStateDetails: String? = null
 
+    @Transient
+    var threadDetails: ThreadDetails? = null
+
     fun sendStateError(): MatrixError? {
         return sendStateDetails?.let {
             val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
@@ -104,14 +117,14 @@ data class Event(
 
     /**
      * The `age` value transcoded in a timestamp based on the device clock when the SDK received
-     * the event from the home server.
+     * the event from the homeserver.
      * Unlike `age`, this value is static.
      */
     @Transient
     var ageLocalTs: Long? = null
 
     /**
-     * Copy all fields, including transient fields
+     * Copy all fields, including transient fields.
      */
     fun copyAll(): Event {
         return copy().also {
@@ -120,6 +133,7 @@ data class Event(
             it.mCryptoErrorReason = mCryptoErrorReason
             it.sendState = sendState
             it.ageLocalTs = ageLocalTs
+            it.threadDetails = threadDetails
         }
     }
 
@@ -183,7 +197,58 @@ data class Event(
     }
 
     /**
-     * Tells if the event is redacted
+     * Returns a user friendly content depending on the message type.
+     * It can be used especially for message summaries.
+     * It will return a decrypted text message or an empty string otherwise.
+     */
+    fun getDecryptedTextSummary(): String? {
+        if (isRedacted()) return "Message removed"
+        val text = getDecryptedValue() ?: run {
+            if (isPoll()) {
+                return getPollQuestion() ?: "created a poll."
+            }
+            return null
+        }
+
+        return when {
+            isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
+            isFileMessage() -> "sent a file."
+            isAudioMessage() -> "sent an audio file."
+            isImageMessage() -> "sent an image."
+            isVideoMessage() -> "sent a video."
+            isSticker() -> "sent a sticker"
+            isPoll() -> getPollQuestion() ?: "created a poll."
+            else -> text
+        }
+    }
+
+    private fun Event.isQuote(): Boolean {
+        if (isReplyRenderedInThread()) return false
+        return getDecryptedValue("formatted_body")?.contains("<blockquote>") ?: false
+    }
+
+    /**
+     * Determines whether or not current event has mentioned the user.
+     */
+    fun isUserMentioned(userId: String): Boolean {
+        return getDecryptedValue("formatted_body")?.contains(userId) ?: false
+    }
+
+    /**
+     * Decrypt the message, or return the pure payload value if there is no encryption.
+     */
+    private fun getDecryptedValue(key: String = "body"): String? {
+        return if (isEncrypted()) {
+            @Suppress("UNCHECKED_CAST")
+            val decryptedContent = mxDecryptionResult?.payload?.get("content") as? JsonDict
+            decryptedContent?.get(key) as? String
+        } else {
+            content?.get(key) as? String
+        }
+    }
+
+    /**
+     * Tells if the event is redacted.
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
 
@@ -214,7 +279,7 @@ data class Event(
         if (mCryptoError != other.mCryptoError) return false
         if (mCryptoErrorReason != other.mCryptoErrorReason) return false
         if (sendState != other.sendState) return false
-
+        if (threadDetails != other.threadDetails) return false
         return true
     }
 
@@ -233,75 +298,137 @@ data class Event(
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
         result = 31 * result + (mCryptoErrorReason?.hashCode() ?: 0)
         result = 31 * result + sendState.hashCode()
+        result = 31 * result + threadDetails.hashCode()
+
         return result
     }
 }
 
+/**
+ * Return the value of "content.msgtype", if the Event type is "m.room.message"
+ * and if the content has it, and if it is a String.
+ */
+fun Event.getMsgType(): String? {
+    if (getClearType() != EventType.MESSAGE) return null
+    return getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY) as? String
+}
+
 fun Event.isTextMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
+        else -> false
     }
 }
 
 fun Event.isImageMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
 fun Event.isAttachmentMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+    return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE,
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
+
+fun Event.isLocationMessage(): Boolean {
+    return when (getMsgType()) {
+        MessageType.MSGTYPE_LOCATION -> true
+        else -> false
+    }
+}
+
+fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
+
+fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
+
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
-        content.toModel<MessageContent>()?.relatesTo
+        content.toModel<MessageContent>()?.relatesTo ?: run {
+            // Special cases when there is only a local msgtype for some event types
+            when (getClearType()) {
+                EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
+                in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
+                else -> null
+            }
+        }
     }
 }
+
+/**
+ * Returns the poll question or null otherwise.
+ */
+fun Event.getPollQuestion(): String? =
+        getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
+
+/**
+ * Returns the relation content for a specific type or null otherwise.
+ */
+fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
+        getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
 }
 
-fun Event.isEdition(): Boolean {
-    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
+fun Event.isReplyRenderedInThread(): Boolean {
+    return isReply() && getRelationContent()?.shouldRenderInThread() == true
 }
+
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
+
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
+
+fun Event.isEdition(): Boolean {
+    return getRelationContentForType(RelationType.REPLACE)?.eventId != null
+}
+
+internal fun Event.getPresenceContent(): PresenceContent? {
+    return content.toModel<PresenceContent>()
+}
+
+fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
+        content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
+
+fun Event.getPollContent(): MessagePollContent? {
+    return content.toModel<MessagePollContent>()
+}
+
+fun Event.supportsNotification() =
+        this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+
+fun Event.isContentReportable() =
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO

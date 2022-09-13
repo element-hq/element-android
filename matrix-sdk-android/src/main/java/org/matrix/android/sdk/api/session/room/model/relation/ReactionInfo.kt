@@ -26,5 +26,6 @@ data class ReactionInfo(
         @Json(name = "key") val key: String,
         // always null for reaction
         @Json(name = "m.in_reply_to") override val inReplyTo: ReplyToContent? = null,
-        @Json(name = "option") override val option: Int? = null
+        @Json(name = "option") override val option: Int? = null,
+        @Json(name = "is_falling_back") override val isFallingBack: Boolean? = null
 ) : RelationContent

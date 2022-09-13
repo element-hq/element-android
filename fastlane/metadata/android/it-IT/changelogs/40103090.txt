@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: aggiunto supporto per le bozze dei vocali. Molte correzioni!
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.9

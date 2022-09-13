@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,19 +10,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Use VectorToolbarStyleWithPadding on this screen for better alignment with setting items -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/settingsToolbar"
-            style="@style/VectorToolbarStyleWithPadding"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp" />
+            android:layout_height="wrap_content">
+
+            <!-- Use Widget.Vector.Toolbar.Settings on this screen for better alignment with setting items -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/settingsToolbar"
+                style="@style/Widget.Vector.Toolbar.Settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:navigationIcon="@drawable/ic_back_24dp"
+                tools:title="Title" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:id="@+id/vector_settings_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?riotx_background" />
+            android:background="?android:colorBackground" />
 
     </LinearLayout>
 
@@ -29,7 +38,7 @@
         android:id="@+id/vector_settings_spinner_views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/riotx_waiting_background_color"
+        android:background="?vctr_waiting_background_color"
         android:clickable="true"
         android:visibility="gone">
 

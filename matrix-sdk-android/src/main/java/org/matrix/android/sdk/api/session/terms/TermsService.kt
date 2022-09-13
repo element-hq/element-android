@@ -24,8 +24,16 @@ interface TermsService {
 
     suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse
 
-    suspend fun agreeToTerms(serviceType: ServiceType,
-                             baseUrl: String,
-                             agreedUrls: List<String>,
-                             token: String?)
+    suspend fun agreeToTerms(
+            serviceType: ServiceType,
+            baseUrl: String,
+            agreedUrls: List<String>,
+            token: String?
+    )
+
+    /**
+     * Get the homeserver terms, from the register API.
+     * Will be updated once https://github.com/matrix-org/matrix-doc/pull/3012 will be implemented.
+     */
+    suspend fun getHomeserverTerms(baseUrl: String): TermsResponse
 }

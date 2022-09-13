@@ -4,5 +4,5 @@
     android:id="@+id/localeRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     tools:listitem="@layout/item_locale" />

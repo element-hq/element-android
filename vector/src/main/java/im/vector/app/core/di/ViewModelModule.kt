@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
 import im.vector.app.core.platform.ConfigurationViewModel
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -32,6 +34,7 @@ import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.reactions.EmojiChooserViewModel
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
@@ -42,11 +45,12 @@ import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
 import im.vector.app.features.spaces.people.SpacePeopleSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
+@InstallIn(ActivityComponent::class)
 @Module
 interface ViewModelModule {
 
     /**
-     * ViewModels with @IntoMap will be injected by this factory
+     * ViewModels with @IntoMap will be injected by this factory.
      */
     @Binds
     fun bindViewModelFactory(factory: VectorViewModelFactory): ViewModelProvider.Factory
@@ -154,4 +158,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SpacePeopleSharedActionViewModel::class)
     fun bindSpacePeopleSharedActionViewModel(viewModel: SpacePeopleSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomListSharedActionViewModel::class)
+    fun bindRoomListSharedActionViewModel(viewModel: RoomListSharedActionViewModel): ViewModel
 }

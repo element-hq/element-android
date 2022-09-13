@@ -1,0 +1,2 @@
+此版本的主要变化：主题和样式更新以及空间的新功能。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.1.10

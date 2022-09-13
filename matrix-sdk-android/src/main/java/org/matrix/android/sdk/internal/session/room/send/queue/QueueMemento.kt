@@ -35,11 +35,13 @@ import javax.inject.Inject
 
 private const val PERSISTENCE_KEY = "ManagedBySender"
 
-internal class QueueMemento @Inject constructor(context: Context,
-                                                @SessionId sessionId: String,
-                                                private val queuedTaskFactory: QueuedTaskFactory,
-                                                private val localEchoRepository: LocalEchoRepository,
-                                                private val cryptoService: CryptoService) {
+internal class QueueMemento @Inject constructor(
+        context: Context,
+        @SessionId sessionId: String,
+        private val queuedTaskFactory: QueuedTaskFactory,
+        private val localEchoRepository: LocalEchoRepository,
+        private val cryptoService: CryptoService
+) {
 
     private val storage = context.getSharedPreferences("QueueMemento_$sessionId", Context.MODE_PRIVATE)
     private val trackedTasks = mutableListOf<QueuedTask>()
@@ -78,7 +80,7 @@ internal class QueueMemento @Inject constructor(context: Context,
                     redactionLocalEcho = task.redactionLocalEchoId,
                     order = order
             )
-            else                   -> null
+            else -> null
         }
     }
 

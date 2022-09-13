@@ -24,24 +24,37 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
+import im.vector.app.features.debug.analytics.DebugAnalyticsActivity
+import im.vector.app.features.debug.features.DebugFeaturesSettingsActivity
+import im.vector.app.features.debug.leak.DebugMemoryLeaksActivity
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
+import im.vector.app.features.debug.settings.DebugPrivateSettingsActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
-import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
-
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
@@ -49,9 +62,8 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
+    @Inject
+    lateinit var clock: Clock
 
     private lateinit var buffer: ByteArray
 
@@ -70,13 +82,58 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     }
 
     private fun setupViews() {
+        views.debugFeatures.setOnClickListener { startActivity(Intent(this, DebugFeaturesSettingsActivity::class.java)) }
+        views.debugPrivateSetting.setOnClickListener { openPrivateSettings() }
+        views.debugAnalytics.setOnClickListener {
+            startActivity(Intent(this, DebugAnalyticsActivity::class.java))
+        }
+        views.debugMemoryLeaks.setOnClickListener { openMemoryLeaksSettings() }
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugOpenButtonStylesLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
+        }
+        views.debugOpenButtonStylesDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesDarkActivity::class.java))
+        }
+        views.debugTestTextViewLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewLightActivity::class.java))
+        }
+        views.debugTestTextViewDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewDarkActivity::class.java))
+        }
         views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
         views.debugTestNotification.setOnClickListener { testNotification() }
-        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
-        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestMaterialThemeLightDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightVectorActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkVectorActivity::class.java))
+        }
         views.debugTestCrash.setOnClickListener { testCrash() }
         views.debugScanQrCode.setOnClickListener { scanQRCode() }
+        views.debugPermission.setOnClickListener {
+            startActivity(Intent(this, DebugPermissionActivity::class.java))
+        }
+    }
+
+    private fun openPrivateSettings() {
+        startActivity(Intent(this, DebugPrivateSettingsActivity::class.java))
+    }
+
+    private fun openMemoryLeaksSettings() {
+        startActivity(Intent(this, DebugMemoryLeaksActivity::class.java))
     }
 
     private fun renderQrCode(text: String) {
@@ -118,7 +175,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         }
 
         val builder = NotificationCompat.Builder(this, "CHAN")
-                .setWhen(System.currentTimeMillis())
+                .setWhen(clock.epochMillis())
                 .setContentTitle("Title")
                 .setContentText("Content")
                 // No effect because it's a group summary notif
@@ -133,16 +190,16 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         .setName("User name")
                         .build()
         )
-                .addMessage("Message 1 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 1 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+                .addMessage("Message 1 - 1", clock.epochMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 1 - 2", clock.epochMillis(), Person.Builder().setName("user 1-2").build())
 
         val messagingStyle2 = NotificationCompat.MessagingStyle(
                 Person.Builder()
                         .setName("User name 2")
                         .build()
         )
-                .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+                .addMessage("Message 2 - 1", clock.epochMillis(), Person.Builder().setName("user 1-1").build())
+                .addMessage("Message 2 - 2", clock.epochMillis(), Person.Builder().setName("user 1-2").build())
 
         notificationManager.notify(10, builder.build())
 
@@ -150,7 +207,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                 11,
                 NotificationCompat.Builder(this, "CHAN")
                         .setChannelId("CHAN")
-                        .setWhen(System.currentTimeMillis())
+                        .setWhen(clock.epochMillis())
                         .setContentTitle("Title 1")
                         .setContentText("Content 1")
                         // For shortcut on long press on launcher icon
@@ -164,7 +221,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         notificationManager.notify(
                 12,
                 NotificationCompat.Builder(this, "CHAN2")
-                        .setWhen(System.currentTimeMillis())
+                        .setWhen(clock.epochMillis())
                         .setContentTitle("Title 2")
                         .setContentText("Content 2")
                         .setStyle(messagingStyle2)
@@ -174,28 +231,18 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         )
     }
 
-    private fun testMaterialThemeLight() {
-        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
-    }
-
-    private fun testMaterialThemeDark() {
-        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
-    }
-
     private fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
 
     private fun scanQRCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             doScanQRCode()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
             doScanQRCode()
         }
     }
@@ -206,14 +253,16 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            toast("QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data)
-                    + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data))
+            toast(
+                    "QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data) +
+                            " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
+            )
 
             // Also update the current QR Code (reverse operation)
             // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
             val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-            val qrCodeData = result.toQrCodeData()
+            val qrCodeData = null // This is now internal: result.toQrCodeData()
             Timber.e("qrCodeData: $qrCodeData")
 
             if (result.length != buffer.size) {
@@ -227,6 +276,8 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                     }
                 }
             }
+            // Ensure developer will see that this cannot work anymore
+            error("toQrCodeData() is now internal")
         }
     }
 }

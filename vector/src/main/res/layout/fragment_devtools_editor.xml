@@ -13,7 +13,6 @@
         android:hint="@string/dev_tools_event_content_hint"
         android:inputType="textMultiLine"
         android:scrollHorizontally="true"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

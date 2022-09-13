@@ -35,8 +35,10 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                   private val realmSessionProvider: RealmSessionProvider) {
+internal class DraftRepository @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider
+) {
 
     suspend fun saveDraft(roomId: String, userDraft: UserDraft) {
         monarchy.awaitTransaction {

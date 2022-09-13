@@ -20,19 +20,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Success
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
-
 import org.matrix.android.sdk.api.failure.is401
-import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to check his email and to click on a button once it's done
+ * In this screen, the user is asked to check their email and to click on a button once it's done.
  */
-class LoginResetPasswordMailConfirmationFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordMailConfirmationBinding>() {
+@AndroidEntryPoint
+class LoginResetPasswordMailConfirmationFragment :
+        AbstractLoginFragment<FragmentLoginResetPasswordMailConfirmationBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordMailConfirmationBinding {
         return FragmentLoginResetPasswordMailConfirmationBinding.inflate(inflater, container, false)
@@ -41,7 +41,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.resetPasswordMailConfirmationSubmit.setOnClickListener { submit() }
+        views.resetPasswordMailConfirmationSubmit.debouncedClicks { submit() }
     }
 
     private fun setupUi(state: LoginViewState) {
@@ -60,7 +60,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
         setupUi(state)
 
         when (state.asyncResetMailConfirmed) {
-            is Fail    -> {
+            is Fail -> {
                 // Link in email not yet clicked ?
                 val message = if (state.asyncResetMailConfirmed.error.is401()) {
                     getString(R.string.auth_reset_password_error_unauthorized)
@@ -68,13 +68,13 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                     errorFormatter.toHumanReadable(state.asyncResetMailConfirmed.error)
                 }
 
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is Success -> Unit
+            else -> Unit
         }
     }
 }

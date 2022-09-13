@@ -48,4 +48,16 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun shouldShowAvatarDisplayNameChanges(): Boolean {
         return vectorPreferences.showAvatarDisplayNameChangeMessages()
     }
+
+    fun areThreadMessagesEnabled(): Boolean {
+        return vectorPreferences.areThreadMessagesEnabled()
+    }
+
+    fun showLiveSenderInfo(): Boolean {
+        return vectorPreferences.showLiveSenderInfo()
+    }
+
+    fun autoplayAnimatedImages(): Boolean {
+        return vectorPreferences.autoplayAnimatedImages()
+    }
 }

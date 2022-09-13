@@ -16,20 +16,24 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.util
 
-import org.matrix.android.sdk.MatrixTest
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.matrix.android.sdk.MatrixTest
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.isValidRecoveryKey
 
-class RecoveryKeyTest: MatrixTest {
+class RecoveryKeyTest : MatrixTest {
 
     private val curve25519Key = byteArrayOf(
             0x77.toByte(), 0x07.toByte(), 0x6D.toByte(), 0x0A.toByte(), 0x73.toByte(), 0x18.toByte(), 0xA5.toByte(), 0x7D.toByte(),
             0x3C.toByte(), 0x16.toByte(), 0xC1.toByte(), 0x72.toByte(), 0x51.toByte(), 0xB2.toByte(), 0x66.toByte(), 0x45.toByte(),
             0xDF.toByte(), 0x4C.toByte(), 0x2F.toByte(), 0x87.toByte(), 0xEB.toByte(), 0xC0.toByte(), 0x99.toByte(), 0x2A.toByte(),
-            0xB1.toByte(), 0x77.toByte(), 0xFB.toByte(), 0xA5.toByte(), 0x1D.toByte(), 0xB9.toByte(), 0x2C.toByte(), 0x2A.toByte())
+            0xB1.toByte(), 0x77.toByte(), 0xFB.toByte(), 0xA5.toByte(), 0x1D.toByte(), 0xB9.toByte(), 0x2C.toByte(), 0x2A.toByte()
+    )
 
     @Test
     fun isValidRecoveryKey_valid_true() {

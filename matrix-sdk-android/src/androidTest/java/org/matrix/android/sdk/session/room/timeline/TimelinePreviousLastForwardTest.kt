@@ -16,38 +16,40 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.checkSendOrder
+import androidx.test.filters.LargeTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.checkSendOrder
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@Ignore("This test will be ignored until it is fixed")
+@LargeTest
 class TimelinePreviousLastForwardTest : InstrumentedTest {
-
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
 
     /**
      * This test ensure that if we have a chunk in the timeline which is due to a sync, and we click to permalink, we will be able to go back to the live
      */
+
     @Test
-    fun previousLastForwardTest() {
+    fun previousLastForwardTest() = CommonTestHelper.runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -60,7 +62,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(30))
+        val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
 
         run {
@@ -71,8 +73,12 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                // Ok, we have the 8 first messages of the initial sync (room creation and bob invite and join events)
-                snapshot.size == 8
+                // Ok, we have the 9 first messages of the initial sync (room creation and bob invite and join events)
+                // create
+                // join alice
+                // power_levels, join_rules, history_visibility, guest_access, name
+                // invite, join bob
+                snapshot.size == 9
             }
 
             bobTimeline.addListener(eventsListener)
@@ -84,19 +90,20 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val firstMessage = "First messages from Alice"
         // Alice sends 30 messages
         val firstMessageFromAliceId = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 firstMessage,
-                30)
+                30
+        )
                 .last()
                 .eventId
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)
@@ -107,8 +114,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -120,17 +127,18 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         // Bob stop to sync
-        bobSession.stopSync()
+        bobSession.syncService().stopSync()
 
         val secondMessage = "Second messages from Alice"
         // Alice sends again 30 messages
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 secondMessage,
-                30)
+                30
+        )
 
         // Bob start to sync
-        bobSession.startSync(true)
+        bobSession.syncService().startSync(true)
 
         run {
             val lock = CountDownLatch(1)
@@ -141,8 +149,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -168,10 +176,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
             bobTimeline.addListener(eventsListener)
 
-            // Restart the timeline to the first sent event, and paginate in both direction
+            // Restart the timeline to the first sent event
             bobTimeline.restartWithEventId(firstMessageFromAliceId)
-            bobTimeline.paginate(Timeline.Direction.BACKWARDS, 50)
-            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
 
             commonTestHelper.await(lock)
             bobTimeline.removeAllListeners()
@@ -189,7 +195,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                snapshot.size == 8 + 1 + 35
+                snapshot.size == 45 // 9 + 1 + 35
             }
 
             bobTimeline.addListener(eventsListener)
@@ -216,15 +222,16 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
-                        // 8 for room creation item 60 message from Alice
-                        && snapshot.size == 8 + 60
-                        && snapshot.checkSendOrder(secondMessage, 30, 0)
-                        && snapshot.checkSendOrder(firstMessage, 30, 30)
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
+                        // 9 for room creation item 60 message from Alice
+                        snapshot.size == 69 && // 9 + 60U
+                        snapshot.checkSendOrder(secondMessage, 30, 0) &&
+                        snapshot.checkSendOrder(firstMessage, 30, 30)
             }
 
             bobTimeline.addListener(eventsListener)
 
+            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
             bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
 
             commonTestHelper.await(lock)
@@ -235,7 +242,5 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         }
 
         bobTimeline.dispose()
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

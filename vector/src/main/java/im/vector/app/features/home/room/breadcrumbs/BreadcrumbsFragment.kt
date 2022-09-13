@@ -22,20 +22,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBreadcrumbsBinding
 import im.vector.app.features.home.room.detail.RoomDetailSharedAction
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
-
 import javax.inject.Inject
 
-class BreadcrumbsFragment @Inject constructor(
-        private val breadcrumbsController: BreadcrumbsController,
-        val breadcrumbsViewModelFactory: BreadcrumbsViewModel.Factory
-) : VectorBaseFragment<FragmentBreadcrumbsBinding>(),
+@AndroidEntryPoint
+class BreadcrumbsFragment :
+        VectorBaseFragment<FragmentBreadcrumbsBinding>(),
         BreadcrumbsController.Listener {
+
+    @Inject lateinit var breadcrumbsController: BreadcrumbsController
 
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val breadcrumbsViewModel: BreadcrumbsViewModel by fragmentViewModel()

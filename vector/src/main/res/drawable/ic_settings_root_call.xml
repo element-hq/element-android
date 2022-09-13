@@ -5,8 +5,8 @@
     android:viewportHeight="25">
   <path
       android:pathData="M0.5,8C0.5,6.3432 1.8432,5 3.5,5H14.5C16.1569,5 17.5,6.3432 17.5,8V17C17.5,18.6569 16.1569,20 14.5,20H3.5C1.8432,20 0.5,18.6569 0.5,17V8Z"
-      android:fillColor="@color/riotx_header_panel_text_secondary_light"/>
+      android:fillColor="#000000"/>
   <path
       android:pathData="M19.4229,9.4388L23.5259,6.8221C23.9142,6.5744 24.4229,6.8533 24.4229,7.3139V17.545C24.4229,18.0326 23.8601,18.305 23.4777,18.0025L19.4229,14.7959V9.4388Z"
-      android:fillColor="@color/riotx_header_panel_text_secondary_light"/>
+      android:fillColor="#000000"/>
 </vector>

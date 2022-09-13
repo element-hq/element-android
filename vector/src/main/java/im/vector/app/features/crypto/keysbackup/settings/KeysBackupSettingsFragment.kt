@@ -19,22 +19,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSettingsBinding
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
-
 import javax.inject.Inject
 
-class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController)
-    : VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
+@AndroidEntryPoint
+class KeysBackupSettingsFragment :
+        VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
         KeysBackupSettingsRecyclerViewController.Listener {
+
+    @Inject lateinit var keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSettingsBinding {
         return FragmentKeysBackupSettingsBinding.inflate(inflater, container, false)
@@ -59,9 +61,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
     }
 
     override fun didSelectSetupMessageRecovery() {
-        context?.let {
-            startActivity(KeysBackupSetupActivity.intent(it, false))
-        }
+        viewModel.handle(KeyBackupSettingsAction.SetUpKeyBackup)
     }
 
     override fun didSelectRestoreMessageRecovery() {
@@ -72,14 +72,14 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun didSelectDeleteSetupMessageRecovery() {
         activity?.let {
-            AlertDialog.Builder(it)
+            MaterialAlertDialogBuilder(it)
                     .setTitle(R.string.keys_backup_settings_delete_confirm_title)
                     .setMessage(R.string.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
                         viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setCancelable(true)
                     .show()
         }

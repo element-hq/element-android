@@ -1,0 +1,2 @@
+Principaux changements pour cette version : ajout du support pour les indicateurs de présence, dans les conversations privées (attention : les indicateurs de présence sont désactivés sur matrix.org). Réactivation de la prise en charge de Android Auto.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.5

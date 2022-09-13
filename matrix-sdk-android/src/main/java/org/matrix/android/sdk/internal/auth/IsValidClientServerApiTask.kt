@@ -42,7 +42,7 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
 
     override suspend fun execute(params: IsValidClientServerApiTask.Params): Boolean {
         val client = buildClient(params.homeServerConnectionConfig)
-        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)
@@ -54,8 +54,8 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
             // We get a response, so the API is valid
             true
         } catch (failure: Throwable) {
-            if (failure is Failure.OtherServerError
-                    && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+            if (failure is Failure.OtherServerError &&
+                    failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                 // Probably not valid
                 false
             } else {

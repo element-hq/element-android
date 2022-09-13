@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.auth.registration.ThreePidData
 import java.util.UUID
 
 /**
- * This class holds all pending data when creating a session, either by login or by register
+ * This class holds all pending data when creating a session, either by login or by register.
  */
 internal data class PendingSessionData(
         val homeServerConnectionConfig: HomeServerConnectionConfig,

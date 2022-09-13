@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Vector.Black.v23" parent="Base.Theme.Vector.Black">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.Vector.Black" parent="Theme.Vector.Black.v23"/>
+
+</resources>

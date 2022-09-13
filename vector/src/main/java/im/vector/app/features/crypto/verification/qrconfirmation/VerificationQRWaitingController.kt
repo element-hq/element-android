@@ -23,7 +23,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationQRWaitingController @Inject constructor(
@@ -40,11 +41,12 @@ class VerificationQRWaitingController @Inject constructor(
 
     override fun buildModels() {
         val params = args ?: return
+        val host = this
 
         bottomSheetVerificationNoticeItem {
             id("notice")
             apply {
-                notice(stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice))
+                notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice).toEpoxyCharSequence())
             }
         }
 
@@ -55,7 +57,7 @@ class VerificationQRWaitingController @Inject constructor(
 
         bottomSheetVerificationWaitingItem {
             id("waiting")
-            title(stringProvider.getString(R.string.qr_code_scanned_verif_waiting, params.otherUserName))
+            title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, params.otherUserName))
         }
     }
 }

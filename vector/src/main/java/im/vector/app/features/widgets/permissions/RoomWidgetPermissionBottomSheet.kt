@@ -23,20 +23,18 @@ import android.text.style.BulletSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.withArgs
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
-
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomWidgetPermissionBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetRoomWidgetPermissionBinding>() {
 
@@ -50,22 +48,17 @@ class RoomWidgetPermissionBottomSheet :
 
     override val showExpanded = true
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     // Use this if you don't need the full activity view model
     var directListener: ((Boolean) -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupViews()
     }
 
     private fun setupViews() {
-        views.widgetPermissionDecline.setOnClickListener { doDecline() }
-        views.widgetPermissionContinue.setOnClickListener { doAccept() }
+        views.widgetPermissionDecline.debouncedClicks { doDecline() }
+        views.widgetPermissionContinue.debouncedClicks { doAccept() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -109,14 +102,17 @@ class RoomWidgetPermissionBottomSheet :
     }
 
     override fun onCancel(dialog: DialogInterface) {
+        viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
+        directListener?.invoke(false)
         super.onCancel(dialog)
-        viewModel.handle(RoomWidgetPermissionActions.DoClose)
     }
 
     companion object {
 
-        fun newInstance(widgetArgs: WidgetArgs) = RoomWidgetPermissionBottomSheet().withArgs {
-            putParcelable(MvRx.KEY_ARG, widgetArgs)
+        fun newInstance(widgetArgs: WidgetArgs): RoomWidgetPermissionBottomSheet {
+            return RoomWidgetPermissionBottomSheet().apply {
+                setArguments(widgetArgs)
+            }
         }
     }
 }

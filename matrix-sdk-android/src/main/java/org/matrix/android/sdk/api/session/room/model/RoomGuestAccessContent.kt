@@ -27,16 +27,14 @@ import timber.log.Timber
 @JsonClass(generateAdapter = true)
 data class RoomGuestAccessContent(
         // Required. Whether guests can join the room. One of: ["can_join", "forbidden"]
-        @Json(name = "guest_access") val _guestAccess: String? = null
+        @Json(name = "guest_access") val guestAccessStr: String? = null
 ) {
-    val guestAccess: GuestAccess? = when (_guestAccess) {
-        "can_join"  -> GuestAccess.CanJoin
-        "forbidden" -> GuestAccess.Forbidden
-        else        -> {
-            Timber.w("Invalid value for GuestAccess: `$_guestAccess`")
-            null
-        }
-    }
+    val guestAccess: GuestAccess? = GuestAccess.values()
+            .find { it.value == guestAccessStr }
+            ?: run {
+                Timber.w("Invalid value for GuestAccess: `$guestAccessStr`")
+                null
+            }
 }
 
 @JsonClass(generateAdapter = false)

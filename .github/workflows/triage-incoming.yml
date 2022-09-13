@@ -1,0 +1,17 @@
+name: Move new issues onto Issue triage board
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
+    steps:
+      - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+        with:
+          project: Issue triage
+          column: Incoming
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

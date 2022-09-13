@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LocationSharingOptionView">
+        <attr name="locShareIcon" format="reference" />
+        <attr name="locShareIconBackground" format="reference" />
+        <attr name="locShareIconBackgroundTint" format="color" />
+        <attr name="locShareIconPadding" format="dimension" />
+        <attr name="locShareIconDescription" format="string" />
+        <attr name="locShareTitle" format="string" />
+    </declare-styleable>
+
+</resources>

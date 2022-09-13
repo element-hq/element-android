@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
@@ -27,7 +28,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -42,7 +43,9 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope) {
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val clock: Clock,
+) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
@@ -52,13 +55,14 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
                 cryptoStore = cryptoStore,
                 deviceListManager = deviceListManager,
                 ensureOlmSessionsForDevicesAction = ensureOlmSessionsForDevicesAction,
-                userId = userId,
-                deviceId = deviceId!!,
+                myUserId = userId,
+                myDeviceId = deviceId!!,
                 sendToDeviceTask = sendToDeviceTask,
                 messageEncrypter = messageEncrypter,
                 warnOnUnknownDevicesRepository = warnOnUnknownDevicesRepository,
                 coroutineDispatchers = coroutineDispatchers,
-                cryptoCoroutineScope = cryptoCoroutineScope
+                cryptoCoroutineScope = cryptoCoroutineScope,
+                clock = clock,
         )
     }
 }

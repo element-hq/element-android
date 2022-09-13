@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Vector.Dark.v27" parent="Theme.Vector.Dark.v23">
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="Theme.Vector.Dark" parent="Theme.Vector.Dark.v27" />
+
+</resources>

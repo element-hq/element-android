@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".debug.DebugMaterialThemeActivity"
+    tools:ignore="HardcodedText,MissingPrefix">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/debug_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:subtitle="Toolbar Subtitle"
+                app:title="Toolbar Title" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/linear_divider"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:showDividers="middle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:divider="@drawable/linear_divider"
+                    android:showDividers="middle">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#FFFFFF"
+                        android:divider="@drawable/linear_divider"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:showDividers="middle">
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorPrimary"
+                            android:text="colorPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorPrimaryVariant"
+                            android:text="colorPrimaryVariant" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorOnPrimary"
+                            android:text="colorOnPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorSecondary"
+                            android:text="colorSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorSecondaryVariant"
+                            android:text="colorSecondaryVariant" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorOnSecondary"
+                            android:text="colorOnSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorError"
+                            android:text="colorError" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorOnError"
+                            android:text="colorOnError" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorSurface"
+                            android:text="colorSurface" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorOnSurface"
+                            android:text="colorOnSurface" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:colorBackground"
+                            android:text="android:colorBackground" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorOnBackground"
+                            android:text="colorOnBackground" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?colorAccent"
+                            android:text="colorAccent" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:statusBarColor"
+                            android:text="android:statusBarColor" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:navigationBarColor"
+                            android:text="android:navigationBarColor" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:textColorPrimary"
+                            android:text="android:textColorPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:textColorSecondary"
+                            android:text="android:textColorSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:textColorTertiary"
+                            android:text="android:textColorTertiary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.White"
+                            android:background="?android:textColorLink"
+                            android:text="android:textColorLink" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#000000"
+                        android:divider="@drawable/linear_divider"
+                        android:dividerPadding="8dp"
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        android:showDividers="middle">
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorPrimary"
+                            android:text="colorPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorPrimaryVariant"
+                            android:text="colorPrimaryVariant" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorOnPrimary"
+                            android:text="colorOnPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorSecondary"
+                            android:text="colorSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorSecondaryVariant"
+                            android:text="colorSecondaryVariant" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorOnSecondary"
+                            android:text="colorOnSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorError"
+                            android:text="colorError" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorOnError"
+                            android:text="colorOnError" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorSurface"
+                            android:text="colorSurface" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorOnSurface"
+                            android:text="colorOnSurface" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:colorBackground"
+                            android:text="android:colorBackground" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorOnBackground"
+                            android:text="colorOnBackground" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?colorAccent"
+                            android:text="colorAccent" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:statusBarColor"
+                            android:text="android:statusBarColor" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:navigationBarColor"
+                            android:text="android:navigationBarColor" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:textColorPrimary"
+                            android:text="android:textColorPrimary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:textColorSecondary"
+                            android:text="android:textColorSecondary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:textColorTertiary"
+                            android:text="android:textColorTertiary" />
+
+                        <TextView
+                            style="@style/DebugTextColorDemo.Black"
+                            android:background="?android:textColorLink"
+                            android:text="android:textColorLink" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:colorBackground"
+                    android:padding="8dp"
+                    android:text="Background"
+                    android:textColor="?colorOnBackground" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorPrimary"
+                    android:padding="8dp"
+                    android:text="Primary"
+                    android:textColor="?colorOnPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSecondary"
+                    android:padding="8dp"
+                    android:text="Secondary"
+                    android:textColor="?colorOnSecondary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorError"
+                    android:padding="8dp"
+                    android:text="Error"
+                    android:textColor="?colorOnError" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorSurface"
+                    android:padding="8dp"
+                    android:text="Surface"
+                    android:textColor="?colorOnSurface" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="OutlinedBox.Dense">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="FilledBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="FilledBox.Dense">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buttons" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Classic"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="Classic Disabled"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OutlinedButton"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="OutlinedButton Disabled"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextButton"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="TextButton Disabled"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UnelevatedButton"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="UnelevatedButton Disabled"
+                    app:icon="@drawable/ic_debug_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Actions" />
+
+                <Button
+                    android:id="@+id/debugShowSnackbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Snackbar" />
+
+                <Button
+                    android:id="@+id/debugShowToast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Toast" />
+
+                <Button
+                    android:id="@+id/debugShowDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Dialog" />
+
+                <Button
+                    android:id="@+id/debugShowDialogDestructive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Dialog Destructive" />
+
+                <Button
+                    android:id="@+id/debugShowDialogNegativeDestructive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Dialog Neg Destructive" />
+
+                <Button
+                    android:id="@+id/debugShowProgressDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Progress Dialog" />
+
+                <Button
+                    android:id="@+id/debugShowBottomSheet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Show Bottom Sheet" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Material CheckBox" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Material Switch" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="48dp"
+                        android:text="TextView in MaterialCardView" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="16dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_debug_icon" />
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:menu="@menu/menu_debug" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

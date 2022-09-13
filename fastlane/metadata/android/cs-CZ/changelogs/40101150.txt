@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: implementace hlasových zpráv dosupných v experimentálních funkcích.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.15

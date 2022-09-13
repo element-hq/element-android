@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    The transitions which us used for the entrance and exit of shared elements. Here we declare
+    two different transitions which are targeting specific views.
+-->
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android" android:duration="200">
+
+    <!-- changeBounds is used for the TextViews which are shared -->
+    <changeBounds/>
+
+    <!-- changeImageTransform is used for the ImageViews which are shared -->
+    <changeImageTransform />
+
+</transitionSet>

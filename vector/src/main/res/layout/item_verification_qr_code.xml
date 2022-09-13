@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.ui.views.QrCodeImageView
         android:id="@+id/itemVerificationQrCodeImage"

@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class EventFilter(
+internal data class EventFilter(
         /**
          * The maximum number of events to return.
          */
@@ -50,10 +50,10 @@ data class EventFilter(
         @Json(name = "not_types") val notTypes: List<String>? = null
 ) {
     fun hasData(): Boolean {
-        return limit != null
-                || senders != null
-                || notSenders != null
-                || types != null
-                || notTypes != null
+        return limit != null ||
+                senders != null ||
+                notSenders != null ||
+                types != null ||
+                notTypes != null
     }
 }

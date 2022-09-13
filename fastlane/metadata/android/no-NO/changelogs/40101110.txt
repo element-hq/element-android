@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: oppdatering av tema og stil og nye funksjoner for mellomrom (feilrettelse for 1.1.10)
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.11

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:minHeight="50dp">
+    android:minHeight="50dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/item_generic_title_image"
@@ -24,18 +25,19 @@
 
     <TextView
         android:id="@+id/item_generic_title_text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/item_generic_description_text"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintBottom_toTopOf="@id/item_generic_description_text"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/item_generic_title_image"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,19 +48,21 @@
 
     <TextView
         android:id="@+id/item_generic_description_text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/item_generic_action_button"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
-        tools:text="At totam delectus et aliquid dolorem. Consectetur voluptas tempore et non blanditiis id optio. Dolorum impedit quidem minus nihil. "
+        app:layout_constraintTop_toBottomOf="@id/item_generic_title_text"
+        tools:maxLines="3"
+        tools:text="@tools:sample/lorem/random"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -76,9 +80,9 @@
         android:layout_margin="16dp"
         android:importantForAccessibility="no"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toBottomOf="@id/item_generic_description_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        app:layout_constraintTop_toTopOf="@id/item_generic_title_text"
         tools:srcCompat="@drawable/e2e_warning"
         tools:visibility="visible" />
 
@@ -89,15 +93,14 @@
         android:layout_height="20dp"
         android:layout_margin="16dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toBottomOf="@id/item_generic_description_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        app:layout_constraintTop_toTopOf="@id/item_generic_title_text"
         tools:visibility="visible" />
 
     <!-- Set a max width because the text can be long -->
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/item_generic_action_button"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -105,15 +108,15 @@
         android:layout_marginBottom="16dp"
         android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/item_generic_destructive_action_button"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toTopOf="@id/item_generic_destructive_action_button"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_generic_description_text"
         tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/item_generic_destructive_action_button"
-        style="@style/VectorButtonStyleDestructive"
+        style="@style/Widget.Vector.Button.Destructive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -122,9 +125,9 @@
         android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_action_button"
-        tools:text="@string/delete"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_generic_action_button"
+        tools:text="@string/action_delete"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

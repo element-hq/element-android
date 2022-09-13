@@ -26,11 +26,10 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListBinding
-
 import javax.inject.Inject
 
 /**
- * Generic Bottom sheet with actions
+ * Generic Bottom sheet with actions.
  */
 abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : BottomSheetGenericRadioAction> :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),

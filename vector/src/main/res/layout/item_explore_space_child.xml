@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemRoomLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
+
+    <FrameLayout
+        android:id="@+id/roomAvatarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/roomAvatarImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:importantForAccessibility="no"
+            tools:src="@sample/room_round_avatars" />
+
+    </FrameLayout>
+
+    <!-- Margin bottom does not work, so I use space -->
+    <Space
+        android:id="@+id/roomAvatarBottomSpace"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
+        tools:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/roomNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/suggestedTag"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/space_suggested"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomNameView" />
+
+    <TextView
+        android:id="@+id/roomDescription"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/suggestedTag"
+        tools:text="@sample/rooms.json/data/topic" />
+
+    <Button
+        android:id="@+id/joinSuggestedRoomButton"
+        style="@style/Widget.Vector.Button.Outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:maxWidth="@dimen/button_max_width"
+        android:text="@string/action_join"
+        app:layout_constraintBottom_toTopOf="@id/inlineErrorText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/joinSuggestedLoading"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintEnd_toEndOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintTop_toTopOf="@id/joinSuggestedRoomButton"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/roomBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierMargin="8dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="roomAvatarBottomSpace" />
+
+    <TextView
+        android:id="@+id/inlineErrorText"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:textColor="?colorError"
+        app:drawableStartCompat="@drawable/ic_warning_badge"
+        app:layout_constraintTop_toBottomOf="@id/roomBottomBarrier"
+        tools:text="An error occured while joining" />
+
+    <!-- We use vctr_list_separator_system here for a better rendering -->
+    <View
+        android:id="@+id/roomDividerView"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_list_separator_system"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/joinSuggestedRoomButton"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/inlineErrorText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

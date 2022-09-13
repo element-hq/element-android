@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.SendToDeviceObject
 import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoAccept
 import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoAcceptFactory
 
@@ -34,25 +35,25 @@ internal data class KeyVerificationAccept(
         override val transactionId: String? = null,
 
         /**
-         * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
+         * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device.
          */
         @Json(name = "key_agreement_protocol")
         override val keyAgreementProtocol: String? = null,
 
         /**
-         * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device
+         * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device.
          */
         @Json(name = "hash")
         override val hash: String? = null,
 
         /**
-         * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device
+         * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device.
          */
         @Json(name = "message_authentication_code")
         override val messageAuthenticationCode: String? = null,
 
         /**
-         * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device
+         * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device.
          */
         @Json(name = "short_authentication_string")
         override val shortAuthenticationStrings: List<String>? = null,
@@ -68,12 +69,14 @@ internal data class KeyVerificationAccept(
     override fun toSendToDeviceObject() = this
 
     companion object : VerificationInfoAcceptFactory {
-        override fun create(tid: String,
-                            keyAgreementProtocol: String,
-                            hash: String,
-                            commitment: String,
-                            messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
+        override fun create(
+                tid: String,
+                keyAgreementProtocol: String,
+                hash: String,
+                commitment: String,
+                messageAuthenticationCode: String,
+                shortAuthenticationStrings: List<String>
+        ): VerificationInfoAccept {
             return KeyVerificationAccept(
                     transactionId = tid,
                     keyAgreementProtocol = keyAgreementProtocol,

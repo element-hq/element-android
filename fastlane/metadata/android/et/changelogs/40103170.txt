@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: oma asukoha saatmine jututuppa ja küsitluste muutmise võimalus.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.3.17

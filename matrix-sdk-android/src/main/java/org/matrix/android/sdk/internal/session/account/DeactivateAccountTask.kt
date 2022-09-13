@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.account
 
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.session.uia.UiaResult
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -44,25 +46,31 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
         val deactivateAccountParams = DeactivateAccountParams.create(params.userAuthParam, params.eraseAllData)
-
+        cleanupSession.stopActiveTasks()
         val canCleanup = try {
             executeRequest(globalErrorReceiver) {
                 accountAPI.deactivate(deactivateAccountParams)
             }
             true
         } catch (throwable: Throwable) {
-            if (!handleUIA(
-                            failure = throwable,
-                            interceptor = params.userInteractiveAuthInterceptor,
-                            retryBlock = { authUpdate ->
-                                execute(params.copy(userAuthParam = authUpdate))
-                            }
-                    )
-            ) {
-                Timber.d("## UIA: propagate failure")
-                throw throwable
-            } else {
-                false
+            when (handleUIA(
+                    failure = throwable,
+                    interceptor = params.userInteractiveAuthInterceptor,
+                    retryBlock = { authUpdate ->
+                        execute(params.copy(userAuthParam = authUpdate))
+                    }
+            )) {
+                UiaResult.SUCCESS -> {
+                    false
+                }
+                UiaResult.FAILURE -> {
+                    Timber.d("## UIA: propagate failure")
+                    throw throwable
+                }
+                UiaResult.CANCELLED -> {
+                    Timber.d("## UIA: cancelled")
+                    throw UiaCancelledException()
+                }
             }
         }
 
@@ -71,7 +79,7 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             runCatching { identityDisconnectTask.execute(Unit) }
                     .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
-            cleanupSession.handle()
+            cleanupSession.cleanup()
         }
     }
 }

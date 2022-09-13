@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: Edit izin ruangan, tema cahaya/gelap otomatis, dan banyak perbaikan bug.
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.0.14

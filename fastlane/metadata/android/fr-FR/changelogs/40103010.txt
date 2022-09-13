@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Organisez vos salons à l’aide des espaces ! La v1.3.1 corrige également un plantage dans la version v1.3.0
+Liste de tous les changements : https://github.com/vector-im/element-android/releases/tag/v1.3.1

@@ -17,9 +17,7 @@
 package im.vector.app.core.epoxy
 
 import androidx.annotation.CallSuper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
+import androidx.annotation.LayoutRes
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.VisibilityState
 import kotlinx.coroutines.CoroutineScope
@@ -28,26 +26,25 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 
 /**
- * EpoxyModelWithHolder which can listen to visibility state change
+ * EpoxyModelWithHolder which can listen to visibility state change.
  */
-abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>(), LifecycleOwner {
+abstract class VectorEpoxyModel<H : VectorEpoxyHolder>(
+        @LayoutRes private val layoutId: Int
+) : EpoxyModelWithHolder<H>() {
 
     protected val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
-
-    override fun getLifecycle() = lifecycleRegistry
 
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null
+
+    final override fun getDefaultLayout() = layoutId
 
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
-        lifecycleRegistry.currentState = Lifecycle.State.STARTED
     }
 
     @CallSuper
     override fun unbind(holder: H) {
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
         coroutineScope.coroutineContext.cancelChildren()
         super.unbind(holder)
     }

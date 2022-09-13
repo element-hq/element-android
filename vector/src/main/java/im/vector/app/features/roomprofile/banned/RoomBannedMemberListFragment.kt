@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -34,17 +35,17 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomBannedMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomBannedMemberListViewModel.Factory,
-        private val roomMemberListController: RoomBannedMemberListController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class RoomBannedMemberListFragment :
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomBannedMemberListController.Callback {
+
+    @Inject lateinit var roomMemberListController: RoomBannedMemberListController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomBannedMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -61,6 +62,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         setupSearchView()
         views.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 
@@ -68,7 +70,7 @@ class RoomBannedMemberListFragment @Inject constructor(
             when (it) {
                 is RoomBannedMemberListViewEvents.ShowBannedInfo -> {
                     val canBan = withState(viewModel) { state -> state.canUserBan }
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(getString(R.string.member_banned_by, it.bannedByUserId))
                             .setMessage(getString(R.string.reason_colon, it.banReason))
                             .setPositiveButton(R.string.ok, null)
@@ -81,7 +83,7 @@ class RoomBannedMemberListFragment @Inject constructor(
                             }
                             .show()
                 }
-                is RoomBannedMemberListViewEvents.ToastError     -> {
+                is RoomBannedMemberListViewEvents.ToastError -> {
                     requireActivity().toast(it.info)
                 }
             }

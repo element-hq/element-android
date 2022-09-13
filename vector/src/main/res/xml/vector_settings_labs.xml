@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--<im.vector.app.core.preference.VectorPreferenceCategory-->
     <!--android:key="SETTINGS_LABS_PREFERENCE_KEY"-->
@@ -44,17 +45,48 @@
         android:key="SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
         android:title="@string/labs_show_unread_notifications_as_tab" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:persistent="false"
+        android:key="SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
+        android:summary="@string/labs_enable_msc3061_share_history_desc"
+        android:title="@string/labs_enable_msc3061_share_history" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
-        android:key="SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
-        android:title="@string/labs_use_restricted_join_rule"
-        android:summary="@string/labs_use_restricted_join_rule_desc"/>
+        android:key="SETTINGS_LABS_ENABLE_LATEX_MATHS"
+        android:summary="@string/restart_the_application_to_apply_changes"
+        android:title="@string/labs_enable_latex_maths" />
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
     <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_thread_messages_default"
+        android:key="SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
+        android:summary="@string/labs_enable_thread_messages_desc"
+        android:title="@string/labs_enable_thread_messages" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
-        android:key="SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
-        android:title="@string/labs_space_show_orphan_in_home"/>
+        android:key="SETTINGS_LABS_AUTO_REPORT_UISI"
+        android:summary="@string/labs_auto_report_uisi_desc"
+        android:title="@string/labs_auto_report_uisi" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ENABLE_LIVE_LOCATION"
+        android:summary="@string/labs_enable_live_location_summary"
+        android:title="@string/labs_enable_live_location" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
+        android:summary="@string/labs_enable_element_call_permission_shortcuts_summary"
+        android:title="@string/labs_enable_element_call_permission_shortcuts" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_new_app_layout_default"
+        android:key="SETTINGS_LABS_NEW_APP_LAYOUT_KEY"
+        android:summary="@string/labs_enable_new_app_layout_summary"
+        android:title="@string/labs_enable_new_app_layout_title" />
 
 </androidx.preference.PreferenceScreen>

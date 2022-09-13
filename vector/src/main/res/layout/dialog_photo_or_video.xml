@@ -14,14 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/dialog_photo_or_video_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/option_take_photo"
             tools:checked="true" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/dialog_photo_or_video_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:text="@string/option_take_video" />
 
         <!-- Displayed only form the settings -->
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/dialog_photo_or_video_always_ask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
     </RadioGroup>
 
     <!-- Displayed only form the timeline -->
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <CheckBox
         android:id="@+id/dialog_photo_or_video_as_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

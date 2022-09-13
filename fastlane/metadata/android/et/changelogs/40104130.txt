@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: kasutajate võrguolekud ning helisõnumite esitaja.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases

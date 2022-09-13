@@ -85,7 +85,7 @@ class CallProximityManager @Inject constructor(
     }
 
     /**
-     * Recommending naming convention for WakeLock tags is "app:tag"
+     * Recommending naming convention for WakeLock tags is "app:tag".
      */
     private fun generateWakeLockTag() = "${stringProvider.getString(R.string.app_name)}:$PROXIMITY_WAKE_LOCK_TAG"
 
@@ -93,7 +93,9 @@ class CallProximityManager @Inject constructor(
         if (wakeLock == null) {
             wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, generateWakeLockTag())
         }
-        wakeLock?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
+        wakeLock
+                ?.takeIf { !it.isHeld }
+                ?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
     }
 
     private fun onProximityFar() {

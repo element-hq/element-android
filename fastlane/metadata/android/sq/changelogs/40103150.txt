@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Ndryshimi i parë në skenat e mirëseardhjes, përfshi zgjedhje për pjesëmarrje në Analiza. Në laboratorë u shtua mbulim për Akte me Formula Matematikore.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.15

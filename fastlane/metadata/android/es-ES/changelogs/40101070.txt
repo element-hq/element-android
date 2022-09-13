@@ -1,0 +1,2 @@
+Principales cambios en esta versión: soporte beta para Spaces. Comprima el video antes de enviarlo.
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.7

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.spaces.manage
 
-import io.reactivex.functions.Predicate
+import androidx.core.util.Predicate
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
@@ -30,8 +30,8 @@ class SpaceChildInfoMatchFilter : Predicate<SpaceChildInfo> {
         }
         // if filter is "Jo Do", it should match "John Doe"
         return filter.split(" ").all {
-            spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse()
-                    || spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
+            spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse() ||
+                    spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
         }
     }
 }

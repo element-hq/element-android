@@ -4,7 +4,7 @@
 
     <size android:width="40dp" android:height="40dp"/>
 
-    <solid android:color="?vctr_list_header_background_color" />
+    <solid android:color="?vctr_system" />
 
     <corners android:radius="8dp" />
 

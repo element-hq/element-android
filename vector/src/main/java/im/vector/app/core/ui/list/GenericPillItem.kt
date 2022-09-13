@@ -25,25 +25,28 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 /**
- * A generic list item with a rounded corner background and an optional icon
+ * A generic list item with a rounded corner background and an optional icon.
  */
-@EpoxyModelClass(layout = R.layout.item_generic_pill_footer)
-abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
+@EpoxyModelClass
+abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>(R.layout.item_generic_pill_footer) {
 
     @EpoxyAttribute
-    var text: CharSequence? = null
+    var text: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
-    var itemClickAction: GenericItem.Action? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute
     var centered: Boolean = false
@@ -58,7 +61,7 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.textView.setTextOrHide(text)
+        holder.textView.setTextOrHide(text?.charSequence)
         holder.textView.typeface = style.toTypeFace()
         holder.textView.textSize = style.toTextSize()
         holder.textView.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
@@ -70,15 +73,13 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>() {
             holder.imageView.isVisible = false
         }
         if (tintIcon) {
-            val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
             ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(iconTintColor))
         } else {
             ImageViewCompat.setImageTintList(holder.imageView, null)
         }
 
-        holder.view.setOnClickListener {
-            itemClickAction?.perform?.run()
-        }
+        holder.view.onClick(itemClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

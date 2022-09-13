@@ -15,16 +15,16 @@
  */
 package im.vector.app.features.discovery.change
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
 import im.vector.app.R
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
@@ -38,29 +38,23 @@ import java.net.UnknownHostException
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
-        stringProvider: StringProvider)
-    : VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        stringProvider: StringProvider
+) :
+        VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+        override fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
 
-    companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+    companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-
+        override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState {
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return SetIdentityServerState(
                     homeServerUrl = session.sessionParams.homeServerUrl,
                     defaultIdentityServerUrl = session.identityService().getDefaultIdentityServer()
             )
-        }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SetIdentityServerState): SetIdentityServerViewModel? {
-            val fragment: SetIdentityServerFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
         }
     }
 
@@ -71,9 +65,9 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     override fun handle(action: SetIdentityServerAction) {
         when (action) {
-            SetIdentityServerAction.UseDefaultIdentityServer   -> useDefault()
+            SetIdentityServerAction.UseDefaultIdentityServer -> useDefault()
             is SetIdentityServerAction.UseCustomIdentityServer -> usedCustomIdentityServerUrl(action)
-        }.exhaustive
+        }
     }
 
     private fun useDefault() = withState { state ->
@@ -101,11 +95,11 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                 checkTerms(baseUrl)
             } catch (failure: Throwable) {
                 when {
-                    failure is IdentityServiceError.OutdatedIdentityServer                              ->
+                    failure is IdentityServiceError.OutdatedIdentityServer ->
                         _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server, isDefault))
                     failure is Failure.NetworkConnection && failure.ioException is UnknownHostException ->
                         _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server, isDefault))
-                    else                                                                                ->
+                    else ->
                         _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                 }
             }
@@ -114,7 +108,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
+            val data = mxSession.termsService().getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

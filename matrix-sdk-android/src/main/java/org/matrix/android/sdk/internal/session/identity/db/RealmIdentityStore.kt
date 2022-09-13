@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.session.identity.db
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.internal.di.IdentityDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.identity.data.IdentityPendingBinding
 import org.matrix.android.sdk.internal.session.identity.data.IdentityData
+import org.matrix.android.sdk.internal.session.identity.data.IdentityPendingBinding
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.identity.model.IdentityHashDetailResponse
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 @SessionScope

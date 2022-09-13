@@ -15,31 +15,33 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import dagger.Lazy
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
-import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
-    data class Params(val roomId: String,
-                      val event: Event,
-                      /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
-                      val keepKeys: List<String>? = null
+    data class Params(
+            val roomId: String,
+            val event: Event,
+            /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
+            val keepKeys: List<String>? = null
     )
 }
 
 internal class DefaultEncryptEventTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
-        private val cryptoService: CryptoService
+        private val cryptoService: Lazy<CryptoService>
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         // don't want to wait for any query
@@ -59,7 +61,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
 //        try {
         // let it throws
         awaitCallback<MXEncryptEventContentResult> {
-            cryptoService.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
+            cryptoService.get().encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
         }.let { result ->
             val modifiedContent = HashMap(result.eventContent)
             params.keepKeys?.forEach { toKeep ->
@@ -80,7 +82,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
                         ).toContent(),
                         forwardingCurve25519KeyChain = emptyList(),
                         senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                        claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
+                        claimedEd25519Key = cryptoService.get().getMyDevice().fingerprint()
                 )
             } else {
                 null

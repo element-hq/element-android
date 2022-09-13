@@ -3,18 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical"
     android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/bottomSheetTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         tools:text="@string/reactions" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -1,0 +1,2 @@
+此版本中的主要變動：對 VoIP 與空間功能的諸多改善（仍在測試中）。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.2.1

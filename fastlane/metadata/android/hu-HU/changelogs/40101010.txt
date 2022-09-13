@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: sebesség javítás és hibajavítás
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.1.1

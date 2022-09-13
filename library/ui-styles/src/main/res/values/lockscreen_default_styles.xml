@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LockScreenStyle">
+        <item name="android:background">@drawable/lockscreen_background</item>
+    </style>
+
+    <style name="LockScreenButtonStyle" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/lockscreen_touch_selector</item>
+    </style>
+
+    <style name="LockScreenFingerPrintButtonStyle">
+        <item name="android:src">@drawable/lockscreen_fingerprint</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
+    <style name="LockScreenDeleteButtonStyle">
+        <item name="android:src">@drawable/lockscreen_delete</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
+    <style name="CheckBox">
+        <item name="android:checkboxStyle">@style/LockScreenCodeStyle</item>
+        <item name="checkboxStyle">@style/LockScreenCodeStyle</item>
+    </style>
+
+    <style name="LockScreenCodeStyle">
+        <item name="android:button">@drawable/lockscreen_code_selector</item>
+    </style>
+
+    <style name="LockScreenNextTextStyle">
+        <item name="android:textColor">#9FFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:backgroundTint">#c66</item>
+    </style>
+
+    <style name="LockScreenHintTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="LockScreenTitleTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

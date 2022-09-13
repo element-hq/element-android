@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: beta podpora pro Spaces. Komprimace videa před odesláním.
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.7

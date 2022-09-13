@@ -1,0 +1,2 @@
+此版本中的主要更新：改进性能和错误修复！
+完整的更新记录：https://github.com/vector-im/element-android/releases/tag/v1.1.2

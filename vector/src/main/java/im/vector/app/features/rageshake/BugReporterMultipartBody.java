@@ -39,7 +39,7 @@ public class BugReporterMultipartBody extends RequestBody {
         /**
          * Upload listener
          *
-         * @param totalWritten  total written bytes
+         * @param totalWritten total written bytes
          * @param contentLength content length
          */
         void onWrite(long totalWritten, long contentLength);
@@ -224,7 +224,7 @@ public class BugReporterMultipartBody extends RequestBody {
         }
 
         public static Part createFormData(String name, String value) {
-            return createFormData(name, null, RequestBody.create(null, value));
+            return createFormData(name, null, RequestBody.create(value, null));
         }
 
         public static Part createFormData(String name, String filename, RequestBody body) {

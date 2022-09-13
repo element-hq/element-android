@@ -20,7 +20,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
@@ -30,6 +30,8 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationD
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationEmojisItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import im.vector.app.features.displayname.getBestName
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(
@@ -58,11 +60,12 @@ class VerificationEmojiCodeController @Inject constructor(
     }
 
     private fun buildEmojiItem(state: VerificationEmojiCodeViewState) {
+        val host = this
         when (val emojiDescription = state.emojiDescription) {
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(stringProvider.getString(R.string.verification_emoji_notice))
+                    notice(host.stringProvider.getString(R.string.verification_emoji_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationEmojisItem {
@@ -78,27 +81,28 @@ class VerificationEmojiCodeController @Inject constructor(
 
                 buildActions(state)
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
-                    text(errorFormatter.toHumanReadable(emojiDescription.error))
+                    text(host.errorFormatter.toHumanReadable(emojiDescription.error))
                 }
             }
-            else       -> {
+            else -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(stringProvider.getString(R.string.please_wait))
+                    title(host.stringProvider.getString(R.string.please_wait))
                 }
             }
         }
     }
 
     private fun buildDecimal(state: VerificationEmojiCodeViewState) {
+        val host = this
         when (val decimalDescription = state.decimalDescription) {
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(stringProvider.getString(R.string.verification_code_notice))
+                    notice(host.stringProvider.getString(R.string.verification_code_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationDecimalCodeItem {
@@ -108,50 +112,51 @@ class VerificationEmojiCodeController @Inject constructor(
 
                 buildActions(state)
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
-                    text(errorFormatter.toHumanReadable(decimalDescription.error))
+                    text(host.errorFormatter.toHumanReadable(decimalDescription.error))
                 }
             }
-            else       -> {
+            else -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(stringProvider.getString(R.string.please_wait))
+                    title(host.stringProvider.getString(R.string.please_wait))
                 }
             }
         }
     }
 
     private fun buildActions(state: VerificationEmojiCodeViewState) {
-        dividerItem {
+        val host = this
+        bottomSheetDividerItem {
             id("sep0")
         }
 
         if (state.isWaitingFromOther) {
             bottomSheetVerificationWaitingItem {
                 id("waiting")
-                title(stringProvider.getString(R.string.verification_request_waiting_for, state.otherUser?.getBestName() ?: ""))
+                title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUser?.getBestName() ?: ""))
             }
         } else {
             bottomSheetVerificationActionItem {
                 id("ko")
-                title(stringProvider.getString(R.string.verification_sas_do_not_match))
-                titleColor(colorProvider.getColor(R.color.vector_error_color))
+                title(host.stringProvider.getString(R.string.verification_sas_do_not_match))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_check_off)
-                iconColor(colorProvider.getColor(R.color.vector_error_color))
-                listener { listener?.onDoNotMatchButtonTapped() }
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                listener { host.listener?.onDoNotMatchButtonTapped() }
             }
-            dividerItem {
+            bottomSheetDividerItem {
                 id("sep1")
             }
             bottomSheetVerificationActionItem {
                 id("ok")
-                title(stringProvider.getString(R.string.verification_sas_match))
-                titleColor(colorProvider.getColor(R.color.riotx_accent))
+                title(host.stringProvider.getString(R.string.verification_sas_match))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 iconRes(R.drawable.ic_check_on)
-                iconColor(colorProvider.getColor(R.color.riotx_accent))
-                listener { listener?.onMatchButtonTapped() }
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                listener { host.listener?.onMatchButtonTapped() }
             }
         }
     }

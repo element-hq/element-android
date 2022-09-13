@@ -24,7 +24,7 @@ sealed class MatrixToAction : VectorViewModelAction {
     object FailedToResolveUser : MatrixToAction()
     object FailedToStartChatting : MatrixToAction()
     data class JoinSpace(val spaceID: String, val viaServers: List<String>?) : MatrixToAction()
-    data class JoinRoom(val roomId: String, val viaServers: List<String>?) : MatrixToAction()
+    data class JoinRoom(val roomIdOrAlias: String, val viaServers: List<String>?) : MatrixToAction()
     data class OpenSpace(val spaceID: String) : MatrixToAction()
     data class OpenRoom(val roomId: String) : MatrixToAction()
 }

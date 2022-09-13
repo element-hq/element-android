@@ -31,9 +31,17 @@ object MimeTypes {
     const val Jpeg = "image/jpeg"
     const val Gif = "image/gif"
 
+    const val Ogg = "audio/ogg"
+
+    const val PlainText = "text/plain"
+
     fun String?.normalizeMimeType() = if (this == BadJpg) Jpeg else this
 
     fun String?.isMimeTypeImage() = this?.startsWith("image/").orFalse()
     fun String?.isMimeTypeVideo() = this?.startsWith("video/").orFalse()
     fun String?.isMimeTypeAudio() = this?.startsWith("audio/").orFalse()
+    fun String?.isMimeTypeApplication() = this?.startsWith("application/").orFalse()
+    fun String?.isMimeTypeFile() = this?.startsWith("file/").orFalse()
+    fun String?.isMimeTypeText() = this?.startsWith("text/").orFalse()
+    fun String?.isMimeTypeAny() = this?.startsWith("*/").orFalse()
 }

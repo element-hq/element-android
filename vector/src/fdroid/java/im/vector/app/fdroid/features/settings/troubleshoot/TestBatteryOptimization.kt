@@ -17,7 +17,7 @@ package im.vector.app.fdroid.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
@@ -26,12 +26,12 @@ import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
 class TestBatteryOptimization @Inject constructor(
-        private val context: AppCompatActivity,
+        private val context: FragmentActivity,
         private val stringProvider: StringProvider
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        if (isIgnoringBatteryOptimizations(context)) {
+        if (context.isIgnoringBatteryOptimizations()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_battery_success)
             status = TestStatus.SUCCESS
             quickFix = null

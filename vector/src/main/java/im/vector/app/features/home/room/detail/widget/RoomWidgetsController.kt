@@ -16,46 +16,48 @@
 
 package im.vector.app.features.home.room.detail.widget
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room widgets list
+ * Epoxy controller for room widgets list.
  */
 class RoomWidgetsController @Inject constructor(
         val stringProvider: StringProvider,
-        val colorProvider: ColorProvider)
-    : TypedEpoxyController<List<Widget>>() {
+        val colorProvider: ColorProvider
+) :
+        TypedEpoxyController<List<Widget>>() {
 
     var listener: Listener? = null
 
     override fun buildModels(widgets: List<Widget>) {
+        val host = this
         if (widgets.isEmpty()) {
             genericFooterItem {
                 id("empty")
-                text(stringProvider.getString(R.string.room_no_active_widgets))
+                text(host.stringProvider.getString(R.string.room_no_active_widgets).toEpoxyCharSequence())
             }
         } else {
-            widgets.forEach {
+            widgets.forEach { widget ->
                 roomWidgetItem {
-                    id(it.widgetId)
-                    widget(it)
-                    widgetClicked { listener?.didSelectWidget(it) }
+                    id(widget.widgetId)
+                    widget(widget)
+                    widgetClicked { host.listener?.didSelectWidget(widget) }
                 }
             }
         }
         genericButtonItem {
             id("addIntegration")
-            text(stringProvider.getString(R.string.room_manage_integrations))
-            textColor(colorProvider.getColor(R.color.riotx_accent))
-            buttonClickAction(View.OnClickListener { listener?.didSelectManageWidgets() })
+            text(host.stringProvider.getString(R.string.room_manage_integrations))
+            textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            buttonClickAction { host.listener?.didSelectManageWidgets() }
         }
     }
 

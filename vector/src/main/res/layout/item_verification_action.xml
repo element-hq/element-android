@@ -5,7 +5,7 @@
     android:id="@+id/itemVerificationClickableZone"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -13,7 +13,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemVerificationLeftIcon"
@@ -25,23 +26,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_share"
         tools:visibility="visible" />
 
-
     <TextView
         android:id="@+id/itemVerificationActionTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/riotx_accent"
-        android:textSize="16sp"
+        android:textColor="?colorPrimary"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/itemVerificationActionSubTitle"
-        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-        app:layout_constraintStart_toEndOf="@+id/itemVerificationLeftIcon"
+        app:layout_constraintBottom_toTopOf="@id/itemVerificationActionSubTitle"
+        app:layout_constraintEnd_toStartOf="@id/itemVerificationActionIcon"
+        app:layout_constraintStart_toEndOf="@id/itemVerificationLeftIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_goneMarginStart="0dp"
@@ -49,17 +49,17 @@
 
     <TextView
         android:id="@+id/itemVerificationActionSubTitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-        app:layout_constraintStart_toStartOf="@+id/itemVerificationActionTitle"
-        app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
+        app:layout_constraintEnd_toStartOf="@id/itemVerificationActionIcon"
+        app:layout_constraintStart_toStartOf="@id/itemVerificationActionTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemVerificationActionTitle"
         tools:text="For maximum security, do this in person"
         tools:visibility="visible" />
 
@@ -72,7 +72,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_arrow_right" />
 

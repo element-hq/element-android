@@ -15,7 +15,6 @@
 
     </View>
 
-
     <ImageView
         android:id="@+id/overlayBackButton"
         android:layout_width="44dp"
@@ -32,19 +31,19 @@
         app:layout_constraintStart_toStartOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_back_24dp"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/overlayCounterText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textColor="?colorOnPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/overlayInfoText"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
@@ -55,18 +54,35 @@
 
     <TextView
         android:id="@+id/overlayInfoText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
         app:layout_constraintStart_toStartOf="@id/overlayCounterText"
         app:layout_constraintTop_toBottomOf="@id/overlayCounterText"
         tools:text="Bill 29 Jun at 19:42" />
+
+    <ImageView
+        android:id="@+id/overlayDownloadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/action_download"
+        android:focusable="true"
+        android:padding="6dp"
+        app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
+        app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
+        app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
+        app:srcCompat="@drawable/ic_material_save"
+        app:tint="?colorOnPrimary"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/overlayShareButton"
@@ -75,16 +91,15 @@
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/share"
+        android:contentDescription="@string/action_share"
         android:focusable="true"
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayTopBackground"
         app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
         app:srcCompat="@drawable/ic_share"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
-
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/overlayVideoControlsGroup"
@@ -109,7 +124,7 @@
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/play_video"
+        android:contentDescription="@string/action_play"
         android:focusable="true"
         android:padding="6dp"
         android:scaleType="centerInside"
@@ -117,7 +132,7 @@
         app:layout_constraintStart_toStartOf="@id/overlayBottomBackground"
         app:layout_constraintTop_toTopOf="@id/overlayBottomBackground"
         app:srcCompat="@drawable/ic_play_arrow"
-        app:tint="@color/white"
+        app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
 
     <SeekBar
@@ -126,9 +141,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/white"
-        android:progressBackgroundTint="@color/white"
-        android:thumbTint="@color/white"
+        android:backgroundTint="?colorOnPrimary"
+        android:progressBackgroundTint="?colorOnPrimary"
+        android:thumbTint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@id/overlayBottomBackground"
         app:layout_constraintEnd_toEndOf="@id/overlayBottomBackground"
         app:layout_constraintStart_toEndOf="@id/overlayPlayPauseButton"

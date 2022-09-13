@@ -1,0 +1,42 @@
+Element, hem güvenli bir haberci hem de uzaktan çalışırken grup sohbetleri için ideal olan bir üretkenlik ekibi işbirliği uygulamasıdır. Bu sohbet uygulaması, güçlü video konferans, dosya paylaşımı ve sesli aramalar sağlamak için uçtan uca şifreleme kullanır.
+
+ <b>Elementin özellikleri şunları içerir:</b>
+ - Gelişmiş çevrimiçi iletişim araçları
+ - Uzak çalışanlar için bile daha güvenli kurumsal iletişime izin vermek için tamamen şifrelenmiş mesajlar
+ - Matrix açık kaynak çerçevesine dayalı merkezi olmayan sohbet
+ - Projeleri yönetirken şifreli verilerle güvenli dosya paylaşımı
+ - IP üzerinden Ses ve ekran paylaşımı ile görüntülü sohbetler
+ - En sevdiğiniz çevrimiçi işbirliği araçları, proje yönetimi araçları, VoIP hizmetleri ve diğer ekip mesajlaşma uygulamalarıyla kolay entegrasyon
+
+ Element, diğer mesajlaşma ve işbirliği uygulamalarından tamamen farklıdır. Güvenli mesajlaşma ve merkezi olmayan iletişim için açık bir ağ olan Matrix üzerinde çalışır. Kendi kendine barındırmanın, kullanıcılara verilerinin ve mesajlarının maksimum sahipliğini ve kontrolünü vermesini sağlar.
+
+ <b>Gizlilik ve şifreli mesajlaşma</b>
+ Element sizi istenmeyen reklamlardan, veri madenciliğinden ve duvarlarla çevrili bahçelerden korur. Ayrıca uçtan uca şifreleme ve çapraz imzalı cihaz doğrulama yoluyla tüm verilerinizi, bire bir video ve sesli iletişiminizi korur.
+
+ Element, Slack gibi uygulamalarla bütünleşerek Matrix ağındaki herhangi biriyle veya diğer iş işbirliği araçlarıyla güvenli bir şekilde iletişim kurmanıza izin verirken gizliliğiniz üzerinde kontrol sağlar.
+
+ <b>Öğe kendi kendine barındırılabilir</b>
+ Hassas verileriniz ve konuşmalarınız üzerinde daha fazla kontrole izin vermek için Element, kendi kendine barındırılabilir veya açık kaynak, merkezi olmayan iletişim standardı olan Matrix tabanlı herhangi bir ana bilgisayarı seçebilirsiniz. Element size gizlilik, güvenlik uyumluluğu ve entegrasyon esnekliği sağlar.
+
+ <b>Verilerinizin sahibi olun</b>
+ Verilerinizi ve mesajlarınızı nerede tutacağınıza siz karar verirsiniz. Veri madenciliği veya üçüncü şahıslardan erişim riski olmadan.
+
+ Element, kontrolü farklı şekillerde size verir:
+ 1. Matrix geliştiricileri tarafından barındırılan matrix.org genel sunucusunda ücretsiz bir hesap edinin veya gönüllüler tarafından barındırılan binlerce genel sunucu arasından seçim yapın
+ 2. Kendi BT altyapınızda bir sunucu çalıştırarak hesabınızı kendiniz barındırın
+ 3. Element Matrix Services barındırma platformuna abone olarak özel bir sunucuda bir hesap için kaydolun
+
+ <b>Açık mesajlaşma ve ortak çalışma</b>
+ Element, başka bir Matrix uygulaması veya farklı bir mesajlaşma uygulaması kullanıyor olsalar bile, Matrix ağındaki herkesle sohbet edebilirsiniz.
+
+ <b>Süper güvenli</b>
+ Gerçek uçtan uca şifreleme (yalnızca görüşmedekiler mesajların şifresini çözebilir) ve çapraz imzalı cihaz doğrulaması.
+
+ <b>Tam iletişim ve entegrasyon</b>
+ Mesajlaşma, sesli ve görüntülü aramalar, dosya paylaşımı, ekran paylaşımı ve bir sürü entegrasyon, bot ve widget. Odalar, topluluklar oluşturun, iletişimde kalın ve işlerinizi halledin.
+
+ <b>Kaldığınız yerden devam edin</b>
+ https://app.element.io adresinde tüm cihazlarınızda ve web'de tamamen senkronize edilmiş mesaj geçmişiyle nerede olursanız olun bağlantıda kalın
+
+ <b>Açık kaynak</b>
+ Element Android, GitHub tarafından barındırılan açık kaynaklı bir projedir. Lütfen https://github.com/vector-im/element-android adresinde hataları bildirin ve/veya gelişimine katkıda bulunun.

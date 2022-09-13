@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.crypto
 
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 interface RoomCryptoService {
 
@@ -27,9 +27,13 @@ interface RoomCryptoService {
     fun shouldEncryptForInvitedMembers(): Boolean
 
     /**
-     * Enable encryption of the room
+     * Enable encryption of the room.
+     * @param algorithm the algorithm to set, default to [MXCRYPTO_ALGORITHM_MEGOLM]
+     * @param force Use force to ensure that this algorithm will be used. Otherwise this call
+     * will throw if encryption is already setup or if the algorithm is not supported. Only to
+     * be used by admins to fix misconfigured encryption.
      */
-    suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM)
+    suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM, force: Boolean = false)
 
     /**
      * Ensures all members of the room are loaded and outbound session keys are shared.

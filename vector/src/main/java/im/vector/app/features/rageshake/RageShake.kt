@@ -19,21 +19,25 @@ package im.vector.app.features.rageshake
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
-class RageShake @Inject constructor(private val activity: AppCompatActivity,
-                                    private val bugReporter: BugReporter,
-                                    private val navigator: Navigator,
-                                    private val vectorPreferences: VectorPreferences) : ShakeDetector.Listener {
+class RageShake @Inject constructor(
+        private val activity: FragmentActivity,
+        private val bugReporter: BugReporter,
+        private val navigator: Navigator,
+        private val sessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences
+) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
 
@@ -46,7 +50,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
 
         shakeDetector = ShakeDetector(this).apply {
             setSensitivity(vectorPreferences.getRageshakeSensitivity())
-            start(sensorManager)
+            start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
         }
     }
 
@@ -72,10 +76,16 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
             vibrate(activity)
             dialogDisplayed = true
 
-            AlertDialog.Builder(activity)
+            MaterialAlertDialogBuilder(activity)
                     .setMessage(R.string.send_bug_report_alert_message)
                     .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
-                    .setNeutralButton(R.string.settings) { _, _ -> openSettings() }
+                    .also {
+                        if (sessionHolder.hasActiveSession()) {
+                            it.setNeutralButton(R.string.settings) { _, _ -> openSettings() }
+                        } else {
+                            it.setNeutralButton(R.string.action_disable) { _, _ -> disableRageShake() }
+                        }
+                    }
                     .setOnDismissListener { dialogDisplayed = false }
                     .setNegativeButton(R.string.no, null)
                     .show()
@@ -90,9 +100,14 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
         navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS)
     }
 
+    private fun disableRageShake() {
+        vectorPreferences.setRageshakeEnabled(false)
+        stop()
+    }
+
     companion object {
         /**
-         * Check if the feature is available
+         * Check if the feature is available.
          */
         fun isAvailable(context: Context): Boolean {
             return context.getSystemService<SensorManager>()?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_home_setting"
+        android:icon="@drawable/ic_settings_x"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_home_suggestion"
+        android:icon="@drawable/ic_material_bug_report"
+        android:title="@string/send_suggestion" />
+
+    <item
+        android:id="@+id/menu_home_report_bug"
+        android:icon="@drawable/ic_material_bug_report"
+        android:title="@string/send_bug_report" />
+
+    <item
+        android:id="@+id/menu_home_init_sync_legacy"
+        android:title="Do a legacy init sync"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menu_home_init_sync_optimized"
+        android:title="Do an optimized init sync"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menu_home_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/home_filter_placeholder_home"
+        app:iconTint="?vctr_content_secondary"
+        app:showAsAction="always" />
+
+</menu>

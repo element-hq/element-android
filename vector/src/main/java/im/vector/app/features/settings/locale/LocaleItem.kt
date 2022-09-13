@@ -26,17 +26,16 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_locale)
-abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>() {
+@EpoxyModelClass
+abstract class LocaleItem : VectorEpoxyModel<LocaleItem.Holder>(R.layout.item_locale) {
 
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var subtitle: String? = null
-    @EpoxyAttribute var clickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-
-        holder.view.onClick { clickListener?.invoke() }
+        holder.view.onClick(clickListener)
         holder.titleView.setTextOrHide(title)
         holder.subtitleView.setTextOrHide(subtitle)
     }

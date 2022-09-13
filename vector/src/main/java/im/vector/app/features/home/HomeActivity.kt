@@ -24,34 +24,53 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import com.airbnb.mvrx.MvRx
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import im.vector.app.AppStateHandler
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
+import im.vector.app.core.extensions.restart
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.permalink.PermalinkHandler.Companion.MATRIX_TO_CUSTOM_SCHEME_URL_BASE
+import im.vector.app.features.permalink.PermalinkHandler.Companion.ROOM_LINK_PREFIX
+import im.vector.app.features.permalink.PermalinkHandler.Companion.USER_LINK_PREFIX
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -59,61 +78,70 @@ import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-import im.vector.app.push.fcm.FcmHelper
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
-import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
 data class HomeActivityArgs(
         val clearNotification: Boolean,
-        val accountCreation: Boolean
+        val authenticationDescription: AuthenticationDescription? = null,
+        val hasExistingSession: Boolean = false,
+        val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
+@AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
-        ToolbarConfigurable,
-        UnknownDeviceDetectorSharedViewModel.Factory,
-        ServerBackupStatusViewModel.Factory,
-        UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
-        SpaceInviteBottomSheet.InteractionListener {
+        SpaceInviteBottomSheet.InteractionListener,
+        MatrixToBottomSheet.InteractionListener,
+        VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
+
+    @Suppress("UNUSED")
+    private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
+
+    @Suppress("UNUSED")
+    private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
-    @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
-    @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
-    @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var spaceStateHandler: SpaceStateHandler
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var nightlyProxy: NightlyProxy
+
+    private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -131,168 +159,254 @@ class HomeActivity :
             }
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(context = this,
+                navigator.switchToSpace(
+                        context = this,
                         spaceId = spaceId,
-                        postSwitchOption)
+                        postSwitchOption,
+                )
+                roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
     }
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@HomeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
+        override fun onDrawerOpened(drawerView: View) {
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Sidebar))
+        }
+
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
         }
     }
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
-        return unknownDeviceViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupviewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
-        return unreadMessagesSharedViewModelFactory.create(initialState)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
-        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
+        isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
+        analyticsScreenName = MobileScreen.ScreenName.Home
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
+        unifiedPushHelper.register(this) {
+            if (unifiedPushHelper.isEmbeddedDistributor()) {
+                fcmHelper.ensureFcmTokenIsRetrieved(
+                        this,
+                        pushersManager,
+                        vectorPreferences.areNotificationEnabledForDevice()
+                )
+            }
+        }
+        sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            if (vectorPreferences.isNewAppLayoutEnabled()) {
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
+            } else {
+                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
         }
 
-//        appStateHandler.selectedRoomGroupingObservable.subscribe {
-//            if (supportFragmentManager.getFragment())
-//            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-//        }.disposeOnDestroy()
-
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> {
-                            views.drawerLayout.closeDrawer(GravityCompat.START)
-
-                            // Temporary
-                            // When switching from space to group or group to space, we need to reload the fragment
-                            // To be removed when dropping legacy groups
-                            if (sharedAction.clearFragment) {
-                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
-                            } else {
-                                // nop
-                            }
-                            // we might want to delay that to avoid having the drawer animation lagging
-                            // would be probably better to let the drawer do that? in the on closed callback?
-                        }
-                        is HomeActivitySharedAction.OpenSpacePreview -> {
-                            startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
-                        }
-                        is HomeActivitySharedAction.AddSpace -> {
-                            createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
-                        }
-                        is HomeActivitySharedAction.ShowSpaceSettings -> {
-                            // open bottom sheet
-                            SpaceSettingsMenuBottomSheet
-                                    .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
-                                        override fun onShareSpaceSelected(spaceId: String) {
-                                            ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
-                                        }
-                                    })
-                                    .show(supportFragmentManager, "SPACE_SETTINGS")
-                        }
-                        is HomeActivitySharedAction.OpenSpaceInvite -> {
-                            SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
-                                    .show(supportFragmentManager, "SPACE_INVITE")
-                        }
-                        HomeActivitySharedAction.SendSpaceFeedBack -> {
-                            bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
-                        }
-                    }.exhaustive
+                        is HomeActivitySharedAction.OpenSpacePreview -> startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
+                        is HomeActivitySharedAction.AddSpace -> createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        is HomeActivitySharedAction.ShowSpaceSettings -> showSpaceSettings(sharedAction.spaceId)
+                        is HomeActivitySharedAction.OpenSpaceInvite -> openSpaceInvite(sharedAction.spaceId)
+                        HomeActivitySharedAction.SendSpaceFeedBack -> bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
+                        HomeActivitySharedAction.OnCloseSpace -> onCloseSpace()
+                    }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
+        }
+        if (args?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(args.inviteNotificationRoomId)?.let {
+                navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
+            }
         }
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
+                is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
+                is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
+                HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
+                is HomeActivityViewEvents.ForceVerification -> {
+                    if (it.sendRequest) {
+                        navigator.requestSelfSessionVerification(this)
+                    } else {
+                        navigator.waitSessionVerification(this)
+                    }
+                }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
-            }.exhaustive
+                HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
+                HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
+            }
         }
-        homeActivityViewModel.subscribe(this) { renderState(it) }
+        homeActivityViewModel.onEach { renderState(it) }
 
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
 
         if (isFirstCreation()) {
             handleIntent(intent)
         }
+        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowReleaseNotes() {
+        startActivity(Intent(this, ReleaseNotesActivity::class.java))
+    }
+
+    private fun showSpaceSettings(spaceId: String) {
+        // open bottom sheet
+        SpaceSettingsMenuBottomSheet
+                .newInstance(spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
+                    override fun onShareSpaceSelected(spaceId: String) {
+                        ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
+                    }
+                })
+                .show(supportFragmentManager, "SPACE_SETTINGS")
+    }
+
+    private fun showLayoutSettings() {
+        HomeLayoutSettingBottomDialogFragment()
+                .show(supportFragmentManager, "LAYOUT_SETTINGS")
+    }
+
+    private fun openSpaceInvite(spaceId: String) {
+        SpaceInviteBottomSheet.newInstance(spaceId)
+                .show(supportFragmentManager, "SPACE_INVITE")
+    }
+
+    private fun onCloseSpace() {
+        views.drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    private fun handleShowAnalyticsOptIn() {
+        navigator.openAnalyticsOptIn(this)
+    }
+
+    /**
+     * Migrating from old threads io.element.thread to new m.thread needs an initial sync to
+     * sync and display existing messages appropriately.
+     */
+    private fun migrateThreadsIfNeeded(checkSession: Boolean) {
+        if (checkSession) {
+            // We should check session to ensure we will only clear cache if needed
+            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            if (args?.hasExistingSession == true) {
+                // existingSession --> Will be true only if we came from an existing active session
+                Timber.i("----> Migrating threads from an existing session..")
+                handleThreadsMigration()
+            } else {
+                // We came from a new session and not an existing one,
+                // so there is no need to migrate threads while an initial synced performed
+                Timber.i("----> No thread migration needed, we are ok")
+                vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+            }
+        } else {
+            // Proceed with migration
+            handleThreadsMigration()
+        }
+    }
+
+    /**
+     * Clear cache and restart to invoke an initial sync for threads migration.
+     */
+    private fun handleThreadsMigration() {
+        Timber.i("----> Threads Migration detected, clearing cache and sync...")
+        vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+        MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+    }
+
+    private fun handleNotifyUserForThreadsMigration() {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.threads_notice_migration_title)
+                .setMessage(R.string.threads_notice_migration_message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.sas_got_it) { _, _ -> }
+                .show()
     }
 
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
-                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
-                    // This is a bit ugly, but for now just convert to matrix.to link for compatibility
+                // Element custom scheme is not handled by the sdk, convert it to matrix.to link for compatibility
+                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
-                        else                                  -> null
-                    }?.let {
-                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
+                        else -> null
+                    }?.let { permalinkId ->
+                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
                 }
-                else                                                     -> return@let
+                else -> deepLink
             }
 
-            permalinkHandler.launch(
-                    context = this,
-                    deepLink = resolvedLink,
-                    navigationInterceptor = this,
-                    buildTask = true
-            )
-                    // .delay(500, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { isHandled ->
-                        if (!isHandled) {
-                            AlertDialog.Builder(this)
-                                    .setTitle(R.string.dialog_title_error)
-                                    .setMessage(R.string.permalink_malformed)
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-                    }
-                    .disposeOnDestroy()
+            lifecycleScope.launch {
+                val isHandled = permalinkHandler.launch(
+                        fragmentActivity = this@HomeActivity,
+                        deepLink = resolvedLink,
+                        navigationInterceptor = this@HomeActivity,
+                        buildTask = true
+                )
+                if (!isHandled) {
+                    val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                            deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
+                    MaterialAlertDialogBuilder(this@HomeActivity)
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+            }
+        }
+    }
+
+    private fun handleStartRecoverySetup() {
+        // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
+        lifecycleScope.launchWhenResumed {
+            navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
         }
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle -> {
-                views.waitingView.root.isVisible = false
-            }
-            is InitialSyncProgressService.Status.Progressing -> {
-                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+        when (val status = state.syncRequestState) {
+            is SyncRequestState.InitialSyncProgressing -> {
+                val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
@@ -309,7 +423,11 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-        }.exhaustive
+            else -> {
+                // Idle or Incremental sync status
+                views.waitingView.root.isVisible = false
+            }
+        }
     }
 
     private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
@@ -334,7 +452,7 @@ class HomeActivity :
         }
     }
 
-    private fun handleOnNewSession(event: HomeActivityViewEvents.OnNewSession) {
+    private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
         promptSecurityEvent(
                 event.userItem,
@@ -346,6 +464,17 @@ class HomeActivity :
             } else {
                 it.navigator.requestSelfSessionVerification(it)
             }
+        }
+    }
+
+    private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
+        // We need to ask
+        promptSecurityEvent(
+                event.userItem,
+                R.string.crosssigning_cannot_verify_this_session,
+                R.string.crosssigning_cannot_verify_this_session_desc
+        ) {
+            it.navigator.open4SSetup(it, SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
         }
     }
 
@@ -371,7 +500,7 @@ class HomeActivity :
                     dismissedAction = Runnable {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }
-                    addButton(getString(R.string.dismiss), {
+                    addButton(getString(R.string.action_dismiss), {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }, true)
                     addButton(getString(R.string.settings), {
@@ -394,7 +523,7 @@ class HomeActivity :
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
-                    colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                    colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             action(it)
@@ -407,28 +536,37 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
+        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
+        }
+        if (parcelableExtra?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()
+                    ?.permalinkService()
+                    ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
+                        navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
+                    }
         }
         handleIntent(intent)
     }
 
     override fun onDestroy() {
         views.drawerLayout.removeDrawerListener(drawerListener)
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         super.onDestroy()
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
-            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash()) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus()
 
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
             showDisclaimerDialog(this)
@@ -436,96 +574,109 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
+
+        // Check nightly
+        nightlyProxy.onHomeResumed()
+
+        checkNewAppLayoutFlagChange()
     }
 
-    override fun configure(toolbar: Toolbar) {
-        configureToolbar(toolbar, false)
+    private fun checkNewAppLayoutFlagChange() {
+        if (vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+            restart()
+        }
     }
 
-    override fun getMenuRes() = R.menu.home
+    override fun getMenuRes() = if (vectorPreferences.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
-        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
-        return super.onPrepareOptionsMenu(menu)
+    override fun handlePrepareMenu(menu: Menu) {
+        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_home_suggestion -> {
                 bugReporter.openBugReportScreen(this, ReportType.SUGGESTION)
-                return true
+                true
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
-                return true
+                true
             }
             R.id.menu_home_init_sync_legacy -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Legacy
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_init_sync_optimized -> {
                 // Configure the SDK
                 initialSyncStrategy = InitialSyncStrategy.Optimized()
                 // And clear cache
                 MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
-                return true
+                true
             }
             R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
-                return true
+                true
             }
             R.id.menu_home_setting -> {
                 navigator.openSettings(this)
-                return true
+                true
             }
+            R.id.menu_home_layout_settings -> {
+                showLayoutSettings()
+                true
+            }
+            R.id.menu_home_invite_friends -> {
+                launchInviteFriends()
+                true
+            }
+            else -> false
         }
+    }
 
-        return super.onOptionsItemSelected(item)
+    private fun launchInviteFriends() {
+        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            val text = getString(R.string.invite_friends_text, permalink)
+
+            startSharePlainTextIntent(
+                    context = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
+        }
     }
 
     override fun onBackPressed() {
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            validateBackPressed { super.onBackPressed() }
         }
     }
 
     override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-        }
         // TODO check if there is already one??
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
-    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-
-            override fun switchToSpace(spaceId: String) {
-                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
-            }
-        }
-
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 
     override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
@@ -533,20 +684,39 @@ class HomeActivity :
     }
 
     companion object {
-        fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
+        fun newIntent(
+                context: Context,
+                firstStartMainActivity: Boolean,
+                clearNotification: Boolean = false,
+                authenticationDescription: AuthenticationDescription? = null,
+                existingSession: Boolean = false,
+                inviteNotificationRoomId: String? = null
+        ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
-                    accountCreation = accountCreation
+                    authenticationDescription = authenticationDescription,
+                    hasExistingSession = existingSession,
+                    inviteNotificationRoomId = inviteNotificationRoomId
             )
 
-            return Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(MvRx.KEY_ARG, args)
+                        putExtra(Mavericks.KEY_ARG, args)
                     }
-        }
 
-        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
-        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
+            }
+        }
+    }
+
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
+    }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 }

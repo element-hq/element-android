@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.auth
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 
 /**
- * Store for elements when doing login or registration
+ * Store for elements when doing login or registration.
  */
 internal interface PendingSessionStore {
 

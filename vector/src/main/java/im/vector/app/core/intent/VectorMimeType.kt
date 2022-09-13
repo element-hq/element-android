@@ -27,6 +27,7 @@ import java.util.Locale
  * Returns the mimetype from a uri.
  *
  * @param context the context
+ * @param uri the uri
  * @return the mimetype
  */
 fun getMimeTypeFromUri(context: Context, uri: Uri): String? {
@@ -45,7 +46,7 @@ fun getMimeTypeFromUri(context: Context, uri: Uri): String? {
 
         if (null != mimeType) {
             // the mimetype is sometimes in uppercase.
-            mimeType = mimeType.toLowerCase(Locale.ROOT)
+            mimeType = mimeType.lowercase(Locale.ROOT)
         }
     } catch (e: Exception) {
         Timber.e(e, "Failed to open resource input stream")

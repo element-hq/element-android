@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <CheckBox
         android:id="@+id/term_accept_checkbox"
@@ -16,27 +17,29 @@
 
     <TextView
         android:id="@+id/term_name"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
         app:layout_constraintStart_toEndOf="@id/term_accept_checkbox"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Integration Manager" />
+        tools:text="Integration manager" />
 
     <TextView
         android:id="@+id/term_description"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
-        app:layout_constraintStart_toStartOf="@+id/term_name"
-        app:layout_constraintTop_toBottomOf="@+id/term_name"
+        app:layout_constraintStart_toStartOf="@id/term_name"
+        app:layout_constraintTop_toBottomOf="@id/term_name"
         tools:text="Use bots, bridges, widget and sticker packs." />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->
@@ -46,11 +49,11 @@
         android:layout_height="wrap_content"
         android:importantForAccessibility="no"
         android:rotationY="@integer/rtl_mirror_flip"
-        android:src="@drawable/ic_material_chevron_right_black"
+        android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

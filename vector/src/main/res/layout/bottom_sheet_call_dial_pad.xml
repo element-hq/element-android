@@ -5,7 +5,7 @@
     android:id="@+id/callDialPad"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,13 +16,13 @@
 
         <TextView
             android:id="@+id/callDialPadTitle"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/call_dial_pad_title"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp" />
+            android:textColor="?vctr_content_primary" />
 
         <ImageView
             android:id="@+id/callDialPadClose"
@@ -32,7 +32,7 @@
             android:foreground="?selectableItemBackground"
             android:scaleType="center"
             android:src="@drawable/ic_cross"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
     </LinearLayout>

@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Počáteční implementace vláken zpráv. Bubliny zpráv.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.4.0

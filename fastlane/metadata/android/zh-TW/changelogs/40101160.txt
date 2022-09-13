@@ -1,0 +1,2 @@
+此版本中的主要變動：修復在聊天室中有人登出時傳送加密訊息所發生的問題。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.16

@@ -15,17 +15,15 @@
  */
 package im.vector.app.features.terms
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -37,27 +35,20 @@ class ReviewTermsViewModel @AssistedInject constructor(
 ) : VectorViewModel<ReviewTermsViewState, ReviewTermsAction, ReviewTermsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
+        override fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ReviewTermsViewState): ReviewTermsViewModel? {
-            val activity: ReviewTermsActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> by hiltMavericksViewModelFactory()
 
     lateinit var termsArgs: ServiceTermsArgs
 
     override fun handle(action: ReviewTermsAction) {
         when (action) {
-            is ReviewTermsAction.LoadTerms          -> loadTerms(action)
+            is ReviewTermsAction.LoadTerms -> loadTerms(action)
             is ReviewTermsAction.MarkTermAsAccepted -> markTermAsAccepted(action)
-            ReviewTermsAction.Accept                -> acceptTerms()
-        }.exhaustive
+            ReviewTermsAction.Accept -> acceptTerms()
+        }
     }
 
     private fun markTermAsAccepted(action: ReviewTermsAction.MarkTermAsAccepted) = withState { state ->
@@ -93,7 +84,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                session.agreeToTerms(
+                session.termsService().agreeToTerms(
                         termsArgs.type,
                         termsArgs.baseURL,
                         agreedUrls,
@@ -118,9 +109,10 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = session.getTerms(termsArgs.type, termsArgs.baseURL)
+                val data = session.termsService().getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
-                    Term(it.localizedUrl ?: "",
+                    Term(
+                            it.localizedUrl ?: "",
                             it.localizedName ?: "",
                             it.version,
                             accepted = data.alreadyAcceptedTermUrls.contains(it.localizedUrl)

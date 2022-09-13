@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterStart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+    <View
+        android:id="@+id/emailVerificationGradientContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.60"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/bg_gradient_ftue_breaker" />
+
+    <Space
+        android:id="@+id/emailVerificationSpace1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationLogo"
+        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <ImageView
+        android:id="@+id/emailVerificationLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorSecondary"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_email"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace1" />
+
+    <Space
+        android:id="@+id/emailVerificationSpace2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationTitle"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationLogo" />
+
+    <TextView
+        android:id="@+id/emailVerificationTitle"
+        style="@style/Widget.Vector.TextView.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:transitionName="loginTitleTransition"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSubtitle"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace2"
+        tools:text="@string/ftue_auth_email_verification_title" />
+
+    <TextView
+        android:id="@+id/emailVerificationSubtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace4"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationTitle"
+        tools:text="@string/ftue_auth_email_verification_subtitle" />
+
+    <Space
+        android:id="@+id/emailVerificationSpace4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationResendEmail"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSubtitle" />
+
+    <ProgressBar
+        android:id="@+id/emailVerificationWaiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/emailVerificationSpace4"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toTopOf="@id/emailVerificationSpace4"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/emailVerificationFooter"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/ftue_auth_email_verification_footer"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationResendEmail"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace4" />
+
+    <Button
+        android:id="@+id/emailVerificationResendEmail"
+        style="@style/Widget.Vector.Button.Text.Login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/element_background_light"
+        android:text="@string/ftue_auth_email_resend_email"
+        android:textAllCaps="true"
+        android:textColor="?colorSecondary"
+        android:transitionName="loginSubmitTransition"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace5"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationFooter" />
+
+    <Space
+        android:id="@+id/emailVerificationSpace5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationResendEmail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.cache
 
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal interface ClearCacheTask : Task<Unit, Unit>

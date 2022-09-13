@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: hurtigreparasjoner for 1.1.4
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.5

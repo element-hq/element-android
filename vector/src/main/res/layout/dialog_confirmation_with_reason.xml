@@ -12,12 +12,13 @@
 
     <TextView
         android:id="@+id/dialogConfirmationText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/delete_event_dialog_content" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <CheckBox
         android:id="@+id/dialogReasonCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,18 +26,17 @@
         android:checked="true"
         android:text="@string/delete_event_dialog_reason_checkbox"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogConfirmationText" />
+        app:layout_constraintTop_toBottomOf="@id/dialogConfirmationText" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialogReasonTextInputLayout"
-        style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:counterEnabled="true"
         app:counterMaxLength="240"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogReasonCheck"
+        app:layout_constraintTop_toBottomOf="@id/dialogReasonCheck"
         tools:hint="@string/delete_event_dialog_reason_hint">
 
         <com.google.android.material.textfield.TextInputEditText

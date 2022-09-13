@@ -22,15 +22,15 @@ import org.matrix.android.sdk.api.session.call.TurnServerResponse
 
 sealed class VectorCallViewEvents : VectorViewEvents {
 
-    object DismissNoCall : VectorCallViewEvents()
     data class ConnectionTimeout(val turn: TurnServerResponse?) : VectorCallViewEvents()
     data class ShowSoundDeviceChooser(
             val available: Set<CallAudioManager.Device>,
             val current: CallAudioManager.Device
     ) : VectorCallViewEvents()
-    object ShowDialPad: VectorCallViewEvents()
-    object ShowCallTransferScreen: VectorCallViewEvents()
-//    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
-//    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
-//    object CallAccepted : VectorCallViewEvents()
+
+    object ShowDialPad : VectorCallViewEvents()
+    object ShowCallTransferScreen : VectorCallViewEvents()
+    object FailToTransfer : VectorCallViewEvents()
+    object ShowScreenSharingPermissionDialog : VectorCallViewEvents()
+    object StopScreenSharingService : VectorCallViewEvents()
 }

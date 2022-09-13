@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- "app_name" is now defined in build.gradle -->
+
+    <!-- server urls -->
+    <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+
+    <!-- Rageshake configuration -->
+    <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <string name="bug_report_app_name" translatable="false">riot-android</string>
+    <string name="bug_report_auto_uisi_app_name" translatable="false">element-auto-uisi</string>
+
+    <!--
+        Pusher config for the application
+        https://matrix.org/docs/spec/client_server/r0.4.0#id128
+     -->
+
+    <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
+    <!-- It is the push gateway for FCM embedded distributor -->
+    <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
+    <!-- Note: default_push_gateway_http_url should have path '/_matrix/push/v1/notify' -->
+    <!-- It is the push gateway for UnifiedPush -->
+    <string name="default_push_gateway_http_url" translatable="false">https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify</string>
+    <!-- Note: pusher_app_id cannot exceed 64 chars -->
+    <string name="pusher_app_id" translatable="false">im.vector.app.android</string>
+
+    <!-- preferred jitsi domain -->
+    <string name="preferred_jitsi_domain" translatable="false">meet.element.io</string>
+
+    <string-array name="room_directory_servers" translatable="false">
+        <item>matrix.org</item>
+        <item>gitter.im</item>
+    </string-array>
+
+    <!-- Permalink config -->
+    <string-array name="permalink_supported_hosts" translatable="false">
+        <!-- Regular Element Web instance -->
+        <item>app.element.io</item>
+        <!-- Other known instances of Element Web -->
+        <item>develop.element.io</item>
+        <item>staging.element.io</item>
+        <!-- Previous Web instance, kept for compatibility reason -->
+        <item>riot.im</item>
+    </string-array>
+
+</resources>

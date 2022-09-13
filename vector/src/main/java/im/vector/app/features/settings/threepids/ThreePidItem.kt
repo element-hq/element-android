@@ -22,14 +22,14 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_settings_three_pid)
-abstract class ThreePidItem : EpoxyModelWithHolder<ThreePidItem.Holder>() {
+@EpoxyModelClass
+abstract class ThreePidItem : VectorEpoxyModel<ThreePidItem.Holder>(R.layout.item_settings_three_pid) {
 
     @EpoxyAttribute
     var title: String? = null
@@ -38,7 +38,7 @@ abstract class ThreePidItem : EpoxyModelWithHolder<ThreePidItem.Holder>() {
     @DrawableRes
     var iconResId: Int? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var deleteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -52,7 +52,7 @@ abstract class ThreePidItem : EpoxyModelWithHolder<ThreePidItem.Holder>() {
         }
 
         holder.title.text = title
-        holder.delete.onClick { deleteClickListener?.invoke() }
+        holder.delete.onClick(deleteClickListener)
         holder.delete.isVisible = deleteClickListener != null
     }
 

@@ -19,24 +19,20 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.LoadingItem_
-import im.vector.app.core.epoxy.TimelineEmptyItem_
-import im.vector.app.core.resources.UserPreferencesProvider
-import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import kotlin.random.Random
 import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
-class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMutableProperty0<Int?>,
-                                          private val adapterPositionMapping: MutableMap<String, Int>,
-                                          private val userPreferencesProvider: UserPreferencesProvider,
-                                          private val callManager: WebRtcCallManager
+class TimelineControllerInterceptorHelper(
+        private val positionOfReadMarker: KMutableProperty0<Int?>,
+        private val adapterPositionMapping: MutableMap<String, Int>
 ) {
 
     private var previousModelsSize = 0
@@ -50,14 +46,12 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
     ) {
         positionOfReadMarker.set(null)
         adapterPositionMapping.clear()
-        val callIds = mutableSetOf<String>()
 
         // Add some prefetch loader if needed
         models.addBackwardPrefetchIfNeeded(timeline, callback)
         models.addForwardPrefetchIfNeeded(timeline, callback)
 
         val modelsIterator = models.listIterator()
-        val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
         var index = 0
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
         var atLeastOneVisibleItemSinceLastDaySeparator = false
@@ -73,7 +67,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                 }
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
-                    appendReadMarker = epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker
+                    appendReadMarker = appendReadMarker ||
+                            (epoxyModel.canAppendReadMarker() && eventId == firstUnreadEventId && atLeastOneVisibleItemsBeforeReadMarker)
                 }
             }
             if (epoxyModel is DaySeparatorItem) {
@@ -82,11 +77,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     return@forEach
                 }
                 atLeastOneVisibleItemSinceLastDaySeparator = false
-            } else if (epoxyModel is CallTileTimelineItem) {
-                val hasBeenRemoved = modelsIterator.removeCallItemIfNeeded(epoxyModel, callIds, showHiddenEvents)
-                if (!hasBeenRemoved) {
-                    atLeastOneVisibleItemSinceLastDaySeparator = true
-                }
             }
             if (appendReadMarker) {
                 modelsIterator.addReadMarkerItem(callback)
@@ -108,29 +98,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         add(readMarker)
     }
 
-    private fun MutableListIterator<EpoxyModel<*>>.removeCallItemIfNeeded(
-            epoxyModel: CallTileTimelineItem,
-            callIds: MutableSet<String>,
-            showHiddenEvents: Boolean
-    ): Boolean {
-        val callId = epoxyModel.attributes.callId
-        // We should remove the call tile if we already have one for this call or
-        // if this is an active call tile without an actual call (which can happen with permalink)
-        val shouldRemoveCallItem = callIds.contains(callId)
-                || (!callManager.getAdvertisedCalls().contains(callId) && epoxyModel.attributes.callStatus.isActive())
-        val removed = shouldRemoveCallItem && !showHiddenEvents
-        if (removed) {
-            remove()
-            val emptyItem = TimelineEmptyItem_()
-                    .id(epoxyModel.id())
-                    .eventId(epoxyModel.attributes.informationData.eventId)
-                    .notBlank(false)
-            add(emptyItem)
-        }
-        callIds.add(callId)
-        return removed
-    }
-
     private fun MutableList<EpoxyModel<*>>.addBackwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
         val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
         if (shouldAddBackwardPrefetch) {
@@ -139,7 +106,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     .coerceAtLeast(0)
 
             val loadingItem = LoadingItem_()
-                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
+                    .id("prefetch_backward_loading${Random.nextLong()}")
                     .showLoader(false)
                     .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS, callback)
 
@@ -150,9 +117,12 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
     private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
         val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
         if (shouldAddForwardPrefetch) {
-            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(size - 1)
+            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD
+                    .coerceAtMost(size - 1)
+                    .coerceAtLeast(0)
+
             val loadingItem = LoadingItem_()
-                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
+                    .id("prefetch_forward_loading${Random.nextLong()}")
                     .showLoader(false)
                     .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS, callback)
             add(indexOfPrefetchForward, loadingItem)

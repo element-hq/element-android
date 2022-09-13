@@ -2,13 +2,13 @@ package ${escapeKotlinIdentifiers(packageName)}
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 
-//TODO: add this activity to manifest
+//TODO add this activity to manifest
 class ${activityClass} : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
@@ -35,14 +35,14 @@ class ${activityClass} : VectorBaseActivity(), ToolbarConfigurable {
 			<#if createFragmentArgs>
 			val fragmentArgs: ${fragmentArgsClass} = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
                                                    ?: return
-            addFragment(R.id.simpleFragmentContainer, ${fragmentClass}::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer.id, ${fragmentClass}::class.java, fragmentArgs)
 			<#else>
-			addFragment(R.id.simpleFragmentContainer, ${fragmentClass}::class.java)
+			addFragment(views.simpleFragmentContainer.id, ${fragmentClass}::class.java)
 			</#if>
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 

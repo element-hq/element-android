@@ -1,0 +1,2 @@
+Neues: Erstelle Threads, damit dein Chatverlauf nicht zugespammt wird. Nachrichtenblasen.
+Ganze Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.4.0

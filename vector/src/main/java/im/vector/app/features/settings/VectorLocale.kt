@@ -19,9 +19,9 @@ package im.vector.app.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import androidx.core.content.edit
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.resources.BuildMeta
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -29,7 +29,7 @@ import java.util.IllformedLocaleException
 import java.util.Locale
 
 /**
- * Object to manage the Locale choice of the user
+ * Object to manage the Locale choice of the user.
  */
 object VectorLocale {
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
@@ -42,27 +42,30 @@ object VectorLocale {
     private const val ISO_15924_LATN = "Latn"
 
     /**
-     * The cache of supported application languages
+     * The cache of supported application languages.
      */
     private val supportedLocales = mutableListOf<Locale>()
 
     /**
-     * Provides the current application locale
+     * Provides the current application locale.
      */
     var applicationLocale = defaultLocale
         private set
 
     private lateinit var context: Context
+    private lateinit var buildMeta: BuildMeta
 
     /**
-     * Init this object
+     * Init this object.
      */
-    fun init(context: Context) {
+    fun init(context: Context, buildMeta: BuildMeta) {
         this.context = context
+        this.buildMeta = buildMeta
         val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
+            applicationLocale = Locale(
+                    preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
                     preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
                     preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!
             )
@@ -117,10 +120,10 @@ object VectorLocale {
     }
 
     /**
-     * Get String from a locale
+     * Get String from a locale.
      *
-     * @param context    the context
-     * @param locale     the locale
+     * @param context the context
+     * @param locale the locale
      * @param resourceId the string resource id
      * @return the localized string
      */
@@ -137,7 +140,7 @@ object VectorLocale {
     }
 
     /**
-     * Init the supported application locales list
+     * Init the supported application locales list.
      */
     private fun initApplicationLocales() {
         val knownLocalesSet = HashSet<Triple<String, String, String>>()
@@ -173,7 +176,7 @@ object VectorLocale {
                         .setScript(script)
                         .build()
             } catch (exception: IllformedLocaleException) {
-                if (BuildConfig.DEBUG) {
+                if (buildMeta.isDebug) {
                     throw exception
                 }
                 // Ignore this locale in production
@@ -181,14 +184,14 @@ object VectorLocale {
             }
         }
                 // sort by human display names
-                .sortedBy { localeToLocalisedString(it).toLowerCase(it) }
+                .sortedBy { localeToLocalisedString(it).lowercase(it) }
 
         supportedLocales.clear()
         supportedLocales.addAll(list)
     }
 
     /**
-     * Convert a locale to a string
+     * Convert a locale to a string.
      *
      * @param locale the locale to convert
      * @return the string
@@ -211,7 +214,7 @@ object VectorLocale {
     }
 
     /**
-     * Information about the locale in the current locale
+     * Information about the locale in the current locale.
      *
      * @param locale the locale to get info from
      * @return the string

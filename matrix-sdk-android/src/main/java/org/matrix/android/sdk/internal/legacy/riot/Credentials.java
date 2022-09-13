@@ -21,11 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * The user's credentials.
  */
 public class Credentials {
@@ -41,7 +39,7 @@ public class Credentials {
 
     public String deviceId;
 
-    // Optional data that may contain info to override home server and/or identity server
+    // Optional data that may contain info to override homeserver and/or identity server
     public WellKnown wellKnown;
 
     public JSONObject toJson() throws JSONException {

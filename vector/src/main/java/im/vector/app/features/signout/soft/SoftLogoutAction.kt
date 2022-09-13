@@ -25,7 +25,6 @@ sealed class SoftLogoutAction : VectorViewModelAction {
 
     // For password entering management
     data class PasswordChanged(val password: String) : SoftLogoutAction()
-    object TogglePassword : SoftLogoutAction()
     data class SignInAgain(val password: String) : SoftLogoutAction()
 
     // For signing again with SSO

@@ -4,7 +4,7 @@
 
     <size android:width="40dp" android:height="40dp"/>
 
-    <solid android:color="?riotx_reaction_background_off" />
+    <solid android:color="?vctr_reaction_background_off" />
 
     <corners android:radius="8dp" />
 

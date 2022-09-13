@@ -20,8 +20,10 @@ import android.content.Context
 import androidx.annotation.CallSuper
 import androidx.work.CoroutineWorker
 import androidx.work.Data
+import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.session.SessionComponent
 import timber.log.Timber
 
@@ -33,6 +35,7 @@ import timber.log.Timber
 internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
         context: Context,
         workerParameters: WorkerParameters,
+        private val sessionManager: SessionManager,
         private val paramClass: Class<PARAM>
 ) : CoroutineWorker(context, workerParameters) {
 
@@ -48,26 +51,28 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
                         .also { Timber.e("Unable to parse work parameters") }
 
         return try {
-            val sessionComponent = getSessionComponent(params.sessionId)
+            val sessionComponent = sessionManager.getSessionComponent(params.sessionId)
                     ?: return buildErrorResult(params, "No session")
 
             // Make sure to inject before handling error as you may need some dependencies to process them.
             injectWith(sessionComponent)
-            if (params.lastFailureMessage != null) {
-                // Forward error to the next workers
-                doOnError(params)
-            } else {
-                doSafeWork(params)
+
+            when (val lastFailureMessage = params.lastFailureMessage) {
+                null -> doSafeWork(params)
+                else -> {
+                    // Forward error to the next workers
+                    doOnError(params, lastFailureMessage)
+                }
             }
         } catch (throwable: Throwable) {
-            buildErrorResult(params, throwable.localizedMessage ?: "error")
+            buildErrorResult(params, "${throwable::class.java.name}: ${throwable.localizedMessage ?: "N/A error message"}")
         }
     }
 
     abstract fun injectWith(injector: SessionComponent)
 
     /**
-     * Should only return Result.Success for workers added to a unique queue
+     * Should only return Result.Success for workers added to a unique queue.
      */
     abstract suspend fun doSafeWork(params: PARAM): Result
 
@@ -87,10 +92,10 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
      * This is called when the input parameters are correct, but contain an error from the previous worker.
      */
     @CallSuper
-    open fun doOnError(params: PARAM): Result {
+    open fun doOnError(params: PARAM, failureMessage: String): Result {
         // Forward the error
         return Result.success(inputData)
-                .also { Timber.e("Work cancelled due to input error from parent") }
+                .also { Timber.e("Work cancelled due to input error from parent: $failureMessage") }
     }
 
     companion object {

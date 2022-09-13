@@ -23,8 +23,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_profile_matrix_item_progress)
-abstract class ProfileMatrixItemWithProgress : BaseProfileMatrixItem<ProfileMatrixItemWithProgress.Holder>() {
+@EpoxyModelClass
+abstract class ProfileMatrixItemWithProgress : BaseProfileMatrixItem<ProfileMatrixItemWithProgress.Holder>(R.layout.item_profile_matrix_item_progress) {
 
     @EpoxyAttribute var inProgress: Boolean = true
 

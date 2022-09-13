@@ -15,14 +15,16 @@
  */
 package im.vector.app.features.crypto.verification.choose
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasScreenInjector
+import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -42,13 +44,18 @@ data class VerificationChooseMethodViewState(
         val qrCodeText: String? = null,
         val sasModeAvailable: Boolean = false,
         val isMe: Boolean = false,
-        val canCrossSign: Boolean = false
-) : MvRxState
+        val canCrossSign: Boolean = false,
+        val isReadySent: Boolean = false
+) : MavericksState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
 ) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
+
+    init {
+        session.cryptoService().verificationService().addListener(this)
+    }
 
     override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
@@ -75,41 +82,30 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             copy(
                     otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
                     otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
-                    sasModeAvailable = pvr?.isSasSupported().orFalse()
+                    sasModeAvailable = pvr?.isSasSupported().orFalse(),
+                    isReadySent = pvr?.isReady.orFalse(),
             )
         }
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationChooseMethodViewState): VerificationChooseMethodViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
+        override fun create(initialState: VerificationChooseMethodViewState): VerificationChooseMethodViewModel
     }
 
-    init {
-        session.cryptoService().verificationService().addListener(this)
-    }
+    companion object : MavericksViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> by hiltMavericksViewModelFactory() {
 
-    override fun onCleared() {
-        session.cryptoService().verificationService().removeListener(this)
-        super.onCleared()
-    }
-
-    companion object : MvRxViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: VerificationChooseMethodViewState): VerificationChooseMethodViewModel? {
-            val fragment: VerificationChooseMethodFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.verificationChooseMethodViewModelFactory.create(state)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState {
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val verificationService = session.cryptoService().verificationService()
             val pvr = verificationService.getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
             // Get the QR code now, because transaction is already created, so transactionCreated() will not be called
             val qrCodeVerificationTransaction = verificationService.getExistingTransaction(args.otherUserId, args.verificationId ?: "")
 
-            return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
+            return VerificationChooseMethodViewState(
+                    otherUserId = args.otherUserId,
                     isMe = session.myUserId == pvr?.otherUserId,
                     canCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     transactionId = args.verificationId ?: "",
@@ -119,6 +115,11 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
                     sasModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
+    }
+
+    override fun onCleared() {
+        session.cryptoService().verificationService().removeListener(this)
+        super.onCleared()
     }
 
     override fun handle(action: EmptyAction) {}

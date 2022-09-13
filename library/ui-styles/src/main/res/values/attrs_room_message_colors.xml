@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- room message colors -->
+    <attr name="vctr_unsent_message_text_color" format="color" />
+    <attr name="vctr_message_text_color" format="color" />
+    <attr name="vctr_notice_text_color" format="color" />
+    <attr name="vctr_notice_secondary" format="color" />
+    <attr name="vctr_encrypting_message_text_color" format="color" />
+    <attr name="vctr_sending_message_text_color" format="color" />
+    <attr name="vctr_markdown_block_background_color" format="color" />
+    <attr name="vctr_spoiler_background_color" format="color" />
+
+</resources>

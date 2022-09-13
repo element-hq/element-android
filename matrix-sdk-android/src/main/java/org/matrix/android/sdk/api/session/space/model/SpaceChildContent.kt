@@ -20,11 +20,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * Example:
+ * <pre>
  *  "content": {
  *      "via": ["example.com"],
  *      "order": "abcd",
  *      "default": true
  *  }
+ * </pre>.
  */
 @JsonClass(generateAdapter = true)
 data class SpaceChildContent(
@@ -40,12 +43,12 @@ data class SpaceChildContent(
          * or consist of more than 50 characters, are forbidden and should be ignored if received.)
          */
         @Json(name = "order") val order: String? = null,
-        /**
-         * The auto_join flag on a child listing allows a space admin to list the sub-spaces and rooms in that space which should
-         * be automatically joined by members of that space.
-         * (This is not a force-join, which are descoped for a future MSC; the user can subsequently part these room if they desire.)
-         */
-        @Json(name = "auto_join") val autoJoin: Boolean? = false,
+//        /**
+//         * The auto_join flag on a child listing allows a space admin to list the sub-spaces and rooms in that space which should
+//         * be automatically joined by members of that space.
+//         * (This is not a force-join, which are descoped for a future MSC; the user can subsequently part these room if they desire.)
+//         */
+//        @Json(name = "auto_join") val autoJoin: Boolean? = false,
 
         /**
          * If `suggested` is set to `true`, that indicates that the child should be advertised to
@@ -56,7 +59,7 @@ data class SpaceChildContent(
 ) {
     /**
      * Orders which are not strings, or do not consist solely of ascii characters in the range \x20 (space) to \x7F (~),
-     * or consist of more than 50 characters, are forbidden and should be ignored if received.)
+     * or consist of more than 50 characters, are forbidden and should be ignored if received.).
      */
     fun validOrder(): String? {
         return order

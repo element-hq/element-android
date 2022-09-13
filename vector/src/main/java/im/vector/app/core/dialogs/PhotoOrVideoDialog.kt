@@ -17,8 +17,8 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogPhotoOrVideoBinding
 import im.vector.app.features.settings.VectorPreferences
@@ -42,7 +42,7 @@ class PhotoOrVideoDialog(
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> listener.takePhoto()
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> listener.takeVideo()
             /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
-            else                                          -> {
+            else -> {
                 val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_photo_or_video, null)
                 val views = DialogPhotoOrVideoBinding.bind(dialogLayout)
 
@@ -51,21 +51,23 @@ class PhotoOrVideoDialog(
                 // Always default to photo
                 views.dialogPhotoOrVideoPhoto.isChecked = true
 
-                AlertDialog.Builder(activity)
+                MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.option_take_photo_video)
                         .setView(dialogLayout)
                         .setPositiveButton(R.string._continue) { _, _ ->
                             submit(views, vectorPreferences, listener)
                         }
-                        .setNegativeButton(R.string.cancel, null)
+                        .setNegativeButton(R.string.action_cancel, null)
                         .show()
             }
         }
     }
 
-    private fun submit(views: DialogPhotoOrVideoBinding,
-                       vectorPreferences: VectorPreferences,
-                       listener: PhotoOrVideoDialogListener) {
+    private fun submit(
+            views: DialogPhotoOrVideoBinding,
+            vectorPreferences: VectorPreferences,
+            listener: PhotoOrVideoDialogListener
+    ) {
         val mode = if (views.dialogPhotoOrVideoPhoto.isChecked) {
             VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO
         } else {
@@ -95,14 +97,14 @@ class PhotoOrVideoDialog(
         views.dialogPhotoOrVideoVideo.isChecked = currentMode == VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO
         views.dialogPhotoOrVideoAlwaysAsk.isChecked = currentMode == VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.option_take_photo_video)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.save) { _, _ ->
+                .setPositiveButton(R.string.action_save) { _, _ ->
                     submitSettings(views)
                     listener.onUpdated()
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -111,7 +113,7 @@ class PhotoOrVideoDialog(
                 when {
                     views.dialogPhotoOrVideoPhoto.isChecked -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO
                     views.dialogPhotoOrVideoVideo.isChecked -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO
-                    else                                    -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
+                    else -> VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
                 }
         )
     }

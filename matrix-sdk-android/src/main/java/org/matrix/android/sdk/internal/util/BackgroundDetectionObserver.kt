@@ -16,49 +16,47 @@
 
 package org.matrix.android.sdk.internal.util
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import org.matrix.android.sdk.internal.di.MatrixScope
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
-import javax.inject.Inject
+import java.util.concurrent.CopyOnWriteArraySet
 
-/**
- * To be attached to ProcessLifecycleOwner lifecycle
- */
-@MatrixScope
-internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
+internal interface BackgroundDetectionObserver : DefaultLifecycleObserver {
+    val isInBackground: Boolean
 
-    var isInBackground: Boolean = false
-        private set
-
-    private
-    val listeners = LinkedHashSet<Listener>()
-
-    fun register(listener: Listener) {
-        listeners.add(listener)
-    }
-
-    fun unregister(listener: Listener) {
-        listeners.remove(listener)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onMoveToForeground() {
-        Timber.v("App returning to foreground…")
-        isInBackground = false
-        listeners.forEach { it.onMoveToForeground() }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onMoveToBackground() {
-        Timber.v("App going to background…")
-        isInBackground = true
-        listeners.forEach { it.onMoveToBackground() }
-    }
+    fun register(listener: Listener)
+    fun unregister(listener: Listener)
 
     interface Listener {
         fun onMoveToForeground()
         fun onMoveToBackground()
+    }
+}
+
+internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver {
+
+    override var isInBackground: Boolean = true
+        private set
+
+    private val listeners = CopyOnWriteArraySet<BackgroundDetectionObserver.Listener>()
+
+    override fun register(listener: BackgroundDetectionObserver.Listener) {
+        listeners.add(listener)
+    }
+
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) {
+        listeners.remove(listener)
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        Timber.d("App returning to foreground…")
+        isInBackground = false
+        listeners.forEach { it.onMoveToForeground() }
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        Timber.d("App going to background…")
+        isInBackground = true
+        listeners.forEach { it.onMoveToBackground() }
     }
 }

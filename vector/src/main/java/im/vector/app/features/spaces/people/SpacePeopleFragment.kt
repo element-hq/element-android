@@ -20,39 +20,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
-import im.vector.app.features.roomprofile.members.RoomMemberListViewState
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpacePeopleFragment @Inject constructor(
-        private val viewModelFactory: SpacePeopleViewModel.Factory,
-        private val roomMemberModelFactory: RoomMemberListViewModel.Factory,
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider,
-        private val epoxyController: SpacePeopleListController
-) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        SpacePeopleViewModel.Factory,
-        RoomMemberListViewModel.Factory,
-        OnBackPressed, SpacePeopleListController.InteractionListener {
+@AndroidEntryPoint
+class SpacePeopleFragment :
+        VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
+        OnBackPressed,
+        SpacePeopleListController.InteractionListener {
+
+    @Inject lateinit var epoxyController: SpacePeopleListController
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
     private val membersViewModel by fragmentViewModel(RoomMemberListViewModel::class)
@@ -66,18 +64,11 @@ class SpacePeopleFragment @Inject constructor(
         return true
     }
 
-    override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return roomMemberModelFactory.create(initialState)
-    }
-
     override fun invalidate() = withState(membersViewModel) { memberListState ->
-        views.appBarTitle.text = getString(R.string.bottom_action_people)
+        views.progressBar.isGone = memberListState.areAllMembersLoaded
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
-        views.appBarSpaceInfo.text = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
+
+        toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
 //        views.listBuildingProgress.isVisible = true
         epoxyController.setData(memberListState)
     }
@@ -89,26 +80,21 @@ class SpacePeopleFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(views.addRoomToSpaceToolbar)
+                .allowBack()
         setupRecyclerView()
         setupSearchView()
-
-        views.addRoomToSpaceToolbar.navigationIcon = drawableProvider.getDrawable(
-                R.drawable.ic_close_24dp,
-                colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color)
-        )
-        views.addRoomToSpaceToolbar.setNavigationOnClickListener {
-            sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
-        }
 
         viewModel.observeViewEvents {
             handleViewEvents(it)
         }
 
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,
-                is Fail    -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
+                is Fail -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
                 is Success -> {
                     // don't hide on success, it will navigate out. If not the loading goes out before navigation
                 }
@@ -130,16 +116,16 @@ class SpacePeopleFragment @Inject constructor(
     private fun setupSearchView() {
         views.memberNameFilter.queryHint = getString(R.string.search_members_hint)
         views.memberNameFilter.queryTextChanges()
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(100)
+                .onEach {
                     membersViewModel.handle(RoomMemberListAction.FilterMemberList(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {
         when (events) {
-            is SpacePeopleViewEvents.OpenRoom      -> {
+            is SpacePeopleViewEvents.OpenRoom -> {
                 sharedActionViewModel.post(SpacePeopleSharedAction.NavigateToRoom(events.roomId))
             }
             is SpacePeopleViewEvents.InviteToSpace -> {

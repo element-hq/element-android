@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/messageRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageMainInnerLayout"
+        style="@style/TimelineContentMediaPillStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:viewBindingIgnore="true">
+
+        <ImageButton
+            android:id="@+id/audioPlaybackControlButton"
+            android:layout_width="@dimen/item_event_message_media_button_size"
+            android:layout_height="@dimen/item_event_message_media_button_size"
+            android:background="@drawable/bg_voice_play_pause_button"
+            android:backgroundTint="?android:colorBackground"
+            android:contentDescription="@string/a11y_play_voice_message"
+            android:src="@drawable/ic_play_pause_play"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?vctr_content_secondary" />
+
+        <TextView
+            android:id="@+id/messageFilenameView"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:autoLink="none"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toEndOf="@id/audioPlaybackControlButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Filename.mp3" />
+
+        <TextView
+            android:id="@+id/audioPlaybackDuration"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="?vctr_content_tertiary"
+            app:layout_constraintStart_toStartOf="@id/messageFilenameView"
+            app:layout_constraintTop_toBottomOf="@id/messageFilenameView"
+            tools:text="0:23" />
+
+        <TextView
+            android:id="@+id/fileSize"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?vctr_content_tertiary"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/audioPlaybackDuration"
+            app:layout_constraintBottom_toBottomOf="@id/audioPlaybackDuration"
+            tools:text="(2MB)" />
+
+        <SeekBar
+            android:id="@+id/audioSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
+            android:progressDrawable="@drawable/bg_seek_bar"
+            android:thumbTint="?vctr_content_tertiary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/audioPlaybackTime"
+            app:layout_constraintTop_toBottomOf="@id/audioPlaybackControlButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:progress="40" />
+
+        <TextView
+            android:id="@+id/audioPlaybackTime"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?vctr_content_tertiary"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/audioSeekBar"
+            app:layout_constraintBottom_toBottomOf="@id/audioSeekBar"
+            tools:text="0:23" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/messageFileUploadProgressLayout"
+        layout="@layout/media_upload_download_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>

@@ -20,12 +20,10 @@ import android.content.Context
 import android.content.Intent
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.annotation.CallSuper
-import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorWebViewBinding
-
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -35,20 +33,20 @@ import javax.inject.Inject
  * It relies on the VectorWebViewClient
  * This class shouldn't be extended. To add new behaviors, you might create a new WebViewMode and a new WebViewEventListener
  */
+@AndroidEntryPoint
 class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>() {
 
     override fun getBinding() = ActivityVectorWebViewBinding.inflate(layoutInflater)
 
-    @Inject lateinit var session: Session
-
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        session = injector.activeSessionHolder().getActiveSession()
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    val session: Session by lazy {
+        activeSessionHolder.getActiveSession()
     }
 
     override fun initUiAndData() {
-        configureToolbar(views.webviewToolbar)
-        waitingView = findViewById(R.id.simple_webview_loader)
+        setupToolbar(views.webviewToolbar)
+                .allowBack()
+        waitingView = views.simpleWebviewLoader
 
         views.simpleWebview.settings.apply {
             // Enable Javascript
@@ -117,10 +115,12 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
 
         private const val USE_TITLE_FROM_WEB_PAGE = ""
 
-        fun getIntent(context: Context,
-                      url: String,
-                      title: String = USE_TITLE_FROM_WEB_PAGE,
-                      mode: WebViewMode = WebViewMode.DEFAULT): Intent {
+        fun getIntent(
+                context: Context,
+                url: String,
+                title: String = USE_TITLE_FROM_WEB_PAGE,
+                mode: WebViewMode = WebViewMode.DEFAULT
+        ): Intent {
             return Intent(context, VectorWebViewActivity::class.java)
                     .apply {
                         putExtra(EXTRA_URL, url)

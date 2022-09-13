@@ -44,10 +44,10 @@ internal class CancelSendTracker @Inject constructor() {
     }
 
     fun isCancelRequestedFor(eventId: String?, roomId: String?): Boolean {
-        val index = synchronized(cancellingRequests) {
-            cancellingRequests.indexOfFirst { it.localId == eventId && it.roomId == roomId }
+        val found = synchronized(cancellingRequests) {
+            cancellingRequests.any { it.localId == eventId && it.roomId == roomId }
         }
-        return index != -1
+        return found
     }
 
     fun markCancelled(eventId: String, roomId: String) {

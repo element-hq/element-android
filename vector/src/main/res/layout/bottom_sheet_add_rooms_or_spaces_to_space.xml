@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:orientation="vertical">
+
+<!--    <TextView-->
+<!--        android:id="@+id/headerText"-->
+<!--        style="@style/Widget.Vector.TextView.Subtitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/space_add_rooms"-->
+<!--        android:textColor="?vctr_content_primary"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/createRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/create_new_room"
+        app:leftIcon="@drawable/ic_fab_add"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
+        tools:actionDescription="" />
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/addRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/space_add_existing_rooms_only"
+        app:leftIcon="@drawable/ic_fab_add"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
+        tools:actionDescription="" />
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/addSpaces"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/add_space"
+        app:betaAction="true"
+        app:leftIcon="@drawable/ic_fab_add"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
+        tools:actionDescription="" />
+
+</LinearLayout>

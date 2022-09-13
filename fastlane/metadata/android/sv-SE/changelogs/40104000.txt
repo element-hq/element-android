@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Initial implementation av trådmeddelanden. Meddelandebubblor.
+Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.4.0

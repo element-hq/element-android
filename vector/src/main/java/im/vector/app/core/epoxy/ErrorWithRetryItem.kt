@@ -23,20 +23,20 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_error_retry)
-abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>() {
+@EpoxyModelClass
+abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(R.layout.item_error_retry) {
 
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
-    var listener: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.textView.text = text
         holder.buttonView.isVisible = listener != null
-        holder.buttonView.setOnClickListener { listener?.invoke() }
+        holder.buttonView.onClick(listener)
     }
 
     class Holder : VectorEpoxyHolder() {

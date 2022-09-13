@@ -16,14 +16,16 @@
 
 package org.matrix.android.sdk.internal.session.homeserver
 
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-internal class HomeServerPinger @Inject constructor(private val taskExecutor: TaskExecutor,
-                                                    private val capabilitiesAPI: CapabilitiesAPI) {
+internal class HomeServerPinger @Inject constructor(
+        private val taskExecutor: TaskExecutor,
+        private val capabilitiesAPI: CapabilitiesAPI
+) {
 
     fun canReachHomeServer(callback: (Boolean) -> Unit) {
         taskExecutor.executorScope.launch {

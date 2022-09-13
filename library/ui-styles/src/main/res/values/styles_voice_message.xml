@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VoicePlaybackWaveform">
+        <item name="alignment">center</item>
+        <item name="flow">leftToRight</item>
+        <item name="verticalPadding">4dp</item>
+        <item name="horizontalPadding">4dp</item>
+        <item name="barWidth">2dp</item>
+        <item name="barSpace">2dp</item>
+        <item name="barMinHeight">1dp</item>
+        <item name="isBarRounded">true</item>
+    </style>
+
+</resources>

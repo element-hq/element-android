@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Gépelés visszajelzési frissítések a felületen. További hibajavítások egy stabilitást növelő fejlesztések.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.4.4

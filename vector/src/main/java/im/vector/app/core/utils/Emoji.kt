@@ -16,7 +16,7 @@
 
 package im.vector.app.core.utils
 
-import com.vanniktech.emoji.EmojiUtils
+import com.vanniktech.emoji.isOnlyEmojis
 
 /**
  * Test if a string contains emojis.
@@ -28,11 +28,11 @@ import com.vanniktech.emoji.EmojiUtils
  */
 fun containsOnlyEmojis(str: String?): Boolean {
     // Now rely on vanniktech library
-    return EmojiUtils.isOnlyEmojis(str)
+    return str.isOnlyEmojis()
 }
 
 /**
- * Same as split, but considering emojis
+ * Same as split, but considering emojis.
  */
 fun CharSequence.splitEmoji(): List<CharSequence> {
     val result = mutableListOf<CharSequence>()
@@ -42,13 +42,13 @@ fun CharSequence.splitEmoji(): List<CharSequence> {
     while (index < length) {
         val firstChar = get(index)
 
-        if (firstChar.toInt() == 0x200e) {
+        if (firstChar.code == 0x200e) {
             // Left to right mark. What should I do with it?
-        } else if (firstChar.toInt() in 0xD800..0xDBFF && index + 1 < length) {
+        } else if (firstChar.code in 0xD800..0xDBFF && index + 1 < length) {
             // We have the start of a surrogate pair
             val secondChar = get(index + 1)
 
-            if (secondChar.toInt() in 0xDC00..0xDFFF) {
+            if (secondChar.code in 0xDC00..0xDFFF) {
                 // We have an emoji
                 result.add("$firstChar$secondChar")
                 index++

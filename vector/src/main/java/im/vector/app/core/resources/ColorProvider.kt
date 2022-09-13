@@ -32,7 +32,7 @@ class ColorProvider @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Translates color attributes to colors
+     * Translates color attributes to colors.
      *
      * @param colorAttribute Color Attribute
      * @return Requested Color

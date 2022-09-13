@@ -16,27 +16,30 @@
 
 package im.vector.app.features.matrixto
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -50,32 +53,31 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter)
-    : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker
+) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
+        override fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
     }
+
+    companion object : MavericksViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> by hiltMavericksViewModelFactory()
 
     init {
         when (initialState.linkType) {
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink -> {
                 setState {
                     copy(roomPeekResult = Loading())
                 }
             }
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink -> {
                 setState {
                     copy(matrixItem = Loading())
                 }
             }
-            is PermalinkData.GroupLink    -> {
-                // Not yet supported
-            }
-            is PermalinkData.FallbackLink -> {
-                // Not yet supported
-            }
+            is PermalinkData.RoomEmailInviteLink,
+            is PermalinkData.FallbackLink -> Unit
         }
         viewModelScope.launch(Dispatchers.IO) {
             resolveLink(initialState)
@@ -95,7 +97,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
 
         when (permalinkData) {
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink -> {
                 val user = resolveUser(permalinkData.userId)
                 setState {
                     copy(
@@ -104,11 +106,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink -> {
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
-                        session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
+                        session.roomService().getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
                     }
                             ?.getOrNull()
                             ?.roomId?.let {
@@ -118,11 +120,9 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     session.getRoom(permalinkData.roomIdOrAlias)
                 }
                         ?.roomSummary()
-                        // don't take if not active, as it could be outdated
-                        ?.takeIf { it.membership.isActive() }
-                // XXX fix that
-                val forceRefresh = true
-                if (!forceRefresh && knownRoom != null) {
+                        // don't take if not Join, as it could be outdated
+                        ?.takeIf { it.membership == Membership.JOIN }
+                if (knownRoom != null) {
                     setState {
                         copy(
                                 roomPeekResult = Success(
@@ -134,14 +134,15 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                                 alias = knownRoom.canonicalAlias,
                                                 membership = knownRoom.membership,
                                                 roomType = knownRoom.roomType,
-                                                viaServers = null
+                                                viaServers = null,
+                                                isPublic = knownRoom.isPublic
                                         )
                                 )
                         )
                     }
                 } else {
                     val result = when (val peekResult = tryOrNull { resolveSpace(permalinkData) }) {
-                        is PeekResult.Success           -> {
+                        is PeekResult.Success -> {
                             RoomInfoResult.FullInfo(
                                     roomItem = MatrixItem.RoomItem(peekResult.roomId, peekResult.name, peekResult.avatarUrl),
                                     name = peekResult.name ?: "",
@@ -150,7 +151,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                     alias = peekResult.alias,
                                     membership = knownRoom?.membership ?: Membership.NONE,
                                     roomType = peekResult.roomType,
-                                    viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters
+                                    viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters,
+                                    isPublic = peekResult.isPublic
                             ).also {
                                 peekResult.someMembers?.let { checkForKnownMembers(it) }
                             }
@@ -161,10 +163,10 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                                     viaServers = permalinkData.viaParameters
                             )
                         }
-                        PeekResult.UnknownAlias         -> {
+                        PeekResult.UnknownAlias -> {
                             RoomInfoResult.UnknownAlias(permalinkData.roomIdOrAlias)
                         }
-                        null                            -> {
+                        null -> {
                             RoomInfoResult.PartialInfo(
                                     roomId = permalinkData.roomIdOrAlias,
                                     viaServers = permalinkData.viaParameters
@@ -179,10 +181,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is PermalinkData.GroupLink    -> {
-                // not yet supported
-                _viewEvents.post(MatrixToViewEvents.Dismiss)
-            }
+            is PermalinkData.RoomEmailInviteLink,
             is PermalinkData.FallbackLink -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
@@ -192,7 +191,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     private fun checkForKnownMembers(someMembers: List<MatrixItem.UserItem>) {
         viewModelScope.launch(Dispatchers.Default) {
             val knownMembers = someMembers.filter {
-                session.getExistingDirectRoomWithUser(it.id) != null
+                session.roomService().getExistingDirectRoomWithUser(it.id) != null
             }
             // put one with avatar first, and take 5
             val finalRes = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
@@ -231,45 +230,37 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveUser(userId: String): User {
-        return tryOrNull { session.resolveUser(userId) }
+        return tryOrNull { session.userService().resolveUser(userId) }
         // Create raw user in case the user is not searchable
                 ?: User(userId, null, null)
     }
 
     /**
      * Let's try to get some information about that room,
-     * main thing is trying to see if it's a space or a room
+     * main thing is trying to see if it's a space or a room.
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
-        return session.peekRoom(roomIdOrAlias)
-    }
-
-    companion object : MvRxViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
-        override fun create(viewModelContext: ViewModelContext, state: MatrixToBottomSheetState): MatrixToBottomSheetViewModel? {
-            val fragment: MatrixToBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.matrixToBottomSheetViewModelFactory.create(state)
-        }
+        return session.roomService().peekRoom(roomIdOrAlias)
     }
 
     override fun handle(action: MatrixToAction) {
         when (action) {
             is MatrixToAction.StartChattingWithUser -> handleStartChatting(action)
-            MatrixToAction.FailedToResolveUser      -> {
+            MatrixToAction.FailedToResolveUser -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            MatrixToAction.FailedToStartChatting    -> {
+            MatrixToAction.FailedToStartChatting -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            is MatrixToAction.JoinSpace             -> handleJoinSpace(action)
-            is MatrixToAction.JoinRoom              -> handleJoinRoom(action)
-            is MatrixToAction.OpenSpace             -> {
+            is MatrixToAction.JoinSpace -> handleJoinSpace(action)
+            is MatrixToAction.JoinRoom -> handleJoinRoom(action)
+            is MatrixToAction.OpenSpace -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToSpace(action.spaceID))
             }
-            is MatrixToAction.OpenRoom              -> {
+            is MatrixToAction.OpenRoom -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             }
-        }.exhaustive
+        }
     }
 
     private fun handleJoinSpace(joinSpace: MatrixToAction.JoinSpace) {
@@ -279,6 +270,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val joinResult = session.spaceService().joinSpace(joinSpace.spaceID, null, joinSpace.viaServers?.take(3) ?: emptyList())
+                withState { state ->
+                    session.getRoomSummary(joinSpace.spaceID)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
                 if (joinResult.isSuccess()) {
                     _viewEvents.post(MatrixToViewEvents.NavigateToSpace(joinSpace.spaceID))
                 } else {
@@ -302,8 +298,19 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
+                session.roomService().joinRoom(
+                        roomIdOrAlias = action.roomIdOrAlias,
+                        reason = null,
+                        viaServers = action.viaServers?.take(3) ?: emptyList()
+                )
+
+                val roomId = getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)
+                withState { state ->
+                    session.getRoomSummary(roomId)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
+                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))
             } finally {
@@ -313,6 +320,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getRoomIdFromRoomIdOrAlias(roomIdOrAlias: String): String {
+        return if (MatrixPatterns.isRoomAlias(roomIdOrAlias)) {
+            session.roomService().getRoomIdByAlias(roomIdOrAlias, true).get().roomId
+        } else roomIdOrAlias
     }
 
     private fun handleStartChatting(action: MatrixToAction.StartChattingWithUser) {

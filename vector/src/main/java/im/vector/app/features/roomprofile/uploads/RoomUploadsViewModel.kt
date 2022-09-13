@@ -16,24 +16,22 @@
 
 package im.vector.app.features.roomprofile.uploads
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomUploadsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomUploadsViewState,
@@ -41,21 +39,11 @@ class RoomUploadsViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomUploadsViewState, RoomUploadsAction, RoomUploadsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomUploadsViewState): RoomUploadsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
+        override fun create(initialState: RoomUploadsViewState): RoomUploadsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomUploadsViewState): RoomUploadsViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 
@@ -66,7 +54,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -85,14 +73,14 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val result = room.getUploads(20, token)
+                val result = room.uploadsService().getUploads(20, token)
 
                 token = result.nextToken
 
                 val groupedUploadEvents = result.uploadEvents
                         .groupBy {
-                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE
-                                    || it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
+                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE ||
+                                    it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
                         }
 
                 setState {
@@ -119,17 +107,18 @@ class RoomUploadsViewModel @AssistedInject constructor(
     override fun handle(action: RoomUploadsAction) {
         when (action) {
             is RoomUploadsAction.Download -> handleDownload(action)
-            is RoomUploadsAction.Share    -> handleShare(action)
-            RoomUploadsAction.Retry       -> handleLoadMore()
-            RoomUploadsAction.LoadMore    -> handleLoadMore()
-        }.exhaustive
+            is RoomUploadsAction.Share -> handleShare(action)
+            RoomUploadsAction.Retry -> handleLoadMore()
+            RoomUploadsAction.LoadMore -> handleLoadMore()
+        }
     }
 
     private fun handleShare(action: RoomUploadsAction.Share) {
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)
@@ -142,7 +131,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                        messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)

@@ -23,11 +23,9 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * Represents a X509 Certificate fingerprint.
  */
 public class Fingerprint {

@@ -17,13 +17,13 @@
 package im.vector.app.features.invite
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class InviteUsersToRoomViewState(
         val roomId: String,
         val inviteState: Async<Unit> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: InviteUsersToRoomArgs) : this(roomId = args.roomId)
 }

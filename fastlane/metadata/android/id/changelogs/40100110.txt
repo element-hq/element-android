@@ -1,0 +1,2 @@
+Versi baru ini terutama berisi antarmuka pengguna dan peningkatan pengalaman pengguna. Sekarang Anda dapat mengundang teman, dan membuat sebuah DM sangat cepat dengan memindai kode QR.
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.0.11

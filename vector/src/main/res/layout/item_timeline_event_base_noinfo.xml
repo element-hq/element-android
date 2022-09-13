@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/highlighted_message_background" />
 
     <View
@@ -22,6 +23,7 @@
 
     <FrameLayout
         android:id="@+id/viewStubContainer"
+        style="@style/TimelineContentStubContainerParams"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

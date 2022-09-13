@@ -93,7 +93,7 @@ class TestLinkifyActivity : AppCompatActivity() {
                                         .show()
                             }
                         })
-                        */
+                         */
                     }
 
                     subViews.testLinkifyCustomText.apply {
@@ -108,7 +108,7 @@ class TestLinkifyActivity : AppCompatActivity() {
                                         .show()
                             }
                         })
-                        */
+                         */
 
                         // TODO Call VectorLinkify.addLinks(text)
                     }

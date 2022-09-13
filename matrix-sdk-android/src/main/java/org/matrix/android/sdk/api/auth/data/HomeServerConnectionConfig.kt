@@ -18,11 +18,12 @@ package org.matrix.android.sdk.api.auth.data
 
 import android.net.Uri
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
-import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import okhttp3.CipherSuite
+import okhttp3.ConnectionSpec
 import okhttp3.TlsVersion
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
+import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 
 /**
  * This data class holds how to connect to a specific Homeserver.
@@ -31,7 +32,12 @@ import okhttp3.TlsVersion
  */
 @JsonClass(generateAdapter = true)
 data class HomeServerConnectionConfig(
+        // This is the homeserver URL entered by the user
         val homeServerUri: Uri,
+        // This is the homeserver base URL for the client-server API. Default to homeServerUri,
+        // but can be updated with data from .Well-Known before login, and/or with the data
+        // included in the login response
+        val homeServerUriBase: Uri = homeServerUri,
         val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
         val allowedFingerprints: List<Fingerprint> = emptyList(),
@@ -47,7 +53,6 @@ data class HomeServerConnectionConfig(
      * This builder should be use to create a [HomeServerConnectionConfig] instance.
      */
     class Builder {
-
         private lateinit var homeServerUri: Uri
         private var identityServerUri: Uri? = null
         private var antiVirusServerUri: Uri? = null
@@ -69,14 +74,14 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             // ensure trailing /
             val hsString = hsUri.toString().ensureTrailingSlash()
             homeServerUri = try {
                 Uri.parse(hsString)
             } catch (e: Exception) {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             return this
         }
@@ -134,7 +139,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add an accepted TLS version for TLS connections with the home server.
+         * Add an accepted TLS version for TLS connections with the homeserver.
          *
          * @param tlsVersion the tls version to add to the set of TLS versions accepted.
          * @return this builder
@@ -156,7 +161,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add a TLS cipher suite to the list of accepted TLS connections with the home server.
+         * Add a TLS cipher suite to the list of accepted TLS connections with the homeserver.
          *
          * @param tlsCipherSuite the tls cipher suite to add.
          * @return this builder
@@ -187,32 +192,25 @@ data class HomeServerConnectionConfig(
         /**
          * Convenient method to limit the TLS versions and cipher suites for this Builder
          * Ref:
-         * - https://www.ssi.gouv.fr/uploads/2017/02/security-recommendations-for-tls_v1.1.pdf
+         * - https://www.ssi.gouv.fr/uploads/2017/07/anssi-guide-recommandations_de_securite_relatives_a_tls-v1.2.pdf
          * - https://developer.android.com/reference/javax/net/ssl/SSLEngine
          *
-         * @param tlsLimitations         true to use Tls limitations
+         * @param tlsLimitations true to use Tls limitations
          * @param enableCompatibilityMode set to true for Android < 20
          * @return this builder
          */
+        @Deprecated("TLS versions and cipher suites are limited by default")
         fun withTlsLimitations(tlsLimitations: Boolean, enableCompatibilityMode: Boolean): Builder {
             if (tlsLimitations) {
                 withShouldAcceptTlsExtensions(false)
 
-                // Tls versions
-                addAcceptedTlsVersion(TlsVersion.TLS_1_2)
-                addAcceptedTlsVersion(TlsVersion.TLS_1_3)
+                // TlS versions
+                ConnectionSpec.RESTRICTED_TLS.tlsVersions?.let { this.tlsVersions.addAll(it) }
 
                 forceUsageOfTlsVersions(enableCompatibilityMode)
 
                 // Cipher suites
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256)
+                ConnectionSpec.RESTRICTED_TLS.cipherSuites?.let { this.tlsCipherSuites.addAll(it) }
 
                 if (enableCompatibilityMode) {
                     // Adopt some preceding cipher suites for Android < 20 to be able to negotiate
@@ -234,16 +232,16 @@ data class HomeServerConnectionConfig(
          */
         fun build(): HomeServerConnectionConfig {
             return HomeServerConnectionConfig(
-                    homeServerUri,
-                    identityServerUri,
-                    antiVirusServerUri,
-                    allowedFingerprints,
-                    shouldPin,
-                    tlsVersions,
-                    tlsCipherSuites,
-                    shouldAcceptTlsExtensions,
-                    allowHttpExtension,
-                    forceUsageTlsVersions
+                    homeServerUri = homeServerUri,
+                    identityServerUri = identityServerUri,
+                    antiVirusServerUri = antiVirusServerUri,
+                    allowedFingerprints = allowedFingerprints,
+                    shouldPin = shouldPin,
+                    tlsVersions = tlsVersions,
+                    tlsCipherSuites = tlsCipherSuites,
+                    shouldAcceptTlsExtensions = shouldAcceptTlsExtensions,
+                    allowHttpExtension = allowHttpExtension,
+                    forceUsageTlsVersions = forceUsageTlsVersions
             )
         }
     }

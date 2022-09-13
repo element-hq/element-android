@@ -22,16 +22,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSsssResetAllBinding
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 
-import javax.inject.Inject
-
-class SharedSecuredStorageResetAllFragment @Inject constructor()
-    : VectorBaseFragment<FragmentSsssResetAllBinding>() {
+@AndroidEntryPoint
+class SharedSecuredStorageResetAllFragment :
+        VectorBaseFragment<FragmentSsssResetAllBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssResetAllBinding {
         return FragmentSsssResetAllBinding.inflate(inflater, container, false)
@@ -56,7 +56,7 @@ class SharedSecuredStorageResetAllFragment @Inject constructor()
             }
         }
 
-        sharedViewModel.subscribe(this) { state ->
+        sharedViewModel.onEach { state ->
             views.ssssResetOtherDevices.setTextOrHide(
                     state.activeDeviceCount
                             .takeIf { it > 0 }

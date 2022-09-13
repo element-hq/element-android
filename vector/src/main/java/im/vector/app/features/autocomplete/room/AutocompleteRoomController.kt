@@ -32,15 +32,14 @@ class AutocompleteRoomController @Inject constructor(private val avatarRenderer:
         if (data.isNullOrEmpty()) {
             return
         }
+        val host = this
         data.forEach { roomSummary ->
             autocompleteMatrixItem {
                 id(roomSummary.roomId)
                 matrixItem(roomSummary.toMatrixItem())
                 subName(roomSummary.canonicalAlias)
-                avatarRenderer(avatarRenderer)
-                clickListener { _ ->
-                    listener?.onItemClick(roomSummary)
-                }
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(roomSummary) }
             }
         }
     }

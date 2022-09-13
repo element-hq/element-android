@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDD"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/element_background_light"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Google.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Facebook.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Github.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Apple.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Twitter.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Dark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/element_background_dark"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Google.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Facebook.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Github.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Apple.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+        <Button
+            style="@style/Widget.Vector.Button.Outlined.SocialLogin.Twitter.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue with XXX" />
+
+    </LinearLayout>
+</LinearLayout>

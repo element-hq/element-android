@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/menu_item_width_small"
+    android:layout_height="@dimen/menu_item_size">
+
+    <FrameLayout
+        android:layout_width="@dimen/menu_item_ripple_size"
+        android:layout_height="@dimen/menu_item_ripple_size"
+        android:layout_gravity="center"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/menu_item_icon_size"
+            android:layout_height="@dimen/menu_item_icon_size"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_thread_menu_item"
+            tools:ignore="ContentDescription"
+            app:tint="?colorPrimary" />
+
+        <FrameLayout
+            android:id="@+id/threadNotificationBadgeFrameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="9dp"
+            android:minWidth="9dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_gravity="top|end"
+            android:backgroundTint="@color/palette_gray_200"
+            android:background="@drawable/notification_badge"
+            android:visibility="visible"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/threadNotificationBadgeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="2dp"
+                android:paddingStart="2dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/palette_white"
+                android:maxLength="3"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                tools:text="99" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

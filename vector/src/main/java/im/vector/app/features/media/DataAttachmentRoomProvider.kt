@@ -19,12 +19,11 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MimeTypes
 import java.io.File
@@ -35,8 +34,16 @@ class DataAttachmentRoomProvider(
         imageContentRenderer: ImageContentRenderer,
         dateFormatter: VectorDateFormatter,
         fileService: FileService,
+        coroutineScope: CoroutineScope,
         stringProvider: StringProvider
-) : BaseAttachmentProvider<AttachmentData>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
+) : BaseAttachmentProvider<AttachmentData>(
+        attachments = attachments,
+        imageContentRenderer = imageContentRenderer,
+        fileService = fileService,
+        coroutineScope = coroutineScope,
+        dateFormatter = dateFormatter,
+        stringProvider = stringProvider
+) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return getItem(position).let {
@@ -68,30 +75,27 @@ class DataAttachmentRoomProvider(
                             )
                     )
                 }
-                else                         -> throw IllegalArgumentException()
+                else -> throw IllegalArgumentException()
             }
         }
     }
 
     override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
         val item = getItem(position)
-        return room?.getTimeLineEvent(item.eventId)
+        return room?.getTimelineEvent(item.eventId)
     }
 
-    override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        val item = getItem(position)
-        GlobalScope.launch {
-            val result = runCatching {
-                fileService.downloadFile(
-                        fileName = item.filename,
-                        mimeType = item.mimeType,
-                        url = item.url,
-                        elementToDecrypt = item.elementToDecrypt
-                )
-            }
-            withContext(Dispatchers.Main) {
-                callback(result.getOrNull())
-            }
-        }
+    override suspend fun getFileForSharing(position: Int): File? {
+        return getItem(position)
+                .let { item ->
+                    tryOrNull {
+                        fileService.downloadFile(
+                                fileName = item.filename,
+                                mimeType = item.mimeType,
+                                url = item.url,
+                                elementToDecrypt = item.elementToDecrypt
+                        )
+                    }
+                }
     }
 }

@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: aktualizace motivu a stylu a oprava pádu aplikace po videohovoru
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.12

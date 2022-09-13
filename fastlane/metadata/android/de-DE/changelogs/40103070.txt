@@ -1,0 +1,2 @@
+Hauptänderungen: Fehler bei Benachrichtigungen gefixt
+Ganze Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

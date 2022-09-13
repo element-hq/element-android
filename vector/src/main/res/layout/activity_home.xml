@@ -22,12 +22,10 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homeDrawerFragmentContainer"
         android:layout_width="@dimen/navigation_drawer_max_width"
         android:layout_height="match_parent"
         android:layout_gravity="start" />
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

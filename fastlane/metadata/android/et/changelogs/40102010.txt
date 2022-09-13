@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: palju täiendusi kõnede ja veel testjärgus olevas kogukonnakeskuste loogikas.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.2.1

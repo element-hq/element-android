@@ -4,7 +4,7 @@
     android:id="@+id/keysBackupSettingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clipToPadding="false"
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingBottom="@dimen/layout_vertical_margin_big"

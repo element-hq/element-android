@@ -11,59 +11,42 @@
 
         <TextView
             android:id="@+id/reAuthConfirmText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:text="@string/re_authentication_default_confirm_text"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/reAuthConfirmButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <FrameLayout
-            android:id="@+id/passwordContainer"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordFieldTil"
+            style="@style/Widget.Vector.TextInputLayout.Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:hint="@string/login_signup_password_hint"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@null"
             app:layout_constraintTop_toBottomOf="@id/reAuthConfirmText">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordFieldTil"
-                style="@style/VectorTextInputLayout"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_signup_password_hint"
-                app:errorEnabled="true"
-                app:errorIconDrawable="@null">
+                android:ems="10"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingEnd="48dp"
+                tools:ignore="RtlSymmetry" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:paddingEnd="48dp"
-                    tools:ignore="RtlSymmetry" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <im.vector.app.core.ui.views.RevealPasswordImageView
-                android:id="@+id/passwordReveal"
-                android:layout_width="@dimen/layout_touch_size"
-                android:layout_height="@dimen/layout_touch_size"
-                android:layout_gravity="end"
-                android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:scaleType="center"
-                app:tint="?attr/colorAccent" />
-
-        </FrameLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!--        <TextView-->
         <!--            android:id="@+id/loginPasswordNotice"-->
@@ -71,7 +54,7 @@
         <!--            android:layout_height="wrap_content"-->
         <!--            android:gravity="start"-->
         <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-        <!--            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"-->
+        <!--            style="@style/Widget.Vector.TextView.Caption"-->
         <!--            android:visibility="gone"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
@@ -80,22 +63,21 @@
 
         <TextView
             android:id="@+id/genericErrorText"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/authentication_error"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
             android:textColor="?colorError"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordContainer"
+            app:layout_constraintTop_toBottomOf="@id/passwordFieldTil"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/reAuthConfirmButton"
-            style="@style/VectorButtonStylePositive"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
@@ -103,6 +85,8 @@
             android:layout_marginBottom="20dp"
             android:text="@string/_continue"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/genericErrorText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

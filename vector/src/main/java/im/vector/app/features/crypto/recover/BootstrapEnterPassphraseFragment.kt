@@ -21,22 +21,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.app.features.settings.VectorLocale
-import io.reactivex.android.schedulers.AndroidSchedulers
+import im.vector.lib.core.utils.flow.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
-
-class BootstrapEnterPassphraseFragment @Inject constructor()
-    : VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
+@AndroidEntryPoint
+class BootstrapEnterPassphraseFragment :
+        VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
@@ -55,22 +56,21 @@ class BootstrapEnterPassphraseFragment @Inject constructor()
             views.ssssPassphraseEnterEdittext.setText(it.passphrase ?: "")
         }
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .subscribe {
+                .onEach {
                     // ssss_passphrase_enter_til.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
+                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it.toString()))
 //                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedViewModel.observeViewEvents {
             //            when (it) {
@@ -80,7 +80,6 @@ class BootstrapEnterPassphraseFragment @Inject constructor()
 //            }
         }
 
-        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
         views.bootstrapSubmit.debouncedClicks { submit() }
     }
 
@@ -101,10 +100,6 @@ class BootstrapEnterPassphraseFragment @Inject constructor()
 
     override fun invalidate() = withState(sharedViewModel) { state ->
         if (state.step is BootstrapStep.SetupPassphrase) {
-            val isPasswordVisible = state.step.isPasswordVisible
-            views.ssssPassphraseEnterEdittext.showPassword(isPasswordVisible, updateCursor = false)
-            views.ssssViewShowPassword.render(isPasswordVisible)
-
             state.passphraseStrength.invoke()?.let { strength ->
                 val score = strength.score
                 views.ssssPassphraseSecurityProgress.strength = score

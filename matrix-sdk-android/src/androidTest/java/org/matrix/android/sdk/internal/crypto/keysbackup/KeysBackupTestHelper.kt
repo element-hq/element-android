@@ -16,24 +16,29 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
+import org.junit.Assert
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.assertDictEquals
 import org.matrix.android.sdk.common.assertListEquals
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.junit.Assert
 import java.util.concurrent.CountDownLatch
 
-class KeysBackupTestHelper(
-        private val mTestHelper: CommonTestHelper,
-        private val mCryptoTestHelper: CryptoTestHelper) {
+internal class KeysBackupTestHelper(
+        private val testHelper: CommonTestHelper,
+        private val cryptoTestHelper: CryptoTestHelper
+) {
+
+    fun waitForKeybackUpBatching() {
+        Thread.sleep(400)
+    }
 
     /**
      * Common initial condition
@@ -43,7 +48,9 @@ class KeysBackupTestHelper(
      * @param password optional password
      */
     fun createKeysBackupScenarioWithPassword(password: String?): KeysBackupScenarioData {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
+
+        waitForKeybackUpBatching()
 
         val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService()
@@ -57,7 +64,7 @@ class KeysBackupTestHelper(
 
         var lastProgress = 0
         var lastTotal = 0
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             keysBackup.backupAllGroupSessions(object : ProgressListener {
                 override fun onProgress(progress: Int, total: Int) {
                     lastProgress = progress
@@ -72,7 +79,7 @@ class KeysBackupTestHelper(
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
         // - Log Alice on a new device
-        val aliceSession2 = mTestHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
+        val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
 
         // Test check: aliceSession2 has no keys at login
         Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))
@@ -82,33 +89,37 @@ class KeysBackupTestHelper(
 
         stateObserver.stopAndCheckStates(null)
 
-        return KeysBackupScenarioData(cryptoTestData,
+        return KeysBackupScenarioData(
+                cryptoTestData,
                 aliceKeys,
                 prepareKeysBackupDataResult,
-                aliceSession2)
+                aliceSession2
+        )
     }
 
-    fun prepareAndCreateKeysBackupData(keysBackup: KeysBackupService,
-                                       password: String? = null): PrepareKeysBackupDataResult {
+    fun prepareAndCreateKeysBackupData(
+            keysBackup: KeysBackupService,
+            password: String? = null
+    ): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
-        val megolmBackupCreationInfo = mTestHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
             keysBackup.prepareKeysBackupVersion(password, null, it)
         }
 
         Assert.assertNotNull(megolmBackupCreationInfo)
 
-        Assert.assertFalse(keysBackup.isEnabled)
+        Assert.assertFalse("Key backup should not be enabled before creation", keysBackup.isEnabled())
 
         // Create the version
-        val keysVersion = mTestHelper.doSync<KeysVersion> {
+        val keysVersion = testHelper.doSync<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
-        Assert.assertNotNull(keysVersion.version)
+        Assert.assertNotNull("Key backup version should not be null", keysVersion.version)
 
         // Backup must be enable now
-        Assert.assertTrue(keysBackup.isEnabled)
+        Assert.assertTrue(keysBackup.isEnabled())
 
         stateObserver.stopAndCheckStates(null)
         return PrepareKeysBackupDataResult(megolmBackupCreationInfo, keysVersion.version)
@@ -120,7 +131,7 @@ class KeysBackupTestHelper(
      */
     fun waitForKeysBackupToBeInState(session: Session, state: KeysBackupState) {
         // If already in the wanted state, return
-        if (session.cryptoService().keysBackupService().state == state) {
+        if (session.cryptoService().keysBackupService().getState() == state) {
             return
         }
 
@@ -136,7 +147,7 @@ class KeysBackupTestHelper(
             }
         })
 
-        mTestHelper.await(latch)
+        testHelper.await(latch)
     }
 
     fun assertKeysEquals(keys1: MegolmSessionData?, keys2: MegolmSessionData?) {
@@ -161,9 +172,11 @@ class KeysBackupTestHelper(
      * - The new device must have the same count of megolm keys
      * - Alice must have the same keys on both devices
      */
-    fun checkRestoreSuccess(testData: KeysBackupScenarioData,
-                            total: Int,
-                            imported: Int) {
+    fun checkRestoreSuccess(
+            testData: KeysBackupScenarioData,
+            total: Int,
+            imported: Int
+    ) {
         // - Imported keys number must be correct
         Assert.assertEquals(testData.aliceKeys.size, total)
         Assert.assertEquals(total, imported)
@@ -174,7 +187,7 @@ class KeysBackupTestHelper(
         // - Alice must have the same keys on both devices
         for (aliceKey1 in testData.aliceKeys) {
             val aliceKey2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
-                    .getInboundGroupSession(aliceKey1.olmInboundGroupSession!!.sessionIdentifier(), aliceKey1.senderKey!!)
+                    .getInboundGroupSession(aliceKey1.safeSessionId!!, aliceKey1.senderKey!!)
             Assert.assertNotNull(aliceKey2)
             assertKeysEquals(aliceKey1.exportKeys(), aliceKey2!!.exportKeys())
         }

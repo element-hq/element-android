@@ -31,7 +31,8 @@ class JumpToBottomViewVisibilityManager(
         private val jumpToBottomView: FloatingActionButton,
         private val debouncer: Debouncer,
         recyclerView: RecyclerView,
-        private val layoutManager: LinearLayoutManager) {
+        private val layoutManager: LinearLayoutManager
+) {
 
     init {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -49,7 +50,7 @@ class JumpToBottomViewVisibilityManager(
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE     -> {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
                         maybeShowJumpToBottomViewVisibilityWithDelay()
                     }
                     RecyclerView.SCROLL_STATE_DRAGGING,

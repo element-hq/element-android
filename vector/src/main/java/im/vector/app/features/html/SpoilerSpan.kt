@@ -38,7 +38,7 @@ class SpoilerSpan(private val colorProvider: ColorProvider) : ClickableSpan() {
             tp.color = Color.TRANSPARENT
         } else {
             tp.bgColor = colorProvider.getColorFromAttribute(R.attr.vctr_markdown_block_background_color)
-            tp.color = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
+            tp.color = colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
         }
     }
 }

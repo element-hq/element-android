@@ -16,34 +16,32 @@
 
 package im.vector.app.features.spaces.manage
 
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_to_add_in_space)
-abstract class RoomSelectionItem : VectorEpoxyModel<RoomSelectionItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomSelectionItem : VectorEpoxyModel<RoomSelectionItem.Holder>(R.layout.item_room_to_add_in_space) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var space: Boolean = false
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        if (space) {
-            avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
-        } else {
-            avatarRenderer.render(matrixItem, holder.avatarImageView)
-        }
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
+
         holder.titleText.text = matrixItem.getBestName()
 
         if (selected) {
@@ -54,9 +52,7 @@ abstract class RoomSelectionItem : VectorEpoxyModel<RoomSelectionItem.Holder>() 
             holder.checkboxImage.contentDescription = holder.view.context.getString(R.string.a11y_unchecked)
         }
 
-        holder.view.setOnClickListener {
-            itemClickListener?.onClick(it)
-        }
+        holder.view.onClick(itemClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

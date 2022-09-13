@@ -16,10 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.actions
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
+import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedMessage
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
@@ -28,21 +29,24 @@ import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 import javax.inject.Inject
 
+private val loggerTag = LoggerTag("MessageEncrypter", LoggerTag.CRYPTO)
+
 internal class MessageEncrypter @Inject constructor(
         @UserId
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
-        private val olmDevice: MXOlmDevice) {
+        private val olmDevice: MXOlmDevice
+) {
     /**
      * Encrypt an event payload for a list of devices.
      * This method must be called from the getCryptoHandler() thread.
      *
      * @param payloadFields fields to include in the encrypted payload.
-     * @param deviceInfos   list of device infos to encrypt for.
+     * @param deviceInfos list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
-    fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
+    suspend fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
         val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
         val payloadJson = payloadFields.toMutableMap()
@@ -66,7 +70,7 @@ internal class MessageEncrypter @Inject constructor(
             val sessionId = olmDevice.getSessionId(deviceKey)
 
             if (!sessionId.isNullOrEmpty()) {
-                Timber.v("Using sessionid $sessionId for device $deviceKey")
+                Timber.tag(loggerTag.value).d("Using sessionid $sessionId for device $deviceKey")
 
                 payloadJson["recipient"] = deviceInfo.userId
                 payloadJson["recipient_keys"] = mapOf("ed25519" to deviceInfo.fingerprint()!!)

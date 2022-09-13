@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Error colors -->
+    <color name="vector_warning_color_2">@color/palette_melon</color>
+    <color name="vector_info_color">#2f9edb</color>
+
+    <!-- Notification view colors -->
+    <color name="soft_resource_limit_exceeded">#2f9edb</color>
+    <color name="hard_resource_limit_exceeded">?colorError</color>
+
+    <!-- Notification (do not depends on theme) -->
+    <color name="notification_accent_color">@color/palette_azure</color>
+    <color name="key_share_req_accent_color">@color/palette_melon</color>
+
+    <!-- Source: https://zpl.io/aBKw9Mk -->
+
+    <color name="bg_call_screen_blur">#99000000</color>
+    <color name="bg_call_screen">#27303A</color>
+
+    <color name="vctr_notice_secondary_alpha12">#1E61708B</color>
+
+    <!-- Other useful color -->
+    <!-- Emoji text has to use a black text color -->
+    <color name="emoji_color">@android:color/black</color>
+    <color name="join_conference_animated_color">#0BAC7E</color>
+
+    <color name="half_transparent_status_bar">#80000000</color>
+
+    <color name="black_alpha">#55000000</color>
+    <color name="black_54">#8A000000</color>
+
+    <!-- For Android status bar and navigation bar -->
+    <color name="android_status_bar_background_light">@color/element_system_light</color>
+    <color name="android_navigation_bar_background_light">@color/element_system_light</color>
+    <color name="android_status_bar_background_dark">@color/element_background_dark</color>
+    <color name="android_navigation_bar_background_dark">@color/element_system_dark</color>
+
+    <!-- Used for toolbar background -->
+    <attr name="vctr_toolbar_background" format="color" />
+
+    <!-- Used for header background -->
+    <attr name="vctr_header_background" format="color" />
+
+    <!-- Used for item separators in list -->
+    <attr name="vctr_list_separator" format="color" />
+
+    <!-- Used for item separators in list, variant using element system color -->
+    <attr name="vctr_list_separator_system" format="color" />
+
+    <!-- Used for item separators in list, on surface -->
+    <attr name="vctr_list_separator_on_surface" format="color" />
+
+    <!-- Background color used for:
+          - unread badge background for a room item in the room list
+          - start unread indicator for a room item in the room list
+          - Background for unread badge background in the bottom navigation -->
+    <attr name="vctr_unread_background" format="color" />
+
+    <!-- Other colors, which are not in the palette -->
+    <attr name="vctr_fab_label_bg" format="color" />
+    <color name="vctr_fab_label_bg_light">@android:color/white</color>
+    <color name="vctr_fab_label_bg_dark">#FF181B21</color>
+    <color name="vctr_fab_label_bg_black">#FF181B21</color>
+
+    <attr name="vctr_fab_label_stroke" format="color" />
+    <color name="vctr_fab_label_stroke_light">#1EFFFFFF</color>
+    <color name="vctr_fab_label_stroke_dark">@android:color/black</color>
+    <color name="vctr_fab_label_stroke_black">@android:color/black</color>
+
+    <attr name="vctr_fab_label_color" format="color" />
+    <color name="vctr_fab_label_color_light">#FF2E2F32</color>
+    <color name="vctr_fab_label_color_dark">#FFA1B2D1</color>
+    <color name="vctr_fab_label_color_black">#FFA1B2D1</color>
+
+    <attr name="vctr_touch_guard_bg" format="color" />
+    <color name="vctr_touch_guard_bg_light">#66000000</color>
+    <color name="vctr_touch_guard_bg_dark">#BF000000</color>
+    <color name="vctr_touch_guard_bg_black">#BF000000</color>
+
+    <attr name="vctr_room_active_widgets_banner_bg" format="color" />
+    <color name="vctr_room_active_widgets_banner_bg_light">#EBEFF5</color>
+    <color name="vctr_room_active_widgets_banner_bg_dark">#27303A</color>
+    <color name="vctr_room_active_widgets_banner_bg_black">#27303A</color>
+
+    <attr name="vctr_room_active_widgets_banner_text" format="color" />
+    <color name="vctr_room_active_widgets_banner_text_light">#61708B</color>
+    <color name="vctr_room_active_widgets_banner_text_dark">#E3E8F0</color>
+    <color name="vctr_room_active_widgets_banner_text_black">#E3E8F0</color>
+
+    <attr name="vctr_waiting_background_color" format="color" />
+    <color name="vctr_waiting_background_color_light">#AAAAAAAA</color>
+    <color name="vctr_waiting_background_color_dark">#55555555</color>
+
+    <color name="vctr_disabled_view_color_light">#EEEEEE</color>
+
+    <attr name="vctr_reaction_background_off" format="color" />
+    <color name="vctr_reaction_background_off_light">#FFF3F8FD</color>
+    <color name="vctr_reaction_background_off_dark">#22252B</color>
+    <color name="vctr_reaction_background_off_black">#22252B</color>
+
+    <attr name="vctr_reaction_background_on" format="color" />
+    <color name="vctr_reaction_background_on_light">#2011BC8A</color>
+    <color name="vctr_reaction_background_on_dark">#4011BC8A</color>
+    <color name="vctr_reaction_background_on_black">#4011BC8A</color>
+
+    <!-- (color from RiotWeb) -->
+    <attr name="vctr_keys_backup_banner_accent_color" format="color" />
+    <color name="vctr_keys_backup_banner_accent_color_light">#FFF8E3</color>
+    <color name="vctr_keys_backup_banner_accent_color_dark">#22262E</color>
+
+    <attr name="vctr_chat_effect_snow_background" format="color" />
+    <color name="vctr_chat_effect_snow_background_light">@color/black_alpha</color>
+    <color name="vctr_chat_effect_snow_background_dark">@android:color/transparent</color>
+
+    <attr name="vctr_toast_background" format="color" />
+    <color name="vctr_toast_background_light">@color/palette_black_900</color>
+    <color name="vctr_toast_background_dark">@color/palette_gray_400</color>
+
+    <!-- Presence Indicator colors -->
+    <attr name="vctr_presence_indicator_offline" format="color" />
+    <color name="vctr_presence_indicator_offline_light">@color/palette_gray_100</color>
+    <color name="vctr_presence_indicator_offline_dark">@color/palette_gray_450</color>
+
+    <attr name="vctr_presence_indicator_online" format="color" />
+    <color name="vctr_presence_indicator_online_light">@color/palette_element_green</color>
+    <color name="vctr_presence_indicator_online_dark">@color/palette_element_green</color>
+
+    <attr name="vctr_presence_indicator_busy" format="color" />
+    <color name="vctr_presence_indicator_busy_light">@color/element_alert_light</color>
+    <color name="vctr_presence_indicator_busy_dark">@color/element_alert_dark</color>
+
+    <attr name="vctr_presence_indicator_away" format="color" />
+    <color name="vctr_presence_indicator_away_light">@color/palette_element_orange</color>
+    <color name="vctr_presence_indicator_away_dark">@color/palette_element_orange</color>
+
+    <!-- Location sharing colors -->
+    <attr name="vctr_live_location" format="color" />
+    <color name="vctr_live_location_light">@color/palette_prune</color>
+    <color name="vctr_live_location_dark">@color/palette_prune</color>
+
+    <!-- Shield colors -->
+    <color name="shield_color_trust">#0DBD8B</color>
+    <color name="shield_color_black">#17191C</color>
+    <color name="shield_color_warning">#FF4B55</color>
+    <color name="shield_color_warning_background">#0FFF4B55</color>
+
+    <!-- Badge Colors -->
+    <attr name="vctr_badge_color_border" format="color" />
+    <color name="vctr_badge_color_border_light">@color/palette_white</color>
+    <color name="vctr_badge_color_border_dark">@color/palette_black_950</color>
+
+</resources>

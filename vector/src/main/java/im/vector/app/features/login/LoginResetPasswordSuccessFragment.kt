@@ -20,14 +20,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.databinding.FragmentLoginResetPasswordSuccessBinding
 
-import javax.inject.Inject
-
 /**
- * In this screen, we confirm to the user that his password has been reset
+ * In this screen, we confirm to the user that his password has been reset.
  */
-class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordSuccessBinding>() {
+@AndroidEntryPoint
+class LoginResetPasswordSuccessFragment :
+        AbstractLoginFragment<FragmentLoginResetPasswordSuccessBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordSuccessBinding {
         return FragmentLoginResetPasswordSuccessBinding.inflate(inflater, container, false)
@@ -36,7 +37,7 @@ class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.resetPasswordSuccessSubmit.setOnClickListener { submit() }
+        views.resetPasswordSuccessSubmit.debouncedClicks { submit() }
     }
 
     private fun submit() {

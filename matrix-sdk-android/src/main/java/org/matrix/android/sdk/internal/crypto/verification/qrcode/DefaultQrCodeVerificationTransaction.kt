@@ -21,15 +21,14 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64Safe
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationTransaction
 import org.matrix.android.sdk.internal.crypto.verification.ValidVerificationInfoStart
-import org.matrix.android.sdk.internal.util.exhaustive
 import timber.log.Timber
 
 internal class DefaultQrCodeVerificationTransaction(
@@ -38,8 +37,8 @@ internal class DefaultQrCodeVerificationTransaction(
         override val otherUserId: String,
         override var otherDeviceId: String?,
         private val crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        secretShareManager: SecretShareManager,
         private val cryptoStore: IMXCryptoStore,
         // Not null only if other user is able to scan QR code
         private val qrCodeData: QrCodeData?,
@@ -49,13 +48,14 @@ internal class DefaultQrCodeVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
+        outgoingKeyRequestManager,
+        secretShareManager,
         userId,
         transactionId,
         otherUserId,
         otherDeviceId,
-        isIncoming),
+        isIncoming
+),
         QrCodeVerificationTransaction {
 
     override val qrCodeText: String?
@@ -84,7 +84,7 @@ internal class DefaultQrCodeVerificationTransaction(
         // Perform some checks
         if (otherQrCodeData.transactionId != transactionId) {
             Timber.d("## Verification QR: Invalid transaction actual ${otherQrCodeData.transactionId} expected:$transactionId")
-            cancel(CancelCode.QrCodeInvalid)
+            cancel(CancelCode.UnknownTransaction)
             return
         }
 
@@ -94,7 +94,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // Check the other device view of my MSK
         when (otherQrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // key2 (aka otherUserMasterCrossSigningPublicKey) is what the one displaying the QR code (other user) think my MSK is.
                 // Let's check that it's correct
                 // If not -> Cancel
@@ -104,7 +104,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     return
                 } else Unit
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // key1 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
                 // Let's check that I see the same MSK
                 // If not -> Cancel
@@ -129,13 +129,13 @@ internal class DefaultQrCodeVerificationTransaction(
                     // Nothing special here, we will send a reciprocate start event, and then the other session will trust it's view of the MSK
                 }
             }
-        }.exhaustive
+        }
 
         val toVerifyDeviceIds = mutableListOf<String>()
 
         // Let's now check the other user/device key material
         when (otherQrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // key1(aka userMasterCrossSigningPublicKey) is the MSK of the one displaying the QR code (i.e other user)
                 // Let's check that it matches what I think it should be
                 if (otherQrCodeData.userMasterCrossSigningPublicKey
@@ -149,7 +149,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     Unit
                 }
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // key2 (aka otherDeviceKey) is my current device key in POV of the one displaying the QR code (i.e other device)
                 // Let's check that it's correct
                 if (otherQrCodeData.otherDeviceKey
@@ -174,7 +174,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     Unit
                 }
             }
-        }.exhaustive
+        }
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
             // Nothing to verify
@@ -259,11 +259,11 @@ internal class DefaultQrCodeVerificationTransaction(
 
     override fun otherUserScannedMyQrCode() {
         when (qrCodeData) {
-            is QrCodeData.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser -> {
                 // Alice telling Bob that the code was scanned successfully is sufficient for Bob to trust Alice's key,
                 trust(true, emptyList(), false)
             }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
                 // I now know that I have the correct device key for other session,
                 // and can sign it with the self-signing key and upload the signature
                 trust(false, listOf(otherDeviceId ?: ""), false)
@@ -272,6 +272,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 // I now know that i can trust my MSK
                 trust(true, emptyList(), true)
             }
+            null -> Unit
         }
     }
 

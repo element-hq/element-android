@@ -20,32 +20,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-
 import javax.inject.Inject
 
 /**
- * This Fragment is only used when user activates developer mode from the settings
+ * This Fragment is only used when user activates developer mode from the settings.
  */
-class CrossSigningSettingsFragment @Inject constructor(
-        private val controller: CrossSigningSettingsController,
-        val viewModelFactory: CrossSigningSettingsViewModel.Factory
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class CrossSigningSettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         CrossSigningSettingsController.InteractionListener {
+
+    @Inject lateinit var controller: CrossSigningSettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -80,7 +80,7 @@ class CrossSigningSettingsFragment @Inject constructor(
         viewModel.observeViewEvents { event ->
             when (event) {
                 is CrossSigningSettingsViewEvents.Failure -> {
-                    AlertDialog.Builder(requireContext())
+                    MaterialAlertDialogBuilder(requireContext())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(event.throwable))
                             .setPositiveButton(R.string.ok, null)
@@ -88,10 +88,12 @@ class CrossSigningSettingsFragment @Inject constructor(
                     Unit
                 }
                 is CrossSigningSettingsViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             event.registrationFlowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)).let { intent ->
+                            getString(R.string.initialize_cross_signing)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
@@ -102,7 +104,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                 CrossSigningSettingsViewEvents.HideModalWaitingView -> {
                     views.waitingView.waitingView.isVisible = false
                 }
-            }.exhaustive
+            }
         }
     }
 

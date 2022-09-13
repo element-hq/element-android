@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.vector.lib.ui.styles">
+
+    <application android:theme="@style/Theme.Vector.Light">
+        <activity
+            android:name=".debug.DebugMaterialThemeLightDefaultActivity"
+            android:theme="@style/Theme.Debug.Light" />
+        <activity
+            android:name=".debug.DebugMaterialThemeLightTestActivity"
+            android:theme="@style/Theme.Debug.Light.Test" />
+        <activity
+            android:name=".debug.DebugMaterialThemeLightVectorActivity"
+            android:theme="@style/Theme.Vector.Light" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkDefaultActivity"
+            android:theme="@style/Theme.Debug.Dark" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkTestActivity"
+            android:theme="@style/Theme.Debug.Dark.Test" />
+        <activity
+            android:name=".debug.DebugMaterialThemeDarkVectorActivity"
+            android:theme="@style/Theme.Vector.Dark" />
+
+        <activity
+            android:name=".debug.DebugVectorButtonStylesLightActivity"
+            android:theme="@style/Theme.Vector.Light" />
+        <activity
+            android:name=".debug.DebugVectorButtonStylesDarkActivity"
+            android:theme="@style/Theme.Vector.Dark" />
+
+        <activity
+            android:name=".debug.DebugVectorTextViewLightActivity"
+            android:theme="@style/Theme.Vector.Light" />
+        <activity
+            android:name=".debug.DebugVectorTextViewDarkActivity"
+            android:theme="@style/Theme.Vector.Dark" />
+    </application>
+
+</manifest>

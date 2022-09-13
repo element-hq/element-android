@@ -6,8 +6,8 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
-            android:key="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
             android:icon="@drawable/ic_verification_glasses"
+            android:key="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
             android:summary="@string/settings_developer_mode_summary"
             android:title="@string/settings_developer_mode" />
 
@@ -16,6 +16,13 @@
             android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
             android:key="SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
             android:title="@string/settings_labs_show_hidden_events_in_timeline" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:key="SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+            android:summary="@string/settings_developer_mode_show_info_on_screen_summary"
+            android:title="@string/settings_developer_mode_show_info_on_screen_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Size will be overrode -->
+    <ImageView
+        android:id="@+id/liveLocationInactiveMap"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/a11y_static_map_image"
+        android:src="@drawable/bg_no_location_map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <im.vector.app.features.location.live.LiveLocationEndedBannerView
+        android:id="@+id/liveLocationEndedBanner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationInactiveMap"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationInactiveMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationInactiveMap"
+        app:locLiveEndedBkgWithAlpha="true"
+        app:locLiveEndedIconMarginStart="8dp" />
+
+    <ImageView
+        android:id="@+id/liveLocationInactiveIcon"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:src="@drawable/ic_attachment_location_white"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationInactiveVerticalCenter"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationInactiveMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationInactiveMap"
+        app:tint="?vctr_content_quaternary"
+        tools:ignore="ContentDescription" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/liveLocationInactiveVerticalCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

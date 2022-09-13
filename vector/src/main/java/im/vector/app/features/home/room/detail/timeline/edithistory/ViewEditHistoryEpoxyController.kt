@@ -15,61 +15,72 @@
  */
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
-import android.content.Context
 import android.text.Spannable
-import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
-import org.matrix.android.sdk.internal.session.room.send.TextContent
+import org.matrix.android.sdk.api.util.TextContent
 import java.util.Calendar
+import javax.inject.Inject
 
 /**
- * Epoxy controller for edit history list
+ * Epoxy controller for edit history list.
  */
-class ViewEditHistoryEpoxyController(private val context: Context,
-                                     val dateFormatter: VectorDateFormatter,
-                                     val eventHtmlRenderer: EventHtmlRenderer) : TypedEpoxyController<ViewEditHistoryViewState>() {
+class ViewEditHistoryEpoxyController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val eventHtmlRenderer: EventHtmlRenderer,
+        private val dateFormatter: VectorDateFormatter,
+        private val clock: Clock,
+) : TypedEpoxyController<ViewEditHistoryViewState>() {
 
     override fun buildModels(state: ViewEditHistoryViewState) {
+        val host = this
         when (state.editList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 genericLoaderItem {
                     id("Spinner")
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
-                    text(context.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
-            is Success    -> {
+            is Success -> {
                 state.editList()?.let { renderEvents(it, state.isOriginalAReply) }
             }
         }
     }
 
     private fun renderEvents(sourceEvents: List<Event>, isOriginalReply: Boolean) {
+        val host = this
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
-                title(context.getString(R.string.no_message_edits_found))
+                title(host.stringProvider.getString(R.string.no_message_edits_found).toEpoxyCharSequence())
             }
         } else {
             var lastDate: Calendar? = null
@@ -77,13 +88,13 @@ class ViewEditHistoryEpoxyController(private val context: Context,
 
                 val evDate = Calendar.getInstance().apply {
                     timeInMillis = timelineEvent.originServerTs
-                            ?: System.currentTimeMillis()
+                            ?: clock.epochMillis()
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
-                    genericItemHeader {
+                    genericHeaderItem {
                         id(evDate.hashCode())
-                        text(dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
+                        text(host.dateFormatter.format(evDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
                     }
                 }
                 lastDate = evDate
@@ -106,17 +117,17 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                                 diff_match_patch.Operation.DELETE -> {
                                     span {
                                         text = it.text.replace("\n", " ")
-                                        textColor = ContextCompat.getColor(context, R.color.vector_error_color)
+                                        textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                                         textDecorationLine = "line-through"
                                     }
                                 }
                                 diff_match_patch.Operation.INSERT -> {
                                     span {
                                         text = it.text
-                                        textColor = ContextCompat.getColor(context, R.color.vector_success_color)
+                                        textColor = colorProvider.getColor(R.color.palette_element_green)
                                     }
                                 }
-                                else                              -> {
+                                else -> {
                                     span {
                                         text = it.text
                                     }
@@ -127,8 +138,8 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
-                    description(spannedDiff ?: body)
+                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW).toEpoxyCharSequence())
+                    description((spannedDiff ?: body).toEpoxyCharSequence())
                 }
             }
         }

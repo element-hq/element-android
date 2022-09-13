@@ -19,7 +19,7 @@ package im.vector.app.features.roomprofile
 import im.vector.app.core.platform.VectorSharedAction
 
 /**
- * Supported navigation actions for [RoomProfileActivity]
+ * Supported navigation actions for [RoomProfileActivity].
  */
 sealed class RoomProfileSharedAction : VectorSharedAction {
     object OpenRoomSettings : RoomProfileSharedAction()
@@ -28,4 +28,5 @@ sealed class RoomProfileSharedAction : VectorSharedAction {
     object OpenRoomUploads : RoomProfileSharedAction()
     object OpenRoomMembers : RoomProfileSharedAction()
     object OpenBannedRoomMembers : RoomProfileSharedAction()
+    object OpenRoomNotificationSettings : RoomProfileSharedAction()
 }

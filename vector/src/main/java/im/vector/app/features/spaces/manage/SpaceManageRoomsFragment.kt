@@ -25,12 +25,14 @@ import android.view.ViewGroup
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionManager
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -38,22 +40,25 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpaceManageRoomsFragment @Inject constructor(
-        private val viewModelFactory: SpaceManageRoomsViewModel.Factory,
-        private val epoxyController: SpaceManageRoomsController
-) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        SpaceManageRoomsViewModel.Factory,
+@AndroidEntryPoint
+class SpaceManageRoomsFragment :
+        VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
         OnBackPressed,
         SpaceManageRoomsController.Listener,
         Callback {
 
+    @Inject lateinit var epoxyController: SpaceManageRoomsController
+
     private val viewModel by fragmentViewModel(SpaceManageRoomsViewModel::class)
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
+    private val epoxyVisibilityTracker = EpoxyVisibilityTracker()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentSpaceAddRoomsBinding.inflate(inflater)
 
@@ -64,25 +69,29 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupToolbar(views.addRoomToSpaceToolbar)
-        views.appBarTitle.text = getString(R.string.space_manage_rooms_and_spaces)
+                .setTitle(R.string.space_manage_rooms_and_spaces)
+                .allowBack()
+
         views.createNewRoom.isVisible = false
         epoxyController.listener = this
-        views.roomList.configureWith(epoxyController, hasFixedSize = true, showDivider = true)
+        views.roomList.configureWith(epoxyController, hasFixedSize = true, dividerDrawable = R.drawable.divider_horizontal)
+        epoxyVisibilityTracker.attach(views.roomList)
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(200)
+                .onEach {
                     viewModel.handle(SpaceManageRoomViewAction.UpdateFilter(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.selectSubscribe(SpaceManageRoomViewState::actionState) { actionState ->
+        viewModel.onEach(SpaceManageRoomViewState::actionState) { actionState ->
             when (actionState) {
                 is Loading -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.ShowLoading)
                 }
-                else       -> {
+                else -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HideLoading)
                 }
             }
@@ -99,24 +108,24 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onDestroyView() {
         epoxyController.listener = null
+        epoxyVisibilityTracker.detach(views.roomList)
         views.roomList.cleanup()
         super.onDestroyView()
     }
-
-    override fun create(initialState: SpaceManageRoomViewState) = viewModelFactory.create(initialState)
 
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)
 
         state.spaceSummary.invoke()?.let {
-            views.appBarSpaceInfo.text = it.displayName
+            toolbar?.subtitle = it.displayName
         }
+
         if (state.selectedRooms.isNotEmpty()) {
             if (currentActionMode == null) {
                 views.addRoomToSpaceToolbar.isVisible = true
                 vectorBaseActivity.startSupportActionMode(this)
             } else {
-                currentActionMode?.title = "${state.selectedRooms.size} selected"
+                toolbar?.title = resources.getQuantityString(R.plurals.room_details_selected, state.selectedRooms.size, state.selectedRooms.size)
             }
 //            views.addRoomToSpaceToolbar.isVisible = false
 //            views.addRoomToSpaceToolbar.startActionMode(this)
@@ -136,6 +145,10 @@ class SpaceManageRoomsFragment @Inject constructor(
         viewModel.handle(SpaceManageRoomViewAction.RefreshFromServer)
     }
 
+    override fun loadAdditionalItemsIfNeeded() {
+        viewModel.handle(SpaceManageRoomViewAction.LoadAdditionalItemsIfNeeded)
+    }
+
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         val inflater = mode?.menuInflater
         inflater?.inflate(R.menu.menu_manage_space, menu)
@@ -150,7 +163,7 @@ class SpaceManageRoomsFragment @Inject constructor(
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         withState(viewModel) { state ->
             // check if we show mark as suggested or not
-            val areAllSuggested = state.childrenInfo.invoke().orEmpty().filter { state.selectedRooms.contains(it.childRoomId) }
+            val areAllSuggested = state.childrenInfo.invoke()?.children.orEmpty().filter { state.selectedRooms.contains(it.childRoomId) }
                     .all { it.suggested == true }
             menu?.findItem(R.id.action_mark_as_suggested)?.isVisible = !areAllSuggested
             menu?.findItem(R.id.action_mark_as_not_suggested)?.isVisible = areAllSuggested
@@ -170,7 +183,7 @@ class SpaceManageRoomsFragment @Inject constructor(
             R.id.action_mark_as_not_suggested -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(false))
             }
-            else                              -> {
+            else -> {
             }
         }
         mode?.finish()

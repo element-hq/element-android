@@ -22,8 +22,9 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import timber.log.Timber
 
-class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
-                               private val callAudioManager: CallAudioManager
+class DefaultAudioDeviceRouter(
+        private val audioManager: AudioManager,
+        private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceRouter, AudioManager.OnAudioFocusChangeListener {
 
     private var audioFocusLost = false
@@ -31,8 +32,8 @@ class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
     private var focusRequestCompat: AudioFocusRequestCompat? = null
 
     override fun setAudioRoute(device: CallAudioManager.Device) {
-        audioManager.isSpeakerphoneOn = device === CallAudioManager.Device.SPEAKER
-        setBluetoothAudioRoute(device === CallAudioManager.Device.WIRELESS_HEADSET)
+        audioManager.isSpeakerphoneOn = device is CallAudioManager.Device.Speaker
+        setBluetoothAudioRoute(device is CallAudioManager.Device.WirelessHeadset)
     }
 
     override fun setMode(mode: CallAudioManager.Mode): Boolean {

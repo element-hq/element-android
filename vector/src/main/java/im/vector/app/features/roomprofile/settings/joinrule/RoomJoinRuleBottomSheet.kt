@@ -21,7 +21,7 @@ import android.os.Parcelable
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.ui.bottomsheet.BottomSheetGeneric
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
 import kotlinx.parcelize.Parcelize
@@ -29,19 +29,27 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 @Parcelize
-data class RoomJoinRuleBottomSheetArgs(
-        val currentRoomJoinRule: RoomJoinRules
+data class JoinRulesOptionSupport(
+        val rule: RoomJoinRules,
+        val needUpgrade: Boolean = false
 ) : Parcelable
 
+fun RoomJoinRules.toOption(needUpgrade: Boolean) = JoinRulesOptionSupport(this, needUpgrade)
+
+@Parcelize
+data class RoomJoinRuleBottomSheetArgs(
+        val currentRoomJoinRule: RoomJoinRules,
+        val allowedJoinedRules: List<JoinRulesOptionSupport>,
+        val isSpace: Boolean = false,
+        val parentSpaceName: String?
+) : Parcelable
+
+@AndroidEntryPoint
 class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
     @Inject lateinit var controller: RoomJoinRuleController
     private val viewModel: RoomJoinRuleViewModel by fragmentViewModel(RoomJoinRuleViewModel::class)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getController(): BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleRadioAction> = controller
 
@@ -61,9 +69,18 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
     }
 
     companion object {
-        fun newInstance(currentRoomJoinRule: RoomJoinRules): RoomJoinRuleBottomSheet {
+        fun newInstance(
+                currentRoomJoinRule: RoomJoinRules,
+                allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
+                        RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
+                ).map { it.toOption(true) },
+                isSpace: Boolean = false,
+                parentSpaceName: String? = null
+        ): RoomJoinRuleBottomSheet {
             return RoomJoinRuleBottomSheet().apply {
-                setArguments(RoomJoinRuleBottomSheetArgs(currentRoomJoinRule))
+                setArguments(
+                        RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules, isSpace, parentSpaceName)
+                )
             }
         }
     }

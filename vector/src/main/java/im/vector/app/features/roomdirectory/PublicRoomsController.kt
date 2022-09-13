@@ -35,13 +35,16 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,
-                                                private val avatarRenderer: AvatarRenderer,
-                                                private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
+class PublicRoomsController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val errorFormatter: ErrorFormatter
+) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
 
     override fun buildModels(viewState: PublicRoomsViewState) {
+        val host = this
         val publicRooms = viewState.publicRooms
 
         val unknownRoomItem = viewState.buildUnknownRoomIfNeeded()
@@ -51,7 +54,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             // No result
             noResultItem {
                 id("noResult")
-                text(stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
             publicRooms.forEach {
@@ -60,8 +63,8 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
 
             unknownRoomItem?.addTo(this)
 
-            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success)
-                    || viewState.asyncPublicRoomsRequest is Incomplete) {
+            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success) ||
+                    viewState.asyncPublicRoomsRequest is Incomplete) {
                 loadingItem {
                     // Change id to avoid list to scroll automatically when first results are displayed
                     if (publicRooms.isEmpty()) {
@@ -71,7 +74,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
                     }
                     onVisibilityStateChanged { _, _, visibilityState ->
                         if (visibilityState == VisibilityState.VISIBLE) {
-                            callback?.loadMore()
+                            host.callback?.loadMore()
                         }
                     }
                 }
@@ -81,15 +84,16 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         if (viewState.asyncPublicRoomsRequest is Fail) {
             errorWithRetryItem {
                 id("error")
-                text(errorFormatter.toHumanReadable(viewState.asyncPublicRoomsRequest.error))
-                listener { callback?.loadMore() }
+                text(host.errorFormatter.toHumanReadable(viewState.asyncPublicRoomsRequest.error))
+                listener { host.callback?.loadMore() }
             }
         }
     }
 
     private fun buildPublicRoom(publicRoom: PublicRoom, viewState: PublicRoomsViewState) {
+        val host = this
         publicRoomItem {
-            avatarRenderer(avatarRenderer)
+            avatarRenderer(host.avatarRenderer)
             id(publicRoom.roomId)
             matrixItem(publicRoom.toMatrixItem())
             roomAlias(publicRoom.getPrimaryAlias())
@@ -99,18 +103,18 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             val roomChangeMembership = viewState.changeMembershipStates[publicRoom.roomId] ?: ChangeMembershipState.Unknown
             val isJoined = viewState.joinedRoomsIds.contains(publicRoom.roomId) || roomChangeMembership is ChangeMembershipState.Joined
             val joinState = when {
-                isJoined                                                    -> JoinState.JOINED
-                roomChangeMembership is ChangeMembershipState.Joining       -> JoinState.JOINING
+                isJoined -> JoinState.JOINED
+                roomChangeMembership is ChangeMembershipState.Joining -> JoinState.JOINING
                 roomChangeMembership is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
-                else                                                        -> JoinState.NOT_JOINED
+                else -> JoinState.NOT_JOINED
             }
             joinState(joinState)
 
             joinListener {
-                callback?.onPublicRoomJoin(publicRoom)
+                host.callback?.onPublicRoomJoin(publicRoom)
             }
             globalListener {
-                callback?.onPublicRoomClicked(publicRoom, joinState)
+                host.callback?.onPublicRoomClicked(publicRoom, joinState)
             }
         }
     }
@@ -120,17 +124,18 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         val isAlias = MatrixPatterns.isRoomAlias(roomIdOrAlias) && !publicRooms.any { it.canonicalAlias == roomIdOrAlias }
         val isRoomId = !isAlias && MatrixPatterns.isRoomId(roomIdOrAlias) && !publicRooms.any { it.roomId == roomIdOrAlias }
         val roomItem = when {
-            isAlias  -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
+            isAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, roomIdOrAlias)
             isRoomId -> MatrixItem.RoomItem(roomIdOrAlias)
-            else     -> null
+            else -> null
         }
+        val host = this@PublicRoomsController
         return roomItem?.let {
             UnknownRoomItem_().apply {
                 id(roomIdOrAlias)
                 matrixItem(it)
-                avatarRenderer(this@PublicRoomsController.avatarRenderer)
+                avatarRenderer(host.avatarRenderer)
                 globalListener {
-                    callback?.onUnknownRoomClicked(roomIdOrAlias)
+                    host.callback?.onUnknownRoomClicked(roomIdOrAlias)
                 }
             }
         }

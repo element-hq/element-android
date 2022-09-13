@@ -21,6 +21,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -28,42 +29,71 @@ import kotlin.math.abs
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val activeSessionHolder: ActiveSessionHolder,
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
-        private val appNameProvider: AppNameProvider
+        private val appNameProvider: AppNameProvider,
 ) {
-    suspend fun testPush(pushKey: String) {
+    suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
 
-        currentSession.testPush(
-                stringProvider.getString(R.string.pusher_http_url),
+        currentSession.pushersService().testPush(
+                unifiedPushHelper.getPushGateway() ?: return,
                 stringProvider.getString(R.string.pusher_app_id),
-                pushKey,
+                unifiedPushHelper.getEndpointOrToken().orEmpty(),
                 TEST_EVENT_ID
         )
     }
 
-    fun registerPusherWithFcmKey(pushKey: String): UUID {
-        val currentSession = activeSessionHolder.getActiveSession()
-        val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
+    fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
+        return enqueueRegisterPusher(pushKey, stringProvider.getString(R.string.pusher_http_url))
+    }
 
-        return currentSession.addHttpPusher(
-                pushKey,
-                stringProvider.getString(R.string.pusher_app_id),
-                profileTag,
-                localeProvider.current().language,
-                appNameProvider.getAppName(),
-                currentSession.sessionParams.deviceId ?: "MOBILE",
-                stringProvider.getString(R.string.pusher_http_url),
-                append = false,
-                withEventIdOnly = true
+    fun enqueueRegisterPusher(
+            pushKey: String,
+            gateway: String
+    ): UUID {
+        val currentSession = activeSessionHolder.getActiveSession()
+        val pusher = createHttpPusher(pushKey, gateway)
+        return currentSession.pushersService().enqueueAddHttpPusher(pusher)
+    }
+
+    private fun createHttpPusher(
+            pushKey: String,
+            gateway: String
+    ) = HttpPusher(
+            pushKey,
+            stringProvider.getString(R.string.pusher_app_id),
+            profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
+            localeProvider.current().language,
+            appNameProvider.getAppName(),
+            activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
+            gateway,
+            append = false,
+            withEventIdOnly = true
+    )
+
+    suspend fun registerEmailForPush(email: String) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        val appName = appNameProvider.getAppName()
+        currentSession.pushersService().addEmailPusher(
+                email = email,
+                lang = localeProvider.current().language,
+                emailBranding = appName,
+                appDisplayName = appName,
+                deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
         )
+    }
+
+    suspend fun unregisterEmailPusher(email: String) {
+        val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
+        currentSession.pushersService().removeEmailPusher(email)
     }
 
     suspend fun unregisterPusher(pushKey: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
+        currentSession.pushersService().removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
     }
 
     companion object {

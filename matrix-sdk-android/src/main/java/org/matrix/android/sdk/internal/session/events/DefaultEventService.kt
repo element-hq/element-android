@@ -29,7 +29,6 @@ internal class DefaultEventService @Inject constructor(
 
     override suspend fun getEvent(roomId: String, eventId: String): Event {
         val event = getEventTask.execute(GetEventTask.Params(roomId, eventId))
-
         // Fast lane to the call event processors: try to make the incoming call ring faster
         if (callEventProcessor.shouldProcessFastLane(event.getClearType())) {
             callEventProcessor.processFastLane(event)

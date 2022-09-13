@@ -20,16 +20,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDevtoolsEditorBinding
-import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.textChanges
 
-class RoomDevToolEditFragment @Inject constructor()
-    : VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
+@AndroidEntryPoint
+class RoomDevToolEditFragment :
+        VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
 
     private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 
@@ -44,10 +48,10 @@ class RoomDevToolEditFragment @Inject constructor()
         }
         views.editText.textChanges()
                 .skipInitialValue()
-                .subscribe {
+                .onEach {
                     sharedViewModel.handle(RoomDevToolAction.UpdateContentText(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onResume() {

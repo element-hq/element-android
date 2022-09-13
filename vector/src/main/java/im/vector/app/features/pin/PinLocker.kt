@@ -17,12 +17,12 @@
 package im.vector.app.features.pin
 
 import android.os.SystemClock
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -41,7 +41,7 @@ private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
 class PinLocker @Inject constructor(
         private val pinCodeStore: PinCodeStore,
         private val vectorPreferences: VectorPreferences
-) : LifecycleObserver {
+) : DefaultLifecycleObserver {
 
     enum class State {
         // App is locked, can be unlock
@@ -60,6 +60,7 @@ class PinLocker @Inject constructor(
         return liveState
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun computeState() {
         GlobalScope.launch {
             val state = if (shouldBeLocked && pinCodeStore.hasEncodedPin()) {
@@ -86,16 +87,14 @@ class PinLocker @Inject constructor(
         computeState()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun entersForeground() {
+    override fun onResume(owner: LifecycleOwner) {
         val timeElapsedSinceBackground = SystemClock.elapsedRealtime() - entersBackgroundTs
         shouldBeLocked = shouldBeLocked || timeElapsedSinceBackground >= getGracePeriod()
         Timber.v("App enters foreground after $timeElapsedSinceBackground ms spent in background shouldBeLocked: $shouldBeLocked")
         computeState()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun entersBackground() {
+    override fun onPause(owner: LifecycleOwner) {
         Timber.v("App enters background")
         entersBackgroundTs = SystemClock.elapsedRealtime()
     }

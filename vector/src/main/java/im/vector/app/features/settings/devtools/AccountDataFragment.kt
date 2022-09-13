@@ -16,35 +16,34 @@
 
 package im.vector.app.features.settings.devtools
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import javax.inject.Inject
 
-class AccountDataFragment @Inject constructor(
-        val viewModelFactory: AccountDataViewModel.Factory,
-        private val epoxyController: AccountDataEpoxyController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class AccountDataFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         AccountDataEpoxyController.InteractionListener {
+
+    @Inject lateinit var epoxyController: AccountDataEpoxyController
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -63,7 +62,7 @@ class AccountDataFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
         epoxyController.interactionListener = this
     }
 
@@ -74,7 +73,7 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun didTap(data: UserAccountDataEvent) {
-        val jsonString = MoshiProvider.providesMoshi()
+        val jsonString = MatrixJsonParser.getMoshi()
                 .adapter(UserAccountDataEvent::class.java)
                 .toJson(data)
         JSonViewerDialog.newInstance(
@@ -85,14 +84,13 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun didLongTap(data: UserAccountDataEvent) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.delete)
+        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+                .setTitle(R.string.action_delete)
                 .setMessage(getString(R.string.delete_account_data_warning, data.type))
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete) { _, _ ->
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_delete) { _, _ ->
                     viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
                 }
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 }

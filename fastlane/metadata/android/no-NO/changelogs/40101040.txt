@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: forbedring av ytelsen og feilrettinger!
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.4

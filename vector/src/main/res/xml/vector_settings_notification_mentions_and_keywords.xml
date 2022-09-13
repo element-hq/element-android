@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_KEYWORDS_AND_MENTIONS"
+        android:title="@string/settings_notification_notify_me_for">
+
+        <im.vector.app.core.preference.VectorCheckboxPreference
+            android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_containing_display_name" />
+
+        <im.vector.app.core.preference.VectorCheckboxPreference
+            android:key="SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_containing_username" />
+
+        <im.vector.app.core.preference.VectorCheckboxPreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_mentions_at_room" />
+
+        <im.vector.app.core.preference.VectorCheckboxPreference
+            android:key="SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_messages_containing_keywords" />
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_YOUR_KEYWORDS"
+        android:title="@string/settings_notification_your_keywords">
+        <im.vector.app.core.preference.KeywordPreference
+            android:key="SETTINGS_KEYWORD_EDIT"
+            android:persistent="false"
+            />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_KEYWORDS_FOOTER"
+            android:focusable="false"
+            android:persistent="false"
+            android:summary="@string/settings_mentions_and_keywords_encryption_notice" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+</androidx.preference.PreferenceScreen>

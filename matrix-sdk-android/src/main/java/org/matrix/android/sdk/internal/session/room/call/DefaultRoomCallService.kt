@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.call
 
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.internal.session.room.RoomGetter

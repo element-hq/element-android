@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
@@ -41,17 +41,17 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 internal interface KeysAlgorithmAndData {
 
     /**
-     * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
+     * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined.
      */
     val algorithm: String
 
     /**
-     * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
+     * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData].
      */
     val authData: JsonDict
 
     /**
-     * Facility method to convert authData to a MegolmBackupAuthData object
+     * Facility method to convert authData to a MegolmBackupAuthData object.
      */
     fun getAuthDataAsMegolmBackupAuthData(): MegolmBackupAuthData? {
         return MoshiProvider.providesMoshi()

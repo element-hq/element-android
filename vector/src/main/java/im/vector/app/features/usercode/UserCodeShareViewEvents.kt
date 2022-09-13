@@ -24,6 +24,6 @@ sealed class UserCodeShareViewEvents : VectorViewEvents {
     object HideWaitingScreen : UserCodeShareViewEvents()
     data class ToastMessage(val message: String) : UserCodeShareViewEvents()
     data class NavigateToRoom(val roomId: String) : UserCodeShareViewEvents()
-    object CameraPermissionNotGranted : UserCodeShareViewEvents()
+    data class CameraPermissionNotGranted(val deniedPermanently: Boolean) : UserCodeShareViewEvents()
     data class SharePlainText(val text: String, val title: String, val richPlainText: String) : UserCodeShareViewEvents()
 }

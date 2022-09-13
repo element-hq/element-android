@@ -7,7 +7,8 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:paddingEnd="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/actionIconImageView"
@@ -17,19 +18,19 @@
         android:layout_marginEnd="8dp"
         android:importantForAccessibility="no"
         android:padding="10dp"
-        app:tint="?riotx_text_secondary"
-        tools:src="@drawable/ic_invite_people" />
+        app:tint="?vctr_content_secondary"
+        tools:src="@drawable/ic_baseline_perm_contact_calendar_24" />
 
     <TextView
         android:id="@+id/actionTitleText"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         tools:text="@string/invite_friends" />
 
 </LinearLayout>

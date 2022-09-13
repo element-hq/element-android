@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_dismiss">Zawrzij</string>
+    <string name="action_play">Ôdtwōrz</string>
+    <string name="report_content">Zgłoś zawartość</string>
+    <string name="action_disconnect">Rozłōncz</string>
+    <string name="action_revoke">Ôdkoż</string>
+    <string name="none">Brak</string>
+    <string name="action_rename">Przemianuj</string>
+    <string name="action_delete">Skasuj</string>
+    <string name="view_decrypted_source">Pokoż ôdszyfrowane zdrzōdło</string>
+    <string name="view_source">Pokoż zdrzōdło</string>
+    <string name="permalink">Bezpostrzedni link</string>
+    <string name="later">Niyskorzij</string>
+    <string name="action_share">Udostympnij</string>
+    <string name="action_download">Pobier</string>
+    <string name="action_quote">Cytuj</string>
+    <string name="action_send">Wyślij</string>
+    <string name="action_leave">Pociep</string>
+    <string name="action_save">Spamiyntej</string>
+    <string name="action_cancel">Pociep</string>
+    <string name="ok">OK</string>
+    <string name="loading">Wgrowanie…</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Stracisz dostymp do zaszyfrowanych wiadōmości, chyba że wykōnosz ibryczno kopijo kluczy przed ôdlogowaniym sie.</string>
+    <string name="backup">Stwōrz kopijo ibryczno</string>
+    <string name="are_you_sure">Je żeś zicher\?</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Tworzynie ibrycznyj kopije kluczy…</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Niy chca mojich zaszyfrowanych wiadōmości</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Coby niy stracić dostympu do swojich zaszyfrowanych wiadōmości, aktywuj ibryczno kopijo klucza na wszyskich aktywnych sesyjach.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Trwo tworzynie ibrycznyj kopije klucza. Jeźli ôdlogujesz sie teroz, to stracisz dostymp do zaszyfrowanych wiadōmości.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Stracisz zaszyfrowane wiadōmości, jeźli sie teroz ôdlogujesz</string>
+    <string name="title_activity_keys_backup_restore">Użyj ibrycznyj kopije klucza</string>
+    <string name="title_activity_keys_backup_setup">Ibryczno Kopijo Klucza</string>
+    <string name="title_activity_choose_sticker">Wyślij nalepka</string>
+    <string name="title_activity_bug_report">Zgłoś feler</string>
+    <string name="title_activity_settings">Sztalōnki</string>
+    <string name="notification_silent_notifications">Ciche powiadōmiynia</string>
+    <string name="notification_noisy_notifications">Głośne powiadōmiynia</string>
+    <string name="notification_listening_for_events">Nasuchowanie zdarzyń</string>
+    <string name="black_theme">Czorny tymat</string>
+    <string name="dark_theme">Ciymny tymat</string>
+    <string name="light_theme">Jasny tymat</string>
+</resources>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/voiceLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/chat_bubble_fixed_size"
+    tools:viewBindingIgnore="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/voicePlaybackLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TimelineContentMediaPillStyle">
+
+        <ImageButton
+            android:id="@+id/voicePlaybackControlButton"
+            android:layout_width="@dimen/item_event_message_media_button_size"
+            android:layout_height="@dimen/item_event_message_media_button_size"
+            android:background="@drawable/bg_voice_play_pause_button"
+            android:backgroundTint="?android:colorBackground"
+            android:contentDescription="@string/a11y_play_voice_message"
+            android:src="@drawable/ic_play_pause_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?vctr_content_secondary" />
+
+        <TextView
+            android:id="@+id/voicePlaybackTime"
+            style="@style/Widget.Vector.TextView.Body.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="@id/voicePlaybackControlButton"
+            app:layout_constraintStart_toEndOf="@id/voicePlaybackControlButton"
+            app:layout_constraintTop_toTopOf="@id/voicePlaybackControlButton"
+            tools:text="0:23" />
+
+        <im.vector.app.features.voice.AudioWaveformView
+            android:id="@+id/voicePlaybackWaveform"
+            style="@style/VoicePlaybackWaveform"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/messageFileUploadProgressLayout"
+        layout="@layout/media_upload_download_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</LinearLayout>

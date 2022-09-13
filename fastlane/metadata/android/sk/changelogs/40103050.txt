@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Pridanie podpory prítomnosti pre miestnosť s priamymi správami (poznámka: prítomnosť je na matrix.org vypnutá). Opätovné pridanie podpory Android Auto.
+Úplný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.3.5

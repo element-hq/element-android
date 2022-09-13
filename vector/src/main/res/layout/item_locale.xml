@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="64dp">
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/localeTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/localeSubtitle"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintBottom_toTopOf="@id/localeSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,17 +25,17 @@
 
     <TextView
         android:id="@+id/localeSubtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/localeTitle"
+        app:layout_constraintTop_toBottomOf="@id/localeTitle"
         tools:text="details"
         tools:visibility="visible" />
 

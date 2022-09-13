@@ -31,7 +31,8 @@ internal data class PasswordLoginParams(
         @Json(name = "password") val password: String,
         @Json(name = "type") override val type: String,
         @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
-        @Json(name = "device_id") val deviceId: String?) : LoginParams {
+        @Json(name = "device_id") val deviceId: String?
+) : LoginParams {
 
     companion object {
         private const val IDENTIFIER_KEY_TYPE = "type"
@@ -47,53 +48,62 @@ internal data class PasswordLoginParams(
         private const val IDENTIFIER_KEY_COUNTRY = "country"
         private const val IDENTIFIER_KEY_PHONE = "phone"
 
-        fun userIdentifier(user: String,
-                           password: String,
-                           deviceDisplayName: String? = null,
-                           deviceId: String? = null): PasswordLoginParams {
+        fun userIdentifier(
+                user: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
                             IDENTIFIER_KEY_USER to user
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
 
-        fun thirdPartyIdentifier(medium: String,
-                                 address: String,
-                                 password: String,
-                                 deviceDisplayName: String? = null,
-                                 deviceId: String? = null): PasswordLoginParams {
+        fun thirdPartyIdentifier(
+                medium: String,
+                address: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
                             IDENTIFIER_KEY_MEDIUM to medium,
                             IDENTIFIER_KEY_ADDRESS to address
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
 
-        fun phoneIdentifier(country: String,
-                            phone: String,
-                            password: String,
-                            deviceDisplayName: String? = null,
-                            deviceId: String? = null): PasswordLoginParams {
+        fun phoneIdentifier(
+                country: String,
+                phone: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,
                             IDENTIFIER_KEY_COUNTRY to country,
                             IDENTIFIER_KEY_PHONE to phone
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
     }
 }

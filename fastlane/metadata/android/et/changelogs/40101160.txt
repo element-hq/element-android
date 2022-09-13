@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: samaaegse krüptitud sõnumi saatmise ja jututoast väljalogimisega seotud vea parandus.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.1.16

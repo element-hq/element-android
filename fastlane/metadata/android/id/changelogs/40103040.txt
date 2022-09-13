@@ -1,0 +1,2 @@
+Perubahan utama di versi ini: Tambahkan dukungan presensi, untuk ruangan Pesan Langsung (diingat bahwa presensi dinonaktifkan di matrix.org). Tambahkan lagi dukungan Android Auto.
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.3.4

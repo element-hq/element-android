@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallAssertedIdentityContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
@@ -62,6 +63,10 @@ internal class CallListenersDispatcher(private val listeners: Set<CallListener>)
 
     override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) = dispatch {
         it.onCallNegotiateReceived(callNegotiateContent)
+    }
+
+    override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) = dispatch {
+        it.onCallAssertedIdentityReceived(callAssertedIdentityContent)
     }
 
     private fun dispatch(lambda: (CallListener) -> Unit) {

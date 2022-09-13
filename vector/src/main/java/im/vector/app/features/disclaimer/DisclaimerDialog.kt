@@ -18,8 +18,8 @@ package im.vector.app.features.disclaimer
 
 import android.app.Activity
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.utils.openUrlInChromeCustomTab
@@ -40,7 +40,7 @@ fun showDisclaimerDialog(activity: Activity) {
 
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setView(dialogLayout)
                 .setCancelable(false)
                 .setNegativeButton(R.string.disclaimer_negative_button, null)

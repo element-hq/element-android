@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,5 +19,8 @@ package im.vector.app.features.rageshake
 enum class ReportType {
     BUG_REPORT,
     SUGGESTION,
-    SPACE_BETA_FEEDBACK
+    SPACE_BETA_FEEDBACK,
+    THREADS_BETA_FEEDBACK,
+    AUTO_UISI,
+    AUTO_UISI_SENDER,
 }

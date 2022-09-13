@@ -1,0 +1,2 @@
+Principales cambios en esta versión: Soporte de inicio de sesión social.
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.0.15 y https://github.com/vector-im/element-android/releases/tag/v1.0.16

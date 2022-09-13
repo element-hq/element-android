@@ -46,7 +46,7 @@ internal object WorkerParamsFactory {
 
     inline fun <reified T> fromData(data: Data) = fromData(T::class.java, data)
 
-    fun <T> fromData(clazz: Class<T>, data: Data): T? = tryOrNull("Unable to parse work parameters") {
+    fun <T> fromData(clazz: Class<T>, data: Data): T? = tryOrNull<T?>("Unable to parse work parameters") {
         val json = data.getString(KEY)
         return if (json == null) {
             null

@@ -1,0 +1,43 @@
+Az Element egy biztonságos üzenetküldő, és egy csapatmunka app, amely távoli munkavégzéshez is alkalmas lehet. Az alkalmazás végponti titkosítás használatával biztosít videó konferencia, fájlmegosztás, és audio hívás lehetőségeket.
+
+<b>Az Element funkciói többek között:</b>
+- Fejlett online kommunikációs eszközök
+- Titkosított üzenetek a biztonságos céges kommunikációhoz, otthonról dolgozóknak is
+- Decentralizált chat a nyílt forráskódú Matrix protokoll használatával
+- Biztonságos fájlmegosztáss a projektek kezeléséhez
+- Videochat, VoIP, és képernyőmegosztási lehetőséggel 
+- Egyszerű integráció a kedvenc online kollaborációs eszközeiddel, projektkezelési eszközökkel, VoIP szolgáltatásokkal, és más csoportos üzenetküldő alkalmazásokkal
+
+Az Element teljesen más, mint az összes többi üzenetküldő és kollaborációs alkalmazás. A biztonságos üzenetküldést és decentralizált kommunikációt biztosító Matrix platformot használja. Akár egyénileg üzemeltetett szervereket is lehet használni az adatok teljes kontrollálása érdekében.
+
+<b>Magánszféra és titkosított csevegés</b>
+Az Element megvéd a nemkívánatos hirdetésektől, adatbányászattól, és a zárt platformoktól. Ezeken felül biztonságban tartja az összes adatod és 1:1 hívásod a végponti titkosításnak és az eszközök-közti hitelesítésnek köszönhetően.
+
+Az Element átadja neked az irányítást a magánszférád felett, miközben lehetővé teszi, hogy biztonságosan kommunikálj bárkivel a Matrix hálózatban, vagy a többi üzleti kommunikációs eszközt használókkal, az olyan appok integrálásának köszönhetően, mint például a Slack.
+
+
+<b>Element can be self-hosted</b>
+To allow more control of your sensitive data and conversations, Element can be self-hosted or you can choose any Matrix-based host - the standard for open source, decentralized communication. Element gives you privacy, security compliance and integration flexibility.
+
+<b>Own your data</b>
+You decide where to keep your data and messages. Without the risk of data mining or access from third parties.
+
+Element puts you in control in different ways:
+1. Get a free account on the matrix.org public server hosted by the Matrix developers, or choose from thousands of public servers hosted by volunteers
+2. Self-host your account by running a server on your own IT infrastructure
+3. Sign up for an account on a custom server by simply subscribing to the Element Matrix Services hosting platform
+
+<b>Open messaging and collaboration</b>
+You can chat with anyone on the Matrix network, whether they’re using Element, another Matrix app or even if they are using a different messaging app.
+
+<b>Super secure</b>
+Real end-to-end encryption (only those in the conversation can decrypt messages), and cross-signed device verification.
+
+<b>Complete communication and integration</b>
+Messaging, voice and video calls, file sharing, screen sharing and a whole bunch of integrations, bots and widgets. Build rooms, communities, stay in touch and get things done.
+
+<b>Pick up where you left off</b>
+Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io
+
+<b>Open source</b>
+Element Android is an open source project, hosted by GitHub. Please report bugs and/or contribute to its development at https://github.com/vector-im/element-android

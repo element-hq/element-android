@@ -17,10 +17,11 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject.Companion.ACTION_SHARE_CANCELLATION
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject.Companion.ACTION_SHARE_CANCELLATION
 
 /**
- * Class representing a room key request cancellation content
+ * Class representing a room key request cancellation content.
  */
 @JsonClass(generateAdapter = true)
 internal data class ShareRequestCancellation(

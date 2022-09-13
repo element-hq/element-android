@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 
 class RoomJoinRuleRadioAction(
         val roomJoinRule: RoomJoinRules,
-        title: CharSequence,
+        title: String,
         description: String,
         isSelected: Boolean
 ) : BottomSheetGenericRadioAction(

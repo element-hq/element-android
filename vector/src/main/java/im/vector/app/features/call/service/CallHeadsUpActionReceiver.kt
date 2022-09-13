@@ -19,7 +19,7 @@ package im.vector.app.features.call.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import timber.log.Timber
 
@@ -32,11 +32,7 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-        val webRtcCallManager = (context.applicationContext as? HasVectorInjector)
-                ?.injector()
-                ?.webRtcCallManager()
-                ?: return
-
+        val webRtcCallManager = context.singletonEntryPoint().webRtcCallManager()
         when (intent?.getIntExtra(EXTRA_CALL_ACTION_KEY, 0)) {
             CALL_ACTION_REJECT -> {
                 val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return

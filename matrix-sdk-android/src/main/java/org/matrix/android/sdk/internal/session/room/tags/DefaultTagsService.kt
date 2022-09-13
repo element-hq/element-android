@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.tags
 
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.tags.TagsService
 
 internal class DefaultTagsService @AssistedInject constructor(

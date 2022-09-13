@@ -19,45 +19,47 @@ package org.matrix.android.sdk.internal.session.space
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
+import retrofit2.HttpException
 import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
     data class Params(
             val spaceId: String,
-            val maxRoomPerSpace: Int?,
-            val limit: Int,
-            val batchToken: String?,
-            val suggestedOnly: Boolean?,
-            val autoJoinOnly: Boolean?
-    ) {
-        companion object {
-            fun withId(spaceId: String, suggestedOnly: Boolean?, autoJoinOnly: Boolean?) =
-                    Params(
-                            spaceId = spaceId,
-                            maxRoomPerSpace = 10,
-                            limit = 20,
-                            batchToken = null,
-                            suggestedOnly = suggestedOnly,
-                            autoJoinOnly = autoJoinOnly
-                    )
-        }
-    }
+            val limit: Int?,
+            val maxDepth: Int?,
+            val from: String?,
+            val suggestedOnly: Boolean?
+    )
 }
 
 internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val spaceApi: SpaceApi,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
-    override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
-        val body = SpaceSummaryParams(
-                maxRoomPerSpace = params.maxRoomPerSpace,
-                limit = params.limit,
-                batch = params.batchToken ?: "",
-                autoJoinedOnly = params.autoJoinOnly,
-                suggestedOnly = params.suggestedOnly
-        )
-        return executeRequest(globalErrorReceiver) {
-            spaceApi.getSpaces(params.spaceId, body)
+
+    override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
+        try {
+            getSpaceHierarchy(params)
+        } catch (e: HttpException) {
+            getUnstableSpaceHierarchy(params)
         }
     }
+
+    private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
+            spaceApi.getSpaceHierarchy(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from,
+            )
+
+    private suspend fun getUnstableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
+            spaceApi.getSpaceHierarchyUnstable(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from,
+            )
 }

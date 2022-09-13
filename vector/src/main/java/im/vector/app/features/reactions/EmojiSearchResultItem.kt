@@ -19,14 +19,16 @@ import android.graphics.Typeface
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.reactions.data.EmojiItem
 
-@EpoxyModelClass(layout = R.layout.item_emoji_result)
-abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
+@EpoxyModelClass
+abstract class EmojiSearchResultItem : VectorEpoxyModel<EmojiSearchResultItem.Holder>(R.layout.item_emoji_result) {
 
     @EpoxyAttribute
     lateinit var emojiItem: EmojiItem
@@ -34,8 +36,8 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
     @EpoxyAttribute
     var currentQuery: String? = null
 
-    @EpoxyAttribute
-    var onClickListener: ReactionClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onClickListener: ClickListener? = null
 
     @EpoxyAttribute
     var emojiTypeFace: Typeface? = null
@@ -47,9 +49,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
         holder.emojiKeywordText.setTextOrHide(emojiItem.keywords.joinToString())
-        holder.view.setOnClickListener {
-            onClickListener?.onReactionSelected(emojiItem.emoji)
-        }
+        holder.view.onClick(onClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

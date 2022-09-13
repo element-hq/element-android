@@ -19,6 +19,9 @@ package org.matrix.android.sdk.internal.crypto
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
@@ -93,9 +96,6 @@ import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.cache.ClearCacheTask
 import org.matrix.android.sdk.internal.session.cache.RealmClearCacheTask
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import java.io.File
 
@@ -110,10 +110,12 @@ internal abstract class CryptoModule {
         @Provides
         @CryptoDatabase
         @SessionScope
-        fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
-                                       @UserMd5 userMd5: String,
-                                       realmCryptoStoreMigration: RealmCryptoStoreMigration,
-                                       realmKeysUtils: RealmKeysUtils): RealmConfiguration {
+        fun providesRealmConfiguration(
+                @SessionFilesDirectory directory: File,
+                @UserMd5 userMd5: String,
+                realmKeysUtils: RealmKeysUtils,
+                realmCryptoStoreMigration: RealmCryptoStoreMigration
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .apply {
@@ -122,7 +124,7 @@ internal abstract class CryptoModule {
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
                     .allowWritesOnUiThread(true)
-                    .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
+                    .schemaVersion(realmCryptoStoreMigration.schemaVersion)
                     .migration(realmCryptoStoreMigration)
                     .build()
         }
@@ -137,8 +139,7 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase
-                                   realmConfiguration: RealmConfiguration): ClearCacheTask {
+        fun providesClearCacheTask(@CryptoDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }
 

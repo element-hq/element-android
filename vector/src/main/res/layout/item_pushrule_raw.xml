@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
-
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -16,15 +16,16 @@
 
         <TextView
             android:id="@+id/pushRuleId"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:textStyle="bold"
             tools:text=".m.rule.contains_user_name" />
 
-
         <TextView
             android:id="@+id/pushRuleDescription"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

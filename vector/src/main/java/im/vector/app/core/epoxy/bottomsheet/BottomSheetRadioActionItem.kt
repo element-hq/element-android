@@ -16,7 +16,6 @@
  */
 package im.vector.app.core.epoxy.bottomsheet
 
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.StringRes
@@ -24,18 +23,21 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.extensions.setTextOrHide
 
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_radio)
-abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioActionItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioActionItem.Holder>(R.layout.item_bottom_sheet_radio) {
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: String? = null
 
     @StringRes
     @EpoxyAttribute
@@ -45,17 +47,14 @@ abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioAct
     var selected = false
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: String? = null
 
-    @EpoxyAttribute
-    lateinit var listener: View.OnClickListener
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.onClick(it)
-        }
-
+        holder.view.onClick(listener)
         if (titleRes != null) {
             holder.titleText.setText(titleRes!!)
         } else {
@@ -64,7 +63,7 @@ abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioAct
         holder.descriptionText.setTextOrHide(description)
 
         if (selected) {
-            holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_on))
+            holder.radioImage.setAttributeTintedImageResource(R.drawable.ic_radio_on, R.attr.colorPrimary)
             holder.radioImage.contentDescription = holder.view.context.getString(R.string.a11y_checked)
         } else {
             holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_off))

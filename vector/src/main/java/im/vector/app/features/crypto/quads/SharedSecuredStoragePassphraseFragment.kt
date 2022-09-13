@@ -22,22 +22,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import im.vector.lib.core.utils.flow.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 
-class SharedSecuredStoragePassphraseFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentSsssAccessFromPassphraseBinding>() {
+@AndroidEntryPoint
+class SharedSecuredStoragePassphraseFragment :
+        VectorBaseFragment<FragmentSsssAccessFromPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromPassphraseBinding {
         return FragmentSsssAccessFromPassphraseBinding.inflate(inflater, container, false)
@@ -62,21 +61,20 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
         // .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .subscribe {
+                .onEach {
                     views.ssssPassphraseEnterTil.error = null
                     views.ssssPassphraseSubmit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
@@ -87,12 +85,12 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 is SharedSecureStorageViewEvent.InlineError -> {
                     views.ssssPassphraseEnterTil.error = it.message
                 }
+                else -> Unit
             }
         }
 
         views.ssssPassphraseSubmit.debouncedClicks { submit() }
         views.ssssPassphraseUseKey.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.UseKey) }
-        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility) }
     }
 
     fun submit() {
@@ -100,11 +98,5 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
         if (text.isBlank()) return // Should not reach this point as button disabled
         views.ssssPassphraseSubmit.isEnabled = false
         sharedViewModel.handle(SharedSecureStorageAction.SubmitPassphrase(text))
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { state ->
-        val shouldBeVisible = state.passphraseVisible
-        views.ssssPassphraseEnterEdittext.showPassword(shouldBeVisible)
-        views.ssssViewShowPassword.render(shouldBeVisible)
     }
 }

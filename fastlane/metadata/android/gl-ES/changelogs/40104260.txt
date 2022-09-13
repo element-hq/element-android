@@ -1,0 +1,2 @@
+Principais cambios nesta versión: Utiliza UnifiedPush e permite á usuaria obter notificacións sen FCM.
+Rexistro completo dos cambios: https://github.com/vector-im/element-android/releases

@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Gör identitetsserverpolicy(er) synliga i inställningarna. Ta tillfälligt bort stöd för Android Auto.
+Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.3.3

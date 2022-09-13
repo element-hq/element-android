@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.settings
 
 import android.net.Uri
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -43,8 +43,10 @@ data class RoomSettingsViewState(
         val newHistoryVisibility: RoomHistoryVisibility? = null,
         val newRoomJoinRules: NewJoinRule = NewJoinRule(),
         val showSaveAction: Boolean = false,
-        val actionPermissions: ActionPermissions = ActionPermissions()
-) : MvRxState {
+        val actionPermissions: ActionPermissions = ActionPermissions(),
+        val supportsRestricted: Boolean = false,
+        val canUpgradeToRestricted: Boolean = false
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
@@ -60,8 +62,10 @@ data class RoomSettingsViewState(
     sealed class AvatarAction {
         object None : AvatarAction()
         object DeleteAvatar : AvatarAction()
-        data class UpdateAvatar(val newAvatarUri: Uri,
-                                val newAvatarFileName: String) : AvatarAction()
+        data class UpdateAvatar(
+                val newAvatarUri: Uri,
+                val newAvatarFileName: String
+        ) : AvatarAction()
     }
 
     data class NewJoinRule(
@@ -85,7 +89,7 @@ data class RoomSettingsViewState(
             RoomJoinRules.RESTRICTED -> {
                 stringProvider.getString(R.string.room_settings_room_access_restricted_title)
             }
-            else                     -> {
+            else -> {
                 stringProvider.getString(R.string.room_settings_room_access_entry_unknown, joinRule.value)
             }
         }

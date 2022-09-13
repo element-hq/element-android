@@ -18,7 +18,7 @@ package im.vector.app.features.contactsbook
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import im.vector.app.core.contacts.MappedContact
 
 data class ContactsBookViewState(
@@ -36,4 +36,4 @@ data class ContactsBookViewState(
         val identityServerUrl: String? = null,
         // User consent to perform lookup (send emails to the identity server)
         val userConsent: Boolean = false
-) : MvRxState
+) : MavericksState

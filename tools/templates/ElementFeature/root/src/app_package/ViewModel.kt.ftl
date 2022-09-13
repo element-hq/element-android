@@ -2,12 +2,11 @@ package ${escapeKotlinIdentifiers(packageName)}
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
 <#if createViewEvents>
@@ -27,7 +26,7 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
         fun create(initialState: ${viewStateClass}): ${viewModelClass}
     }
 
-    companion object : MvRxViewModelFactory<${viewModelClass}, ${viewStateClass}> {
+    companion object : MavericksViewModelFactory<${viewModelClass}, ${viewStateClass}> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ${viewStateClass}): ${viewModelClass}? {
@@ -42,6 +41,6 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
     override fun handle(action: ${actionClass}) {
         when (action) {
 
-        }.exhaustive
+        }
     }
 }

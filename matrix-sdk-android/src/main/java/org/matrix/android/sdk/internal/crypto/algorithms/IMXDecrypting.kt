@@ -17,58 +17,30 @@
 package org.matrix.android.sdk.internal.crypto.algorithms
 
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**
- * An interface for decrypting data
+ * An interface for decrypting data.
  */
 internal interface IMXDecrypting {
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     /**
      * Handle a key event.
      *
      * @param event the key event.
+     * @param defaultKeysBackupService the keys backup service
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
-
-    /**
-     * Check if the some messages can be decrypted with a new session
-     *
-     * @param senderKey the session sender key
-     * @param sessionId the session id
-     */
-    fun onNewSession(senderKey: String, sessionId: String) {}
-
-    /**
-     * Determine if we have the keys necessary to respond to a room key request
-     *
-     * @param request keyRequest
-     * @return true if we have the keys and could (theoretically) share
-     */
-    fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean = false
-
-    /**
-     * Send the response to a room key request.
-     *
-     * @param request keyRequest
-     */
-    fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
-
-    fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue: String) {}
-
-    fun requestKeysForEvent(event: Event, withHeld: Boolean)
 }

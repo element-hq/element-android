@@ -16,13 +16,19 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.content.res.Resources
 import androidx.recyclerview.widget.RecyclerView
-import im.vector.app.core.di.ScreenScope
+import dagger.hilt.android.scopes.ActivityScoped
+import im.vector.app.R
+import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-@ScreenScope
-class TimelineMediaSizeProvider @Inject constructor() {
+@ActivityScoped
+class TimelineMediaSizeProvider @Inject constructor(
+        private val resources: Resources,
+        private val vectorPreferences: VectorPreferences
+) {
 
     var recyclerView: RecyclerView? = null
     private var cachedSize: Pair<Int, Int>? = null
@@ -41,9 +47,14 @@ class TimelineMediaSizeProvider @Inject constructor() {
             maxImageWidth = (width * 0.7f).roundToInt()
             maxImageHeight = (height * 0.5f).roundToInt()
         } else {
-            maxImageWidth = (width * 0.5f).roundToInt()
+            maxImageWidth = (width * 0.7f).roundToInt()
             maxImageHeight = (height * 0.7f).roundToInt()
         }
-        return Pair(maxImageWidth, maxImageHeight)
+        return if (vectorPreferences.useMessageBubblesLayout()) {
+            val bubbleMaxImageWidth = maxImageWidth.coerceAtMost(resources.getDimensionPixelSize(R.dimen.chat_bubble_fixed_size))
+            Pair(bubbleMaxImageWidth, maxImageHeight)
+        } else {
+            Pair(maxImageWidth, maxImageHeight)
+        }
     }
 }

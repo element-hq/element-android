@@ -1,0 +1,2 @@
+Perubahan utama di versi ini: Organisir ruangan Anda menggunakan sebuah Space!
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.3.0

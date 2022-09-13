@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="default_animation_half">200</integer>
+
+    <integer name="default_animation_duration">400</integer>
+
+    <integer name="default_animation_offset">200</integer>
+
+    <integer name="rtl_x_multiplier">1</integer>
+    <integer name="rtl_mirror_flip">0</integer>
+
+    <integer name="splash_animation_velocity">750</integer>
+
+</resources>

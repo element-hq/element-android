@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
     <TextView
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/keys_backup_setup_step3_copy_button_title"
         android:textAlignment="center"
-        android:textSize="17sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/keys_backup_recovery_key_text"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/layout_horizontal_margin"
         android:fontFamily="monospace"
         android:textAlignment="center"
-        android:textSize="20sp"
         tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8" />
 
     <LinearLayout
@@ -48,15 +48,16 @@
             android:layout_marginEnd="16dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_material_share"
-            app:tint="?colorAccent"
+            app:tint="?colorSecondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/keys_backup_setup_step3_share_recovery_file"
-            android:textSize="17sp" />
+            android:textColor="?vctr_content_primary" />
 
     </LinearLayout>
 
@@ -80,15 +81,16 @@
             android:layout_marginEnd="16dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_material_save"
-            app:tint="?colorAccent"
+            app:tint="?colorSecondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/keys_backup_setup_step3_save_button_title"
-            android:textSize="17sp" />
+            android:textColor="?vctr_content_primary" />
 
     </LinearLayout>
 

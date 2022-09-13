@@ -1,0 +1,2 @@
+Hauptänderungen: Design-Update und neue Features für Spaces (Bugfix für 1.1.10)
+Vollständige Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.1.11

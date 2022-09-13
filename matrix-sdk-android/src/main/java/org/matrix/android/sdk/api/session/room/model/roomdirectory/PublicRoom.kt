@@ -79,13 +79,13 @@ data class PublicRoom(
         val avatarUrl: String? = null,
 
         /**
-         * Undocumented item
+         * Undocumented item.
          */
         @Json(name = "m.federate")
         val isFederated: Boolean = false
 ) {
     /**
-     * Return the canonical alias, or the first alias from the list of aliases, or null
+     * Return the canonical alias, or the first alias from the list of aliases, or null.
      */
     fun getPrimaryAlias(): String? {
         return canonicalAlias ?: aliases?.firstOrNull()

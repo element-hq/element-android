@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.security.SecureRandom
 
-fun generateSharedSecretV2(): String {
+internal fun generateSharedSecretV2(): String {
     val secureRandom = SecureRandom()
 
     // 8 bytes long

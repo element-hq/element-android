@@ -25,7 +25,7 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 
-abstract class AbstractSSOLoginFragment<VB: ViewBinding> : AbstractLoginFragment<VB>() {
+abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragment<VB>() {
 
     // For sso
     private var customTabsServiceConnection: CustomTabsServiceConnection? = null
@@ -85,10 +85,10 @@ abstract class AbstractSSOLoginFragment<VB: ViewBinding> : AbstractLoginFragment
 
     private fun prefetchIfNeeded() {
         withState(loginViewModel) { state ->
-            if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
+            if (state.loginMode.hasSso() && state.loginMode.ssoState().isFallback()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 loginViewModel.getSsoUrl(
-                        redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
                         providerId = null
                 )

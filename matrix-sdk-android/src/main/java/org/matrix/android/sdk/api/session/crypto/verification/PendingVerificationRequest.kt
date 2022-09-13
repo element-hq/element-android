@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import java.util.UUID
 
 /**
- * Stores current pending verification requests
+ * Stores current pending verification requests.
  */
 data class PendingVerificationRequest(
         val ageLocalTs: Long,
@@ -45,36 +45,36 @@ data class PendingVerificationRequest(
     val isFinished: Boolean = isSuccessful || cancelConclusion != null
 
     /**
-     * SAS is supported if I support it and the other party support it
+     * SAS is supported if I support it and the other party support it.
      */
     fun isSasSupported(): Boolean {
-        return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
-                && readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
+        return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse() &&
+                readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
     }
 
     /**
-     * Other can show QR code if I can scan QR code and other can show QR code
+     * Other can show QR code if I can scan QR code and other can show QR code.
      */
     fun otherCanShowQrCode(): Boolean {
         return if (isIncoming) {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
         } else {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
         }
     }
 
     /**
-     * Other can scan QR code if I can show QR code and other can scan QR code
+     * Other can scan QR code if I can show QR code and other can scan QR code.
      */
     fun otherCanScanQrCode(): Boolean {
         return if (isIncoming) {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
         } else {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
         }
     }
 }

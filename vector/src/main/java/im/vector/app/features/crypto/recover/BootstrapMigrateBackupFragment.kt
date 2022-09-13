@@ -27,29 +27,32 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentBootstrapMigrateBackupBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-
+import im.vector.lib.core.utils.flow.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
-import java.util.concurrent.TimeUnit
+import org.matrix.android.sdk.api.session.crypto.keysbackup.isValidRecoveryKey
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class BootstrapMigrateBackupFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
+@AndroidEntryPoint
+class BootstrapMigrateBackupFragment :
+        VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapMigrateBackupBinding {
         return FragmentBootstrapMigrateBackupBinding.inflate(inflater, container, false)
@@ -65,26 +68,24 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         views.bootstrapMigrateEditText.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.bootstrapMigrateEditText.textChanges()
                 .skipInitialValue()
-                .subscribe {
+                .onEach {
                     views.bootstrapRecoveryKeyEnterTil.error = null
                     // sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         // sharedViewModel.observeViewEvents {}
         views.bootstrapMigrateContinueButton.debouncedClicks { submit() }
-        views.bootstrapMigrateShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
         views.bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
         views.bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
     }
@@ -116,7 +117,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
         val isEnteringKey = getBackupSecretForMigration.useKey()
 
         if (isEnteringKey) {
-            views.bootstrapMigrateShowPassword.isVisible = false
             views.bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
 
             val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
@@ -128,14 +128,6 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateForgotPassphrase.isVisible = false
             views.bootstrapMigrateUseFile.isVisible = true
         } else {
-            views.bootstrapMigrateShowPassword.isVisible = true
-
-            if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
-                val isPasswordVisible = state.step.isPasswordVisible
-                views.bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
-                views.bootstrapMigrateShowPassword.render(isPasswordVisible)
-            }
-
             views.bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)
 
             views.bootstrapMigrateEditText.hint = getString(R.string.passphrase_enter_passphrase)

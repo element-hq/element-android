@@ -1,0 +1,2 @@
+Principales cambios en esta versión: mejora del rendimiento y corrección de errores.
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.3

@@ -17,14 +17,15 @@
 package org.matrix.android.sdk.internal.util
 
 import timber.log.Timber
+import java.util.Locale
 
 /**
- * Convert a string to an UTF8 String
+ * Convert a string to an UTF8 String.
  *
  * @param s the string to convert
  * @return the utf-8 string
  */
-fun convertToUTF8(s: String): String {
+internal fun convertToUTF8(s: String): String {
     return try {
         val bytes = s.toByteArray(Charsets.UTF_8)
         String(bytes)
@@ -35,12 +36,12 @@ fun convertToUTF8(s: String): String {
 }
 
 /**
- * Convert a string from an UTF8 String
+ * Convert a string from an UTF8 String.
  *
  * @param s the string to convert
  * @return the utf-16 string
  */
-fun convertFromUTF8(s: String): String {
+internal fun convertFromUTF8(s: String): String {
     return try {
         val bytes = s.toByteArray()
         String(bytes, Charsets.UTF_8)
@@ -53,10 +54,10 @@ fun convertFromUTF8(s: String): String {
 /**
  * Returns whether a string contains an occurrence of another, as a standalone word, regardless of case.
  *
- * @param subString  the string to search for
+ * @param subString the string to search for
  * @return whether a match was found
  */
-fun String.caseInsensitiveFind(subString: String): Boolean {
+internal fun String.caseInsensitiveFind(subString: String): Boolean {
     // add sanity checks
     if (subString.isEmpty() || isEmpty()) {
         return false
@@ -75,6 +76,19 @@ fun String.caseInsensitiveFind(subString: String): Boolean {
 internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
 
 /**
- * Strip all the UTF-8 chars which are actually spaces
+ * Strip all the UTF-8 chars which are actually spaces.
  */
-internal fun String.replaceSpaceChars() = replace(spaceChars, "")
+internal fun String.replaceSpaceChars(replacement: String = "") = replace(spaceChars, replacement)
+
+// String.capitalize is now deprecated
+internal fun String.safeCapitalize(): String {
+    return replaceFirstChar { char ->
+        if (char.isLowerCase()) {
+            char.titlecase(Locale.getDefault())
+        } else {
+            char.toString()
+        }
+    }
+}
+
+internal fun String.removeInvalidRoomNameChars() = "[^a-z0-9._%#@=+-]".toRegex().replace(this, "")

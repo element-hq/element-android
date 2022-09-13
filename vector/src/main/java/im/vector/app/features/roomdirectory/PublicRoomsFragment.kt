@@ -22,38 +22,45 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
-import io.reactivex.rxkotlin.subscribeBy
-
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
  * What can be improved:
- * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
+ * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect.
  */
-class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val permalinkHandler: PermalinkHandler,
-        private val session: Session
-) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        PublicRoomsController.Callback {
+@AndroidEntryPoint
+class PublicRoomsFragment :
+        VectorBaseFragment<FragmentPublicRoomsBinding>(),
+        PublicRoomsController.Callback,
+        VectorMenuProvider {
+
+    @Inject lateinit var publicRoomsController: PublicRoomsController
+    @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var session: Session
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -67,22 +74,18 @@ class PublicRoomsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.publicRoomsToolbar)
-
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(views.publicRoomsToolbar)
+                .allowBack()
 
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(500)
+                .onEach {
                     viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.publicRoomsCreateNewRoom.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
@@ -98,7 +101,7 @@ class PublicRoomsFragment @Inject constructor(
             is RoomDirectoryViewEvents.Failure -> {
                 views.coordinatorLayout.showOptimizedSnackbar(errorFormatter.toHumanReadable(viewEvents.throwable))
             }
-        }.exhaustive
+        }
     }
 
     override fun onDestroyView() {
@@ -107,14 +110,13 @@ class PublicRoomsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else                                     ->
-                super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
@@ -125,20 +127,20 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     override fun onUnknownRoomClicked(roomIdOrAlias: String) {
-        val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
-        permalinkHandler
-                .launch(requireContext(), permalink, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
-                .subscribe { isSuccessful ->
-                    if (!isSuccessful) {
-                        requireContext().toast(R.string.room_error_not_found)
-                    }
-                }
-                .disposeOnDestroyView()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
+            val isHandled = permalinkHandler
+                    .launch(requireActivity(), permalink, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
+                            requireActivity().finish()
+                            return false
+                        }
+                    })
+
+            if (!isHandled) {
+                requireContext().toast(R.string.room_error_not_found)
+            }
+        }
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
@@ -146,9 +148,13 @@ class PublicRoomsFragment @Inject constructor(
         withState(viewModel) { state ->
             when (joinState) {
                 JoinState.JOINED -> {
-                    navigator.openRoom(requireActivity(), publicRoom.roomId)
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = publicRoom.roomId,
+                            trigger = ViewRoom.Trigger.RoomDirectory
+                    )
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
                 }
@@ -158,7 +164,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom))
     }
 
     override fun loadMore() {

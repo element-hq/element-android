@@ -1,0 +1,86 @@
+name: Bug report for the Element Android app
+description: Report any issues that you have found with the Element app. Please [check open issues](https://github.com/vector-im/element-android/issues) first, in case it has already been reported.
+labels: [T-Defect]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        Please report security issues by email to security@matrix.org
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to reproduce
+      description: Please attach screenshots, videos or logs if you can.
+      placeholder: Tell us what you see!
+      value: |
+        1. Where are you starting? What can you see?
+        2. What do you click?
+        3. More steps…
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Outcome
+      placeholder: Tell us what went wrong
+      value: |
+        #### What did you expect?
+
+        #### What happened instead?
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Your phone model
+      placeholder: e.g. Samsung S6
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: Operating system version
+      placeholder: e.g. Android 10.0
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: Application version and app store
+      description: You can find the version information in Settings -> Help & About. 
+      placeholder: e.g. Element version 1.7.34, olm version 3.2.3 from F-Droid
+    validations:
+      required: false
+  - type: input
+    id: homeserver
+    attributes:
+      label: Homeserver
+      description: |
+        Which server is your account registered on? If it is a local or non-public homeserver, please tell us what is the homeserver implementation (ex: Synapse/Dendrite/etc.) and the version.
+      placeholder: e.g. matrix.org or Synapse 1.50.0rc1
+    validations:
+      required: false
+  - type: dropdown
+    id: rageshake
+    attributes:
+      label: Will you send logs?
+      description:  |
+        Did you know that you can shake your phone to submit logs for this issue? Trigger the defect, then shake your phone and you will see a popup asking if you would like to open the bug report screen. Click YES, and describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Are you willing to provide a PR?
+      description:  |
+        Providing a PR can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true

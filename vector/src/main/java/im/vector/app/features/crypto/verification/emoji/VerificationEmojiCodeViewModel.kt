@@ -17,17 +17,19 @@ package im.vector.app.features.crypto.verification.emoji
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasScreenInjector
+import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -38,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
@@ -48,7 +51,7 @@ data class VerificationEmojiCodeViewState(
         val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
         val decimalDescription: Async<String> = Uninitialized,
         val isWaitingFromOther: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
@@ -57,9 +60,13 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     init {
         withState { state ->
-            refreshStateFromTx(session.cryptoService().verificationService()
-                    .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
-                            ?: "") as? SasVerificationTransaction)
+            refreshStateFromTx(
+                    session.cryptoService().verificationService()
+                            .getExistingTransaction(
+                                    state.otherUser?.id ?: "", state.transactionId
+                                    ?: ""
+                            ) as? SasVerificationTransaction
+            )
         }
 
         session.cryptoService().verificationService().addListener(this)
@@ -81,7 +88,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.OnAccepted,
             is VerificationTxState.SendingKey,
             is VerificationTxState.KeySent,
-            is VerificationTxState.OnKeyReceived  -> {
+            is VerificationTxState.OnKeyReceived -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -111,12 +118,12 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.SendingMac,
             is VerificationTxState.MacSent,
             is VerificationTxState.Verifying,
-            is VerificationTxState.Verified       -> {
+            is VerificationTxState.Verified -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            is VerificationTxState.Cancelled      -> {
+            is VerificationTxState.Cancelled -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {
@@ -128,7 +135,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            null                                  -> {
+            null -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -137,6 +144,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
+            else -> Unit
         }
     }
 
@@ -151,20 +159,15 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
+        override fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
     }
 
-    companion object : MvRxViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel? {
-            val factory = (viewModelContext as FragmentViewModelContext).fragment<VerificationEmojiCodeFragment>().viewModelFactory
-            return factory.create(state)
-        }
+    companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
             return VerificationEmojiCodeViewState(

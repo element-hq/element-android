@@ -18,20 +18,22 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogConfirmationWithReasonBinding
 
 object ConfirmationDialogBuilder {
 
-    fun show(activity: Activity,
-             askForReason: Boolean,
-             @StringRes titleRes: Int,
-             @StringRes confirmationRes: Int,
-             @StringRes positiveRes: Int,
-             @StringRes reasonHintRes: Int,
-             confirmation: (String?) -> Unit) {
+    fun show(
+            activity: Activity,
+            askForReason: Boolean,
+            @StringRes titleRes: Int,
+            @StringRes confirmationRes: Int,
+            @StringRes positiveRes: Int,
+            @StringRes reasonHintRes: Int,
+            confirmation: (String?) -> Unit
+    ) {
         val layout = activity.layoutInflater.inflate(R.layout.dialog_confirmation_with_reason, null)
         val views = DialogConfirmationWithReasonBinding.bind(layout)
         views.dialogConfirmationText.setText(confirmationRes)
@@ -46,7 +48,7 @@ object ConfirmationDialogBuilder {
             views.dialogReasonInput.setHint(reasonHintRes)
         }
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(titleRes)
                 .setView(layout)
                 .setPositiveButton(positiveRes) { _, _ ->
@@ -56,7 +58,7 @@ object ConfirmationDialogBuilder {
                             ?.takeIf { it.isNotBlank() }
                     confirmation(reason)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 }

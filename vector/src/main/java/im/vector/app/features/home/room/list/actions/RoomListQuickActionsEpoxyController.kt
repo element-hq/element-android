@@ -15,81 +15,97 @@
  */
 package im.vector.app.features.home.room.list.actions
 
-import android.view.View
+import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
-import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.roomprofile.notifications.notificationOptions
+import im.vector.app.features.roomprofile.notifications.notificationStateMapped
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room list actions
+ * Epoxy controller for room list actions.
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
-) : TypedEpoxyController<RoomListQuickActionsState>() {
+        private val colorProvider: ColorProvider,
+        private val stringProvider: StringProvider,
+) : TypedEpoxyController<RoomListQuickActionViewState>() {
 
     var listener: Listener? = null
 
-    override fun buildModels(state: RoomListQuickActionsState) {
-        val roomSummary = state.roomSummary() ?: return
-        val showAll = state.mode == RoomListActionsArgs.Mode.FULL
+    override fun buildModels(state: RoomListQuickActionViewState) {
+        val notificationViewState = state.notificationSettingsViewState
+        val roomSummary = notificationViewState.roomSummary() ?: return
+        val host = this
+        // Preview, favorite, settings
+        bottomSheetRoomPreviewItem {
+            id("room_preview")
+            avatarRenderer(host.avatarRenderer)
+            matrixItem(roomSummary.toMatrixItem())
+            stringProvider(host.stringProvider)
+            colorProvider(host.colorProvider)
+            izLowPriority(roomSummary.isLowPriority)
+            izFavorite(roomSummary.isFavorite)
+            settingsClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
+            favoriteClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
+            lowPriorityClickListener { host.listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.LowPriority(roomSummary.roomId)) }
+        }
 
-        if (showAll) {
-            // Preview, favorite, settings
-            bottomSheetRoomPreviewItem {
-                id("room_preview")
-                avatarRenderer(avatarRenderer)
-                matrixItem(roomSummary.toMatrixItem())
-                stringProvider(stringProvider)
-                izLowPriority(roomSummary.isLowPriority)
-                izFavorite(roomSummary.isFavorite)
-                settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
-                favoriteClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
-                lowPriorityClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.LowPriority(roomSummary.roomId)) }
-            }
+        // Notifications
+        bottomSheetDividerItem {
+            id("notifications_separator")
+        }
 
-            // Notifications
-            dividerItem {
-                id("notifications_separator")
+        notificationViewState.notificationOptions.forEach { notificationState ->
+            val title = titleForNotificationState(notificationState)
+            radioButtonItem {
+                id(notificationState.name)
+                titleRes(title)
+                selected(notificationViewState.notificationStateMapped() == notificationState)
+                listener {
+                    host.listener?.didSelectRoomNotificationState(notificationState)
+                }
             }
         }
 
-        val selectedRoomState = state.roomNotificationState()
-        RoomListQuickActionsSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
-        RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
-
-        if (showAll) {
-            RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
-        }
+        RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !true).toBottomSheetItem()
     }
 
-    private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
-        val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
-            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
-            is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
-            else                                                          -> false
-        }
+    @StringRes
+    private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
+        RoomNotificationState.MENTIONS_ONLY -> R.string.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE -> R.string.room_settings_none
+        else -> null
+    }
+
+    private fun RoomListQuickActionsSharedAction.Leave.toBottomSheetItem() {
+        val host = this@RoomListQuickActionsEpoxyController
         return bottomSheetActionItem {
-            id("action_$index")
-            selected(selected)
-            iconRes(iconResId)
+            id("action_leave")
+            selected(false)
+            if (iconResId != null) {
+                iconRes(iconResId)
+            } else {
+                showIcon(false)
+            }
             textRes(titleRes)
             destructive(this@toBottomSheetItem.destructive)
-            listener(View.OnClickListener { listener?.didSelectMenuAction(this@toBottomSheetItem) })
+            listener { host.listener?.didSelectMenuAction(this@toBottomSheetItem) }
         }
     }
 
     interface Listener {
         fun didSelectMenuAction(quickAction: RoomListQuickActionsSharedAction)
+        fun didSelectRoomNotificationState(roomNotificationState: RoomNotificationState)
     }
 }

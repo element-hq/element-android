@@ -17,7 +17,6 @@
 package im.vector.app.features.share
 
 import android.app.Activity
-import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,42 +24,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
-import im.vector.app.features.attachments.AttachmentsHelper
+import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-import im.vector.app.features.login.LoginActivity
-
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 /**
- * Display the list of rooms
- * The user can select multiple rooms to send the data to
+ * Display the list of rooms.
+ * The user can select multiple rooms to send the data to.
  */
-class IncomingShareFragment @Inject constructor(
-        val incomingShareViewModelFactory: IncomingShareViewModel.Factory,
-        private val incomingShareController: IncomingShareController,
-        private val sessionHolder: ActiveSessionHolder
-) :
+@AndroidEntryPoint
+class IncomingShareFragment :
         VectorBaseFragment<FragmentIncomingShareBinding>(),
-        AttachmentsHelper.Callback,
         IncomingShareController.Callback {
 
-    private lateinit var attachmentsHelper: AttachmentsHelper
+    @Inject lateinit var incomingShareController: IncomingShareController
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
+
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentIncomingShareBinding {
@@ -68,43 +62,31 @@ class IncomingShareFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // If we are not logged in, stop the sharing process and open login screen.
-        // In the future, we might want to relaunch the sharing process after login.
-        if (!sessionHolder.hasActiveSession()) {
-            startLoginActivity()
-            return
-        }
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupToolbar(views.incomingShareToolbar)
-        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
         viewModel.observeViewEvents {
             when (it) {
-                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
+            }
         }
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND          -> {
-                var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
-                if (!isShareManaged) {
-                    isShareManaged = handleTextShare(intent)
-                }
-
+            Intent.ACTION_SEND -> {
+                val isShareManaged = handleIncomingShareIntent(intent)
                 // Direct share
                 if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
                     val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
-                    sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
+                    viewModel.handle(IncomingShareAction.ShareToRoom(roomId))
                 }
-
                 isShareManaged
             }
-            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
-            else                        -> false
+            Intent.ACTION_SEND_MULTIPLE -> handleIncomingShareIntent(intent)
+            else -> false
         }
 
         if (!isShareManaged) {
@@ -121,14 +103,30 @@ class IncomingShareFragment @Inject constructor(
                 return true
             }
         })
-        views.sendShareButton.setOnClickListener {
+        views.sendShareButton.debouncedClicks {
             handleSendShare()
         }
     }
 
+    private fun handleIncomingShareIntent(intent: Intent) = shareIntentHandler.handleIncomingShareIntent(
+            intent,
+            onFile = {
+                val sharedData = SharedData.Attachments(it)
+                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+            },
+            onPlainText = {
+                val sharedData = SharedData.Text(it)
+                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+            }
+    )
+
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
         requireActivity().let {
-            navigator.openRoom(it, viewEvent.roomId)
+            navigator.openRoom(
+                    context = it,
+                    roomId = viewEvent.roomId,
+                    trigger = ViewRoom.Trigger.MobileLinkShare
+            )
             it.finish()
         }
     }
@@ -171,50 +169,20 @@ class IncomingShareFragment @Inject constructor(
         incomingShareController.callback = this
     }
 
-    override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val sharedData = SharedData.Attachments(attachments)
-        viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
-    }
-
-    override fun onAttachmentsProcessFailed() {
-        cannotManageShare(R.string.error_handling_incoming_share)
-    }
-
     private fun cannotManageShare(@StringRes messageResId: Int) {
         Toast.makeText(requireContext(), messageResId, Toast.LENGTH_LONG).show()
         requireActivity().finish()
     }
 
-    private fun handleTextShare(intent: Intent): Boolean {
-        if (intent.type == ClipDescription.MIMETYPE_TEXT_PLAIN) {
-            val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
-            return if (sharedText.isNullOrEmpty()) {
-                false
-            } else {
-                val sharedData = SharedData.Text(sharedText)
-                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
-                true
-            }
-        }
-        return false
-    }
-
     private fun showConfirmationDialog(roomSummary: RoomSummary, sharedData: SharedData) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.send_attachment)
                 .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
-                .setPositiveButton(R.string.send) { _, _ ->
+                .setPositiveButton(R.string.action_send) { _, _ ->
                     navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
-    }
-
-    private fun startLoginActivity() {
-        val intent = LoginActivity.newIntent(requireActivity(), null)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     override fun invalidate() = withState(viewModel) {

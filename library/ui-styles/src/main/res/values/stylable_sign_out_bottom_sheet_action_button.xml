@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SignOutBottomSheetActionButton">
+        <attr name="iconTint"/>
+        <attr name="actionTitle" />
+        <attr name="leftIcon" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
+
+</resources>

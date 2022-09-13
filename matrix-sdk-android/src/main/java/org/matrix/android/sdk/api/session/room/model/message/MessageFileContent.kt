@@ -19,16 +19,16 @@ package org.matrix.android.sdk.api.session.room.model.message
 import android.webkit.MimeTypeMap
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class MessageFileContent(
         /**
          * Required. Must be 'm.file'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A human-readable description of the file. This is recommended to be the filename of the original upload.
@@ -60,8 +60,7 @@ data class MessageFileContent(
 ) : MessageWithAttachmentContent {
 
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype
-                ?: info?.mimeType
+        get() = info?.mimeType
                 ?: MimeTypeMap.getFileExtensionFromUrl(filename ?: body)?.let { extension ->
                     MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
                 }

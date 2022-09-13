@@ -18,8 +18,10 @@ package im.vector.app.features.crypto.keysbackup.restore
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -28,7 +30,9 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     companion object {
@@ -48,25 +52,27 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         super.onBackPressed()
     }
 
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+
     override fun initUiAndData() {
         super.initUiAndData()
         viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
-        viewModel.initSession(session)
+        viewModel.initSession(activeSessionHolder.getActiveSession())
 
         viewModel.keySourceModel.observe(this) { keySource ->
             if (keySource != null && !keySource.isInQuadS && supportFragmentManager.fragments.isEmpty()) {
                 val isBackupCreatedFromPassphrase =
                         viewModel.keyVersionResult.value?.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                 if (isBackupCreatedFromPassphrase) {
-                    replaceFragment(R.id.container, KeysBackupRestoreFromPassphraseFragment::class.java)
+                    replaceFragment(views.container, KeysBackupRestoreFromPassphraseFragment::class.java)
                 } else {
-                    replaceFragment(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
+                    replaceFragment(views.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
             }
         }
 
         viewModel.keyVersionResultError.observeEvent(this) { message ->
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.unknown_error)
                     .setMessage(message)
                     .setCancelable(false)
@@ -85,19 +91,19 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
-                    addFragmentToBackstack(R.id.container, KeysBackupRestoreFromKeyFragment::class.java, allowStateLoss = true)
+                    addFragmentToBackstack(views.container, KeysBackupRestoreFromKeyFragment::class.java, allowStateLoss = true)
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
                     viewModel.keyVersionResult.value?.version?.let {
                         KeysBackupBanner.onRecoverDoneForVersion(this, it)
                     }
-                    replaceFragment(R.id.container, KeysBackupRestoreSuccessFragment::class.java, allowStateLoss = true)
+                    replaceFragment(views.container, KeysBackupRestoreSuccessFragment::class.java, allowStateLoss = true)
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_4S               -> {
+                KeysBackupRestoreSharedViewModel.NAVIGATE_TO_4S -> {
                     launch4SActivity()
                 }
-                KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S   -> {
-                    AlertDialog.Builder(this)
+                KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S -> {
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.unknown_error)
                             .setMessage(R.string.error_failed_to_import_keys)
                             .setCancelable(false)
@@ -122,7 +128,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
     }
 
     private fun launch4SActivity() {
-        SharedSecureStorageActivity.newIntent(
+        SharedSecureStorageActivity.newReadIntent(
                 context = this,
                 keyId = null, // default key
                 requestedSecrets = listOf(KEYBACKUP_SECRET_SSSS_NAME),

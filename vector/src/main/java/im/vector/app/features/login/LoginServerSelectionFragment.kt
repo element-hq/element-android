@@ -20,17 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerSelectionBinding
-
 import me.gujun.android.span.span
-import javax.inject.Inject
 
 /**
- * In this screen, the user will choose between matrix.org, modular or other type of homeserver
+ * In this screen, the user will choose between matrix.org, modular or other type of homeserver.
  */
-class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
+@AndroidEntryPoint
+class LoginServerSelectionFragment :
+        AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerSelectionBinding {
         return FragmentLoginServerSelectionBinding.inflate(inflater, container, false)
@@ -44,11 +45,11 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     private fun initViews() {
-        views.loginServerChoiceEmsLearnMore.setOnClickListener { learnMore() }
-        views.loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
-        views.loginServerChoiceEms.setOnClickListener { selectEMS() }
-        views.loginServerChoiceOther.setOnClickListener { selectOther() }
-        views.loginServerIKnowMyIdSubmit.setOnClickListener { loginWithMatrixId() }
+        views.loginServerChoiceEmsLearnMore.debouncedClicks { learnMore() }
+        views.loginServerChoiceMatrixOrg.debouncedClicks { selectMatrixOrg() }
+        views.loginServerChoiceEms.debouncedClicks { selectEMS() }
+        views.loginServerChoiceOther.debouncedClicks { selectOther() }
+        views.loginServerIKnowMyIdSubmit.debouncedClicks { loginWithMatrixId() }
     }
 
     private fun updateSelectedChoice(state: LoginViewState) {
@@ -88,10 +89,5 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     override fun updateWithState(state: LoginViewState) {
         updateSelectedChoice(state)
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }

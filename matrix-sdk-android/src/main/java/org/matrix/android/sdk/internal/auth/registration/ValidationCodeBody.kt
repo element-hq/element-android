@@ -20,10 +20,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This object is used to send a code received by SMS to validate Msisdn ownership
+ * This object is used to send a code received by SMS to validate Msisdn ownership.
  */
 @JsonClass(generateAdapter = true)
-data class ValidationCodeBody(
+internal data class ValidationCodeBody(
         @Json(name = "client_secret")
         val clientSecret: String,
 

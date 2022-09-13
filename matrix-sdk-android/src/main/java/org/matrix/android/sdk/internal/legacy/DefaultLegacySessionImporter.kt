@@ -17,22 +17,23 @@
 package org.matrix.android.sdk.internal.legacy
 
 import android.content.Context
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.WellKnownBaseConfig
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.legacy.riot.LoginStorage
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
-import org.matrix.android.sdk.internal.util.md5
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -42,8 +43,8 @@ import org.matrix.android.sdk.internal.legacy.riot.HomeServerConnectionConfig as
 internal class DefaultLegacySessionImporter @Inject constructor(
         private val context: Context,
         private val sessionParamsStore: SessionParamsStore,
-        private val realmCryptoStoreMigration: RealmCryptoStoreMigration,
-        private val realmKeysUtils: RealmKeysUtils
+        private val realmKeysUtils: RealmKeysUtils,
+        private val realmCryptoStoreMigration: RealmCryptoStoreMigration
 ) : LegacySessionImporter {
 
     private val loginStorage = LoginStorage(context)
@@ -132,7 +133,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                                     bytes = it.bytes,
                                     hashType = when (it.type) {
                                         LegacyFingerprint.HashType.SHA1,
-                                        null                              -> Fingerprint.HashType.SHA1
+                                        null -> Fingerprint.HashType.SHA1
                                         LegacyFingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
                                     }
                             )
@@ -145,7 +146,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
                 ),
                 // If token is not valid, this boolean will be updated later
-                isTokenValid = true
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
         )
 
         Timber.d("Migration: save session")
@@ -153,7 +155,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     }
 
     private fun importCryptoDb(legacyConfig: LegacyHomeServerConnectionConfig) {
-        // Here we migrate the DB, we copy the crypto DB to the location specific to RiotX, and we encrypt it.
+        // Here we migrate the DB, we copy the crypto DB to the location specific to Matrix SDK2, and we encrypt it.
         val userMd5 = legacyConfig.credentials.userId.md5()
 
         val sessionId = legacyConfig.credentials.let { (if (it.deviceId.isNullOrBlank()) it.userId else "${it.userId}|${it.deviceId}").md5() }
@@ -171,18 +173,18 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                 .directory(File(context.filesDir, userMd5))
                 .name("crypto_store.realm")
                 .modules(RealmCryptoStoreModule())
-                .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
+                .schemaVersion(realmCryptoStoreMigration.schemaVersion)
                 .migration(realmCryptoStoreMigration)
                 .build()
 
         Timber.d("Migration: copy DB to encrypted DB")
         Realm.getInstance(realmConfiguration).use {
-            // Move the DB to the new location, handled by RiotX
+            // Move the DB to the new location, handled by Matrix SDK2
             it.writeEncryptedCopyTo(File(newLocation, realmConfiguration.realmFileName), realmKeysUtils.getRealmEncryptionKey(keyAlias))
         }
     }
 
-    // Delete all the files created by Riot Android which will not be used anymore by RiotX
+    // Delete all the files created by Riot Android which will not be used anymore by Element
     private fun clearFileSystem(legacyConfig: LegacyHomeServerConnectionConfig) {
         val cryptoFolder = legacyConfig.credentials.userId.md5()
 

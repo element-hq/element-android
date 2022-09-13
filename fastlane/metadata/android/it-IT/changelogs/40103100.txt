@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: aggiunto supporto per i sondaggi (in labs). Nuovo design anteprime URL.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.10

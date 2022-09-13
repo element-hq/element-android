@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: atualizações de UI de indicador de digitação. Vários consertos de bugs e melhorias de estabilidade.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.4.4

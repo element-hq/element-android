@@ -33,6 +33,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
 /**
@@ -107,7 +108,7 @@ open class VectorPreference : Preference {
                 val icon = holder.findViewById(android.R.id.icon) as? ImageView
 
                 icon?.let {
-                    val color = ThemeUtils.getColor(context, R.attr.riotx_header_panel_text_secondary)
+                    val color = ThemeUtils.getColor(context, R.attr.vctr_content_secondary)
                     ImageViewCompat.setImageTintList(it, ColorStateList.valueOf(color))
                 }
             }
@@ -116,7 +117,7 @@ open class VectorPreference : Preference {
             currentHighlightAnimator?.cancel()
             if (isHighlighted) {
                 val colorFrom = Color.TRANSPARENT
-                val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorAccent)
+                val colorTo = ThemeUtils.getColor(itemView.context, R.attr.colorPrimary)
                 currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
                     duration = 250 // milliseconds
                     addUpdateListener { animator ->
@@ -152,16 +153,12 @@ open class VectorPreference : Preference {
      */
     private fun addClickListeners(view: View) {
         view.setOnLongClickListener {
-            if (null != onPreferenceLongClickListener) {
-                onPreferenceLongClickListener!!.onPreferenceLongClick(this@VectorPreference)
-            } else false
+            onPreferenceLongClickListener?.onPreferenceLongClick(this@VectorPreference).orFalse()
         }
 
         view.setOnClickListener {
             // call only the click listener
-            if (onPreferenceClickListener != null) {
-                onPreferenceClickListener.onPreferenceClick(this@VectorPreference)
-            }
+            onPreferenceClickListener?.onPreferenceClick(this@VectorPreference)
         }
     }
 }

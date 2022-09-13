@@ -49,15 +49,16 @@ fun MultiPickerFileType.toContentAttachmentData(): ContentAttachmentData {
     )
 }
 
-fun MultiPickerAudioType.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerAudioType.toContentAttachmentData(isVoiceMessage: Boolean): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             mimeType = mimeType,
-            type = mapType(),
+            type = if (isVoiceMessage) ContentAttachmentData.Type.VOICE_MESSAGE else mapType(),
             size = size,
             name = displayName,
             duration = duration,
-            queryUri = contentUri
+            queryUri = contentUri,
+            waveform = waveform
     )
 }
 
@@ -66,7 +67,7 @@ private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
         mimeType?.isMimeTypeImage() == true -> ContentAttachmentData.Type.IMAGE
         mimeType?.isMimeTypeVideo() == true -> ContentAttachmentData.Type.VIDEO
         mimeType?.isMimeTypeAudio() == true -> ContentAttachmentData.Type.AUDIO
-        else                                -> ContentAttachmentData.Type.FILE
+        else -> ContentAttachmentData.Type.FILE
     }
 }
 
@@ -74,9 +75,9 @@ fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
     return when (this) {
         is MultiPickerImageType -> toContentAttachmentData()
         is MultiPickerVideoType -> toContentAttachmentData()
-        is MultiPickerAudioType -> toContentAttachmentData()
-        is MultiPickerFileType  -> toContentAttachmentData()
-        else                    -> throw IllegalStateException("Unknown file type")
+        is MultiPickerAudioType -> toContentAttachmentData(isVoiceMessage = false)
+        is MultiPickerFileType -> toContentAttachmentData()
+        else -> throw IllegalStateException("Unknown file type")
     }
 }
 
@@ -84,7 +85,7 @@ fun MultiPickerBaseMediaType.toContentAttachmentData(): ContentAttachmentData {
     return when (this) {
         is MultiPickerImageType -> toContentAttachmentData()
         is MultiPickerVideoType -> toContentAttachmentData()
-        else                    -> throw IllegalStateException("Unknown media type")
+        else -> throw IllegalStateException("Unknown media type")
     }
 }
 

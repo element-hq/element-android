@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
@@ -27,23 +26,28 @@ import javax.inject.Inject
 
 class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer) {
 
-    fun create(eventId: String, readReceipts: List<ReadReceipt>, callback: TimelineEventController.Callback?): ReadReceiptsItem? {
+    fun create(
+            eventId: String,
+            readReceipts: List<ReadReceipt>,
+            callback: TimelineEventController.Callback?,
+            isFromThreadTimeLine: Boolean
+    ): ReadReceiptsItem? {
         if (readReceipts.isEmpty()) {
             return null
         }
         val readReceiptsData = readReceipts
                 .map {
-                    ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
+                    ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
                 }
-                .toList()
-
+                .sortedByDescending { it.timestamp }
         return ReadReceiptsItem_()
                 .id("read_receipts_$eventId")
                 .eventId(eventId)
                 .readReceipts(readReceiptsData)
                 .avatarRenderer(avatarRenderer)
-                .clickListener(DebouncedClickListener({ _ ->
+                .shouldHideReadReceipts(isFromThreadTimeLine)
+                .clickListener {
                     callback?.onReadReceiptsClicked(readReceiptsData)
-                }))
+                }
     }
 }
