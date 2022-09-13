@@ -34,17 +34,23 @@ import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.DevicesAction
 import im.vector.app.features.settings.devices.v2.DevicesViewModel
+import im.vector.app.features.settings.devices.v2.VectorSettingsDevicesViewNavigator
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>(), VectorBaseBottomSheetDialogFragment.ResultListener {
+class OtherSessionsFragment :
+        VectorBaseFragment<FragmentOtherSessionsBinding>(),
+        VectorBaseBottomSheetDialogFragment.ResultListener,
+        OtherSessionsView.Callback {
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
     @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
@@ -68,6 +74,8 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
         views.otherSessionsClearFilterButton.debouncedClicks {
             viewModel.handle(DevicesAction.FilterDevices(DeviceManagerFilterType.ALL_SESSIONS))
         }
+
+        views.deviceListOtherSessions.callback = this
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
@@ -141,5 +149,16 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
             views.otherSessionsNotFoundLayout.isVisible = false
             views.deviceListOtherSessions.render(devices, devices.size)
         }
+    }
+
+    override fun onOtherSessionClicked(deviceId: String) {
+        viewNavigator.navigateToSessionOverview(
+                context = requireActivity(),
+                deviceId = deviceId
+        )
+    }
+
+    override fun onViewAllOtherSessionsClicked() {
+        // NOOP. We don't have this button in this screen
     }
 }
