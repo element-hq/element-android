@@ -18,11 +18,9 @@ package im.vector.app.features.spaces
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.FloatRange
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.app.R
@@ -41,7 +39,6 @@ class SpaceListBottomSheet : BottomSheetDialogFragment() {
         }
         return binding.root
     }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
