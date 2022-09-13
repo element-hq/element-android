@@ -147,7 +147,7 @@ class OtherSessionsFragment :
         } else {
             views.deviceListOtherSessions.isVisible = true
             views.otherSessionsNotFoundLayout.isVisible = false
-            views.deviceListOtherSessions.render(devices, devices.size)
+            views.deviceListOtherSessions.render(devices = devices, totalNumberOfDevices = devices.size, showViewAll = false)
         }
     }
 

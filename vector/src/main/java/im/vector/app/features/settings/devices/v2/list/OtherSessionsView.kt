@@ -19,6 +19,8 @@ package im.vector.app.features.settings.devices.v2.list
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -42,7 +44,9 @@ class OtherSessionsView @JvmOverloads constructor(
     @Inject lateinit var otherSessionsController: OtherSessionsController
 
     private val views: ViewOtherSessionsBinding
+    private val recyclerViewDataObserver: RecyclerView.AdapterDataObserver
     var callback: Callback? = null
+
 
     init {
         inflate(context, R.layout.view_other_sessions, this)
@@ -53,16 +57,30 @@ class OtherSessionsView @JvmOverloads constructor(
         views.otherSessionsViewAllButton.setOnClickListener {
             callback?.onViewAllOtherSessionsClicked()
         }
+
+        recyclerViewDataObserver = object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                views.otherSessionsRecyclerView.scrollToPosition(0)
+            }
+        }
+        otherSessionsController.adapter.registerAdapterDataObserver(recyclerViewDataObserver)
     }
 
-    fun render(devices: List<DeviceFullInfo>, totalNumberOfDevices: Int) {
+    fun render(devices: List<DeviceFullInfo>, totalNumberOfDevices: Int, showViewAll: Boolean) {
         views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = true)
-        views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, totalNumberOfDevices)
+        if (showViewAll) {
+            views.otherSessionsViewAllButton.isVisible = true
+            views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, totalNumberOfDevices)
+        } else {
+            views.otherSessionsViewAllButton.isVisible = false
+        }
         otherSessionsController.setData(devices)
     }
 
     override fun onDetachedFromWindow() {
         otherSessionsController.callback = null
+        otherSessionsController.adapter.unregisterAdapterDataObserver(recyclerViewDataObserver)
         views.otherSessionsRecyclerView.cleanup()
         super.onDetachedFromWindow()
     }

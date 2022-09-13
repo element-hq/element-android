@@ -199,7 +199,11 @@ class VectorSettingsDevicesFragment :
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
             views.deviceListOtherSessions.isVisible = true
-            views.deviceListOtherSessions.render(otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER), otherDevices.size)
+            views.deviceListOtherSessions.render(
+                    devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
+                    totalNumberOfDevices = otherDevices.size,
+                    showViewAll = otherDevices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
+            )
         }
     }
 
