@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -117,7 +118,7 @@ class GetDeviceFullInfoUseCaseTest {
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
 
         // Then
-        deviceFullInfo shouldBeEqualTo null
+        deviceFullInfo.shouldBeNull()
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getMyDevicesInfoLive(A_DEVICE_ID).asFlow() }
         verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getLiveCryptoDeviceInfoWithId(A_DEVICE_ID).asFlow() }
@@ -132,7 +133,7 @@ class GetDeviceFullInfoUseCaseTest {
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
 
         // Then
-        deviceFullInfo shouldBeEqualTo null
+        deviceFullInfo.shouldBeNull()
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
     }
 
