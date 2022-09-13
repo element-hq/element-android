@@ -64,6 +64,10 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
                         .show(requireActivity().supportFragmentManager, "SHOW_DEVICE_MANAGER_FILTER_BOTTOM_SHEET")
             }
         }
+
+        views.otherSessionsClearFilterButton.debouncedClicks {
+            viewModel.handle(DevicesAction.FilterDevices(DeviceManagerFilterType.ALL_SESSIONS))
+        }
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
@@ -98,6 +102,7 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
                                 imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_trust_background)
                         )
                 )
+                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_verified_sessions_found)
             }
             DeviceManagerFilterType.UNVERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(
@@ -108,6 +113,7 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
                                 imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_warning_background)
                         )
                 )
+                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_unverified_sessions_found)
             }
             DeviceManagerFilterType.INACTIVE -> {
                 views.otherSessionsSecurityRecommendationView.render(
@@ -122,14 +128,17 @@ class OtherSessionsFragment : VectorBaseFragment<FragmentOtherSessionsBinding>()
                                 imageTintColorResourceId = ThemeUtils.getColor(requireContext(), R.attr.vctr_system)
                         )
                 )
+                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_inactive_sessions_found)
             }
             DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */ }
         }
 
         if (devices.isNullOrEmpty()) {
             views.deviceListOtherSessions.isVisible = false
+            views.otherSessionsNotFoundLayout.isVisible = true
         } else {
             views.deviceListOtherSessions.isVisible = true
+            views.otherSessionsNotFoundLayout.isVisible = false
             views.deviceListOtherSessions.render(devices, devices.size)
         }
     }

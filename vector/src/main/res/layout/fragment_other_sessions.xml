@@ -75,6 +75,37 @@
         app:otherSessionsRecommendationTitle="@string/device_manager_other_sessions_recommendation_title_unverified"
         tools:visibility="visible" />
 
+    <LinearLayout
+        android:id="@+id/otherSessionsNotFoundLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionsSecurityRecommendationView">
+
+        <TextView
+            android:id="@+id/otherSessionsNotFoundTextView"
+            style="@style/TextAppearance.Vector.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/device_manager_other_sessions_no_verified_sessions_found" />
+
+        <Button
+            android:id="@+id/otherSessionsClearFilterButton"
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="start"
+            android:padding="0dp"
+            android:text="@string/device_manager_other_sessions_clear_filter" />
+
+    </LinearLayout>
+
     <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
         android:id="@+id/deviceListOtherSessions"
         android:layout_width="0dp"
