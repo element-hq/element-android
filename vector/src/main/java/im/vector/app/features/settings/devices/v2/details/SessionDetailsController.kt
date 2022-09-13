@@ -87,7 +87,7 @@ class SessionDetailsController @Inject constructor(
         val sessionId = data.deviceId
         val sessionLastSeenTs = data.lastSeenTs
 
-        buildHeaderItem(R.string.device_manager_session_details_section_session_title)
+        buildHeaderItem(R.string.device_manager_session_title)
 
         sessionName?.let {
             val hasDivider = sessionId != null || sessionLastSeenTs != null
@@ -111,7 +111,7 @@ class SessionDetailsController @Inject constructor(
     private fun buildSectionDevice(data: DeviceInfo, addExtraTopMargin: Boolean) {
         val lastSeenIp = data.lastSeenIp
 
-        buildHeaderItem(R.string.device_manager_session_details_section_device_title, addExtraTopMargin)
+        buildHeaderItem(R.string.device_manager_device_title, addExtraTopMargin)
 
         lastSeenIp?.let {
             val hasDivider = false

@@ -432,7 +432,7 @@
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
     <string name="encryption_information_device_name">Публичное имя</string>
-    <string name="encryption_information_device_id">ID сессии</string>
+    <string name="device_manager_session_details_session_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
     <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>

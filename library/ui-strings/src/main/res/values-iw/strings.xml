@@ -542,7 +542,7 @@
     <string name="encryption_export_room_keys">יצא מפתחות חדר</string>
     <string name="encryption_export_e2e_room_keys">ייצא מפתחות חדר E2E</string>
     <string name="encryption_information_device_key">מזהה מפתח</string>
-    <string name="encryption_information_device_id">מזהה מושב</string>
+    <string name="device_manager_session_details_session_id">מזהה מושב</string>
     <string name="encryption_information_device_name">שם ציבורי</string>
     <string name="encryption_information_decryption_error">שגיאת פענוח</string>
     <string name="settings_theme">ערכת נושא</string>

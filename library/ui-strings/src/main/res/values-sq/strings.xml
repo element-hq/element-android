@@ -431,7 +431,7 @@
     <string name="settings_theme">Temë</string>
     <string name="encryption_information_decryption_error">Gabim shfshehtëzimi</string>
     <string name="encryption_information_device_name">Emër publik</string>
-    <string name="encryption_information_device_id">ID Sesioni</string>
+    <string name="device_manager_session_details_session_id">ID Sesioni</string>
     <string name="encryption_information_device_key">Kyç sesioni</string>
     <string name="encryption_export_e2e_room_keys">Eksporto kyçe dhome E2E</string>
     <string name="encryption_export_room_keys">Eksporto kyçe dhome</string>

@@ -35,7 +35,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/encryption_information_device_id"
+            android:title="@string/device_manager_session_details_session_id"
             tools:summary="VZRHETBEER" />
 
         <im.vector.app.core.preference.VectorPreference

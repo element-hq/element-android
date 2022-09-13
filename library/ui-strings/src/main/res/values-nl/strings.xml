@@ -275,7 +275,7 @@
     <string name="room_settings_unset_main_address">Niet instellen als hoofdadres</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
     <string name="encryption_information_device_name">Publieke naam</string>
-    <string name="encryption_information_device_id">Sessie ID</string>
+    <string name="device_manager_session_details_session_id">Sessie ID</string>
     <string name="encryption_information_device_key">Sessiesleutel</string>
     <string name="encryption_export_e2e_room_keys">E2E-gesprekssleutels exporteren</string>
     <string name="encryption_export_room_keys">Gesprekssleutels exporteren</string>
