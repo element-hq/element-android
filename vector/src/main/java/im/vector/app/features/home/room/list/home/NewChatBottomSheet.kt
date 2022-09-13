@@ -27,7 +27,7 @@ import im.vector.app.features.navigation.Navigator
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
+class NewChatBottomSheet : BottomSheetDialogFragment() {
 
     @Inject lateinit var navigator: Navigator
 
