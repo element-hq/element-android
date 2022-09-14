@@ -41,14 +41,17 @@ class NewChatBottomSheet : BottomSheetDialogFragment() {
 
     private fun initFABs() {
         binding.startChat.setOnClickListener {
+            dismiss()
             navigator.openCreateDirectRoom(requireActivity())
         }
 
         binding.createRoom.setOnClickListener {
+            dismiss()
             navigator.openCreateRoom(requireActivity())
         }
 
         binding.exploreRooms.setOnClickListener {
+            dismiss()
             navigator.openRoomDirectory(requireContext())
         }
     }
