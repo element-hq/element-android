@@ -23,7 +23,6 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO add unit tests
 class CheckIfCurrentSessionCanBeVerifiedUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
