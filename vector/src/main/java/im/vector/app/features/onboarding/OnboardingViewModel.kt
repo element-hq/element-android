@@ -16,7 +16,13 @@
 
 package im.vector.app.features.onboarding
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
+import android.widget.Toast
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,6 +39,7 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.services.DendriteService
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
@@ -41,6 +48,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toTrackingValue
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
+import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
@@ -55,6 +63,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -147,6 +156,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UserNameEnteredAction -> handleUserNameEntered(action)
             is AuthenticateAction -> handleAuthenticateAction(action)
             is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
+            is OnboardingAction.LoginWithDendrite -> handleLoginWithDendrite(action)
             is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword -> handleResetPassword(action)
             OnboardingAction.ResendResetPassword -> handleResendResetPassword()
@@ -249,7 +259,7 @@ class OnboardingViewModel @AssistedInject constructor(
             }
             OnboardingFlow.SignIn -> when {
                 vectorFeatures.isOnboardingCombinedLoginEnabled() -> {
-                    handle(OnboardingAction.HomeServerChange.SelectHomeServer(deeplinkOrDefaultHomeserverUrl()))
+                    handle(OnboardingAction.LoginWithDendrite("http://localhost:65432"))
                 }
                 else -> openServerSelectionOrDeeplinkToOther()
             }
@@ -302,6 +312,53 @@ class OnboardingViewModel @AssistedInject constructor(
                 setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
+        }
+    }
+
+    private fun handleLoginWithDendrite(action: OnboardingAction.LoginWithDendrite) = withState { state ->
+        Timber.i("login with Dendrite")
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                val binder = service as DendriteService.DendriteLocalBinder
+                val dendrite = binder.getService()
+                var accessToken: String = ""
+                var userID: String = ""
+                try {
+                    userID = dendrite.registerUser("android", "dendrite!")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                try {
+                    accessToken = dendrite.registerDevice("android")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                if (userID == "" || accessToken == "") {
+                    android.widget.Toast.makeText(applicationContext, "No user ID or access token", android.widget.Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+                val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, state.deviceId)
+
+                setState { copy(isLoading = true) }
+                currentJob = viewModelScope.launch {
+                    try {
+                        val result = authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials)
+                        onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
+                    } catch (failure: Throwable) {
+                        setState { copy(isLoading = false) }
+                        _viewEvents.post(OnboardingViewEvents.Failure(failure))
+                    }
+                }
+            }
+            override fun onServiceDisconnected(className: ComponentName) {
+            }
+        }
+
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
         }
     }
 

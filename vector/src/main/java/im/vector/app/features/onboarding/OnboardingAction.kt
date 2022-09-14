@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
@@ -45,6 +46,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResetUseCase : OnboardingAction
     data class UpdateSignMode(val signMode: SignMode) : OnboardingAction
     data class LoginWithToken(val loginToken: String) : OnboardingAction
+    data class LoginWithDendrite(val homeServerUrl: String) : OnboardingAction
     data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction
     data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction
     data class ResetPassword(val email: String, val newPassword: String?) : OnboardingAction

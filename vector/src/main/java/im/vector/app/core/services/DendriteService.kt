@@ -48,6 +48,7 @@ import android.bluetooth.le.ScanSettings
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
@@ -64,6 +65,7 @@ import gobind.Conduit
 import gobind.DendriteMonolith
 import gobind.Gobind
 import im.vector.app.R
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -79,7 +81,7 @@ import javax.inject.Inject
 import kotlin.concurrent.thread
 
 class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPreferenceChangeListener {
-    @Inject lateinit var vectorPreferences: VectorPreferences
+    private lateinit var vectorPreferences: VectorPreferences
 
     private var notificationManager: NotificationManager? = null
 
@@ -114,22 +116,6 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             }
             val action = intent.action
             if (action == BluetoothAdapter.ACTION_STATE_CHANGED) {
-                if (ActivityCompat.checkSelfPermission(
-                                context!!,
-                                Manifest.permission.BLUETOOTH_ADVERTISE
-                        ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.BLUETOOTH_SCAN
-                        ) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return
-                }
                 when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)) {
                     BluetoothAdapter.STATE_OFF -> return
                     BluetoothAdapter.STATE_TURNING_OFF -> stopBluetooth()
@@ -409,6 +395,11 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     override fun onCreate() {
         super.onCreate()
 
+        if (monolith != null) {
+            Timber.i("Created again while running.")
+            return
+        }
+
         // post notification belonging to this service
         startForeground(ID, serviceNotification())
 
@@ -416,14 +407,47 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         if (monolith == null) {
             monolith = gobind.DendriteMonolith()
         }
-        //monolith?.storageDirectory = applicationContext.filesDir.toString()
-        //monolith?.start()
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        this.registerReceiver(bleReceiver, intentFilter)
+
+        vectorPreferences = singletonEntryPoint().vectorPreferences()
+        vectorPreferences.subscribeToChanges(this)
+
+        monolith?.storageDirectory = applicationContext.filesDir.toString()
+        monolith?.cacheDirectory = applicationContext.cacheDir.toString()
+        monolith?.start()
+
+        if (vectorPreferences.p2pEnableStatic()) {
+            monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
+        }
+        monolith!!.setMulticastEnabled(vectorPreferences.p2pEnableMulticast())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startBluetooth()
+        }
+
+        super.onCreate()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
 
+        Timber.i("Stopping Dendrite")
+
         // Occurs when the element app is closed from the system tray
+        stopBluetooth()
+
+        this.unregisterReceiver(bleReceiver)
+
+        if (notificationManager != null) {
+            notificationManager?.cancel(ID)
+        }
+
+        monolith?.stop()
+        monolith = null
+
         stopForeground(true)
         myStopSelf()
     }
@@ -439,46 +463,8 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             VectorPreferences.SETTINGS_P2P_ENABLE_BLUETOOTH -> {
                 val enabled = vectorPreferences.p2pEnableBluetooth()
                 if (enabled) {
-                    if (ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_ADVERTISE
-                            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_SCAN
-                            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_CONNECT
-                            ) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return
-                    }
                     startBluetooth()
                 } else {
-                    if (ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_ADVERTISE
-                            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_SCAN
-                            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.BLUETOOTH_CONNECT
-                            ) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return
-                    }
                     stopBluetooth()
                     m.disconnectType(Gobind.PeerTypeBluetooth)
                 }
@@ -546,8 +532,6 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    @RequiresPermission(allOf = [Manifest.permission.BLUETOOTH_ADVERTISE,
-        Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN])
     private fun startBluetooth() {
         if (!vectorPreferences.p2pEnableBluetooth()) {
             return
@@ -559,6 +543,25 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             return
         }
         if (!adapter.isEnabled) {
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_ADVERTISE
+                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return
         }
 
@@ -672,8 +675,24 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         }
     }
 
-    @RequiresPermission(allOf = [Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_SCAN])
     private fun stopBluetooth() {
+        if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_ADVERTISE
+                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+
         if (adapter.isEnabled) {
             advertiser.stopAdvertising(advertiseCallback)
             advertiser.stopAdvertisingSet(advertiseSetCallback)
