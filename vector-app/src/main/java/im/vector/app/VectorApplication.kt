@@ -132,8 +132,6 @@ class VectorApplication :
         autoRageShaker.initialize()
         vectorUncaughtExceptionHandler.activate()
 
-
-
         // Remove Log handler statically added by Jitsi
         Timber.forest()
                 .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)

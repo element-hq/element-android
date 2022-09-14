@@ -35,6 +35,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.services.DendriteService
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.analytics.VectorAnalytics
@@ -141,6 +142,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Intent(this, DendriteService::class.java).also { dendriteIntent ->
+            startService(dendriteIntent)
+        }
 
         shortcutsHandler.updateShortcutsWithPreviousIntent()
 

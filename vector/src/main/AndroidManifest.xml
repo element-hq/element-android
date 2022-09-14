@@ -383,6 +383,10 @@
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />
 
+        <!-- P2P -->
+        <service android:name=".core.services.DendriteService"
+            android:exported="false" />
+
         <!-- Receivers -->
 
         <receiver
