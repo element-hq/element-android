@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -70,7 +71,7 @@ data class VerificationBottomSheetViewState(
         val roomId: String?,
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean,
-        val otherUserMxItem: MatrixItem? = null,
+        val otherUserMxItem: MatrixItem,
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
         val pendingLocalId: String? = null,
         val sasTransactionState: VerificationTxState? = null,
@@ -92,7 +93,8 @@ data class VerificationBottomSheetViewState(
             otherUserId = args.otherUserId,
             verificationId = args.verificationId,
             roomId = args.roomId,
-            selfVerificationMode = args.selfVerificationMode
+            selfVerificationMode = args.selfVerificationMode,
+            otherUserMxItem = MatrixItem.UserItem(args.otherUserId),
     )
 }
 
@@ -126,7 +128,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        val userItem = session.getUser(initialState.otherUserId)
+        fetchOtherUserProfile(initialState.otherUserId)
 
         var autoReady = false
         val pr = if (initialState.selfVerificationMode) {
@@ -160,7 +162,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    otherUserMxItem = userItem?.toMatrixItem(),
                     sasTransactionState = sasTx?.state,
                     qrTransactionState = qrTx?.state,
                     transactionId = pr?.transactionId ?: initialState.verificationId,
@@ -180,6 +181,28 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             pr!!.otherUserId,
                             pr.transactionId ?: ""
                     )
+        }
+    }
+
+    private fun fetchOtherUserProfile(otherUserId: String) {
+        session.getUser(otherUserId)?.toMatrixItem()?.let {
+            setState {
+                copy(
+                        otherUserMxItem = it
+                )
+            }
+        }
+        // Always fetch the latest User data
+        viewModelScope.launch {
+            tryOrNull { session.userService().resolveUser(otherUserId) }
+                    ?.toMatrixItem()
+                    ?.let {
+                        setState {
+                            copy(
+                                    otherUserMxItem = it
+                            )
+                        }
+                    }
         }
     }
 

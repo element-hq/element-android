@@ -26,6 +26,7 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
@@ -61,7 +62,7 @@ class VerificationCancelController @Inject constructor(
             }
         } else {
             val otherUserID = state.otherUserId
-            val otherDisplayName = state.otherUserMxItem?.displayName ?: state.otherUserId
+            val otherDisplayName = state.otherUserMxItem.getBestName()
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(

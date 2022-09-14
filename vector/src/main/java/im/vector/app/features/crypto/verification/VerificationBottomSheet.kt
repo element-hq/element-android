@@ -152,29 +152,25 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        state.otherUserMxItem?.let { matrixItem ->
-            if (state.isMe) {
-                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
-                if (state.sasTransactionState == VerificationTxState.Verified ||
-                        state.qrTransactionState == VerificationTxState.Verified ||
-                        state.verifiedFromPrivateKeys) {
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
-                } else {
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
-                }
-                views.otherUserNameText.text = getString(
-                        if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
-                )
+        avatarRenderer.render(state.otherUserMxItem, views.otherUserAvatarImageView)
+        if (state.isMe) {
+            if (state.sasTransactionState == VerificationTxState.Verified ||
+                    state.qrTransactionState == VerificationTxState.Verified ||
+                    state.verifiedFromPrivateKeys) {
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
             } else {
-                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
-
-                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
-                    views.otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
-                } else {
-                    views.otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
-                    views.otherUserShield.render(null)
-                }
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
+            }
+            views.otherUserNameText.text = getString(
+                    if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
+            )
+        } else {
+            if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
+                views.otherUserNameText.text = getString(R.string.verification_verified_user, state.otherUserMxItem.getBestName())
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
+            } else {
+                views.otherUserNameText.text = getString(R.string.verification_verify_user, state.otherUserMxItem.getBestName())
+                views.otherUserShield.render(null)
             }
         }
 
@@ -271,7 +267,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         VerificationQRWaitingFragment::class,
                         VerificationQRWaitingFragment.Args(
                                 isMe = state.isMe,
-                                otherUserName = state.otherUserMxItem?.getBestName() ?: state.otherUserId
+                                otherUserName = state.otherUserMxItem.getBestName()
                         )
                 )
                 return@withState
