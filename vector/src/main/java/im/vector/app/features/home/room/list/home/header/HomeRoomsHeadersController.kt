@@ -47,7 +47,7 @@ class HomeRoomsHeadersController @Inject constructor(
 
     private var carousel: Carousel? = null
 
-    private val carouselAdapterObserver =  object : RecyclerView.AdapterDataObserver() {
+    private val carouselAdapterObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
             if (toPosition == 0 || fromPosition == 0) {
                 carousel?.post {
@@ -120,7 +120,7 @@ class HomeRoomsHeadersController @Inject constructor(
                 try {
                     view.adapter?.registerAdapterDataObserver(host.carouselAdapterObserver)
                 } catch (e: IllegalStateException) {
-                    //do nothing
+                    // do nothing
                 }
             }
 
@@ -130,7 +130,7 @@ class HomeRoomsHeadersController @Inject constructor(
                 try {
                     view.adapter?.unregisterAdapterDataObserver(host.carouselAdapterObserver)
                 } catch (e: IllegalStateException) {
-                    //do nothing
+                    // do nothing
                 }
             }
 
