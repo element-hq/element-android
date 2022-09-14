@@ -296,3 +296,25 @@ dependencyAnalysis {
         }
     }
 }
+
+task recordScreenshots(type: GradleBuild) {
+    startParameter.projectProperties.screenshot = ""
+    tasks = [':vector:recordPaparazziGplayDebug']
+}
+
+task verifyScreenshots(type: GradleBuild) {
+    startParameter.projectProperties.screenshot = ""
+    tasks = [':vector:verifyPaparazziGplayDebug']
+}
+
+ext.initScreenshotTests = { project ->
+    project.apply plugin: 'app.cash.paparazzi'
+    project.android.testOptions.unitTests.all {
+        def screenshotTestCapture = "**/*ScreenshotTest*"
+        if (project.hasProperty("screenshot")) {
+            include screenshotTestCapture
+        } else {
+            exclude screenshotTestCapture
+        }
+    }
+}

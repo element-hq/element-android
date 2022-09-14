@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'app.cash.paparazzi'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
@@ -24,6 +23,8 @@ project.android.buildTypes.all { buildType ->
                     validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
             ]
 }
+
+initScreenshotTests(project)
 
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
