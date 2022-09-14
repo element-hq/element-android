@@ -160,7 +160,7 @@ Warning: do not use twice the same item `id` or it will crash.
 - [Retrofit](https://square.github.io/retrofit/) and [OkHttp3](https://square.github.io/okhttp/): network requests;
 - [Moshi](https://github.com/square/moshi) is used to parse and serialize Json object; 
 
-#### Push
+### Push
 
 Please see the dedicated documentation for more details.
 
@@ -170,7 +170,7 @@ This is the classical scenario:
 - App asks the SDK to load Event data (fastlane mode). We have a change to get the data faster and display the notification faster;
 - App asks the SDK to perform a sync request.
 
-#### Dependencies management
+### Dependencies management
 
 All the dependencies are declared in `build.gradle` files. But some versions are declared in [this dedicated file](../dependencies.gradle).
 
@@ -178,6 +178,12 @@ When adding a new dependency, you will have to update the file [dependencies_gro
 
 [Dependabot](https://github.com/dependabot) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one.
 dependencies_group, gradle files, Dependabot, etc.
+
+### Test
+
+Please refer to [this dedicated document](./ui-tests.md).
+
+TODO add link to the dedicated screenshot test documentation
 
 ### Other points
 
