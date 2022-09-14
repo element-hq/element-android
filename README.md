@@ -48,6 +48,8 @@ Please refer to [CONTRIBUTING.md](https://github.com/vector-im/element-android/b
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-android:matrix.org).
 
+Also [this documentation](./docs/_developer_onboarding.md) can hopefully help developers to start working on the project.
+
 ## Triaging issues
 
 Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
