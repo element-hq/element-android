@@ -66,7 +66,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
         }
 
         val hasLearnMoreLink = typedArray.getBoolean(R.styleable.SessionsListHeaderView_sessionsListHeaderHasLearnMoreLink, true)
-        if(hasLearnMoreLink) {
+        if (hasLearnMoreLink) {
             setDescriptionWithLearnMore(description)
         } else {
             binding.sessionsListHeaderDescription.text = description
