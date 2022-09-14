@@ -21,44 +21,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.extensions.setPeekHeightAsScreenPercentage
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.FragmentNewChatBottomSheetBinding
 import im.vector.app.features.navigation.Navigator
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
+class NewChatBottomSheet @Inject constructor() : VectorBaseBottomSheetDialogFragment<FragmentNewChatBottomSheetBinding>() {
 
     @Inject lateinit var navigator: Navigator
 
-    private lateinit var binding: FragmentNewChatBottomSheetBinding
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentNewChatBottomSheetBinding {
+        return FragmentNewChatBottomSheetBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentNewChatBottomSheetBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFABs()
-        return binding.root
     }
 
     private fun initFABs() {
-        binding.startChat.setOnClickListener {
+        views.startChat.debouncedClicks {
             navigator.openCreateDirectRoom(requireActivity())
         }
 
-        binding.createRoom.setOnClickListener {
+        views.createRoom.debouncedClicks {
             navigator.openCreateRoom(requireActivity())
         }
 
-        binding.exploreRooms.setOnClickListener {
+        views.exploreRooms.debouncedClicks {
             navigator.openRoomDirectory(requireContext())
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
-            (this as BottomSheetDialog).setPeekHeightAsScreenPercentage(0.5f)
+            setPeekHeightAsScreenPercentage(0.5f)
         }
     }
 
