@@ -25,6 +25,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -37,6 +38,7 @@ class DevicesViewModel @AssistedInject constructor(
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
+        private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
 ) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase) {
 
     @AssistedFactory
@@ -94,7 +96,22 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         when (action) {
+            is DevicesAction.VerifyCurrentSession -> handleVerifyCurrentSessionAction()
             is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
+        }
+    }
+
+    // TODO add unit tests
+    private fun handleVerifyCurrentSessionAction() {
+        viewModelScope.launch {
+            val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+            if (currentSessionCanBeVerified) {
+                activeSessionHolder.getSafeActiveSession()?.let { session ->
+                    _viewEvents.post(DevicesViewEvent.SelfVerification(session))
+                }
+            } else {
+                _viewEvents.post(DevicesViewEvent.PromptResetSecrets)
+            }
         }
     }
 

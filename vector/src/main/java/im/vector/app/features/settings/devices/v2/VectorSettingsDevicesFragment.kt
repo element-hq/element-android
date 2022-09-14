@@ -228,7 +228,7 @@ class VectorSettingsDevicesFragment :
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }
             views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
-                // TODO show bottom Sheet verification process
+                viewModel.handle(DevicesAction.VerifyCurrentSession)
             }
         } ?: run {
             hideCurrentSessionView()
