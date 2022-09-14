@@ -1,3 +1,5 @@
+#! /bin/bash
+
 #
 # Copyright (c) 2022 New Vector Ltd
 #
@@ -13,19 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-#! /bin/bash
+# Based on https://cashapp.github.io/paparazzi/#git-lfs
 
 # Compare the output of `git ls-files ':(attr:filter=lfs)'` against `git lfs ls-files`
 # If there's no diff we assume the files have been committed using git lfs
 diff <(git ls-files ':(attr:filter=lfs)' | sort) <(git lfs ls-files -n | sort) >/dev/null
 
 ret=$?
-
 if [[ $ret -ne 0 ]]; then
   echo >&2 "Detected files committed without using Git LFS."
   echo >&2 "Install git lfs (eg brew install git-lfs) and run 'git lfs install --local' within the root repository directory and re-commit your files."
   exit 1
 fi
-
-
