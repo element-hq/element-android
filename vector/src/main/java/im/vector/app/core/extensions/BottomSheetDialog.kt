@@ -16,32 +16,11 @@
 
 package im.vector.app.core.extensions
 
-import android.os.Build
-import android.util.DisplayMetrics
 import androidx.annotation.FloatRange
-import androidx.annotation.RequiresApi
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import io.github.hyuwah.draggableviewlib.Utils.getScreenHeight
 
 fun BottomSheetDialog.setPeekHeightAsScreenPercentage(@FloatRange(from = 0.0, to = 1.0) percentage: Float) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        setPeekHeightPostApi30(percentage)
-    } else {
-        setPeekHeightPreApi30(percentage)
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.R)
-private fun BottomSheetDialog.setPeekHeightPostApi30(percentage: Float) {
-    window?.windowManager?.currentWindowMetrics?.let { windowMetrics ->
-        val height = windowMetrics.bounds.height()
-        behavior.setPeekHeight((height * percentage).toInt(), true)
-    }
-}
-
-private fun BottomSheetDialog.setPeekHeightPreApi30(percentage: Float) {
-    val displayMetrics = DisplayMetrics()
-    @Suppress("DEPRECATION")
-    window?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-    val height = displayMetrics.heightPixels
-    behavior.setPeekHeight((height * percentage).toInt(), true)
+    val screenHeight = getScreenHeight(context)
+    behavior.setPeekHeight((screenHeight * percentage).toInt(), true)
 }
