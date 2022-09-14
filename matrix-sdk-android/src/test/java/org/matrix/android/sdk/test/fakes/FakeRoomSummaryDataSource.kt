@@ -20,7 +20,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 
 internal class FakeRoomSummaryDataSource {
