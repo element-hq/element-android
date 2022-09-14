@@ -59,6 +59,13 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
+    <!-- BLE admin for P2P -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <!-- Since Android 11, see https://developer.android.com/training/package-visibility -->
     <queries>
         <!-- To open URL in CustomTab (prefetch, etc.). It makes CustomTabsClient.getPackageName() work

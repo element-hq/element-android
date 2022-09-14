@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <im.vector.app.core.preference.VectorPreference
+        app:isPreferenceVisible="true"
+        tools:isPreferenceVisible="true" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_P2P_ENABLE_MULTICAST"
+        android:title="@string/settings_p2p_connect_multicast"
+        android:enabled="true" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_P2P_ENABLE_BLUETOOTH"
+        android:title="@string/settings_p2p_connect_bluetooth"
+        android:enabled="true" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_P2P_ENABLE_STATIC"
+        android:title="@string/settings_p2p_connect_static" />
+
+    <im.vector.app.core.preference.VectorEditTextPreference
+        android:key="SETTINGS_P2P_STATIC_URI"
+        android:defaultValue="wss://pinecone.matrix.org/public"
+        android:title="@string/settings_p2p_static_peer_uri"
+        android:summary="@string/change_p2p_static_peer_summary" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_P2P_BLE_CODED_PHY"
+        android:title="@string/settings_p2p_ble_coded_phy"
+        android:enabled="true" />
+</PreferenceScreen>

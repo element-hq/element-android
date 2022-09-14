@@ -72,7 +72,7 @@ class LoginSplashFragment :
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
+        loginViewModel.handle(LoginAction.LoginWithDendrite("http://localhost:65432"))
     }
 
     override fun resetViewModel() {

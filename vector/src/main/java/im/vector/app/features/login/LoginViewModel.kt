@@ -16,8 +16,13 @@
 
 package im.vector.app.features.login
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.net.Uri
+import android.os.IBinder
+import android.widget.Toast
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -33,12 +38,15 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.services.DendriteService
 import im.vector.app.core.utils.ensureTrailingSlash
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -121,6 +129,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action).also { lastAction = action }
             is LoginAction.LoginOrRegister -> handleLoginOrRegister(action).also { lastAction = action }
             is LoginAction.LoginWithToken -> handleLoginWithToken(action)
+            is LoginAction.LoginWithDendrite -> handleLoginWithDendrite(action)
             is LoginAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -216,6 +225,53 @@ class LoginViewModel @AssistedInject constructor(
                 }
                         ?.let { onSessionCreated(it) }
             }
+        }
+    }
+
+    private fun handleLoginWithDendrite(action: LoginAction.LoginWithDendrite) = withState { state ->
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                val binder = service as DendriteService.DendriteLocalBinder
+                val dendrite = binder.getService()
+                var accessToken: String = ""
+                var userID: String = ""
+                try {
+                    userID = dendrite.registerUser("android", "dendrite!")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                try {
+                    accessToken = dendrite.registerDevice("android")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                if (userID == "" || accessToken == "") {
+                    android.widget.Toast.makeText(applicationContext, "No user ID or access token", android.widget.Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+                val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, state.deviceId)
+
+                currentJob = viewModelScope.launch {
+                    try {
+                        authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials)
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(asyncLoginAction = Fail(failure))
+                        }
+                        null
+                    }
+                            ?.let { onSessionCreated(it) }
+                }
+            }
+            override fun onServiceDisconnected(className: ComponentName) {
+            }
+        }
+
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
         }
     }
 

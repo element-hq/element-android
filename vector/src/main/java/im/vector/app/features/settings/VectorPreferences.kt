@@ -198,6 +198,14 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
         const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
+        // P2P
+        const val SETTINGS_P2P_ENABLE_NEARBY = "SETTINGS_P2P_ENABLE_NEARBY"
+        const val SETTINGS_P2P_ENABLE_STATIC = "SETTINGS_P2P_ENABLE_STATIC"
+        const val SETTINGS_P2P_STATIC_URI = "SETTINGS_P2P_STATIC_URI"
+        const val SETTINGS_P2P_ENABLE_MULTICAST = "SETTINGS_P2P_ENABLE_MULTICAST"
+        const val SETTINGS_P2P_ENABLE_BLUETOOTH = "SETTINGS_P2P_ENABLE_BLUETOOTH"
+        const val SETTINGS_P2P_BLE_CODED_PHY = "SETTINGS_P2P_BLE_CODED_PHY"
+
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
         private const val SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY"
@@ -285,7 +293,14 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_SECURITY_USE_FLAG_SECURE,
 
                 ShortcutsHandler.SHARED_PREF_KEY,
-        )
+
+                SETTINGS_P2P_ENABLE_NEARBY,
+                SETTINGS_P2P_ENABLE_MULTICAST,
+                SETTINGS_P2P_ENABLE_BLUETOOTH,
+                SETTINGS_P2P_ENABLE_STATIC,
+                SETTINGS_P2P_BLE_CODED_PHY,
+                SETTINGS_P2P_STATIC_URI,
+                )
     }
 
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
@@ -333,6 +348,26 @@ class VectorPreferences @Inject constructor(
     }
 
     private fun getDefault(@BoolRes resId: Int) = context.resources.getBoolean(resId)
+
+    fun p2pEnableMulticast(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_MULTICAST, true)
+    }
+
+    fun p2pEnableBluetooth(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_BLUETOOTH, true)
+    }
+
+    fun p2pEnableStatic(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_STATIC, false)
+    }
+
+    fun p2pBLECodedPhy(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_BLE_CODED_PHY, false)
+    }
+
+    fun p2pStaticURI(): String {
+        return defaultPrefs.getString(SETTINGS_P2P_STATIC_URI, "") ?: ""
+    }
 
     fun areNotificationEnabledForDevice(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)

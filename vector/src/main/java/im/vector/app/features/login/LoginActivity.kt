@@ -21,6 +21,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -37,7 +38,12 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.PERMISSIONS_FOR_P2P
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
@@ -49,6 +55,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View.
@@ -99,6 +106,28 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (isFirstCreation()) {
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
+        }
+
+        // Dendrite needs location permissions to get BLE data, thanks Google
+        val activity = topFragment?.requireActivity()
+        if (activity != null) {
+            if (checkPermissions(PERMISSIONS_FOR_P2P, activity, launcher, R.string.permissions_rationale_msg_p2p)) {
+                Timber.i("BLE: Got permissions")
+            } else {
+                Timber.i("BLE: No permissions")
+            }
+        }
+    }
+
+    private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            Timber.i("BLE: Permission granted")
+        } else {
+            if (deniedPermanently) {
+                Timber.i("BLE: Permission denied permanently")
+            } else {
+                Timber.i("BLE: Permission denied")
+            }
         }
     }
 
