@@ -81,6 +81,7 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
+        updateVerifyButton()
         updateEntryDetails(state.deviceId)
         if (state.deviceInfo is Success) {
             renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
@@ -94,6 +95,12 @@ class SessionOverviewFragment :
         (activity as? AppCompatActivity)
                 ?.supportActionBar
                 ?.setTitle(titleResId)
+    }
+
+    private fun updateVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            // TODO show bottom Sheet verification process
+        }
     }
 
     private fun updateEntryDetails(deviceId: String) {

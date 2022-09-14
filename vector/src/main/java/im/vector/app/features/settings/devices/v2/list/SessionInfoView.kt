@@ -49,6 +49,7 @@ class SessionInfoView @JvmOverloads constructor(
     }
 
     val viewDetailsButton = views.sessionInfoViewDetailsButton
+    val viewVerifyButton = views.sessionInfoVerifySessionButton
 
     fun render(
             sessionInfoViewState: SessionInfoViewState,
