@@ -101,7 +101,6 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
-    // TODO add unit tests
     private fun handleVerifyCurrentSessionAction() {
         viewModelScope.launch {
             val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()

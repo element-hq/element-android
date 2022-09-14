@@ -145,6 +145,54 @@ class DevicesViewModelTest {
         coVerify { refreshDevicesOnCryptoDevicesChangeUseCase.execute() }
     }
 
+    @Test
+    fun `given current session can be verified when handling verify current session action then self verification event is posted`() {
+        // Given
+        givenVerificationService()
+        givenCurrentSessionCrossSigningInfo()
+        givenDeviceFullInfoList()
+        givenRefreshDevicesOnCryptoDevicesChange()
+        val verifyCurrentSessionAction = DevicesAction.VerifyCurrentSession
+        coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns true
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(verifyCurrentSessionAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it is DevicesViewEvent.SelfVerification }
+                .finish()
+        coVerify {
+            checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+        }
+    }
+
+    @Test
+    fun `given current session cannot be verified when handling verify current session action then reset secrets event is posted`() {
+        // Given
+        givenVerificationService()
+        givenCurrentSessionCrossSigningInfo()
+        givenDeviceFullInfoList()
+        givenRefreshDevicesOnCryptoDevicesChange()
+        val verifyCurrentSessionAction = DevicesAction.VerifyCurrentSession
+        coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns false
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(verifyCurrentSessionAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it is DevicesViewEvent.PromptResetSecrets }
+                .finish()
+        coVerify {
+            checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+        }
+    }
+
     private fun givenVerificationService(): FakeVerificationService {
         val fakeVerificationService = fakeActiveSessionHolder
                 .fakeSession
