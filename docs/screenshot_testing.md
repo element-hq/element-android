@@ -45,7 +45,7 @@ git lfs install --local
 - After creating the new test, record and commit the newly rendered screens.
 - `./tools/validate_lfs` can be ran to ensure everything is working correctly with Git LFS, the CI also runs this check.
 
-### Example
+## Example
 
 ```kotlin
 class PaparazziExampleScreenshotTest {
