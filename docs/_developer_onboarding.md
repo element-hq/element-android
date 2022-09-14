@@ -2,6 +2,29 @@
 
 <!--- TOC -->
 
+* [Introduction](#introduction)
+  * [Quick introduction to Matrix](#quick-introduction-to-matrix)
+    * [Matrix data](#matrix-data)
+      * [Room](#room)
+      * [Event](#event)
+    * [Sync](#sync)
+      * [Glossary about syncs](#glossary-about-syncs)
+  * [The Android project](#the-android-project)
+  * [Matrix SDK](#matrix-sdk)
+  * [Application](#application)
+    * [MvRx](#mvrx)
+      * [Behavior](#behavior)
+    * [Epoxy](#epoxy)
+    * [Other frameworks](#other-frameworks)
+  * [Push](#push)
+  * [Dependencies management](#dependencies-management)
+  * [Test](#test)
+  * [Other points](#other-points)
+    * [Logging](#logging)
+    * [Rageshake](#rageshake)
+  * [Tips](#tips)
+* [Happy coding!](#happy-coding)
+
 <!--- END -->
 
 ## Introduction
