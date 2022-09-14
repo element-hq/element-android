@@ -418,7 +418,7 @@
     <string name="room_settings_unset_main_address">Als Hauptadresse aufheben</string>
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
-    <string name="encryption_information_device_id">Sitzungs-ID</string>
+    <string name="device_manager_session_details_session_id">Sitzungs-ID</string>
     <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_export_e2e_room_keys">Ende-zu-Ende-Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>

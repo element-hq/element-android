@@ -469,7 +469,7 @@
     <string name="settings_theme">Tēma</string>
     <string name="encryption_information_decryption_error">Atšifrēšanas kļūda</string>
     <string name="encryption_information_device_name">Ierīces nosaukums</string>
-    <string name="encryption_information_device_id">Sesijas ID</string>
+    <string name="device_manager_session_details_session_id">Sesijas ID</string>
     <string name="encryption_information_device_key">Sesijas atslēga</string>
     <string name="encryption_export_e2e_room_keys">Eksportēt istabas šifrēšanas atslēgas</string>
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
