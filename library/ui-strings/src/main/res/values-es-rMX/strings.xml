@@ -249,7 +249,7 @@
     <string name="room_settings_unset_main_address">Desescojer como Dirección Principal</string>
     <string name="encryption_information_decryption_error">Error en descifrar</string>
     <string name="encryption_information_device_name">Nombre del dispositivo</string>
-    <string name="encryption_information_device_id">Identificación del dispositivo</string>
+    <string name="device_manager_session_details_session_id">Identificación del dispositivo</string>
     <string name="encryption_information_device_key">Clave del dispositivo</string>
     <string name="encryption_export_e2e_room_keys">Exportar claves de cifrado de extremo-a-extremo de salas</string>
     <string name="encryption_export_room_keys">Exportar claves de salas</string>

@@ -351,7 +351,7 @@
     <string name="room_settings_unset_main_address">Kiszedés fő címek közül</string>
     <string name="encryption_information_decryption_error">Visszafejtés hiba</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Munkamenet-azonosító</string>
+    <string name="device_manager_session_details_session_id">Munkamenet-azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_export_e2e_room_keys">E2E szoba kulcsok exportálása</string>
     <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>

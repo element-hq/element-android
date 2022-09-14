@@ -572,7 +572,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Greška u dešifriranju</string>
     <string name="encryption_information_device_name">Javni naziv</string>
-    <string name="encryption_information_device_id">Identitet</string>
+    <string name="device_manager_session_details_session_id">Identitet</string>
     <string name="encryption_information_device_key">Ključ sesije</string>
     <string name="encryption_export_e2e_room_keys">Izvezi sobne ključeve za E2E</string>
     <string name="encryption_export_room_keys">Izvezi sobne ključeve</string>
