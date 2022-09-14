@@ -216,12 +216,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     private fun cancelAllPendingVerifications(state: VerificationBottomSheetViewState) {
         session.cryptoService()
-                .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
+                .verificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)?.let {
                     session.cryptoService().verificationService().cancelVerificationRequest(it)
                 }
         session.cryptoService()
                 .verificationService()
-                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+                .getExistingTransaction(state.otherUserId, state.transactionId ?: "")
                 ?.cancel(CancelCode.User)
     }
 
@@ -249,7 +249,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: VerificationAction) = withState { state ->
-        val otherUserId = state.otherUserMxItem?.id ?: return@withState
+        val otherUserId = state.otherUserId
         val roomId = state.roomId
                 ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
@@ -514,7 +514,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
         if (state.selfVerificationMode && state.transactionId == null) {
             // is this an incoming with that user
-            if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
+            if (tx.isIncoming && tx.otherUserId == state.otherUserId) {
                 // Also auto accept incoming if needed!
                 if (tx is IncomingSasVerificationTransaction) {
                     if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
@@ -564,7 +564,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
         if (state.selfVerificationMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
-            if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
+            if (pr.isIncoming && pr.otherUserId == state.otherUserId) {
                 if (!pr.isReady) {
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?

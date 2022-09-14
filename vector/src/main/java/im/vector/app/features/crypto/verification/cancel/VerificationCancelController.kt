@@ -60,8 +60,8 @@ class VerificationCancelController @Inject constructor(
                 }
             }
         } else {
-            val otherUserID = state.otherUserMxItem?.id ?: ""
-            val otherDisplayName = state.otherUserMxItem?.displayName ?: ""
+            val otherUserID = state.otherUserId
+            val otherDisplayName = state.otherUserMxItem?.displayName ?: state.otherUserId
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(

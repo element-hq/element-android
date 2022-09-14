@@ -235,7 +235,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                     showFragment(
                             VerificationEmojiCodeFragment::class,
                             VerificationArgs(
-                                    state.otherUserMxItem?.id ?: "",
+                                    state.otherUserId,
                                     // If it was outgoing it.transaction id would be null, but the pending request
                                     // would be updated (from localId to txId)
                                     state.pendingRequest.invoke()?.transactionId ?: state.transactionId
@@ -271,7 +271,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         VerificationQRWaitingFragment::class,
                         VerificationQRWaitingFragment.Args(
                                 isMe = state.isMe,
-                                otherUserName = state.otherUserMxItem?.getBestName() ?: ""
+                                otherUserName = state.otherUserMxItem?.getBestName() ?: state.otherUserId
                         )
                 )
                 return@withState
@@ -319,7 +319,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 showFragment(
                         VerificationChooseMethodFragment::class,
                         VerificationArgs(
-                                otherUserId = state.otherUserMxItem?.id ?: "",
+                                otherUserId = state.otherUserId,
                                 verificationId = state.pendingRequest.invoke()?.transactionId
                         )
                 )
@@ -328,7 +328,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 showFragment(
                         VerificationRequestFragment::class,
                         VerificationArgs(
-                                otherUserId = state.otherUserMxItem?.id ?: "",
+                                otherUserId = state.otherUserId,
                                 verificationId = state.pendingRequest.invoke()?.transactionId,
                                 verificationLocalId = state.roomId
                         )
@@ -340,7 +340,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             showFragment(
                     VerificationChooseMethodFragment::class,
                     VerificationArgs(
-                            otherUserId = state.otherUserMxItem?.id ?: "",
+                            otherUserId = state.otherUserId,
                             verificationId = state.pendingRequest.invoke()?.transactionId
                     )
             )

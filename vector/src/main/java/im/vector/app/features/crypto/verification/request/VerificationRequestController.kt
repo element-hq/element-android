@@ -52,7 +52,7 @@ class VerificationRequestController @Inject constructor(
 
     override fun buildModels() {
         val state = viewState ?: return
-        val matrixItem = viewState?.otherUserMxItem ?: return
+        val matrixItem = state.otherUserMxItem ?: return
         val host = this
 
         if (state.selfVerificationMode) {
