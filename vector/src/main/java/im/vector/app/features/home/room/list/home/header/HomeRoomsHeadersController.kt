@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.list.home.header
 
 import android.content.res.Resources
 import android.util.TypedValue
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.EpoxyController
@@ -43,6 +44,25 @@ class HomeRoomsHeadersController @Inject constructor(
     var onFilterChangedListener: ((HomeRoomFilter) -> Unit)? = null
     var recentsRoomListener: RoomListListener? = null
     var invitesClickListener: (() -> Unit)? = null
+
+    private var carousel: Carousel? = null
+
+    private val carouselAdapterObserver =  object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            if (toPosition == 0 || fromPosition == 0) {
+                carousel?.post {
+                    carousel?.layoutManager?.scrollToPosition(0)
+                }
+            }
+            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+        }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            if (positionStart == 0) {
+                carousel?.layoutManager?.scrollToPosition(0)
+            }
+        }
+    }
 
     private val recentsHPadding = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -92,9 +112,28 @@ class HomeRoomsHeadersController @Inject constructor(
                     )
             )
             onBind { _, view, _ ->
+                host.carousel = view
+
                 val colorSurface = MaterialColors.getColor(view, R.attr.vctr_toolbar_background)
                 view.setBackgroundColor(colorSurface)
+
+                try {
+                    view.adapter?.registerAdapterDataObserver(host.carouselAdapterObserver)
+                } catch (e: IllegalStateException) {
+                    //do nothing
+                }
             }
+
+            onUnbind { _, view ->
+                host.carousel = null
+
+                try {
+                    view.adapter?.unregisterAdapterDataObserver(host.carouselAdapterObserver)
+                } catch (e: IllegalStateException) {
+                    //do nothing
+                }
+            }
+
             withModelsFrom(recents) { roomSummary ->
                 val onClick = host.recentsRoomListener?.let { it::onRoomClicked }
                 val onLongClick = host.recentsRoomListener?.let { it::onRoomLongClicked }
