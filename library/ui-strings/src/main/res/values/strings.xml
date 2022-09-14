@@ -1402,6 +1402,7 @@
     <string name="command_description_avatar_for_room">Changes your avatar in this current room only</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+    <string name="command_description_devtools">Open the developer tools screen</string>
     <string name="command_description_whois">Displays information about a user</string>
 
     <string name="markdown_has_been_enabled">Markdown has been enabled.</string>

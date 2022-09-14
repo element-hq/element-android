@@ -215,7 +215,7 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 - Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here;
 - Show hidden Events can also help to debug feature. When devepor mode is enabled, it is possible to view the source (= the Json content) of any Events;
-- Type `/devtools` in Element Web to access a developer menu. On Element Android, available in the Menu of a Room timeline, after enabling developer mode;
+- Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled;
 - Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags;
 - Using logcat, filtering with `onResume` can help you to understand what screen are currently displayed on your device. Searching for string displayed on the screen can also help to find the running code in the codebase.
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;

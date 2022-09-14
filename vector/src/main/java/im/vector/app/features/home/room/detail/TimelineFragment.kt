@@ -1810,6 +1810,9 @@ class TimelineFragment :
         dismissLoadingDialog()
         views.composerLayout.setTextIfDifferent("")
         when (parsedCommand) {
+            is ParsedCommand.DevTools -> {
+                navigator.openDevTools(requireContext(), timelineArgs.roomId)
+            }
             is ParsedCommand.SetMarkdown -> {
                 showSnackWithMessage(getString(if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
             }
