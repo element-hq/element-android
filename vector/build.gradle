@@ -265,7 +265,7 @@ dependencies {
     api libs.vanniktech.emojiMaterial
     api libs.vanniktech.emojiGoogle
 
-    implementation 'im.dlg:android-dialer:1.2.5'
+    implementation project(":library:dialpad")
 
     // JWT
     api libs.jsonwebtoken.jjwtApi
