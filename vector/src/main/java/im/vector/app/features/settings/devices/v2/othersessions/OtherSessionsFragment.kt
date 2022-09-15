@@ -32,9 +32,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.DevicesAction
-import im.vector.app.features.settings.devices.v2.DevicesViewModel
-import im.vector.app.features.settings.devices.v2.VectorSettingsDevicesViewNavigator
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -48,9 +45,11 @@ class OtherSessionsFragment :
         VectorBaseBottomSheetDialogFragment.ResultListener,
         OtherSessionsView.Callback {
 
-    private val viewModel: DevicesViewModel by fragmentViewModel()
+    private val viewModel: OtherSessionsViewModel by fragmentViewModel()
+
     @Inject lateinit var colorProvider: ColorProvider
-    @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
+
+    @Inject lateinit var viewNavigator: OtherSessionsViewNavigator
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
@@ -59,7 +58,17 @@ class OtherSessionsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.otherSessionsToolbar).allowBack()
+        observeViewEvents()
         initFilterView()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                is OtherSessionsViewEvents.Loading -> showLoading(it.message)
+                is OtherSessionsViewEvents.Failure -> showFailure(it.throwable)
+            }
+        }
     }
 
     private fun initFilterView() {
@@ -72,7 +81,7 @@ class OtherSessionsFragment :
         }
 
         views.otherSessionsClearFilterButton.debouncedClicks {
-            viewModel.handle(DevicesAction.FilterDevices(DeviceManagerFilterType.ALL_SESSIONS))
+            viewModel.handle(OtherSessionsAction.FilterDevices(DeviceManagerFilterType.ALL_SESSIONS))
         }
 
         views.deviceListOtherSessions.callback = this
@@ -80,18 +89,13 @@ class OtherSessionsFragment :
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
         if (resultCode == RESULT_OK && data != null && data is DeviceManagerFilterType) {
-            viewModel.handle(DevicesAction.FilterDevices(data))
+            viewModel.handle(OtherSessionsAction.FilterDevices(data))
         }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         if (state.devices is Success) {
-            with(state) {
-                val devices = state.devices()
-                        ?.filter { it.deviceInfo.deviceId != state.currentSessionCrossSigningInfo.deviceId }
-                        ?.filteredDevices()
-                renderDevices(devices, state.currentFilter)
-            }
+            renderDevices(state.devices(), state.currentFilter)
         }
     }
 

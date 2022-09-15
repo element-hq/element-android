@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back_24dp"
-            app:title="@string/device_manager_other_sessions_title">
+            app:title="@string/settings_sessions_other_title">
 
             <FrameLayout
                 android:id="@+id/otherSessionsFilterFrameLayout"

@@ -47,6 +47,7 @@
             android:text="@string/device_manager_filter_option_verified" />
 
         <TextView
+            android:id="@+id/filterOptionVerifiedTextView"
             style="@style/TextAppearance.Vector.Body.DevicesManagement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,6 +64,7 @@
             android:text="@string/device_manager_filter_option_unverified" />
 
         <TextView
+            android:id="@+id/filterOptionUnverifiedTextView"
             style="@style/TextAppearance.Vector.Body.DevicesManagement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +81,7 @@
             android:text="@string/device_manager_filter_option_inactive" />
 
         <TextView
-            android:id="@+id/filterOptionInactiveRadioButtonDescription"
+            android:id="@+id/filterOptionInactiveTextView"
             style="@style/TextAppearance.Vector.Body.DevicesManagement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

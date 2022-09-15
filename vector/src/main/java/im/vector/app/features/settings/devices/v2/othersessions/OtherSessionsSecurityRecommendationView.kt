@@ -28,7 +28,7 @@ import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewOtherSessionSecurityRecommendationBinding
 
 @AndroidEntryPoint
-class OtherSessionsSecurityRecommendationView  @JvmOverloads constructor(
+class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
@@ -84,13 +84,14 @@ class OtherSessionsSecurityRecommendationView  @JvmOverloads constructor(
 
     private fun setDescription(description: String?) {
         val learnMore = context.getString(R.string.action_learn_more)
-        val stringBuilder = StringBuilder()
-        stringBuilder.append(description)
-        stringBuilder.append(" ")
-        stringBuilder.append(learnMore)
+        val formattedDescription = buildString {
+            append(description)
+            append(" ")
+            append(learnMore)
+        }
 
         views.recommendationDescriptionTextView.setTextWithColoredPart(
-                fullText = stringBuilder.toString(),
+                fullText = formattedDescription,
                 coloredPart = learnMore,
                 underline = false
         ) {

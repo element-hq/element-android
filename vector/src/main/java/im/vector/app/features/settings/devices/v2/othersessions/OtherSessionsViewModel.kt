@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.othersessions
 
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -26,48 +26,65 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.PublishDataSource
+import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
+import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.lib.core.utils.flow.throttleFirst
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import kotlin.time.Duration.Companion.seconds
 
-class DevicesViewModel @AssistedInject constructor(
-        @Assisted initialState: DevicesViewState,
+class OtherSessionsViewModel @AssistedInject constructor(
+        @Assisted initialState: OtherSessionsViewState,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesUseCase: RefreshDevicesUseCase,
-        private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
-) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState), VerificationService.Listener {
+) : VectorViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(initialState), VerificationService.Listener {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
-        override fun create(initialState: DevicesViewState): DevicesViewModel
+    interface Factory : MavericksAssistedViewModelFactory<OtherSessionsViewModel, OtherSessionsViewState> {
+        override fun create(initialState: OtherSessionsViewState): OtherSessionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<OtherSessionsViewModel, OtherSessionsViewState> by hiltMavericksViewModelFactory()
+
+    private var observeDevicesJob: Job? = null
 
     private val refreshSource = PublishDataSource<Unit>()
     private val refreshThrottleDelayMs = 4.seconds.inWholeMilliseconds
 
     init {
+        observeDevices(initialState.currentFilter)
         addVerificationListener()
-        observeCurrentSessionCrossSigningInfo()
-        observeDevices()
         observeRefreshSource()
-        refreshDevicesOnCryptoDevicesChange()
-        queryRefreshDevicesList()
     }
 
     override fun onCleared() {
         removeVerificationListener()
         super.onCleared()
+    }
+
+    private fun observeDevices(currentFilter: DeviceManagerFilterType) {
+        observeDevicesJob?.cancel()
+        observeDevicesJob = getDeviceFullInfoListUseCase.execute(
+                filterType = currentFilter,
+                excludeCurrentDevice = true
+        )
+                .execute { async ->
+                    if (async is Success) {
+                        copy(
+                                devices = async,
+                        )
+                    } else {
+                        copy(
+                                devices = async
+                        )
+                    }
+                }
     }
 
     private fun addVerificationListener() {
@@ -84,45 +101,6 @@ class DevicesViewModel @AssistedInject constructor(
                 ?.removeListener(this)
     }
 
-    private fun observeCurrentSessionCrossSigningInfo() {
-        getCurrentSessionCrossSigningInfoUseCase.execute()
-                .onEach { crossSigningInfo ->
-                    setState {
-                        copy(currentSessionCrossSigningInfo = crossSigningInfo)
-                    }
-                }
-                .launchIn(viewModelScope)
-    }
-
-    private fun observeDevices() {
-        getDeviceFullInfoListUseCase.execute(
-                filterType = DeviceManagerFilterType.ALL_SESSIONS,
-                excludeCurrentDevice = false
-        )
-                .execute { async ->
-                    if (async is Success) {
-                        val deviceFullInfoList = async.invoke()
-                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.isVerified.orFalse() }
-                        val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
-                        copy(
-                                devices = async,
-                                unverifiedSessionsCount = unverifiedSessionsCount,
-                                inactiveSessionsCount = inactiveSessionsCount,
-                        )
-                    } else {
-                        copy(
-                                devices = async
-                        )
-                    }
-                }
-    }
-
-    private fun refreshDevicesOnCryptoDevicesChange() {
-        viewModelScope.launch {
-            refreshDevicesOnCryptoDevicesChangeUseCase.execute()
-        }
-    }
-
     private fun observeRefreshSource() {
         refreshSource.stream()
                 .throttleFirst(refreshThrottleDelayMs)
@@ -136,22 +114,22 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
-    /**
-     * Force the refresh of the devices list.
-     * The devices list is the list of the devices where the user is logged in.
-     * It can be any mobile devices, and any browsers.
-     */
     private fun queryRefreshDevicesList() {
         refreshSource.post(Unit)
     }
 
-    override fun handle(action: DevicesAction) {
+    override fun handle(action: OtherSessionsAction) {
         when (action) {
-            is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
+            is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
         }
     }
 
-    private fun handleMarkAsManuallyVerifiedAction() {
-        // TODO implement when needed
+    private fun handleFilterDevices(action: OtherSessionsAction.FilterDevices) {
+        setState {
+            copy(
+                    currentFilter = action.filterType
+            )
+        }
+        observeDevices(action.filterType)
     }
 }

@@ -20,9 +20,12 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.OnModelBuildFinishedListener
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.ViewOtherSessionsBinding
@@ -44,18 +47,32 @@ class OtherSessionsView @JvmOverloads constructor(
     @Inject lateinit var otherSessionsController: OtherSessionsController
 
     private val views: ViewOtherSessionsBinding
-    private val recyclerViewDataObserver: RecyclerView.AdapterDataObserver
+    private lateinit var recyclerViewDataObserver: RecyclerView.AdapterDataObserver
+    private lateinit var stateRestorer: LayoutManagerStateRestorer
+    private var modelBuildListener: OnModelBuildFinishedListener? = null
+
     var callback: Callback? = null
 
     init {
         inflate(context, R.layout.view_other_sessions, this)
         views = ViewOtherSessionsBinding.bind(this)
 
-        otherSessionsController.callback = this
+        configureOtherSessionsRecyclerView()
 
         views.otherSessionsViewAllButton.setOnClickListener {
             callback?.onViewAllOtherSessionsClicked()
         }
+    }
+
+    private fun configureOtherSessionsRecyclerView() {
+        views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = false)
+
+        val layoutManager = LinearLayoutManager(context)
+        stateRestorer = LayoutManagerStateRestorer(layoutManager)
+        views.otherSessionsRecyclerView.layoutManager = layoutManager
+        layoutManager.recycleChildrenOnDetach = true
+        modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
+        otherSessionsController.addModelBuildListener(modelBuildListener)
 
         recyclerViewDataObserver = object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -64,10 +81,11 @@ class OtherSessionsView @JvmOverloads constructor(
             }
         }
         otherSessionsController.adapter.registerAdapterDataObserver(recyclerViewDataObserver)
+
+        otherSessionsController.callback = this
     }
 
     fun render(devices: List<DeviceFullInfo>, totalNumberOfDevices: Int, showViewAll: Boolean) {
-        views.otherSessionsRecyclerView.configureWith(otherSessionsController, hasFixedSize = true)
         if (showViewAll) {
             views.otherSessionsViewAllButton.isVisible = true
             views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, totalNumberOfDevices)
@@ -78,6 +96,8 @@ class OtherSessionsView @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
+        otherSessionsController.removeModelBuildListener(modelBuildListener)
+        modelBuildListener = null
         otherSessionsController.callback = null
         otherSessionsController.adapter.unregisterAdapterDataObserver(recyclerViewDataObserver)
         views.otherSessionsRecyclerView.cleanup()

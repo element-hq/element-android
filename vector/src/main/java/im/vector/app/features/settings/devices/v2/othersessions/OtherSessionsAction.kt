@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.othersessions
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
+import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 
-data class DevicesViewState(
-        val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
-        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
-        val unverifiedSessionsCount: Int = 0,
-        val inactiveSessionsCount: Int = 0,
-        val isLoading: Boolean = false,
-) : MavericksState
+sealed class OtherSessionsAction : VectorViewModelAction {
+    data class FilterDevices(val filterType: DeviceManagerFilterType) : OtherSessionsAction()
+}

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.othersessions
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
+import android.content.Context
+import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
+import javax.inject.Inject
 
-data class DevicesViewState(
-        val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
-        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
-        val unverifiedSessionsCount: Int = 0,
-        val inactiveSessionsCount: Int = 0,
-        val isLoading: Boolean = false,
-) : MavericksState
+class OtherSessionsViewNavigator @Inject constructor() {
+
+    fun navigateToSessionOverview(context: Context, deviceId: String) {
+        context.startActivity(SessionOverviewActivity.newIntent(context, deviceId))
+    }
+}

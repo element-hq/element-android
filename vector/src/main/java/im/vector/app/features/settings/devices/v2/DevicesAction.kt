@@ -17,10 +17,8 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 sealed class DevicesAction : VectorViewModelAction {
     data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
-    data class FilterDevices(val filterType: DeviceManagerFilterType) : DevicesAction()
 }

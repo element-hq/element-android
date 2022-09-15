@@ -50,7 +50,7 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
     }
 
     private fun initFilterRadioGroup() {
-        views.filterOptionInactiveRadioButtonDescription.text = resources.getQuantityString(
+        views.filterOptionInactiveTextView.text = resources.getQuantityString(
                 R.plurals.device_manager_filter_option_inactive_description,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
@@ -63,6 +63,16 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
             DeviceManagerFilterType.INACTIVE -> R.id.filterOptionInactiveRadioButton
         }
         views.filterOptionsRadioGroup.check(radioButtonId)
+
+        views.filterOptionVerifiedTextView.debouncedClicks {
+            views.filterOptionsRadioGroup.check(R.id.filterOptionVerifiedRadioButton)
+        }
+        views.filterOptionUnverifiedTextView.debouncedClicks {
+            views.filterOptionsRadioGroup.check(R.id.filterOptionUnverifiedRadioButton)
+        }
+        views.filterOptionInactiveTextView.debouncedClicks {
+            views.filterOptionsRadioGroup.check(R.id.filterOptionInactiveRadioButton)
+        }
 
         views.filterOptionsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             onFilterTypeChanged(checkedId)
