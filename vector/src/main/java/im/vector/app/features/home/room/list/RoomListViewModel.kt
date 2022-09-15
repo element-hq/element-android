@@ -173,7 +173,7 @@ class RoomListViewModel @AssistedInject constructor(
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
     }
 
-    fun deleteLocalRooms(roomsIds: List<String>) {
+    fun deleteLocalRooms(roomsIds: Iterable<String>) {
         viewModelScope.launch {
             roomsIds.forEach {
                 session.roomService().deleteLocalRoom(it)
