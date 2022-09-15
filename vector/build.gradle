@@ -208,7 +208,6 @@ dependencies {
     // Image Loading
     implementation libs.github.bigImageViewer
     implementation libs.github.glideImageLoader
-    implementation libs.github.progressPieIndicator
     implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
