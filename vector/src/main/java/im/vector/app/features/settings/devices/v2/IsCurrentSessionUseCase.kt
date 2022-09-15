@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.di.ActiveSessionHolder
+import javax.inject.Inject
 
-sealed class SessionOverviewAction : VectorViewModelAction {
-    data class VerifySession(val deviceId: String) : SessionOverviewAction()
+class IsCurrentSessionUseCase @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+) {
+
+    fun execute(deviceId: String): Boolean {
+        val currentDeviceId = activeSessionHolder.getSafeActiveSession()?.sessionParams?.deviceId.orEmpty()
+        return deviceId.isNotEmpty() && deviceId == currentDeviceId
+    }
 }

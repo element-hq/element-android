@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
+import org.matrix.android.sdk.api.session.Session
 
-sealed class SessionOverviewAction : VectorViewModelAction {
-    data class VerifySession(val deviceId: String) : SessionOverviewAction()
+sealed class SessionOverviewViewEvent : VectorViewEvents {
+    data class SelfVerification(val session: Session) : SessionOverviewViewEvent()
+    object PromptResetSecrets : SessionOverviewViewEvent()
 }

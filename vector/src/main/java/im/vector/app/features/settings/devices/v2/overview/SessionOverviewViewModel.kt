@@ -21,19 +21,23 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
+import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
+import kotlinx.coroutines.launch
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        session: Session,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
-) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
+        private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
+) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(initialState) {
 
     companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> by hiltMavericksViewModelFactory()
 
@@ -43,12 +47,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
-        val currentDeviceId = session.sessionParams.deviceId.orEmpty()
         setState {
-            copy(isCurrentSession = deviceId.isNotEmpty() && deviceId == currentDeviceId)
+            copy(isCurrentSession = isCurrentSession(deviceId))
         }
-
         observeSessionInfo(initialState.deviceId)
+    }
+
+    private fun isCurrentSession(deviceId: String): Boolean {
+        return isCurrentSessionUseCase.execute(deviceId)
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -58,6 +64,27 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: SessionOverviewAction) {
-        TODO("Implement when adding the first action")
+        when (action) {
+            is SessionOverviewAction.VerifySession -> handleVerifySessionAction(action)
+        }
+    }
+
+    private fun handleVerifySessionAction(verifySession: SessionOverviewAction.VerifySession) {
+        if (isCurrentSession(verifySession.deviceId)) {
+            handleVerifyCurrentSession()
+        }
+    }
+
+    private fun handleVerifyCurrentSession() {
+        viewModelScope.launch {
+            val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+            if (currentSessionCanBeVerified) {
+                activeSessionHolder.getSafeActiveSession()?.let { session ->
+                    _viewEvents.post(SessionOverviewViewEvent.SelfVerification(session))
+                }
+            } else {
+                _viewEvents.post(SessionOverviewViewEvent.PromptResetSecrets)
+            }
+        }
     }
 }
