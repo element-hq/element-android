@@ -272,6 +272,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
                     .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
+                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
                     .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
                     .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)

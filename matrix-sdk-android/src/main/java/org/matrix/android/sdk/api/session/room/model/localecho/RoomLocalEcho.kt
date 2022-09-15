@@ -20,7 +20,7 @@ import java.util.UUID
 
 object RoomLocalEcho {
 
-    private const val PREFIX = "!local."
+    const val PREFIX = "!local."
 
     /**
      * Tell whether the provider room id is a local id.
