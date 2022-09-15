@@ -2600,8 +2600,8 @@
     <string name="location_share_loading_map_error">Kan kaart niet laden
 \nDeze server is mogelijk niet geconfigureerd om kaarten weer te geven.</string>
     <string name="a11y_open_settings">Open instellingen</string>
-    <string name="settings_sessions_other_description">Voor de beste beveiliging verifieert u uw sessies en meldt u zich af bij elke sessie die u niet meer herkent of gebruikt.</string>
-    <string name="settings_sessions_other_title">Andere sessies</string>
+    <string name="device_manager_sessions_other_description">Voor de beste beveiliging verifieert u uw sessies en meldt u zich af bij elke sessie die u niet meer herkent of gebruikt.</string>
+    <string name="device_manager_sessions_other_title">Andere sessies</string>
     <string name="settings_sessions_list">Sessies</string>
     <string name="a11y_open_spaces">Lijst met publieke spaces</string>
     <string name="a11y_create_message">Maak een nieuw gesprek of een nieuwe kamer</string>
