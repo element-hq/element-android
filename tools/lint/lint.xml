@@ -108,6 +108,9 @@
     <issue id="TypographyDashes" severity="error" />
     <issue id="PluralsCandidate" severity="error" />
 
+    <!-- Notification -->
+    <issue id="LaunchActivityFromNotification" severity="error" />
+
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
 </lint>

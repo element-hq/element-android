@@ -967,6 +967,7 @@ class NotificationUtils @Inject constructor(
         }
     }
 
+    @SuppressLint("LaunchActivityFromNotification")
     fun displayDiagnosticNotification() {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = actionIds.diagnostic
