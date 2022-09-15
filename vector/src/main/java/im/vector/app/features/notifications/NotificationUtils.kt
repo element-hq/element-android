@@ -34,6 +34,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.annotation.AttrRes
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -102,6 +103,7 @@ class NotificationUtils @Inject constructor(
         const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
         fun openSystemSettingsForSilentCategory(fragment: Fragment) {
@@ -126,7 +128,6 @@ class NotificationUtils @Inject constructor(
     /**
      * Create notification channels.
      */
-    @TargetApi(Build.VERSION_CODES.O)
     fun createNotificationChannels() {
         if (!supportNotificationChannels()) {
             return
