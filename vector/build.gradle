@@ -100,7 +100,6 @@ android {
         viewBinding true
     }
 }
-
 dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
@@ -240,12 +239,26 @@ dependencies {
     // implementation 'org.webrtc:google-webrtc:1.0.+'
     implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
+    // Exclude jitsi's android-scalablevideoview fork's support library
+    // The library exports a jetified artifact but doesn't remove the support library dependency
+    // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
+    components {
+        withModule("com.github.MatrixFrog:android-scalablevideoview") {
+            allVariants {
+                withDependencies {
+                    removeAll { it.group == "com.android.support" && it.name == "appcompat-v7" }
+                }
+            }
+        }
+    }
+
     // Jitsi
     api('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
     }
+
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
