@@ -16,6 +16,8 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.filter.FilterDevicesUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.test
@@ -47,12 +49,14 @@ class GetDeviceFullInfoListUseCaseTest {
     private val checkIfSessionIsInactiveUseCase = mockk<CheckIfSessionIsInactiveUseCase>()
     private val getEncryptionTrustLevelForDeviceUseCase = mockk<GetEncryptionTrustLevelForDeviceUseCase>()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
+    private val filterDevicesUseCase = mockk<FilterDevicesUseCase>()
 
     private val getDeviceFullInfoListUseCase = GetDeviceFullInfoListUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
             checkIfSessionIsInactiveUseCase = checkIfSessionIsInactiveUseCase,
             getEncryptionTrustLevelForDeviceUseCase = getEncryptionTrustLevelForDeviceUseCase,
             getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
+            filterDevicesUseCase = filterDevicesUseCase,
     )
 
     @Before
@@ -117,9 +121,10 @@ class GetDeviceFullInfoListUseCaseTest {
                 isInactive = false
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
+        every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
 
         // When
-        val result = getDeviceFullInfoListUseCase.execute()
+        val result = getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.ALL_SESSIONS, excludeCurrentDevice = false)
                 .test(this)
 
         // Then
@@ -144,7 +149,7 @@ class GetDeviceFullInfoListUseCaseTest {
         fakeActiveSessionHolder.givenGetSafeActiveSessionReturns(null)
 
         // When
-        val result = getDeviceFullInfoListUseCase.execute()
+        val result = getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.ALL_SESSIONS, excludeCurrentDevice = false)
                 .test(this)
 
         // Then
