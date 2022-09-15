@@ -253,6 +253,7 @@ dependencies {
 
     // Analytics
     implementation 'com.posthog.android:posthog:1.1.2'
+    implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.1'

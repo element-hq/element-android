@@ -18,6 +18,9 @@
         tools:ignore="UnusedAttribute"
         tools:replace="android:allowBackup">
 
+        <!-- Sentry auto-initialization disable -->
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+
         <!-- Providers -->
 
         <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->

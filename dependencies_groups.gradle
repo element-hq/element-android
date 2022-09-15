@@ -142,6 +142,7 @@ ext.groups = [
                         'io.opencensus',
                         'io.reactivex.rxjava2',
                         'io.realm',
+                        'io.sentry',
                         'it.unimi.dsi',
                         'jakarta.activation',
                         'jakarta.xml.bind',
