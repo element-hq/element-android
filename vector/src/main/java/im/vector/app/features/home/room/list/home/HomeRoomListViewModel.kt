@@ -32,6 +32,7 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -53,6 +54,7 @@ import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
@@ -62,6 +64,7 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
 class HomeRoomListViewModel @AssistedInject constructor(
@@ -298,7 +301,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                             isBigImage = true
                     )
                 } else {
-                    val userName = session.userService().getUser(session.myUserId)?.displayName ?: ""
+                    val userName = session.getUserOrDefault(session.myUserId).toMatrixItem().getBestName()
                     StateView.State.Empty(
                             title = stringProvider.getString(R.string.home_empty_no_rooms_title, userName),
                             message = stringProvider.getString(R.string.home_empty_no_rooms_message),
