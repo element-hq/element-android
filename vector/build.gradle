@@ -177,7 +177,9 @@ dependencies {
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    api 'me.gujun.android:span:1.7'
+    api('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
     implementation libs.markwon.inlineParser
@@ -225,7 +227,9 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation 'com.posthog.android:posthog:1.1.2'
+    implementation('com.posthog.android:posthog:1.1.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.1'
