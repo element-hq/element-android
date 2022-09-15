@@ -19,6 +19,9 @@
     <issue id="IconExpectedSize" severity="error" />
     <issue id="LocaleFolder" severity="error" />
 
+    <!-- AlwaysShowAction is considered as an error to force ignoring the issue when detected -->
+    <issue id="AlwaysShowAction" severity="error" />
+
     <issue id="TooManyViews" severity="warning">
         <!-- Ignore TooManyViews in debug build type -->
         <ignore path="**/src/debug/**" />

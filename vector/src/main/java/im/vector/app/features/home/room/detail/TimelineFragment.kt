@@ -1124,6 +1124,7 @@ class TimelineFragment :
                         .findViewById<ImageView>(R.id.action_view_icon_image)
                         .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                @Suppress("AlwaysShowAction")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
 
