@@ -38,7 +38,7 @@ class PaparazziExampleScreenshotTest {
     fun `example paparazzi test`() {
         val view = paparazzi.inflate<ConstraintLayout>(R.layout.item_radio)
 
-        view.findViewById<TextView>(R.id.actionTitle).text = paparazzi.resources.getString(R.string.room_settings_all_messages)
+        view.findViewById<TextView>(R.id.actionTitle).text = "fail"
         view.findViewById<ImageView>(R.id.radioIcon).setImageResource(R.drawable.ic_radio_on)
 
         paparazzi.snapshot(view)
