@@ -20,14 +20,17 @@ import android.content.Context
 import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import im.vector.app.features.VectorFeatures
 import kotlinx.coroutines.Dispatchers
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import javax.inject.Inject
 
 class VoiceRecorderProvider @Inject constructor(
         private val context: Context,
         private val vectorFeatures: VectorFeatures,
+        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
         return if (useFallbackRecorder()) {
@@ -37,8 +40,11 @@ class VoiceRecorderProvider @Inject constructor(
         }
     }
 
+    @ChecksSdkIntAtLeast(api = 29)
     private fun useFallbackRecorder(): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || !hasOpusEncoder() || vectorFeatures.forceUsageOfOpusEncoder()
+        return buildVersionSdkIntProvider.get() < Build.VERSION_CODES.Q ||
+                !hasOpusEncoder() ||
+                vectorFeatures.forceUsageOfOpusEncoder()
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
