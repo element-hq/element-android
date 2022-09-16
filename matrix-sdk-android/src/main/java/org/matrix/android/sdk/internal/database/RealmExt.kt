@@ -55,6 +55,23 @@ internal fun <T : RealmObject> RealmQuery<T>.queryIn(
         values: List<String>
 ): RealmQuery<T> {
     if (values.isEmpty()) return this
+    val filter = buildQueryInFilter(field, values)
+    return query(filter)
+}
+
+internal fun <T : RealmObject> RealmQuery<T>.queryNotIn(
+        field: String,
+        values: List<String>
+): RealmQuery<T> {
+    if (values.isEmpty()) return this
+    val filter = buildQueryInFilter(field, values)
+    return query("NOT $filter")
+}
+
+private fun buildQueryInFilter(
+        field: String,
+        values: List<String>
+): String {
     val filter = buildString {
         val iterator = values.iterator()
         while (iterator.hasNext()) {
@@ -64,7 +81,7 @@ internal fun <T : RealmObject> RealmQuery<T>.queryIn(
             }
         }
     }
-    return query(filter)
+    return filter
 }
 
 internal fun <T : RealmObject> RealmQuery<T>.andIf(

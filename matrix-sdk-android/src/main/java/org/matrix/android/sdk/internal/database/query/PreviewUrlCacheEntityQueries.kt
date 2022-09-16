@@ -16,24 +16,30 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntity
-import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 
 /**
  * Get the current PreviewUrlCacheEntity, return null if it does not exist.
  */
-internal fun PreviewUrlCacheEntity.Companion.get(realm: Realm, url: String): PreviewUrlCacheEntity? {
-    return realm.where<PreviewUrlCacheEntity>()
-            .equalTo(PreviewUrlCacheEntityFields.URL, url)
-            .findFirst()
+internal fun PreviewUrlCacheEntity.Companion.get(realm: TypedRealm, url: String): PreviewUrlCacheEntity? {
+    return realm.query(PreviewUrlCacheEntity::class)
+            .query("url == $0", url)
+            .first()
+            .find()
 }
 
 /**
  * Get the current PreviewUrlCacheEntity, create one if it does not exist.
  */
-internal fun PreviewUrlCacheEntity.Companion.getOrCreate(realm: Realm, url: String): PreviewUrlCacheEntity {
-    return get(realm, url) ?: realm.createObject(url)
+internal fun PreviewUrlCacheEntity.Companion.getOrCreate(realm: MutableRealm, url: String): PreviewUrlCacheEntity {
+    return get(realm, url) ?: create(realm, url)
+}
+
+internal fun PreviewUrlCacheEntity.Companion.create(realm: MutableRealm, url: String): PreviewUrlCacheEntity {
+    val previewUrlCacheEntity = PreviewUrlCacheEntity().apply {
+        this.url = url
+    }
+    return realm.copyToRealm(previewUrlCacheEntity)
 }

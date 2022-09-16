@@ -16,15 +16,16 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 
-internal fun BreadcrumbsEntity.Companion.get(realm: Realm): BreadcrumbsEntity? {
-    return realm.where<BreadcrumbsEntity>().findFirst()
+internal fun BreadcrumbsEntity.Companion.get(realm: TypedRealm): BreadcrumbsEntity? {
+    return realm.query(BreadcrumbsEntity::class).first().find()
 }
 
-internal fun BreadcrumbsEntity.Companion.getOrCreate(realm: Realm): BreadcrumbsEntity {
-    return get(realm) ?: realm.createObject()
+internal fun BreadcrumbsEntity.Companion.getOrCreate(realm: MutableRealm): BreadcrumbsEntity {
+    return get(realm) ?: BreadcrumbsEntity().also {
+        realm.copyToRealm(it)
+    }
 }

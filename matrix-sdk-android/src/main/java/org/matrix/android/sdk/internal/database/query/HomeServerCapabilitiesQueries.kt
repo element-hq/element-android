@@ -16,21 +16,25 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
 
 /**
  * Get the current HomeServerCapabilitiesEntity, return null if it does not exist.
  */
-internal fun HomeServerCapabilitiesEntity.Companion.get(realm: Realm): HomeServerCapabilitiesEntity? {
-    return realm.where<HomeServerCapabilitiesEntity>().findFirst()
+internal fun HomeServerCapabilitiesEntity.Companion.get(realm: TypedRealm): HomeServerCapabilitiesEntity? {
+    return realm.query(HomeServerCapabilitiesEntity::class).first().find()
 }
 
 /**
  * Get the current HomeServerCapabilitiesEntity, create one if it does not exist.
  */
-internal fun HomeServerCapabilitiesEntity.Companion.getOrCreate(realm: Realm): HomeServerCapabilitiesEntity {
-    return get(realm) ?: realm.createObject()
+internal fun HomeServerCapabilitiesEntity.Companion.getOrCreate(realm: MutableRealm): HomeServerCapabilitiesEntity {
+    return get(realm) ?: create(realm)
 }
+
+internal fun HomeServerCapabilitiesEntity.Companion.create(realm: MutableRealm): HomeServerCapabilitiesEntity {
+    return realm.copyToRealm(HomeServerCapabilitiesEntity())
+}
+

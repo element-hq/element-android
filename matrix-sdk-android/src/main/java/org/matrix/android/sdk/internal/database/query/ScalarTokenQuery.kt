@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.ScalarTokenEntity
-import org.matrix.android.sdk.internal.database.model.ScalarTokenEntityFields
 
-internal fun ScalarTokenEntity.Companion.where(realm: Realm, serverUrl: String): RealmQuery<ScalarTokenEntity> {
+internal fun ScalarTokenEntity.Companion.where(realm: TypedRealm, serverUrl: String): RealmQuery<ScalarTokenEntity> {
     return realm
-            .where<ScalarTokenEntity>()
-            .equalTo(ScalarTokenEntityFields.SERVER_URL, serverUrl)
+            .query(ScalarTokenEntity::class)
+            .query("serverUrl == $0", serverUrl)
 }

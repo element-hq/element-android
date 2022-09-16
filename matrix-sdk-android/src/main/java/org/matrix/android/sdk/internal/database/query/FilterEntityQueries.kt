@@ -16,27 +16,30 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.internal.database.model.FilterEntity
 import org.matrix.android.sdk.internal.session.filter.FilterFactory
 
 /**
  * Get the current filter.
  */
-internal fun FilterEntity.Companion.get(realm: Realm): FilterEntity? {
-    return realm.where<FilterEntity>().findFirst()
+internal fun FilterEntity.Companion.get(realm: TypedRealm): FilterEntity? {
+    return realm.query(FilterEntity::class).first().find()
 }
 
 /**
  * Get the current filter, create one if it does not exist.
  */
-internal fun FilterEntity.Companion.getOrCreate(realm: Realm): FilterEntity {
-    return get(realm) ?: realm.createObject<FilterEntity>()
-            .apply {
-                filterBodyJson = FilterFactory.createDefaultFilter().toJSONString()
-                roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
-                filterId = ""
-            }
+internal fun FilterEntity.Companion.getOrCreate(realm: MutableRealm): FilterEntity {
+    return get(realm) ?: create(realm)
+}
+
+internal fun FilterEntity.Companion.create(realm: MutableRealm): FilterEntity {
+    val filterEntity = FilterEntity().apply {
+        filterBodyJson = FilterFactory.createDefaultFilter().toJSONString()
+        roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
+        filterId = ""
+    }
+    return realm.copyToRealm(filterEntity)
 }

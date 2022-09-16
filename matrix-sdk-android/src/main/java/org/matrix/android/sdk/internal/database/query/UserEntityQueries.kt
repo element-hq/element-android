@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.UserEntity
-import org.matrix.android.sdk.internal.database.model.UserEntityFields
 
-internal fun UserEntity.Companion.where(realm: Realm, userId: String): RealmQuery<UserEntity> {
+internal fun UserEntity.Companion.where(realm: TypedRealm, userId: String): RealmQuery<UserEntity> {
     return realm
-            .where<UserEntity>()
-            .equalTo(UserEntityFields.USER_ID, userId)
+            .query(UserEntity::class)
+            .query("userId == $0", userId)
 }

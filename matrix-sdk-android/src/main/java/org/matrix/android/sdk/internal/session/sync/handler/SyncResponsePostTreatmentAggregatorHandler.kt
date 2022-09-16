@@ -16,10 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
-import com.zhuinden.monarchy.Monarchy
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
@@ -28,7 +29,6 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
@@ -36,7 +36,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val getProfileInfoTask: GetProfileInfoTask,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
@@ -93,9 +93,11 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
     }
 
     private suspend fun List<User>.saveLocally() {
-        val userEntities = map { user -> UserEntityFactory.create(user) }
-        monarchy.awaitTransaction {
-            it.insertOrUpdate(userEntities)
+        realmInstance.write {
+            forEach { user ->
+                val userEntity = UserEntityFactory.create(user)
+                copyToRealm(userEntity, updatePolicy = UpdatePolicy.ALL)
+            }
         }
     }
 }

@@ -16,18 +16,24 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
-import org.matrix.android.sdk.internal.database.model.ReadMarkerEntityFields
 
-internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ReadMarkerEntity> {
-    return realm.where<ReadMarkerEntity>()
-            .equalTo(ReadMarkerEntityFields.ROOM_ID, roomId)
+internal fun ReadMarkerEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ReadMarkerEntity> {
+    return realm.query(ReadMarkerEntity::class)
+            .query("roomId == $0", roomId)
 }
 
-internal fun ReadMarkerEntity.Companion.getOrCreate(realm: Realm, roomId: String): ReadMarkerEntity {
-    return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+internal fun ReadMarkerEntity.Companion.getOrCreate(realm: MutableRealm, roomId: String): ReadMarkerEntity {
+    return where(realm, roomId).first().find() ?: create(realm, roomId)
 }
+
+internal fun ReadMarkerEntity.Companion.create(realm: MutableRealm, roomId: String): ReadMarkerEntity {
+    val readMarkerEntity = ReadMarkerEntity().apply {
+        this.roomId = roomId
+    }
+    return realm.copyToRealm(readMarkerEntity)
+}
+

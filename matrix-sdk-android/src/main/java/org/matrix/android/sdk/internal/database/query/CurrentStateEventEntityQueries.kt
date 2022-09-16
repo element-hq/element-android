@@ -17,50 +17,49 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.createObject
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 
 internal fun CurrentStateEventEntity.Companion.whereRoomId(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String
 ): RealmQuery<CurrentStateEventEntity> {
-    return realm.where(CurrentStateEventEntity::class.java)
-            .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+    return realm.query(CurrentStateEventEntity::class)
+            .query("roomId == $0", roomId)
 }
 
 internal fun CurrentStateEventEntity.Companion.whereType(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         type: String
 ): RealmQuery<CurrentStateEventEntity> {
     return whereRoomId(realm = realm, roomId = roomId)
-            .equalTo(CurrentStateEventEntityFields.TYPE, type)
+            .query("type == $0", type)
 }
 
 internal fun CurrentStateEventEntity.Companion.whereStateKey(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         type: String,
         stateKey: String
 ): RealmQuery<CurrentStateEventEntity> {
     return whereType(realm = realm, roomId = roomId, type = type)
-            .equalTo(CurrentStateEventEntityFields.STATE_KEY, stateKey)
+            .query("stateKey == $0", stateKey)
 }
 
 internal fun CurrentStateEventEntity.Companion.getOrNull(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         stateKey: String,
         type: String
 ): CurrentStateEventEntity? {
-    return whereStateKey(realm = realm, roomId = roomId, type = type, stateKey = stateKey).findFirst()
+    return whereStateKey(realm = realm, roomId = roomId, type = type, stateKey = stateKey).first().find()
 }
 
 internal fun CurrentStateEventEntity.Companion.getOrCreate(
-        realm: Realm,
+        realm: MutableRealm,
         roomId: String,
         stateKey: String,
         type: String
@@ -69,14 +68,15 @@ internal fun CurrentStateEventEntity.Companion.getOrCreate(
 }
 
 private fun create(
-        realm: Realm,
+        realm: MutableRealm,
         roomId: String,
         stateKey: String,
         type: String
 ): CurrentStateEventEntity {
-    return realm.createObject<CurrentStateEventEntity>().apply {
+    val currentStateEventEntity = CurrentStateEventEntity().apply {
         this.type = type
         this.roomId = roomId
         this.stateKey = stateKey
     }
+    return realm.copyToRealm(currentStateEventEntity)
 }

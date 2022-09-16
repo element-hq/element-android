@@ -16,7 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getPresenceContent
@@ -30,23 +31,21 @@ import javax.inject.Inject
 
 internal class PresenceSyncHandler @Inject constructor(private val matrixConfiguration: MatrixConfiguration) {
 
-    fun handle(realm: Realm, presenceSyncResponse: PresenceSyncResponse?) {
+    fun handle(realm: MutableRealm, presenceSyncResponse: PresenceSyncResponse?) {
         presenceSyncResponse?.events
                 ?.filter { event -> event.type == EventType.PRESENCE }
                 ?.forEach { event ->
                     val content = event.getPresenceContent() ?: return@forEach
-                    val userId = event.senderId ?: return@forEach
-                    val userPresenceEntity = UserPresenceEntity(
-                            userId = userId,
-                            lastActiveAgo = content.lastActiveAgo,
-                            statusMessage = content.statusMessage,
-                            isCurrentlyActive = content.isCurrentlyActive,
-                            avatarUrl = content.avatarUrl,
-                            displayName = content.displayName
-                    ).also {
-                        it.presence = content.presence
+                    val senderId = event.senderId ?: return@forEach
+                    val userPresenceEntity = UserPresenceEntity().apply {
+                        userId = senderId
+                        lastActiveAgo = content.lastActiveAgo
+                        statusMessage = content.statusMessage
+                        isCurrentlyActive = content.isCurrentlyActive
+                        avatarUrl = content.avatarUrl
+                        displayName = content.displayName
+                        presence = content.presence
                     }
-
                     storePresenceToDB(realm, userPresenceEntity)
                 }
     }
@@ -54,8 +53,8 @@ internal class PresenceSyncHandler @Inject constructor(private val matrixConfigu
     /**
      * Store user presence to DB and update Direct Rooms and Room Member Summaries accordingly.
      */
-    private fun storePresenceToDB(realm: Realm, userPresenceEntity: UserPresenceEntity) =
-            realm.copyToRealmOrUpdate(userPresenceEntity)?.apply {
+    private fun storePresenceToDB(realm: MutableRealm, userPresenceEntity: UserPresenceEntity) =
+            realm.copyToRealm(userPresenceEntity, updatePolicy = UpdatePolicy.ALL)?.also {
                 RoomSummaryEntity.updateDirectUserPresence(realm, userPresenceEntity.userId, this)
                 RoomMemberSummaryEntity.updateUserPresence(realm, userPresenceEntity.userId, this)
             }

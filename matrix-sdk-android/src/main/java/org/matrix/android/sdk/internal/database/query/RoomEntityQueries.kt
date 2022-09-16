@@ -16,32 +16,38 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.extensions.realm
 
-internal fun RoomEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<RoomEntity> {
-    return realm.where<RoomEntity>()
-            .equalTo(RoomEntityFields.ROOM_ID, roomId)
+internal fun RoomEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<RoomEntity> {
+    return realm.query(RoomEntity::class)
+            .query("roomId == $0", roomId)
 }
 
-internal fun RoomEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomEntity {
-    return where(realm, roomId).findFirst() ?: realm.createObject(RoomEntity::class.java, roomId)
+internal fun RoomEntity.Companion.getOrCreate(realm: MutableRealm, roomId: String): RoomEntity {
+    return where(realm, roomId).first().find() ?: create(realm, roomId)
 }
 
-internal fun RoomEntity.Companion.where(realm: Realm, membership: Membership? = null): RealmQuery<RoomEntity> {
-    val query = realm.where<RoomEntity>()
-    if (membership != null) {
-        query.equalTo(RoomEntityFields.MEMBERSHIP_STR, membership.name)
+internal fun RoomEntity.Companion.create(realm: MutableRealm, roomId: String): RoomEntity {
+    val entity = RoomEntity().apply {
+        this.roomId = roomId
     }
-    return query
+    return realm.copyToRealm(entity)
 }
 
-internal fun RoomEntity.fastContains(eventId: String): Boolean {
+internal fun RoomEntity.Companion.where(realm: TypedRealm, membership: Membership? = null): RealmQuery<RoomEntity> {
+    return realm.query(RoomEntity::class)
+            .andIf(membership != null) {
+                query("membershipStr == $0", membership!!.name)
+            }
+}
+
+internal fun RoomEntity.fastContains(realm: TypedRealm, eventId: String): Boolean {
     return EventEntity.where(realm, eventId = eventId).findFirst() != null
 }

@@ -16,27 +16,34 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
+import org.matrix.android.sdk.internal.database.queryIn
 
-internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInsertType): EventEntity {
-    val eventEntity = realm.where<EventEntity>()
-            .equalTo(EventEntityFields.EVENT_ID, eventId)
-            .equalTo(EventEntityFields.ROOM_ID, roomId)
-            .findFirst()
+internal fun EventEntity.copyToRealmOrIgnore(realm: MutableRealm, insertType: EventInsertType): EventEntity {
+    val eventId = this.eventId
+    val type = this.type
+    val eventEntity = realm.query(EventEntity::class)
+            .query("eventId == $0", eventId)
+            .query("roomId == $0", roomId)
+            .first()
+            .find()
     return if (eventEntity == null) {
         val canBeProcessed = type != EventType.ENCRYPTED || decryptionResultJson != null
-        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type, canBeProcessed = canBeProcessed).apply {
+        val insertEntity = EventInsertEntity().apply {
+            this.eventId = eventId
+            this.eventType = type
+            this.canBeProcessed = canBeProcessed
             this.insertType = insertType
         }
-        realm.insert(insertEntity)
+        realm.copyToRealm(insertEntity)
         // copy this event entity and return it
         realm.copyToRealm(this)
     } else {
@@ -44,44 +51,43 @@ internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInse
     }
 }
 
-internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .equalTo(EventEntityFields.EVENT_ID, eventId)
+internal fun EventEntity.Companion.where(realm: TypedRealm, eventId: String): RealmQuery<EventEntity> {
+    return realm.query(EventEntity::class)
+            .query("eventId == $0", eventId)
 }
 
-internal fun EventEntity.Companion.whereRoomId(realm: Realm, roomId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .equalTo(EventEntityFields.ROOM_ID, roomId)
+internal fun EventEntity.Companion.whereRoomId(realm: TypedRealm, roomId: String): RealmQuery<EventEntity> {
+    return realm.query(EventEntity::class)
+            .query("roomId == $0", roomId)
 }
 
-internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
+internal fun EventEntity.Companion.where(realm: TypedRealm, eventIds: List<String>): RealmQuery<EventEntity> {
+    return realm.query(EventEntity::class)
+            .queryIn("eventId", eventIds)
 }
 
 internal fun EventEntity.Companion.whereType(
-        realm: Realm,
+        realm: TypedRealm,
         type: String,
         roomId: String? = null
 ): RealmQuery<EventEntity> {
-    val query = realm.where<EventEntity>()
-    if (roomId != null) {
-        query.equalTo(EventEntityFields.ROOM_ID, roomId)
-    }
-    return query.equalTo(EventEntityFields.TYPE, type)
+    return realm.query(EventEntity::class)
+            .query("type == $0", type)
+            .andIf(roomId != null){
+                query("roomId == $0", roomId!!)
+            }
 }
 
 internal fun EventEntity.Companion.whereTypes(
-        realm: Realm,
+        realm: TypedRealm,
         typeList: List<String> = emptyList(),
         roomId: String? = null
 ): RealmQuery<EventEntity> {
-    val query = realm.where<EventEntity>()
-    query.`in`(EventEntityFields.TYPE, typeList.toTypedArray())
-    if (roomId != null) {
-        query.equalTo(EventEntityFields.ROOM_ID, roomId)
-    }
-    return query
+    return realm.query(EventEntity::class)
+            .queryIn("type", typeList)
+            .andIf(roomId != null){
+                query("roomId == $0", roomId!!)
+            }
 }
 
 internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {

@@ -16,62 +16,59 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
-import io.realm.kotlin.where
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.queryIn
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm): RealmQuery<TimelineEventEntity> {
-    return realm.where()
+internal fun TimelineEventEntity.Companion.where(realm: TypedRealm): RealmQuery<TimelineEventEntity> {
+    return realm.query(TimelineEventEntity::class)
 }
 
 internal fun TimelineEventEntity.Companion.where(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         eventId: String
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
-            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-            .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
+            .query("roomId == $0", roomId)
+            .query("evendId == $0", eventId)
 }
 
 internal fun TimelineEventEntity.Companion.where(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         eventIds: List<String>
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
-            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-            .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
+            .query("roomId == $0", roomId)
+            .queryIn("evendId", eventIds)
 }
 
 internal fun TimelineEventEntity.Companion.whereRoomId(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
-            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+            .query("roomId == $0", roomId)
 }
 
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(
-        realm: Realm,
+        realm: TypedRealm,
         senderMembershipEventId: String
 ): List<TimelineEventEntity> {
     return where(realm)
-            .equalTo(TimelineEventEntityFields.SENDER_MEMBERSHIP_EVENT_ID, senderMembershipEventId)
-            .findAll()
+            .query("senderMembershipEventId == $0", senderMembershipEventId)
+            .find()
 }
 
 internal fun TimelineEventEntity.Companion.latestEvent(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         includesSending: Boolean,
         filters: TimelineEventFilters = TimelineEventFilters()

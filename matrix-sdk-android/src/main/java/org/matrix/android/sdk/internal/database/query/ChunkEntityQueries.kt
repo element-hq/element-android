@@ -16,17 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 
-internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
-    return realm.where<ChunkEntity>()
-            .equalTo(ChunkEntityFields.ROOM.ROOM_ID, roomId)
+internal fun ChunkEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ChunkEntity> {
+    return realm.query(ChunkEntity::class)
+            .query(ChunkEntityFields.ROOM.ROOM_ID, roomId)
 }
 
 internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {

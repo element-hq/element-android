@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.readReceiptSummaryEntityQueries
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
@@ -62,7 +64,7 @@ internal class ReadReceiptHandler @Inject constructor(
     }
 
     fun handle(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             content: ReadReceiptContent?,
             isInitialSync: Boolean,
@@ -78,7 +80,7 @@ internal class ReadReceiptHandler @Inject constructor(
     }
 
     private fun handleReadReceiptContent(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             content: ReadReceiptContent,
             isInitialSync: Boolean,
@@ -91,24 +93,29 @@ internal class ReadReceiptHandler @Inject constructor(
         }
     }
 
-    private fun initialSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
-        val readReceiptSummaries = ArrayList<ReadReceiptsSummaryEntity>()
+    private fun initialSyncStrategy(realm: MutableRealm, roomId: String, content: ReadReceiptContent) {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
-            val readReceiptsSummary = ReadReceiptsSummaryEntity(eventId = eventId, roomId = roomId)
-
+            val readReceiptsSummary = ReadReceiptsSummaryEntity().apply {
+                this.eventId = eventId
+                this.roomId = roomId
+            }
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val receiptEntity = ReadReceiptEntity.createUnmanaged(roomId, eventId, userId, ts)
+                val receiptEntity = ReadReceiptEntity().apply {
+                    this.roomId = roomId
+                    this.eventId = eventId
+                    this.userId = userId
+                    this.originServerTs = ts
+                }
                 readReceiptsSummary.readReceipts.add(receiptEntity)
             }
-            readReceiptSummaries.add(readReceiptsSummary)
+            realm.copyToRealm(readReceiptsSummary, updatePolicy = UpdatePolicy.ALL)
         }
-        realm.insertOrUpdate(readReceiptSummaries)
     }
 
     private fun incrementalSyncStrategy(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             content: ReadReceiptContent,
             aggregator: SyncResponsePostTreatmentAggregator?
@@ -123,10 +130,10 @@ internal class ReadReceiptHandler @Inject constructor(
         doIncrementalSyncStrategy(realm, roomId, content)
     }
 
-    private fun doIncrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+    private fun doIncrementalSyncStrategy(realm: MutableRealm, roomId: String, content: ReadReceiptContent) {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
-            val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
+            val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).find()
                     ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
                         this.roomId = roomId
                     }

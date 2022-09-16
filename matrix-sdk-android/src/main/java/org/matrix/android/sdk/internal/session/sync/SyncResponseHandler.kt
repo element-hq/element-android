@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionListeners
@@ -40,7 +41,7 @@ import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
 internal class SyncResponseHandler @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @SessionId private val sessionId: String,
         private val sessionManager: SessionManager,
         private val sessionListeners: SessionListeners,
@@ -94,13 +95,13 @@ internal class SyncResponseHandler @Inject constructor(
 //        }
 
         // Start one big transaction
-        monarchy.awaitTransaction { realm ->
+        realmInstance.write {
             // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
                     if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
+                        roomSyncHandler.handle(this, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
                 }
             }.also {
@@ -110,7 +111,7 @@ internal class SyncResponseHandler @Inject constructor(
             measureTimeMillis {
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
                     Timber.v("Handle accountData")
-                    userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
+                    userAccountDataSyncHandler.handle(this, syncResponse.accountData)
                 }
             }.also {
                 Timber.v("Finish handling accountData in $it ms")
@@ -118,11 +119,11 @@ internal class SyncResponseHandler @Inject constructor(
 
             measureTimeMillis {
                 Timber.v("Handle Presence")
-                presenceSyncHandler.handle(realm, syncResponse.presence)
+                presenceSyncHandler.handle(this, syncResponse.presence)
             }.also {
                 Timber.v("Finish handling Presence in $it ms")
             }
-            tokenStore.saveToken(realm, syncResponse.nextBatch)
+            tokenStore.saveToken(this, syncResponse.nextBatch)
         }
 
         // Everything else we need to do outside the transaction
@@ -138,8 +139,8 @@ internal class SyncResponseHandler @Inject constructor(
         cryptoSyncHandler.onSyncCompleted(syncResponse)
 
         // post sync stuffs
-        monarchy.writeAsync {
-            roomSyncHandler.postSyncSpaceHierarchyHandle(it)
+        realmInstance.asyncWrite {
+            roomSyncHandler.postSyncSpaceHierarchyHandle(this)
         }
     }
 

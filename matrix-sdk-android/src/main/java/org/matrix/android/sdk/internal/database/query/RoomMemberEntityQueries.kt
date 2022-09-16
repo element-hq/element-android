@@ -16,29 +16,26 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 
-internal fun RoomMemberSummaryEntity.Companion.where(realm: Realm, roomId: String, userId: String? = null): RealmQuery<RoomMemberSummaryEntity> {
-    val query = realm
-            .where<RoomMemberSummaryEntity>()
-            .equalTo(RoomMemberSummaryEntityFields.ROOM_ID, roomId)
-
-    if (userId != null) {
-        query.equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-    }
-    return query
+internal fun RoomMemberSummaryEntity.Companion.where(realm: TypedRealm, roomId: String, userId: String? = null): RealmQuery<RoomMemberSummaryEntity> {
+    return realm.query(RoomMemberSummaryEntity::class)
+            .query("roomId == $0", roomId)
+            .andIf(userId != null) {
+                query("userId == $0", userId!!)
+            }
 }
 
-internal fun RoomMemberSummaryEntity.Companion.updateUserPresence(realm: Realm, userId: String, userPresenceEntity: UserPresenceEntity) {
-    realm.where<RoomMemberSummaryEntity>()
-            .equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-            .isNull(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`)
-            .findAll()
+internal fun RoomMemberSummaryEntity.Companion.updateUserPresence(realm: MutableRealm, userId: String, userPresenceEntity: UserPresenceEntity) {
+    realm.query(RoomMemberSummaryEntity::class)
+            .query("userId == $0", userId)
+            .query("userPresenceEntity == nil")
+            .find()
             .map {
                 it.userPresenceEntity = userPresenceEntity
             }

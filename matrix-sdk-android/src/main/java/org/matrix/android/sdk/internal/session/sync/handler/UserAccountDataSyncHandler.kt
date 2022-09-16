@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.sync.handler
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
@@ -79,7 +81,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         private val sessionListeners: SessionListeners
 ) {
 
-    fun handle(realm: Realm, accountData: UserAccountDataSync?) {
+    fun handle(realm: MutableRealm, accountData: UserAccountDataSync?) {
         accountData?.list?.forEach { event ->
             // Generic handling, just save in base
             handleGenericAccountData(realm, event.type, event.content)
@@ -125,49 +127,67 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         }
     }
 
-    private fun handlePushRules(realm: Realm, event: UserAccountDataEvent) {
+    private fun handlePushRules(realm: MutableRealm, event: UserAccountDataEvent) {
         val pushRules = event.content.toModel<GetPushRulesResponse>() ?: return
-        realm.where(PushRulesEntity::class.java)
-                .findAll()
-                .forEach { it.deleteOnCascade() }
+        realm
+                .query(PushRulesEntity::class)
+                .find()
+                .forEach {
+                    //it.deleteOnCascade()
+                }
 
         // Save only global rules for the moment
         val globalRules = pushRules.global
 
-        val content = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.CONTENT }
+        val content = PushRulesEntity().apply {
+            scope = RuleScope.GLOBAL
+            kind = RuleSetKey.CONTENT
+        }
         globalRules.content?.forEach { rule ->
             content.pushRules.add(PushRulesMapper.map(rule))
         }
-        realm.insertOrUpdate(content)
+        realm.copyToRealm(content, updatePolicy = UpdatePolicy.ALL)
 
-        val override = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.OVERRIDE }
+        val override = PushRulesEntity().apply {
+            scope = RuleScope.GLOBAL
+            kind = RuleSetKey.OVERRIDE
+        }
         globalRules.override?.forEach { rule ->
             PushRulesMapper.map(rule).also {
                 override.pushRules.add(it)
             }
         }
-        realm.insertOrUpdate(override)
+        realm.copyToRealm(override, updatePolicy = UpdatePolicy.ALL)
 
-        val rooms = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.ROOM }
+        val rooms = PushRulesEntity().apply {
+        scope = RuleScope.GLOBAL
+            kind = RuleSetKey.ROOM
+        }
         globalRules.room?.forEach { rule ->
             rooms.pushRules.add(PushRulesMapper.map(rule))
         }
-        realm.insertOrUpdate(rooms)
+        realm.copyToRealm(rooms, updatePolicy = UpdatePolicy.ALL)
 
-        val senders = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.SENDER }
+        val senders = PushRulesEntity().apply {
+        scope = RuleScope.GLOBAL
+            kind = RuleSetKey.SENDER
+        }
         globalRules.sender?.forEach { rule ->
             senders.pushRules.add(PushRulesMapper.map(rule))
         }
-        realm.insertOrUpdate(senders)
+        realm.copyToRealm(senders, updatePolicy = UpdatePolicy.ALL)
 
-        val underrides = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.UNDERRIDE }
+        val underrides = PushRulesEntity().apply {
+            scope = RuleScope.GLOBAL
+            kind = RuleSetKey.UNDERRIDE
+        }
         globalRules.underride?.forEach { rule ->
             underrides.pushRules.add(PushRulesMapper.map(rule))
         }
-        realm.insertOrUpdate(underrides)
+        realm.copyToRealm(underrides, updatePolicy = UpdatePolicy.ALL)
     }
 
-    private fun handleDirectChatRooms(realm: Realm, event: UserAccountDataEvent) {
+    private fun handleDirectChatRooms(realm: MutableRealm, event: UserAccountDataEvent) {
         val content = event.content.toModel<DirectMessagesContent>() ?: return
         content.forEach { (userId, roomIds) ->
             roomIds.forEach { roomId ->
@@ -193,14 +213,19 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                 }
     }
 
-    private fun handleIgnoredUsers(realm: Realm, event: UserAccountDataEvent) {
+    private fun handleIgnoredUsers(realm: MutableRealm, event: UserAccountDataEvent) {
         val userIds = event.content.toModel<IgnoredUsersContent>()?.ignoredUsers?.keys ?: return
-        val currentIgnoredUsers = realm.where(IgnoredUserEntity::class.java).findAll()
+        val currentIgnoredUsers = realm.query(IgnoredUserEntity::class).find()
         val currentIgnoredUserIds = currentIgnoredUsers.map { it.userId }
         // Delete the previous list
-        currentIgnoredUsers.deleteAllFromRealm()
+        realm.delete(currentIgnoredUsers)
         // And save the new received list
-        userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }
+        userIds.forEach {
+            val ignoredUserEntity = IgnoredUserEntity().apply {
+                userId = it
+            }
+            realm.copyToRealm(ignoredUserEntity)
+        }
 
         // Delete all the TimelineEvents for all the ignored users
         // See https://spec.matrix.org/latest/client-server-api/#client-behaviour-22 :
@@ -227,7 +252,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         }
     }
 
-    private fun handleBreadcrumbs(realm: Realm, event: UserAccountDataEvent) {
+    private fun handleBreadcrumbs(realm: MutableRealm, event: UserAccountDataEvent) {
         val recentRoomIds = event.content.toModel<BreadcrumbsContent>()?.recentRoomIds ?: return
         val entity = BreadcrumbsEntity.getOrCreate(realm)
 
@@ -251,7 +276,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         }
     }
 
-    fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
+    fun handleGenericAccountData(realm: MutableRealm, type: String, content: Content?) {
         val existing = realm.where<UserAccountDataEntity>()
                 .equalTo(UserAccountDataEntityFields.TYPE, type)
                 .findFirst()

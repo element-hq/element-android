@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.coroutines.runBlocking
@@ -217,7 +218,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     /**
      * Should be called at the end of the room sync, to check and validate all parent/child relations.
      */
-    fun validateSpaceRelationship(realm: Realm) {
+    fun validateSpaceRelationship(realm: MutableRealm) {
         measureTimeMillis {
             val lookupMap = realm.where(RoomSummaryEntity::class.java)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())

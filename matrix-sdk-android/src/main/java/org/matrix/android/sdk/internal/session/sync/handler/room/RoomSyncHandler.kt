@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import dagger.Lazy
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -108,7 +108,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     fun handle(
-            realm: Realm,
+            realm: MutableRealm,
             roomsSyncResponse: RoomsSyncResponse,
             isInitialSync: Boolean,
             aggregator: SyncResponsePostTreatmentAggregator,
@@ -122,13 +122,13 @@ internal class RoomSyncHandler @Inject constructor(
 //        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
 
-    fun postSyncSpaceHierarchyHandle(realm: Realm) {
+    fun postSyncSpaceHierarchyHandle(realm: MutableRealm) {
         roomSummaryUpdater.validateSpaceRelationship(realm)
     }
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(
-            realm: Realm,
+            realm: MutableRealm,
             handlingStrategy: HandlingStrategy,
             isInitialSync: Boolean,
             aggregator: SyncResponsePostTreatmentAggregator,
@@ -140,7 +140,7 @@ internal class RoomSyncHandler @Inject constructor(
             EventInsertType.INCREMENTAL_SYNC
         }
         val syncLocalTimeStampMillis = clock.epochMillis()
-        val rooms = when (handlingStrategy) {
+        when (handlingStrategy) {
             is HandlingStrategy.JOINED -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
                     insertJoinRoomsFromInitSync(realm, handlingStrategy, syncLocalTimeStampMillis, aggregator, reporter)
@@ -163,11 +163,10 @@ internal class RoomSyncHandler @Inject constructor(
                 }
             }
         }
-        realm.insertOrUpdate(rooms)
     }
 
     private fun insertJoinRoomsFromInitSync(
-            realm: Realm,
+            realm: MutableRealm,
             handlingStrategy: HandlingStrategy.JOINED,
             syncLocalTimeStampMillis: Long,
             aggregator: SyncResponsePostTreatmentAggregator,
@@ -211,7 +210,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     private fun handleJoinedRoom(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             roomSync: RoomSync,
             insertType: EventInsertType,
@@ -291,7 +290,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     private fun handleInvitedRoom(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             roomSync: InvitedRoomSync,
             insertType: EventInsertType,
@@ -324,7 +323,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     private fun handleLeftRoom(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             roomSync: RoomSync,
             insertType: EventInsertType,
@@ -371,7 +370,7 @@ internal class RoomSyncHandler @Inject constructor(
     }
 
     private fun handleTimelineEvents(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             roomEntity: RoomEntity,
             eventList: List<Event>,
@@ -519,7 +518,7 @@ internal class RoomSyncHandler @Inject constructor(
      * the thread timeline and /relations api, we should not added it
      */
     private fun addToThreadChunkIfNeeded(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             threadId: String,
             timelineEventEntity: TimelineEventEntity?,
@@ -567,7 +566,7 @@ internal class RoomSyncHandler @Inject constructor(
     )
 
     private fun handleEphemeral(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             ephemeralEvents: List<Event>,
             isInitialSync: Boolean,
