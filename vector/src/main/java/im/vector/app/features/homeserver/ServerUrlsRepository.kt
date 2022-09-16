@@ -16,7 +16,6 @@
 
 package im.vector.app.features.homeserver
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import im.vector.app.R
