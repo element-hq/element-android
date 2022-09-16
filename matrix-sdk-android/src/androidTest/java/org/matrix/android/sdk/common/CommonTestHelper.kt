@@ -497,6 +497,12 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
+    fun launch(block: suspend () -> Unit) {
+        runBlocking {
+            block()
+        }
+    }
+
     fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         val job = coroutineScope.launch(dispatcher) {

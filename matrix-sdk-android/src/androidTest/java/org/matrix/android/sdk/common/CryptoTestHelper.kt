@@ -18,7 +18,12 @@ package org.matrix.android.sdk.common
 
 import android.os.SystemClock
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -52,6 +57,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -66,6 +72,7 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
@@ -117,36 +124,25 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
-        testHelper.waitWithLatch { latch ->
-            val bobRoomSummariesLive = bobSession.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
-            val newRoomObserver = object : Observer<List<RoomSummary>> {
-                override fun onChanged(t: List<RoomSummary>?) {
-                    if (t?.isNotEmpty() == true) {
-                        bobRoomSummariesLive.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            bobRoomSummariesLive.observeForever(newRoomObserver)
-            aliceRoom.membershipService().invite(bobSession.myUserId)
-        }
+        testHelper.launch {
+            waitFor(
+                    continueWhen = { bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first { it.isNotEmpty() } },
+                    action = { aliceRoom.membershipService().invite(bobSession.myUserId) }
+            )
 
-        testHelper.waitWithLatch { latch ->
-            val bobRoomSummariesLive = bobSession.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
-            val roomJoinedObserver = object : Observer<List<RoomSummary>> {
-                override fun onChanged(t: List<RoomSummary>?) {
-                    if (bobSession.getRoom(aliceRoomId)
+            waitFor(
+                    continueWhen = {
+                        bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first {
+                            bobSession.getRoom(aliceRoomId)
                                     ?.membershipService()
                                     ?.getRoomMember(bobSession.myUserId)
-                                    ?.membership == Membership.JOIN) {
-                        bobRoomSummariesLive.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            bobRoomSummariesLive.observeForever(roomJoinedObserver)
-            bobSession.roomService().joinRoom(aliceRoomId)
+                                    ?.membership == Membership.JOIN
+                        }
+                    },
+                    action = { bobSession.roomService().joinRoom(aliceRoomId) }
+            )
         }
+
         // Ensure bob can send messages to the room
 //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 //        assertNotNull(roomFromBobPOV.powerLevels)
