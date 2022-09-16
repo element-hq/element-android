@@ -45,7 +45,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
-        // TODO check if current session is trusted
         setState {
             copy(isCurrentSession = isCurrentSession(deviceId))
         }

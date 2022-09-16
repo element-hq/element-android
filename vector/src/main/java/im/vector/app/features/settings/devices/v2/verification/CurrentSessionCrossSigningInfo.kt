@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.verification
 
 /**
  * Used to hold some info about the cross signing of the current Session.

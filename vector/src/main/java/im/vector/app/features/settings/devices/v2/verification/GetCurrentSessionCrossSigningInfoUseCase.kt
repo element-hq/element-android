@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.verification
 
 import im.vector.app.core.di.ActiveSessionHolder
 import kotlinx.coroutines.flow.Flow
