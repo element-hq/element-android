@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.matrix.android.sdk.api.session.room.RoomService
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -32,18 +33,20 @@ suspend fun <T> RoomService.onMain(block: RoomService.() -> T): T {
     }
 }
 
-suspend fun <T> LiveData<T>.first(predicate: (T) -> Boolean): T {
-    return withContext(Dispatchers.Main) {
-        suspendCoroutine { continuation ->
-            val observer = object : Observer<T> {
-                override fun onChanged(data: T) {
-                    if (predicate(data)) {
-                        removeObserver(this)
-                        continuation.resume(data)
+suspend fun <T> LiveData<T>.first(timeout: Long = TestConstants.timeOutMillis, predicate: (T) -> Boolean): T {
+    return withTimeout(timeout) {
+        withContext(Dispatchers.Main) {
+            suspendCoroutine { continuation ->
+                val observer = object : Observer<T> {
+                    override fun onChanged(data: T) {
+                        if (predicate(data)) {
+                            removeObserver(this)
+                            continuation.resume(data)
+                        }
                     }
                 }
+                observeForever(observer)
             }
-            observeForever(observer)
         }
     }
 }

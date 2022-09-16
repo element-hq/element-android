@@ -116,6 +116,10 @@ class CommonTestHelper internal constructor(context: Context) {
         return createAccount(userNamePrefix, TestConstants.PASSWORD, testParams)
     }
 
+    suspend fun createAccountSuspending(userNamePrefix: String, testParams: SessionTestParams): Session {
+        return createAccountSuspending(userNamePrefix, TestConstants.PASSWORD, testParams)
+    }
+
     fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
     }
@@ -159,6 +163,12 @@ class CommonTestHelper internal constructor(context: Context) {
             syncLiveData.observeForever(syncObserver)
         }
         await(lock, timeout)
+    }
+
+    suspend fun syncSessionSuspending(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
+        session.syncService().startSync(true)
+        val syncLiveData = session.syncService().getSyncStateLive()
+        syncLiveData.first(timeout) { session.syncService().hasAlreadySynced() }
     }
 
     /**
@@ -331,6 +341,24 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
+    private suspend fun createAccountSuspending(
+            userNamePrefix: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
+        val session = createAccountAndSyncSuspending(
+                userNamePrefix + "_" + accountNumber++ + "_" + UUID.randomUUID(),
+                password,
+                testParams
+        )
+        assertNotNull(session)
+        return session.also {
+            // most of the test was created pre-MSC3061 so ensure compatibility
+            it.cryptoService().enableShareKeyOnInvite(false)
+            trackedSessions.add(session)
+        }
+    }
+
     /**
      * Logs into an existing account
      *
@@ -387,6 +415,39 @@ class CommonTestHelper internal constructor(context: Context) {
         session.open()
         if (sessionTestParams.withInitialSync) {
             syncSession(session, 120_000)
+        }
+        return session
+    }
+
+    private suspend fun createAccountAndSyncSuspending(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
+        val hs = createHomeServerConfig()
+
+        withTimeout(TestConstants.timeOutMillis) {
+            matrix.authenticationService.getLoginFlow(hs)
+        }
+
+        withTimeout(timeMillis = 60_000L) {
+            matrix.authenticationService
+                    .getRegistrationWizard()
+                    .createAccount(userName, password, null)
+        }
+
+        // Perform dummy step
+        val registrationResult = runBlockingTest(timeout = 60_000) {
+            matrix.authenticationService
+                    .getRegistrationWizard()
+                    .dummy()
+        }
+
+        assertTrue(registrationResult is RegistrationResult.Success)
+        val session = (registrationResult as RegistrationResult.Success).session
+        session.open()
+        if (sessionTestParams.withInitialSync) {
+            syncSessionSuspending(session, 120_000)
         }
         return session
     }
@@ -497,8 +558,8 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
-    fun launch(block: suspend () -> Unit) {
-        runBlocking {
+    fun <T> launch(block: suspend () -> T): T {
+        return runBlocking {
             block()
         }
     }

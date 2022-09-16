@@ -122,9 +122,9 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
         val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
-        val bobSession = testHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
+        return testHelper.launch {
+            val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)
 
-        testHelper.launch {
             waitFor(
                     continueWhen = { bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first { it.isNotEmpty() } },
                     action = { aliceRoom.membershipService().invite(bobSession.myUserId) }
@@ -141,14 +141,14 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                     },
                     action = { bobSession.roomService().joinRoom(aliceRoomId) }
             )
-        }
 
-        // Ensure bob can send messages to the room
+            // Ensure bob can send messages to the room
 //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
+            CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
+        }
     }
 
     /**
