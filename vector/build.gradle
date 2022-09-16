@@ -239,30 +239,27 @@ dependencies {
     // implementation 'org.webrtc:google-webrtc:1.0.+'
     implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
-    // Exclude jitsi's android-scalablevideoview fork's support library
-    // The library exports a jetified artifact but doesn't remove the support library dependency
-    // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
-    components {
-        withModule("com.github.MatrixFrog:android-scalablevideoview") {
-            allVariants {
-                withDependencies {
-                    removeAll { it.group == "com.android.support" && it.name == "appcompat-v7" }
-                }
-            }
-        }
-    }
-
     // Jitsi
     api('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
+
+        // Exclude jitsi's android-scalablevideoview fork's support library
+        // The library exports a jetified artifact but doesn't remove the support library dependency
+        // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
+        exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    // Excludes the legacy support library annotation usages
+    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
+    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
 
     // Emoji Keyboard
     api libs.vanniktech.emojiMaterial
