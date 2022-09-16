@@ -77,6 +77,9 @@
 
     <application android:supportsRtl="true">
 
+        <!-- Sentry auto-initialization disable -->
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
             android:name="android.max_aspect"
@@ -89,23 +92,6 @@
         <activity
             android:name=".features.MainActivity"
             android:theme="@style/Theme.Vector.Launcher" />
-
-        <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
-        <!-- exported="true" is required to launch application -->
-        <activity-alias
-            android:name=".features.Alias"
-            android:exported="true"
-            android:targetActivity=".features.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity-alias>
 
         <activity android:name=".features.home.HomeActivity" />
 
@@ -340,6 +326,7 @@
         <activity android:name=".features.home.room.list.home.invites.InvitesActivity"/>
         <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity"/>
         <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity"/>
+        <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity"/>
 
         <!-- Services -->
 

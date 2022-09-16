@@ -19,8 +19,6 @@ package im.vector.app.core.utils
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -100,8 +98,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
  * @param toastMessage content of the toast message as a String resource
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
-    val clipboard = context.getSystemService<ClipboardManager>()!!
-    clipboard.setPrimaryClip(ClipData.newPlainText("", text))
+    CopyToClipboardUseCase(context).execute(text)
     if (showToast) {
         context.toast(toastMessage)
     }

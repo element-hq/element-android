@@ -16,25 +16,32 @@
 
 package im.vector.app.features.spaces
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceChildFragment
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.FragmentSpacesBottomSheetBinding
 
-class SpaceListBottomSheet : BottomSheetDialogFragment() {
+class SpaceListBottomSheet : VectorBaseBottomSheetDialogFragment<FragmentSpacesBottomSheetBinding>() {
 
-    private lateinit var binding: FragmentSpacesBottomSheetBinding
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSpacesBottomSheetBinding {
+        return FragmentSpacesBottomSheetBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentSpacesBottomSheetBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.space_list, SpaceListFragment::class.java)
         }
-        return binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setPeekHeightAsScreenPercentage(0.75f)
+        }
     }
 
     companion object {

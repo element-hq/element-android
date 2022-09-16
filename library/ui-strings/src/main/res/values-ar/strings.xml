@@ -320,7 +320,7 @@
     <string name="settings_theme">السمة</string>
     <string name="encryption_information_decryption_error">خطأ في فكّ التعمية</string>
     <string name="encryption_information_device_name">اسم الجهاز</string>
-    <string name="encryption_information_device_id">معرّف الجهاز</string>
+    <string name="device_manager_session_details_session_id">معرّف الجهاز</string>
     <string name="encryption_information_device_key">مفتاح الجهاز</string>
     <string name="encryption_export_room_keys">صدّر مفاتيح الغرفة</string>
     <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>

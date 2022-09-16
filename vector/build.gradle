@@ -66,23 +66,6 @@ android {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
-        nightly {
-            initWith release
-            matchingFallbacks = ['release']
-        }
-        release
-    }
-
-    flavorDimensions "store"
-
-    productFlavors {
-        gplay {
-            dimension "store"
-        }
-
-        fdroid {
-            dimension "store"
-        }
     }
 
     compileOptions {
@@ -110,10 +93,6 @@ android {
         }
         test {
             java.srcDirs += "src/sharedTest/java"
-        }
-        // Add sourceSets for `release` version when building `nightly`
-        nightly {
-            java.srcDirs += "src/release/java"
         }
     }
 
@@ -183,12 +162,6 @@ dependencies {
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
     api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
-    // Nightly
-    // API-only library
-    gplayImplementation libs.google.appdistributionApi
-    // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
-
     // Work
     api libs.androidx.work
 
@@ -204,7 +177,7 @@ dependencies {
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    implementation 'me.gujun.android:span:1.7'
+    api 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
     implementation libs.markwon.inlineParser
@@ -257,15 +230,6 @@ dependencies {
 
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.0.1'
-    // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.8') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
-    }
-
-    // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji2:emoji2:1.1.0"
 
@@ -301,14 +265,12 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    fdroidApi(libs.maplibre.androidSdk) {
+    api(libs.maplibre.androidSdk) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    fdroidApi(libs.maplibre.pluginAnnotation) {
+    api(libs.maplibre.pluginAnnotation) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    gplayApi libs.maplibre.androidSdk
-    gplayApi libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
@@ -320,19 +282,6 @@ dependencies {
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
-
-    // Flipper, debug builds only
-    debugImplementation(libs.flipper.flipper) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation(libs.flipper.flipperNetworkPlugin) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
-
-    // Activate when you want to check for leaks, from time to time.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner

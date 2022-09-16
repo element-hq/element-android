@@ -594,7 +594,7 @@
     <string name="deactivate_account_title">Hủy tài khoản</string>
     <string name="dialog_user_consent_submit">Xem lại ngay</string>
     <string name="encryption_information_device_key">Chìa khóa phiên</string>
-    <string name="encryption_information_device_id">Mã phiên</string>
+    <string name="device_manager_session_details_session_id">Mã phiên</string>
     <string name="encryption_information_device_name">Tên công khai</string>
     <string name="encryption_information_decryption_error">Lỗi giải mã</string>
     <string name="room_settings_labs_warning_message">Những chức năng này mang tính thí nghiệm có thể còn nhiều lỗi. Lưu ý khi dùng.</string>
