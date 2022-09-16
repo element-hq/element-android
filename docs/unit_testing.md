@@ -259,8 +259,8 @@ private fun createIntCache(cacheSize: Int): Pair<CircularCache<Int>, Array<Int?>
     return CircularCache(cacheSize, factory) to internalData!!
 }
 
-private fun CircularCache<Int>.putInOrder(vararg keys: Int) {
-    keys.forEach { put(it) }
+private fun CircularCache<Int>.putInOrder(vararg values: Int) {
+    values.forEach { put(it) }
 }
 ```
 
