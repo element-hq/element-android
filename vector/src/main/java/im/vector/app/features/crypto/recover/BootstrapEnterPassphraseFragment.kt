@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -44,7 +44,7 @@ class BootstrapEnterPassphraseFragment :
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
     }
 
-    @Inject lateinit var vectorLocale: VectorLocale
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 

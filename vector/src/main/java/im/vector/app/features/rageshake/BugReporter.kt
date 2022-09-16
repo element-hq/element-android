@@ -31,7 +31,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
@@ -80,7 +80,7 @@ class BugReporter @Inject constructor(
         private val buildMeta: BuildMeta,
         private val processInfo: ProcessInfo,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
-        private val vectorLocale: VectorLocale,
+        private val vectorLocale: VectorLocaleProvider,
 ) {
     var inMultiWindowMode = false
 

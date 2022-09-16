@@ -22,7 +22,7 @@ import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
 import im.vector.app.features.settings.FontScalePreferences
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import java.util.Locale
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class VectorConfiguration @Inject constructor(
         private val context: Context,
         private val fontScalePreferences: FontScalePreferences,
-        private val vectorLocale: VectorLocale,
+        private val vectorLocale: VectorLocaleProvider,
 ) {
 
     fun onConfigurationChanged() {

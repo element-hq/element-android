@@ -25,7 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallDialPadBinding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,7 +44,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
         }
     }
 
-    @Inject lateinit var vectorLocale: VectorLocale
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     override val showExpanded = true
 

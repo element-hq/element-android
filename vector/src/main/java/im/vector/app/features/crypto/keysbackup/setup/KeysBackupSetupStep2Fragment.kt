@@ -29,7 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,7 +44,7 @@ class KeysBackupSetupStep2Fragment :
 
     private val zxcvbn = Zxcvbn()
 
-    @Inject lateinit var vectorLocale: VectorLocale
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     private fun onPassphraseChanged() {
         viewModel.passphrase.value = views.keysBackupSetupStep2PassphraseEnterEdittext.text.toString()
