@@ -47,7 +47,6 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -127,20 +126,13 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeLocalRooms() {
-        val queryParams = roomSummaryQueryParams {
-            memberships = listOf(Membership.JOIN)
-        }
         session
                 .flow()
-                .liveRoomSummaries(queryParams)
-                .map { roomSummaries ->
-                    roomSummaries.mapNotNull { summary ->
-                        summary.roomId.takeIf { RoomLocalEcho.isLocalEchoId(it) }
-                    }.toSet()
-                }
-                .setOnEach { roomIds ->
-                    copy(localRoomIds = roomIds)
-                }
+                .liveRoomSummaries(roomSummaryQueryParams {
+                    roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX)
+                })
+                .map { page -> page.map { it.roomId } }
+                .setOnEach { copy(localRoomIds = it) }
     }
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
@@ -181,7 +173,7 @@ class RoomListViewModel @AssistedInject constructor(
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
     }
 
-    fun deleteLocalRooms(roomsIds: Set<String>) {
+    fun deleteLocalRooms(roomsIds: Iterable<String>) {
         viewModelScope.launch {
             roomsIds.forEach {
                 session.roomService().deleteLocalRoom(it)

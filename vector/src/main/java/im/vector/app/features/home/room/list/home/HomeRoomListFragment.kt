@@ -123,7 +123,6 @@ class HomeRoomListFragment :
                 roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
             is RoomListQuickActionsSharedAction.Leave -> {
-                roomListViewModel.handle(HomeRoomListAction.LeaveRoom(quickAction.roomId))
                 promptLeaveRoom(quickAction.roomId)
             }
         }

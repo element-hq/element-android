@@ -197,7 +197,7 @@
     <string name="room_settings_labs_warning_message">これらは予期しない不具合が生じるかもしれない実験的機能です。慎重に使用してください。</string>
     <string name="room_settings_set_main_address">メインアドレスとして設定</string>
     <string name="room_settings_unset_main_address">メインアドレスとしての設定を解除</string>
-    <string name="encryption_information_device_id">セッションID</string>
+    <string name="device_manager_session_details_session_id">セッションID</string>
     <string name="font_size">文字の大きさ</string>
     <string name="tiny">とても小さい</string>
     <string name="small">小さい</string>

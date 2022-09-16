@@ -380,7 +380,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Fallo ao descifrar</string>
     <string name="encryption_information_device_name">Nome do dispositivo</string>
-    <string name="encryption_information_device_id">ID de sesión</string>
+    <string name="device_manager_session_details_session_id">ID de sesión</string>
     <string name="encryption_information_device_key">Chave do dispositivo</string>
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>

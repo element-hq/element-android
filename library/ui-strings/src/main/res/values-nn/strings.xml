@@ -310,7 +310,7 @@
     <string name="settings_theme">Preg</string>
     <string name="encryption_information_decryption_error">Noko gjekk gale med dekrypteringa</string>
     <string name="encryption_information_device_name">Offentleg namn</string>
-    <string name="encryption_information_device_id">Økt-ID</string>
+    <string name="device_manager_session_details_session_id">Økt-ID</string>
     <string name="encryption_information_device_key">Sesjonsnøkkel</string>
     <string name="encryption_export_e2e_room_keys">Eksporter E2E-romnøkklar</string>
     <string name="encryption_export_room_keys">Eksporter romnøkklar</string>

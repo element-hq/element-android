@@ -25,8 +25,8 @@ import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveU
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject
 
 class GetDeviceFullInfoUseCase @Inject constructor(
@@ -36,7 +36,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
 ) {
 
-    fun execute(deviceId: String): Flow<Optional<DeviceFullInfo>> {
+    fun execute(deviceId: String): Flow<DeviceFullInfo> {
         return activeSessionHolder.getSafeActiveSession()?.let { session ->
             combine(
                     getCurrentSessionCrossSigningInfoUseCase.execute(),
@@ -58,7 +58,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                     null
                 }
                 fullInfo.toOptional()
-            }
+            }.unwrap()
         } ?: emptyFlow()
     }
 }

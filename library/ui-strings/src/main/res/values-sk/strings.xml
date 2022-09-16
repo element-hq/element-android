@@ -388,7 +388,7 @@
     <string name="settings_theme">Vzhľad</string>
     <string name="encryption_information_decryption_error">Chyba dešifrovania</string>
     <string name="encryption_information_device_name">Verejné meno</string>
-    <string name="encryption_information_device_id">ID relácie</string>
+    <string name="device_manager_session_details_session_id">ID relácie</string>
     <string name="encryption_information_device_key">Kľúč relácie</string>
     <string name="encryption_export_e2e_room_keys">Exportovať šifrovacie kľúče miestnosti</string>
     <string name="encryption_export_room_keys">Exportovať kľúče miestnosti</string>

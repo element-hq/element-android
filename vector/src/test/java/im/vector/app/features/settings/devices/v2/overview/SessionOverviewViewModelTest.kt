@@ -21,22 +21,21 @@ import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
+import im.vector.app.test.testDispatcher
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.SessionParams
-import org.matrix.android.sdk.api.util.Optional
 
 private const val A_SESSION_ID = "session-id"
 
 class SessionOverviewViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
+    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
 
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID
@@ -52,17 +51,20 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `given the viewModel has been initialized then viewState is updated with session info`() {
+        // Given
         val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(Optional(deviceFullInfo))
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
         val expectedState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID,
                 isCurrentSession = true,
                 deviceInfo = Success(deviceFullInfo)
         )
 
+        // When
         val viewModel = createViewModel()
 
+        // Then
         viewModel.test()
                 .assertLatestState { state -> state == expectedState }
                 .finish()

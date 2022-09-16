@@ -418,7 +418,7 @@
     <string name="room_settings_unset_main_address">Des-definir como endereço principal</string>
     <string name="encryption_information_decryption_error">Erro de decriptação</string>
     <string name="encryption_information_device_name">Nome público</string>
-    <string name="encryption_information_device_id">ID de sessão</string>
+    <string name="device_manager_session_details_session_id">ID de sessão</string>
     <string name="encryption_information_device_key">Chave de sessão</string>
     <string name="encryption_export_e2e_room_keys">Exportar chaves de sala E2E</string>
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>

@@ -246,7 +246,7 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
 
     <string name="encryption_information_decryption_error">Erro de decifragem</string>
     <string name="encryption_information_device_name">Nome do dispositivo</string>
-    <string name="encryption_information_device_id">ID do dispositivo</string>
+    <string name="device_manager_session_details_session_id">ID do dispositivo</string>
     <string name="encryption_information_device_key">Chave do dispositivo</string>
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves de sala</string>

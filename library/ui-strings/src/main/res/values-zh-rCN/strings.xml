@@ -242,7 +242,7 @@
     <string name="settings_password_updated">你的密码已更新</string>
     <string name="encryption_information_decryption_error">解密错误</string>
     <string name="encryption_information_device_name">公开名称</string>
-    <string name="encryption_information_device_id">会话 ID</string>
+    <string name="device_manager_session_details_session_id">会话 ID</string>
     <string name="encryption_information_device_key">会话密钥</string>
     <string name="encryption_import_import">导入</string>
     <string name="encryption_information_verified">已验证</string>
