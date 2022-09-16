@@ -27,6 +27,7 @@ import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
 import im.vector.app.test.fixtures.aVectorAnalyticsScreen
+import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +49,7 @@ class DefaultVectorAnalyticsTest {
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
+            sentryFactory= mockk(),
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),

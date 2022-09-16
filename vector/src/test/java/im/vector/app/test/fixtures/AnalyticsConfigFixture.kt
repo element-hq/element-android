@@ -23,6 +23,8 @@ object AnalyticsConfigFixture {
             isEnabled: Boolean = false,
             postHogHost: String = "http://posthog.url",
             postHogApiKey: String = "api-key",
-            policyLink: String = "http://policy.link"
-    ) = AnalyticsConfig(isEnabled, postHogHost, postHogApiKey, policyLink)
+            policyLink: String = "http://policy.link",
+            sentryDSN: String = "http://sentry.dsn",
+            sentryEnvironment: String = "sentry-env"
+    ) = AnalyticsConfig(isEnabled, postHogHost, postHogApiKey, policyLink, sentryDSN, sentryEnvironment)
 }
