@@ -49,7 +49,7 @@ class DefaultVectorAnalyticsTest {
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
-            sentryFactory= mockk(),
+            sentryFactory = mockk(),
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
