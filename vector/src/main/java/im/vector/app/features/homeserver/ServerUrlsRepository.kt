@@ -85,7 +85,7 @@ class ServerUrlsRepository @Inject constructor(
     /**
      * Return true if url is the default homeserver url form resources.
      */
-    fun isDefaultHomeServerUrl(context: Context, url: String) = url == getDefaultHomeServerUrl()
+    fun isDefaultHomeServerUrl(url: String) = url == getDefaultHomeServerUrl()
 
     /**
      * Return default homeserver url from resources.
