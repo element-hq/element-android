@@ -16,7 +16,6 @@
 
 package im.vector.app.features.lifecycle
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
@@ -91,7 +90,6 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      *
      * @return true if an app task is corrupted by a potentially malicious activity
      */
-    @SuppressLint("NewApi")
     private suspend fun isTaskCorrupted(activity: Activity): Boolean = withContext(Dispatchers.Default) {
         val context = activity.applicationContext
         val packageManager: PackageManager = context.packageManager

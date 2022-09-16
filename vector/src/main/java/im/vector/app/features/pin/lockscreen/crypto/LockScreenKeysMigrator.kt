@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.crypto
 
-import android.annotation.SuppressLint
 import android.os.Build
 import im.vector.app.features.pin.lockscreen.crypto.migrations.LegacyPinCodeMigrator
 import im.vector.app.features.pin.lockscreen.crypto.migrations.MissingSystemKeyMigrator

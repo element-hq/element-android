@@ -218,7 +218,6 @@ class NotificationUtils @Inject constructor(
      * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
-    @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
         val i = HomeActivity.newIntent(context, firstStartMainActivity = false)
@@ -287,7 +286,6 @@ class NotificationUtils @Inject constructor(
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildIncomingCallNotification(
             call: WebRtcCall,
             title: String,
@@ -420,7 +418,6 @@ class NotificationUtils @Inject constructor(
      * @param title title of the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildPendingCallNotification(
             call: WebRtcCall,
             title: String
