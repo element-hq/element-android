@@ -90,23 +90,6 @@
             android:name=".features.MainActivity"
             android:theme="@style/Theme.Vector.Launcher" />
 
-        <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
-        <!-- exported="true" is required to launch application -->
-        <activity-alias
-            android:name=".features.Alias"
-            android:exported="true"
-            android:targetActivity=".features.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity-alias>
-
         <activity android:name=".features.home.HomeActivity" />
 
         <activity
