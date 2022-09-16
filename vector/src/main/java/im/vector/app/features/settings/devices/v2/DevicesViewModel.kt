@@ -24,10 +24,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
-import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -35,16 +32,15 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import kotlin.time.Duration.Companion.seconds
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
-        private val refreshDevicesUseCase: RefreshDevicesUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
-) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState), VerificationService.Listener {
+        refreshDevicesUseCase: RefreshDevicesUseCase,
+) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, refreshDevicesUseCase), VerificationService.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
@@ -53,14 +49,10 @@ class DevicesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
-    private val refreshSource = PublishDataSource<Unit>()
-    private val refreshThrottleDelayMs = 4.seconds.inWholeMilliseconds
-
     init {
         addVerificationListener()
         observeCurrentSessionCrossSigningInfo()
         observeDevices()
-        observeRefreshSource()
         refreshDevicesOnCryptoDevicesChange()
         queryRefreshDevicesList()
     }
@@ -123,13 +115,6 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observeRefreshSource() {
-        refreshSource.stream()
-                .throttleFirst(refreshThrottleDelayMs)
-                .onEach { refreshDevicesUseCase.execute() }
-                .launchIn(viewModelScope)
-    }
-
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx.state == VerificationTxState.Verified) {
             queryRefreshDevicesList()
@@ -142,7 +127,7 @@ class DevicesViewModel @AssistedInject constructor(
      * It can be any mobile devices, and any browsers.
      */
     private fun queryRefreshDevicesList() {
-        refreshSource.post(Unit)
+        refreshDeviceList()
     }
 
     override fun handle(action: DevicesAction) {

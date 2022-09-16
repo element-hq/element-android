@@ -17,33 +17,28 @@
 package im.vector.app.features.settings.devices.v2.othersessions
 
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
-import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import kotlin.time.Duration.Companion.seconds
 
 class OtherSessionsViewModel @AssistedInject constructor(
         @Assisted initialState: OtherSessionsViewState,
         private val activeSessionHolder: ActiveSessionHolder,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
-        private val refreshDevicesUseCase: RefreshDevicesUseCase,
-) : VectorViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(initialState), VerificationService.Listener {
+        refreshDevicesUseCase: RefreshDevicesUseCase
+) : VectorSessionsListViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(initialState, refreshDevicesUseCase),
+        VerificationService.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<OtherSessionsViewModel, OtherSessionsViewState> {
@@ -54,13 +49,9 @@ class OtherSessionsViewModel @AssistedInject constructor(
 
     private var observeDevicesJob: Job? = null
 
-    private val refreshSource = PublishDataSource<Unit>()
-    private val refreshThrottleDelayMs = 4.seconds.inWholeMilliseconds
-
     init {
         observeDevices(initialState.currentFilter)
         addVerificationListener()
-        observeRefreshSource()
     }
 
     override fun onCleared() {
@@ -75,15 +66,9 @@ class OtherSessionsViewModel @AssistedInject constructor(
                 excludeCurrentDevice = true
         )
                 .execute { async ->
-                    if (async is Success) {
-                        copy(
-                                devices = async,
-                        )
-                    } else {
-                        copy(
-                                devices = async
-                        )
-                    }
+                    copy(
+                            devices = async,
+                    )
                 }
     }
 
@@ -101,13 +86,6 @@ class OtherSessionsViewModel @AssistedInject constructor(
                 ?.removeListener(this)
     }
 
-    private fun observeRefreshSource() {
-        refreshSource.stream()
-                .throttleFirst(refreshThrottleDelayMs)
-                .onEach { refreshDevicesUseCase.execute() }
-                .launchIn(viewModelScope)
-    }
-
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx.state == VerificationTxState.Verified) {
             queryRefreshDevicesList()
@@ -115,7 +93,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
     }
 
     private fun queryRefreshDevicesList() {
-        refreshSource.post(Unit)
+        refreshDeviceList()
     }
 
     override fun handle(action: OtherSessionsAction) {
