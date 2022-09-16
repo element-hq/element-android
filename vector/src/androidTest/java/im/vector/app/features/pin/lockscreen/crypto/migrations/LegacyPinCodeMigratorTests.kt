@@ -25,6 +25,7 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.preference.PreferenceManager
 import androidx.test.platform.app.InstrumentationRegistry
+import im.vector.app.TestBuildVersionSdkIntProvider
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenCryptoConstants.ANDROID_KEY_STORE
@@ -32,7 +33,6 @@ import im.vector.app.features.pin.lockscreen.crypto.LockScreenCryptoConstants.LE
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
@@ -42,7 +42,6 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Test
 import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
-import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
@@ -66,9 +65,7 @@ class LegacyPinCodeMigratorTests {
             SharedPrefPinCodeStore(PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().context))
     )
     private val keyStore: KeyStore = spyk(KeyStore.getInstance(ANDROID_KEY_STORE)).also { it.load(null) }
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider = mockk {
-        every { get() } returns Build.VERSION_CODES.M
-    }
+    private val buildVersionSdkIntProvider = TestBuildVersionSdkIntProvider(Build.VERSION_CODES.M)
     private val secretStoringUtils: SecretStoringUtils = spyk(
             SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider)
     )
@@ -126,6 +123,7 @@ class LegacyPinCodeMigratorTests {
     @Test
     fun migratePinCodeM() = runTest {
         val pinCode = "1234"
+        buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
         saveLegacyPinCode(pinCode)
 
         legacyPinCodeMigrator.migrate()
@@ -144,7 +142,7 @@ class LegacyPinCodeMigratorTests {
     @Test
     fun migratePinCodeL() = runTest {
         val pinCode = "1234"
-        every { buildVersionSdkIntProvider.get() } returns Build.VERSION_CODES.LOLLIPOP
+        buildVersionSdkIntProvider.value = Build.VERSION_CODES.LOLLIPOP
         saveLegacyPinCode(pinCode)
 
         legacyPinCodeMigrator.migrate()
@@ -163,7 +161,7 @@ class LegacyPinCodeMigratorTests {
     private fun generateLegacyKey() {
         if (keyStore.containsAlias(LEGACY_PIN_CODE_KEY_ALIAS)) return
 
-        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M) {
+        if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
             generateLegacyKeyM()
         } else {
             generateLegacyKeyL()
@@ -206,7 +204,7 @@ class LegacyPinCodeMigratorTests {
         generateLegacyKey()
         val publicKey = keyStore.getCertificate(LEGACY_PIN_CODE_KEY_ALIAS).publicKey
         val cipher = getLegacyCipher()
-        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M) {
+        if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
             val unrestrictedKey = KeyFactory.getInstance(publicKey.algorithm).generatePublic(X509EncodedKeySpec(publicKey.encoded))
             val spec = OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT)
             cipher.init(Cipher.ENCRYPT_MODE, unrestrictedKey, spec)
@@ -219,14 +217,15 @@ class LegacyPinCodeMigratorTests {
     }
 
     private fun getLegacyCipher(): Cipher {
-        return when (buildVersionSdkIntProvider.get()) {
-            Build.VERSION_CODES.LOLLIPOP, Build.VERSION_CODES.LOLLIPOP_MR1 -> getCipherL()
-            else -> getCipherM()
+        return if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
+            getCipherM()
+        } else {
+            getCipherL()
         }
     }
 
     private fun getCipherL(): Cipher {
-        val provider = if (buildVersionSdkIntProvider.get() < Build.VERSION_CODES.M) "AndroidOpenSSL" else "AndroidKeyStoreBCWorkaround"
+        val provider = if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) "AndroidKeyStoreBCWorkaround" else "AndroidOpenSSL"
         val transformation = "RSA/ECB/PKCS1Padding"
         return Cipher.getInstance(transformation, provider)
     }
