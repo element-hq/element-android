@@ -60,7 +60,7 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -312,10 +312,10 @@ class HomeActivityViewModel @AssistedInject constructor(
         } else {
             // cross signing keys have been reset
             // Trigger a popup to re-verify
-            // Note: user can be null in case of logout
-            session.getUser(session.myUserId)
-                    ?.toMatrixItem()
-                    ?.let { user ->
+            // Note: user can be unknown in case of logout
+            session.getUserOrDefault(session.myUserId)
+                    .toMatrixItem()
+                    .let { user ->
                         _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
                     }
         }
@@ -396,7 +396,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 // New session
                                 _viewEvents.post(
                                         HomeActivityViewEvents.CurrentSessionNotVerified(
-                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                                session.getUserOrDefault(session.myUserId).toMatrixItem(),
                                                 // Always send request instead of waiting for an incoming as per recent EW changes
                                                 false
                                         )
@@ -404,7 +404,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             } else {
                                 _viewEvents.post(
                                         HomeActivityViewEvents.CurrentSessionCannotBeVerified(
-                                                session.getUser(session.myUserId)?.toMatrixItem(),
+                                                session.getUserOrDefault(session.myUserId).toMatrixItem(),
                                         )
                                 )
                             }
@@ -424,7 +424,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                         // Check this is not an SSO account
                         if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
                             // Ask password to the user: Upgrade security
-                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUser(session.myUserId)?.toMatrixItem()))
+                            _viewEvents.post(HomeActivityViewEvents.AskPasswordToInitCrossSigning(session.getUserOrDefault(session.myUserId).toMatrixItem()))
                         }
                         // Else (SSO) just ignore for the moment
                     } else {

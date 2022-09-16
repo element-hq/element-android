@@ -54,7 +54,7 @@ class VerificationQrScannedByOtherController @Inject constructor(
                 if (state.isMe) {
                     notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice).toEpoxyCharSequence())
                 } else {
-                    val name = state.otherUserMxItem?.getBestName() ?: ""
+                    val name = state.otherUserMxItem.getBestName()
                     notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name).toEpoxyCharSequence())
                 }
             }

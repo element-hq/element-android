@@ -514,7 +514,7 @@ class HomeActivity :
         )
     }
 
-    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
+    private fun promptSecurityEvent(userItem: MatrixItem.UserItem, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = "upgradeSecurity",
