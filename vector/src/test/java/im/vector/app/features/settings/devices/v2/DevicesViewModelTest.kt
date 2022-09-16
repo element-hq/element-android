@@ -52,8 +52,8 @@ class DevicesViewModelTest {
                 fakeActiveSessionHolder.instance,
                 getCurrentSessionCrossSigningInfoUseCase,
                 getDeviceFullInfoListUseCase,
-                refreshDevicesUseCase,
                 refreshDevicesOnCryptoDevicesChangeUseCase,
+                refreshDevicesUseCase,
         )
     }
 
