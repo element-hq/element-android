@@ -104,12 +104,12 @@ dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":library:jsonviewer")
+    implementation project(":library:external:jsonviewer")
+    implementation project(":library:external:diff-match-patch")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation project(":library:attachment-viewer")
-    implementation project(":library:diff-match-patch")
     implementation project(":library:multipicker")
 
     implementation libs.jetbrains.coroutinesCore
@@ -265,7 +265,7 @@ dependencies {
     api libs.vanniktech.emojiMaterial
     api libs.vanniktech.emojiGoogle
 
-    implementation project(":library:dialpad")
+    implementation project(":library:external:dialpad")
 
     // JWT
     api libs.jsonwebtoken.jjwtApi

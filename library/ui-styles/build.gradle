@@ -58,5 +58,5 @@ dependencies {
     // Pref theme
     implementation libs.androidx.preferenceKtx
     // dialpad dimen
-    implementation project(":library:dialpad")
+    implementation project(":library:external:dialpad")
 }
