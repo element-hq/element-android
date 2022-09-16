@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -41,6 +42,8 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
 ) : UpdateBreadcrumbsTask {
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {
+        // Do not add local rooms to the recent rooms list as they should not be known by the server
+        if (RoomLocalEcho.isLocalEchoId(params.newTopRoomId)) return
         val newBreadcrumbs =
                 // Get the breadcrumbs entity, if any
                 monarchy.fetchCopied { BreadcrumbsEntity.get(it) }
