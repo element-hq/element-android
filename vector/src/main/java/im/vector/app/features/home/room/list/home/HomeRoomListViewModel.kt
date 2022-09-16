@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
@@ -60,6 +61,7 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
@@ -103,6 +105,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         observeRecents()
         observeFilterTabs()
         observeRooms()
+        observeLocalRooms()
     }
 
     private fun observeInvites() {
@@ -261,6 +264,16 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun observeLocalRooms() {
+        session
+                .flow()
+                .liveRoomSummaries(roomSummaryQueryParams {
+                    roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX)
+                })
+                .map { page -> page.map { it.roomId } }
+                .setOnEach { copy(localRoomIds = it) }
+    }
+
     private fun emitEmptyState() {
         viewModelScope.launch {
             val emptyState = getEmptyStateData(currentFilter, spaceStateHandler.getCurrentSpace())
@@ -347,6 +360,14 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     fun isPublicRoom(roomId: String): Boolean {
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
+    }
+
+    fun deleteLocalRooms(roomsIds: Iterable<String>) {
+        viewModelScope.launch {
+            roomsIds.forEach {
+                session.roomService().deleteLocalRoom(it)
+            }
+        }
     }
 
     private fun handleSelectRoom(action: HomeRoomListAction.SelectRoom) = withState {

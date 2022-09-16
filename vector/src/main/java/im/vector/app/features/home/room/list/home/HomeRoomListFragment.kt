@@ -40,6 +40,7 @@ import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.list.RoomListAnimator
 import im.vector.app.features.home.room.list.RoomListListener
+import im.vector.app.features.home.room.list.RoomListViewState
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
@@ -97,6 +98,11 @@ class HomeRoomListFragment :
                 is HomeRoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is HomeRoomListViewEvents.Done -> Unit
             }
+        }
+
+        roomListViewModel.onEach(HomeRoomListViewState::localRoomIds) {
+            // Local rooms should not exist anymore when the room list is shown
+            roomListViewModel.deleteLocalRooms(it)
         }
     }
 
