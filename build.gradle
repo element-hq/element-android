@@ -71,6 +71,14 @@ allprojects {
                 groups.mavenCentral.group.each { includeGroup it }
             }
         }
+        // snapshots repository
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+            content {
+                groups.snapshot.regex.each { includeGroupByRegex it }
+                groups.snapshot.group.each { includeGroup it }
+            }
+        }
         maven {
             url 'https://jitpack.io'
             content {
