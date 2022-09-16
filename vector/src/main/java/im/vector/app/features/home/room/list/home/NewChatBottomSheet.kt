@@ -42,14 +42,17 @@ class NewChatBottomSheet : VectorBaseBottomSheetDialogFragment<FragmentNewChatBo
 
     private fun initFABs() {
         views.startChat.debouncedClicks {
+            dismiss()
             navigator.openCreateDirectRoom(requireActivity())
         }
 
         views.createRoom.debouncedClicks {
+            dismiss()
             navigator.openCreateRoom(requireActivity())
         }
 
         views.exploreRooms.debouncedClicks {
+            dismiss()
             navigator.openRoomDirectory(requireContext())
         }
     }
