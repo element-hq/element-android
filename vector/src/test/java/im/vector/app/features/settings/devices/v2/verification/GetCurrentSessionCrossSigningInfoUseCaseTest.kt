@@ -107,11 +107,8 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
     }
 
     private fun givenSession(deviceId: String): FakeSession {
-        val sessionParams = mockk<SessionParams>()
-        every { sessionParams.deviceId } returns deviceId
-
         val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionParams(sessionParams)
+        fakeSession.givenSessionId(deviceId)
 
         return fakeSession
     }

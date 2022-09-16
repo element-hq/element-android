@@ -17,8 +17,6 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
-import io.mockk.every
-import io.mockk.mockk
 import io.mockk.verify
 import org.amshove.kluent.shouldBe
 import org.junit.Test
@@ -73,10 +71,7 @@ class IsCurrentSessionUseCaseTest {
         result shouldBe false
     }
 
-    private fun givenIdForCurrentSession(deviceId: String): SessionParams {
-        val sessionParams = mockk<SessionParams>()
-        every { sessionParams.deviceId } returns deviceId
-        fakeActiveSessionHolder.fakeSession.givenSessionParams(sessionParams)
-        return sessionParams
+    private fun givenIdForCurrentSession(sessionId: String): SessionParams {
+        return fakeActiveSessionHolder.fakeSession.givenSessionId(sessionId)
     }
 }

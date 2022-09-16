@@ -26,9 +26,12 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
@@ -49,6 +52,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
             copy(isCurrentSession = isCurrentSession(deviceId))
         }
         observeSessionInfo(initialState.deviceId)
+        observeCurrentSessionInfo()
     }
 
     private fun isCurrentSession(deviceId: String): Boolean {
@@ -59,6 +63,19 @@ class SessionOverviewViewModel @AssistedInject constructor(
         getDeviceFullInfoUseCase.execute(deviceId)
                 .onEach { setState { copy(deviceInfo = Success(it)) } }
                 .launchIn(viewModelScope)
+    }
+
+    private fun observeCurrentSessionInfo() {
+        activeSessionHolder.getSafeActiveSession()
+                ?.sessionParams
+                ?.deviceId
+                ?.let { deviceId ->
+                    getDeviceFullInfoUseCase.execute(deviceId)
+                            .map { it.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted }
+                            .distinctUntilChanged()
+                            .onEach { setState { copy(isCurrentSessionTrusted = it) } }
+                            .launchIn(viewModelScope)
+                }
     }
 
     override fun handle(action: SessionOverviewAction) {
