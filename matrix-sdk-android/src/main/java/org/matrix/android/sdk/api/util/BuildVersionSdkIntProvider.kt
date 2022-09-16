@@ -34,4 +34,7 @@ interface BuildVersionSdkIntProvider {
             result()
         } else null
     }
+
+    @ChecksSdkIntAtLeast(parameter = 0)
+    fun isAtLeast(version: Int) = get() >= version
 }
