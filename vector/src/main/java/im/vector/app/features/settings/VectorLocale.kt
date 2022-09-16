@@ -17,10 +17,11 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.core.content.edit
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -37,6 +38,8 @@ import javax.inject.Singleton
 class VectorLocale @Inject constructor(
         private val context: Context,
         private val buildMeta: BuildMeta,
+        @DefaultPreferences
+        private val preferences: SharedPreferences,
 ) {
     companion object {
         const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
@@ -63,8 +66,6 @@ class VectorLocale @Inject constructor(
      * Init this singleton.
      */
     fun init() {
-        val preferences = DefaultSharedPreferences.getInstance(context)
-
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
             applicationLocale = Locale(
                     preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
@@ -90,7 +91,7 @@ class VectorLocale @Inject constructor(
     fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
-        DefaultSharedPreferences.getInstance(context).edit {
+        preferences.edit {
             val language = locale.language
             if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)
