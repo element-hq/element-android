@@ -33,21 +33,22 @@ import javax.inject.Inject
  */
 class VectorConfiguration @Inject constructor(
         private val context: Context,
-        private val fontScalePreferences: FontScalePreferences
+        private val fontScalePreferences: FontScalePreferences,
+        private val vectorLocale: VectorLocale,
 ) {
 
     fun onConfigurationChanged() {
-        if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
+        if (Locale.getDefault().toString() != vectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
-            Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
-            Locale.setDefault(VectorLocale.applicationLocale)
+            Timber.v("## onConfigurationChanged(): restore the expected value ${vectorLocale.applicationLocale}")
+            Locale.setDefault(vectorLocale.applicationLocale)
         }
         // Night mode may have changed
         ThemeUtils.init(context)
     }
 
     fun applyToApplicationContext() {
-        val locale = VectorLocale.applicationLocale
+        val locale = vectorLocale.applicationLocale
         val fontScale = fontScalePreferences.getResolvedFontScaleValue()
 
         Locale.setDefault(locale)
@@ -67,7 +68,7 @@ class VectorConfiguration @Inject constructor(
      */
     fun getLocalisedContext(context: Context): Context {
         try {
-            val locale = VectorLocale.applicationLocale
+            val locale = vectorLocale.applicationLocale
 
             // create new configuration passing old configuration from original Context
             val configuration = Configuration(context.resources.configuration)
@@ -107,7 +108,7 @@ class VectorConfiguration @Inject constructor(
      * @return the local status value
      */
     fun getHash(): String {
-        return (VectorLocale.applicationLocale.toString() +
+        return (vectorLocale.applicationLocale.toString() +
                 "_" + fontScalePreferences.getResolvedFontScaleValue().preferenceValue +
                 "_" + ThemeUtils.getApplicationTheme(context))
     }

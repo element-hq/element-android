@@ -78,7 +78,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
             arguments = Bundle().apply {
                 putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
                 putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
-                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
             }
             callback = object : DialPadFragment.Callback {
                 override fun onOkClicked(formatted: String?, raw: String?) {

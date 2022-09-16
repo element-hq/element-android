@@ -75,6 +75,7 @@ class HomeDetailFragment :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
+    @Inject lateinit var vectorLocale: VectorLocale
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -378,7 +379,7 @@ class HomeDetailFragment :
             arguments = Bundle().apply {
                 putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
                 putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
-                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
             }
             applyCallback()
         }

@@ -32,6 +32,7 @@ import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class KeysBackupSetupStep2Fragment :
@@ -42,6 +43,8 @@ class KeysBackupSetupStep2Fragment :
     }
 
     private val zxcvbn = Zxcvbn()
+
+    @Inject lateinit var vectorLocale: VectorLocale
 
     private fun onPassphraseChanged() {
         viewModel.passphrase.value = views.keysBackupSetupStep2PassphraseEnterEdittext.text.toString()
@@ -78,12 +81,12 @@ class KeysBackupSetupStep2Fragment :
                 views.keysBackupSetupStep2PassphraseStrengthLevel.strength = score
 
                 if (score in 1..3) {
-                    val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
+                    val warning = strength.feedback?.getWarning(vectorLocale.applicationLocale)
                     if (warning != null) {
                         views.keysBackupSetupStep2PassphraseEnterTil.error = warning
                     }
 
-                    val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
+                    val suggestions = strength.feedback?.getSuggestions(vectorLocale.applicationLocale)
                     if (suggestions != null) {
                         views.keysBackupSetupStep2PassphraseEnterTil.error = suggestions.firstOrNull()
                     }

@@ -84,6 +84,7 @@ import im.vector.app.features.rageshake.RageShake
 import im.vector.app.features.session.SessionListener
 import im.vector.app.features.settings.FontScalePreferences
 import im.vector.app.features.settings.FontScalePreferencesImpl
+import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
@@ -155,6 +156,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @Inject lateinit var rageShake: RageShake
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var vectorLocale: VectorLocale
 
     // For debug only
     @Inject lateinit var debugReceiver: DebugReceiver
@@ -177,7 +179,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     override fun attachBaseContext(base: Context) {
         val fontScalePreferences = FontScalePreferencesImpl(PreferenceManager.getDefaultSharedPreferences(base), AndroidSystemSettingsProvider(base))
-        val vectorConfiguration = VectorConfiguration(this, fontScalePreferences)
+        val vectorConfiguration = VectorConfiguration(this, fontScalePreferences, vectorLocale)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }
 

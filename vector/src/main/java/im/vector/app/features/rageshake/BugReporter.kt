@@ -80,6 +80,7 @@ class BugReporter @Inject constructor(
         private val buildMeta: BuildMeta,
         private val processInfo: ProcessInfo,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
+        private val vectorLocale: VectorLocale,
 ) {
     var inMultiWindowMode = false
 
@@ -294,7 +295,7 @@ class BugReporter @Inject constructor(
                                     Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
                             )
                             .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
+                            .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
                             .addFormDataPart("server_version", serverVersion)

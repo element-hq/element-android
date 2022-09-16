@@ -27,19 +27,27 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.IllformedLocaleException
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Object to manage the Locale choice of the user.
  */
-object VectorLocale {
-    private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
-    private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
-    private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
-    private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
+@Singleton
+class VectorLocale @Inject constructor(
+        private val context: Context,
+        private val buildMeta: BuildMeta,
+) {
+    companion object {
+        private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
+        private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
+        private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
+        private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
+        private const val ISO_15924_LATN = "Latn"
+    }
 
     private val defaultLocale = Locale("en", "US")
 
-    private const val ISO_15924_LATN = "Latn"
 
     /**
      * The cache of supported application languages.
@@ -52,15 +60,10 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
-    private lateinit var context: Context
-    private lateinit var buildMeta: BuildMeta
-
     /**
-     * Init this object.
+     * Init this singleton.
      */
-    fun init(context: Context, buildMeta: BuildMeta) {
-        this.context = context
-        this.buildMeta = buildMeta
+    fun init() {
         val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {

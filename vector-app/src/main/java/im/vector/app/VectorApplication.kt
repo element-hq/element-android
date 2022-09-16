@@ -109,6 +109,7 @@ class VectorApplication :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var leakDetector: LeakDetector
+    @Inject lateinit var vectorLocale: VectorLocale
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -159,7 +160,7 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        VectorLocale.init(this, buildMeta)
+        vectorLocale.init()
         ThemeUtils.init(this)
         vectorConfiguration.applyToApplicationContext()
 

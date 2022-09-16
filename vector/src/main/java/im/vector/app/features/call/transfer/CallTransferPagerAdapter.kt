@@ -27,7 +27,8 @@ import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 
 class CallTransferPagerAdapter(
-        private val fragmentActivity: FragmentActivity
+        private val fragmentActivity: FragmentActivity,
+        private val vectorLocale: VectorLocale,
 ) : FragmentStateAdapter(fragmentActivity) {
 
     companion object {
@@ -61,7 +62,7 @@ class CallTransferPagerAdapter(
                 arguments = Bundle().apply {
                     putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
                     putBoolean(DialPadFragment.EXTRA_ENABLE_OK, false)
-                    putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                    putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
                 }
             }
         }

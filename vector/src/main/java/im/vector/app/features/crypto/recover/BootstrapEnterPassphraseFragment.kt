@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BootstrapEnterPassphraseFragment :
@@ -42,6 +43,8 @@ class BootstrapEnterPassphraseFragment :
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
     }
+
+    @Inject lateinit var vectorLocale: VectorLocale
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
@@ -105,8 +108,8 @@ class BootstrapEnterPassphraseFragment :
                 views.ssssPassphraseSecurityProgress.strength = score
                 if (score in 1..3) {
                     val hint =
-                            strength.feedback?.getWarning(VectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
-                                    ?: strength.feedback?.getSuggestions(VectorLocale.applicationLocale)?.firstOrNull()
+                            strength.feedback?.getWarning(vectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
+                                    ?: strength.feedback?.getSuggestions(vectorLocale.applicationLocale)?.firstOrNull()
                     if (hint != null && hint != views.ssssPassphraseEnterTil.error.toString()) {
                         views.ssssPassphraseEnterTil.error = hint
                     }
