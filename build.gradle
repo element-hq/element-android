@@ -297,21 +297,24 @@ dependencyAnalysis {
     }
 }
 
-task recordScreenshots(type: GradleBuild) {
+tasks.register("recordScreenshots", GradleBuild) {
     startParameter.projectProperties.screenshot = ""
-    tasks = [':vector:recordPaparazziGplayDebug']
+    tasks = [':vector:recordPaparazziDebug']
 }
 
-task verifyScreenshots(type: GradleBuild) {
+tasks.register("verifyScreenshots", GradleBuild) {
     startParameter.projectProperties.screenshot = ""
-    tasks = [':vector:verifyPaparazziGplayDebug']
+    tasks = [':vector:verifyPaparazziDebug']
 }
 
 ext.initScreenshotTests = { project ->
-    project.apply plugin: 'app.cash.paparazzi'
+    def hasScreenshots = project.hasProperty("screenshot")
+    if (hasScreenshots) {
+        project.apply plugin: 'app.cash.paparazzi'
+    }
     project.android.testOptions.unitTests.all {
         def screenshotTestCapture = "**/*ScreenshotTest*"
-        if (project.hasProperty("screenshot")) {
+        if (hasScreenshots) {
             include screenshotTestCapture
         } else {
             exclude screenshotTestCapture
