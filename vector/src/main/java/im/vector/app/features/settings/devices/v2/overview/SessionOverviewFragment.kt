@@ -82,8 +82,11 @@ class SessionOverviewFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is SessionOverviewViewEvent.SelfVerification -> {
+                is SessionOverviewViewEvent.ShowVerifyCurrentSession -> {
                     navigator.requestSelfSessionVerification(requireActivity())
+                }
+                is SessionOverviewViewEvent.ShowVerifyOtherSession -> {
+                    navigator.requestSessionVerification(requireActivity(), it.deviceId)
                 }
                 is SessionOverviewViewEvent.PromptResetSecrets -> {
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
@@ -105,7 +108,7 @@ class SessionOverviewFragment :
         updateToolbar(state.isCurrentSession)
         updateEntryDetails(state.deviceId)
         if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
+            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke(), state.isCurrentSessionTrusted)
         } else {
             hideSessionInfo()
         }
@@ -124,11 +127,16 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
+    private fun renderSessionInfo(
+            isCurrentSession: Boolean,
+            deviceFullInfo: DeviceFullInfo,
+            isCurrentSessionTrusted: Boolean,
+    ) {
         views.sessionOverviewInfo.isVisible = true
         val viewState = SessionInfoViewState(
                 isCurrentSession = isCurrentSession,
                 deviceFullInfo = deviceFullInfo,
+                isVerifyButtonVisible = isCurrentSession || isCurrentSessionTrusted,
                 isDetailsButtonVisible = false,
                 isLearnMoreLinkVisible = true,
                 isLastSeenDetailsVisible = true,

@@ -45,6 +45,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
+        // TODO check if current session is trusted
         setState {
             copy(isCurrentSession = isCurrentSession(deviceId))
         }
@@ -70,6 +71,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
     private fun handleVerifySessionAction() = withState { viewState ->
         if (isCurrentSession(viewState.deviceId)) {
             handleVerifyCurrentSession()
+        } else {
+            handleVerifyOtherSession(verifySession.deviceId)
         }
     }
 
@@ -77,10 +80,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
             if (currentSessionCanBeVerified) {
-                _viewEvents.post(SessionOverviewViewEvent.SelfVerification)
+                _viewEvents.post(SessionOverviewViewEvent.ShowVerifyCurrentSession)
             } else {
                 _viewEvents.post(SessionOverviewViewEvent.PromptResetSecrets)
             }
         }
+    }
+
+    private fun handleVerifyOtherSession(deviceId: String) {
+        _viewEvents.post(SessionOverviewViewEvent.ShowVerifyOtherSession(deviceId))
     }
 }

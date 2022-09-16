@@ -95,7 +95,7 @@ class SessionOverviewViewModelTest {
 
         // Then
         viewModelTest
-                .assertEvent { it is SessionOverviewViewEvent.SelfVerification }
+                .assertEvent { it is SessionOverviewViewEvent.ShowVerifyCurrentSession }
                 .finish()
         coVerify {
             checkIfCurrentSessionCanBeVerifiedUseCase.execute()
@@ -123,5 +123,24 @@ class SessionOverviewViewModelTest {
         coVerify {
             checkIfCurrentSessionCanBeVerifiedUseCase.execute()
         }
+    }
+
+    @Test
+    fun `given another session when handling verify session action then verify session event is posted`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
+        every { isCurrentSessionUseCase.execute(any()) } returns false
+        val verifySessionAction = SessionOverviewAction.VerifySession(A_SESSION_ID)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(verifySessionAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it is SessionOverviewViewEvent.ShowVerifyOtherSession }
+                .finish()
     }
 }
