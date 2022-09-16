@@ -593,7 +593,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_action_ignore_title">Abaikan pengguna</string>
     <string name="room_participants_power_level_demote">Turunkan</string>
     <string name="room_participants_power_level_demote_warning_prompt">Anda tidak akan dapat membatalkan perubahan ini karena Anda menurunkan diri sendiri, jika Anda adalah pengguna istimewa terakhir di ruangan itu akan tidak mungkin untuk mendapatkan kembali hak istimewa.</string>
-    <string name="room_participants_power_level_demote_warning_title">Turunkan dirimu\?</string>
+    <string name="room_participants_power_level_demote_warning_title">Turunkan diri Anda\?</string>
     <string name="room_participants_action_cancel_invite">Batalkan undangan</string>
     <string name="room_participants_leave_private_warning">Ruangan ini tidak umum. Anda tidak akan dapat bergabung kembali tanpa undangan.</string>
     <string name="permissions_denied_add_contact">Izinkan untuk mengakses kontak.</string>
