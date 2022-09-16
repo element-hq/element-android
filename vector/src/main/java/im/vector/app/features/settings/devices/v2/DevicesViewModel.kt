@@ -29,18 +29,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        private val activeSessionHolder: ActiveSessionHolder,
+        activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
-) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, refreshDevicesUseCase), VerificationService.Listener {
+) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
@@ -50,30 +47,10 @@ class DevicesViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
     init {
-        addVerificationListener()
         observeCurrentSessionCrossSigningInfo()
         observeDevices()
         refreshDevicesOnCryptoDevicesChange()
-        queryRefreshDevicesList()
-    }
-
-    override fun onCleared() {
-        removeVerificationListener()
-        super.onCleared()
-    }
-
-    private fun addVerificationListener() {
-        activeSessionHolder.getSafeActiveSession()
-                ?.cryptoService()
-                ?.verificationService()
-                ?.addListener(this)
-    }
-
-    private fun removeVerificationListener() {
-        activeSessionHolder.getSafeActiveSession()
-                ?.cryptoService()
-                ?.verificationService()
-                ?.removeListener(this)
+        refreshDeviceList()
     }
 
     private fun observeCurrentSessionCrossSigningInfo() {
@@ -113,21 +90,6 @@ class DevicesViewModel @AssistedInject constructor(
         viewModelScope.launch {
             refreshDevicesOnCryptoDevicesChangeUseCase.execute()
         }
-    }
-
-    override fun transactionUpdated(tx: VerificationTransaction) {
-        if (tx.state == VerificationTxState.Verified) {
-            queryRefreshDevicesList()
-        }
-    }
-
-    /**
-     * Force the refresh of the devices list.
-     * The devices list is the list of the devices where the user is logged in.
-     * It can be any mobile devices, and any browsers.
-     */
-    private fun queryRefreshDevicesList() {
-        refreshDeviceList()
     }
 
     override fun handle(action: DevicesAction) {

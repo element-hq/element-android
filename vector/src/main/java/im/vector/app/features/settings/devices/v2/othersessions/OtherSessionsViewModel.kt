@@ -28,17 +28,15 @@ import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import kotlinx.coroutines.Job
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 
 class OtherSessionsViewModel @AssistedInject constructor(
         @Assisted initialState: OtherSessionsViewState,
-        private val activeSessionHolder: ActiveSessionHolder,
+        activeSessionHolder: ActiveSessionHolder,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase
-) : VectorSessionsListViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(initialState, refreshDevicesUseCase),
-        VerificationService.Listener {
+) : VectorSessionsListViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(
+        initialState, activeSessionHolder, refreshDevicesUseCase
+) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<OtherSessionsViewModel, OtherSessionsViewState> {
@@ -51,12 +49,6 @@ class OtherSessionsViewModel @AssistedInject constructor(
 
     init {
         observeDevices(initialState.currentFilter)
-        addVerificationListener()
-    }
-
-    override fun onCleared() {
-        removeVerificationListener()
-        super.onCleared()
     }
 
     private fun observeDevices(currentFilter: DeviceManagerFilterType) {
@@ -70,30 +62,6 @@ class OtherSessionsViewModel @AssistedInject constructor(
                             devices = async,
                     )
                 }
-    }
-
-    private fun addVerificationListener() {
-        activeSessionHolder.getSafeActiveSession()
-                ?.cryptoService()
-                ?.verificationService()
-                ?.addListener(this)
-    }
-
-    private fun removeVerificationListener() {
-        activeSessionHolder.getSafeActiveSession()
-                ?.cryptoService()
-                ?.verificationService()
-                ?.removeListener(this)
-    }
-
-    override fun transactionUpdated(tx: VerificationTransaction) {
-        if (tx.state == VerificationTxState.Verified) {
-            queryRefreshDevicesList()
-        }
-    }
-
-    private fun queryRefreshDevicesList() {
-        refreshDeviceList()
     }
 
     override fun handle(action: OtherSessionsAction) {
