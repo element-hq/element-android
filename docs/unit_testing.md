@@ -2,8 +2,8 @@
 
 <!--- TOC -->  
 
-* [Overview](#project-conventions)
-    * [Best Practices](#best-practices)
+* [Overview](#overview)
+  * [Best Practices](#best-practices)
 * [Project Conventions](#project-conventions)
     * [Setup](#setup)
     * [Naming](#naming)
@@ -13,10 +13,9 @@
     * [Mocking](#mocking)
     * [Fakes](#fakes)
     * [Fixtures](#fixtures)
-* [Examples](#examples)
-    * [Simple](#extensions-used-to-streamline-the-test-setup)
-    * [Fakes and Fixtures](#fakes-and-fixtures)
-    * [ViewModel](#viewmodel)
+  * [Examples](#examples)
+      * [Extensions used to streamline the test setup](#extensions-used-to-streamline-the-test-setup)
+      * [Fakes and Fixtures](#fakes-and-fixtures)
 
 <!--- END -->  
 
@@ -65,11 +64,11 @@ class MyClassTest {
 
 #### Naming
 
-- Test names use the `Gherkin` format, `given, when, then`mapping to the input, logic under test and expected result.
+- Test names use the `Gherkin` format, `given, when, then` mapping to the input, logic under test and expected result.
     - `given` - Uniqueness about the environment or dependencies in which the test case is running. _"given device is android 12 and supports dark mode"_
     - `when` - The action/function under test. _"when reading dark mode status"_
     - `then` - The expected result from the combination of _given_ and _when_. _"then returns dark mode enabled"_
-- Test names are written using kotlin back ticks to enable _sentences _ish_.
+- Test names are written using kotlin back ticks to enable sentences _ish_.
 
 ```kotlin
 @Test
