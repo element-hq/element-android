@@ -33,18 +33,18 @@ class VoiceRecorderProvider @Inject constructor(
         private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
-        return if (useFallbackRecorder()) {
-            VoiceRecorderL(context, Dispatchers.IO)
-        } else {
+        return if (useNativeRecorder()) {
             VoiceRecorderQ(context)
+        } else {
+            VoiceRecorderL(context, Dispatchers.IO)
         }
     }
 
-    @ChecksSdkIntAtLeast(api = 29)
-    private fun useFallbackRecorder(): Boolean {
-        return buildVersionSdkIntProvider.get() < Build.VERSION_CODES.Q ||
-                !hasOpusEncoder() ||
-                vectorFeatures.forceUsageOfOpusEncoder()
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
+    private fun useNativeRecorder(): Boolean {
+        return buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.Q &&
+                hasOpusEncoder() &&
+                !vectorFeatures.forceUsageOfOpusEncoder()
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
