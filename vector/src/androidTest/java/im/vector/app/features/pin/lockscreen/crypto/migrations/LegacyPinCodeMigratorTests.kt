@@ -122,27 +122,18 @@ class LegacyPinCodeMigratorTests {
 
     @Test
     fun migratePinCodeM() = runTest {
-        val pinCode = "1234"
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
-        saveLegacyPinCode(pinCode)
-
-        legacyPinCodeMigrator.migrate()
-
-        coVerify { legacyPinCodeMigrator.getDecryptedPinCode() }
-        verify { secretStoringUtils.securelyStoreBytes(any(), any()) }
-        coVerify { pinCodeStore.savePinCode(any()) }
-        verify { keyStore.deleteEntry(LEGACY_PIN_CODE_KEY_ALIAS) }
-
-        val decodedPinCode = String(secretStoringUtils.loadSecureSecretBytes(Base64.decode(pinCodeStore.getPinCode().orEmpty(), Base64.NO_WRAP), alias))
-        decodedPinCode shouldBeEqualTo pinCode
-        keyStore.containsAlias(LEGACY_PIN_CODE_KEY_ALIAS) shouldBe false
-        keyStore.containsAlias(alias) shouldBe true
+        migratePinCode()
     }
 
     @Test
     fun migratePinCodeL() = runTest {
-        val pinCode = "1234"
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.LOLLIPOP
+        migratePinCode()
+    }
+
+    private suspend fun migratePinCode() {
+        val pinCode = "1234"
         saveLegacyPinCode(pinCode)
 
         legacyPinCodeMigrator.migrate()
