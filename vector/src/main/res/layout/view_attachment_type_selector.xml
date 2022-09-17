@@ -93,16 +93,6 @@
                 android:src="@drawable/ic_attachment_camera"
                 app:tint="?colorPrimary" />
 
-            <ImageButton
-                android:id="@+id/attachment_video_camera_button"
-                android:layout_width="@dimen/layout_touch_size"
-                android:layout_height="@dimen/layout_touch_size"
-                android:layout_marginStart="2dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/attachment_type_camera"
-                android:src="@drawable/ic_attachment_video_camera"
-                app:tint="?colorPrimary" />
-
             <!-- TODO. Request for new icon -->
             <ImageButton
                 android:id="@+id/attachmentContactButton"

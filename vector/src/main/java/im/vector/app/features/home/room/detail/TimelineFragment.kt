@@ -1582,9 +1582,6 @@ class TimelineFragment :
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
                     )
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.VIDEO_CAMERA, !vectorPreferences.builtinCameraIsEnabled()
-                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -2629,14 +2626,18 @@ class TimelineFragment :
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.PHOTO_CAMERA -> {
+            AttachmentTypeSelectorView.Type.CAMERA -> {
                 if (vectorPreferences.builtinCameraIsEnabled()) {
                     attachmentsHelper.openBuiltInCamera(attachmentBuiltInCameraActivityResultLauncher)
                 } else {
-                    attachmentsHelper.openPhotoCamera(attachmentCameraActivityResultLauncher)
+                    attachmentsHelper.openCamera(
+                        activity = requireActivity(),
+                        vectorPreferences = vectorPreferences,
+                        cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
+                        cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
+                    )
                 }
             }
-            AttachmentTypeSelectorView.Type.VIDEO_CAMERA -> attachmentsHelper.openVideoCamera(attachmentCameraVideoActivityResultLauncher)
             AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)

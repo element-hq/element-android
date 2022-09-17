@@ -3199,7 +3199,6 @@
     <string name="live_location_labs_promotion_title">Live location sharing</string>
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
-    <string name="tooltip_attachment_video">Open camera for a video</string>
     <string name="attachment_camera_capture">Capture</string>
     <string name="attachment_camera_flip">Change camera</string>
     <string name="labs_enable_builtin_camera">Enable Built-in Camera</string>

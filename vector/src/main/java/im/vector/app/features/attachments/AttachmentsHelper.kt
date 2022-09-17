@@ -15,16 +15,19 @@
  */
 package im.vector.app.features.attachments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
+import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.camera.AttachmentsCameraActivity
 import im.vector.app.features.attachments.camera.AttachmentsCameraOutput
 import im.vector.app.features.attachments.camera.MediaType
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
@@ -92,14 +95,23 @@ class AttachmentsHelper(
     }
 
     /**
-     * Starts the process for handling image/video capture.
+     * Starts the process for handling image/video capture. Can open a dialog
      */
-    fun openPhotoCamera(cameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
-    }
+    fun openCamera(
+            activity: Activity,
+            vectorPreferences: VectorPreferences,
+            cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
+            cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>
+    ) {
+        PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
+            override fun takePhoto() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
+            }
 
-    fun openVideoCamera(cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>) {
-        captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
+            override fun takeVideo() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
+            }
+        })
     }
 
     fun openBuiltInCamera(attachmentsCameraActivityResultLauncher: ActivityResultLauncher<Intent>) {
