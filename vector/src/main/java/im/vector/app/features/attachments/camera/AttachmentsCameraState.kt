@@ -25,4 +25,6 @@ data class AttachmentsCameraState(
         val cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
         val flashMode: Int = ImageCapture.FLASH_MODE_AUTO,
         val rotation: Int = Surface.ROTATION_0,
+        val recording: Boolean = false,
+        val done: Boolean = false,
 ) : MavericksState

@@ -133,7 +133,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
                     ContextCompat.getMainExecutor(context),
                     object : ImageCapture.OnImageCapturedCallback() {
                         override fun onCaptureSuccess(image: ImageProxy) {
-                            _viewEvents.post(AttachmentsCameraViewEvents.TakePhoto)
+                            setState { copy( done = true ) }
                             saveImageProxyToFile(image, file)?.let {
                                 _viewEvents.post(
                                         AttachmentsCameraViewEvents.SetResultAndFinish(
@@ -197,9 +197,10 @@ class AttachmentsCameraModel @AssistedInject constructor(
                 .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
                     when (recordEvent) {
                         is VideoRecordEvent.Start -> {
-                            _viewEvents.post(AttachmentsCameraViewEvents.StartRecording)
+                            setState { copy( recording = true ) }
                         }
                         is VideoRecordEvent.Finalize -> {
+                            setState { copy( done = true ) }
                             if (!recordEvent.hasError()) {
                                 Timber.d(
                                         "Video capture succeeded: " +

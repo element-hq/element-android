@@ -19,7 +19,6 @@ package im.vector.app.features.attachments.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -109,27 +108,11 @@ class AttachmentsCameraFragment :
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility", "UseCompatLoadingForDrawables")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents {
             when (it) {
-                AttachmentsCameraViewEvents.StartRecording -> {
-                    views.attachmentsCameraCaptureAction.setImageDrawable(
-                            context?.getDrawable(R.drawable.ic_material_stop)
-                    )
-                    views.attachmentsCameraFlip.isEnabled = false
-                    views.attachmentsCameraFlash.isEnabled = false
-                    views.attachmentsCameraChronometer.isVisible = true
-                    views.attachmentsCameraChronometer.base = SystemClock.elapsedRealtime()
-                    views.attachmentsCameraChronometer.start()
-                }
-                AttachmentsCameraViewEvents.TakePhoto -> {
-                    (activity as AttachmentsCameraActivity?)?.showWaitingView()
-                    context?.let { context ->
-                        ProcessCameraProvider.getInstance(context).get().unbind(preview)
-                    }
-                }
                 AttachmentsCameraViewEvents.SetErrorAndFinish -> {
                     views.attachmentsCameraChronometer.stop()
                     (activity as AttachmentsCameraActivity).setErrorAndFinish()
@@ -188,6 +171,7 @@ class AttachmentsCameraFragment :
         }
         setFlashButton()
         setRotation()
+        showCapturing()
     }
 
     override fun onStart() {
@@ -204,6 +188,33 @@ class AttachmentsCameraFragment :
         context?.let { context ->
             ContextCompat.checkSelfPermission(context, permission)
         } == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun showCapturing() = withState(viewModel) { state ->
+        if (state.done) {
+            waitForPhoto()
+        } else if (state.recording) {
+            recording()
+        }
+    }
+
+    private fun waitForPhoto() {
+        (activity as AttachmentsCameraActivity?)?.showWaitingView()
+        context?.let { context ->
+            ProcessCameraProvider.getInstance(context).get().unbind(preview)
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun recording() {
+        views.attachmentsCameraCaptureAction.setImageDrawable(
+                context?.getDrawable(R.drawable.ic_material_stop)
+        )
+        views.attachmentsCameraFlip.isEnabled = false
+        views.attachmentsCameraFlash.isEnabled = false
+        views.attachmentsCameraChronometer.isVisible = true
+        views.attachmentsCameraChronometer.base = SystemClock.elapsedRealtime()
+        views.attachmentsCameraChronometer.start()
     }
 
     @SuppressLint("RestrictedApi")
