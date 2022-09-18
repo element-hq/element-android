@@ -57,7 +57,7 @@
         android:elevation="2dp"
         android:scaleX="0.7"
         android:scaleY="0.7"
-        android:src="@drawable/ic_video_flip"
+        android:src="@drawable/ic_flip_camera"
         app:layout_constraintBottom_toTopOf="@id/attachmentCameraActionDescription"
         app:layout_constraintStart_toEndOf="@id/attachmentsCameraCaptureAction"
         app:layout_constraintEnd_toEndOf="parent"
