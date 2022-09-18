@@ -2620,7 +2620,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_sessions_list">Munkamenetek</string>
     <string name="a11y_open_spaces">Nyitott területek listája</string>
     <string name="a11y_create_message">Új beszélgetés vagy szoba létrehozása</string>
-    <string name="room_list_filter_people">Résztvevők</string>
+    <string name="room_list_filter_people">Emberek</string>
     <string name="room_list_filter_favourites">Kedvencek</string>
     <string name="room_list_filter_unreads">Olvasatlan</string>
     <string name="room_list_filter_all">Mind</string>
@@ -2661,4 +2661,14 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_collapse_space_children">%s összezárása</string>
     <string name="a11y_expand_space_children">%s kinyitása</string>
     <string name="change_space">Tér cseréje</string>
+    <string name="onboarding_new_app_layout_feedback_message">A visszajelzési lehetőségekhez koppint jobb felső sarokba.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Fontold meg, hogy a régi már nem használt (%1$d napja vagy régebben) munkamenetből kijelentkezel.</item>
+        <item quantity="other">Fontold meg, hogy a régi már nem használt (%1$d napja vagy régebben) munkamenetből kijelentkezel.</item>
+    </plurals>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">%1$d+ napja inaktív (%2$s)</item>
+        <item quantity="other">%1$d+ napja inaktív (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Itt láthatók a meghívók és elvégzendő műveletek.</string>
 </resources>
