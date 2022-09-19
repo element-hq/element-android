@@ -22,7 +22,7 @@ import javax.inject.Inject
 // TODO add unit tests
 class RenameSessionViewNavigator @Inject constructor() {
 
-    fun navigateBack(activity: FragmentActivity) {
+    fun goBack(activity: FragmentActivity) {
         activity.finish()
     }
 }

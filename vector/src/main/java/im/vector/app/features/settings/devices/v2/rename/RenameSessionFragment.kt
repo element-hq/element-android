@@ -62,7 +62,7 @@ class RenameSessionFragment :
         viewModel.observeViewEvents {
             when (it) {
                 is RenameSessionViewEvent.SessionRenamed -> {
-                    viewNavigator.navigateBack(requireActivity())
+                    viewNavigator.goBack(requireActivity())
                 }
             }
         }
