@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -155,11 +154,7 @@ class SessionOverviewFragment :
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
         } else {
-            hideSessionInfo()
+            views.sessionOverviewInfo.isVisible = false
         }
-    }
-
-    private fun hideSessionInfo() {
-        views.sessionOverviewInfo.isGone = true
     }
 }
