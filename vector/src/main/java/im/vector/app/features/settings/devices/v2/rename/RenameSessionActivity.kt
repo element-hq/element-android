@@ -22,20 +22,23 @@ import android.os.Bundle
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 
 /**
  * Display the screen to rename a Session.
  */
 @AndroidEntryPoint
-class RenameSessionActivity : SimpleFragmentActivity() {
+class RenameSessionActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (isFirstCreation()) {
             addFragment(
-                    container = views.container,
+                    container = views.simpleFragmentContainer,
                     fragmentClass = RenameSessionFragment::class.java,
                     params = intent.getParcelableExtra(Mavericks.KEY_ARG)
             )

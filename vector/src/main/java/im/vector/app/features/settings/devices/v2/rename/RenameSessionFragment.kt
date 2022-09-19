@@ -53,9 +53,8 @@ class RenameSessionFragment :
     }
 
     private fun initToolbar() {
-        (activity as? AppCompatActivity)
-                ?.supportActionBar
-                ?.setTitle(R.string.device_manager_session_rename)
+        setupToolbar(views.renameSessionToolbar)
+                .allowBack(useCross = true)
     }
 
     private fun observeViewEvents() {
