@@ -95,6 +95,15 @@ jobs:
       ###       ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
       ###       ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 
+      - name: Upload Integration Test Report Log
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-error-results
+          path: |
+            */build/outputs/androidTest-results/connected/
+            */build/reports/androidTests/connected/
+
       # we may have failed a previous step and retried, that's OK
       - name: Publish results to Sonar
         env:
