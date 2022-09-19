@@ -21,8 +21,8 @@ import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.LocalRoomCreationState
-import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -57,56 +57,71 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
 
     override suspend fun execute(params: CreateRoomFromLocalRoomTask.Params): String {
         val localRoomSummary = roomSummaryDataSource.getLocalRoomSummary(params.localRoomId)
-                ?.takeIf { it.createRoomParams != null && it.roomSummary != null }
-                ?: error("Invalid LocalRoomSummary for ${params.localRoomId}")
+                ?: error("## CreateRoomFromLocalRoomTask - Cannot retrieve LocalRoomSummary with roomId ${params.localRoomId}")
 
         // If a room has already been created for the given local room, return the existing roomId
         if (localRoomSummary.replacementRoomId != null) {
             return localRoomSummary.replacementRoomId
         }
 
-        return createRoom(localRoomSummary)
+        if (localRoomSummary.createRoomParams != null && localRoomSummary.roomSummary != null) {
+            return createRoom(params.localRoomId, localRoomSummary.roomSummary, localRoomSummary.createRoomParams)
+        } else {
+            error("## CreateRoomFromLocalRoomTask - Invalid LocalRoomSummary: $localRoomSummary")
+        }
     }
 
-    private suspend fun createRoom(localRoomSummary: LocalRoomSummary): String {
-        updateCreationState(localRoomSummary.roomId, LocalRoomCreationState.CREATING)
+    /**
+     * Create a room on the server for the given local room.
+     *
+     * @param localRoomId the local room identifier.
+     * @param localRoomSummary the RoomSummary of the local room.
+     * @param createRoomParams the CreateRoomParams object which was used to configure the local room.
+     *
+     * @return the identifier of the created room.
+     */
+    private suspend fun createRoom(localRoomId: String, localRoomSummary: RoomSummary, createRoomParams: CreateRoomParams): String {
+        updateCreationState(localRoomId, LocalRoomCreationState.CREATING)
         val replacementRoomId = runCatching {
-            createRoomTask.execute(localRoomSummary.createRoomParams!!)
+            createRoomTask.execute(createRoomParams)
         }.fold(
                 { it },
                 {
-                    updateCreationState(roomId = localRoomSummary.roomId, LocalRoomCreationState.FAILURE)
+                    updateCreationState(localRoomId, LocalRoomCreationState.FAILURE)
                     throw it
                 }
         )
-        updateReplacementRoomId(localRoomSummary.roomId, replacementRoomId)
-        waitForRoomEvents(replacementRoomId, localRoomSummary.roomSummary!!)
-        updateCreationState(localRoomSummary.roomId, LocalRoomCreationState.CREATED)
+        updateReplacementRoomId(localRoomId, replacementRoomId)
+        waitForRoomEvents(replacementRoomId, localRoomSummary)
+        updateCreationState(localRoomId, LocalRoomCreationState.CREATED)
         return replacementRoomId
     }
 
     /**
      * Wait for all the room events before triggering the created state.
+     *
+     * @param replacementRoomId the identifier of the created room
+     * @param localRoomSummary the RoomSummary of the local room.
      */
-    private suspend fun waitForRoomEvents(replacementRoomId: String, roomSummary: RoomSummary) {
+    private suspend fun waitForRoomEvents(replacementRoomId: String, localRoomSummary: RoomSummary) {
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomSummaryEntity::class.java)
                         .equalTo(RoomSummaryEntityFields.ROOM_ID, replacementRoomId)
-                        .equalTo(RoomSummaryEntityFields.INVITED_MEMBERS_COUNT, roomSummary.invitedMembersCount)
+                        .equalTo(RoomSummaryEntityFields.INVITED_MEMBERS_COUNT, localRoomSummary.invitedMembersCount)
             }
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 EventEntity.whereRoomId(realm, replacementRoomId)
                         .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_HISTORY_VISIBILITY)
             }
-            if (roomSummary.isEncrypted) {
+            if (localRoomSummary.isEncrypted) {
                 awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                     EventEntity.whereRoomId(realm, replacementRoomId)
                             .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
                 }
             }
         } catch (exception: TimeoutCancellationException) {
-            updateCreationState(roomSummary.roomId, LocalRoomCreationState.FAILURE)
+            updateCreationState(localRoomSummary.roomId, LocalRoomCreationState.FAILURE)
             throw CreateRoomFailure.CreatedWithTimeout(replacementRoomId)
         }
     }
