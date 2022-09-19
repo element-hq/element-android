@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -33,7 +32,6 @@ import kotlinx.coroutines.launch
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        private val activeSessionHolder: ActiveSessionHolder,
         private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -79,9 +77,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
             if (currentSessionCanBeVerified) {
-                activeSessionHolder.getSafeActiveSession()?.let { session ->
-                    _viewEvents.post(SessionOverviewViewEvent.SelfVerification(session))
-                }
+                _viewEvents.post(SessionOverviewViewEvent.SelfVerification)
             } else {
                 _viewEvents.post(SessionOverviewViewEvent.PromptResetSecrets)
             }

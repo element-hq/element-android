@@ -105,9 +105,7 @@ class DevicesViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
             if (currentSessionCanBeVerified) {
-                activeSessionHolder.getSafeActiveSession()?.let { session ->
-                    _viewEvents.post(DevicesViewEvent.SelfVerification(session))
-                }
+                _viewEvents.post(DevicesViewEvent.SelfVerification)
             } else {
                 _viewEvents.post(DevicesViewEvent.PromptResetSecrets)
             }

@@ -17,9 +17,8 @@
 package im.vector.app.features.settings.devices.v2.overview
 
 import im.vector.app.core.platform.VectorViewEvents
-import org.matrix.android.sdk.api.session.Session
 
 sealed class SessionOverviewViewEvent : VectorViewEvents {
-    data class SelfVerification(val session: Session) : SessionOverviewViewEvent()
+    object SelfVerification : SessionOverviewViewEvent()
     object PromptResetSecrets : SessionOverviewViewEvent()
 }
