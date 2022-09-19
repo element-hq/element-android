@@ -62,13 +62,20 @@ class SessionOverviewFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initSessionInfoView()
         observeViewEvents()
+        initSessionInfoView()
+        initVerifyButton()
     }
 
     private fun initSessionInfoView() {
         views.sessionOverviewInfo.onLearnMoreClickListener = {
             Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun initVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.VerifySession)
         }
     }
 
@@ -96,7 +103,6 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
-        updateVerifyButton(state.deviceId)
         updateEntryDetails(state.deviceId)
         if (state.deviceInfo is Success) {
             renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
@@ -110,12 +116,6 @@ class SessionOverviewFragment :
         (activity as? AppCompatActivity)
                 ?.supportActionBar
                 ?.setTitle(titleResId)
-    }
-
-    private fun updateVerifyButton(deviceId: String) {
-        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
-            viewModel.handle(SessionOverviewAction.VerifySession(deviceId))
-        }
     }
 
     private fun updateEntryDetails(deviceId: String) {

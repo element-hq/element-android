@@ -63,12 +63,12 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     override fun handle(action: SessionOverviewAction) {
         when (action) {
-            is SessionOverviewAction.VerifySession -> handleVerifySessionAction(action)
+            is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
         }
     }
 
-    private fun handleVerifySessionAction(verifySession: SessionOverviewAction.VerifySession) {
-        if (isCurrentSession(verifySession.deviceId)) {
+    private fun handleVerifySessionAction() = withState { viewState ->
+        if (isCurrentSession(viewState.deviceId)) {
             handleVerifyCurrentSession()
         }
     }

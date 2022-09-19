@@ -85,7 +85,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
         every { isCurrentSessionUseCase.execute(any()) } returns true
-        val verifySessionAction = SessionOverviewAction.VerifySession(A_SESSION_ID)
+        val verifySessionAction = SessionOverviewAction.VerifySession
         coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns true
 
         // When
@@ -108,7 +108,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
         every { isCurrentSessionUseCase.execute(any()) } returns true
-        val verifySessionAction = SessionOverviewAction.VerifySession(A_SESSION_ID)
+        val verifySessionAction = SessionOverviewAction.VerifySession
         coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns false
 
         // When

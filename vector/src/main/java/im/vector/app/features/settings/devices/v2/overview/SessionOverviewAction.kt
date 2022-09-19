@@ -19,5 +19,5 @@ package im.vector.app.features.settings.devices.v2.overview
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class SessionOverviewAction : VectorViewModelAction {
-    data class VerifySession(val deviceId: String) : SessionOverviewAction()
+    object VerifySession : SessionOverviewAction()
 }
