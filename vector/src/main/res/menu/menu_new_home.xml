@@ -13,6 +13,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_home_qr"
+        android:title="@string/add_by_qr_code"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
         android:title="@string/send_suggestion"
@@ -42,5 +47,4 @@
         android:title="@string/home_filter_placeholder_home"
         app:iconTint="?vctr_content_secondary"
         app:showAsAction="ifRoom" />
-
 </menu>
