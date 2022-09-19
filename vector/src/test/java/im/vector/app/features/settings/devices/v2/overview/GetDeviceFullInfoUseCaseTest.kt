@@ -85,6 +85,7 @@ class GetDeviceFullInfoUseCaseTest {
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData.givenAsFlow()
         val trustLevel = givenTrustLevel(currentSessionCrossSigningInfo, cryptoDeviceInfo)
         val isInactive = false
+        val isCurrentDevice = true
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
 
         // When
@@ -96,6 +97,7 @@ class GetDeviceFullInfoUseCaseTest {
                 cryptoDeviceInfo = cryptoDeviceInfo,
                 roomEncryptionTrustLevel = trustLevel,
                 isInactive = isInactive,
+                isCurrentDevice = isCurrentDevice
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }

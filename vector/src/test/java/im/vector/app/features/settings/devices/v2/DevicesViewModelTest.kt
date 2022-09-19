@@ -171,13 +171,15 @@ class DevicesViewModelTest {
                 deviceInfo = mockk(),
                 cryptoDeviceInfo = verifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = true
         )
         val deviceFullInfo2 = DeviceFullInfo(
                 deviceInfo = mockk(),
                 cryptoDeviceInfo = unverifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                isInactive = true
+                isInactive = true,
+                isCurrentDevice = false
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)

@@ -33,7 +33,8 @@ private val activeVerifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-        isInactive = false
+        isInactive = false,
+        isCurrentDevice = true
 )
 private val inactiveVerifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_VERIFIED_DEVICE"),
@@ -43,7 +44,8 @@ private val inactiveVerifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-        isInactive = true
+        isInactive = true,
+        isCurrentDevice = false
 )
 private val activeUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "ACTIVE_UNVERIFIED_DEVICE"),
@@ -53,7 +55,8 @@ private val activeUnverifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-        isInactive = false
+        isInactive = false,
+        isCurrentDevice = false
 )
 private val inactiveUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_UNVERIFIED_DEVICE"),
@@ -63,7 +66,8 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-        isInactive = true
+        isInactive = true,
+        isCurrentDevice = false
 )
 
 private val devices = listOf(
