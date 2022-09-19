@@ -71,7 +71,7 @@ class DevicesViewModel @AssistedInject constructor(
                 .execute { async ->
                     if (async is Success) {
                         val deviceFullInfoList = async.invoke()
-                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.isVerified.orFalse() }
+                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse() }
                         val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
                         copy(
                                 devices = async,
