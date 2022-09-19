@@ -47,7 +47,4 @@
         android:title="@string/home_filter_placeholder_home"
         app:iconTint="?vctr_content_secondary"
         app:showAsAction="ifRoom" />
-
-
-
 </menu>
