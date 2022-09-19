@@ -51,7 +51,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object OpenRoomProfile : RoomDetailViewEvents()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val view: View?) : RoomDetailViewEvents()
 
-    object ShowWaitingView : RoomDetailViewEvents()
+    data class ShowWaitingView(val text: String? = null) : RoomDetailViewEvents()
     object HideWaitingView : RoomDetailViewEvents()
 
     data class DownloadFileState(

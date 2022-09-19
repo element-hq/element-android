@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.query
+package org.matrix.android.sdk.api.session.room.model
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
-import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
-
-internal fun LocalRoomSummaryEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<LocalRoomSummaryEntity> {
-    return realm.where<LocalRoomSummaryEntity>().equalTo(LocalRoomSummaryEntityFields.ROOM_ID, roomId)
+enum class LocalRoomCreationState {
+    NOT_CREATED,
+    CREATING,
+    FAILURE,
+    CREATED
 }
