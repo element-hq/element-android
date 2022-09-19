@@ -40,6 +40,8 @@ class RenameSessionFragment :
 
     @Inject lateinit var viewNavigator: RenameSessionViewNavigator
 
+    private var renameEditTextInitialized = false
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSessionRenameBinding {
         return FragmentSessionRenameBinding.inflate(inflater, container, false)
     }
@@ -66,7 +68,10 @@ class RenameSessionFragment :
         }
     }
 
-    override fun invalidate() = withState(viewModel) { _ ->
-        // TODO
+    override fun invalidate() = withState(viewModel) { state ->
+        if(renameEditTextInitialized.not()) {
+            views.renameSessionEditText.setText(state.deviceName)
+            renameEditTextInitialized = true
+        }
     }
 }

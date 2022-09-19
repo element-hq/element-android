@@ -3296,6 +3296,9 @@
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
+    <string name="device_manager_session_rename_edit_hint">Session name</string>
+    <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
+    <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
