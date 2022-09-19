@@ -118,7 +118,7 @@ class SessionOverviewFragment :
 
     private fun updateEntryDetails(deviceId: String) {
         views.sessionOverviewEntryDetails.setOnClickListener {
-            viewNavigator.navigateToSessionDetails(requireContext(), deviceId)
+            viewNavigator.goToSessionDetails(requireContext(), deviceId)
         }
     }
 

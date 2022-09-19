@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.content.Intent
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsActivity
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import im.vector.app.test.fakes.FakeContext
 import io.mockk.every
 import io.mockk.mockk
@@ -38,6 +39,7 @@ class SessionOverviewViewNavigatorTest {
     @Before
     fun setUp() {
         mockkObject(SessionDetailsActivity)
+        mockkObject(RenameSessionActivity)
     }
 
     @After
@@ -52,7 +54,22 @@ class SessionOverviewViewNavigatorTest {
         context.givenStartActivity(intent)
 
         // When
-        sessionOverviewViewNavigator.navigateToSessionDetails(context.instance, A_SESSION_ID)
+        sessionOverviewViewNavigator.goToSessionDetails(context.instance, A_SESSION_ID)
+
+        // Then
+        verify {
+            context.instance.startActivity(intent)
+        }
+    }
+
+    @Test
+    fun `given a session id when navigating to rename screen then it starts the correct activity`() {
+        // Given
+        val intent = givenIntentForRenameSession(A_SESSION_ID)
+        context.givenStartActivity(intent)
+
+        // When
+        sessionOverviewViewNavigator.goToRenameSession(context.instance, A_SESSION_ID)
 
         // Then
         verify {
@@ -63,6 +80,12 @@ class SessionOverviewViewNavigatorTest {
     private fun givenIntentForSessionDetails(sessionId: String): Intent {
         val intent = mockk<Intent>()
         every { SessionDetailsActivity.newIntent(context.instance, sessionId) } returns intent
+        return intent
+    }
+
+    private fun givenIntentForRenameSession(sessionId: String): Intent {
+        val intent = mockk<Intent>()
+        every { RenameSessionActivity.newIntent(context.instance, sessionId) } returns intent
         return intent
     }
 }

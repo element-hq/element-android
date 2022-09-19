@@ -18,11 +18,16 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.content.Context
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsActivity
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import javax.inject.Inject
 
 class SessionOverviewViewNavigator @Inject constructor() {
 
-    fun navigateToSessionDetails(context: Context, deviceId: String) {
+    fun goToSessionDetails(context: Context, deviceId: String) {
         context.startActivity(SessionDetailsActivity.newIntent(context, deviceId))
+    }
+
+    fun goToRenameSession(context: Context, deviceId: String) {
+        context.startActivity(RenameSessionActivity.newIntent(context, deviceId))
     }
 }
