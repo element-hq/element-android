@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.list.home.header
 
 import android.content.res.Resources
 import android.util.TypedValue
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.EpoxyController
@@ -27,6 +27,7 @@ import com.airbnb.epoxy.carousel
 import com.google.android.material.color.MaterialColors
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.FirstItemUpdatedObserver
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomListListener
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -47,22 +48,7 @@ class HomeRoomsHeadersController @Inject constructor(
 
     private var carousel: Carousel? = null
 
-    private val carouselAdapterObserver = object : RecyclerView.AdapterDataObserver() {
-        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-            if (toPosition == 0 || fromPosition == 0) {
-                carousel?.post {
-                    carousel?.layoutManager?.scrollToPosition(0)
-                }
-            }
-            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-        }
-
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            if (positionStart == 0) {
-                carousel?.layoutManager?.scrollToPosition(0)
-            }
-        }
-    }
+    private var carouselAdapterObserver: FirstItemUpdatedObserver? = null
 
     private val recentsHPadding = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -113,25 +99,16 @@ class HomeRoomsHeadersController @Inject constructor(
             )
             onBind { _, view, _ ->
                 host.carousel = view
+                host.unsubscribeAdapterObserver()
+                host.subscribeAdapterObserver()
 
                 val colorSurface = MaterialColors.getColor(view, R.attr.vctr_toolbar_background)
                 view.setBackgroundColor(colorSurface)
-
-                try {
-                    view.adapter?.registerAdapterDataObserver(host.carouselAdapterObserver)
-                } catch (e: IllegalStateException) {
-                    // do nothing
-                }
             }
 
-            onUnbind { _, view ->
+            onUnbind { _, _ ->
                 host.carousel = null
-
-                try {
-                    view.adapter?.unregisterAdapterDataObserver(host.carouselAdapterObserver)
-                } catch (e: IllegalStateException) {
-                    // do nothing
-                }
+                host.unsubscribeAdapterObserver()
             }
 
             withModelsFrom(recents) { roomSummary ->
@@ -146,6 +123,33 @@ class HomeRoomsHeadersController @Inject constructor(
                         .showHighlighted(roomSummary.highlightCount > 0)
                         .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
                         .itemClickListener { onClick?.invoke(roomSummary) }
+            }
+        }
+    }
+
+    private fun unsubscribeAdapterObserver() {
+        carouselAdapterObserver?.let { observer ->
+            try {
+                carousel?.adapter?.unregisterAdapterDataObserver(observer)
+                carouselAdapterObserver = null
+            } catch (e: IllegalStateException) {
+                // do nothing
+            }
+        }
+    }
+
+    private fun subscribeAdapterObserver() {
+        (carousel?.layoutManager as? LinearLayoutManager)?.let { layoutManager ->
+            carouselAdapterObserver = FirstItemUpdatedObserver(layoutManager) {
+                carousel?.post {
+                    layoutManager.scrollToPosition(0)
+                }
+            }.also { observer ->
+                try {
+                    carousel?.adapter?.registerAdapterDataObserver(observer)
+                } catch (e: IllegalStateException) {
+                    // do nothing
+                }
             }
         }
     }
