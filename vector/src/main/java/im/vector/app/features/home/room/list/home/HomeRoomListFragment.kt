@@ -83,6 +83,13 @@ class HomeRoomListFragment :
         setupRecyclerView()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(HomeRoomListAction.DeleteAllLocalRoom)
+    }
+
     private fun setupObservers() {
         sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
         sharedQuickActionsViewModel
@@ -97,11 +104,6 @@ class HomeRoomListFragment :
                 is HomeRoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is HomeRoomListViewEvents.Done -> Unit
             }
-        }
-
-        roomListViewModel.onEach(HomeRoomListViewState::localRoomIds) {
-            // Local rooms should not exist anymore when the room list is shown
-            roomListViewModel.deleteLocalRooms(it)
         }
     }
 

@@ -105,7 +105,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         observeRecents()
         observeFilterTabs()
         observeRooms()
-        observeLocalRooms()
     }
 
     private fun observeInvites() {
@@ -264,16 +263,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun observeLocalRooms() {
-        session
-                .flow()
-                .liveRoomSummaries(roomSummaryQueryParams {
-                    roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX)
-                })
-                .map { page -> page.map { it.roomId } }
-                .setOnEach { copy(localRoomIds = it) }
-    }
-
     private fun emitEmptyState() {
         viewModelScope.launch {
             val emptyState = getEmptyStateData(currentFilter, spaceStateHandler.getCurrentSpace())
@@ -342,6 +331,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             is HomeRoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is HomeRoomListAction.ToggleTag -> handleToggleTag(action)
             is HomeRoomListAction.ChangeRoomFilter -> handleChangeRoomFilter(action.filter)
+            HomeRoomListAction.DeleteAllLocalRoom -> handleDeleteLocalRooms()
         }
     }
 
@@ -360,14 +350,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     fun isPublicRoom(roomId: String): Boolean {
         return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
-    }
-
-    fun deleteLocalRooms(roomsIds: Iterable<String>) {
-        viewModelScope.launch {
-            roomsIds.forEach {
-                session.roomService().deleteLocalRoom(it)
-            }
-        }
     }
 
     private fun handleSelectRoom(action: HomeRoomListAction.SelectRoom) = withState {
@@ -416,6 +398,18 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 } catch (failure: Throwable) {
                     _viewEvents.post(HomeRoomListViewEvents.Failure(failure))
                 }
+            }
+        }
+    }
+
+    private fun handleDeleteLocalRooms() = withState {
+        val localRoomIds = session.roomService()
+                .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
+                .map { it.roomId }
+
+        viewModelScope.launch {
+            localRoomIds.forEach {
+                session.roomService().deleteLocalRoom(it)
             }
         }
     }

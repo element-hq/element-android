@@ -27,5 +27,4 @@ data class HomeRoomListViewState(
         val state: StateView.State = StateView.State.Content,
         val headersData: RoomsHeadersData = RoomsHeadersData(),
         val roomsLivePagedList: LiveData<PagedList<RoomSummary>>? = null,
-        val localRoomIds: List<String> = emptyList()
 ) : MavericksState
