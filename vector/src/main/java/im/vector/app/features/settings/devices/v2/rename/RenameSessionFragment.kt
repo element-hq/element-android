@@ -20,11 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionRenameBinding
 import javax.inject.Inject
@@ -50,11 +49,25 @@ class RenameSessionFragment :
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
         initToolbar()
+        initEditText()
+        initSaveButton()
     }
 
     private fun initToolbar() {
         setupToolbar(views.renameSessionToolbar)
                 .allowBack(useCross = true)
+    }
+
+    private fun initEditText() {
+        views.renameSessionEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.handle(RenameSessionAction.EditLocally(text.toString()))
+        }
+    }
+
+    private fun initSaveButton() {
+        views.renameSessionSave.debouncedClicks {
+            viewModel.handle(RenameSessionAction.SaveModifications)
+        }
     }
 
     private fun observeViewEvents() {
@@ -68,9 +81,10 @@ class RenameSessionFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if(renameEditTextInitialized.not()) {
+        if (renameEditTextInitialized.not()) {
             views.renameSessionEditText.setText(state.deviceName)
             renameEditTextInitialized = true
         }
+        views.renameSessionSave.isEnabled = state.deviceName.isNotEmpty()
     }
 }

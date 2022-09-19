@@ -14,8 +14,17 @@
             android:id="@+id/renameSessionToolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:title="@string/device_manager_session_rename"/>
+            app:title="@string/device_manager_session_rename">
 
+            <Button
+                android:id="@+id/renameSessionSave"
+                style="@style/Widget.Vector.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/action_save" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout

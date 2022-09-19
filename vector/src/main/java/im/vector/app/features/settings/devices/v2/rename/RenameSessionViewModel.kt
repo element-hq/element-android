@@ -22,7 +22,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +31,7 @@ import kotlinx.coroutines.flow.onEach
 class RenameSessionViewModel @AssistedInject constructor(
         @Assisted val initialState: RenameSessionViewState,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
-) : VectorViewModel<RenameSessionViewState, EmptyAction, RenameSessionViewEvent>(initialState) {
+) : VectorViewModel<RenameSessionViewState, RenameSessionAction, RenameSessionViewEvent>(initialState) {
 
     companion object : MavericksViewModelFactory<RenameSessionViewModel, RenameSessionViewState> by hiltMavericksViewModelFactory()
 
@@ -51,7 +50,19 @@ class RenameSessionViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
-    override fun handle(action: EmptyAction) {
-        // do nothing
+    override fun handle(action: RenameSessionAction) {
+        when (action) {
+            is RenameSessionAction.EditLocally -> handleEditLocally(action.editedName)
+            is RenameSessionAction.SaveModifications -> handleSaveModifications()
+        }
+    }
+
+    private fun handleEditLocally(editedName: String) {
+        setState { copy(deviceName = editedName) }
+    }
+
+    private fun handleSaveModifications() {
+        // TODO call use case to save the modifications
+        _viewEvents.post(RenameSessionViewEvent.SessionRenamed)
     }
 }
