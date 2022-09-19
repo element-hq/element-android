@@ -2602,8 +2602,8 @@
     <string name="all_chats">Tots els xats</string>
     <string name="home_layout_preferences">Preferències de disseny</string>
     <string name="explore_rooms">Explora sales</string>
-    <string name="settings_sessions_other_description">Per estar més segur, verifica les teves sessions i tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
-    <string name="settings_sessions_other_title">Altres sessions</string>
+    <string name="device_manager_sessions_other_description">Per estar més segur, verifica les teves sessions i tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
+    <string name="device_manager_sessions_other_title">Altres sessions</string>
     <string name="settings_sessions_list">Sessions</string>
     <string name="a11y_open_spaces">Obre la llista d\'espais</string>
     <string name="a11y_create_message">Crea un nou xat o sala</string>
