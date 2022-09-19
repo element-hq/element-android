@@ -403,14 +403,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let {
-                    RelationDefaultContent(
-                            type = RelationType.THREAD,
-                            eventId = it,
-                            isFallingBack = true,
-                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
-                    )
-                }
+                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -447,14 +440,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         thumbnailInfo = thumbnailInfo
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let {
-                    RelationDefaultContent(
-                            type = RelationType.THREAD,
-                            eventId = it,
-                            isFallingBack = true,
-                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
-                    )
-                }
+                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -479,14 +465,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
-                relatesTo = rootThreadEventId?.let {
-                    RelationDefaultContent(
-                            type = RelationType.THREAD,
-                            eventId = it,
-                            isFallingBack = true,
-                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
-                    )
-                }
+                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -500,14 +479,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let {
-                    RelationDefaultContent(
-                            type = RelationType.THREAD,
-                            eventId = it,
-                            isFallingBack = true,
-                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
-                    )
-                }
+                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -628,6 +600,14 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
         return createMessageEvent(roomId, content)
     }
+
+    private fun generateThreadRelationContent(rootThreadEventId: String) =
+            RelationDefaultContent(
+                    type = RelationType.THREAD,
+                    eventId = rootThreadEventId,
+                    isFallingBack = true,
+                    inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId))
+            )
 
     /**
      * Generates the appropriate relatesTo object for a reply event.
