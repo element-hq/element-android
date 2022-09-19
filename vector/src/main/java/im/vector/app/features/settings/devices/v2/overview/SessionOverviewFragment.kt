@@ -35,7 +35,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
 
@@ -107,11 +106,7 @@ class SessionOverviewFragment :
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
         updateEntryDetails(state.deviceId)
-        if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke(), state.isCurrentSessionTrusted)
-        } else {
-            hideSessionInfo()
-        }
+        updateSessionInfo(state)
     }
 
     private fun updateToolbar(isCurrentSession: Boolean) {
@@ -127,21 +122,22 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun renderSessionInfo(
-            isCurrentSession: Boolean,
-            deviceFullInfo: DeviceFullInfo,
-            isCurrentSessionTrusted: Boolean,
-    ) {
-        views.sessionOverviewInfo.isVisible = true
-        val viewState = SessionInfoViewState(
-                isCurrentSession = isCurrentSession,
-                deviceFullInfo = deviceFullInfo,
-                isVerifyButtonVisible = isCurrentSession || isCurrentSessionTrusted,
-                isDetailsButtonVisible = false,
-                isLearnMoreLinkVisible = true,
-                isLastSeenDetailsVisible = true,
-        )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider)
+    private fun updateSessionInfo(viewState: SessionOverviewViewState) {
+        if (viewState.deviceInfo is Success) {
+            views.sessionOverviewInfo.isVisible = true
+            val isCurrentSession = viewState.isCurrentSession
+            val infoViewState = SessionInfoViewState(
+                    isCurrentSession = isCurrentSession,
+                    deviceFullInfo = viewState.deviceInfo.invoke(),
+                    isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
+                    isDetailsButtonVisible = false,
+                    isLearnMoreLinkVisible = true,
+                    isLastSeenDetailsVisible = true,
+            )
+            views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
+        } else {
+            hideSessionInfo()
+        }
     }
 
     private fun hideSessionInfo() {
