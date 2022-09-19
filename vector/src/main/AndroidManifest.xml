@@ -325,6 +325,7 @@
         <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity" />
         <activity android:name=".features.settings.devices.v2.othersessions.OtherSessionsActivity" />
         <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity" />
+        <activity android:name=".features.settings.devices.v2.rename.RenameSessionActivity" />
 
         <!-- Services -->
 
