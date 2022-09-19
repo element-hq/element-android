@@ -69,184 +69,26 @@ class SpaceListViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
+    var preDragExpandedState: Map<String, Boolean>? = null
+
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SpaceListViewModel, SpaceListViewState> {
         override fun create(initialState: SpaceListViewState): SpaceListViewModel
     }
 
-    companion object : MavericksViewModelFactory<SpaceListViewModel, SpaceListViewState> by hiltMavericksViewModelFactory()
-
     init {
+        observeUser()
+        observeSpaceSummaries()
+        observeSelectedSpace()
+        observeRoomSummaries()
+    }
+
+    private fun observeUser() {
         session.userService().getUserLive(session.myUserId)
                 .asFlow()
-                .setOnEach {
-                    copy(
-                            myMxItem = it.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
-                    )
+                .setOnEach { user ->
+                    copy(myMxItem = user.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading())
                 }
-
-        observeSpaceSummaries()
-        spaceStateHandler.getSelectedSpaceFlow()
-                .distinctUntilChanged()
-                .setOnEach { selectedSpaceOption ->
-                    copy(selectedSpace = selectedSpaceOption.orNull())
-                }
-
-        // XXX there should be a way to refactor this and share it
-        session.roomService().getPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = roomsInSpaceFilter()
-                }, sortOrder = RoomSortOrder.NONE
-        ).asFlow()
-                .sample(300)
-                .onEach {
-                    val inviteCount = if (autoAcceptInvites.hideInvites) {
-                        0
-                    } else {
-                        session.roomService().getRoomSummaries(
-                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                        ).size
-                    }
-                    val totalCount = session.roomService().getNotificationCountForRooms(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = roomsInSpaceFilter()
-                            }
-                    )
-                    val counts = RoomAggregateNotificationCount(
-                            totalCount.notificationCount + inviteCount,
-                            totalCount.highlightCount + inviteCount
-                    )
-                    setState {
-                        copy(
-                                homeAggregateCount = counts
-                        )
-                    }
-                }
-                .flowOn(Dispatchers.Default)
-                .launchIn(viewModelScope)
-    }
-
-    private fun roomsInSpaceFilter() = when {
-        vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
-        else -> SpaceFilter.OrphanRooms
-    }
-
-    override fun handle(action: SpaceListAction) {
-        when (action) {
-            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
-            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
-            SpaceListAction.AddSpace -> handleAddSpace()
-            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
-            is SpaceListAction.MoveSpace -> handleMoveSpace(action)
-            is SpaceListAction.OnEndDragging -> handleEndDragging()
-            is SpaceListAction.OnStartDragging -> handleStartDragging()
-        }
-    }
-
-// PRIVATE METHODS *****************************************************************************
-
-    var preDragExpandedState: Map<String, Boolean>? = null
-    private fun handleStartDragging() = withState { state ->
-        preDragExpandedState = state.expandedStates.toMap()
-        setState {
-            copy(
-                    expandedStates = expandedStates.map {
-                        it.key to false
-                    }.toMap()
-            )
-        }
-    }
-
-    private fun handleEndDragging() {
-        // restore expanded state
-        setState {
-            copy(
-                    expandedStates = preDragExpandedState.orEmpty()
-            )
-        }
-    }
-
-    private fun handleMoveSpace(action: SpaceListAction.MoveSpace) = withState { state ->
-        state.rootSpacesOrdered ?: return@withState
-        val orderCommands = SpaceOrderUtils.orderCommandsForMove(
-                state.rootSpacesOrdered.map {
-                    it.roomId to (state.spaceOrderLocalEchos?.get(it.roomId) ?: state.spaceOrderInfo?.get(it.roomId))
-                },
-                action.spaceId,
-                action.delta
-        )
-
-        // local echo
-        val updatedLocalEchos = state.spaceOrderLocalEchos.orEmpty().toMutableMap().apply {
-            orderCommands.forEach {
-                this[it.spaceId] = it.order
-            }
-        }.toMap()
-
-        setState {
-            copy(
-                    rootSpacesOrdered = state.rootSpacesOrdered.toMutableList().apply {
-                        val index = indexOfFirst { it.roomId == action.spaceId }
-                        val moved = removeAt(index)
-                        add(index + action.delta, moved)
-                    },
-                    spaceOrderLocalEchos = updatedLocalEchos,
-            )
-        }
-        session.coroutineScope.launch {
-            orderCommands.forEach {
-                session.getRoom(it.spaceId)?.roomAccountDataService()?.updateAccountData(
-                        RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
-                        SpaceOrderContent(order = it.order).toContent()
-                )
-            }
-        }
-
-        // restore expanded state
-        setState {
-            copy(
-                    expandedStates = preDragExpandedState.orEmpty()
-            )
-        }
-    }
-
-    private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-        if (state.selectedSpace?.roomId != action.spaceSummary?.roomId) {
-            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
-            setState { copy(selectedSpace = action.spaceSummary) }
-            spaceStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
-            _viewEvents.post(SpaceListViewEvents.CloseDrawer)
-        } else {
-            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSelectedSpace))
-        }
-    }
-
-    private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
-        _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
-    }
-
-    private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->
-        val updatedToggleStates = state.expandedStates.toMutableMap().apply {
-            this[action.spaceSummary.roomId] = !(this[action.spaceSummary.roomId] ?: false)
-        }
-        setState {
-            copy(expandedStates = updatedToggleStates)
-        }
-    }
-
-    private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
-        viewModelScope.launch {
-            tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
-                session.spaceService().leaveSpace(action.spaceSummary.roomId)
-            }
-        }
-    }
-
-    private fun handleAddSpace() {
-        _viewEvents.post(SpaceListViewEvents.AddSpace)
     }
 
     private fun observeSpaceSummaries() {
@@ -288,9 +130,159 @@ class SpaceListViewModel @AssistedInject constructor(
                 .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                 .asFlow()
                 .execute {
-                    copy(
-                            spaceOrderLocalEchos = emptyMap()
-                    )
+                    copy(spaceOrderLocalEchos = emptyMap())
                 }
     }
+
+    private fun observeSelectedSpace() {
+        spaceStateHandler.getSelectedSpaceFlow()
+                .distinctUntilChanged()
+                .setOnEach { selectedSpaceOption ->
+                    copy(selectedSpace = selectedSpaceOption.orNull())
+                }
+    }
+
+    private fun observeRoomSummaries() {
+        session.roomService().getPagedRoomSummariesLive(
+                roomSummaryQueryParams {
+                    this.memberships = listOf(Membership.JOIN)
+                    this.spaceFilter = roomsInSpaceFilter()
+                }, sortOrder = RoomSortOrder.NONE
+        ).asFlow()
+                .sample(300)
+                .onEach {
+                    val inviteCount = if (autoAcceptInvites.hideInvites) {
+                        0
+                    } else {
+                        session.roomService().getRoomSummaries(
+                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                        ).size
+                    }
+                    val totalCount = session.roomService().getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                this.memberships = listOf(Membership.JOIN)
+                                this.spaceFilter = roomsInSpaceFilter()
+                            }
+                    )
+                    val counts = RoomAggregateNotificationCount(
+                            totalCount.notificationCount + inviteCount,
+                            totalCount.highlightCount + inviteCount
+                    )
+                    setState {
+                        copy(homeAggregateCount = counts)
+                    }
+                }
+                .flowOn(Dispatchers.Default)
+                .launchIn(viewModelScope)
+    }
+
+    private fun roomsInSpaceFilter() = when {
+        vectorPreferences.prefSpacesShowAllRoomInHome() -> SpaceFilter.NoFilter
+        else -> SpaceFilter.OrphanRooms
+    }
+
+    override fun handle(action: SpaceListAction) {
+        when (action) {
+            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
+            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace -> handleAddSpace()
+            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
+            is SpaceListAction.MoveSpace -> handleMoveSpace(action)
+            is SpaceListAction.OnStartDragging -> handleStartDragging()
+            is SpaceListAction.OnEndDragging -> handleEndDragging()
+        }
+    }
+
+    private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
+        if (state.selectedSpace?.roomId != action.spaceSummary?.roomId) {
+            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
+            setState { copy(selectedSpace = action.spaceSummary) }
+            spaceStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
+            _viewEvents.post(SpaceListViewEvents.CloseDrawer)
+        } else {
+            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSelectedSpace))
+        }
+    }
+
+    private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
+        viewModelScope.launch {
+            tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
+                session.spaceService().leaveSpace(action.spaceSummary.roomId)
+            }
+        }
+    }
+
+    private fun handleAddSpace() {
+        _viewEvents.post(SpaceListViewEvents.AddSpace)
+    }
+
+    private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->
+        val updatedToggleStates = state.expandedStates.toMutableMap().apply {
+            this[action.spaceSummary.roomId] = !(this[action.spaceSummary.roomId] ?: false)
+        }
+        setState {
+            copy(expandedStates = updatedToggleStates)
+        }
+    }
+
+    private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
+        _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
+    }
+
+    private fun handleMoveSpace(action: SpaceListAction.MoveSpace) = withState { state ->
+        state.rootSpacesOrdered ?: return@withState
+        val orderCommands = SpaceOrderUtils.orderCommandsForMove(
+                state.rootSpacesOrdered.map {
+                    it.roomId to (state.spaceOrderLocalEchos?.get(it.roomId) ?: state.spaceOrderInfo?.get(it.roomId))
+                },
+                action.spaceId,
+                action.delta
+        )
+
+        // local echo
+        val updatedLocalEchos = state.spaceOrderLocalEchos.orEmpty().toMutableMap().apply {
+            orderCommands.forEach { this[it.spaceId] = it.order }
+        }.toMap()
+
+        setState {
+            copy(
+                    rootSpacesOrdered = state.rootSpacesOrdered.toMutableList().apply {
+                        val index = indexOfFirst { it.roomId == action.spaceId }
+                        val moved = removeAt(index)
+                        add(index + action.delta, moved)
+                    },
+                    spaceOrderLocalEchos = updatedLocalEchos,
+            )
+        }
+        session.coroutineScope.launch {
+            orderCommands.forEach {
+                session.getRoom(it.spaceId)?.roomAccountDataService()?.updateAccountData(
+                        RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
+                        SpaceOrderContent(order = it.order).toContent()
+                )
+            }
+        }
+
+        // restore expanded state
+        setState {
+            copy(expandedStates = preDragExpandedState.orEmpty())
+        }
+    }
+
+    private fun handleStartDragging() = withState { state ->
+        preDragExpandedState = state.expandedStates.toMap()
+        setState {
+            copy(expandedStates = expandedStates.map { it.key to false }.toMap())
+        }
+    }
+
+    private fun handleEndDragging() {
+        // restore expanded state
+        setState {
+            copy(expandedStates = preDragExpandedState.orEmpty())
+        }
+    }
+
+    companion object : MavericksViewModelFactory<SpaceListViewModel, SpaceListViewState> by hiltMavericksViewModelFactory()
 }
