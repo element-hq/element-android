@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
  * This observer detects when item was added or moved to the first position of the adapter, while recyclerView is scrolled to the top. This is necessary
  * to force recycler to scroll to the top to make such item visible, because by default it will keep items on screen, while adding new item to the top,
  * outside of the viewport
- * @property layoutManager - [LinearLayoutManager] of the recycler view, which displays items
+ * @param layoutManager - [LinearLayoutManager] of the recycler view, which displays items
  * @property onItemUpdated - callback to be called, when observer detects event
  */
 class FirstItemUpdatedObserver(
