@@ -46,6 +46,8 @@ plugins {
 
     // Dependency Analysis
     id 'com.autonomousapps.dependency-analysis' version "1.13.1"
+    // Gradle doctor
+    id "com.osacky.doctor" version "0.8.1"
 }
 
 // https://github.com/jeremylong/DependencyCheck
