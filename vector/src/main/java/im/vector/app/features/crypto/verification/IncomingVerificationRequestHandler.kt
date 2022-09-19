@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificatio
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,8 +68,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
         when (tx.state) {
             is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
-                val user = session?.userService()?.getUser(tx.otherUserId)
-                val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
+                val user = session.getUserOrDefault(tx.otherUserId).toMatrixItem()
+                val name = user.getBestName()
                 val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
@@ -86,7 +87,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         }
                 )
                         .apply {
-                            viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
+                            viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -131,8 +132,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 // XXX this is a bit hard coded :/
                 popupAlertManager.cancelAlert("review_login")
             }
-            val user = session?.userService()?.getUser(pr.otherUserId)?.toMatrixItem()
-            val name = user?.getBestName() ?: pr.otherUserId
+            val user = session.getUserOrDefault(pr.otherUserId).toMatrixItem()
+            val name = user.getBestName()
             val description = if (name == pr.otherUserId) {
                 name
             } else {

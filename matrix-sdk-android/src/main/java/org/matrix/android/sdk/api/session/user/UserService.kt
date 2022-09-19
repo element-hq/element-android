@@ -29,7 +29,7 @@ interface UserService {
     /**
      * Get a user from a userId.
      * @param userId the userId to look for.
-     * @return a user with userId or null
+     * @return a user with userId or null if the User is not known yet by the SDK. See [resolveUser] to ensure that a User is retrieved.
      */
     fun getUser(userId: String): User?
 

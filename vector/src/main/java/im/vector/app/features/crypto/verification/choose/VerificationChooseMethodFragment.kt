@@ -78,7 +78,7 @@ class VerificationChooseMethodFragment :
     override fun doVerifyBySas() = withState(sharedViewModel) { state ->
         sharedViewModel.handle(
                 VerificationAction.StartSASVerification(
-                        state.otherUserMxItem?.id ?: "",
+                        state.otherUserId,
                         state.pendingRequest.invoke()?.transactionId ?: ""
                 )
         )
@@ -130,7 +130,7 @@ class VerificationChooseMethodFragment :
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) { state ->
         sharedViewModel.handle(
                 VerificationAction.RemoteQrCodeScanned(
-                        state.otherUserMxItem?.id ?: "",
+                        state.otherUserId,
                         state.pendingRequest.invoke()?.transactionId ?: "",
                         remoteQrCode
                 )

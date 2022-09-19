@@ -20,3 +20,7 @@ android {
         jvmTarget = "11"
     }
 }
+
+tasks.withType( com.likethesalad.android.templates.common.tasks.BaseTask) {
+    it.outputs.cacheIf { true }
+}
