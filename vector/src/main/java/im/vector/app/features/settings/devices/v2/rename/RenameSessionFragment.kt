@@ -20,9 +20,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionRenameBinding
 import javax.inject.Inject
@@ -45,6 +47,13 @@ class RenameSessionFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
+        initToolbar()
+    }
+
+    private fun initToolbar() {
+        (activity as? AppCompatActivity)
+                ?.supportActionBar
+                ?.setTitle(R.string.device_manager_session_rename)
     }
 
     private fun observeViewEvents() {

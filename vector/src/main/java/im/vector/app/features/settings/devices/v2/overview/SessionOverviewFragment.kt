@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -31,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
@@ -43,7 +45,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class SessionOverviewFragment :
-        VectorBaseFragment<FragmentSessionOverviewBinding>() {
+        VectorBaseFragment<FragmentSessionOverviewBinding>(),
+        VectorMenuProvider {
 
     @Inject lateinit var viewNavigator: SessionOverviewViewNavigator
 
@@ -101,6 +104,22 @@ class SessionOverviewFragment :
 
     private fun cleanUpSessionInfoView() {
         views.sessionOverviewInfo.onLearnMoreClickListener = null
+    }
+
+    override fun getMenuRes() = R.menu.menu_session_overview
+
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sessionOverviewRename -> {
+                goToRenameSession()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun goToRenameSession() = withState(viewModel) { state ->
+        viewNavigator.goToRenameSession(requireContext(), state.deviceId)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
