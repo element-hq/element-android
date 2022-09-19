@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -85,10 +87,11 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun handleVerifySessionAction() = withState { viewState ->
-        if (isCurrentSession(viewState.deviceId)) {
+        val deviceId = viewState.deviceId
+        if (isCurrentSession(deviceId)) {
             handleVerifyCurrentSession()
         } else {
-            handleVerifyOtherSession(verifySession.deviceId)
+            handleVerifyOtherSession(deviceId)
         }
     }
 

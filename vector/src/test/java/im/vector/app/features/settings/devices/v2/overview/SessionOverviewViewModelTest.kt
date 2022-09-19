@@ -21,6 +21,7 @@ import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
@@ -44,12 +45,14 @@ class SessionOverviewViewModelTest {
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID_1
     )
+    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val isCurrentSessionUseCase = mockk<IsCurrentSessionUseCase>()
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
+            activeSessionHolder = fakeActiveSessionHolder.instance,
             isCurrentSessionUseCase = isCurrentSessionUseCase,
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
