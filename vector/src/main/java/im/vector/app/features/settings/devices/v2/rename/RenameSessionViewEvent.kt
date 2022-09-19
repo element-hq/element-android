@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class RenameSessionViewEvent : VectorViewEvents {
     object SessionRenamed : RenameSessionViewEvent()
+    data class Failure(val throwable: Throwable) : RenameSessionViewEvent()
 }

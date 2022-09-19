@@ -16,13 +16,22 @@
 
 package im.vector.app.features.settings.devices.v2.rename
 
-import com.airbnb.mvrx.MavericksState
+import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.util.awaitCallback
+import javax.inject.Inject
 
-data class RenameSessionViewState(
-        val deviceId: String,
-        val editedDeviceName: String = "",
-) : MavericksState {
-    constructor(args: RenameSessionArgs) : this(
-            deviceId = args.deviceId
-    )
+// TODO add unit tests
+class RenameSessionUseCase @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+) {
+
+    suspend fun execute(deviceId: String, newName: String): Result<Unit> {
+        return runCatching {
+            awaitCallback<Unit> { matrixCallback ->
+                activeSessionHolder.getActiveSession()
+                        .cryptoService()
+                        .setDeviceName(deviceId, newName, matrixCallback)
+            }
+        }
+    }
 }

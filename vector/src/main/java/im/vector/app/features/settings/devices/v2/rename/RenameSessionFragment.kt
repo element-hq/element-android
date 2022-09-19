@@ -76,15 +76,18 @@ class RenameSessionFragment :
                 is RenameSessionViewEvent.SessionRenamed -> {
                     viewNavigator.goBack(requireActivity())
                 }
+                is RenameSessionViewEvent.Failure -> {
+                    showFailure(it.throwable)
+                }
             }
         }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         if (renameEditTextInitialized.not()) {
-            views.renameSessionEditText.setText(state.deviceName)
+            views.renameSessionEditText.setText(state.editedDeviceName)
             renameEditTextInitialized = true
         }
-        views.renameSessionSave.isEnabled = state.deviceName.isNotEmpty()
+        views.renameSessionSave.isEnabled = state.editedDeviceName.isNotEmpty()
     }
 }

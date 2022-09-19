@@ -26,11 +26,13 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 // TODO add unit tests
 class RenameSessionViewModel @AssistedInject constructor(
         @Assisted val initialState: RenameSessionViewState,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
+        private val renameSessionUseCase: RenameSessionUseCase,
 ) : VectorViewModel<RenameSessionViewState, RenameSessionAction, RenameSessionViewEvent>(initialState) {
 
     companion object : MavericksViewModelFactory<RenameSessionViewModel, RenameSessionViewState> by hiltMavericksViewModelFactory()
@@ -46,7 +48,7 @@ class RenameSessionViewModel @AssistedInject constructor(
 
     private fun observeSessionInfo(deviceId: String) {
         getDeviceFullInfoUseCase.execute(deviceId)
-                .onEach { setState { copy(deviceName = it.deviceInfo.displayName.orEmpty()) } }
+                .onEach { setState { copy(editedDeviceName = it.deviceInfo.displayName.orEmpty()) } }
                 .launchIn(viewModelScope)
     }
 
@@ -58,11 +60,21 @@ class RenameSessionViewModel @AssistedInject constructor(
     }
 
     private fun handleEditLocally(editedName: String) {
-        setState { copy(deviceName = editedName) }
+        setState { copy(editedDeviceName = editedName) }
     }
 
-    private fun handleSaveModifications() {
-        // TODO call use case to save the modifications
-        _viewEvents.post(RenameSessionViewEvent.SessionRenamed)
+    private fun handleSaveModifications() = withState { viewState ->
+        viewModelScope.launch {
+            val result = renameSessionUseCase.execute(
+                    deviceId = viewState.deviceId,
+                    newName = viewState.editedDeviceName,
+            )
+            val viewEvent = if (result.isSuccess) {
+                RenameSessionViewEvent.SessionRenamed
+            } else {
+                RenameSessionViewEvent.Failure(result.exceptionOrNull() ?: Exception())
+            }
+            _viewEvents.post(viewEvent)
+        }
     }
 }
