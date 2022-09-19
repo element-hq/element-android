@@ -37,8 +37,8 @@ class DevicesViewModel @AssistedInject constructor(
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
-        refreshDevicesUseCase: RefreshDevicesUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
+        refreshDevicesUseCase: RefreshDevicesUseCase,
 ) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase) {
 
     @AssistedFactory

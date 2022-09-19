@@ -55,8 +55,8 @@ class DevicesViewModelTest {
                 getCurrentSessionCrossSigningInfoUseCase,
                 getDeviceFullInfoListUseCase,
                 refreshDevicesOnCryptoDevicesChangeUseCase,
-                refreshDevicesUseCase,
                 checkIfCurrentSessionCanBeVerifiedUseCase,
+                refreshDevicesUseCase,
         )
     }
 
