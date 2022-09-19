@@ -87,11 +87,10 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun handleVerifySessionAction() = withState { viewState ->
-        val deviceId = viewState.deviceId
-        if (isCurrentSession(deviceId)) {
+        if (viewState.isCurrentSession) {
             handleVerifyCurrentSession()
         } else {
-            handleVerifyOtherSession(deviceId)
+            handleVerifyOtherSession(viewState.deviceId)
         }
     }
 
