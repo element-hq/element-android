@@ -3246,6 +3246,7 @@
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
     <!--  Examples: Unverified · Last activity Yesterday at 6PM, Unverified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Unverified · Your current session</string>
     <!--  Example: Inactive for 90+ days (Dec 25, 2021) -->
     <plurals name="device_manager_other_sessions_description_inactive">
         <item quantity="one">Inactive for %1$d+ day (%2$s)</item>

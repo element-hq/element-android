@@ -41,6 +41,7 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
@@ -84,6 +85,7 @@ class VectorSettingsDevicesFragment :
         initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
+        initSecurityRecommendationsView()
         observeViewEvents()
     }
 
@@ -124,6 +126,29 @@ class VectorSettingsDevicesFragment :
 
     private fun initOtherSessionsView() {
         views.deviceListOtherSessions.callback = this
+    }
+
+    private fun initSecurityRecommendationsView() {
+        views.deviceListUnverifiedSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.UNVERIFIED,
+                        includeCurrentSession = true
+                )
+            }
+        }
+        views.deviceListInactiveSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.INACTIVE,
+                        includeCurrentSession = true
+                )
+            }
+        }
     }
 
     override fun onDestroyView() {
