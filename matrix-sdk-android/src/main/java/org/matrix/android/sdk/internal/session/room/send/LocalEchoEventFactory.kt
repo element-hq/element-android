@@ -347,14 +347,21 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createMediaEvent(
             roomId: String,
             attachment: ContentAttachmentData,
-            rootThreadEventId: String?
+            rootThreadEventId: String?,
+            relatesTo: RelationDefaultContent?,
     ): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment, rootThreadEventId)
-            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
-            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true, rootThreadEventId = rootThreadEventId)
-            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment, rootThreadEventId, relatesTo)
+            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment, rootThreadEventId, relatesTo)
+            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId, relatesTo)
+            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(
+                    roomId,
+                    attachment,
+                    isVoiceMessage = true,
+                    rootThreadEventId = rootThreadEventId,
+                    relatesTo
+            )
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment, rootThreadEventId, relatesTo)
         }
     }
 
@@ -378,7 +385,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    private fun createImageEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
+    private fun createImageEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?, relatesTo: RelationDefaultContent?): Event {
         var width = attachment.width
         var height = attachment.height
 
@@ -403,12 +410,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
+                relatesTo = relatesTo ?: rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
 
-    private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
+    private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?, relatesTo: RelationDefaultContent?): Event {
         val mediaDataRetriever = MediaMetadataRetriever()
         mediaDataRetriever.setDataSource(context, attachment.queryUri)
 
@@ -440,7 +447,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         thumbnailInfo = thumbnailInfo
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
+                relatesTo = relatesTo ?: rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -449,7 +456,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             attachment: ContentAttachmentData,
             isVoiceMessage: Boolean,
-            rootThreadEventId: String?
+            rootThreadEventId: String?,
+            relatesTo: RelationDefaultContent?,
     ): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
@@ -465,12 +473,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                         waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
-                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
+                relatesTo = relatesTo ?: rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
 
-    private fun createFileEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
+    private fun createFileEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?, relatesTo: RelationDefaultContent?): Event {
         val content = MessageFileContent(
                 msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
@@ -479,7 +487,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { generateThreadRelationContent(it) }
+                relatesTo = relatesTo ?: rootThreadEventId?.let { generateThreadRelationContent(it) }
         )
         return createMessageEvent(roomId, content)
     }
