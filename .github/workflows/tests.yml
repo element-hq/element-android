@@ -71,7 +71,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          # emulator-build: 7425822
+          emulator-build: 7425822
           script: |
             ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
@@ -129,26 +129,26 @@ jobs:
 # Unneeded as part of the test suite above, kept around in case we want to re-enable them.
 #
 #  # Build Android Tests
-#  build-android-tests: 
-#    name: Build Android Tests 
-#    runs-on: ubuntu-latest 
+#  build-android-tests:
+#    name: Build Android Tests
+#    runs-on: ubuntu-latest
 #    concurrency:
 #      group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('build-android-tests-{0}', github.ref) }}
 #      cancel-in-progress: true
-#    steps: 
-#      - uses: actions/checkout@v3 
-#      - uses: actions/setup-java@v3 
-#        with: 
-#          distribution: 'adopt' 
-#          java-version: 11 
-#      - uses: actions/cache@v3 
-#        with: 
-#          path: | 
-#            ~/.gradle/caches 
-#            ~/.gradle/wrapper 
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }} 
-#          restore-keys: | 
-#            ${{ runner.os }}-gradle- 
-#      - name: Build Android Tests  
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-java@v3
+#        with:
+#          distribution: 'adopt'
+#          java-version: 11
+#      - uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Build Android Tests
 #        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES
 
