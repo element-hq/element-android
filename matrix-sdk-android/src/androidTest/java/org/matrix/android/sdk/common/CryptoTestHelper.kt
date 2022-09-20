@@ -74,12 +74,10 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         return testHelper.launch {
             val aliceSession = testHelper.createAccountSuspending(TestConstants.USER_ALICE, defaultSessionParams)
 
-            val roomId = testHelper.runBlockingTest {
-                aliceSession.roomService().createRoom(CreateRoomParams().apply {
-                    historyVisibility = roomHistoryVisibility
-                    name = "MyRoom"
-                })
-            }
+            val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+                historyVisibility = roomHistoryVisibility
+                name = "MyRoom"
+            })
             if (encryptedRoom) {
                 val room = aliceSession.getRoom(roomId)!!
                 waitFor(
@@ -176,17 +174,15 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    private fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val timeLineEvent = session.getRoom(roomId)?.timelineService()?.getTimelineEvent(eventId)
-                if (andCanDecrypt) {
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                } else {
-                    timeLineEvent != null
-                }
+    private suspend fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {
+        testHelper.retryPeriodically {
+            val timeLineEvent = session.getRoom(roomId)?.timelineService()?.getTimelineEvent(eventId)
+            if (andCanDecrypt) {
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
+            } else {
+                timeLineEvent != null
             }
         }
     }

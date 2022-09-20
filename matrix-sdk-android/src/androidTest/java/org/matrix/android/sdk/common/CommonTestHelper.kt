@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -97,7 +98,9 @@ class CommonTestHelper internal constructor(context: Context) {
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return runTest {
                 try {
-                    block(cryptoTestHelper, testHelper)
+                    withContext(Dispatchers.Default) {
+                        block(cryptoTestHelper, testHelper)
+                    }
                 } finally {
                     if (autoSignoutOnClose) {
                         testHelper.cleanUpOpenedSessions()
