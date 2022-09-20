@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -43,6 +44,13 @@ class FlowRoom(private val room: Room) {
         return room.getRoomSummaryLive().asFlow()
                 .startWith(room.coroutineDispatchers.io) {
                     room.roomSummary().toOptional()
+                }
+    }
+
+    fun liveLocalRoomSummary(): Flow<Optional<LocalRoomSummary>> {
+        return room.getLocalRoomSummaryLive().asFlow()
+                .startWith(room.coroutineDispatchers.io) {
+                    room.localRoomSummary().toOptional()
                 }
     }
 

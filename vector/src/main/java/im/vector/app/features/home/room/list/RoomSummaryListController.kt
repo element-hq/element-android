@@ -17,18 +17,26 @@
 package im.vector.app.features.home.room.list
 
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.settings.FontScalePreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryListController(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val displayMode: RoomListDisplayMode
+        private val displayMode: RoomListDisplayMode,
+        fontScalePreferences: FontScalePreferences
 ) : CollapsableTypedEpoxyController<List<RoomSummary>>() {
 
     var listener: RoomListListener? = null
+    private val shouldUseSingleLine: Boolean
+
+    init {
+        val fontScale = fontScalePreferences.getResolvedFontScaleValue()
+        shouldUseSingleLine = fontScale.scale > FontScalePreferences.SCALE_LARGE
+    }
 
     override fun buildModels(data: List<RoomSummary>?) {
         data?.forEach {
-            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), displayMode, listener))
+            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), displayMode, listener, shouldUseSingleLine))
         }
     }
 }

@@ -47,6 +47,11 @@ internal class FakeMonarchy {
         } coAnswers {
             firstArg<Monarchy.RealmBlock>().doWithRealm(fakeRealm.instance)
         }
+        coEvery {
+            instance.runTransactionSync(any())
+        } coAnswers {
+            firstArg<Realm.Transaction>().execute(fakeRealm.instance)
+        }
         every { instance.realmConfiguration } returns mockk()
     }
 
