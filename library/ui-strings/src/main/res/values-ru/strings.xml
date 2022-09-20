@@ -2694,4 +2694,5 @@
     <string name="home_empty_no_rooms_title">Добро пожаловать в ${app_name},
 \n%s.</string>
     <string name="onboarding_new_app_layout_feedback_title">Оставить отзыв</string>
+    <string name="device_manager_verification_status_detail_verified">Текущая сессия готова к безопасному обмену сообщениями.</string>
 </resources>
