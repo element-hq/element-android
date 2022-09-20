@@ -95,6 +95,9 @@ class DefaultVectorAnalytics @Inject constructor(
     override suspend fun onSignOut() {
         // reset the analyticsId
         setAnalyticsId("")
+
+        // Close Sentry SDK.
+        sentryFactory.stopSentry()
     }
 
     private fun observeAnalyticsId() {
@@ -124,15 +127,17 @@ class DefaultVectorAnalytics @Inject constructor(
                     Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
                     optOutPostHog()
-                    initOrStopSentry(consent)
+                    initOrStopSentry()
                 }
                 .launchIn(globalScope)
     }
 
-    private fun initOrStopSentry(userConsent: Boolean) {
-        when (userConsent) {
-            true -> sentryFactory.initSentry()
-            false -> sentryFactory.stopSentry()
+    private fun initOrStopSentry() {
+        userConsent?.let {
+            when (it) {
+                true -> sentryFactory.initSentry()
+                false -> sentryFactory.stopSentry()
+            }
         }
     }
 
