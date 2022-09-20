@@ -17,6 +17,16 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 
-class FakeAnalyticsTracker : AnalyticsTracker by mockk()
+class FakeAnalyticsTracker : AnalyticsTracker by mockk(relaxUnitFun = true) {
+
+    fun verifyCaptureAndGetInteraction(): Interaction {
+        val slot = slot<Interaction>()
+        verify { capture(capture(slot)) }
+        return slot.captured
+    }
+}

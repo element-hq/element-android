@@ -23,7 +23,7 @@ import io.mockk.verify
 
 class FakeVectorPreferences {
 
-    val instance = mockk<VectorPreferences>(relaxUnitFun = true)
+    val instance = mockk<VectorPreferences>(relaxed = true)
 
     fun givenUseCompleteNotificationFormat(value: Boolean) {
         every { instance.useCompleteNotificationFormat() } returns value

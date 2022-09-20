@@ -16,21 +16,19 @@
 
 package im.vector.app.test.fakes
 
-import arrow.core.Option
-import im.vector.app.SpaceStateHandler
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.user.UserService
+import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.Optional
 
-class FakeSpaceStateHandler : SpaceStateHandler by mockk(relaxed = true) {
+class FakeUserService : UserService by mockk(relaxed = true) {
 
-    fun getSelectedSpaceFlowReturns(space: RoomSummary) {
-        every { getSelectedSpaceFlow() } returns flowOf(Option(space))
-    }
-
-    fun verifySetCurrentSpace(spaceId: String) {
-        verify { setCurrentSpace(spaceId) }
+    fun getUserLiveReturns(user: User? = null): LiveData<Optional<User>> {
+        val liveData = MutableLiveData(Optional(user))
+        every { getUserLive(any()) } returns liveData
+        return liveData
     }
 }

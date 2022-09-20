@@ -187,7 +187,7 @@ class SpaceListViewModel @AssistedInject constructor(
             is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
             SpaceListAction.AddSpace -> handleAddSpace()
             is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
+            is SpaceListAction.OpenSpaceInvite -> handleOpenSpaceInvite(action)
             is SpaceListAction.MoveSpace -> handleMoveSpace(action)
             is SpaceListAction.OnStartDragging -> handleStartDragging()
             is SpaceListAction.OnEndDragging -> handleEndDragging()
@@ -226,7 +226,7 @@ class SpaceListViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
+    private fun handleOpenSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
         _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
     }
 

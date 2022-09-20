@@ -24,7 +24,7 @@ class FakeRoom(
         private val fakeSendService: FakeSendService = FakeSendService(),
         private val fakeTimelineService: FakeTimelineService = FakeTimelineService(),
         private val fakeRelationService: FakeRelationService = FakeRelationService(),
-) : Room by mockk() {
+) : Room by mockk(relaxed = true) {
 
     override fun locationSharingService() = fakeLocationSharingService
 

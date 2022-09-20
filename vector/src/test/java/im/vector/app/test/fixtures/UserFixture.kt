@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.test.fixtures
 
-import arrow.core.Option
-import im.vector.app.SpaceStateHandler
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.user.model.User
 
-class FakeSpaceStateHandler : SpaceStateHandler by mockk(relaxed = true) {
+object UserFixture {
 
-    fun getSelectedSpaceFlowReturns(space: RoomSummary) {
-        every { getSelectedSpaceFlow() } returns flowOf(Option(space))
-    }
-
-    fun verifySetCurrentSpace(spaceId: String) {
-        verify { setCurrentSpace(spaceId) }
-    }
+    fun aUser(userId: String) = User(userId)
 }
