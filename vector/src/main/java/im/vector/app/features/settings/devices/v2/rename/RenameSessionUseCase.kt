@@ -17,21 +17,28 @@
 package im.vector.app.features.settings.devices.v2.rename
 
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.andThen
+import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
-// TODO add unit tests
 class RenameSessionUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
+        private val refreshDevicesUseCase: RefreshDevicesUseCase,
 ) {
 
     suspend fun execute(deviceId: String, newName: String): Result<Unit> {
-        return runCatching {
-            awaitCallback<Unit> { matrixCallback ->
-                activeSessionHolder.getActiveSession()
-                        .cryptoService()
-                        .setDeviceName(deviceId, newName, matrixCallback)
-            }
+        return renameDevice(deviceId, newName)
+                .andThen { refreshDevices() }
+    }
+
+    private suspend fun renameDevice(deviceId: String, newName: String) = runCatching {
+        awaitCallback<Unit> { matrixCallback ->
+            activeSessionHolder.getActiveSession()
+                    .cryptoService()
+                    .setDeviceName(deviceId, newName, matrixCallback)
         }
     }
+
+    private fun refreshDevices() = runCatching { refreshDevicesUseCase.execute() }
 }
