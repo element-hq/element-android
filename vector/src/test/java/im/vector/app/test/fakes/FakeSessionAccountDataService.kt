@@ -29,4 +29,3 @@ class FakeSessionAccountDataService : SessionAccountDataService by mockk(relaxed
         every { getLiveRoomAccountDataEvents(any()) } returns liveData
     }
 }
-
