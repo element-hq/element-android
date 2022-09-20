@@ -23,11 +23,14 @@ import im.vector.app.test.fakes.FakeAnalyticsStore
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
 import im.vector.app.test.fakes.FakePostHogFactory
+import im.vector.app.test.fakes.FakeSentryFactory
 import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
 import im.vector.app.test.fixtures.aVectorAnalyticsScreen
 import io.mockk.mockk
+import io.mockk.verify
+import io.sentry.Sentry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,10 +49,11 @@ class DefaultVectorAnalyticsTest {
     private val fakePostHog = FakePostHog()
     private val fakeAnalyticsStore = FakeAnalyticsStore()
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
+    private val fakeSentryFactory = FakeSentryFactory()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
-            sentryFactory = mockk(),
+            sentryFactory = fakeSentryFactory.instance,
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
@@ -69,17 +73,21 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when consenting to analytics then updates posthog opt out to false`() = runTest {
+    fun `when consenting to analytics then updates posthog opt out to false and initialize Sentry`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         fakePostHog.verifyOptOutStatus(optedOut = false)
+
+        fakeSentryFactory.verifySentryInit()
     }
 
     @Test
-    fun `when revoking consent to analytics then updates posthog opt out to true`() = runTest {
+    fun `when revoking consent to analytics then updates posthog opt out to true and closes Sentry`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         fakePostHog.verifyOptOutStatus(optedOut = true)
+
+        fakeSentryFactory.verifySentryClose()
     }
 
     @Test
@@ -99,12 +107,14 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when signing out then resets posthog`() = runTest {
+    fun `when signing out then resets posthog and closes Sentry`() = runTest {
         fakeAnalyticsStore.allowSettingAnalyticsIdToCallBackingFlow()
 
         defaultVectorAnalytics.onSignOut()
 
         fakePostHog.verifyReset()
+
+        fakeSentryFactory.verifySentryClose()
     }
 
     @Test
