@@ -260,53 +260,51 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     /**
      * Initialize cross-signing, set up megolm backup and save all in 4S
      */
-    fun bootstrapSecurity(session: Session) {
+    suspend fun bootstrapSecurity(session: Session) {
         initializeCrossSigning(session)
         val ssssService = session.sharedSecretStorageService()
-        testHelper.runBlockingTest {
-            val keyInfo = ssssService.generateKey(
-                    UUID.randomUUID().toString(),
-                    null,
-                    "ssss_key",
-                    EmptyKeySigner()
-            )
-            ssssService.setDefaultKey(keyInfo.keyId)
+        val keyInfo = ssssService.generateKey(
+                UUID.randomUUID().toString(),
+                null,
+                "ssss_key",
+                EmptyKeySigner()
+        )
+        ssssService.setDefaultKey(keyInfo.keyId)
 
+        ssssService.storeSecret(
+                MASTER_KEY_SSSS_NAME,
+                session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
+                listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
+        )
+
+        ssssService.storeSecret(
+                SELF_SIGNING_KEY_SSSS_NAME,
+                session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
+                listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
+        )
+
+        ssssService.storeSecret(
+                USER_SIGNING_KEY_SSSS_NAME,
+                session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
+                listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
+        )
+
+        // set up megolm backup
+        val creationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        }
+        val version = testHelper.doSync<KeysVersion> {
+            session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+        }
+        // Save it for gossiping
+        session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+
+        extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
             ssssService.storeSecret(
-                    MASTER_KEY_SSSS_NAME,
-                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
+                    KEYBACKUP_SECRET_SSSS_NAME,
+                    secret,
                     listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
-
-            ssssService.storeSecret(
-                    SELF_SIGNING_KEY_SSSS_NAME,
-                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
-                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
-            )
-
-            ssssService.storeSecret(
-                    USER_SIGNING_KEY_SSSS_NAME,
-                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
-                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
-            )
-
-            // set up megolm backup
-            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
-            }
-            val version = awaitCallback<KeysVersion> {
-                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
-            }
-            // Save it for gossiping
-            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
-
-            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
-                ssssService.storeSecret(
-                        KEYBACKUP_SECRET_SSSS_NAME,
-                        secret,
-                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
-                )
-            }
         }
     }
 

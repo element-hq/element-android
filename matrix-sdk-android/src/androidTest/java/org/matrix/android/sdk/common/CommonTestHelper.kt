@@ -145,6 +145,10 @@ class CommonTestHelper internal constructor(context: Context) {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
     }
 
+    suspend fun logIntoAccountSuspending(userId: String, testParams: SessionTestParams): Session {
+        return logIntoAccountSuspending(userId, TestConstants.PASSWORD, testParams)
+    }
+
     fun cleanUpOpenedSessions() {
         trackedSessions.forEach {
             runBlockingTest {
@@ -440,6 +444,18 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
+    suspend fun logIntoAccountSuspending(
+            userId: String,
+            password: String,
+            testParams: SessionTestParams
+    ): Session {
+        val session = logAccountAndSyncSuspending(userId, password, testParams)
+        assertNotNull(session)
+        return session.also {
+            trackedSessions.add(session)
+        }
+    }
+
     /**
      * Create an account and a dedicated session
      *
@@ -539,6 +555,26 @@ class CommonTestHelper internal constructor(context: Context) {
         session.open()
         if (sessionTestParams.withInitialSync) {
             syncSession(session)
+        }
+
+        return session
+    }
+
+    private suspend fun logAccountAndSyncSuspending(
+            userName: String,
+            password: String,
+            sessionTestParams: SessionTestParams
+    ): Session {
+        val hs = createHomeServerConfig()
+
+        matrix.authenticationService.getLoginFlow(hs)
+
+        val session = matrix.authenticationService
+                .getLoginWizard()
+                .login(userName, password, "myDevice")
+        session.open()
+        if (sessionTestParams.withInitialSync) {
+            syncSessionSuspending(session)
         }
 
         return session
