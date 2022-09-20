@@ -24,6 +24,7 @@ import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionRenameBinding
 import javax.inject.Inject
@@ -59,6 +60,7 @@ class RenameSessionFragment :
     }
 
     private fun initEditText() {
+        views.renameSessionEditText.showKeyboard(andRequestFocus = true)
         views.renameSessionEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.handle(RenameSessionAction.EditLocally(text.toString()))
         }
@@ -86,6 +88,7 @@ class RenameSessionFragment :
     override fun invalidate() = withState(viewModel) { state ->
         if (renameEditTextInitialized.not()) {
             views.renameSessionEditText.setText(state.editedDeviceName)
+            views.renameSessionEditText.setSelection(views.renameSessionEditText.length())
             renameEditTextInitialized = true
         }
         views.renameSessionSave.isEnabled = state.editedDeviceName.isNotEmpty()

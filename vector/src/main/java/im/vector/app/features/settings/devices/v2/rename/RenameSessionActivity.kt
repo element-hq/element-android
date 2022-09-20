@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.rename
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -37,6 +38,7 @@ class RenameSessionActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         super.onCreate(savedInstanceState)
 
         if (isFirstCreation()) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             addFragment(
                     container = views.simpleFragmentContainer,
                     fragmentClass = RenameSessionFragment::class.java,
