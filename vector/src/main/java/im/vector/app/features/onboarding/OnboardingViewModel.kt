@@ -534,6 +534,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
+        handle(OnboardingAction.LoginWithDendrite("http://localhost:65432"))
     }
 
     private fun handleResetPassword(action: OnboardingAction.ResetPassword) {

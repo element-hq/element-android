@@ -18,9 +18,13 @@ package im.vector.app.core.platform
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -65,6 +69,7 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.services.DendriteService
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
@@ -202,6 +207,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
+
         val singletonEntryPoint = singletonEntryPoint()
         val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
@@ -412,6 +418,15 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             rageShake.start()
         }
         debugReceiver.register(this)
+
+        Timber.i("Bind Dendrite service")
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) { }
+            override fun onServiceDisconnected(name: ComponentName?) { }
+        }
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
+        }
     }
 
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()

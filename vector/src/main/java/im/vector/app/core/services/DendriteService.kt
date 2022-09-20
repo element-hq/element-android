@@ -20,7 +20,6 @@ import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
@@ -56,8 +55,9 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.ParcelUuid
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -77,13 +77,13 @@ import java.nio.ByteBuffer
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
-import javax.inject.Inject
 import kotlin.concurrent.thread
 
 class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var vectorPreferences: VectorPreferences
 
     private var notificationManager: NotificationManager? = null
+    private var notification: Notification? = null
 
     private val binder = DendriteLocalBinder()
     private var monolith: DendriteMonolith? = null
@@ -95,8 +95,6 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     private lateinit var gattCharacteristic: BluetoothGattCharacteristic
     private var gattService = BluetoothGattService(serviceUUID.uuid, BluetoothGattService.SERVICE_TYPE_PRIMARY)
 
-    @Suppress("DEPRECATION")
-    private var adapter = BluetoothAdapter.getDefaultAdapter()
     private lateinit var advertiser: BluetoothLeAdvertiser
     private lateinit var scanner: BluetoothLeScanner
 
@@ -199,31 +197,32 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 }
             }
 
-            Timber.i("BLE: Connecting outbound $device PSM $psm")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Timber.i("BLE: Connecting outbound $device PSM $psm")
+                val socket = device.createInsecureL2capChannel(psm.toInt())
+                try {
+                    socket.connect()
+                } catch (e: Exception) {
+                    timber.log.Timber.i("BLE: Failed to connect to $device PSM $psm: ${e.toString()}")
+                    connecting.remove(device.address)
+                    return
+                }
+                if (!socket.isConnected) {
+                    Timber.i("BLE: Expected to be connected but not")
+                    connecting.remove(device.address)
+                    return
+                }
 
-            val socket = device.createInsecureL2capChannel(psm.toInt())
-            try {
-                socket.connect()
-            } catch (e: Exception) {
-                timber.log.Timber.i("BLE: Failed to connect to $device PSM $psm: ${e.toString()}")
+                Timber.i("BLE: Connected outbound $device PSM $psm")
+
+                Timber.i("Creating DendriteBLEPeering")
+                val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
+                conduits[device.address] = conduit
+                connections[device.address] = DendriteBLEPeering(conduit, socket)
+                Timber.i("Starting DendriteBLEPeering")
+                connections[device.address]!!.start()
                 connecting.remove(device.address)
-                return
             }
-            if (!socket.isConnected) {
-                Timber.i("BLE: Expected to be connected but not")
-                connecting.remove(device.address)
-                return
-            }
-
-            Timber.i("BLE: Connected outbound $device PSM $psm")
-
-            Timber.i("Creating DendriteBLEPeering")
-            val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
-            conduits[device.address] = conduit
-            connections[device.address] = DendriteBLEPeering(conduit, socket)
-            Timber.i("Starting DendriteBLEPeering")
-            connections[device.address]!!.start()
-            connecting.remove(device.address)
         }
     }
 
@@ -294,6 +293,8 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     }
 
     companion object {
+        const val ACTION = "ACTION"
+        const val ACTION_START = "ACTION_START"
         private const val ID = 532345
         private const val CHANNEL_ID = "im.vector.p2p"
         private const val CHANNEL_NAME = "Element P2P"
@@ -388,15 +389,62 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         }
     }
 
+    private fun updateNotification() {
+        if (notificationManager == null || monolith == null) {
+            return
+        }
+
+        val remotePeers = monolith!!.peerCount(Gobind.PeerTypeRemote).toInt()
+        val multicastPeers = monolith!!.peerCount(Gobind.PeerTypeMulticast).toInt()
+        val bluetoothPeers = monolith!!.peerCount(Gobind.PeerTypeBluetooth).toInt()
+
+        val title: String = "Element p2p service running"
+        val text: String
+
+        text = if (remotePeers+multicastPeers+bluetoothPeers == 0) {
+            "No connectivity"
+        } else {
+            val texts: MutableList<String> = mutableListOf<String>()
+            if (bluetoothPeers > 0) {
+                texts.add(0, "$bluetoothPeers BLE")
+            }
+            if (multicastPeers > 0) {
+                texts.add(0, "$multicastPeers LAN")
+            }
+            if (remotePeers > 0) {
+                texts.add(0, "static")
+            }
+            "Connected to " + texts.joinToString(", ")
+        }
+
+        notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.drawable.ic_ems_logo)
+                .setOngoing(true)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setOnlyAlertOnce(true)
+                .build()
+        notificationManager!!.notify(ID, notification)
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
         return binder
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val action = intent.getStringExtra(ACTION);
+        Timber.i("Action: $action")
+        when (action) {
+            ACTION_START -> {
+                startService()
+            }
+        }
+        return START_NOT_STICKY
+    }
 
+    private fun startService() {
         if (monolith != null) {
-            Timber.i("Created again while running.")
             return
         }
 
@@ -428,26 +476,28 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             startBluetooth()
         }
 
-        super.onCreate()
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                updateNotification()
+            }
+        }, 0, 1000)
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
 
-        Timber.i("Stopping Dendrite")
+        if (monolith != null) {
+            Timber.i("Stopping Dendrite")
 
-        // Occurs when the element app is closed from the system tray
-        stopBluetooth()
+            // Occurs when the element app is closed from the system tray
+            stopBluetooth()
+            this.unregisterReceiver(bleReceiver)
 
-        this.unregisterReceiver(bleReceiver)
-
-        if (notificationManager != null) {
-            notificationManager?.cancel(ID)
+            monolith?.stop()
+            monolith = null
         }
 
-        monolith?.stop()
-        monolith = null
-
+        notificationManager?.cancelAll()
         stopForeground(true)
         myStopSelf()
     }
@@ -536,13 +586,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         if (!vectorPreferences.p2pEnableBluetooth()) {
             return
         }
-        if (adapter == null) {
-            return
-        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return
-        }
-        if (!adapter.isEnabled) {
             return
         }
         if (ActivityCompat.checkSelfPermission(
@@ -566,8 +610,8 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         }
 
         manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        advertiser = adapter.bluetoothLeAdvertiser
-        scanner = adapter.bluetoothLeScanner
+        advertiser = manager.adapter.bluetoothLeAdvertiser
+        scanner = manager.adapter.bluetoothLeScanner
 
         val isCodedPHY = vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported
 
@@ -583,7 +627,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 .addServiceUuid(serviceUUID)
                 .build()
 
-        l2capServer = adapter.listenUsingInsecureL2capChannel()
+        l2capServer = manager.adapter.listenUsingInsecureL2capChannel()
         l2capPSM = intToBytes(l2capServer.psm.toShort())
 
         if (isCodedPHY) {
@@ -693,7 +737,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             return
         }
 
-        if (adapter.isEnabled) {
+        if (manager.adapter.isEnabled) {
             advertiser.stopAdvertising(advertiseCallback)
             advertiser.stopAdvertisingSet(advertiseSetCallback)
             scanner.stopScan(scanCallback)

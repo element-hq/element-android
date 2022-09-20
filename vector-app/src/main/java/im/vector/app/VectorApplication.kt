@@ -18,12 +18,15 @@ package im.vector.app
 
 import android.app.Application
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.IBinder
 import android.os.StrictMode
 import android.view.Gravity
 import androidx.core.provider.FontRequest
@@ -50,6 +53,7 @@ import im.vector.app.core.debug.LeakDetector
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.services.DendriteService
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -125,6 +129,7 @@ class VectorApplication :
     override fun onCreate() {
         enableStrictModeIfNeeded()
         super.onCreate()
+
         appContext = this
         flipperProxy.init(matrix)
         vectorAnalytics.init()

@@ -146,11 +146,13 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Timber.i("Start Dendrite service")
         val dendriteConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) { }
             override fun onServiceDisconnected(name: ComponentName?) { }
         }
         Intent(this, DendriteService::class.java).also { dendriteIntent ->
+            dendriteIntent.putExtra(DendriteService.ACTION, DendriteService.ACTION_START)
             startService(dendriteIntent)
         }.also { intent ->
             applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
