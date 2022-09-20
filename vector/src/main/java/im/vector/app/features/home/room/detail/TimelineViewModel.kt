@@ -83,7 +83,6 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -100,9 +99,11 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
+import org.matrix.android.sdk.api.session.room.model.LocalRoomCreationState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
@@ -185,6 +186,7 @@ class TimelineViewModel @AssistedInject constructor(
     init {
         // This method will take care of a null room to update the state.
         observeRoomSummary()
+        observeLocalRoomSummary()
         if (room == null) {
             timeline = null
         } else {
@@ -617,7 +619,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleAddJitsiConference(action: RoomDetailAction.AddJitsiWidget) {
-        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView())
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val widget = jitsiService.createJitsiWidget(initialState.roomId, action.withVideo)
@@ -637,7 +639,7 @@ class TimelineViewModel @AssistedInject constructor(
                 if (isJitsiWidget) {
                     setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = true)) }
                 } else {
-                    _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+                    _viewEvents.post(RoomDetailViewEvents.ShowWaitingView())
                 }
                 session.widgetService().destroyRoomWidget(initialState.roomId, widgetId)
                 // local echo
@@ -1231,6 +1233,28 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
+    private fun observeLocalRoomSummary() {
+        if (room != null && RoomLocalEcho.isLocalEchoId(room.roomId)) {
+            room.flow().liveLocalRoomSummary()
+                    .unwrap()
+                    .map { it.creationState }
+                    .distinctUntilChanged()
+                    .onEach { creationState ->
+                        when (creationState) {
+                            LocalRoomCreationState.NOT_CREATED -> Unit
+                            LocalRoomCreationState.CREATING ->
+                                _viewEvents.post(RoomDetailViewEvents.ShowWaitingView(stringProvider.getString(R.string.creating_direct_room)))
+                            LocalRoomCreationState.FAILURE -> {
+                                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                            }
+                            LocalRoomCreationState.CREATED ->
+                                _viewEvents.post(RoomDetailViewEvents.OpenRoom(room.localRoomSummary()?.replacementRoomId!!, true))
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        }
+    }
+
     private fun getUnreadState() {
         if (room == null) return
         combine(
@@ -1322,23 +1346,8 @@ class TimelineViewModel @AssistedInject constructor(
                 }
             }
             room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)?.also {
-                onRoomTombstoneUpdated(it)
+                setState { copy(tombstoneEvent = it) }
             }
-        }
-    }
-
-    private var roomTombstoneHandled = false
-    private fun onRoomTombstoneUpdated(tombstoneEvent: Event) = withState { state ->
-        if (roomTombstoneHandled) return@withState
-        if (state.isLocalRoom()) {
-            // Local room has been replaced, so navigate to the new room
-            val roomId = tombstoneEvent.getClearContent()?.toModel<RoomTombstoneContent>()
-                    ?.replacementRoomId
-                    ?: return@withState
-            _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
-            roomTombstoneHandled = true
-        } else {
-            setState { copy(tombstoneEvent = tombstoneEvent) }
         }
     }
 

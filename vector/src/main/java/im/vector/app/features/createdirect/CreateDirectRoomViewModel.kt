@@ -37,11 +37,10 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-import org.matrix.android.sdk.api.session.user.model.User
 
 class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
@@ -78,11 +77,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
             } else {
                 // Try to get user from known users and fall back to creating a User object from MXID
-                val qrInvitee = if (session.getUser(mxid) != null) {
-                    session.getUser(mxid)!!
-                } else {
-                    User(mxid, null, null)
-                }
+                val qrInvitee = session.getUserOrDefault(mxid)
                 onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
             }
         }

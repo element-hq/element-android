@@ -493,7 +493,7 @@ class TimelineFragment :
                 is RoomDetailViewEvents.ShowInfoOkDialog -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference -> joinJitsiRoom(it.widget, it.withVideo)
                 RoomDetailViewEvents.LeaveJitsiConference -> leaveJitsiConference()
-                RoomDetailViewEvents.ShowWaitingView -> vectorBaseActivity.showWaitingView()
+                is RoomDetailViewEvents.ShowWaitingView -> vectorBaseActivity.showWaitingView(it.text)
                 RoomDetailViewEvents.HideWaitingView -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission -> requestNativeWidgetPermission(it)
                 is RoomDetailViewEvents.OpenRoom -> handleOpenRoom(it)

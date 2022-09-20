@@ -69,8 +69,6 @@ ext.groups = [
                         'com.gabrielittner.threetenbp',
                         'com.getkeepsafe.relinker',
                         'com.github.bumptech.glide',
-                        'com.github.filippudak',
-                        'com.github.filippudak.progresspieview',
                         'com.github.javaparser',
                         'com.github.piasy',
                         'com.github.shyiko.klob',

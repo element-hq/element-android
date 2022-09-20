@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewSessionsListHeaderBinding
 
@@ -54,7 +55,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
 
     private fun setTitle(typedArray: TypedArray) {
         val title = typedArray.getString(R.styleable.SessionsListHeaderView_sessionsListHeaderTitle)
-        binding.sessionsListHeaderTitle.text = title
+        binding.sessionsListHeaderTitle.setTextOrHide(title)
     }
 
     private fun setDescription(typedArray: TypedArray) {

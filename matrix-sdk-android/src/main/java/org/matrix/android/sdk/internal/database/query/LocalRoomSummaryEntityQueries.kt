@@ -22,10 +22,6 @@ import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
 
-internal fun LocalRoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<LocalRoomSummaryEntity> {
-    val query = realm.where<LocalRoomSummaryEntity>()
-    if (roomId != null) {
-        query.equalTo(LocalRoomSummaryEntityFields.ROOM_ID, roomId)
-    }
-    return query
+internal fun LocalRoomSummaryEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<LocalRoomSummaryEntity> {
+    return realm.where<LocalRoomSummaryEntity>().equalTo(LocalRoomSummaryEntityFields.ROOM_ID, roomId)
 }

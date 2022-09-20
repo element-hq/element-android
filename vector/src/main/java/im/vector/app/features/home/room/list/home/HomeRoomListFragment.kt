@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -36,6 +35,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.utils.FirstItemUpdatedObserver
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.list.RoomListAnimator
@@ -66,6 +66,7 @@ class HomeRoomListFragment :
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
     private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel
     private var concatAdapter = ConcatAdapter()
+    private lateinit var firstItemObserver: FirstItemUpdatedObserver
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
@@ -130,6 +131,9 @@ class HomeRoomListFragment :
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
+        firstItemObserver = FirstItemUpdatedObserver(layoutManager) {
+            layoutManager.scrollToPosition(0)
+        }
         stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         views.roomListView.layoutManager = layoutManager
         views.roomListView.itemAnimator = RoomListAnimator()
@@ -158,14 +162,7 @@ class HomeRoomListFragment :
 
         views.roomListView.adapter = concatAdapter
 
-        // we need to force scroll when recents/filter tabs are added to make them visible
-        concatAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (positionStart == 0) {
-                    layoutManager.scrollToPosition(0)
-                }
-            }
-        })
+        concatAdapter.registerAdapterDataObserver(firstItemObserver)
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
@@ -232,6 +229,8 @@ class HomeRoomListFragment :
         headersController.onFilterChangedListener = null
 
         roomsController.listener = null
+
+        concatAdapter.unregisterAdapterDataObserver(firstItemObserver)
 
         super.onDestroyView()
     }

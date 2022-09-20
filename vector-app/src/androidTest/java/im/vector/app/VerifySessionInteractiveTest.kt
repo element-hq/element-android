@@ -225,8 +225,8 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         // Wait until local secrets are known (gossip)
         withIdlingResource(allSecretsKnownIdling(uiSession)) {
-            onView(withId(R.id.groupToolbarAvatarImageView))
-                    .perform(click())
+            onView(withId(R.id.roomListContainer))
+                    .check(matches(isDisplayed()))
         }
     }
 

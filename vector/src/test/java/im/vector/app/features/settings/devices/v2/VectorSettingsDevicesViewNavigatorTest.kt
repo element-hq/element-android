@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2
 
 import android.content.Intent
+import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsActivity
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
 import im.vector.app.test.fakes.FakeContext
 import io.mockk.every
@@ -38,6 +39,7 @@ class VectorSettingsDevicesViewNavigatorTest {
     @Before
     fun setUp() {
         mockkObject(SessionOverviewActivity.Companion)
+        mockkObject(OtherSessionsActivity.Companion)
     }
 
     @After
@@ -57,9 +59,27 @@ class VectorSettingsDevicesViewNavigatorTest {
         }
     }
 
+    @Test
+    fun `given an intent when navigating to other sessions list then it starts the correct activity`() {
+        val intent = givenIntentForOtherSessions()
+        context.givenStartActivity(intent)
+
+        vectorSettingsDevicesViewNavigator.navigateToOtherSessions(context.instance)
+
+        verify {
+            context.instance.startActivity(intent)
+        }
+    }
+
     private fun givenIntentForSessionOverview(sessionId: String): Intent {
         val intent = mockk<Intent>()
         every { SessionOverviewActivity.newIntent(context.instance, sessionId) } returns intent
+        return intent
+    }
+
+    private fun givenIntentForOtherSessions(): Intent {
+        val intent = mockk<Intent>()
+        every { OtherSessionsActivity.newIntent(context.instance) } returns intent
         return intent
     }
 }

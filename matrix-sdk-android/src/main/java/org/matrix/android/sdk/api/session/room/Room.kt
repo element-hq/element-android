@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
 import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
@@ -61,9 +62,20 @@ interface Room {
     fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
     /**
+     * A live [LocalRoomSummary] associated with the room.
+     * You can observe this summary to get dynamic data from this room.
+     */
+    fun getLocalRoomSummaryLive(): LiveData<Optional<LocalRoomSummary>>
+
+    /**
      * A current snapshot of [RoomSummary] associated with the room.
      */
     fun roomSummary(): RoomSummary?
+
+    /**
+     * A current snapshot of [LocalRoomSummary] associated with the room.
+     */
+    fun localRoomSummary(): LocalRoomSummary?
 
     /**
      * Use this room as a Space, if the type is correct.

@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
 import org.matrix.android.sdk.api.session.room.location.LocationSharingService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
@@ -80,6 +81,14 @@ internal class DefaultRoom(
 
     override fun roomSummary(): RoomSummary? {
         return roomSummaryDataSource.getRoomSummary(roomId)
+    }
+
+    override fun getLocalRoomSummaryLive(): LiveData<Optional<LocalRoomSummary>> {
+        return roomSummaryDataSource.getLocalRoomSummaryLive(roomId)
+    }
+
+    override fun localRoomSummary(): LocalRoomSummary? {
+        return roomSummaryDataSource.getLocalRoomSummary(roomId)
     }
 
     override fun asSpace(): Space? {

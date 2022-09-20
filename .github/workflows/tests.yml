@@ -13,7 +13,10 @@ env:
 jobs:
   tests:
     name: Runs all tests
-    runs-on: macos-latest # for the emulator
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    strategy:
+      matrix:
+        api-level: [28]
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
@@ -36,40 +39,70 @@ jobs:
           httpPort: 8080
           disableRateLimiting: true
           public_baseurl: "http://10.0.2.2:8080/"
+
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86
+          profile: Nexus 5X
+          force-avd-creation: true # Is set to false in the doc https://github.com/ReactiveCircus/android-emulator-runner
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: echo "Generated AVD snapshot for caching."
+
       - name: Run all the codecoverage tests at once
-        id: tests
         uses: reactivecircus/android-emulator-runner@v2
-        continue-on-error: true
+        # continue-on-error: true
         with:
-          api-level: 28
+          api-level: ${{ matrix.api-level }}
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          emulator-build: 7425822
+          # emulator-build: 7425822
           script: |
             ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
-      # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves stes.tests.outcome = 'failure'
-      - name: Run all the codecoverage tests at once (retry if emulator failed)
-        uses: reactivecircus/android-emulator-runner@v2
-        if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
+      # NB: continue-on-error marks steps.tests.conclusion = 'success' but leaves steps.tests.outcome = 'failure'
+      ### - name: Run all the codecoverage tests at once (retry if emulator failed)
+      ###   uses: reactivecircus/android-emulator-runner@v2
+      ###   if: always() && steps.tests.outcome == 'failure' # don't run if previous step succeeded.
+      ###   with:
+      ###     api-level: 28
+      ###     arch: x86
+      ###     profile: Nexus 5X
+      ###     force-avd-creation: false
+      ###     emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      ###     disable-animations: true
+      ###     emulator-build: 7425822
+      ###     script: |
+      ###       ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+      ###       ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+      ###       ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
+      ###       ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Upload Integration Test Report Log
+        uses: actions/upload-artifact@v3
+        if: always()
         with:
-          api-level: 28
-          arch: x86
-          profile: Nexus 5X
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          emulator-build: 7425822
-          script: |
-            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
-            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+          name: integration-test-error-results
+          path: |
+            */build/outputs/androidTest-results/connected/
+            */build/reports/androidTests/connected/
 
       # we may have failed a previous step and retried, that's OK
       - name: Publish results to Sonar
