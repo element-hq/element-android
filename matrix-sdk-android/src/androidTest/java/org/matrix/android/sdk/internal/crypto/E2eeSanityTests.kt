@@ -60,7 +60,6 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
-import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
 import java.util.concurrent.CountDownLatch
@@ -70,8 +69,6 @@ import java.util.concurrent.CountDownLatch
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
 class E2eeSanityTests : InstrumentedTest {
-
-    @get:Rule val rule = RetryTestRule(3)
 
     /**
      * Simple test that create an e2ee room.
@@ -323,7 +320,7 @@ class E2eeSanityTests : InstrumentedTest {
      * get them from an older one.
      */
     @Test
-    fun testSimpleGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testSimpleGossip() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -423,7 +420,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwarded (lower index, it is then used)
      */
     @Test
-    fun testForwardBetterKey() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testForwardBetterKey() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -541,27 +538,25 @@ class E2eeSanityTests : InstrumentedTest {
         }
     }
 
-    private fun sendMessageInRoom(testHelper: CommonTestHelper, aliceRoomPOV: Room, text: String): String? {
-        aliceRoomPOV.sendService().sendTextMessage(text)
+    private suspend fun sendMessageInRoom(testHelper: CommonTestHelper, aliceRoomPOV: Room, text: String): String? {
         var sentEventId: String? = null
-        testHelper.waitWithLatch(4 * TestConstants.timeOutMillis) { latch ->
-            val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
-            timeline.start()
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val decryptedMsg = timeline.getSnapshot()
-                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                        .also { list ->
-                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
-                            Log.v("#E2E TEST", "Timeline snapshot is $message")
-                        }
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
-                sentEventId = decryptedMsg?.eventId
-                decryptedMsg != null
-            }
+        aliceRoomPOV.sendService().sendTextMessage(text)
 
-            timeline.dispose()
+        val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+        testHelper.retryPeriodically {
+            val decryptedMsg = timeline.getSnapshot()
+                    .filter { it.root.getClearType() == EventType.MESSAGE }
+                    .also { list ->
+                        val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                        Log.v("#E2E TEST", "Timeline snapshot is $message")
+                    }
+                    .filter { it.root.sendState == SendState.SYNCED }
+                    .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+            sentEventId = decryptedMsg?.eventId
+            decryptedMsg != null
         }
+        timeline.dispose()
         return sentEventId
     }
 
