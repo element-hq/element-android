@@ -21,13 +21,11 @@ import androidx.lifecycle.Observer
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -45,9 +43,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerific
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -58,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
@@ -76,31 +71,24 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
      * @return alice session
      */
     fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
-        val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        return testHelper.launch {
+            val aliceSession = testHelper.createAccountSuspending(TestConstants.USER_ALICE, defaultSessionParams)
 
-        val roomId = testHelper.runBlockingTest {
-            aliceSession.roomService().createRoom(CreateRoomParams().apply {
-                historyVisibility = roomHistoryVisibility
-                name = "MyRoom"
-            })
-        }
-        if (encryptedRoom) {
-            testHelper.waitWithLatch { latch ->
-                val room = aliceSession.getRoom(roomId)!!
-                room.roomCryptoService().enableEncryption()
-                val roomSummaryLive = room.getRoomSummaryLive()
-                val roomSummaryObserver = object : Observer<Optional<RoomSummary>> {
-                    override fun onChanged(roomSummary: Optional<RoomSummary>) {
-                        if (roomSummary.getOrNull()?.isEncrypted.orFalse()) {
-                            roomSummaryLive.removeObserver(this)
-                            latch.countDown()
-                        }
-                    }
-                }
-                roomSummaryLive.observeForever(roomSummaryObserver)
+            val roomId = testHelper.runBlockingTest {
+                aliceSession.roomService().createRoom(CreateRoomParams().apply {
+                    historyVisibility = roomHistoryVisibility
+                    name = "MyRoom"
+                })
             }
+            if (encryptedRoom) {
+                val room = aliceSession.getRoom(roomId)!!
+                waitFor(
+                        continueWhen = { room.onMain { getRoomSummaryLive() }.first { it.getOrNull()?.isEncrypted.orFalse() } },
+                        action = { room.roomCryptoService().enableEncryption() }
+                )
+            }
+            CryptoTestData(roomId, listOf(aliceSession))
         }
-        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**

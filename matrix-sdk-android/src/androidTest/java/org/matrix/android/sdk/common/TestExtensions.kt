@@ -27,9 +27,9 @@ import org.matrix.android.sdk.api.session.room.RoomService
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun <T> RoomService.onMain(block: RoomService.() -> T): T {
+suspend fun <T, R> T.onMain(block: T.() -> R): R {
     return withContext(Dispatchers.Main) {
-        block()
+        block(this@onMain)
     }
 }
 
