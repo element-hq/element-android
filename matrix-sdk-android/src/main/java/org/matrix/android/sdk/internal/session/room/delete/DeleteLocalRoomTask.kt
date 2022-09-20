@@ -22,12 +22,15 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
+import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereInRoom
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask.Params
@@ -50,6 +53,12 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
         if (RoomLocalEcho.isLocalEchoId(roomId)) {
             monarchy.awaitTransaction { realm ->
                 Timber.i("## DeleteLocalRoomTask - delete local room id $roomId")
+                ReadReceiptsSummaryEntity.whereInRoom(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ReadReceiptsSummaryEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                ReadReceiptEntity.whereRoomId(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ReadReceiptEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
                 RoomMemberSummaryEntity.where(realm, roomId = roomId).findAll()
                         ?.also { Timber.i("## DeleteLocalRoomTask - RoomMemberSummaryEntity - delete ${it.size} entries") }
                         ?.deleteAllFromRealm()

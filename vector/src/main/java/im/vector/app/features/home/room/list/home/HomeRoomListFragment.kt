@@ -83,6 +83,13 @@ class HomeRoomListFragment :
         setupRecyclerView()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(HomeRoomListAction.DeleteAllLocalRoom)
+    }
+
     private fun setupObservers() {
         sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
         sharedQuickActionsViewModel
