@@ -32,7 +32,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -458,11 +457,11 @@ class CommonTestHelper internal constructor(context: Context) {
     ): Session {
         val hs = createHomeServerConfig()
 
-        withTimeout(TestConstants.timeOutMillis) {
+        wrapWithTimeout(TestConstants.timeOutMillis) {
             matrix.authenticationService.getLoginFlow(hs)
         }
 
-        withTimeout(timeMillis = 60_000L) {
+        wrapWithTimeout(60_000L) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .createAccount(userName, password, null)
@@ -614,7 +613,7 @@ class CommonTestHelper internal constructor(context: Context) {
 
     fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
         return runBlocking {
-            withTimeout(timeout) {
+            wrapWithTimeout(timeout) {
                 block()
             }
         }

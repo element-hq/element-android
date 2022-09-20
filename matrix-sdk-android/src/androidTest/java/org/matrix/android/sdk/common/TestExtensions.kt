@@ -33,7 +33,7 @@ suspend fun <T, R> T.onMain(block: T.() -> R): R {
 }
 
 suspend fun <T> LiveData<T>.first(timeout: Long = TestConstants.timeOutMillis, predicate: (T) -> Boolean): T {
-    return withTimeout(timeout) {
+    return wrapWithTimeout(timeout) {
         withContext(Dispatchers.Main) {
             suspendCoroutine { continuation ->
                 val observer = object : Observer<T> {
