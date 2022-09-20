@@ -28,9 +28,6 @@ import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
 import im.vector.app.test.fixtures.aVectorAnalyticsScreen
-import io.mockk.mockk
-import io.mockk.verify
-import io.sentry.Sentry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
