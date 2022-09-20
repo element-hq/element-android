@@ -62,7 +62,6 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.SessionTestParams
-import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
 import kotlin.coroutines.resume
 
@@ -96,7 +95,7 @@ class E2eeSanityTests : InstrumentedTest {
         // add some more users and invite them
         val otherAccounts = listOf("benoit", "valere", "ganfra") // , "adam", "manu")
                 .map {
-                    testHelper.createAccount(it, SessionTestParams(true)).also {
+                    testHelper.createAccountSuspending(it, SessionTestParams(true)).also {
                         it.cryptoService().enableKeyGossiping(false)
                     }
                 }
@@ -147,7 +146,7 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         newAccount.forEach {
-            testHelper.waitForAndAcceptInviteInRoomSuspending(it, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoom(it, e2eRoomID)
         }
 
         ensureMembersHaveJoined(testHelper, aliceSession, newAccount, e2eRoomID)
@@ -236,30 +235,21 @@ class E2eeSanityTests : InstrumentedTest {
                 sentEventIds.add(it)
             }
 
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+            testHelper.retryPeriodically {
+                val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
             // we want more so let's discard the session
             aliceSession.cryptoService().discardOutboundSession(e2eRoomID)
-
-            delay(1_000)
         }
         Log.v("#E2E TEST", "Bob received all and can decrypt")
 
         // Let's wait a bit to be sure that bob has backed up the session
 
         Log.v("#E2E TEST", "Force key backup for Bob...")
-        testHelper.waitWithLatch { latch ->
-            bobKeysBackupService.backupAllGroupSessions(
-                    null,
-                    TestMatrixCallback(latch, true)
-            )
-        }
+        testHelper.doSync<Unit> { bobKeysBackupService.backupAllGroupSessions(null, it) }
         Log.v("#E2E TEST", "... Key backup done for Bob")
 
         // Now lets logout both alice and bob to ensure that we won't have any gossiping
@@ -274,19 +264,16 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Create a new session for bob
         Log.v("#E2E TEST", "Create a new session for Bob")
-        val newBobSession = testHelper.logIntoAccount(bobUserId, SessionTestParams(true))
+        val newBobSession = testHelper.logIntoAccountSuspending(bobUserId, SessionTestParams(true))
 
         // check that bob can't currently decrypt
         Log.v("#E2E TEST", "check that bob can't currently decrypt")
         sentEventIds.forEach { sentEventId ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)?.also {
-                        Log.v("#E2E TEST", "Event seen by new user ${it.root.getClearType()}|${it.root.mCryptoError}")
-                    }
-                    timelineEvent != null &&
-                            timelineEvent.root.getClearType() == EventType.ENCRYPTED
+            testHelper.retryPeriodically {
+                val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)?.also {
+                    Log.v("#E2E TEST", "Event seen by new user ${it.root.getClearType()}|${it.root.mCryptoError}")
                 }
+                timelineEvent != null && timelineEvent.root.getClearType() == EventType.ENCRYPTED
             }
         }
         // after initial sync events are not decrypted, so we have to try manually

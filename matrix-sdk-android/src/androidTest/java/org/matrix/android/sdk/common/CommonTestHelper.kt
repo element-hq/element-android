@@ -298,38 +298,7 @@ class CommonTestHelper internal constructor(context: Context) {
         return sentEvents
     }
 
-    fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
-                val roomSummary = otherSession.getRoomSummary(roomID)
-                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
-                    if (it) {
-                        Log.v("# TEST", "${otherSession.myUserId} can see the invite")
-                    }
-                }
-            }
-        }
-
-        // not sure why it's taking so long :/
-        runBlockingTest(90_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
-            try {
-                otherSession.roomService().joinRoom(roomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
-        }
-
-        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        waitWithLatch {
-            retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(roomID)
-                roomSummary != null && roomSummary.membership == Membership.JOIN
-            }
-        }
-    }
-
-    suspend fun waitForAndAcceptInviteInRoomSuspending(otherSession: Session, roomID: String) {
+    suspend fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
         retryPeriodically {
             val roomSummary = otherSession.getRoomSummary(roomID)
             (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
@@ -643,7 +612,7 @@ class CommonTestHelper internal constructor(context: Context) {
     suspend fun retryPeriodically(timeout: Long = TestConstants.timeOutMillis, predicate: suspend () -> Boolean) {
         wrapWithTimeout(timeout) {
             while (!predicate()) {
-                runBlocking { delay(1000) }
+                runBlocking { delay(500) }
             }
         }
     }

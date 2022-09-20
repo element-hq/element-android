@@ -78,7 +78,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         // Let alice invite bob
         roomAlice.membershipService().invite(bobSession.myUserId)
 
-        commonTestHelper.waitForAndAcceptInviteInRoomSuspending(bobSession, roomId)
+        commonTestHelper.waitForAndAcceptInviteInRoom(bobSession, roomId)
 
         // Bob has join but should not be able to decrypt history
         cryptoTestHelper.ensureCannotDecrypt(
@@ -109,7 +109,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         // Let alice invite sam
         roomAlice.membershipService().invite(samSession.myUserId)
 
-        commonTestHelper.waitForAndAcceptInviteInRoomSuspending(samSession, roomId)
+        commonTestHelper.waitForAndAcceptInviteInRoom(samSession, roomId)
 
         // Sam shouldn't be able to decrypt messages with the first session, but should decrypt the one with 3rd session
         cryptoTestHelper.ensureCannotDecrypt(
@@ -188,7 +188,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         // Let bob invite sam
         bobSession.getRoom(testData.roomId)!!.membershipService().invite(samSession.myUserId)
 
-        commonTestHelper.waitForAndAcceptInviteInRoomSuspending(samSession, testData.roomId)
+        commonTestHelper.waitForAndAcceptInviteInRoom(samSession, testData.roomId)
         return Triple(fromAliceNotSharable, fromBobSharable, samSession)
     }
 
@@ -260,7 +260,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         // Let alice invite sam
         newAliceSession.getRoom(roomId)!!.membershipService().invite(samSession.myUserId)
 
-        commonTestHelper.waitForAndAcceptInviteInRoomSuspending(samSession, roomId)
+        commonTestHelper.waitForAndAcceptInviteInRoom(samSession, roomId)
 
         // Sam shouldn't be able to decrypt messages with the first session, but should decrypt the one with 3rd session
         cryptoTestHelper.ensureCannotDecrypt(
