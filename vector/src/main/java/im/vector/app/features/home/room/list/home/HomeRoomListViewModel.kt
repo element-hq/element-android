@@ -259,7 +259,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         liveResults.livePagedList
                 .asFlow()
                 .onEach {
-                    setState { copy(roomsLivePagedList = it) }
+                    setState { copy(roomsPagedList = it) }
                 }
                 .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)

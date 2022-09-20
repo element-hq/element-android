@@ -25,5 +25,5 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 data class HomeRoomListViewState(
         val state: StateView.State = StateView.State.Content,
         val headersData: RoomsHeadersData = RoomsHeadersData(),
-        val roomsLivePagedList: PagedList<RoomSummary>? = null,
+        val roomsPagedList: PagedList<RoomSummary>? = null,
 ) : MavericksState

@@ -152,7 +152,7 @@ class HomeRoomListFragment :
             headersController.submitData(it)
         }
 
-        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList) { roomsList ->
+        roomListViewModel.onEach(HomeRoomListViewState::roomsPagedList) { roomsList ->
             roomsList?.let {
                 roomsController.submitList(it)
                 if (it.isEmpty()) {
