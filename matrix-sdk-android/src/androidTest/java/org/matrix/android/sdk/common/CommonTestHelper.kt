@@ -495,7 +495,7 @@ class CommonTestHelper internal constructor(context: Context) {
         }
 
         // Perform dummy step
-        val registrationResult = runBlockingTest(timeout = 60_000) {
+        val registrationResult = wrapWithTimeout(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .dummy()
@@ -601,10 +601,10 @@ class CommonTestHelper internal constructor(context: Context) {
         )
     }
 
-    suspend fun retryPeriodically(timeout: Long = TestConstants.timeOutMillis, predicate: () -> Boolean) {
+    suspend fun retryPeriodically(timeout: Long = TestConstants.timeOutMillis, predicate: suspend () -> Boolean) {
         wrapWithTimeout(timeout) {
             while (!predicate()) {
-                delay(1000)
+                runBlocking { delay(1000) }
             }
         }
     }
