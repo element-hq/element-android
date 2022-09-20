@@ -57,6 +57,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -219,7 +220,7 @@ class E2eeSanityTests : InstrumentedTest {
      * 9. Check that new session can decrypt
      */
     @Test
-    fun testBasicBackupImport() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testBasicBackupImport() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -229,10 +230,10 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val bobKeysBackupService = bobSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.doSyncSuspending<MegolmBackupCreationInfo> {
             bobKeysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
         }
-        val version = testHelper.doSync<KeysVersion> {
+        val version = testHelper.doSyncSuspending<KeysVersion> {
             bobKeysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
         Log.v("#E2E TEST", "... Key backup started and enabled for bob")
@@ -259,9 +260,7 @@ class E2eeSanityTests : InstrumentedTest {
             // we want more so let's discard the session
             aliceSession.cryptoService().discardOutboundSession(e2eRoomID)
 
-            testHelper.runBlockingTest {
-                delay(1_000)
-            }
+            delay(1_000)
         }
         Log.v("#E2E TEST", "Bob received all and can decrypt")
 
@@ -284,9 +283,7 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.signOutAndClose(bobSession)
         Log.v("#E2E TEST", "..Logout alice and bob...")
 
-        testHelper.runBlockingTest {
-            delay(1_000)
-        }
+        delay(1_000)
 
         // Create a new session for bob
         Log.v("#E2E TEST", "Create a new session for Bob")
@@ -676,8 +673,10 @@ class E2eeSanityTests : InstrumentedTest {
         assertEquals("Decimal code should have matched", oldCode, newCode)
 
         // Assert that devices are verified
-        val newDeviceFromOldPov: CryptoDeviceInfo? = aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceNewSession.sessionParams.deviceId)
-        val oldDeviceFromNewPov: CryptoDeviceInfo? = aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
+        val newDeviceFromOldPov: CryptoDeviceInfo? =
+                aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceNewSession.sessionParams.deviceId)
+        val oldDeviceFromNewPov: CryptoDeviceInfo? =
+                aliceSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
 
         Assert.assertTrue("new device should be verified from old point of view", newDeviceFromOldPov!!.isVerified)
         Assert.assertTrue("old device should be verified from new point of view", oldDeviceFromNewPov!!.isVerified)

@@ -99,9 +99,9 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
 
-        val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
-
         return testHelper.launch {
+            val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
+
             val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)
 
             waitFor(
@@ -139,39 +139,41 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val aliceRoomId = cryptoTestData.roomId
         val bobSession = cryptoTestData.secondSession!!
 
-        bobSession.cryptoService().setWarnOnUnknownDevices(false)
-        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        return testHelper.launch {
+            bobSession.cryptoService().setWarnOnUnknownDevices(false)
+            aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
-        val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
+            val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
+            val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
-            // ensure bob got it
-            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
-        }
+            // Alice sends a message
+            testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
+                // ensure bob got it
+                ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+            }
 
-        // Bob send 3 messages
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-        }
+            // Bob send 3 messages
+            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
+                // ensure alice got it
+                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+            }
 
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-        }
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-        }
+            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
+                // ensure alice got it
+                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+            }
+            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
+                // ensure alice got it
+                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+            }
 
-        // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
-            // ensure bob got it
-            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+            // Alice sends a message
+            testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
+                // ensure bob got it
+                ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+            }
+            cryptoTestData
         }
-        return cryptoTestData
     }
 
     private fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {

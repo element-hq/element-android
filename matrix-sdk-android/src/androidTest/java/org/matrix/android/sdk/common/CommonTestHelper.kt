@@ -24,12 +24,16 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -57,6 +61,8 @@ import java.util.UUID
 import java.util.concurrent.CancellationException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * This class exposes methods to be used in common cases
@@ -84,6 +90,21 @@ class CommonTestHelper internal constructor(context: Context) {
             } finally {
                 if (autoSignoutOnClose) {
                     testHelper.cleanUpOpenedSessions()
+                }
+            }
+        }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        internal fun runSuspendingCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend (CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            val cryptoTestHelper = CryptoTestHelper(testHelper)
+            return runTest {
+                try {
+                    block(cryptoTestHelper, testHelper)
+                } finally {
+                    if (autoSignoutOnClose) {
+                        testHelper.cleanUpOpenedSessions()
+                    }
                 }
             }
         }
@@ -202,6 +223,10 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+        return runBlocking { sendTextMessageSuspending(room, message, nbOfMessages, timeout) }
+    }
+
+    suspend fun sendTextMessageSuspending(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, nbOfMessages, timeout)
@@ -214,48 +239,57 @@ class CommonTestHelper internal constructor(context: Context) {
     /**
      * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
+    private suspend fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(count)
         (1 until count + 1)
                 .map { "$message #$it" }
                 .chunked(10)
                 .forEach { batchedMessages ->
-                    batchedMessages.forEach { formattedMessage ->
-                        if (rootThreadEventId != null) {
-                            room.relationService().replyInThread(
-                                    rootThreadEventId = rootThreadEventId,
-                                    replyInThreadText = formattedMessage
-                            )
-                        } else {
-                            room.sendService().sendTextMessage(formattedMessage)
-                        }
-                    }
-                    waitWithLatch(timeout) { latch ->
-                        val timelineListener = object : Timeline.Listener {
+                    waitFor(
+                            continueWhen = {
+                                withTimeout(timeout) {
+                                    suspendCoroutine<Unit> { continuation ->
+                                        val timelineListener = object : Timeline.Listener {
 
-                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                                val allSentMessages = snapshot
-                                        .filter { it.root.sendState == SendState.SYNCED }
-                                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+                                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                                                val allSentMessages = snapshot
+                                                        .filter { it.root.sendState == SendState.SYNCED }
+                                                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
-                                val hasSyncedAllBatchedMessages = allSentMessages
-                                        .map {
-                                            it.root.getClearContent().toModel<MessageContent>()?.body
+                                                val hasSyncedAllBatchedMessages = allSentMessages
+                                                        .map {
+                                                            it.root.getClearContent().toModel<MessageContent>()?.body
+                                                        }
+                                                        .containsAll(batchedMessages)
+
+                                                if (allSentMessages.size == count) {
+                                                    sentEvents.addAll(allSentMessages)
+                                                }
+                                                if (hasSyncedAllBatchedMessages) {
+                                                    timeline.removeListener(this)
+                                                    continuation.resume(Unit)
+                                                }
+                                            }
                                         }
-                                        .containsAll(batchedMessages)
+                                        timeline.addListener(timelineListener)
+                                    }
+                                }
+                            },
+                            action = {
+                                batchedMessages.forEach { formattedMessage ->
+                                    if (rootThreadEventId != null) {
+                                        room.relationService().replyInThread(
+                                                rootThreadEventId = rootThreadEventId,
+                                                replyInThreadText = formattedMessage
+                                        )
+                                    } else {
+                                        room.sendService().sendTextMessage(formattedMessage)
+                                    }
+                                }
 
-                                if (allSentMessages.size == count) {
-                                    sentEvents.addAll(allSentMessages)
-                                }
-                                if (hasSyncedAllBatchedMessages) {
-                                    timeline.removeListener(this)
-                                    latch.countDown()
-                                }
                             }
-                        }
-                        timeline.addListener(timelineListener)
-                    }
+                    )
                 }
         return sentEvents
     }
@@ -306,7 +340,7 @@ class CommonTestHelper internal constructor(context: Context) {
     ): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
-        val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
+        val sentEvents = runBlocking { sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId) }
         timeline.dispose()
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", numberOfMessages.toLong(), sentEvents.size.toLong())
@@ -598,6 +632,22 @@ class CommonTestHelper internal constructor(context: Context) {
 
         assertNotNull(result)
         return result!!
+    }
+
+    suspend fun <T> doSyncSuspending(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
+        val deferred = coroutineScope {
+            async {
+                suspendCoroutine<T> { continuation ->
+                    val callback = object : MatrixCallback<T> {
+                        override fun onSuccess(data: T) {
+                            continuation.resume(data)
+                        }
+                    }
+                    block(callback)
+                }
+            }
+        }
+        return withTimeout(timeout) { deferred.await() }
     }
 
     /**
