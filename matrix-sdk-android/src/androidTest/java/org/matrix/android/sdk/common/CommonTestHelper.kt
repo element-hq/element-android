@@ -245,7 +245,7 @@ class CommonTestHelper internal constructor(context: Context) {
                 .forEach { batchedMessages ->
                     waitFor(
                             continueWhen = {
-                                withTimeout(timeout) {
+                                wrapWithTimeout(timeout) {
                                     suspendCoroutine<Unit> { continuation ->
                                         val timelineListener = object : Timeline.Listener {
 
@@ -573,6 +573,14 @@ class CommonTestHelper internal constructor(context: Context) {
                     }
                 }
         )
+    }
+
+    suspend fun retryPeriodically(timeout: Long = TestConstants.timeOutMillis, predicate: () -> Boolean) {
+        wrapWithTimeout(timeout) {
+            while (!predicate()) {
+                delay(1000)
+            }
+        }
     }
 
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
