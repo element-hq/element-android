@@ -83,7 +83,7 @@ class E2eeSanityTests : InstrumentedTest {
      * Alice sends a new message, then check that the new one can be decrypted
      */
     @Test
-    fun testSendingE2EEMessages() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testSendingE2EEMessages() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession
@@ -105,10 +105,8 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "All accounts created")
         // we want to invite them in the room
         otherAccounts.forEach {
-            testHelper.runBlockingTest {
-                Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.membershipService().invite(it.myUserId)
-            }
+            Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
+            aliceRoomPOV.membershipService().invite(it.myUserId)
         }
 
         // All user should accept invite
@@ -130,51 +128,43 @@ class E2eeSanityTests : InstrumentedTest {
 
         // All should be able to decrypt
         otherAccounts.forEach { otherSession ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+            testHelper.retryPeriodically {
+                val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
         }
 
         // Add a new user to the room, and check that he can't decrypt
         val newAccount = listOf("adam") // , "adam", "manu")
                 .map {
-                    testHelper.createAccount(it, SessionTestParams(true))
+                    testHelper.createAccountSuspending(it, SessionTestParams(true))
                 }
 
         newAccount.forEach {
-            testHelper.runBlockingTest {
-                Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.membershipService().invite(it.myUserId)
-            }
+            Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
+            aliceRoomPOV.membershipService().invite(it.myUserId)
         }
 
         newAccount.forEach {
-            testHelper.waitForAndAcceptInviteInRoom(it, e2eRoomID)
+            testHelper.waitForAndAcceptInviteInRoomSuspending(it, e2eRoomID)
         }
 
         ensureMembersHaveJoined(testHelper, aliceSession, newAccount, e2eRoomID)
 
         // wait a bit
-        testHelper.runBlockingTest {
-            delay(3_000)
-        }
+        delay(3_000)
 
         // check that messages are encrypted (uisi)
         newAccount.forEach { otherSession ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!).also {
-                        Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
-                    }
-                    timelineEvent != null &&
-                            timelineEvent.root.getClearType() == EventType.ENCRYPTED &&
-                            timelineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
+            testHelper.retryPeriodically {
+                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!).also {
+                    Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                 }
+                timelineEvent != null &&
+                        timelineEvent.root.getClearType() == EventType.ENCRYPTED &&
+                        timelineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
             }
         }
 
@@ -186,15 +176,13 @@ class E2eeSanityTests : InstrumentedTest {
 
         // new members should be able to decrypt it
         newAccount.forEach { otherSession ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(secondSentEventId!!).also {
-                        Log.v("#E2E TEST", "Second Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
-                    }
-                    timelineEvent != null &&
-                            timelineEvent.root.getClearType() == EventType.MESSAGE &&
-                            secondMessage == timelineEvent.root.getClearContent().toModel<MessageContent>()?.body
+            testHelper.retryPeriodically {
+                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(secondSentEventId!!).also {
+                    Log.v("#E2E TEST", "Second Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                 }
+                timelineEvent != null &&
+                        timelineEvent.root.getClearType() == EventType.MESSAGE &&
+                        secondMessage == timelineEvent.root.getClearContent().toModel<MessageContent>()?.body
             }
         }
     }
@@ -724,14 +712,12 @@ class E2eeSanityTests : InstrumentedTest {
         )
     }
 
-    private fun ensureMembersHaveJoined(testHelper: CommonTestHelper, aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                otherAccounts.map {
-                    aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
-                }.all {
-                    it == Membership.JOIN
-                }
+    private suspend fun ensureMembersHaveJoined(testHelper: CommonTestHelper, aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
+        testHelper.retryPeriodically {
+            otherAccounts.map {
+                aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
+            }.all {
+                it == Membership.JOIN
             }
         }
     }

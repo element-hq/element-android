@@ -322,6 +322,33 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
+    suspend fun waitForAndAcceptInviteInRoomSuspending(otherSession: Session, roomID: String) {
+        retryPeriodically {
+            val roomSummary = otherSession.getRoomSummary(roomID)
+            (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                if (it) {
+                    Log.v("# TEST", "${otherSession.myUserId} can see the invite")
+                }
+            }
+        }
+
+        // not sure why it's taking so long :/
+        wrapWithTimeout(90_000) {
+            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
+            try {
+                otherSession.roomService().joinRoom(roomID)
+            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+                // it's ok we will wait after
+            }
+        }
+
+        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
+        retryPeriodically {
+            val roomSummary = otherSession.getRoomSummary(roomID)
+            roomSummary != null && roomSummary.membership == Membership.JOIN
+        }
+    }
+
     /**
      * Reply in a thread
      * @param room the room where to send the messages
