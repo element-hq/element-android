@@ -69,6 +69,7 @@ jobs:
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
+          sdcard-path-or-size: 3072M
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           script: |
