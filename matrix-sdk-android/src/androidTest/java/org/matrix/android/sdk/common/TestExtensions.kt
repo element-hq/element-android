@@ -21,10 +21,10 @@ import androidx.lifecycle.Observer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 suspend fun <T, R> T.onMain(block: T.() -> R): R {
     return withContext(Dispatchers.Main) {
@@ -35,7 +35,7 @@ suspend fun <T, R> T.onMain(block: T.() -> R): R {
 suspend fun <T> LiveData<T>.first(timeout: Long = TestConstants.timeOutMillis, predicate: (T) -> Boolean): T {
     return wrapWithTimeout(timeout) {
         withContext(Dispatchers.Main) {
-            suspendCoroutine { continuation ->
+            suspendCancellableCoroutine { continuation ->
                 val observer = object : Observer<T> {
                     override fun onChanged(data: T) {
                         if (predicate(data)) {
@@ -45,6 +45,7 @@ suspend fun <T> LiveData<T>.first(timeout: Long = TestConstants.timeOutMillis, p
                     }
                 }
                 observeForever(observer)
+                continuation.invokeOnCancellation { removeObserver(observer) }
             }
         }
     }
