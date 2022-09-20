@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import arrow.core.Option
 import arrow.core.toOption
@@ -43,6 +44,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -254,7 +256,13 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        setState { copy(roomsLivePagedList = liveResults.livePagedList) }
+        liveResults.livePagedList
+                .asFlow()
+                .onEach {
+                    setState { copy(roomsLivePagedList = it) }
+                }
+                .flowOn(Dispatchers.Default)
+                .launchIn(viewModelScope)
     }
 
     private fun observeOrderPreferences() {
