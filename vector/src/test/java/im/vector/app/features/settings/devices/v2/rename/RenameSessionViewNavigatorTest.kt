@@ -17,11 +17,29 @@
 package im.vector.app.features.settings.devices.v2.rename
 
 import androidx.fragment.app.FragmentActivity
-import javax.inject.Inject
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
+import org.junit.Test
 
-class RenameSessionViewNavigator @Inject constructor() {
+class RenameSessionViewNavigatorTest {
 
-    fun goBack(activity: FragmentActivity) {
-        activity.finish()
+    private val renameSessionViewNavigator = RenameSessionViewNavigator()
+
+    @Test
+    fun `given an activity when going back then the activity is finished`() {
+        // Given
+        val fragmentActivity = mockk<FragmentActivity>()
+        every { fragmentActivity.finish() } just runs
+
+        // When
+        renameSessionViewNavigator.goBack(fragmentActivity)
+
+        // Then
+        verify {
+            fragmentActivity.finish()
+        }
     }
 }
