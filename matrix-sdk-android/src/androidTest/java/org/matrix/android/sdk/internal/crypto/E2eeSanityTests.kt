@@ -426,13 +426,11 @@ class E2eeSanityTests : InstrumentedTest {
         firstMessage.let { text ->
             firstEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
 
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+            testHelper.retryPeriodically {
+                val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
         }
 
@@ -440,7 +438,7 @@ class E2eeSanityTests : InstrumentedTest {
         ensureIsDecrypted(testHelper, listOf(firstEventId), bobSessionWithBetterKey, e2eRoomID)
 
         // Let's add a new unverified session from bob
-        val newBobSession = testHelper.logIntoAccount(bobSessionWithBetterKey.myUserId, SessionTestParams(true))
+        val newBobSession = testHelper.logIntoAccountSuspending(bobSessionWithBetterKey.myUserId, SessionTestParams(true))
 
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
@@ -454,13 +452,11 @@ class E2eeSanityTests : InstrumentedTest {
         secondMessage.let { text ->
             secondEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
 
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+            testHelper.retryPeriodically {
+                val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
         }
 
@@ -474,18 +470,14 @@ class E2eeSanityTests : InstrumentedTest {
         Assert.assertTrue("Should be the same session id", firstSessionId == secondSessionId)
 
         // Confirm we can decrypt one but not the other
-        testHelper.runBlockingTest {
-            mustFail(message = "Should not be able to decrypt event") {
-                newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
-            }
+        mustFail(message = "Should not be able to decrypt event") {
+            newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
         }
 
-        testHelper.runBlockingTest {
-            try {
-                newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
-            } catch (error: MXCryptoError) {
-                fail("Should be able to decrypt event")
-            }
+        try {
+            newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
+        } catch (error: MXCryptoError) {
+            fail("Should be able to decrypt event")
         }
 
         // Now let's verify bobs session, and re-request keys
@@ -504,26 +496,20 @@ class E2eeSanityTests : InstrumentedTest {
 
         // old session should have shared the key at earliest known index now
         // we should be able to decrypt both
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val canDecryptFirst = try {
-                    testHelper.runBlockingTest {
-                        newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
-                    }
-                    true
-                } catch (error: MXCryptoError) {
-                    false
-                }
-                val canDecryptSecond = try {
-                    testHelper.runBlockingTest {
-                        newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
-                    }
-                    true
-                } catch (error: MXCryptoError) {
-                    false
-                }
-                canDecryptFirst && canDecryptSecond
+        testHelper.retryPeriodically {
+            val canDecryptFirst = try {
+                newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
+                true
+            } catch (error: MXCryptoError) {
+                false
             }
+            val canDecryptSecond = try {
+                newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
+                true
+            } catch (error: MXCryptoError) {
+                false
+            }
+            canDecryptFirst && canDecryptSecond
         }
     }
 
