@@ -16,14 +16,8 @@
 
 package org.matrix.android.sdk.common
 
-import android.os.SystemClock
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -56,8 +50,6 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.Room
-import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -72,7 +64,6 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
@@ -152,42 +143,6 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     /**
-     * @return Alice, Bob and Sam session
-     */
-    fun doE2ETestWithAliceAndBobAndSamInARoom(): CryptoTestData {
-        val cryptoTestData = doE2ETestWithAliceAndBobInARoom()
-        val aliceSession = cryptoTestData.firstSession
-        val aliceRoomId = cryptoTestData.roomId
-
-        val room = aliceSession.getRoom(aliceRoomId)!!
-
-        val samSession = createSamAccountAndInviteToTheRoom(room)
-
-        // wait the initial sync
-        SystemClock.sleep(1000)
-
-        return CryptoTestData(aliceRoomId, listOf(aliceSession, cryptoTestData.secondSession!!, samSession))
-    }
-
-    /**
-     * Create Sam account and invite him in the room. He will accept the invitation
-     * @Return Sam session
-     */
-    fun createSamAccountAndInviteToTheRoom(room: Room): Session {
-        val samSession = testHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
-
-        testHelper.runBlockingTest {
-            room.membershipService().invite(samSession.myUserId, null)
-        }
-
-        testHelper.runBlockingTest {
-            samSession.roomService().joinRoom(room.roomId, null, emptyList())
-        }
-
-        return samSession
-    }
-
-    /**
      * @return Alice and Bob sessions
      */
     fun doE2ETestWithAliceAndBobInARoomWithEncryptedMessages(): CryptoTestData {
@@ -246,34 +201,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    fun checkEncryptedEvent(event: Event, roomId: String, clearMessage: String, senderSession: Session) {
-        assertEquals(EventType.ENCRYPTED, event.type)
-        assertNotNull(event.content)
-
-        val eventWireContent = event.content.toContent()
-        assertNotNull(eventWireContent)
-
-        assertNull(eventWireContent["body"])
-        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent["algorithm"])
-
-        assertNotNull(eventWireContent["ciphertext"])
-        assertNotNull(eventWireContent["session_id"])
-        assertNotNull(eventWireContent["sender_key"])
-
-        assertEquals(senderSession.sessionParams.deviceId, eventWireContent["device_id"])
-
-        assertNotNull(event.eventId)
-        assertEquals(roomId, event.roomId)
-        assertEquals(EventType.MESSAGE, event.getClearType())
-        // TODO assertTrue(event.getAge() < 10000)
-
-        val eventContent = event.toContent()
-        assertNotNull(eventContent)
-        assertEquals(clearMessage, eventContent["body"])
-        assertEquals(senderSession.myUserId, event.senderId)
-    }
-
-    fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
+    private fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
         return MegolmBackupAuthData(
                 publicKey = "abcdefg",
                 signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
