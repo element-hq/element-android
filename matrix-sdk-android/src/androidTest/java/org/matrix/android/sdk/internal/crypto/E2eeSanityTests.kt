@@ -18,12 +18,16 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.util.Log
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -55,14 +59,12 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
-import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
-import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.resume
 
 // @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 @RunWith(JUnit4::class)
@@ -573,86 +575,18 @@ class E2eeSanityTests : InstrumentedTest {
 
         val aliceNewSession = testHelper.logIntoAccountSuspending(aliceSession.myUserId, SessionTestParams(true))
 
-        val oldCompleteLatch = CountDownLatch(1)
-        lateinit var oldCode: String
-        aliceSession.cryptoService().verificationService().addListener(object : VerificationService.Listener {
-
-            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
-                val readyInfo = pr.readyInfo
-                if (readyInfo != null) {
-                    aliceSession.cryptoService().verificationService().beginKeyVerification(
-                            VerificationMethod.SAS,
-                            aliceSession.myUserId,
-                            readyInfo.fromDevice,
-                            readyInfo.transactionId
-
-                    )
-                }
-            }
-
-            override fun transactionUpdated(tx: VerificationTransaction) {
-                Log.d("##TEST", "exitsingPov: $tx")
-                val sasTx = tx as OutgoingSasVerificationTransaction
-                when (sasTx.uxState) {
-                    OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
-                        // for the test we just accept?
-                        oldCode = sasTx.getDecimalCodeRepresentation()
-                        sasTx.userHasVerifiedShortCode()
-                    }
-                    OutgoingSasVerificationTransaction.UxState.VERIFIED -> {
-                        // we can release this latch?
-                        oldCompleteLatch.countDown()
-                    }
-                    else -> Unit
-                }
-            }
-        })
-
-        val newCompleteLatch = CountDownLatch(1)
-        lateinit var newCode: String
-        aliceNewSession.cryptoService().verificationService().addListener(object : VerificationService.Listener {
-
-            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
-                // let's ready
-                aliceNewSession.cryptoService().verificationService().readyPendingVerification(
-                        listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                        aliceSession.myUserId,
-                        pr.transactionId!!
-                )
-            }
-
-            var matchOnce = true
-            override fun transactionUpdated(tx: VerificationTransaction) {
-                Log.d("##TEST", "newPov: $tx")
-
-                val sasTx = tx as IncomingSasVerificationTransaction
-                when (sasTx.uxState) {
-                    IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
-                        // no need to accept as there was a request first it will auto accept
-                    }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
-                        if (matchOnce) {
-                            sasTx.userHasVerifiedShortCode()
-                            newCode = sasTx.getDecimalCodeRepresentation()
-                            matchOnce = false
-                        }
-                    }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
-                        newCompleteLatch.countDown()
-                    }
-                    else -> Unit
-                }
-            }
-        })
-
+        val deferredOldCode = aliceSession.cryptoService().verificationService().readOldVerificationCodeAsync(this, aliceSession.myUserId)
+        val deferredNewCode = aliceNewSession.cryptoService().verificationService().readNewVerificationCodeAsync(this, aliceSession.myUserId)
         // initiate self verification
         aliceSession.cryptoService().verificationService().requestKeyVerification(
                 listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
                 aliceNewSession.myUserId,
                 listOf(aliceNewSession.sessionParams.deviceId!!)
         )
-        testHelper.await(oldCompleteLatch)
-        testHelper.await(newCompleteLatch)
+
+
+        val (oldCode, newCode) = awaitAll(deferredOldCode, deferredNewCode)
+
         assertEquals("Decimal code should have matched", oldCode, newCode)
 
         // Assert that devices are verified
@@ -703,6 +637,95 @@ class E2eeSanityTests : InstrumentedTest {
         )
     }
 
+    private suspend fun VerificationService.readOldVerificationCodeAsync(scope: CoroutineScope, userId: String): Deferred<String> {
+        return scope.async {
+            suspendCancellableCoroutine { continuation ->
+                var oldCode: String? = null
+                val listener = object : VerificationService.Listener {
+
+                    override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                        val readyInfo = pr.readyInfo
+                        if (readyInfo != null) {
+                            beginKeyVerification(
+                                    VerificationMethod.SAS,
+                                    userId,
+                                    readyInfo.fromDevice,
+                                    readyInfo.transactionId
+
+                            )
+                        }
+                    }
+
+                    override fun transactionUpdated(tx: VerificationTransaction) {
+                        Log.d("##TEST", "exitsingPov: $tx")
+                        val sasTx = tx as OutgoingSasVerificationTransaction
+                        when (sasTx.uxState) {
+                            OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
+                                // for the test we just accept?
+                                oldCode = sasTx.getDecimalCodeRepresentation()
+                                sasTx.userHasVerifiedShortCode()
+                            }
+                            OutgoingSasVerificationTransaction.UxState.VERIFIED -> {
+                                // we can release this latch?
+                                continuation.resume(oldCode!!)
+                                removeListener(this)
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
+                addListener(listener)
+                continuation.invokeOnCancellation { removeListener(listener) }
+            }
+        }
+    }
+
+    private suspend fun VerificationService.readNewVerificationCodeAsync(scope: CoroutineScope, userId: String): Deferred<String> {
+        return scope.async {
+            suspendCancellableCoroutine { continuation ->
+                var newCode: String? = null
+
+                val listener = object : VerificationService.Listener {
+
+                    override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+                        // let's ready
+                        readyPendingVerification(
+                                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
+                                userId,
+                                pr.transactionId!!
+                        )
+                    }
+
+                    var matchOnce = true
+                    override fun transactionUpdated(tx: VerificationTransaction) {
+                        Log.d("##TEST", "newPov: $tx")
+
+                        val sasTx = tx as IncomingSasVerificationTransaction
+                        when (sasTx.uxState) {
+                            IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
+                                // no need to accept as there was a request first it will auto accept
+                            }
+                            IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
+                                if (matchOnce) {
+                                    sasTx.userHasVerifiedShortCode()
+                                    newCode = sasTx.getDecimalCodeRepresentation()
+                                    matchOnce = false
+                                }
+                            }
+                            IncomingSasVerificationTransaction.UxState.VERIFIED -> {
+                                continuation.resume(newCode!!)
+                                removeListener(this)
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
+                addListener(listener)
+                continuation.invokeOnCancellation { removeListener(listener) }
+            }
+        }
+    }
+
     private suspend fun ensureMembersHaveJoined(testHelper: CommonTestHelper, aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
         testHelper.retryPeriodically {
             otherAccounts.map {
@@ -713,15 +736,13 @@ class E2eeSanityTests : InstrumentedTest {
         }
     }
 
-    private fun ensureIsDecrypted(testHelper: CommonTestHelper, sentEventIds: List<String>, session: Session, e2eRoomID: String) {
-        testHelper.waitWithLatch { latch ->
-            sentEventIds.forEach { sentEventId ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = session.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+    private suspend fun ensureIsDecrypted(testHelper: CommonTestHelper, sentEventIds: List<String>, session: Session, e2eRoomID: String) {
+        sentEventIds.forEach { sentEventId ->
+            testHelper.retryPeriodically {
+                val timeLineEvent = session.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
         }
     }

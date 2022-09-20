@@ -93,7 +93,7 @@ class CommonTestHelper internal constructor(context: Context) {
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runSuspendingCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend (CryptoTestHelper, CommonTestHelper) -> Unit) {
+        internal fun runSuspendingCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return runTest {
