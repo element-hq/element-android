@@ -21,10 +21,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.mvrx.UniqueOnly
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -52,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,6 +74,7 @@ class HomeRoomListFragment :
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
+    private var roomsListLive: LiveData<PagedList<RoomSummary>>? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
@@ -152,7 +157,9 @@ class HomeRoomListFragment :
             headersController.submitData(it)
         }
 
-        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList) { roomsListLive ->
+        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList, deliveryMode = UniqueOnly(UUID.randomUUID().toString())) { roomsListLive ->
+            this.roomsListLive?.removeObservers(viewLifecycleOwner)
+            this.roomsListLive = roomsListLive
             roomsListLive?.observe(viewLifecycleOwner) { roomsList ->
                 roomsController.submitList(roomsList)
                 if (roomsList.isEmpty()) {
