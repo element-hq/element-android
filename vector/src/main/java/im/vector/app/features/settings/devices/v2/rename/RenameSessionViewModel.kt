@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-// TODO add unit tests
 class RenameSessionViewModel @AssistedInject constructor(
         @Assisted val initialState: RenameSessionViewState,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
