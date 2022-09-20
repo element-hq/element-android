@@ -27,9 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -635,19 +633,16 @@ class CommonTestHelper internal constructor(context: Context) {
     }
 
     suspend fun <T> doSyncSuspending(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
-        val deferred = coroutineScope {
-            async {
-                suspendCoroutine<T> { continuation ->
-                    val callback = object : MatrixCallback<T> {
-                        override fun onSuccess(data: T) {
-                            continuation.resume(data)
-                        }
+        return wrapWithTimeout(timeout) {
+            suspendCoroutine { continuation ->
+                val callback = object : MatrixCallback<T> {
+                    override fun onSuccess(data: T) {
+                        continuation.resume(data)
                     }
-                    block(callback)
                 }
+                block(callback)
             }
         }
-        return withTimeout(timeout) { deferred.await() }
     }
 
     /**

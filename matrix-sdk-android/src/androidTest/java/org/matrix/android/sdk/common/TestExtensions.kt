@@ -23,7 +23,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import org.matrix.android.sdk.api.session.room.RoomService
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -57,4 +56,11 @@ suspend fun <T> waitFor(continueWhen: suspend () -> T, action: suspend () -> Uni
         action()
         deferred.await()
     }
+}
+
+suspend fun <T> wrapWithTimeout(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
+    val deferred = coroutineScope {
+        async { block() }
+    }
+    return withTimeout(timeout) { deferred.await() }
 }
