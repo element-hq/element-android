@@ -564,14 +564,14 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwared (lower index, it is then used)
      */
     @Test
-    fun testASelfInteractiveVerificationAndGossip() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testASelfInteractiveVerificationAndGossip() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
-        val aliceSession = testHelper.createAccount("alice", SessionTestParams(true))
+        val aliceSession = testHelper.createAccountSuspending("alice", SessionTestParams(true))
         cryptoTestHelper.bootstrapSecurity(aliceSession)
 
         // now let's create a new login from alice
 
-        val aliceNewSession = testHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
+        val aliceNewSession = testHelper.logIntoAccountSuspending(aliceSession.myUserId, SessionTestParams(true))
 
         val oldCompleteLatch = CountDownLatch(1)
         lateinit var oldCode: String
@@ -665,16 +665,12 @@ class E2eeSanityTests : InstrumentedTest {
         Assert.assertTrue("old device should be verified from new point of view", oldDeviceFromNewPov!!.isVerified)
 
         // wait for secret gossiping to happen
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                aliceNewSession.cryptoService().crossSigningService().allPrivateKeysKnown()
-            }
+        testHelper.retryPeriodically {
+            aliceNewSession.cryptoService().crossSigningService().allPrivateKeysKnown()
         }
 
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo() != null
-            }
+        testHelper.retryPeriodically {
+            aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo() != null
         }
 
         assertEquals(
