@@ -26,7 +26,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.search.SearchResult
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.CryptoTestData
 
 @RunWith(JUnit4::class)
@@ -73,21 +73,19 @@ class SearchMessagesTest : InstrumentedTest {
         }
     }
 
-    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        commonTestHelper.sendTextMessage(
+        commonTestHelper.sendTextMessageSuspending(
                 roomFromAlicePOV,
                 MESSAGE,
                 2
         )
 
-        val data = commonTestHelper.runBlockingTest {
-            block.invoke(cryptoTestData)
-        }
+        val data = block.invoke(cryptoTestData)
 
         assertTrue(data.results?.size == 2)
         assertTrue(
