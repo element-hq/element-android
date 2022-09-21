@@ -95,7 +95,7 @@ class SessionDetailsController @Inject constructor(
         }
         sessionId?.let {
             val hasDivider = sessionLastSeenTs != null
-            buildContentItem(R.string.encryption_information_device_id, it, hasDivider)
+            buildContentItem(R.string.device_manager_session_details_session_id, it, hasDivider)
         }
         sessionLastSeenTs?.let {
             val formattedDate = dateFormatter.format(it, DateFormatKind.MESSAGE_DETAIL)

@@ -351,7 +351,7 @@
     <string name="room_settings_unset_main_address">Kiszedés fő címek közül</string>
     <string name="encryption_information_decryption_error">Visszafejtés hiba</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Munkamenet-azonosító</string>
+    <string name="device_manager_session_details_session_id">Munkamenet-azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_export_e2e_room_keys">E2E szoba kulcsok exportálása</string>
     <string name="encryption_export_room_keys">Szoba kulcsok exportálása</string>
@@ -2603,11 +2603,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_other_sessions_description_unverified">Nem ellenőrzött - Utolsó aktivitás %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Ellenőrzött - Utolsó tevékenység %1$s</string>
     <string name="device_manager_other_sessions_view_all">Összes megtekintése (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Jelenlegi munkamenet</string>
     <string name="device_manager_view_details">Részletek megtekintése</string>
     <string name="device_manager_verify_session">Munkamenet hitelesítése</string>
-    <string name="device_manager_verification_status_detail_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
-    <string name="device_manager_verification_status_detail_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
     <string name="device_manager_verification_status_unverified">Ellenőrizetlen munkamenet</string>
     <string name="device_manager_verification_status_verified">Ellenőrzött munkamenet</string>
     <string name="a11y_device_manager_device_type_unknown">Ismeretlen eszköztípus</string>

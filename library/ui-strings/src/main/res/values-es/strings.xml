@@ -415,7 +415,7 @@
     <string name="room_settings_unset_main_address">Dejar de Establecer como dirección principal</string>
     <string name="encryption_information_decryption_error">Error de descifrado</string>
     <string name="encryption_information_device_name">Nombre público</string>
-    <string name="encryption_information_device_id">ID de sesión</string>
+    <string name="device_manager_session_details_session_id">ID de sesión</string>
     <string name="encryption_information_device_key">Clave de sesión</string>
     <string name="encryption_export_e2e_room_keys">Exportar claves de salas con cifrado Extremo-a-Extremo</string>
     <string name="encryption_export_room_keys">Exportar claves de sala</string>
@@ -2540,10 +2540,8 @@
     <string name="device_manager_other_sessions_description_unverified">Sin verificar · Última actividad %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Verificada · Última actividad %1$s</string>
     <string name="device_manager_other_sessions_view_all">Ver todos (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Sesión actual</string>
     <string name="device_manager_view_details">Ver detalles</string>
     <string name="device_manager_verify_session">Verificar sesión</string>
-    <string name="device_manager_verification_status_detail_verified">Esta sesión está lista para mensajería segura.</string>
     <string name="device_manager_verification_status_unverified">Sesión sin verificar</string>
     <string name="device_manager_verification_status_verified">Sesión verificada</string>
     <string name="a11y_device_manager_device_type_unknown">Tipo de dispositivo desconocido</string>

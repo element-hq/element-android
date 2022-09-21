@@ -3232,18 +3232,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_verified -->
-    <string name="device_manager_verification_status_detail_verified" tools:ignore="UnusedResources">Your current session is ready for secure messaging.</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_unverified -->
-    <string name="device_manager_verification_status_detail_unverified" tools:ignore="UnusedResources">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_current_session_title -->
-    <string name="device_manager_header_section_current_session" tools:ignore="UnusedResources">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
     <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
@@ -3296,8 +3290,7 @@
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
-    <!-- TODO rename to device_manager_session_details_session_id -->
-    <string name="encryption_information_device_id">Session ID</string>
+    <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
 

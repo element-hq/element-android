@@ -406,7 +406,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_information_decryption_error">Deszifratze errorea</string>
 
     <string name="encryption_information_device_name">Izen publikoa</string>
-    <string name="encryption_information_device_id">IDa</string>
+    <string name="device_manager_session_details_session_id">IDa</string>
     <string name="encryption_information_device_key">Saioaren gakoa</string>
 
     <string name="encryption_export_e2e_room_keys">Esportatu E2E geletako gakoak</string>

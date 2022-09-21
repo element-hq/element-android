@@ -418,7 +418,7 @@
     <string name="room_settings_unset_main_address">Als Hauptadresse aufheben</string>
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
-    <string name="encryption_information_device_id">Sitzungs-ID</string>
+    <string name="device_manager_session_details_session_id">Sitzungs-ID</string>
     <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_export_e2e_room_keys">Ende-zu-Ende-Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
@@ -2620,7 +2620,6 @@
 \nBitte versuche es später erneut.%s</string>
     <string name="invites_title">Einladungen</string>
     <string name="device_manager_other_sessions_description_unverified">Nicht verifiziert · Letzte Aktivität %1$s</string>
-    <string name="device_manager_verification_status_detail_unverified">Verifiziere deine aktuelle Sitzung für besonders sichere Nachrichtenübertragung.</string>
     <string name="device_manager_verification_status_unverified">Nicht verifizierte Sitzung</string>
     <string name="device_manager_unverified_sessions_title">Nicht verifizierte Sitzung</string>
     <string name="device_manager_header_section_security_recommendations_description">Verbessere deine Kontosicherheit, indem du diese Empfehlungen beherzigst.</string>
@@ -2630,7 +2629,6 @@
         <item quantity="other">Inaktiv seit %1$d+ Tagen (%2$s)</item>
     </plurals>
     <string name="device_manager_other_sessions_description_verified">Verifiziert · Letzte Aktivität %1$s</string>
-    <string name="device_manager_verification_status_detail_verified">Deine aktuelle Sitzung ist für sichere Kommunikation bereit.</string>
     <string name="device_manager_verification_status_verified">Verifizierte Sitzung</string>
     <string name="a11y_device_manager_device_type_unknown">Unbekannter Gerätetyp</string>
     <string name="invites_empty_title">Nichts Neues.</string>

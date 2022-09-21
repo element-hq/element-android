@@ -275,7 +275,7 @@
     <string name="room_settings_unset_main_address">Niet instellen als hoofdadres</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
     <string name="encryption_information_device_name">Publieke naam</string>
-    <string name="encryption_information_device_id">Sessie-ID</string>
+    <string name="device_manager_session_details_session_id">Sessie-ID</string>
     <string name="encryption_information_device_key">Sessiesleutel</string>
     <string name="encryption_export_e2e_room_keys">E2E-gesprekssleutels exporteren</string>
     <string name="encryption_export_room_keys">Gesprekssleutels exporteren</string>
@@ -2635,7 +2635,6 @@
         <item quantity="one">Al %1$d+ dag inactief (%2$s)</item>
         <item quantity="other">Al %1$d+ dagen inactief (%2$s)</item>
     </plurals>
-    <string name="device_manager_verification_status_detail_unverified">Verifieer uw huidige sessie voor verbeterde beveiligde berichten.</string>
     <string name="device_manager_header_section_security_recommendations_title">Beveiligingsaanbevelingen</string>
     <string name="device_manager_unverified_sessions_title">Niet-geverifieerde sessies</string>
     <string name="device_manager_inactive_sessions_title">Inactieve sessies</string>
@@ -2651,10 +2650,8 @@
     <string name="device_manager_other_sessions_description_unverified">Niet-geverifieerd · Laatste activiteit %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Geverifieerd · Laatste activiteit %1$s</string>
     <string name="device_manager_other_sessions_view_all">Alle bekijken (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Huidige sessie</string>
     <string name="device_manager_view_details">Details bekijken</string>
     <string name="device_manager_verify_session">Sessie verifiëren</string>
-    <string name="device_manager_verification_status_detail_verified">Uw huidige sessie is klaar voor beveiligde berichten.</string>
     <string name="timeline_error_room_not_found">Sorry, deze kamer kon niet worden gevonden.
 \nProbeer het later opnieuw. %s</string>
     <string name="invites_empty_message">Dit is waar uw nieuwe verzoeken en uitnodigingen zullen verschijnen.</string>

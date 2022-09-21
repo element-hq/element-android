@@ -291,7 +291,7 @@
     <string name="room_settings_category_advanced_title">Talqayt</string>
     <string name="room_settings_labs_pref_title">Tinarimin</string>
     <string name="settings_theme">Asentel</string>
-    <string name="encryption_information_device_id">Asulay n tqimit</string>
+    <string name="device_manager_session_details_session_id">Asulay n tqimit</string>
     <string name="encryption_information_device_key">Tasarut n tɣimit</string>
     <string name="encryption_export_e2e_room_keys">Sifeḍ tisura n texxamt E2E</string>
     <string name="encryption_export_room_keys">Sifeḍ tisura n texxamt</string>

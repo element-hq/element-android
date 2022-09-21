@@ -376,7 +376,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Çözme hatası</string>
     <string name="encryption_information_device_name">Görünür Ad</string>
-    <string name="encryption_information_device_id">Oturum kimliği</string>
+    <string name="device_manager_session_details_session_id">Oturum kimliği</string>
     <string name="encryption_information_device_key">Oturum anahtarı</string>
     <string name="encryption_export_e2e_room_keys">E2E Oda anahtarlarını dışa aktar</string>
     <string name="encryption_export_room_keys">Oda anahtarlarını dışa aktar</string>

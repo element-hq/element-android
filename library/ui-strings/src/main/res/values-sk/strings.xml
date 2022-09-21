@@ -388,7 +388,7 @@
     <string name="settings_theme">Vzhľad</string>
     <string name="encryption_information_decryption_error">Chyba dešifrovania</string>
     <string name="encryption_information_device_name">Verejné meno</string>
-    <string name="encryption_information_device_id">ID relácie</string>
+    <string name="device_manager_session_details_session_id">ID relácie</string>
     <string name="encryption_information_device_key">Kľúč relácie</string>
     <string name="encryption_export_e2e_room_keys">Exportovať šifrovacie kľúče miestnosti</string>
     <string name="encryption_export_room_keys">Exportovať kľúče miestnosti</string>
@@ -2672,11 +2672,8 @@
     <string name="device_manager_other_sessions_description_unverified">Neoverené - Posledná aktivita %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Overené - Posledná aktivita %1$s</string>
     <string name="device_manager_other_sessions_view_all">Zobraziť všetky (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Aktuálna relácia</string>
     <string name="device_manager_view_details">Zobraziť podrobnosti</string>
     <string name="device_manager_verify_session">Overiť reláciu</string>
-    <string name="device_manager_verification_status_detail_unverified">Overte svoju aktuálnu reláciu pre vylepšené bezpečné zasielanie správ.</string>
-    <string name="device_manager_verification_status_detail_verified">Vaša aktuálna relácia je pripravená na bezpečné zasielanie správ.</string>
     <string name="device_manager_verification_status_unverified">Neoverená relácia</string>
     <string name="device_manager_verification_status_verified">Overená relácia</string>
     <string name="a11y_device_manager_device_type_unknown">Neznámy typ zariadenia</string>
