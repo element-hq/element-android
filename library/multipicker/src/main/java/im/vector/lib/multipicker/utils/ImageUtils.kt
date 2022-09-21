@@ -32,9 +32,9 @@ object ImageUtils {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val source = ImageDecoder.createSource(context.contentResolver, uri)
                 val listener = ImageDecoder.OnHeaderDecodedListener { decoder, _, _ ->
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
                         // Allocating hardware bitmap may cause a crash on framework versions prior to Android Q
-                        decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE)
+                        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
                     }
                 }
 
