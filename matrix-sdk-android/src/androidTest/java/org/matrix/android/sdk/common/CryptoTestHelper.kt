@@ -303,7 +303,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    fun verifySASCrossSign(alice: Session, bob: Session, roomId: String) {
+    suspend fun verifySASCrossSign(alice: Session, bob: Session, roomId: String) {
         assertTrue(alice.cryptoService().crossSigningService().canCrossSign())
         assertTrue(bob.cryptoService().crossSigningService().canCrossSign())
 
@@ -318,12 +318,10 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                 roomId = roomId
         ).transactionId
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
-                    it.requestInfo?.fromDevice == alice.sessionParams.deviceId
-                } != null
-            }
+        testHelper.retryPeriodically {
+            bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
+                it.requestInfo?.fromDevice == alice.sessionParams.deviceId
+            } != null
         }
         val incomingRequest = bobVerificationService.getExistingVerificationRequests(alice.myUserId).first {
             it.requestInfo?.fromDevice == alice.sessionParams.deviceId
@@ -332,16 +330,14 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
         var requestID: String? = null
         // wait for it to be readied
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val outgoingRequest = aliceVerificationService.getExistingVerificationRequests(bob.myUserId)
-                        .firstOrNull { it.localId == localId }
-                if (outgoingRequest?.isReady == true) {
-                    requestID = outgoingRequest.transactionId!!
-                    true
-                } else {
-                    false
-                }
+        testHelper.retryPeriodically {
+            val outgoingRequest = aliceVerificationService.getExistingVerificationRequests(bob.myUserId)
+                    .firstOrNull { it.localId == localId }
+            if (outgoingRequest?.isReady == true) {
+                requestID = outgoingRequest.transactionId!!
+                true
+            } else {
+                false
             }
         }
 
@@ -357,23 +353,19 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         var alicePovTx: OutgoingSasVerificationTransaction? = null
         var bobPovTx: IncomingSasVerificationTransaction? = null
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID!!) as? OutgoingSasVerificationTransaction
-                Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
-                alicePovTx?.state == VerificationTxState.ShortCodeReady
-            }
+        testHelper.retryPeriodically {
+            alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID!!) as? OutgoingSasVerificationTransaction
+            Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
+            alicePovTx?.state == VerificationTxState.ShortCodeReady
         }
         // wait for alice to get the ready
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID!!) as? IncomingSasVerificationTransaction
-                Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
-                if (bobPovTx?.state == VerificationTxState.OnStarted) {
-                    bobPovTx?.performAccept()
-                }
-                bobPovTx?.state == VerificationTxState.ShortCodeReady
+        testHelper.retryPeriodically {
+            bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID!!) as? IncomingSasVerificationTransaction
+            Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
+            if (bobPovTx?.state == VerificationTxState.OnStarted) {
+                bobPovTx?.performAccept()
             }
+            bobPovTx?.state == VerificationTxState.ShortCodeReady
         }
 
         assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
@@ -381,16 +373,12 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         bobPovTx!!.userHasVerifiedShortCode()
         alicePovTx!!.userHasVerifiedShortCode()
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
-            }
+        testHelper.retryPeriodically {
+            alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
         }
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
-            }
+        testHelper.retryPeriodically {
+            alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
         }
     }
 
