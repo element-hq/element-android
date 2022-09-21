@@ -54,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
-import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
@@ -129,47 +128,45 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     /**
      * @return Alice and Bob sessions
      */
-    fun doE2ETestWithAliceAndBobInARoomWithEncryptedMessages(): CryptoTestData {
+    suspend fun doE2ETestWithAliceAndBobInARoomWithEncryptedMessages(): CryptoTestData {
         val cryptoTestData = doE2ETestWithAliceAndBobInARoom()
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
         val bobSession = cryptoTestData.secondSession!!
 
-        return testHelper.launch {
-            bobSession.cryptoService().setWarnOnUnknownDevices(false)
-            aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        bobSession.cryptoService().setWarnOnUnknownDevices(false)
+        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-            val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
-            val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
+        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
+        val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-            // Alice sends a message
-            testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
-                // ensure bob got it
-                ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
-            }
-
-            // Bob send 3 messages
-            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
-                // ensure alice got it
-                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-            }
-
-            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
-                // ensure alice got it
-                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-            }
-            testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
-                // ensure alice got it
-                ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-            }
-
-            // Alice sends a message
-            testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
-                // ensure bob got it
-                ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
-            }
-            cryptoTestData
+        // Alice sends a message
+        testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
+            // ensure bob got it
+            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
         }
+
+        // Bob send 3 messages
+        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+
+        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+
+        // Alice sends a message
+        testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
+            // ensure bob got it
+            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+        }
+        return cryptoTestData
     }
 
     private suspend fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {

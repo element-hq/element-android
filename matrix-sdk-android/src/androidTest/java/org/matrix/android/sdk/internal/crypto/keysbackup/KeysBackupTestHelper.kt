@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Assert
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
@@ -29,7 +30,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.assertDictEquals
 import org.matrix.android.sdk.common.assertListEquals
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.resume
 
 internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
@@ -47,7 +48,7 @@ internal class KeysBackupTestHelper(
      *
      * @param password optional password
      */
-    fun createKeysBackupScenarioWithPassword(password: String?): KeysBackupScenarioData {
+    suspend fun createKeysBackupScenarioWithPassword(password: String?): KeysBackupScenarioData {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
         waitForKeybackUpBatching()
@@ -64,7 +65,7 @@ internal class KeysBackupTestHelper(
 
         var lastProgress = 0
         var lastTotal = 0
-        testHelper.doSync<Unit> {
+        testHelper.doSyncSuspending<Unit> {
             keysBackup.backupAllGroupSessions(object : ProgressListener {
                 override fun onProgress(progress: Int, total: Int) {
                     lastProgress = progress
@@ -79,7 +80,7 @@ internal class KeysBackupTestHelper(
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
         // - Log Alice on a new device
-        val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
+        val aliceSession2 = testHelper.logIntoAccountSuspending(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
 
         // Test check: aliceSession2 has no keys at login
         Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))
@@ -129,25 +130,26 @@ internal class KeysBackupTestHelper(
      * As KeysBackup is doing asynchronous call to update its internal state, this method help to wait for the
      * KeysBackup object to be in the specified state
      */
-    fun waitForKeysBackupToBeInState(session: Session, state: KeysBackupState) {
+    suspend fun waitForKeysBackupToBeInState(session: Session, state: KeysBackupState) {
         // If already in the wanted state, return
-        if (session.cryptoService().keysBackupService().getState() == state) {
+        val keysBackupService = session.cryptoService().keysBackupService()
+        if (keysBackupService.getState() == state) {
             return
         }
 
         // Else observe state changes
-        val latch = CountDownLatch(1)
-
-        session.cryptoService().keysBackupService().addListener(object : KeysBackupStateListener {
-            override fun onStateChange(newState: KeysBackupState) {
-                if (newState == state) {
-                    session.cryptoService().keysBackupService().removeListener(this)
-                    latch.countDown()
+        suspendCancellableCoroutine<Unit> { continuation ->
+            val listener = object : KeysBackupStateListener {
+                override fun onStateChange(newState: KeysBackupState) {
+                    if (newState == state) {
+                        keysBackupService.removeListener(this)
+                        continuation.resume(Unit)
+                    }
                 }
             }
-        })
-
-        testHelper.await(latch)
+            keysBackupService.addListener(listener)
+            continuation.invokeOnCancellation { keysBackupService.removeListener(listener) }
+        }
     }
 
     fun assertKeysEquals(keys1: MegolmSessionData?, keys2: MegolmSessionData?) {
