@@ -354,7 +354,7 @@
     <string name="room_settings_unset_main_address">Зробити не основною адресою</string>
     <string name="encryption_information_decryption_error">Помилка розшифрування</string>
     <string name="encryption_information_device_name">Загальнодоступна назва</string>
-    <string name="device_manager_session_details_session_id">ID сеансу</string>
+    <string name="encryption_information_device_id">ID сеансу</string>
     <string name="encryption_information_device_key">Ключ сеансу</string>
     <string name="encryption_export_e2e_room_keys">Експортувати E2E ключі кімнати</string>
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>

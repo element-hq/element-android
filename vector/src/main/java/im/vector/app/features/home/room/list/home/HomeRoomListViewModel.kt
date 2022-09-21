@@ -17,8 +17,8 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
-import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -35,6 +35,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -49,6 +50,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.query.toActiveSpaceOrNoFilter
@@ -60,12 +62,14 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
+import java.util.concurrent.CancellationException
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
@@ -83,7 +87,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
-    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
@@ -94,6 +97,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
     private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
     val emptyStateFlow = _emptyStateFlow.asSharedFlow()
+
+    private var roomsFlowJob: Job? = null
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -249,10 +254,16 @@ class HomeRoomListViewModel @AssistedInject constructor(
                     )
                     emitEmptyState()
                 }
-                .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        setState { copy(roomsLivePagedList = liveResults.livePagedList) }
+        roomsFlowJob?.cancel(CancellationException())
+
+        roomsFlowJob = liveResults.livePagedList
+                .asFlow()
+                .onEach {
+                    setState { copy(roomsPagedList = it) }
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun observeOrderPreferences() {
@@ -329,6 +340,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             is HomeRoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is HomeRoomListAction.ToggleTag -> handleToggleTag(action)
             is HomeRoomListAction.ChangeRoomFilter -> handleChangeRoomFilter(action.filter)
+            HomeRoomListAction.DeleteAllLocalRoom -> handleDeleteLocalRooms()
         }
     }
 
@@ -395,6 +407,18 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 } catch (failure: Throwable) {
                     _viewEvents.post(HomeRoomListViewEvents.Failure(failure))
                 }
+            }
+        }
+    }
+
+    private fun handleDeleteLocalRooms() = withState {
+        val localRoomIds = session.roomService()
+                .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
+                .map { it.roomId }
+
+        viewModelScope.launch {
+            localRoomIds.forEach {
+                session.roomService().deleteLocalRoom(it)
             }
         }
     }

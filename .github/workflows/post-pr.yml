@@ -31,7 +31,7 @@ jobs:
   ui-tests:
     name: UI Tests (Synapse)
     needs: should-i-run
-    runs-on: macos-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     strategy:
       fail-fast: false
       matrix:

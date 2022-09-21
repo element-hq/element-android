@@ -231,7 +231,7 @@
     <string name="room_settings_set_main_address">Ustaw jako główny adres</string>
     <string name="settings_theme">Motyw</string>
     <string name="encryption_information_device_name">Nazwa publiczna</string>
-    <string name="device_manager_session_details_session_id">ID sesji</string>
+    <string name="encryption_information_device_id">ID sesji</string>
     <string name="encryption_export_export">Eksportuj</string>
     <string name="passphrase_enter_passphrase">Wprowadź hasło</string>
     <string name="passphrase_confirm_passphrase">Potwierdź hasło</string>

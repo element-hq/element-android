@@ -469,7 +469,7 @@
     <string name="settings_theme">主題</string>
     <string name="encryption_information_decryption_error">解密錯誤</string>
     <string name="encryption_information_device_name">公開名稱</string>
-    <string name="device_manager_session_details_session_id">工作階段 ID</string>
+    <string name="encryption_information_device_id">工作階段 ID</string>
     <string name="encryption_information_device_key">工作階段金鑰</string>
     <string name="encryption_export_e2e_room_keys">匯出聊天室的端到端加密金鑰</string>
     <string name="encryption_export_room_keys">匯出聊天室的加密金鑰</string>

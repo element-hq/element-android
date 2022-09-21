@@ -448,7 +448,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Error al desxifrar</string>
     <string name="encryption_information_device_name">Nom públic</string>
-    <string name="device_manager_session_details_session_id">ID de sessió</string>
+    <string name="encryption_information_device_id">ID de sessió</string>
     <string name="encryption_information_device_key">Clau de sessió</string>
     <string name="encryption_export_e2e_room_keys">Exporta les claus de la sala E2E</string>
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>

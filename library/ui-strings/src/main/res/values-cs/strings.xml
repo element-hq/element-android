@@ -635,7 +635,7 @@
     <string name="settings_theme">Motiv vzhledu</string>
     <string name="encryption_information_decryption_error">Chyba dešifrování</string>
     <string name="encryption_information_device_name">Veřejné jméno</string>
-    <string name="device_manager_session_details_session_id">ID relace</string>
+    <string name="encryption_information_device_id">ID relace</string>
     <string name="encryption_information_device_key">Klíč relace</string>
     <string name="encryption_export_e2e_room_keys">Export E2E klíčů místností</string>
     <string name="encryption_export_room_keys">Export klíčů místností</string>
