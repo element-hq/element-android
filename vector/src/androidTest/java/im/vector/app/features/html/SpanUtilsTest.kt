@@ -147,6 +147,7 @@ class SpanUtilsTest : InstrumentedTest {
             }
         })
         EmojiCompat.init(context())
+        load()
         latch.await(30, TimeUnit.SECONDS)
     }
 }
