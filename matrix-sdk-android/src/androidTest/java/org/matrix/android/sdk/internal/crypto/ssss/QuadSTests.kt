@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
@@ -56,7 +57,7 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    fun test_Generate4SKey() = runSessionTest(context()) { testHelper ->
+    fun test_Generate4SKey() = runSuspendingSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 

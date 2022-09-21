@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
@@ -296,7 +297,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testLiveFlatChildren() = runSessionTest(context()) { commonTestHelper ->
+    fun testLiveFlatChildren() = runSuspendingSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(

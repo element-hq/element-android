@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
@@ -256,7 +257,7 @@ class VerificationTest : InstrumentedTest {
     }
 
     @Test
-    fun test_selfVerificationAcceptedCancelsItForOtherSessions() = runSessionTest(context()) { testHelper ->
+    fun test_selfVerificationAcceptedCancelsItForOtherSessions() = runSuspendingSessionTest(context()) { testHelper ->
         val defaultSessionParams = SessionTestParams(true)
 
         val aliceSessionToVerify = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)

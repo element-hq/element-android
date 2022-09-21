@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import timber.log.Timber
@@ -33,7 +33,7 @@ import timber.log.Timber
 class ApiInterceptorTest : InstrumentedTest {
 
     @Test
-    fun apiInterceptorTest() = runSessionTest(context()) { commonTestHelper ->
+    fun apiInterceptorTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
         val responses = mutableListOf<String>()
 
         val listener = object : ApiInterceptorListener {
@@ -45,7 +45,7 @@ class ApiInterceptorTest : InstrumentedTest {
 
         commonTestHelper.matrix.registerApiInterceptorListener(ApiPath.REGISTER, listener)
 
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         commonTestHelper.signOutAndClose(session)
 

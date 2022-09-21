@@ -80,6 +80,22 @@ class CommonTestHelper internal constructor(context: Context) {
             }
         }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
+        internal fun runSuspendingSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context)
+            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+                try {
+                    withContext(Dispatchers.Default) {
+                        block(testHelper)
+                    }
+                } finally {
+                    if (autoSignoutOnClose) {
+                        testHelper.cleanUpOpenedSessions()
+                    }
+                }
+            }
+        }
+
         internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
@@ -690,11 +706,11 @@ class CommonTestHelper internal constructor(context: Context) {
     /**
      * Clear all provided sessions
      */
-    fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
+    suspend fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
-    fun signOutAndClose(session: Session) {
+    suspend fun signOutAndClose(session: Session) {
         trackedSessions.remove(session)
-        runBlockingTest(timeout = 60_000) {
+        wrapWithTimeout(timeout = 60_000L) {
             session.signOutService().signOut(true)
         }
         // no need signout will close

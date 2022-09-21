@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import kotlin.coroutines.Continuation
@@ -52,7 +53,7 @@ import kotlin.coroutines.resume
 class XSigningTest : InstrumentedTest {
 
     @Test
-    fun test_InitializeAndStoreKeys() = runSessionTest(context()) { testHelper ->
+    fun test_InitializeAndStoreKeys() = runSuspendingSessionTest(context()) { testHelper ->
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         testHelper.doSync<Unit> {

@@ -29,6 +29,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -36,7 +37,7 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 class ReplayAttackTest : InstrumentedTest {
 
     @Test
-    fun replayAttackAlreadyDecryptedEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun replayAttackAlreadyDecryptedEventTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId
@@ -51,25 +52,23 @@ class ReplayAttackTest : InstrumentedTest {
         assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
 
         // Alice will send a message
-        val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
+        val sentEvents = testHelper.sendTextMessageSuspending(aliceRoomPOV, "Hello I will be decrypted twice", 1)
         assertEquals(1, sentEvents.size)
 
         val fakeEventId = sentEvents[0].eventId + "_fake"
         val fakeEventWithTheSameIndex =
                 sentEvents[0].copy(eventId = fakeEventId, root = sentEvents[0].root.copy(eventId = fakeEventId))
 
-        testHelper.runBlockingTest {
-            // Lets assume we are from the main timelineId
-            val timelineId = "timelineId"
-            // Lets decrypt the original event
-            aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            // Lets decrypt the fake event that will have the same message index
-            val exception = assertFailsWith<MXCryptoError.Base> {
-                // An exception should be thrown while the same index would have been used for the previous decryption
-                aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId)
-            }
-            assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, exception.errorType)
+        // Lets assume we are from the main timelineId
+        val timelineId = "timelineId"
+        // Lets decrypt the original event
+        aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+        // Lets decrypt the fake event that will have the same message index
+        val exception = assertFailsWith<MXCryptoError.Base> {
+            // An exception should be thrown while the same index would have been used for the previous decryption
+            aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId)
         }
+        assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, exception.errorType)
         cryptoTestData.cleanUp(testHelper)
     }
 
