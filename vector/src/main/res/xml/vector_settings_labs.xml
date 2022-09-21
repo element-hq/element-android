@@ -47,8 +47,8 @@
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
-        android:persistent="false"
         android:key="SETTINGS_LABS_MSC3061_SHARE_KEYS_HISTORY"
+        android:persistent="false"
         android:summary="@string/labs_enable_msc3061_share_history_desc"
         android:title="@string/labs_enable_msc3061_share_history" />
 
@@ -93,6 +93,7 @@
         android:defaultValue="@bool/settings_labs_deferred_dm_default"
         android:key="SETTINGS_LABS_DEFERRED_DM_KEY"
         android:summary="@string/labs_enable_deferred_dm_summary"
-        android:title="@string/labs_enable_deferred_dm_title" />
+        android:title="@string/labs_enable_deferred_dm_title"
+        app:isPreferenceVisible="@bool/settings_labs_deferred_dm_visible" />
 
 </androidx.preference.PreferenceScreen>
