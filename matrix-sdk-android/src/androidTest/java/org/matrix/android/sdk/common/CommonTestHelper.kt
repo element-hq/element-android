@@ -36,6 +36,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.SyncConfig
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
@@ -103,7 +104,8 @@ class CommonTestHelper internal constructor(context: Context) {
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
+                            syncConfig = SyncConfig(longPollTimeout = 5_000L)
                     )
             )
         }
