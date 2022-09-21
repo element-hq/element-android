@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
@@ -51,7 +52,7 @@ class WithHeldTests : InstrumentedTest {
     @get:Rule val rule = RetryTestRule(3)
 
     @Test
-    fun test_WithHeldUnverifiedReason() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_WithHeldUnverifiedReason() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         // =============================
         // ARRANGE
@@ -233,7 +234,7 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    fun test_WithHeldKeyRequest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_WithHeldKeyRequest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession

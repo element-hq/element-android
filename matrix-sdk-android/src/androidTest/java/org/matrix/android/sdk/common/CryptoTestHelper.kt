@@ -238,8 +238,8 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         return roomId
     }
 
-    fun initializeCrossSigning(session: Session) {
-        testHelper.doSync<Unit> {
+    suspend fun initializeCrossSigning(session: Session) {
+        testHelper.doSyncSuspending<Unit> {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {

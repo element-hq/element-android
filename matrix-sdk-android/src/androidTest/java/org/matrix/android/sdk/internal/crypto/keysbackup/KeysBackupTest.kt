@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
@@ -65,7 +66,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Reset keys backup markers
      */
     @Test
-    fun roomKeysTest_testBackupStore_ok() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun roomKeysTest_testBackupStore_ok() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
@@ -132,9 +133,8 @@ class KeysBackupTest : InstrumentedTest {
      * Test creating a keys backup version and check that createKeysBackupVersion() returns valid data
      */
     @Test
-    fun createKeysBackupVersionTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-
-        val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
+    fun createKeysBackupVersionTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+        val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
         cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val keysBackup = bobSession.cryptoService().keysBackupService()
@@ -143,14 +143,14 @@ class KeysBackupTest : InstrumentedTest {
 
         assertFalse(keysBackup.isEnabled())
 
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.doSyncSuspending<MegolmBackupCreationInfo> {
             keysBackup.prepareKeysBackupVersion(null, null, it)
         }
 
         assertFalse(keysBackup.isEnabled())
 
         // Create the version
-        val version = testHelper.doSync<KeysVersion> {
+        val version = testHelper.doSyncSuspending<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
@@ -158,10 +158,10 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(keysBackup.isEnabled())
 
         // Check that it's signed with MSK
-        val versionResult = testHelper.doSync<KeysVersionResult?> {
+        val versionResult = testHelper.doSyncSuspending<KeysVersionResult?> {
             keysBackup.getVersion(version.version, it)
         }
-        val trust = testHelper.doSync<KeysBackupVersionTrust> {
+        val trust = testHelper.doSyncSuspending<KeysBackupVersionTrust> {
             keysBackup.getKeysBackupTrust(versionResult!!, it)
         }
 
