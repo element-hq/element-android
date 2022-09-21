@@ -36,6 +36,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -70,6 +72,7 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
+import java.util.concurrent.CancellationException
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
@@ -98,6 +101,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
     private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
     val emptyStateFlow = _emptyStateFlow.asSharedFlow()
+
+    private var roomsFlowJob: Job? = null
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -256,7 +261,9 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        liveResults.livePagedList
+        roomsFlowJob?.cancel(CancellationException())
+
+        roomsFlowJob = liveResults.livePagedList
                 .asFlow()
                 .onEach {
                     setState { copy(roomsPagedList = it) }
