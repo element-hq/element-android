@@ -1575,6 +1575,10 @@ class TimelineFragment :
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
                     )
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
+                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
+                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -2668,6 +2672,7 @@ class TimelineFragment :
                                 locationOwnerId = session.myUserId
                         )
             }
+            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(RoomDetailAction.StartVoiceBroadcast)
         }
     }
 

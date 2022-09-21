@@ -1871,6 +1871,7 @@
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="attachment_type_poll">Poll</string>
     <string name="attachment_type_location">Location</string>
+    <string name="attachment_type_voice_broadcast">Voice Broadcast</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -3179,6 +3180,7 @@
     <string name="tooltip_attachment_contact">Open contacts</string>
     <string name="tooltip_attachment_poll">Create poll</string>
     <string name="tooltip_attachment_location">Share location</string>
+    <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
