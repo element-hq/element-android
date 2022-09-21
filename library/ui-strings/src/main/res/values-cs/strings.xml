@@ -635,7 +635,7 @@
     <string name="settings_theme">Motiv vzhledu</string>
     <string name="encryption_information_decryption_error">Chyba dešifrování</string>
     <string name="encryption_information_device_name">Veřejné jméno</string>
-    <string name="device_manager_session_details_session_id">ID relace</string>
+    <string name="encryption_information_device_id">ID relace</string>
     <string name="encryption_information_device_key">Klíč relace</string>
     <string name="encryption_export_e2e_room_keys">Export E2E klíčů místností</string>
     <string name="encryption_export_room_keys">Export klíčů místností</string>
@@ -2651,8 +2651,8 @@
     <string name="a11y_open_settings">Otevřít nastavení</string>
     <string name="all_chats">Všechny konverzace</string>
     <string name="device_manager_settings_active_sessions_show_all">Zobrazit všechny relace (V2, WIP)</string>
-    <string name="device_manager_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
-    <string name="device_manager_sessions_other_title">Ostatní relace</string>
+    <string name="settings_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
+    <string name="settings_sessions_other_title">Ostatní relace</string>
     <string name="settings_sessions_list">Relace</string>
     <string name="a11y_open_spaces">Seznam otevřených prostorů</string>
     <string name="a11y_create_message">Vytvořit novou konverzaci nebo místnost</string>

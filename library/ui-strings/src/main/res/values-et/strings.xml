@@ -612,7 +612,7 @@
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
     <string name="encryption_information_device_name">Avalik nimi</string>
-    <string name="device_manager_session_details_session_id">Sessiooni tunnus</string>
+    <string name="encryption_information_device_id">Sessiooni tunnus</string>
     <string name="encryption_information_device_key">Sessiooni võti</string>
     <string name="encryption_export_e2e_room_keys">Ekspordi jututubade läbiva krüptimise võtmed</string>
     <string name="encryption_export_room_keys">Ekspordi jututoa võtmed</string>
@@ -2592,8 +2592,8 @@
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
     <string name="device_manager_settings_active_sessions_show_all">Näita kõiki sessioone (V2, WIP)</string>
-    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
-    <string name="device_manager_sessions_other_title">Muud sessioonid</string>
+    <string name="settings_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="settings_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessionid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
     <string name="a11y_create_message">Alusta uut vestlust või loo uus jututuba</string>

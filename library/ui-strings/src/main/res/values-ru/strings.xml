@@ -432,7 +432,7 @@
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
     <string name="encryption_information_device_name">Публичное имя</string>
-    <string name="device_manager_session_details_session_id">ID сессии</string>
+    <string name="encryption_information_device_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
     <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
@@ -2660,8 +2660,8 @@
     <string name="location_share_loading_map_error">Не удалось загрузить карту
 \nВозможно, этот домашний сервер не настроен для отображения карт.</string>
     <string name="all_chats">Все беседы</string>
-    <string name="device_manager_sessions_other_description">Для лучшей безопасности заверьте свои сессии и выйдите из тех, которые более не признаёте или не используете.</string>
-    <string name="device_manager_sessions_other_title">Другие сессии</string>
+    <string name="settings_sessions_other_description">Для лучшей безопасности заверьте свои сессии и выйдите из тех, которые более не признаёте или не используете.</string>
+    <string name="settings_sessions_other_title">Другие сессии</string>
     <string name="settings_sessions_list">Сессии</string>
     <string name="a11y_create_message">Создать беседу или комнату</string>
     <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>

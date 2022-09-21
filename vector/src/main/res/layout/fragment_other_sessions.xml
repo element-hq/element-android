@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back_24dp"
-            app:title="@string/device_manager_sessions_other_title">
+            app:title="@string/settings_sessions_other_title">
 
             <FrameLayout
                 android:id="@+id/otherSessionsFilterFrameLayout"
@@ -53,7 +53,7 @@
         android:id="@+id/deviceListHeaderOtherSessions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+        app:sessionsListHeaderDescription="@string/settings_sessions_other_description"
         app:sessionsListHeaderTitle=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
