@@ -25,7 +25,7 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.failure.isInvalidPassword
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -39,13 +39,11 @@ class ChangePasswordTest : InstrumentedTest {
     }
 
     @Test
-    fun changePasswordTest() = runSessionTest(context()) { commonTestHelper ->
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+    fun changePasswordTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
+        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Change password
-        commonTestHelper.runBlockingTest {
-            session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
-        }
+        session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
 
         // Try to login with the previous password, it will fail
         val throwable = commonTestHelper.logAccountWithError(session.myUserId, TestConstants.PASSWORD)

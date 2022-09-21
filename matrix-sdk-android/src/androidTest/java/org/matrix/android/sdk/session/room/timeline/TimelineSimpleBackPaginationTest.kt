@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
@@ -43,7 +44,7 @@ import org.matrix.android.sdk.common.TestConstants
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
-    fun timeline_backPaginate_shouldReachEndOfTimeline() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun timeline_backPaginate_shouldReachEndOfTimeline() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSent = 200
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)

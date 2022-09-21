@@ -73,7 +73,7 @@ class ReplayAttackTest : InstrumentedTest {
     }
 
     @Test
-    fun replayAttackSameEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun replayAttackSameEventTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId
@@ -88,21 +88,19 @@ class ReplayAttackTest : InstrumentedTest {
         assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
 
         // Alice will send a message
-        val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
+        val sentEvents = testHelper.sendTextMessageSuspending(aliceRoomPOV, "Hello I will be decrypted twice", 1)
         Assert.assertTrue("Message should be sent", sentEvents.size == 1)
         assertEquals(sentEvents.size, 1)
 
-        testHelper.runBlockingTest {
-            // Lets assume we are from the main timelineId
-            val timelineId = "timelineId"
-            // Lets decrypt the original event
+        // Lets assume we are from the main timelineId
+        val timelineId = "timelineId"
+        // Lets decrypt the original event
+        aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+        try {
+            // Lets try to decrypt the same event
             aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            try {
-                // Lets try to decrypt the same event
-                aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            } catch (ex: Throwable) {
-                fail("Shouldn't throw a decryption error for same event")
-            }
+        } catch (ex: Throwable) {
+            fail("Shouldn't throw a decryption error for same event")
         }
     }
 }

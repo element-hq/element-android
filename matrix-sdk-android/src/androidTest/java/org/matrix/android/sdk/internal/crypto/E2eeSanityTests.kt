@@ -264,7 +264,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Create a new session for bob
         Log.v("#E2E TEST", "Create a new session for Bob")
-        val newBobSession = testHelper.logIntoAccountSuspending(bobUserId, SessionTestParams(true))
+        val newBobSession = testHelper.logIntoAccount(bobUserId, SessionTestParams(true))
 
         // check that bob can't currently decrypt
         Log.v("#E2E TEST", "check that bob can't currently decrypt")
@@ -434,7 +434,7 @@ class E2eeSanityTests : InstrumentedTest {
         ensureIsDecrypted(testHelper, listOf(firstEventId), bobSessionWithBetterKey, e2eRoomID)
 
         // Let's add a new unverified session from bob
-        val newBobSession = testHelper.logIntoAccountSuspending(bobSessionWithBetterKey.myUserId, SessionTestParams(true))
+        val newBobSession = testHelper.logIntoAccount(bobSessionWithBetterKey.myUserId, SessionTestParams(true))
 
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
@@ -542,7 +542,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // now let's create a new login from alice
 
-        val aliceNewSession = testHelper.logIntoAccountSuspending(aliceSession.myUserId, SessionTestParams(true))
+        val aliceNewSession = testHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
 
         val deferredOldCode = aliceSession.cryptoService().verificationService().readOldVerificationCodeAsync(this, aliceSession.myUserId)
         val deferredNewCode = aliceNewSession.cryptoService().verificationService().readNewVerificationCodeAsync(this, aliceSession.myUserId)

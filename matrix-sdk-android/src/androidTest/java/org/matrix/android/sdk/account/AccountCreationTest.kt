@@ -24,8 +24,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -35,14 +35,14 @@ import org.matrix.android.sdk.common.TestConstants
 class AccountCreationTest : InstrumentedTest {
 
     @Test
-    fun createAccountTest() = runSessionTest(context()) { commonTestHelper ->
-        commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+    fun createAccountTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
+        commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun createAccountAndLoginAgainTest() = runSessionTest(context()) { commonTestHelper ->
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+    fun createAccountAndLoginAgainTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
+        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Log again to the same account
         commonTestHelper.logIntoAccount(session.myUserId, SessionTestParams(withInitialSync = true))

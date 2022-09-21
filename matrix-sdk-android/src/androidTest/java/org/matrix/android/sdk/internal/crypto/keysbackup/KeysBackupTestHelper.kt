@@ -80,7 +80,7 @@ internal class KeysBackupTestHelper(
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
         // - Log Alice on a new device
-        val aliceSession2 = testHelper.logIntoAccountSuspending(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
+        val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
 
         // Test check: aliceSession2 has no keys at login
         Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))

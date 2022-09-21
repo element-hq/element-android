@@ -87,40 +87,38 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     /**
      * @return alice and bob sessions
      */
-    fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
-        return testHelper.launch {
-            val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom, roomHistoryVisibility)
-            val aliceSession = cryptoTestData.firstSession
-            val aliceRoomId = cryptoTestData.roomId
+    suspend fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
+        val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom, roomHistoryVisibility)
+        val aliceSession = cryptoTestData.firstSession
+        val aliceRoomId = cryptoTestData.roomId
 
-            val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
+        val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
-            val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)
+        val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)
 
-            waitFor(
-                    continueWhen = { bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first { it.isNotEmpty() } },
-                    action = { aliceRoom.membershipService().invite(bobSession.myUserId) }
-            )
+        waitFor(
+                continueWhen = { bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first { it.isNotEmpty() } },
+                action = { aliceRoom.membershipService().invite(bobSession.myUserId) }
+        )
 
-            waitFor(
-                    continueWhen = {
-                        bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first {
-                            bobSession.getRoom(aliceRoomId)
-                                    ?.membershipService()
-                                    ?.getRoomMember(bobSession.myUserId)
-                                    ?.membership == Membership.JOIN
-                        }
-                    },
-                    action = { bobSession.roomService().joinRoom(aliceRoomId) }
-            )
+        waitFor(
+                continueWhen = {
+                    bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first {
+                        bobSession.getRoom(aliceRoomId)
+                                ?.membershipService()
+                                ?.getRoomMember(bobSession.myUserId)
+                                ?.membership == Membership.JOIN
+                    }
+                },
+                action = { bobSession.roomService().joinRoom(aliceRoomId) }
+        )
 
-            // Ensure bob can send messages to the room
+        // Ensure bob can send messages to the room
 //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-            CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
-        }
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
 
     /**

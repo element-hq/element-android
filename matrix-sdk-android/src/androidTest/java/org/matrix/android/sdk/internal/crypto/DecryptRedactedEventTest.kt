@@ -28,48 +28,45 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class DecryptRedactedEventTest : InstrumentedTest {
 
     @Test
-    fun doNotFailToDecryptRedactedEvent() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun doNotFailToDecryptRedactedEvent() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val e2eRoomID = testData.roomId
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
 
         val roomALicePOV = aliceSession.getRoom(e2eRoomID)!!
-        val timelineEvent = testHelper.sendTextMessage(roomALicePOV, "Hello", 1).first()
+        val timelineEvent = testHelper.sendTextMessageSuspending(roomALicePOV, "Hello", 1).first()
         val redactionReason = "Wrong Room"
         roomALicePOV.sendService().redactEvent(timelineEvent.root, redactionReason)
 
         // get the event from bob
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)?.root?.isRedacted() == true
-            }
+        testHelper.retryPeriodically {
+            bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)?.root?.isRedacted() == true
         }
 
         val eventBobPov = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)!!
 
-        testHelper.runBlockingTest {
-            try {
-                val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
-                Assert.assertEquals(
-                        "Unexpected redacted reason",
-                        redactionReason,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
-                )
-                Assert.assertEquals(
-                        "Unexpected Redacted event id",
-                        timelineEvent.eventId,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
-                )
-            } catch (failure: Throwable) {
-                Assert.fail("Should not throw when decrypting a redacted event")
-            }
+        try {
+            val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
+            Assert.assertEquals(
+                    "Unexpected redacted reason",
+                    redactionReason,
+                    result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
+            )
+            Assert.assertEquals(
+                    "Unexpected Redacted event id",
+                    timelineEvent.eventId,
+                    result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
+            )
+        } catch (failure: Throwable) {
+            Assert.fail("Should not throw when decrypting a redacted event")
         }
     }
 }

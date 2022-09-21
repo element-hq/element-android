@@ -69,7 +69,7 @@ class WithHeldTests : InstrumentedTest {
 
         val roomAlicePOV = aliceSession.getRoom(roomId)!!
 
-        val bobUnverifiedSession = testHelper.logIntoAccountSuspending(bobSession.myUserId, SessionTestParams(true))
+        val bobUnverifiedSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
         // =============================
         // ACT
         // =============================
@@ -196,7 +196,7 @@ class WithHeldTests : InstrumentedTest {
         // Add a new device for bob
 
         aliceInterceptor.clearRules()
-        val bobSecondSession = testHelper.logIntoAccountSuspending(bobSession.myUserId, SessionTestParams(withInitialSync = true))
+        val bobSecondSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(withInitialSync = true))
         // send a second message
         val secondMessageId = testHelper.sendTextMessageSuspending(roomAlicePov, "second message", 1).first().eventId
 
@@ -231,7 +231,7 @@ class WithHeldTests : InstrumentedTest {
 
         // Create a new session for bob
 
-        val bobSecondSession = testHelper.logIntoAccountSuspending(bobSession.myUserId, SessionTestParams(true))
+        val bobSecondSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
         // initialize to force request keys if missing
         cryptoTestHelper.initializeCrossSigning(bobSecondSession)
 

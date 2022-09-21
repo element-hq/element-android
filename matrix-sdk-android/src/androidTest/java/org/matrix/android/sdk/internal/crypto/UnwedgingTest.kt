@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
@@ -82,7 +83,7 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
-    fun testUnwedging() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testUnwedging() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -205,7 +206,7 @@ class UnwedgingTest : InstrumentedTest {
         bobTimeline.removeListener(bobHasThreeDecryptedEventsListener)
 
         // It's a trick to force key request on fail to decrypt
-        testHelper.doSync<Unit> {
+        testHelper.doSyncSuspending<Unit> {
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -223,17 +224,13 @@ class UnwedgingTest : InstrumentedTest {
         }
 
         // Wait until we received back the key
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                // we should get back the key and be able to decrypt
-                val result = testHelper.runBlockingTest {
-                    tryOrNull {
-                        bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
-                    }
-                }
-                Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
-                result != null
+        testHelper.retryPeriodically {
+            // we should get back the key and be able to decrypt
+            val result = tryOrNull {
+                bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
             }
+            Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
+            result != null
         }
 
         bobTimeline.dispose()

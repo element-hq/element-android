@@ -157,12 +157,8 @@ class CommonTestHelper internal constructor(context: Context) {
         return createAccountSuspending(userNamePrefix, TestConstants.PASSWORD, testParams)
     }
 
-    fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
+    suspend fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
-    }
-
-    suspend fun logIntoAccountSuspending(userId: String, testParams: SessionTestParams): Session {
-        return logIntoAccountSuspending(userId, TestConstants.PASSWORD, testParams)
     }
 
     fun cleanUpOpenedSessions() {
@@ -409,32 +405,12 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
-    /**
-     * Logs into an existing account
-     *
-     * @param userId the userId to log in
-     * @param password the password to log in
-     * @param testParams test params about the session
-     * @return the session associated with the existing account
-     */
-    fun logIntoAccount(
+    suspend fun logIntoAccount(
             userId: String,
             password: String,
             testParams: SessionTestParams
     ): Session {
         val session = logAccountAndSync(userId, password, testParams)
-        assertNotNull(session)
-        return session.also {
-            trackedSessions.add(session)
-        }
-    }
-
-    suspend fun logIntoAccountSuspending(
-            userId: String,
-            password: String,
-            testParams: SessionTestParams
-    ): Session {
-        val session = logAccountAndSyncSuspending(userId, password, testParams)
         assertNotNull(session)
         return session.also {
             trackedSessions.add(session)
@@ -514,42 +490,7 @@ class CommonTestHelper internal constructor(context: Context) {
         return session
     }
 
-    /**
-     * Start an account login
-     *
-     * @param userName the account username
-     * @param password the password
-     * @param sessionTestParams session test params
-     */
-    private fun logAccountAndSync(
-            userName: String,
-            password: String,
-            sessionTestParams: SessionTestParams
-    ): Session {
-        val hs = createHomeServerConfig()
-
-        runBlockingTest {
-            matrix.authenticationService.getLoginFlow(hs)
-        }
-
-        val session = runBlockingTest {
-            matrix.authenticationService
-                    .getLoginWizard()
-                    .login(userName, password, "myDevice")
-        }
-        session.open()
-        if (sessionTestParams.withInitialSync) {
-            syncSession(session)
-        }
-
-        return session
-    }
-
-    private suspend fun logAccountAndSyncSuspending(
-            userName: String,
-            password: String,
-            sessionTestParams: SessionTestParams
-    ): Session {
+    private suspend fun logAccountAndSync(userName: String, password: String, sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
         matrix.authenticationService.getLoginFlow(hs)
