@@ -30,14 +30,14 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class PreShareKeysTest : InstrumentedTest {
 
     @Test
-    fun ensure_outbound_session_happy_path() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun ensure_outbound_session_happy_path() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val e2eRoomID = testData.roomId
         val aliceSession = testData.firstSession
@@ -52,15 +52,13 @@ class PreShareKeysTest : InstrumentedTest {
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
-        testHelper.doSync<Unit> {
+        testHelper.doSyncSuspending<Unit> {
             aliceSession.cryptoService().prepareToEncrypt(e2eRoomID, it)
         }
 
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
-                newKeysCount > preShareCount
-            }
+        testHelper.retryPeriodically {
+            val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
+            newKeysCount > preShareCount
         }
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
@@ -82,13 +80,11 @@ class PreShareKeysTest : InstrumentedTest {
         assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
-        val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
+        val sentEvent = testHelper.sendTextMessageSuspending(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
 
         assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
-            }
+        testHelper.retryPeriodically {
+            bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
         }
     }
 }
