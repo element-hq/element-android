@@ -26,10 +26,13 @@ import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldExist
 import org.amshove.kluent.shouldNotBeNull
 import org.amshove.kluent.shouldNotExist
+import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runners.MethodSorters
 import java.io.File
 
+@FixMethodOrder(MethodSorters.JVM)
 class VoiceRecorderLTests {
 
     @get:Rule
@@ -48,8 +51,9 @@ class VoiceRecorderLTests {
         stopRecord()
     }
 
+    // Renamed to be run first... It fixes it.
     @Test
-    fun stopRecordKeepsFile() = with(recorder) {
+    fun atFirstStopRecordKeepsFile() = with(recorder) {
         getVoiceMessageFile().shouldBeNull()
 
         startRecord("some_room_id")
