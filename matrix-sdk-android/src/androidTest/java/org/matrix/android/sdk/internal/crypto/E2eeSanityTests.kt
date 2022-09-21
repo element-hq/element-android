@@ -328,13 +328,11 @@ class E2eeSanityTests : InstrumentedTest {
                 sentEventIds.add(it)
             }
 
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
+            testHelper.retryPeriodically {
+                val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                timeLineEvent != null &&
+                        timeLineEvent.isEncrypted() &&
+                        timeLineEvent.root.getClearType() == EventType.MESSAGE
             }
         }
 
@@ -370,22 +368,20 @@ class E2eeSanityTests : InstrumentedTest {
             val megolmSessionId = newBobSession.getRoom(e2eRoomID)!!
                     .getTimelineEvent(sentEventId)!!
                     .root.content.toModel<EncryptedEventContent>()!!.sessionId
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val aliceReply = newBobSession.cryptoService().getOutgoingRoomKeyRequests()
-                            .first {
-                                it.sessionId == megolmSessionId &&
-                                        it.roomId == e2eRoomID
-                            }
-                            .results.also {
-                                Log.w("##TEST", "result list is $it")
-                            }
-                            .firstOrNull { it.userId == aliceSession.myUserId }
-                            ?.result
-                    aliceReply != null &&
-                            aliceReply is RequestResult.Failure &&
-                            WithHeldCode.UNAUTHORISED == aliceReply.code
-                }
+            testHelper.retryPeriodically {
+                val aliceReply = newBobSession.cryptoService().getOutgoingRoomKeyRequests()
+                        .first {
+                            it.sessionId == megolmSessionId &&
+                                    it.roomId == e2eRoomID
+                        }
+                        .results.also {
+                            Log.w("##TEST", "result list is $it")
+                        }
+                        .firstOrNull { it.userId == aliceSession.myUserId }
+                        ?.result
+                aliceReply != null &&
+                        aliceReply is RequestResult.Failure &&
+                        WithHeldCode.UNAUTHORISED == aliceReply.code
             }
         }
 
