@@ -152,10 +152,10 @@ class HomeRoomListFragment :
             headersController.submitData(it)
         }
 
-        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList) { roomsListLive ->
-            roomsListLive?.observe(viewLifecycleOwner) { roomsList ->
-                roomsController.submitList(roomsList)
-                if (roomsList.isEmpty()) {
+        roomListViewModel.onEach(HomeRoomListViewState::roomsPagedList) { roomsList ->
+            roomsList?.let {
+                roomsController.submitPagedList(it)
+                if (it.isEmpty()) {
                     roomsController.requestForcedModelBuild()
                 }
             }

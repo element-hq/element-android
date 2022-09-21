@@ -17,8 +17,8 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
-import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -35,6 +35,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -68,6 +69,7 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
+import java.util.concurrent.CancellationException
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
@@ -85,7 +87,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
-    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
@@ -96,6 +97,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
     private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
     val emptyStateFlow = _emptyStateFlow.asSharedFlow()
+
+    private var roomsFlowJob: Job? = null
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -251,10 +254,16 @@ class HomeRoomListViewModel @AssistedInject constructor(
                     )
                     emitEmptyState()
                 }
-                .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        setState { copy(roomsLivePagedList = liveResults.livePagedList) }
+        roomsFlowJob?.cancel(CancellationException())
+
+        roomsFlowJob = liveResults.livePagedList
+                .asFlow()
+                .onEach {
+                    setState { copy(roomsPagedList = it) }
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun observeOrderPreferences() {
