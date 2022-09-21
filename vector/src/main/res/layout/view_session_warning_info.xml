@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sessionWarningInfoDescription"
         android:src="@drawable/ic_info"
-        app:tint="?colorOnSurface" />
+        app:tint="?vctr_content_secondary" />
 
     <TextView
         android:id="@+id/sessionWarningInfoDescription"
