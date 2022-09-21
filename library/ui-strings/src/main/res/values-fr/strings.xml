@@ -2636,4 +2636,39 @@
     <string name="timeline_error_room_not_found">Désolé, impossible de trouver ce salon.
 \nVeuillez réessayer plus tard.%s</string>
     <string name="invites_title">Invitations</string>
+    <string name="onboarding_new_app_layout_button_try">Essayez</string>
+    <string name="onboarding_new_app_layout_feedback_message">Appuyez en haut à droite pour les options des avis.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Donner mon avis</string>
+    <string name="onboarding_new_app_layout_spaces_message">Accédez à vos espaces (en bas à droite) plus rapidement et facilement qu’avant.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Accéder aux espaces</string>
+    <string name="onboarding_new_app_layout_welcome_message">Pour simplifier Element, les onglets sont désormais facultatifs. Gérez les depuis le menu en haut à droite.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Bienvenu dans une nouvelle vue !</string>
+    <string name="home_empty_no_unreads_message">C\'est ici que vos messages non-lus s’afficheront lorsque vous en aurez.</string>
+    <string name="home_empty_no_unreads_title">Rien à signaler.</string>
+    <string name="home_empty_no_rooms_message">La messagerie sécurisée tout-en-un pour les équipes, les amis, et les organisations. Créez une discussion ou rejoignez un salon pour démarrer.</string>
+    <string name="home_empty_no_rooms_title">Bienvenue dans ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Les espaces sont un nouveau moyen de grouper les salons et les gens. Ajoutez un salon, ou créez en un nouveau à l’aide du bouton en bas à droite.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\na l’air un peu vide.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Pensez à vous déconnecter des anciennes sessions (%1$d jour ou plus) que vous n’utilisez plus.</item>
+        <item quantity="other">Pensez à vous déconnecter des anciennes sessions (%1$d jours ou plus) que vous n’utilisez plus.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Sessions inactives</string>
+    <string name="device_manager_unverified_sessions_description">Vérifier ou déconnecter les sessions non vérifiées.</string>
+    <string name="device_manager_unverified_sessions_title">Sessions non vérifiées</string>
+    <string name="device_manager_header_section_security_recommendations_description">Améliorez la sécurité de votre compte à l’aide de ces recommandations.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Recommandations de sécurité</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Inactif depuis %1$d+ jour (%2$s)</item>
+        <item quantity="other">Inactif depuis %1$d+ jours (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">C’est l’endroit où se trouveront vos nouvelles requêtes et invitations.</string>
+    <string name="invites_empty_title">Rien de neuf.</string>
+    <string name="space_list_empty_message">Les espaces sont un nouveau moyen de regrouper les salons et les gens. Créez un espace pour commencer.</string>
+    <string name="space_list_empty_title">Pas d’espace pour l’instant.</string>
+    <string name="a11y_collapse_space_children">Réduire %s enfants</string>
+    <string name="a11y_expand_space_children">Développer %s enfants</string>
+    <string name="change_space">Changer d’espace</string>
 </resources>
