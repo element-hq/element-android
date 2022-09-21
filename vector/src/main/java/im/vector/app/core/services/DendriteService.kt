@@ -398,7 +398,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         val multicastPeers = monolith!!.peerCount(Gobind.PeerTypeMulticast).toInt()
         val bluetoothPeers = monolith!!.peerCount(Gobind.PeerTypeBluetooth).toInt()
 
-        val title: String = "Element p2p service running"
+        val title: String = "P2P Matrix service running"
         val text: String
 
         text = if (remotePeers+multicastPeers+bluetoothPeers == 0) {
@@ -583,30 +583,37 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun startBluetooth() {
-        if (!vectorPreferences.p2pEnableBluetooth()) {
-            return
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return
-        }
-        if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.BLUETOOTH_ADVERTISE
-                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.BLUETOOTH_SCAN
-                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+        when {
+            !vectorPreferences.p2pEnableBluetooth() -> {
+                Timber.i("BLE: Bluetooth peerings not enabled")
+                return
+            }
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> {
+                Timber.i("BLE: Bluetooth peerings not supported on this version of Android")
+                return
+            }
+            ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_ADVERTISE
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                Timber.i("BLE: BLUETOOTH_ADVERTISE permission not granted, Bluetooth will not be available")
+                return
+            }
+            ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                    Timber.i("BLE: BLUETOOTH_SCAN permission not granted, Bluetooth will not be available")
+                    return
+                }
+            ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                Timber.i("BLE: BLUETOOTH_CONNECT permission not granted, Bluetooth will not be available")
+                return
+            }
+            else -> Timber.i("BLE: Bluetooth prerequisites satisfied")
         }
 
         manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager

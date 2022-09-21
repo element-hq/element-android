@@ -107,28 +107,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         if (isFirstCreation()) {
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
-
-        // Dendrite needs location permissions to get BLE data, thanks Google
-        val activity = topFragment?.requireActivity()
-        if (activity != null) {
-            if (checkPermissions(PERMISSIONS_FOR_P2P, activity, launcher, R.string.permissions_rationale_msg_p2p)) {
-                Timber.i("BLE: Got permissions")
-            } else {
-                Timber.i("BLE: No permissions")
-            }
-        }
-    }
-
-    private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
-        if (allGranted) {
-            Timber.i("BLE: Permission granted")
-        } else {
-            if (deniedPermanently) {
-                Timber.i("BLE: Permission denied permanently")
-            } else {
-                Timber.i("BLE: Permission denied")
-            }
-        }
     }
 
     protected open fun addFirstFragment() {

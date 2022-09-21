@@ -48,6 +48,9 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.PERMISSIONS_FOR_P2P
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
@@ -283,6 +286,25 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+
+        // Dendrite needs location permissions to get BLE data, thanks Google
+        if (checkPermissions(PERMISSIONS_FOR_P2P, this, launcher, R.string.permissions_rationale_msg_p2p)) {
+            Timber.i("BLE: Got permissions")
+        } else {
+            Timber.i("BLE: No permissions")
+        }
+    }
+
+    private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            Timber.i("BLE: Permission granted")
+        } else {
+            if (deniedPermanently) {
+                Timber.i("BLE: Permission denied permanently")
+            } else {
+                Timber.i("BLE: Permission denied")
+            }
+        }
     }
 
     private fun handleShowReleaseNotes() {

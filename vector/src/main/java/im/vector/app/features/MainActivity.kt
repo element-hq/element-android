@@ -39,7 +39,10 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.services.DendriteService
+import im.vector.app.core.utils.PERMISSIONS_FOR_P2P
+import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.deleteAllFiles
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.plan.ViewRoom
