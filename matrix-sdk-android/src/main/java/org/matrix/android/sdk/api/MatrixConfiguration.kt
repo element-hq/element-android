@@ -73,5 +73,5 @@ data class MatrixConfiguration(
         /**
          * Sync configuration.
          */
-        val syncConfig: SyncConfig = SyncConfig()
+        val syncConfig: SyncConfig = SyncConfig(),
 )

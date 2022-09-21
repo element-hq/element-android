@@ -105,7 +105,7 @@ class CommonTestHelper internal constructor(context: Context) {
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
                             roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
-                            syncConfig = SyncConfig(longPollTimeout = 5_000L)
+                            syncConfig = SyncConfig(longPollTimeout = 5_000L),
                     )
             )
         }

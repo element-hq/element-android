@@ -26,7 +26,7 @@ fun getMatrixInstance(): Matrix {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val configuration = MatrixConfiguration(
             roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context),
-            syncConfig = SyncConfig(longPollTimeout = 5_000L)
+            syncConfig = SyncConfig(longPollTimeout = 5_000L),
     )
     return Matrix(context, configuration)
 }
