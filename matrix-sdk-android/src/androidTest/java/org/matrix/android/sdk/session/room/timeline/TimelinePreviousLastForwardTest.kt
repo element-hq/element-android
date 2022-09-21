@@ -20,7 +20,6 @@ import androidx.test.filters.LargeTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -40,7 +39,6 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore("This test will be ignored until it is fixed")
 @LargeTest
 class TimelinePreviousLastForwardTest : InstrumentedTest {
 

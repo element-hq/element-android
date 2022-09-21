@@ -22,7 +22,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -218,7 +217,6 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("Test is working locally, not in GitHub actions")
     fun test_GetSecretWithBadPassphrase() = runSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))

@@ -22,7 +22,6 @@ import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -53,7 +52,6 @@ class TimelineForwardPaginationTest : InstrumentedTest {
      * This test ensure that if we click to permalink, we will be able to go back to the live
      */
     @Test
-    @Ignore("Ignoring this test until it's fixed since it blocks the CI.")
     fun forwardPaginationTest() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSend = 90
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)

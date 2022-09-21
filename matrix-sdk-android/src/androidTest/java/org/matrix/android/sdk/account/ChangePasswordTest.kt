@@ -18,7 +18,6 @@ package org.matrix.android.sdk.account
 
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -31,7 +30,6 @@ import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore("This test will be ignored until it is fixed")
 class ChangePasswordTest : InstrumentedTest {
 
     companion object {

@@ -25,7 +25,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -52,7 +51,6 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Ignore
 class SASTest : InstrumentedTest {
 
     @Test
@@ -136,7 +134,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_key_agreement_protocols_must_include_curve25519() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
@@ -192,7 +189,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_key_agreement_macs_Must_include_hmac_sha256() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
@@ -229,7 +225,6 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_key_agreement_short_code_include_decimal() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
@@ -340,7 +335,6 @@ class SASTest : InstrumentedTest {
      * Test that when alice starts a 'correct' request, bob agrees.
      */
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_aliceAndBobAgreement() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 

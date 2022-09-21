@@ -31,7 +31,6 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
 import org.junit.BeforeClass
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -41,7 +40,6 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore
 class SpanUtilsTest : InstrumentedTest {
 
     companion object {

@@ -22,7 +22,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -248,7 +247,6 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun testBreakCycle() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 

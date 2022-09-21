@@ -64,7 +64,6 @@ import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.mustFail
 import java.util.concurrent.CountDownLatch
 
-// @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest

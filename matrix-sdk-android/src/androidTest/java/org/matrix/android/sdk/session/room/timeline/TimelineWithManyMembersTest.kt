@@ -19,7 +19,6 @@ package org.matrix.android.sdk.session.room.timeline
 import androidx.test.filters.LargeTest
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -38,7 +37,6 @@ import java.util.concurrent.CountDownLatch
  */
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-@Ignore("This test will be ignored until it is fixed")
 @LargeTest
 class TimelineWithManyMembersTest : InstrumentedTest {
 
