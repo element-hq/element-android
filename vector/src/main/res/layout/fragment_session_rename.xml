@@ -59,4 +59,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/renameSessionInputLayout" />
 
+    <im.vector.app.features.settings.devices.v2.SessionWarningInfoView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        android:layout_marginVertical="@dimen/layout_vertical_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/renameSessionDescription"
+        app:sessionsWarningInfoDescription="@string/device_manager_session_rename_warning"
+        app:sessionsWarningInfoHasLearnMore="false" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
