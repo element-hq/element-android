@@ -154,7 +154,7 @@ class HomeRoomListFragment :
 
         roomListViewModel.onEach(HomeRoomListViewState::roomsPagedList) { roomsList ->
             roomsList?.let {
-                roomsController.submitList(it)
+                roomsController.submitPagedList(it)
                 if (it.isEmpty()) {
                     roomsController.requestForcedModelBuild()
                 }

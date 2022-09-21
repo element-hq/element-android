@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.list.home
 import android.widget.ImageView
 import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
-import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -37,7 +36,6 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -46,7 +44,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -90,7 +87,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
-    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
@@ -258,7 +254,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
                     )
                     emitEmptyState()
                 }
-                .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
         roomsFlowJob?.cancel(CancellationException())
@@ -268,7 +263,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .onEach {
                     setState { copy(roomsPagedList = it) }
                 }
-                .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)
     }
 
