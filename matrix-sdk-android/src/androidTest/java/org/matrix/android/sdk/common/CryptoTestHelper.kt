@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.common
 
 import android.util.Log
-import androidx.lifecycle.Observer
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -48,7 +47,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -197,39 +195,30 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
     }
 
-    fun createDM(alice: Session, bob: Session): String {
-        var roomId: String = ""
-        testHelper.waitWithLatch { latch ->
-            roomId = alice.roomService().createDirectRoom(bob.myUserId)
-            val bobRoomSummariesLive = bob.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
-            val newRoomObserver = object : Observer<List<RoomSummary>> {
-                override fun onChanged(t: List<RoomSummary>?) {
-                    if (t?.any { it.roomId == roomId }.orFalse()) {
-                        bobRoomSummariesLive.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            bobRoomSummariesLive.observeForever(newRoomObserver)
-        }
+    suspend fun createDM(alice: Session, bob: Session): String {
+        var roomId = ""
+        waitFor(
+                continueWhen = {
+                    bob.roomService()
+                            .onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }
+                            .first { it.any { it.roomId == roomId }.orFalse() }
+                },
+                action = { roomId = alice.roomService().createDirectRoom(bob.myUserId) }
+        )
 
-        testHelper.waitWithLatch { latch ->
-            val bobRoomSummariesLive = bob.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
-            val newRoomObserver = object : Observer<List<RoomSummary>> {
-                override fun onChanged(t: List<RoomSummary>?) {
-                    if (bob.getRoom(roomId)
-                                    ?.membershipService()
-                                    ?.getRoomMember(bob.myUserId)
-                                    ?.membership == Membership.JOIN) {
-                        bobRoomSummariesLive.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            bobRoomSummariesLive.observeForever(newRoomObserver)
-            bob.roomService().joinRoom(roomId)
-        }
-
+        waitFor(
+                continueWhen = {
+                    bob.roomService()
+                            .onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }
+                            .first {
+                                bob.getRoom(roomId)
+                                        ?.membershipService()
+                                        ?.getRoomMember(bob.myUserId)
+                                        ?.membership == Membership.JOIN
+                            }
+                },
+                action = { bob.roomService().joinRoom(roomId) }
+        )
         return roomId
     }
 
