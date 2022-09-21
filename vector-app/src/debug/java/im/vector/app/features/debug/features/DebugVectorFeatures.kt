@@ -73,9 +73,6 @@ class DebugVectorFeatures(
     override fun forceUsageOfOpusEncoder(): Boolean = read(DebugFeatureKeys.forceUsageOfOpusEncoder)
             ?: vectorFeatures.forceUsageOfOpusEncoder()
 
-    override fun shouldStartDmOnFirstMessage(): Boolean = read(DebugFeatureKeys.startDmOnFirstMsg)
-            ?: vectorFeatures.shouldStartDmOnFirstMessage()
-
     override fun isNewAppLayoutFeatureEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
             ?: vectorFeatures.isNewAppLayoutFeatureEnabled()
 
