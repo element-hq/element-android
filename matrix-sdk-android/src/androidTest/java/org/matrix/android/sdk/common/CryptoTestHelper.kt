@@ -397,47 +397,41 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         return CryptoTestData(roomId, sessions)
     }
 
-    fun ensureCanDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
+    suspend fun ensureCanDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
         sentEventIds.forEachIndexed { index, sentEventId ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
-                    testHelper.runBlockingTest {
-                        try {
-                            session.cryptoService().decryptEvent(event, "").let { result ->
-                                event.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                )
-                            }
-                        } catch (error: MXCryptoError) {
-                            // nop
-                        }
+            testHelper.retryPeriodically {
+                val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
+                try {
+                    session.cryptoService().decryptEvent(event, "").let { result ->
+                        event.mxDecryptionResult = OlmDecryptionResult(
+                                payload = result.clearEvent,
+                                senderKey = result.senderCurve25519Key,
+                                keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                        )
                     }
-                    Log.v("TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
-                    event.getClearType() == EventType.MESSAGE &&
-                            messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
+                } catch (error: MXCryptoError) {
+                    // nop
                 }
+                Log.v("TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
+                event.getClearType() == EventType.MESSAGE &&
+                        messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
             }
         }
     }
 
-    fun ensureCannotDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType? = null) {
+    suspend fun ensureCannotDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType? = null) {
         sentEventIds.forEach { sentEventId ->
             val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
-            testHelper.runBlockingTest {
-                try {
-                    session.cryptoService().decryptEvent(event, "")
-                    fail("Should not be able to decrypt event")
-                } catch (error: MXCryptoError) {
-                    val errorType = (error as? MXCryptoError.Base)?.errorType
-                    if (expectedError == null) {
-                        assertNotNull(errorType)
-                    } else {
-                        assertEquals("Unexpected reason", expectedError, errorType)
-                    }
+            try {
+                session.cryptoService().decryptEvent(event, "")
+                fail("Should not be able to decrypt event")
+            } catch (error: MXCryptoError) {
+                val errorType = (error as? MXCryptoError.Base)?.errorType
+                if (expectedError == null) {
+                    assertNotNull(errorType)
+                } else {
+                    assertEquals("Unexpected reason", expectedError, errorType)
                 }
             }
         }
