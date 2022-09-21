@@ -448,7 +448,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Error al desxifrar</string>
     <string name="encryption_information_device_name">Nom públic</string>
-    <string name="device_manager_session_details_session_id">ID de sessió</string>
+    <string name="encryption_information_device_id">ID de sessió</string>
     <string name="encryption_information_device_key">Clau de sessió</string>
     <string name="encryption_export_e2e_room_keys">Exporta les claus de la sala E2E</string>
     <string name="encryption_export_room_keys">Exporta les claus de la sala</string>
@@ -2602,8 +2602,8 @@
     <string name="all_chats">Tots els xats</string>
     <string name="home_layout_preferences">Preferències de disseny</string>
     <string name="explore_rooms">Explora sales</string>
-    <string name="device_manager_sessions_other_description">Per estar més segur, verifica les teves sessions i tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
-    <string name="device_manager_sessions_other_title">Altres sessions</string>
+    <string name="settings_sessions_other_description">Per estar més segur, verifica les teves sessions i tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
+    <string name="settings_sessions_other_title">Altres sessions</string>
     <string name="settings_sessions_list">Sessions</string>
     <string name="a11y_open_spaces">Obre la llista d\'espais</string>
     <string name="a11y_create_message">Crea un nou xat o sala</string>

@@ -231,7 +231,7 @@
     <string name="room_settings_set_main_address">Ustaw jako główny adres</string>
     <string name="settings_theme">Motyw</string>
     <string name="encryption_information_device_name">Nazwa publiczna</string>
-    <string name="device_manager_session_details_session_id">ID sesji</string>
+    <string name="encryption_information_device_id">ID sesji</string>
     <string name="encryption_export_export">Eksportuj</string>
     <string name="passphrase_enter_passphrase">Wprowadź hasło</string>
     <string name="passphrase_confirm_passphrase">Potwierdź hasło</string>
@@ -2697,8 +2697,8 @@
     <string name="location_share_loading_map_error">Nie można wczytać mapy.
 \nTen serwer macierzysty może nie być skonfigurowany do wyświetlania map.</string>
     <string name="a11y_open_settings">Otwórz ustawienia</string>
-    <string name="device_manager_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
-    <string name="device_manager_sessions_other_title">Inne sesje</string>
+    <string name="settings_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
+    <string name="settings_sessions_other_title">Inne sesje</string>
     <string name="settings_sessions_list">Sesje</string>
     <string name="a11y_open_spaces">Lista otwartych przestrzeni</string>
     <string name="a11y_create_message">Utwórz nową rozmowę lub pokój</string>

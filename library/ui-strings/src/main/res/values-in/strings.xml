@@ -301,7 +301,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Kesalahan dekripsi</string>
     <string name="encryption_information_device_name">Nama perangkat</string>
-    <string name="device_manager_session_details_session_id">ID Sesi</string>
+    <string name="encryption_information_device_id">ID Sesi</string>
     <string name="encryption_information_device_key">Kunci perangkat</string>
     <string name="encryption_export_e2e_room_keys">Ekspor kunci ruangan terenkripsi</string>
     <string name="encryption_export_room_keys">Ekspor ruangan kunci</string>
@@ -2553,8 +2553,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
     <string name="all_chats">Semua Obrolan</string>
     <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
-    <string name="device_manager_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
-    <string name="device_manager_sessions_other_title">Sesi lainnya</string>
+    <string name="settings_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
+    <string name="settings_sessions_other_title">Sesi lainnya</string>
     <string name="settings_sessions_list">Sesi</string>
     <string name="a11y_open_spaces">Buka daftar space</string>
     <string name="a11y_create_message">Buat percakapan atau ruangan baru</string>

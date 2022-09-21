@@ -2364,8 +2364,10 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
-    <string name="device_manager_sessions_other_title">Other sessions</string>
-    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
+    <!-- TODO rename to device_manager_sessions_other_title -->
+    <string name="settings_sessions_other_title">Other sessions</string>
+    <!-- TODO rename to device_manager_sessions_other_description -->
+    <string name="settings_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
@@ -3296,7 +3298,8 @@
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
-    <string name="device_manager_session_details_session_id">Session ID</string>
+    <!-- TODO rename to device_manager_session_details_session_id -->
+    <string name="encryption_information_device_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
 

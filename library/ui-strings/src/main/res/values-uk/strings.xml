@@ -354,7 +354,7 @@
     <string name="room_settings_unset_main_address">Зробити не основною адресою</string>
     <string name="encryption_information_decryption_error">Помилка розшифрування</string>
     <string name="encryption_information_device_name">Загальнодоступна назва</string>
-    <string name="device_manager_session_details_session_id">ID сеансу</string>
+    <string name="encryption_information_device_id">ID сеансу</string>
     <string name="encryption_information_device_key">Ключ сеансу</string>
     <string name="encryption_export_e2e_room_keys">Експортувати E2E ключі кімнати</string>
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
@@ -2701,8 +2701,8 @@
     <string name="a11y_open_settings">Відкрити налаштування</string>
     <string name="all_chats">Усі бесіди</string>
     <string name="device_manager_settings_active_sessions_show_all">Показати всі сеанси (V2, WIP)</string>
-    <string name="device_manager_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
-    <string name="device_manager_sessions_other_title">Інші сеанси</string>
+    <string name="settings_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
+    <string name="settings_sessions_other_title">Інші сеанси</string>
     <string name="settings_sessions_list">Сеанси</string>
     <string name="a11y_open_spaces">Відкрити список кімнат</string>
     <string name="a11y_create_message">Створити нову розмову або кімнату</string>
