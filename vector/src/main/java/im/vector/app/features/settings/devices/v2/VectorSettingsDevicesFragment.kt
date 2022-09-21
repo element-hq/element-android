@@ -135,7 +135,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.UNVERIFIED,
-                        includeCurrentSession = true
+                        excludeCurrentDevice = false
                 )
             }
         }
@@ -145,7 +145,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.INACTIVE,
-                        includeCurrentSession = true
+                        excludeCurrentDevice = false
                 )
             }
         }
@@ -290,7 +290,7 @@ class VectorSettingsDevicesFragment :
                 context = requireActivity(),
                 titleResourceId = R.string.device_manager_sessions_other_title,
                 defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
-                includeCurrentSession = false
+                excludeCurrentDevice = true
         )
     }
 }

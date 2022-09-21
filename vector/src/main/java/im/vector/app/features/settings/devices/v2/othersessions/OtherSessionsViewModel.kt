@@ -55,7 +55,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
         observeDevicesJob?.cancel()
         observeDevicesJob = getDeviceFullInfoListUseCase.execute(
                 filterType = currentFilter,
-                excludeCurrentDevice = !initialState.includeCurrentSession
+                excludeCurrentDevice = initialState.excludeCurrentDevice
         )
                 .execute { async ->
                     copy(

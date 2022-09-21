@@ -17,12 +17,14 @@
 package im.vector.app.features.settings.devices.v2.othersessions
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class OtherSessionsArgs(
+        @StringRes
         val titleResourceId: Int,
         val defaultFilter: DeviceManagerFilterType,
-        val includeCurrentSession: Boolean,
+        val excludeCurrentDevice: Boolean,
 ) : Parcelable

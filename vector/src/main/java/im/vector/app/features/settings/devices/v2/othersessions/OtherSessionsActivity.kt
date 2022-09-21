@@ -50,10 +50,10 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
                 @StringRes
                 titleResourceId: Int,
                 defaultFilter: DeviceManagerFilterType,
-                includeCurrentSession: Boolean,
+                excludeCurrentDevice: Boolean,
         ): Intent {
             return Intent(context, OtherSessionsActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, OtherSessionsArgs(titleResourceId, defaultFilter, includeCurrentSession))
+                putExtra(Mavericks.KEY_ARG, OtherSessionsArgs(titleResourceId, defaultFilter, excludeCurrentDevice))
             }
         }
     }

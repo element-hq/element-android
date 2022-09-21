@@ -32,10 +32,10 @@ class VectorSettingsDevicesViewNavigator @Inject constructor() {
             context: Context,
             titleResourceId: Int,
             defaultFilter: DeviceManagerFilterType,
-            includeCurrentSession: Boolean,
+            excludeCurrentDevice: Boolean,
     ) {
         context.startActivity(
-                OtherSessionsActivity.newIntent(context, titleResourceId, defaultFilter, includeCurrentSession)
+                OtherSessionsActivity.newIntent(context, titleResourceId, defaultFilter, excludeCurrentDevice)
         )
     }
 }

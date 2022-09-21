@@ -80,9 +80,9 @@ class VectorSettingsDevicesViewNavigatorTest {
         return intent
     }
 
-    private fun givenIntentForOtherSessions(titleResourceId: Int, defaultFilter: DeviceManagerFilterType, includeCurrentSession: Boolean): Intent {
+    private fun givenIntentForOtherSessions(titleResourceId: Int, defaultFilter: DeviceManagerFilterType, excludeCurrentDevice: Boolean): Intent {
         val intent = mockk<Intent>()
-        every { OtherSessionsActivity.newIntent(context.instance, titleResourceId, defaultFilter, includeCurrentSession) } returns intent
+        every { OtherSessionsActivity.newIntent(context.instance, titleResourceId, defaultFilter, excludeCurrentDevice) } returns intent
         return intent
     }
 }

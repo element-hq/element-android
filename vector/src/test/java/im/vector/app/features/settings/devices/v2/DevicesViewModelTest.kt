@@ -180,10 +180,8 @@ class DevicesViewModelTest {
      */
     private fun givenDeviceFullInfoList(): List<DeviceFullInfo> {
         val verifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
-        every { verifiedCryptoDeviceInfo.isVerified } returns true
         every { verifiedCryptoDeviceInfo.trustLevel } returns DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         val unverifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
-        every { unverifiedCryptoDeviceInfo.isVerified } returns false
         every { unverifiedCryptoDeviceInfo.trustLevel } returns DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
         val deviceFullInfo1 = DeviceFullInfo(
