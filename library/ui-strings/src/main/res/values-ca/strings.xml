@@ -2636,4 +2636,39 @@
     <string name="timeline_error_room_not_found">Aquesta sala no s\'ha trobat.
 \nTorna-ho a provar més tard.%s</string>
     <string name="invites_title">Invitacions</string>
+    <string name="home_empty_no_rooms_title">${app_name}
+\nHola, %s.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Nova visualització!</string>
+    <string name="onboarding_new_app_layout_button_try">Prova-ho</string>
+    <string name="onboarding_new_app_layout_spaces_title">Entra a espais</string>
+    <string name="home_empty_no_rooms_message">L\'aplicació de xats segurs tot en un. Per a equips, amics i organitzacions. Crea un xat o uneix-te a una sala existent per començar.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Pensa en tancar sessió de les sessions antigues (%1$d dia o més) que ja no utilitzis.</item>
+        <item quantity="other">Pensa en tancar sessió de les sessions antigues (%1$d dies o més) que ja no utilitzis.</item>
+    </plurals>
+    <string name="onboarding_new_app_layout_feedback_message">Prem la part superior dreta per veure l\'opció d\'enviar comentaris.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Envia comentaris</string>
+    <string name="home_empty_no_unreads_message">Aquí es mostraran els teus missatges no llegits, quan en tinguis.</string>
+    <string name="home_empty_no_unreads_title">Sense novetats.</string>
+    <string name="device_manager_unverified_sessions_description">Verifica les sessions o tanca\'n la sessió si no estan verificades.</string>
+    <string name="onboarding_new_app_layout_welcome_message">Per simplificar ${app_name}, les pestanyes ara son opcionals. Gestiona-les mitjançant el menú de la part superior dreta.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nsembla una mica buit.</string>
+    <string name="device_manager_inactive_sessions_title">Sessions inactives</string>
+    <string name="device_manager_unverified_sessions_title">Sessions no verificades</string>
+    <string name="device_manager_header_section_security_recommendations_description">Millora la seguretat del teu compte seguint aquestes recomanacions.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Recomanacions de seguretat</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Actiu fa %1$d dia (%2$s)</item>
+        <item quantity="other">Actiu fa més de %1$d dies (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Aquí és on apareixeran les teves sol·licituds i invitacions.</string>
+    <string name="invites_empty_title">Res de nou.</string>
+    <string name="onboarding_new_app_layout_spaces_message">Accedeix als teus espais (part inferior dreta) més ràpid i fàcilment.</string>
+    <string name="home_empty_space_no_rooms_message">Els espais són una nova manera d\'agrupar sales i gent. Afegeix una sala o crea\'n una de nova mitjançant el botó de la part inferior dreta.</string>
+    <string name="space_list_empty_message">Els espais són una nova manera d\'agrupar sales i gent. Crea\'n un per començar.</string>
+    <string name="space_list_empty_title">Cap espai, encara.</string>
+    <string name="a11y_collapse_space_children">Amaga els continguts de %s</string>
+    <string name="a11y_expand_space_children">Mostra el contingut de %s</string>
+    <string name="change_space">Canvia espai</string>
 </resources>
