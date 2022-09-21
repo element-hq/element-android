@@ -78,19 +78,24 @@ class OtherSessionsController @Inject constructor(
     }
 
     private fun calculateDescription(device: DeviceFullInfo, formattedLastActivityDate: String): String {
-        return if (device.isInactive) {
-            stringProvider.getQuantityString(
-                    R.plurals.device_manager_other_sessions_description_inactive,
-                    SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
-                    SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
-                    formattedLastActivityDate
-            )
-        } else if (device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted) {
-            stringProvider.getString(R.string.device_manager_other_sessions_description_verified, formattedLastActivityDate)
-        } else if (device.isCurrentDevice) {
-            stringProvider.getString(R.string.device_manager_other_sessions_description_unverified_current_session)
-        } else {
-            stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
+        return when {
+            device.isInactive -> {
+                stringProvider.getQuantityString(
+                        R.plurals.device_manager_other_sessions_description_inactive,
+                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                        formattedLastActivityDate
+                )
+            }
+            device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted -> {
+                stringProvider.getString(R.string.device_manager_other_sessions_description_verified, formattedLastActivityDate)
+            }
+            device.isCurrentDevice -> {
+                stringProvider.getString(R.string.device_manager_other_sessions_description_unverified_current_session)
+            }
+            else -> {
+                stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
+            }
         }
     }
 }

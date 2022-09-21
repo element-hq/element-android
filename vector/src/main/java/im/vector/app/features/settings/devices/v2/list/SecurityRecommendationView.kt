@@ -87,4 +87,9 @@ class SecurityRecommendationView @JvmOverloads constructor(
         setDescription(viewState.description)
         setCount(viewState.sessionsCount)
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        callback = null
+    }
 }

@@ -59,8 +59,7 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.otherSessionsToolbar.title = getString(args.titleResourceId)
-        setupToolbar(views.otherSessionsToolbar).allowBack()
+        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
         observeViewEvents()
         initFilterView()
     }

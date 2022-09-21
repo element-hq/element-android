@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -46,6 +47,7 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
     companion object {
         fun newIntent(
                 context: Context,
+                @StringRes
                 titleResourceId: Int,
                 defaultFilter: DeviceManagerFilterType,
                 includeCurrentSession: Boolean,
