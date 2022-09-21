@@ -24,8 +24,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 
@@ -49,7 +49,7 @@ class AccountCreationTest : InstrumentedTest {
     }
 
     @Test
-    fun simpleE2eTest() = runCryptoTest(context()) { cryptoTestHelper, _ ->
+    fun simpleE2eTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, _ ->
         cryptoTestHelper.doE2ETestWithAliceInARoom()
     }
 }

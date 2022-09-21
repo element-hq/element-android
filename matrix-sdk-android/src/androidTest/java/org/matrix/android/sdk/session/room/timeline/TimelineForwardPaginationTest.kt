@@ -56,7 +56,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
     @Ignore("Ignoring this test until it's fixed since it blocks the CI.")
     fun forwardPaginationTest() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSend = 90
-        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
+        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId

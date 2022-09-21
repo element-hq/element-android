@@ -226,7 +226,7 @@ class KeyShareTests : InstrumentedTest {
     @Test
     fun test_reShareToUnverifiedIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
-        val testData = cryptoTestHelper.doE2ETestWithAliceInARoom(true)
+        val testData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(true) }
         val aliceSession = testData.firstSession
         val roomFromAlice = aliceSession.getRoom(testData.roomId)!!
 

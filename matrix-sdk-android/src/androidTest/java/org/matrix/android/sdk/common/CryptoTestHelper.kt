@@ -70,34 +70,32 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     /**
      * @return alice session
      */
-    fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
-        return testHelper.launch {
-            val aliceSession = testHelper.createAccountSuspending(TestConstants.USER_ALICE, defaultSessionParams)
+    suspend fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
+        val aliceSession = testHelper.createAccountSuspending(TestConstants.USER_ALICE, defaultSessionParams)
 
-            val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
-                historyVisibility = roomHistoryVisibility
-                name = "MyRoom"
-            })
-            if (encryptedRoom) {
-                val room = aliceSession.getRoom(roomId)!!
-                waitFor(
-                        continueWhen = { room.onMain { getRoomSummaryLive() }.first { it.getOrNull()?.isEncrypted.orFalse() } },
-                        action = { room.roomCryptoService().enableEncryption() }
-                )
-            }
-            CryptoTestData(roomId, listOf(aliceSession))
+        val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+            historyVisibility = roomHistoryVisibility
+            name = "MyRoom"
+        })
+        if (encryptedRoom) {
+            val room = aliceSession.getRoom(roomId)!!
+            waitFor(
+                    continueWhen = { room.onMain { getRoomSummaryLive() }.first { it.getOrNull()?.isEncrypted.orFalse() } },
+                    action = { room.roomCryptoService().enableEncryption() }
+            )
         }
+        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
      * @return alice and bob sessions
      */
     fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
-        val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom, roomHistoryVisibility)
-        val aliceSession = cryptoTestData.firstSession
-        val aliceRoomId = cryptoTestData.roomId
-
         return testHelper.launch {
+            val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom, roomHistoryVisibility)
+            val aliceSession = cryptoTestData.firstSession
+            val aliceRoomId = cryptoTestData.roomId
+
             val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
             val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)

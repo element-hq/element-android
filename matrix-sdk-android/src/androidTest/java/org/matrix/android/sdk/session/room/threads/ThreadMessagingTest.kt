@@ -44,7 +44,7 @@ class ThreadMessagingTest : InstrumentedTest {
 
     @Test
     fun reply_in_thread_should_create_a_thread() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
+        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -175,7 +175,7 @@ class ThreadMessagingTest : InstrumentedTest {
 
     @Test
     fun reply_in_thread_to_timeline_message_multiple_times() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
+        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
