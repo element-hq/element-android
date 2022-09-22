@@ -137,28 +137,28 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         // Alice sends a message
-        testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
             // ensure bob got it
             ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
         }
 
         // Bob send 3 messages
-        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
             // ensure alice got it
             ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
         }
 
-        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
             // ensure alice got it
             ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
         }
-        testHelper.sendTextMessageSuspending(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
             // ensure alice got it
             ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
         }
 
         // Alice sends a message
-        testHelper.sendTextMessageSuspending(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
             // ensure bob got it
             ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
         }

@@ -68,9 +68,9 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val roomAlice = aliceSession.roomService().getRoom(roomId)!!
 
         // send some messages
-        val withSession1 = commonTestHelper.sendTextMessageSuspending(roomAlice, "Hello", 1)
+        val withSession1 = commonTestHelper.sendTextMessage(roomAlice, "Hello", 1)
         aliceSession.cryptoService().discardOutboundSession(roomId)
-        val withSession2 = commonTestHelper.sendTextMessageSuspending(roomAlice, "World", 1)
+        val withSession2 = commonTestHelper.sendTextMessage(roomAlice, "World", 1)
 
         // Create bob account
         val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(withInitialSync = true))
@@ -94,7 +94,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         aliceSession.cryptoService().enableShareKeyOnInvite(true)
 
         // let's add a new message first
-        val afterFlagOn = commonTestHelper.sendTextMessageSuspending(roomAlice, "After", 1)
+        val afterFlagOn = commonTestHelper.sendTextMessage(roomAlice, "After", 1)
 
         // Worth nothing to check that the session was rotated
         Assert.assertNotEquals(
@@ -178,8 +178,8 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     }
 
     private suspend fun commonAliceAndBobSendMessages(commonTestHelper: CommonTestHelper, aliceSession: Session, testData: CryptoTestData, bobSession: Session): Triple<List<TimelineEvent>, List<TimelineEvent>, Session> {
-        val fromAliceNotSharable = commonTestHelper.sendTextMessageSuspending(aliceSession.getRoom(testData.roomId)!!, "Hello from alice", 1)
-        val fromBobSharable = commonTestHelper.sendTextMessageSuspending(bobSession.getRoom(testData.roomId)!!, "Hello from bob", 1)
+        val fromAliceNotSharable = commonTestHelper.sendTextMessage(aliceSession.getRoom(testData.roomId)!!, "Hello from alice", 1)
+        val fromBobSharable = commonTestHelper.sendTextMessage(bobSession.getRoom(testData.roomId)!!, "Hello from bob", 1)
 
         // Now let bob invite Sam
         // Invite a new user
@@ -210,9 +210,9 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val roomAlice = aliceSession.roomService().getRoom(roomId)!!
 
         // send some messages
-        val notSharableMessage = commonTestHelper.sendTextMessageSuspending(roomAlice, "Hello", 1)
+        val notSharableMessage = commonTestHelper.sendTextMessage(roomAlice, "Hello", 1)
         aliceSession.cryptoService().enableShareKeyOnInvite(true)
-        val sharableMessage = commonTestHelper.sendTextMessageSuspending(roomAlice, "World", 1)
+        val sharableMessage = commonTestHelper.sendTextMessage(roomAlice, "World", 1)
 
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val keysBackupService = aliceSession.cryptoService().keysBackupService()

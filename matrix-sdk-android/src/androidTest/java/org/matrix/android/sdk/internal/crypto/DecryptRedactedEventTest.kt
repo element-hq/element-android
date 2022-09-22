@@ -41,7 +41,7 @@ class DecryptRedactedEventTest : InstrumentedTest {
         val bobSession = testData.secondSession!!
 
         val roomALicePOV = aliceSession.getRoom(e2eRoomID)!!
-        val timelineEvent = testHelper.sendTextMessageSuspending(roomALicePOV, "Hello", 1).first()
+        val timelineEvent = testHelper.sendTextMessage(roomALicePOV, "Hello", 1).first()
         val redactionReason = "Wrong Room"
         roomALicePOV.sendService().redactEvent(timelineEvent.root, redactionReason)
 

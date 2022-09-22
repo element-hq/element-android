@@ -51,7 +51,7 @@ class ReplayAttackTest : InstrumentedTest {
         assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
 
         // Alice will send a message
-        val sentEvents = testHelper.sendTextMessageSuspending(aliceRoomPOV, "Hello I will be decrypted twice", 1)
+        val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
         assertEquals(1, sentEvents.size)
 
         val fakeEventId = sentEvents[0].eventId + "_fake"
@@ -87,7 +87,7 @@ class ReplayAttackTest : InstrumentedTest {
         assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
 
         // Alice will send a message
-        val sentEvents = testHelper.sendTextMessageSuspending(aliceRoomPOV, "Hello I will be decrypted twice", 1)
+        val sentEvents = testHelper.sendTextMessage(aliceRoomPOV, "Hello I will be decrypted twice", 1)
         Assert.assertTrue("Message should be sent", sentEvents.size == 1)
         assertEquals(sentEvents.size, 1)
 

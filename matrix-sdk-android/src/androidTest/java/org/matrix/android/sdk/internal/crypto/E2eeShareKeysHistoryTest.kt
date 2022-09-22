@@ -356,7 +356,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     }
 
     private suspend fun sendMessageInRoom(aliceRoomPOV: Room, text: String, testHelper: CommonTestHelper): String? {
-        return testHelper.sendTextMessageSuspending(aliceRoomPOV, text, 1).firstOrNull()?.eventId
+        return testHelper.sendTextMessage(aliceRoomPOV, text, 1).firstOrNull()?.eventId
     }
 
     private suspend fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String, testHelper: CommonTestHelper) {

@@ -77,7 +77,7 @@ class WithHeldTests : InstrumentedTest {
         // Alice decide to not send to unverified sessions
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(true)
 
-        val timelineEvent = testHelper.sendTextMessageSuspending(roomAlicePOV, "Hello Bob", 1).first()
+        val timelineEvent = testHelper.sendTextMessage(roomAlicePOV, "Hello Bob", 1).first()
 
         // await for bob unverified session to get the message
         testHelper.retryPeriodically {
@@ -120,7 +120,7 @@ class WithHeldTests : InstrumentedTest {
         // enable back sending to unverified
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(false)
 
-        val secondEvent = testHelper.sendTextMessageSuspending(roomAlicePOV, "Verify your device!!", 1).first()
+        val secondEvent = testHelper.sendTextMessage(roomAlicePOV, "Verify your device!!", 1).first()
 
         testHelper.retryPeriodically {
             val ev = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(secondEvent.eventId)
@@ -164,7 +164,7 @@ class WithHeldTests : InstrumentedTest {
 
         val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
 
-        val eventId = testHelper.sendTextMessageSuspending(roomAlicePov, "first message", 1).first().eventId
+        val eventId = testHelper.sendTextMessage(roomAlicePov, "first message", 1).first().eventId
 
         // await for bob session to get the message
         testHelper.retryPeriodically {
@@ -198,7 +198,7 @@ class WithHeldTests : InstrumentedTest {
         aliceInterceptor.clearRules()
         val bobSecondSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(withInitialSync = true))
         // send a second message
-        val secondMessageId = testHelper.sendTextMessageSuspending(roomAlicePov, "second message", 1).first().eventId
+        val secondMessageId = testHelper.sendTextMessage(roomAlicePov, "second message", 1).first().eventId
 
         // Check that the
         // await for bob SecondSession session to get the message
@@ -225,7 +225,7 @@ class WithHeldTests : InstrumentedTest {
 
         val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
 
-        val eventId = testHelper.sendTextMessageSuspending(roomAlicePov, "first message", 1).first().eventId
+        val eventId = testHelper.sendTextMessage(roomAlicePov, "first message", 1).first().eventId
 
         testHelper.signOutAndClose(bobSession)
 

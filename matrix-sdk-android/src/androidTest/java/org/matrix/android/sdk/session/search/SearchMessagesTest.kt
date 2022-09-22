@@ -79,7 +79,7 @@ class SearchMessagesTest : InstrumentedTest {
         val aliceRoomId = cryptoTestData.roomId
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        commonTestHelper.sendTextMessageSuspending(
+        commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
                 2

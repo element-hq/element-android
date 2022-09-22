@@ -80,7 +80,7 @@ class PreShareKeysTest : InstrumentedTest {
         assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
-        val sentEvent = testHelper.sendTextMessageSuspending(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
+        val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
 
         assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
         testHelper.retryPeriodically {

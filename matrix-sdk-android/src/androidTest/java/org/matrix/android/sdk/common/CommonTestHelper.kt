@@ -19,7 +19,6 @@ package org.matrix.android.sdk.common
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +52,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.api.session.sync.SyncState
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CancellationException
@@ -162,22 +160,11 @@ class CommonTestHelper internal constructor(context: Context) {
      *
      * @param session the session to sync
      */
-    fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
-        waitWithLatch(timeout) { latch ->
-            session.clearCache()
-            val syncLiveData = session.syncService().getSyncStateLive()
-            val syncObserver = object : Observer<SyncState> {
-                override fun onChanged(t: SyncState?) {
-                    if (session.syncService().hasAlreadySynced()) {
-                        Timber.v("Clear cache and synced")
-                        syncLiveData.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            syncLiveData.observeForever(syncObserver)
-            session.syncService().startSync(true)
-        }
+    suspend fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
+        session.clearCache()
+        syncSession(session, timeout)
+        session.syncService().getSyncStateLive().first(timeout) { session.syncService().hasAlreadySynced() }
+        Timber.v("Clear cache and synced")
     }
 
     /**
@@ -187,11 +174,7 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param message the message to send
      * @param nbOfMessages the number of time the message will be sent
      */
-    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
-        return runBlocking { sendTextMessageSuspending(room, message, nbOfMessages, timeout) }
-    }
-
-    suspend fun sendTextMessageSuspending(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+    suspend fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, nbOfMessages, timeout)
