@@ -124,11 +124,11 @@ Translations are handled using an external tool: [Weblate](https://translate.ele
 
 #### Adding new string
 
-When adding new string resources, please only add new entries in the file `value/strings.xml`. Translations will be added later by the community of translators using Weblate.
+When adding new string resources, please only add new entries in the file `values/strings.xml` ([this file](./library/ui-strings/src/main/res/values/strings.xml)). Translations will be added later by the community of translators using Weblate.
 
-The file `value/strings.xml` must only contain American English (U. S. English) values, as this is the default language of the Android operating system. So for instance, please use "color" instead of "colour". Element Android will still use the language set on the system by the user, like any other Android applications which provide translations. The system language can be any other English language variants, or any other languages. Note that this is also possible to override the system language using the Element Android in-app language settings.
+The file `values/strings.xml` must only contain American English (U. S. English) values, as this is the default language of the Android operating system. So for instance, please use "color" instead of "colour". Element Android will still use the language set on the system by the user, like any other Android applications which provide translations. The system language can be any other English language variants, or any other languages. Note that this is also possible to override the system language using the Element Android in-app language settings.
 
-New strings can be added anywhere in the file `value/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
+New strings can be added anywhere in the file `values/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
 
 Do not hesitate to use plurals when appropriate.
 
