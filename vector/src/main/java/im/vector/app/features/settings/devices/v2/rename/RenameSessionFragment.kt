@@ -40,8 +40,6 @@ class RenameSessionFragment :
 
     @Inject lateinit var viewNavigator: RenameSessionViewNavigator
 
-    private var renameEditTextInitialized = false
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSessionRenameBinding {
         return FragmentSessionRenameBinding.inflate(inflater, container, false)
     }
@@ -52,6 +50,7 @@ class RenameSessionFragment :
         initToolbar()
         initEditText()
         initSaveButton()
+        initWithLastEditedName()
     }
 
     private fun initToolbar() {
@@ -72,9 +71,17 @@ class RenameSessionFragment :
         }
     }
 
+    private fun initWithLastEditedName() {
+        viewModel.handle(RenameSessionAction.InitWithLastEditedName)
+    }
+
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
+                is RenameSessionViewEvent.Initialized -> {
+                    views.renameSessionEditText.setText(it.deviceName)
+                    views.renameSessionEditText.setSelection(views.renameSessionEditText.length())
+                }
                 is RenameSessionViewEvent.SessionRenamed -> {
                     viewNavigator.goBack(requireActivity())
                 }
@@ -86,11 +93,6 @@ class RenameSessionFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (renameEditTextInitialized.not()) {
-            views.renameSessionEditText.setText(state.editedDeviceName)
-            views.renameSessionEditText.setSelection(views.renameSessionEditText.length())
-            renameEditTextInitialized = true
-        }
         views.renameSessionSave.isEnabled = state.editedDeviceName.isNotEmpty()
     }
 }

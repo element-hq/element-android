@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.rename
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class RenameSessionViewEvent : VectorViewEvents {
+    data class Initialized(val deviceName: String) : RenameSessionViewEvent()
     object SessionRenamed : RenameSessionViewEvent()
     data class Failure(val throwable: Throwable) : RenameSessionViewEvent()
 }

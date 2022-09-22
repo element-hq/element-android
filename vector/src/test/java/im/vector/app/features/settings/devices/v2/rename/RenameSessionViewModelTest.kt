@@ -51,20 +51,27 @@ class RenameSessionViewModelTest {
     )
 
     @Test
-    fun `given the viewModel has been initialized then viewState is updated with current session name`() {
+    fun `given the original device name has not been retrieved when handling init with last edited name action then view state and view events are updated`() {
         // Given
         givenSessionWithName(A_SESSION_NAME)
+        val action = RenameSessionAction.InitWithLastEditedName
         val expectedState = RenameSessionViewState(
                 deviceId = A_SESSION_ID,
                 editedDeviceName = A_SESSION_NAME,
         )
+        val expectedEvent = RenameSessionViewEvent.Initialized(
+                deviceName = A_SESSION_NAME,
+        )
+        val viewModel = createViewModel()
+        viewModel.hasRetrievedOriginalDeviceName = false
 
         // When
-        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(action)
 
         // Then
-        viewModel.test()
-                .assertLatestState { state -> state == expectedState }
+        viewModelTest.assertLatestState { state -> state == expectedState }
+                .assertEvent { event -> event == expectedEvent }
                 .finish()
         verify {
             getDeviceFullInfoUseCase.execute(A_SESSION_ID)
@@ -72,17 +79,44 @@ class RenameSessionViewModelTest {
     }
 
     @Test
+    fun `given the original device name has been retrieved when handling init with last edited name action then view state and view events are updated`() {
+        // Given
+        val action = RenameSessionAction.InitWithLastEditedName
+        val expectedState = RenameSessionViewState(
+                deviceId = A_SESSION_ID,
+                editedDeviceName = AN_EDITED_SESSION_NAME,
+        )
+        val expectedEvent = RenameSessionViewEvent.Initialized(
+                deviceName = AN_EDITED_SESSION_NAME,
+        )
+        val viewModel = createViewModel()
+        viewModel.handle(RenameSessionAction.EditLocally(AN_EDITED_SESSION_NAME))
+        viewModel.hasRetrievedOriginalDeviceName = true
+
+        // When
+        val viewModelTest = viewModel.test()
+        viewModel.handle(action)
+
+        // Then
+        viewModelTest.assertLatestState { state -> state == expectedState }
+                .assertEvent { event -> event == expectedEvent }
+                .finish()
+        verify(inverse = true) {
+            getDeviceFullInfoUseCase.execute(A_SESSION_ID)
+        }
+    }
+
+    @Test
     fun `given a new edited name when handling edit name locally action then view state is updated accordingly`() {
         // Given
-        givenSessionWithName(A_SESSION_NAME)
         val action = RenameSessionAction.EditLocally(AN_EDITED_SESSION_NAME)
         val expectedState = RenameSessionViewState(
                 deviceId = A_SESSION_ID,
                 editedDeviceName = AN_EDITED_SESSION_NAME,
         )
+        val viewModel = createViewModel()
 
         // When
-        val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
         viewModel.handle(action)
 
@@ -95,12 +129,11 @@ class RenameSessionViewModelTest {
     @Test
     fun `given current edited name when handling save modifications action with success then correct view event is posted`() {
         // Given
-        givenSessionWithName(A_SESSION_NAME)
-        coEvery { renameSessionUseCase.execute(A_SESSION_ID, A_SESSION_NAME) } returns Result.success(Unit)
+        coEvery { renameSessionUseCase.execute(A_SESSION_ID, any()) } returns Result.success(Unit)
         val action = RenameSessionAction.SaveModifications
+        val viewModel = createViewModel()
 
         // When
-        val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
         viewModel.handle(action)
 
@@ -113,13 +146,12 @@ class RenameSessionViewModelTest {
     @Test
     fun `given current edited name when handling save modifications action with error then correct view event is posted`() {
         // Given
-        givenSessionWithName(A_SESSION_NAME)
         val error = Exception()
-        coEvery { renameSessionUseCase.execute(A_SESSION_ID, A_SESSION_NAME) } returns Result.failure(error)
+        coEvery { renameSessionUseCase.execute(A_SESSION_ID, any()) } returns Result.failure(error)
         val action = RenameSessionAction.SaveModifications
+        val viewModel = createViewModel()
 
         // When
-        val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
         viewModel.handle(action)
 

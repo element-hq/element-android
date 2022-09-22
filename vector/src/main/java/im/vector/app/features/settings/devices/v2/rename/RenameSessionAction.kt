@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.rename
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RenameSessionAction : VectorViewModelAction {
+    object InitWithLastEditedName : RenameSessionAction()
     object SaveModifications : RenameSessionAction()
     data class EditLocally(val editedName: String) : RenameSessionAction()
 }
