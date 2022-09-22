@@ -612,7 +612,7 @@
     <string name="room_settings_labs_warning_message">Need on alles katsejärgus olevad funktsionaalsused. Ole kasutamisel ettevaatlik.</string>
     <string name="encryption_information_decryption_error">Dekrüptimise viga</string>
     <string name="encryption_information_device_name">Avalik nimi</string>
-    <string name="encryption_information_device_id">Sessiooni tunnus</string>
+    <string name="device_manager_session_details_session_id">Sessiooni tunnus</string>
     <string name="encryption_information_device_key">Sessiooni võti</string>
     <string name="encryption_export_e2e_room_keys">Ekspordi jututubade läbiva krüptimise võtmed</string>
     <string name="encryption_export_room_keys">Ekspordi jututoa võtmed</string>
@@ -2592,8 +2592,8 @@
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
     <string name="device_manager_settings_active_sessions_show_all">Näita kõiki sessioone (V2, WIP)</string>
-    <string name="settings_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
-    <string name="settings_sessions_other_title">Muud sessioonid</string>
+    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="device_manager_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessionid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
     <string name="a11y_create_message">Alusta uut vestlust või loo uus jututuba</string>
@@ -2613,11 +2613,8 @@
     <string name="device_manager_other_sessions_description_unverified">Verifitseerimata · Viimati kasutusel %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Verifitseeritud · Viimati kasutusel %1$s</string>
     <string name="device_manager_other_sessions_view_all">Näita kõiki (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Praegune sessioon</string>
     <string name="device_manager_view_details">Vaata lisateavet</string>
     <string name="device_manager_verify_session">Verifitseeri sessioon</string>
-    <string name="device_manager_verification_status_detail_unverified">Turvalise sõnumivahetuse nimel palun verifitseeri oma praegune sessioon.</string>
-    <string name="device_manager_verification_status_detail_verified">Sinu praegune sessioon on valmis turvaliseks sõnumivahetuseks.</string>
     <string name="device_manager_verification_status_unverified">Verifitseerimata sessioon</string>
     <string name="device_manager_verification_status_verified">Verifitseeritud sessioon</string>
     <string name="a11y_device_manager_device_type_unknown">Tundmatu seadme tüüp</string>
@@ -2627,4 +2624,39 @@
     <string name="timeline_error_room_not_found">Vabandust, aga seda jututuba ei õnnestu leida.
 \nPalun proovi hiljem uuesti.%s</string>
     <string name="invites_title">Kutsed</string>
+    <string name="invites_empty_title">Uut teavet ei leidu.</string>
+    <string name="space_list_empty_message">Kogukonnad on viis jututubade ja inimeste ühendamiseks. Alustamiseks võid luua uue kogukonna.</string>
+    <string name="space_list_empty_title">Siin veel pole kogukondi.</string>
+    <string name="change_space">Vaheta kogukonda</string>
+    <string name="onboarding_new_app_layout_button_try">Proovi nüüd</string>
+    <string name="onboarding_new_app_layout_feedback_message">Tagasiside valikute nägemiseks klõpsi ülal paremal.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Jaga tagasisidet</string>
+    <string name="onboarding_new_app_layout_spaces_message">Kogukonnad leiad alt paremalt kiiremini ja lihtsamini, kui varem.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Ligipääs kogukondadele</string>
+    <string name="onboarding_new_app_layout_welcome_message">Et ${app_name}\'i kasutamine oleks lihtsam, siis kaardid on nüüd valikulised. Neid saad hallata ülal paremal avanevast menüüst.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Meie liidesel on nüüd uus vaade!</string>
+    <string name="home_empty_no_unreads_message">Kui sul on lugemata sõnumeid, siis nad on siit leitavad.</string>
+    <string name="home_empty_no_unreads_title">Hetkel siin polegi midagi põnevat.</string>
+    <string name="home_empty_no_rooms_message">Paljude võimalustega turvaline suhtlusrakendus sõprade, kogukondade ja tiimide jaoks. Alustamiseks loo mõni uus vestlus või liitu olemasoleva jututoaga.</string>
+    <string name="home_empty_no_rooms_title">%s,
+\ntere tulemast ${app_name} kasutajaks.</string>
+    <string name="home_empty_space_no_rooms_message">Kogukonnad on võimalus jututubade ja inimeste ühendamiseks. Kasutades all paremal olevat nuppu lisa mõni olemasolev jututuba või loo uus.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\ntundub olema tühjavõitu.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Logi välja sellisest vanast sessioonist (vanem kui %1$d päev), mida sa enam ei kasuta.</item>
+        <item quantity="other">Logi välja sellistest vanadest sessioonidest (vanemad kui %1$d päeva), mida sa enam ei kasuta.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Mitteaktiivsed sessioonid</string>
+    <string name="device_manager_unverified_sessions_description">Logi verifitseerimata sessioonidest välja või verifitseeri nad.</string>
+    <string name="device_manager_unverified_sessions_title">Verifitseerimata sessioonid</string>
+    <string name="device_manager_header_section_security_recommendations_description">Kui järgid neid soovitusi, siis sa parandad oma kasutajakonto turvalisust.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Turvalisusega seotud soovitused</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Pole olnud kasutusel %1$d+ päeva (%2$s)</item>
+        <item quantity="other">Pole olnud kasutusel %1$d+ päeva (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Siin saavad olema sinu tulevased päringud ja kutsed.</string>
+    <string name="a11y_collapse_space_children">Ahenda %s alamkogukonnad</string>
+    <string name="a11y_expand_space_children">Näita %s alamkogukondi</string>
 </resources>

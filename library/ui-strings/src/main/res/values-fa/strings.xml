@@ -678,7 +678,7 @@
     <string name="room_settings_labs_warning_message">این‌ها ویژگی‌های آزمایشی‌ای هستند که ممکن است به روش‌های نامنتظره‌ای حراب شوندا. با احتیاط استفاده کنید.</string>
     <string name="room_settings_set_main_address">تنظیم به عنوان نشانی اصلی</string>
     <string name="encryption_information_device_name">نام عمومی</string>
-    <string name="encryption_information_device_id">شناسهٔ نشست</string>
+    <string name="device_manager_session_details_session_id">شناسهٔ نشست</string>
     <string name="encryption_information_device_key">کلید نشست</string>
     <string name="encryption_export_e2e_room_keys">برون‌ریزی کلید‌های اتاق‌های سرتاسری</string>
     <string name="encryption_export_room_keys">برون‌ریزی کلید‌های اتاق‌ها</string>
@@ -2601,8 +2601,8 @@
     <string name="a11y_open_settings">گشودن تنظیمات</string>
     <string name="all_chats">تمامی گپ‌ها</string>
     <string name="device_manager_settings_active_sessions_show_all">نمایش تمامی نشست‌ها (ن۲، دح‌ت)</string>
-    <string name="settings_sessions_other_description">برای امنیت بیش‌تر، نشست‌هایتان را تأیید و از هر نشستی که تشخیصش نمی‌دهید یا دیگر استفاده نمی‌کنید خارج شوید.</string>
-    <string name="settings_sessions_other_title">دیگر نشست‌ها</string>
+    <string name="device_manager_sessions_other_description">برای امنیت بیش‌تر، نشست‌هایتان را تأیید و از هر نشستی که تشخیصش نمی‌دهید یا دیگر استفاده نمی‌کنید خارج شوید.</string>
+    <string name="device_manager_sessions_other_title">دیگر نشست‌ها</string>
     <string name="settings_sessions_list">نشست‌ها</string>
     <string name="a11y_open_spaces">گشودن سیاههٔ فضاها</string>
     <string name="a11y_create_message">ایجاد اتاق یا گفت‌وگویی جدید</string>
@@ -2622,11 +2622,8 @@
     <string name="device_manager_other_sessions_description_unverified">تأیید نشده · آخرین فعّالیت %1$s</string>
     <string name="device_manager_other_sessions_description_verified">تأیید شده · آخرین فعّالیت %1$s</string>
     <string name="device_manager_other_sessions_view_all">دیدن همه (%1$d)</string>
-    <string name="device_manager_header_section_current_session">نشست کنونی</string>
     <string name="device_manager_view_details">دیدن جزییات</string>
     <string name="device_manager_verify_session">تأیید نشست</string>
-    <string name="device_manager_verification_status_detail_unverified">نشست کنونیتان را برای پیام‌رسانی امن بهبود یافته تأیید کنید.</string>
-    <string name="device_manager_verification_status_detail_verified">نشست کنونیتان برای پیام‌رسانی امن آماده است.</string>
     <string name="device_manager_verification_status_unverified">نشست تأیید نشده</string>
     <string name="device_manager_verification_status_verified">نشست تأیید شده</string>
     <string name="a11y_device_manager_device_type_unknown">گونهٔ افزاره ناشناخته</string>
@@ -2636,4 +2633,71 @@
     <string name="timeline_error_room_not_found">متأسفانه این اتاق پیدا نشد.
 \nلطفاً بعداً دوباره تلاش کنید.%s</string>
     <string name="invites_title">دعوت‌ها</string>
+    <string name="onboarding_new_app_layout_feedback_message">زدن بالا سمت چپ برای دیدن گزینهٔ بازخورد.</string>
+    <string name="onboarding_new_app_layout_spaces_message">دسترسی به فضاهایتان (پایین سمت چپ) سریع‌تر و ساده‌تر از همیشه.</string>
+    <string name="onboarding_new_app_layout_welcome_message">برای ساده‌سازی ${app_name} زبانه‌ها اختیاری شده‌اند. مدیریت با استفاده از فهرست بالا سمت چپ.</string>
+    <string name="home_empty_no_unreads_message">این جایی است که پیام‌های ناخوانده‌تان در صورت وجود ظاهر خواهند شد.</string>
+    <string name="home_empty_no_rooms_message">کارهٔ گپ امن یکپارچه برای گروه‌ها، دوستان و سازمان‌ها. برای آغاز، گپی ساخته یا به اتاقی بپیوندید.</string>
+    <string name="home_empty_space_no_rooms_message">فضاها راهی جدید برای گروه‌بندی اتاق‌ها و افراد است. با استفاده از دکمهٔ پایین سمت چپ فضایی ساخته یا اتاقی را بیفزایید.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nکمی خالی به نظر می‌رسد.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">در نظر گرفتن خروج از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
+        <item quantity="other">در نظر گرفتن خروج از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
+    </plurals>
+    <string name="device_manager_unverified_sessions_description">تأیید یا خروج از نشست‌های تأییدنشده.</string>
+    <string name="device_manager_header_section_security_recommendations_description">بهبود امنیت حسابتان با پیروی از این توصیه‌ها.</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">غیرفعّال برای بیش از %1$d روز (%2$s)</item>
+        <item quantity="other">غیرفعّال برای بیش از %1$d روز (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">این جایی است که درخواست‌ها و دعوت‌های جدیدتان خواهند بود.</string>
+    <string name="space_list_empty_message">فضاها راهی جدید برای گروه‌بندی اتاق‌ها و افراد است. برای آغاز، فضایی بسازید.</string>
+    <string name="onboarding_new_app_layout_button_try">بیازماییدش</string>
+    <string name="onboarding_new_app_layout_feedback_title">دادن بازخورد</string>
+    <string name="onboarding_new_app_layout_spaces_title">دسترسی به فضاها</string>
+    <string name="onboarding_new_app_layout_welcome_title">به نمایی جدید خوش آمدید!</string>
+    <string name="home_empty_no_unreads_title">چیزی برای گزارش نیست.</string>
+    <string name="home_empty_no_rooms_title">%s
+\nبه ${app_name} خوش آمدی.</string>
+    <string name="device_manager_inactive_sessions_title">نشست‌های غیرفعّال</string>
+    <string name="device_manager_unverified_sessions_title">نشست‌های تأیید نشده</string>
+    <string name="device_manager_header_section_security_recommendations_title">توصیه‌های امنیتی</string>
+    <string name="invites_empty_title">چیز جدیدی نیست.</string>
+    <string name="space_list_empty_title">هنوز فضایی وجود ندارد.</string>
+    <string name="a11y_collapse_space_children">جمع کردن فرزندان %s</string>
+    <string name="a11y_expand_space_children">گسترش فرزندان %s</string>
+    <string name="change_space">تغییر فضا</string>
+    <string name="device_manager_session_details_device_ip_address">نشانی آی‌پی</string>
+    <string name="device_manager_session_details_session_last_activity">واپسین فعّالیت</string>
+    <string name="device_manager_session_details_session_name">نام نشست</string>
+    <string name="device_manager_session_details_description">اطّلاعات برنامه، افزاره و فعّالیت.</string>
+    <string name="device_manager_session_details_title">جزییات نشست</string>
+    <string name="device_manager_other_sessions_clear_filter">پاک‌سازی پالایه</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">هیچ نشست غیرفعّالی پیدا نشد.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">هیچ نشست تأیید نشده‌ای پیدا نشد.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">هیچ نشست تأیید نشده‌ای پیدا نشد.</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">غیرفعّال</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">تأیید نشده</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">برای بهترین امنیت، از هرنشستی که تشخیصش نمی‌دهید یا دیگر استفاده نمی‌کنید، خارج شوید.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">تأیید شده</string>
+    <string name="a11y_device_manager_filter">پالایه</string>
+    <string name="device_manager_filter_option_inactive">غیرفعّال</string>
+    <string name="device_manager_filter_option_unverified_description">نا آماده برای پیام‌رسانی امن</string>
+    <string name="device_manager_filter_option_unverified">تأیید نشده</string>
+    <string name="device_manager_filter_option_verified_description">آمادهٔ پیام‌رسانی امن</string>
+    <string name="device_manager_filter_option_verified">تأیید شده</string>
+    <string name="device_manager_filter_option_all_sessions">تمامی نشست‌ها</string>
+    <string name="device_manager_filter_bottom_sheet_title">پالایه</string>
+    <string name="device_manager_session_last_activity">آخرین فعّالیت %1$s</string>
+    <string name="device_manager_device_title">افزاره</string>
+    <string name="device_manager_session_title">نشست</string>
+    <string name="device_manager_current_session_title">نشست کنونی</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">برای بهترین امنیت و اطمینان این نشست را تأیید کرده یا خارج شوید.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">تأیید نشست کنونیتان برای پیام‌رسانی امن.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">این نشست برای پیام‌رسانی امن آماده است.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">نشست کنونیتان برای پیام‌رسانی امن آماده است.</string>
+    <string name="labs_enable_deferred_dm_summary">ایجاد پیام خصوصی فقط در نخستین پیام</string>
+    <string name="labs_enable_new_app_layout_summary">المنتی ساده شده با زبانه‌های انتخابی</string>
+    <string name="labs_enable_new_app_layout_title">به کار انداختن چینش جدید</string>
 </resources>

@@ -52,8 +52,8 @@ class DevicesViewModelTest {
                 fakeActiveSessionHolder.instance,
                 getCurrentSessionCrossSigningInfoUseCase,
                 getDeviceFullInfoListUseCase,
-                refreshDevicesUseCase,
                 refreshDevicesOnCryptoDevicesChangeUseCase,
+                refreshDevicesUseCase,
         )
     }
 
@@ -181,7 +181,7 @@ class DevicesViewModelTest {
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)
-        every { getDeviceFullInfoListUseCase.execute() } returns deviceFullInfoListFlow
+        every { getDeviceFullInfoListUseCase.execute(any(), any()) } returns deviceFullInfoListFlow
         return deviceFullInfoList
     }
 

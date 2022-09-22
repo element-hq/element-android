@@ -37,7 +37,8 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.features.settings.devices.v2.list.OtherSessionsController
+import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
+import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
@@ -48,7 +49,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class VectorSettingsDevicesFragment :
-        VectorBaseFragment<FragmentSettingsDevicesBinding>() {
+        VectorBaseFragment<FragmentSettingsDevicesBinding>(),
+        OtherSessionsView.Callback {
 
     @Inject lateinit var viewNavigator: VectorSettingsDevicesViewNavigator
 
@@ -120,11 +122,7 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initOtherSessionsView() {
-        views.deviceListOtherSessions.setCallback(object : OtherSessionsController.Callback {
-            override fun onItemClicked(deviceId: String) {
-                navigateToSessionOverview(deviceId)
-            }
-        })
+        views.deviceListOtherSessions.callback = this
     }
 
     override fun onDestroyView() {
@@ -201,7 +199,11 @@ class VectorSettingsDevicesFragment :
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
             views.deviceListOtherSessions.isVisible = true
-            views.deviceListOtherSessions.render(otherDevices)
+            views.deviceListOtherSessions.render(
+                    devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
+                    totalNumberOfDevices = otherDevices.size,
+                    showViewAll = otherDevices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
+            )
         }
     }
 
@@ -251,5 +253,13 @@ class VectorSettingsDevicesFragment :
 
     private fun handleLoadingStatus(isLoading: Boolean) {
         views.waitingView.root.isVisible = isLoading
+    }
+
+    override fun onOtherSessionClicked(deviceId: String) {
+        navigateToSessionOverview(deviceId)
+    }
+
+    override fun onViewAllOtherSessionsClicked() {
+        viewNavigator.navigateToOtherSessions(requireActivity())
     }
 }

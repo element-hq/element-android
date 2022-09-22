@@ -16,6 +16,7 @@
 
 package im.vector.app.test.fakes
 
+import android.content.ClipboardManager
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -73,5 +74,11 @@ class FakeContext(
 
     fun givenStartActivity(intent: Intent) {
         every { instance.startActivity(intent) } just runs
+    }
+
+    fun givenClipboardManager(): FakeClipboardManager {
+        val fakeClipboardManager = FakeClipboardManager()
+        givenService(Context.CLIPBOARD_SERVICE, ClipboardManager::class.java, fakeClipboardManager.instance)
+        return fakeClipboardManager
     }
 }

@@ -50,7 +50,7 @@ import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot(
-        private val labsPreferences: LabFeaturesPreferences = LabFeaturesPreferences(false)
+        private val labsPreferences: LabFeaturesPreferences = LabFeaturesPreferences(true)
 ) {
     fun onboarding(block: OnboardingRobot.() -> Unit) {
         block(OnboardingRobot())
@@ -110,9 +110,6 @@ class ElementRobot(
         closeSoftKeyboard()
         block(NewDirectMessageRobot())
         pressBack()
-        if (labsPreferences.isNewAppLayoutEnabled) {
-            pressBack() // close create dialog
-        }
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 
@@ -121,9 +118,6 @@ class ElementRobot(
             clickOn(R.id.bottom_action_rooms)
         }
         RoomListRobot(labsPreferences).newRoom { block() }
-        if (labsPreferences.isNewAppLayoutEnabled) {
-            pressBack() // close create dialog
-        }
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 

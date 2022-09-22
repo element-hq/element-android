@@ -172,7 +172,7 @@
     <string name="settings_theme">Θέμα</string>
     <string name="encryption_information_decryption_error">Σφάλμα αποκρυπτογράφησης</string>
     <string name="encryption_information_device_name">Όνομα συσκευής</string>
-    <string name="encryption_information_device_id">Αναγνωριστικό συσκευής</string>
+    <string name="device_manager_session_details_session_id">Αναγνωριστικό συσκευής</string>
     <string name="encryption_export_export">Εξαγωγή</string>
     <string name="encryption_import_import">Εισαγωγή</string>
     <string name="select_room_directory">Επιλέξτε ένα ευρετήριο δωματίων</string>

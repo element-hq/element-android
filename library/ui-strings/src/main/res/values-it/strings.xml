@@ -430,7 +430,7 @@
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Errore di decriptazione</string>
     <string name="encryption_information_device_name">Nome pubblico</string>
-    <string name="encryption_information_device_id">ID sessione</string>
+    <string name="device_manager_session_details_session_id">ID sessione</string>
     <string name="encryption_information_device_key">Chiave sessione</string>
     <string name="encryption_export_e2e_room_keys">Esporta le chiavi di crittografia E2E delle stanze</string>
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
@@ -2592,8 +2592,8 @@
     <string name="a11y_open_settings">Apri le impostazioni</string>
     <string name="all_chats">Tutte le chat</string>
     <string name="device_manager_settings_active_sessions_show_all">Mostra tutte le sessioni (V2, WIP)</string>
-    <string name="settings_sessions_other_description">Per una maggiore sicurezza, verifica le tue sessioni e disconnetti quelle che non riconosci o che non usi più.</string>
-    <string name="settings_sessions_other_title">Altre sessioni</string>
+    <string name="device_manager_sessions_other_description">Per una maggiore sicurezza, verifica le tue sessioni e disconnetti quelle che non riconosci o che non usi più.</string>
+    <string name="device_manager_sessions_other_title">Altre sessioni</string>
     <string name="settings_sessions_list">Sessioni</string>
     <string name="a11y_open_spaces">Apri elenco spazi</string>
     <string name="a11y_create_message">Crea una nuova conversazione o stanza</string>
@@ -2613,11 +2613,8 @@
     <string name="device_manager_other_sessions_description_unverified">Non verificata · Ultima attività %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Verificata · Ultima attività %1$s</string>
     <string name="device_manager_other_sessions_view_all">Vedi tutte (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Sessione attuale</string>
     <string name="device_manager_view_details">Vedi dettagli</string>
     <string name="device_manager_verify_session">Verifica la sessione</string>
-    <string name="device_manager_verification_status_detail_unverified">Verifica la tua sessione attuale per messaggi più sicuri.</string>
-    <string name="device_manager_verification_status_detail_verified">La tua sessione attuale è pronta per i messaggi sicuri.</string>
     <string name="device_manager_verification_status_unverified">Sessione non verificata</string>
     <string name="device_manager_verification_status_verified">Sessione verificata</string>
     <string name="a11y_device_manager_device_type_unknown">Tipo di dispositivo sconosciuto</string>
@@ -2627,4 +2624,39 @@
     <string name="timeline_error_room_not_found">Spiacenti, questa stanza non è stata trovata.
 \nRiprova più tardi.%s</string>
     <string name="invites_title">Inviti</string>
+    <string name="onboarding_new_app_layout_button_try">Provalo</string>
+    <string name="onboarding_new_app_layout_feedback_message">Tocca in alto a destra per vedere l\'opzione feedback.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Invia un feedback</string>
+    <string name="onboarding_new_app_layout_spaces_message">Accedi ai tuoi spazi (in basso a destra) più velocemente e più facilmente che mai.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Accedi agli spazi</string>
+    <string name="onboarding_new_app_layout_welcome_message">Per semplificare ${app_name}, le schede ora sono opzionali. Gestiscile usando il menu in alto a destra.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Benvenuti ad una nuova panoramica!</string>
+    <string name="home_empty_no_unreads_message">Qui è dove verranno mostrati i messaggi non letti, quando ne avrai qualcuno.</string>
+    <string name="home_empty_no_unreads_title">Niente da segnalare.</string>
+    <string name="home_empty_no_rooms_message">L\'app di chat tutto-in-uno per team, amici e organizzazioni. Inizia una conversazione o entra in una stanza esistente per cominciare.</string>
+    <string name="home_empty_no_rooms_title">Benvenuto/a in ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Gli spazi sono un modo nuovo di raggruppare stanze e persone. Aggiungi una stanza esistente, o creane una nuova usando il pulsante in basso a destra.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nsembra un po\' vuoto.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Considera di disconnettere le sessioni vecchie (%1$d giorno o più) che non usi più.</item>
+        <item quantity="other">Considera di disconnettere le sessioni vecchie (%1$d giorni o più) che non usi più.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Sessioni inattive</string>
+    <string name="device_manager_unverified_sessions_description">Verifica o disconnetti le sessioni non verificate.</string>
+    <string name="device_manager_unverified_sessions_title">Sessioni non verificate</string>
+    <string name="device_manager_header_section_security_recommendations_description">Migliora la sicurezza del tuo account seguendo questi consigli.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Consigli di sicurezza</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Inattivo da %1$d+ giorno (%2$s)</item>
+        <item quantity="other">Inattivo da %1$d+ giorni (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Qui è dove troverai le nuove richieste e gli inviti.</string>
+    <string name="invites_empty_title">Niente di nuovo.</string>
+    <string name="space_list_empty_message">Gli spazi sono un modo nuovo di raggruppare stanze e persone. Crea uno spazio per iniziare.</string>
+    <string name="space_list_empty_title">Ancora nessuno spazio.</string>
+    <string name="a11y_collapse_space_children">Riduci contenuto di %s</string>
+    <string name="a11y_expand_space_children">Espandi contenuto di %s</string>
+    <string name="change_space">Cambia spazio</string>
 </resources>

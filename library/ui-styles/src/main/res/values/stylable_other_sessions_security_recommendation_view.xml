@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="OtherSessionsSecurityRecommendationView">
+        <attr name="otherSessionsRecommendationTitle" format="string" />
+        <attr name="otherSessionsRecommendationDescription" format="string" />
+        <attr name="otherSessionsRecommendationImageResource" format="reference" />
+        <attr name="otherSessionsRecommendationImageBackgroundTint" format="color" />
+    </declare-styleable>
+
+</resources>

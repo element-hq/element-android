@@ -260,7 +260,7 @@
     <string name="room_settings_set_main_address">ప్రధాన చిరునామాగా సెట్ చేయండి</string>
 
     <string name="encryption_information_device_name">పరికరం పేరు</string>
-    <string name="encryption_information_device_id">పరికరం ID</string>
+    <string name="device_manager_session_details_session_id">పరికరం ID</string>
     <string name="encryption_information_device_key">పరికరం కీ</string>
 
     <string name="encryption_export_e2e_room_keys">E2E గది కీలను ఎగుమతి చేయండి</string>

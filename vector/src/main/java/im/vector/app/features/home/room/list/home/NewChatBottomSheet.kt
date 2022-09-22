@@ -16,40 +16,50 @@
 
 package im.vector.app.features.home.room.list.home
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.FragmentNewChatBottomSheetBinding
 import im.vector.app.features.navigation.Navigator
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NewChatBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
+class NewChatBottomSheet : VectorBaseBottomSheetDialogFragment<FragmentNewChatBottomSheetBinding>() {
 
     @Inject lateinit var navigator: Navigator
 
-    private lateinit var binding: FragmentNewChatBottomSheetBinding
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentNewChatBottomSheetBinding {
+        return FragmentNewChatBottomSheetBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentNewChatBottomSheetBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFABs()
-        return binding.root
     }
 
     private fun initFABs() {
-        binding.startChat.setOnClickListener {
+        views.startChat.debouncedClicks {
+            dismiss()
             navigator.openCreateDirectRoom(requireActivity())
         }
 
-        binding.createRoom.setOnClickListener {
+        views.createRoom.debouncedClicks {
+            dismiss()
             navigator.openCreateRoom(requireActivity())
         }
 
-        binding.exploreRooms.setOnClickListener {
+        views.exploreRooms.debouncedClicks {
+            dismiss()
             navigator.openRoomDirectory(requireContext())
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setPeekHeightAsScreenPercentage(0.5f)
         }
     }
 

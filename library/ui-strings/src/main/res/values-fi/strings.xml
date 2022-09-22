@@ -366,7 +366,7 @@
     <string name="room_settings_unset_main_address">Kumoa pääosoitteeksi asettaminen</string>
     <string name="encryption_information_decryption_error">Salauksenpurkuvirhe</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
-    <string name="encryption_information_device_id">Istunnon tunnus</string>
+    <string name="device_manager_session_details_session_id">Istunnon tunnus</string>
     <string name="encryption_information_device_key">Istunnon avain</string>
     <string name="encryption_export_e2e_room_keys">Vie salatun huoneen avaimet</string>
     <string name="encryption_export_room_keys">Vie huoneen avaimet</string>

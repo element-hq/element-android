@@ -201,13 +201,12 @@ class NewHomeDetailFragment :
     private fun setupFabs() {
         showFABs()
 
-        views.newLayoutCreateChatButton.setOnClickListener {
-            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
+        views.newLayoutCreateChatButton.debouncedClicks {
+            newChatBottomSheet.takeIf { !it.isAdded }?.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
         }
 
-        views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here
-            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
+        views.newLayoutOpenSpacesButton.debouncedClicks {
+            spaceListBottomSheet.takeIf { !it.isAdded }?.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
         }
     }
 

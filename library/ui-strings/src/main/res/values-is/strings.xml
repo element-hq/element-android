@@ -193,7 +193,7 @@
     <string name="settings_theme">Þema</string>
     <string name="encryption_information_decryption_error">Afkóðunarvilla</string>
     <string name="encryption_information_device_name">Heiti tækis</string>
-    <string name="encryption_information_device_id">Auðkenni setu</string>
+    <string name="device_manager_session_details_session_id">Auðkenni setu</string>
     <string name="encryption_information_device_key">Dulritunarlykill setu</string>
     <string name="encryption_export_export">Flytja út</string>
     <string name="passphrase_enter_passphrase">Settu inn lykilsetningu</string>

@@ -442,6 +442,9 @@
     <string name="labs_enable_new_app_layout_title">Enable new layout</string>
     <string name="labs_enable_new_app_layout_summary">A simplified Element with optional tabs</string>
 
+    <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
+    <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
@@ -1212,7 +1215,6 @@
     <string name="encryption_information_decryption_error">Decryption error</string>
 
     <string name="encryption_information_device_name">Public name</string>
-    <string name="encryption_information_device_id">Session ID</string>
     <string name="encryption_information_device_key">Session key</string>
 
     <string name="encryption_export_e2e_room_keys">Export E2E room keys</string>
@@ -2362,8 +2364,8 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
-    <string name="settings_sessions_other_title">Other sessions</string>
-    <string name="settings_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
+    <string name="device_manager_sessions_other_title">Other sessions</string>
+    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
@@ -3230,18 +3232,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_verified -->
-    <string name="device_manager_verification_status_detail_verified" tools:ignore="UnusedResources">Your current session is ready for secure messaging.</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_unverified -->
-    <string name="device_manager_verification_status_detail_unverified" tools:ignore="UnusedResources">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_current_session_title -->
-    <string name="device_manager_header_section_current_session" tools:ignore="UnusedResources">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
     <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
@@ -3263,8 +3259,40 @@
     </plurals>
     <string name="device_manager_current_session_title">Current Session</string>
     <string name="device_manager_session_title">Session</string>
+    <string name="device_manager_device_title">Device</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_session_last_activity">Last activity %1$s</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filter</string>
+    <string name="device_manager_filter_option_all_sessions">All sessions</string>
+    <string name="device_manager_filter_option_verified">Verified</string>
+    <string name="device_manager_filter_option_verified_description">Ready for secure messaging</string>
+    <string name="device_manager_filter_option_unverified">Unverified</string>
+    <string name="device_manager_filter_option_unverified_description">Not ready for secure messaging</string>
+    <string name="device_manager_filter_option_inactive">Inactive</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inactive for %1$d day or longer</item>
+        <item quantity="other">Inactive for %1$d days or longer</item>
+    </plurals>
+    <string name="a11y_device_manager_filter">Filter</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verified</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">For best security, sign out from any session that you don’t recognize or use anymore.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Unverified</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verify your sessions for enhanced secure messaging or sign out from those you don’t recognize or use anymore.</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inactive</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Consider signing out from old sessions (%1$d day or more) you don’t use anymore.</item>
+        <item quantity="other">Consider signing out from old sessions (%1$d days or more) you don’t use anymore.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">No verified sessions found.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">No unverified sessions found.</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
+    <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
+    <string name="device_manager_session_details_title">Session details</string>
+    <string name="device_manager_session_details_description">Application, device, and activity information.</string>
+    <string name="device_manager_session_details_session_name">Session name</string>
+    <string name="device_manager_session_details_session_id">Session ID</string>
+    <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_device_ip_address">IP address</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

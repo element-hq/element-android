@@ -136,7 +136,7 @@ class VerificationEmojiCodeController @Inject constructor(
         if (state.isWaitingFromOther) {
             bottomSheetVerificationWaitingItem {
                 id("waiting")
-                title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUser?.getBestName() ?: ""))
+                title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUser.getBestName()))
             }
         } else {
             bottomSheetVerificationActionItem {

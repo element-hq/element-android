@@ -32,5 +32,13 @@ fun Session.getRoomSummary(roomIdOrAlias: String): RoomSummary? = roomService().
 
 /**
  * Get a user using the UserService of a Session.
+ * @param userId the userId to look for.
+ * @return a user with userId or null if the User is not known yet by the SDK.
+ * See [org.matrix.android.sdk.api.session.user.UserService.resolveUser] to ensure that a User is retrieved.
  */
 fun Session.getUser(userId: String): User? = userService().getUser(userId)
+
+/**
+ * Similar to [getUser], but fallback to a User without details if the User is not known by the SDK, or if Session is null.
+ */
+fun Session?.getUserOrDefault(userId: String): User = this?.userService()?.getUser(userId) ?: User(userId)
