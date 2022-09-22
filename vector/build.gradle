@@ -230,7 +230,7 @@ dependencies {
     }
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
+    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
 
     implementation "androidx.emoji2:emoji2:1.2.0"
 
