@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.checkSendOrder
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
@@ -54,9 +54,9 @@ class TimelineForwardPaginationTest : InstrumentedTest {
      */
     @Test
     @Ignore("Ignoring this test until it's fixed since it blocks the CI.")
-    fun forwardPaginationTest() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun forwardPaginationTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val numberOfMessagesToSend = 90
-        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId

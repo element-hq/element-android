@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import java.util.concurrent.CountDownLatch
 
@@ -44,8 +43,8 @@ import java.util.concurrent.CountDownLatch
 class ThreadMessagingTest : InstrumentedTest {
 
     @Test
-    fun reply_in_thread_should_create_a_thread() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
+    fun reply_in_thread_should_create_a_thread() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -175,8 +174,8 @@ class ThreadMessagingTest : InstrumentedTest {
     }
 
     @Test
-    fun reply_in_thread_to_timeline_message_multiple_times() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val cryptoTestData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(false) }
+    fun reply_in_thread_to_timeline_message_multiple_times() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId

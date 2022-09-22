@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
@@ -57,8 +56,8 @@ import java.util.concurrent.CountDownLatch
 class SASTest : InstrumentedTest {
 
     @Test
-    fun test_aliceStartThenAliceCancel() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+    fun test_aliceStartThenAliceCancel() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -138,9 +137,9 @@ class SASTest : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_protocols_must_include_curve25519() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_key_agreement_protocols_must_include_curve25519() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
 
@@ -194,7 +193,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_macs_Must_include_hmac_sha256() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_key_agreement_macs_Must_include_hmac_sha256() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
@@ -231,7 +230,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_short_code_include_decimal() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_key_agreement_short_code_include_decimal() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
@@ -342,7 +341,7 @@ class SASTest : InstrumentedTest {
      */
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_aliceAndBobAgreement() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_aliceAndBobAgreement() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
         val aliceSession = cryptoTestData.firstSession
@@ -399,7 +398,7 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    fun test_aliceAndBobSASCode() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_aliceAndBobSASCode() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
         val aliceSession = cryptoTestData.firstSession
@@ -455,7 +454,7 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    fun test_happyPath() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_happyPath() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
         val aliceSession = cryptoTestData.firstSession
@@ -531,7 +530,7 @@ class SASTest : InstrumentedTest {
     }
 
     @Test
-    fun test_ConcurrentStart() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_ConcurrentStart() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
 
         val aliceSession = cryptoTestData.firstSession

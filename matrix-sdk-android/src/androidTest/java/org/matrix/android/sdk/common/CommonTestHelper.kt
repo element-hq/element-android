@@ -69,16 +69,6 @@ import kotlin.coroutines.suspendCoroutine
 class CommonTestHelper internal constructor(context: Context) {
 
     companion object {
-        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
-            return try {
-                block(testHelper)
-            } finally {
-                if (autoSignoutOnClose) {
-                    testHelper.cleanUpOpenedSessions()
-                }
-            }
-        }
 
         @OptIn(ExperimentalCoroutinesApi::class)
         internal fun runSuspendingSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
@@ -92,18 +82,6 @@ class CommonTestHelper internal constructor(context: Context) {
                     if (autoSignoutOnClose) {
                         testHelper.cleanUpOpenedSessions()
                     }
-                }
-            }
-        }
-
-        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
-            val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return try {
-                block(cryptoTestHelper, testHelper)
-            } finally {
-                if (autoSignoutOnClose) {
-                    testHelper.cleanUpOpenedSessions()
                 }
             }
         }
@@ -157,11 +135,9 @@ class CommonTestHelper internal constructor(context: Context) {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
     }
 
-    fun cleanUpOpenedSessions() {
+    suspend fun cleanUpOpenedSessions() {
         trackedSessions.forEach {
-            runBlockingTest {
-                it.signOutService().signOut(true)
-            }
+            it.signOutService().signOut(true)
         }
         trackedSessions.clear()
     }
