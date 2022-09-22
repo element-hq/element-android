@@ -159,7 +159,7 @@ The string will be removed during the next sync with Weblate.
 This is possible to rename ids of the String resources, but since translation files cannot be edited, add TODO in the main strings.xml file above the strings you want to rename. 
 
 ```xml
-<!-- TODO Rename to [put_new_id_here] -->
+<!-- TODO Rename id to put_new_id_here -->
 <string name="current_id">Hello Matrix world!</string>
 ```
 
