@@ -56,17 +56,17 @@ internal class UserAgentHolder @Inject constructor(
                     appPackageName
                 }
         val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName }
+        
+        if (appName.isNullOrEmpty() || appVersion.isNullOrEmpty()) {
+            userAgent = tryOrNull { System.getProperty("http.agent") } ?: ("Java" + System.getProperty("java.version"))
+            return
+        }
 
         val deviceManufacturer = Build.MANUFACTURER
         val deviceModel = Build.MODEL
         val androidVersion = Build.VERSION.RELEASE
         val deviceBuildId = Build.DISPLAY
         val matrixSdkVersion = BuildConfig.SDK_VERSION
-
-        if (appName.isNullOrEmpty() || appVersion.isNullOrEmpty()) {
-            userAgent = tryOrNull { System.getProperty("http.agent") } ?: ("Java" + System.getProperty("java.version"))
-            return
-        }
 
         userAgent = buildString {
             append(appName)
