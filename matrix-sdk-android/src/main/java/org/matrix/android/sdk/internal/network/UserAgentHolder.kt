@@ -39,7 +39,7 @@ internal class UserAgentHolder @Inject constructor(
 
     /**
      * Create an user agent with the application version.
-     * Ex: Element/1.5.0 (Xiaomi; Mi 9T; Android 11; RKQ1.200826.002; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
+     * Ex: Element/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
      *
      * @param flavorDescription the flavor description
      */
@@ -56,7 +56,7 @@ internal class UserAgentHolder @Inject constructor(
                     appPackageName
                 }
         val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName }
-        
+
         if (appName.isNullOrEmpty() || appVersion.isNullOrEmpty()) {
             userAgent = tryOrNull { System.getProperty("http.agent") } ?: ("Java" + System.getProperty("java.version"))
             return
@@ -74,7 +74,7 @@ internal class UserAgentHolder @Inject constructor(
             append(appVersion)
             append(" (")
             append(deviceManufacturer)
-            append("; ")
+            append(" ")
             append(deviceModel)
             append("; ")
             append("Android ")
