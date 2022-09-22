@@ -165,6 +165,12 @@ This is possible to rename ids of the String resources, but since translation fi
 
 The string id(s) will be renamed during the next Weblate sync.
 
+#### Reordering strings
+
+To group strings per feature, or for any other reasons, it is possible to reorder string resources, but only in the [main strings.xml file](./library/ui-strings/src/main/res/values/strings.xml). ). We do not mind about ordering in the translation files, and anyway this is forbidden to edit manually the translation files.
+
+It is also possible to add empty lines between string resources, and to add XML comments. Please note that the XML comment just above a String resource will also appear on Weblate and be visible to the translators.
+
 ### Accessibility
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
