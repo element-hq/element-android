@@ -445,6 +445,19 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
+    suspend fun <T> waitForCallbackError(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): Throwable {
+        return wrapWithTimeout(timeout) {
+            suspendCoroutine { continuation ->
+                val callback = object : MatrixCallback<T> {
+                    override fun onFailure(failure: Throwable) {
+                        continuation.resume(failure)
+                    }
+                }
+                block(callback)
+            }
+        }
+    }
+
     /**
      * Clear all provided sessions
      */

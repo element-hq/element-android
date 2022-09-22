@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.crypto.keysbackup
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
 import org.junit.Rule
@@ -49,8 +49,11 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
+import org.matrix.android.sdk.common.waitFor
+import java.security.InvalidParameterException
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -546,13 +549,13 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Try to trust the backup from the new device with a wrong recovery key
-        val latch = CountDownLatch(1)
-        testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
-                testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                "Bad recovery key",
-                TestMatrixCallback(latch, false)
-        )
-        testHelper.await(latch)
+        testHelper.waitForCallbackError<Unit> {
+            testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+                    "Bad recovery key",
+                    it
+            )
+        }
 
         // - The new device must still see the previous backup as not trusted
         assertNotNull(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion)
@@ -651,13 +654,13 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Try to trust the backup from the new device with a wrong password
-        val latch = CountDownLatch(1)
-        testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithPassphrase(
-                testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                badPassword,
-                TestMatrixCallback(latch, false)
-        )
-        testHelper.await(latch)
+        testHelper.waitForCallbackError<Unit> {
+            testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithPassphrase(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+                    badPassword,
+                    it
+            )
+        }
 
         // - The new device must still see the previous backup as not trusted
         assertNotNull(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion)
@@ -678,26 +681,21 @@ class KeysBackupTest : InstrumentedTest {
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
+        val keysBackupService = testData.aliceSession2.cryptoService().keysBackupService()
 
         // - Try to restore the e2e backup with a wrong recovery key
-        val latch2 = CountDownLatch(1)
-        var importRoomKeysResult: ImportRoomKeysResult? = null
-        testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                "EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d",
-                null,
-                null,
-                null,
-                object : TestMatrixCallback<ImportRoomKeysResult>(latch2, false) {
-                    override fun onSuccess(data: ImportRoomKeysResult) {
-                        importRoomKeysResult = data
-                        super.onSuccess(data)
-                    }
-                }
-        )
-        testHelper.await(latch2)
+        val importRoomKeysResult = testHelper.waitForCallbackError<ImportRoomKeysResult> {
+            keysBackupService.restoreKeysWithRecoveryKey(
+                    keysBackupService.keysBackupVersion!!,
+                    "EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d",
+                    null,
+                    null,
+                    null,
+                    it
+            )
+        }
 
-        // onSuccess may not have been called
-        assertNull(importRoomKeysResult)
+        assertTrue(importRoomKeysResult is InvalidParameterException)
     }
 
     /**
@@ -770,26 +768,21 @@ class KeysBackupTest : InstrumentedTest {
         val wrongPassword = "passw0rd"
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(password)
+        val keysBackupService = testData.aliceSession2.cryptoService().keysBackupService()
 
         // - Try to restore the e2e backup with a wrong password
-        val latch2 = CountDownLatch(1)
-        var importRoomKeysResult: ImportRoomKeysResult? = null
-        testData.aliceSession2.cryptoService().keysBackupService().restoreKeyBackupWithPassword(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                wrongPassword,
-                null,
-                null,
-                null,
-                object : TestMatrixCallback<ImportRoomKeysResult>(latch2, false) {
-                    override fun onSuccess(data: ImportRoomKeysResult) {
-                        importRoomKeysResult = data
-                        super.onSuccess(data)
-                    }
-                }
-        )
-        testHelper.await(latch2)
+        val importRoomKeysResult = testHelper.waitForCallbackError<ImportRoomKeysResult> {
+            keysBackupService.restoreKeyBackupWithPassword(
+                    keysBackupService.keysBackupVersion!!,
+                    wrongPassword,
+                    null,
+                    null,
+                    null,
+                    it
+            )
+        }
 
-        // onSuccess may not have been called
-        assertNull(importRoomKeysResult)
+        assertTrue(importRoomKeysResult is InvalidParameterException)
     }
 
     /**
@@ -832,26 +825,21 @@ class KeysBackupTest : InstrumentedTest {
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
+        val keysBackupService = testData.aliceSession2.cryptoService().keysBackupService()
 
         // - Try to restore the e2e backup with a password
-        val latch2 = CountDownLatch(1)
-        var importRoomKeysResult: ImportRoomKeysResult? = null
-        testData.aliceSession2.cryptoService().keysBackupService().restoreKeyBackupWithPassword(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                "password",
-                null,
-                null,
-                null,
-                object : TestMatrixCallback<ImportRoomKeysResult>(latch2, false) {
-                    override fun onSuccess(data: ImportRoomKeysResult) {
-                        importRoomKeysResult = data
-                        super.onSuccess(data)
-                    }
-                }
-        )
-        testHelper.await(latch2)
+        val importRoomKeysResult = testHelper.waitForCallbackError<ImportRoomKeysResult> {
+            keysBackupService.restoreKeyBackupWithPassword(
+                    keysBackupService.keysBackupVersion!!,
+                    "password",
+                    null,
+                    null,
+                    null,
+                    it
+            )
+        }
 
-        // onSuccess may not have been called
-        assertNull(importRoomKeysResult)
+        assertTrue(importRoomKeysResult is IllegalStateException)
     }
 
     /**
@@ -917,30 +905,36 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled())
 
         // Wait for keys backup to be finished
-        val latch0 = CountDownLatch(1)
         var count = 0
-        keysBackup.addListener(object : KeysBackupStateListener {
-            override fun onStateChange(newState: KeysBackupState) {
-                // Check the backup completes
-                if (newState == KeysBackupState.ReadyToBackUp) {
-                    count++
+        waitFor(
+                continueWhen = {
+                    suspendCancellableCoroutine<Unit> { continuation ->
+                        val listener = object : KeysBackupStateListener {
+                            override fun onStateChange(newState: KeysBackupState) {
+                                // Check the backup completes
+                                if (newState == KeysBackupState.ReadyToBackUp) {
+                                    count++
 
-                    if (count == 2) {
-                        // Remove itself from the list of listeners
-                        keysBackup.removeListener(this)
-
-                        latch0.countDown()
+                                    if (count == 2) {
+                                        // Remove itself from the list of listeners
+                                        keysBackup.removeListener(this)
+                                        continuation.resume(Unit)
+                                    }
+                                }
+                            }
+                        }
+                        keysBackup.addListener(listener)
+                        continuation.invokeOnCancellation { keysBackup.removeListener(listener) }
                     }
-                }
-            }
-        })
 
-        // - Make alice back up her keys to her homeserver
-        keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
+                },
+                action = {
+                    // - Make alice back up her keys to her homeserver
+                    keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
+                },
+        )
 
         assertTrue(keysBackup.isEnabled())
-
-        testHelper.await(latch0)
 
         // - Create a new backup with fake data on the homeserver, directly using the rest client
         val megolmBackupCreationInfo = cryptoTestHelper.createFakeMegolmBackupCreationInfo()
@@ -952,9 +946,7 @@ class KeysBackupTest : InstrumentedTest {
         (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store.resetBackupMarkers()
 
         // - Make alice back up all her keys again
-        val latch2 = CountDownLatch(1)
-        keysBackup.backupAllGroupSessions(null, TestMatrixCallback(latch2, false))
-        testHelper.await(latch2)
+        testHelper.waitForCallbackError<Unit> { keysBackup.backupAllGroupSessions(null, it) }
 
         // -> That must fail and her backup state must be WrongBackUpVersion
         assertEquals(KeysBackupState.WrongBackUpVersion, keysBackup.getState())
@@ -1015,19 +1007,7 @@ class KeysBackupTest : InstrumentedTest {
 
         val stateObserver2 = StateObserver(keysBackup2)
 
-        var isSuccessful = false
-        val latch2 = CountDownLatch(1)
-        keysBackup2.backupAllGroupSessions(
-                null,
-                object : TestMatrixCallback<Unit>(latch2, false) {
-                    override fun onSuccess(data: Unit) {
-                        isSuccessful = true
-                        super.onSuccess(data)
-                    }
-                })
-        testHelper.await(latch2)
-
-        assertFalse(isSuccessful)
+        testHelper.waitForCallbackError<Unit> {keysBackup2.backupAllGroupSessions(null, it) }
 
         // Backup state must be NotTrusted
         assertEquals("Backup state must be NotTrusted", KeysBackupState.NotTrusted, keysBackup2.getState())
@@ -1041,19 +1021,20 @@ class KeysBackupTest : InstrumentedTest {
         )
 
         // -> Backup should automatically enable on the new device
-        val latch4 = CountDownLatch(1)
-        keysBackup2.addListener(object : KeysBackupStateListener {
-            override fun onStateChange(newState: KeysBackupState) {
-                // Check the backup completes
-                if (keysBackup2.getState() == KeysBackupState.ReadyToBackUp) {
-                    // Remove itself from the list of listeners
-                    keysBackup2.removeListener(this)
-
-                    latch4.countDown()
+        suspendCancellableCoroutine<Unit> { continuation ->
+            val listener = object : KeysBackupStateListener {
+                override fun onStateChange(newState: KeysBackupState) {
+                    // Check the backup completes
+                    if (keysBackup2.getState() == KeysBackupState.ReadyToBackUp) {
+                        // Remove itself from the list of listeners
+                        keysBackup2.removeListener(this)
+                        continuation.resume(Unit)
+                    }
                 }
             }
-        })
-        testHelper.await(latch4)
+            keysBackup2.addListener(listener)
+            continuation.invokeOnCancellation { keysBackup2.removeListener(listener) }
+        }
 
         // -> It must use the same backup version
         assertEquals(oldKeyBackupVersion, aliceSession2.cryptoService().keysBackupService().currentBackupVersion)
