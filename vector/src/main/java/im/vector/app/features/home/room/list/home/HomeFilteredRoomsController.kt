@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list.home
 
-import androidx.paging.PagedList
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.platform.StateView
@@ -74,13 +73,6 @@ class HomeFilteredRoomsController @Inject constructor(
 
     fun submitEmptyStateData(state: StateView.State.Empty?) {
         this.emptyStateData = state
-    }
-
-    fun submitPagedList(newList: PagedList<RoomSummary>) {
-        submitList(newList)
-        if (newList.isEmpty()) {
-            requestForcedModelBuild()
-        }
     }
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {

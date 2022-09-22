@@ -17,8 +17,11 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.paging.PagedList
+import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -35,7 +38,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -69,7 +71,6 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import java.util.concurrent.CancellationException
 
 class HomeRoomListViewModel @AssistedInject constructor(
         @Assisted initialState: HomeRoomListViewState,
@@ -87,18 +88,23 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
+    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
             .setEnablePlaceholders(true)
-            .setPrefetchDistance(10)
             .build()
+
+    private val _roomsLivePagedList = MutableLiveData<PagedList<RoomSummary>>()
+    val roomsLivePagedList: LiveData<PagedList<RoomSummary>> = _roomsLivePagedList
+
+    private val internalPagedListObserver = Observer<PagedList<RoomSummary>> {
+        _roomsLivePagedList.postValue(it)
+    }
 
     private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
     private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
     val emptyStateFlow = _emptyStateFlow.asSharedFlow()
-
-    private var roomsFlowJob: Job? = null
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
@@ -223,6 +229,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms() = viewModelScope.launch {
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
+
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
         }
@@ -233,7 +241,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         } else {
             RoomSortOrder.ACTIVITY
         }
-
         val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
                 params,
                 pagedListConfig,
@@ -249,21 +256,15 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 }
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
-                    liveResults.queryParams = liveResults.queryParams.copy(
+                    filteredPagedRoomSummariesLive?.queryParams = liveResults.queryParams.copy(
                             spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
                     emitEmptyState()
                 }
+                .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        roomsFlowJob?.cancel(CancellationException())
-
-        roomsFlowJob = liveResults.livePagedList
-                .asFlow()
-                .onEach {
-                    setState { copy(roomsPagedList = it) }
-                }
-                .launchIn(viewModelScope)
+        liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
     private fun observeOrderPreferences() {
@@ -342,6 +343,11 @@ class HomeRoomListViewModel @AssistedInject constructor(
             is HomeRoomListAction.ChangeRoomFilter -> handleChangeRoomFilter(action.filter)
             HomeRoomListAction.DeleteAllLocalRoom -> handleDeleteLocalRooms()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
     }
 
     private fun handleChangeRoomFilter(newFilter: HomeRoomFilter) {
