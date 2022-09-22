@@ -145,7 +145,6 @@ class UnwedgingTest : InstrumentedTest {
         val oldSession = serializeForRealm(olmSession.olmSession)
 
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
-        Thread.sleep(6_000)
 
         latch = CountDownLatch(1)
         bobEventsListener = createEventListener(latch, 2)
@@ -173,7 +172,6 @@ class UnwedgingTest : InstrumentedTest {
                 bobSession.cryptoService().getMyDevice().identityKey()!!
         )
         olmDevice.clearOlmSessionCache()
-        Thread.sleep(6_000)
 
         // Force new session, and key share
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
