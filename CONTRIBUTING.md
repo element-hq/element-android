@@ -1,10 +1,42 @@
-# Contributing code to Matrix
+# Contributing to Element Android
+
+<!--- TOC -->
+
+* [Contributing code to Matrix](#contributing-code-to-matrix)
+* [Android Studio settings](#android-studio-settings)
+  * [Template](#template)
+* [Compilation](#compilation)
+* [I want to help translating Element](#i-want-to-help-translating-element)
+* [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
+  * [Kotlin](#kotlin)
+  * [Changelog](#changelog)
+  * [Code quality](#code-quality)
+    * [Internal tool](#internal-tool)
+    * [ktlint](#ktlint)
+    * [lint](#lint)
+  * [Unit tests](#unit-tests)
+  * [Tests](#tests)
+  * [Internationalisation](#internationalisation)
+    * [Adding new string](#adding-new-string)
+      * [Plurals](#plurals)
+    * [Editing existing strings](#editing-existing-strings)
+    * [Removing existing strings](#removing-existing-strings)
+    * [Renaming string ids](#renaming-string-ids)
+    * [Reordering strings](#reordering-strings)
+  * [Accessibility](#accessibility)
+  * [Layout](#layout)
+  * [Authors](#authors)
+* [Thanks](#thanks)
+
+<!--- END -->
+
+## Contributing code to Matrix
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 
 Element Android support can be found in this room: [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org).
 
-# Specific rules for Matrix Android projects
+The rest of the document contains specific rules for Matrix Android projects
 
 ## Android Studio settings
 
