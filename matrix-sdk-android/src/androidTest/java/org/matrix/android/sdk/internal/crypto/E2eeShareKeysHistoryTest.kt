@@ -277,21 +277,19 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
 
         var secondAliceMessageSessionId: String? = null
         sendMessageInRoom(aliceRoomPOV, "Other msg", testHelper)?.let { secondMessage ->
-            testHelper.launch {
-                testHelper.retryPeriodically {
-                    val timelineEvent = bobRoomPov
-                            ?.timelineService()
-                            ?.getTimelineEvent(secondMessage)
-                    (timelineEvent != null &&
-                            timelineEvent.isEncrypted() &&
-                            timelineEvent.root.getClearType() == EventType.MESSAGE).also {
-                        if (it) {
-                            secondAliceMessageSessionId = timelineEvent?.root?.content?.get("session_id") as? String
-                            Log.v(
-                                    "#E2E TEST",
-                                    "Bob can decrypt the message (sid:$secondAliceMessageSessionId): ${timelineEvent?.root?.getDecryptedTextSummary()}"
-                            )
-                        }
+            testHelper.retryPeriodically {
+                val timelineEvent = bobRoomPov
+                        ?.timelineService()
+                        ?.getTimelineEvent(secondMessage)
+                (timelineEvent != null &&
+                        timelineEvent.isEncrypted() &&
+                        timelineEvent.root.getClearType() == EventType.MESSAGE).also {
+                    if (it) {
+                        secondAliceMessageSessionId = timelineEvent?.root?.content?.get("session_id") as? String
+                        Log.v(
+                                "#E2E TEST",
+                                "Bob can decrypt the message (sid:$secondAliceMessageSessionId): ${timelineEvent?.root?.getDecryptedTextSummary()}"
+                        )
                     }
                 }
             }

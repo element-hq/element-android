@@ -44,22 +44,20 @@ class DeactivateAccountTest : InstrumentedTest {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
-        commonTestHelper.runBlockingTest {
-            session.accountService().deactivateAccount(
-                    eraseAllData = false,
-                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                            promise.resume(
-                                    UserPasswordAuth(
-                                            user = session.myUserId,
-                                            password = TestConstants.PASSWORD,
-                                            session = flowResponse.session
-                                    )
-                            )
-                        }
+        session.accountService().deactivateAccount(
+                eraseAllData = false,
+                userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
+                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                        promise.resume(
+                                UserPasswordAuth(
+                                        user = session.myUserId,
+                                        password = TestConstants.PASSWORD,
+                                        session = flowResponse.session
+                                )
+                        )
                     }
-            )
-        }
+                }
+        )
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)
         val throwable = commonTestHelper.logAccountWithError(session.myUserId, TestConstants.PASSWORD)
@@ -74,23 +72,19 @@ class DeactivateAccountTest : InstrumentedTest {
         // Try to create an account with the deactivate account user id, it will fail (M_USER_IN_USE)
         val hs = commonTestHelper.createHomeServerConfig()
 
-        commonTestHelper.runBlockingTest {
-            commonTestHelper.matrix.authenticationService.getLoginFlow(hs)
-        }
+        commonTestHelper.matrix.authenticationService.getLoginFlow(hs)
 
         var accountCreationError: Throwable? = null
-        commonTestHelper.runBlockingTest {
-            try {
-                commonTestHelper.matrix.authenticationService
-                        .getRegistrationWizard()
-                        .createAccount(
-                                session.myUserId.substringAfter("@").substringBefore(":"),
-                                TestConstants.PASSWORD,
-                                null
-                        )
-            } catch (failure: Throwable) {
-                accountCreationError = failure
-            }
+        try {
+            commonTestHelper.matrix.authenticationService
+                    .getRegistrationWizard()
+                    .createAccount(
+                            session.myUserId.substringAfter("@").substringBefore(":"),
+                            TestConstants.PASSWORD,
+                            null
+                    )
+        } catch (failure: Throwable) {
+            accountCreationError = failure
         }
 
         // Test the error

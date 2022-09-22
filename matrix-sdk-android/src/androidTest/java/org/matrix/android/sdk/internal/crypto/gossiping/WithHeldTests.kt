@@ -246,9 +246,7 @@ class WithHeldTests : InstrumentedTest {
             val timeLineEvent = bobSecondSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)?.also {
                 // try to decrypt and force key request
                 tryOrNull {
-                    testHelper.runBlockingTest {
-                        bobSecondSession.cryptoService().decryptEvent(it.root, "")
-                    }
+                    bobSecondSession.cryptoService().decryptEvent(it.root, "")
                 }
             }
             sessionId = timeLineEvent?.root?.content?.toModel<EncryptedEventContent>()?.sessionId

@@ -378,18 +378,15 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param userName the account username
      * @param password the password
      */
-    fun logAccountWithError(
+    suspend fun logAccountWithError(
             userName: String,
             password: String
     ): Throwable {
         val hs = createHomeServerConfig()
 
-        runBlockingTest {
-            matrix.authenticationService.getLoginFlow(hs)
-        }
+        matrix.authenticationService.getLoginFlow(hs)
 
         var requestFailure: Throwable? = null
-        runBlockingTest {
             try {
                 matrix.authenticationService
                         .getLoginWizard()
@@ -397,7 +394,6 @@ class CommonTestHelper internal constructor(context: Context) {
             } catch (failure: Throwable) {
                 requestFailure = failure
             }
-        }
 
         assertNotNull(requestFailure)
         return requestFailure!!
@@ -455,26 +451,12 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
-    fun <T> launch(block: suspend () -> T): T {
-        return runBlocking {
-            block()
-        }
-    }
-
     fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         val job = coroutineScope.launch(dispatcher) {
             block(latch)
         }
         await(latch, timeout, job)
-    }
-
-    fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
-        return runBlocking {
-            wrapWithTimeout(timeout) {
-                block()
-            }
-        }
     }
 
     suspend fun <T> doSync(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {

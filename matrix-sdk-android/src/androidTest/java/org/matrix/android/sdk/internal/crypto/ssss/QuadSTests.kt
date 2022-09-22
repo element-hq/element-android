@@ -64,9 +64,7 @@ class QuadSTests : InstrumentedTest {
 
         val TEST_KEY_ID = "my.test.Key"
 
-        testHelper.runBlockingTest {
-            quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner)
-        }
+        quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner)
 
         var accountData: UserAccountDataEvent? = null
         // Assert Account data is updated
@@ -118,13 +116,11 @@ class QuadSTests : InstrumentedTest {
 
         // Store a secret
         val clearSecret = "42".toByteArray().toBase64NoPadding()
-        testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().storeSecret(
-                    "secret.of.life",
-                    clearSecret,
-                    listOf(KeyRef(null, keySpec)) // default key
-            )
-        }
+        aliceSession.sharedSecretStorageService().storeSecret(
+                "secret.of.life",
+                clearSecret,
+                listOf(KeyRef(null, keySpec)) // default key
+        )
 
         val secretAccountData = assertAccountData(testHelper, aliceSession, "secret.of.life")
 
@@ -139,13 +135,11 @@ class QuadSTests : InstrumentedTest {
 
         // Try to decrypt??
 
-        val decryptedSecret = testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret(
-                    "secret.of.life",
-                    null, // default key
-                    keySpec!!
-            )
-        }
+        val decryptedSecret = aliceSession.sharedSecretStorageService().getSecret(
+                "secret.of.life",
+                null, // default key
+                keySpec!!
+        )
 
         assertEquals("Secret mismatch", clearSecret, decryptedSecret)
     }
@@ -159,14 +153,10 @@ class QuadSTests : InstrumentedTest {
 
         val TEST_KEY_ID = "my.test.Key"
 
-        testHelper.runBlockingTest {
-            quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner)
-        }
+        quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner)
 
         // Test that we don't need to wait for an account data sync to access directly the keyid from DB
-        testHelper.runBlockingTest {
-            quadS.setDefaultKey(TEST_KEY_ID)
-        }
+        quadS.setDefaultKey(TEST_KEY_ID)
     }
 
     @Test
@@ -180,16 +170,14 @@ class QuadSTests : InstrumentedTest {
 
         val mySecretText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 
-        testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().storeSecret(
-                    "my.secret",
-                    mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(
-                            KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
-                            KeyRef(keyId2, RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey))
-                    )
-            )
-        }
+        aliceSession.sharedSecretStorageService().storeSecret(
+                "my.secret",
+                mySecretText.toByteArray().toBase64NoPadding(),
+                listOf(
+                        KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
+                        KeyRef(keyId2, RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey))
+                )
+        )
 
         val accountDataEvent = aliceSession.accountDataService().getUserAccountDataEvent("my.secret")
         val encryptedContent = accountDataEvent?.content?.get("encrypted") as? Map<*, *>
@@ -200,21 +188,17 @@ class QuadSTests : InstrumentedTest {
         assertNotNull(encryptedContent?.get(keyId2))
 
         // Assert that can decrypt with both keys
-        testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret(
-                    "my.secret",
-                    keyId1,
-                    RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)!!
-            )
-        }
+        aliceSession.sharedSecretStorageService().getSecret(
+                "my.secret",
+                keyId1,
+                RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)!!
+        )
 
-        testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret(
-                    "my.secret",
-                    keyId2,
-                    RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)!!
-            )
-        }
+        aliceSession.sharedSecretStorageService().getSecret(
+                "my.secret",
+                keyId2,
+                RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)!!
+        )
     }
 
     @Test
@@ -228,44 +212,38 @@ class QuadSTests : InstrumentedTest {
 
         val mySecretText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 
-        testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().storeSecret(
-                    "my.secret",
-                    mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)))
-            )
-        }
+        aliceSession.sharedSecretStorageService().storeSecret(
+                "my.secret",
+                mySecretText.toByteArray().toBase64NoPadding(),
+                listOf(KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)))
+        )
 
-        testHelper.runBlockingTest {
-            try {
-                aliceSession.sharedSecretStorageService().getSecret(
-                        "my.secret",
-                        keyId1,
-                        RawBytesKeySpec.fromPassphrase(
-                                "A bad passphrase",
-                                key1Info.content?.passphrase?.salt ?: "",
-                                key1Info.content?.passphrase?.iterations ?: 0,
-                                null
-                        )
-                )
-            } catch (throwable: Throwable) {
-                assert(throwable is SharedSecretStorageError.BadMac)
-            }
-        }
-
-        // Now try with correct key
-        testHelper.runBlockingTest {
+        try {
             aliceSession.sharedSecretStorageService().getSecret(
                     "my.secret",
                     keyId1,
                     RawBytesKeySpec.fromPassphrase(
-                            passphrase,
+                            "A bad passphrase",
                             key1Info.content?.passphrase?.salt ?: "",
                             key1Info.content?.passphrase?.iterations ?: 0,
                             null
                     )
             )
+        } catch (throwable: Throwable) {
+            assert(throwable is SharedSecretStorageError.BadMac)
         }
+
+        // Now try with correct key
+        aliceSession.sharedSecretStorageService().getSecret(
+                "my.secret",
+                keyId1,
+                RawBytesKeySpec.fromPassphrase(
+                        passphrase,
+                        key1Info.content?.passphrase?.salt ?: "",
+                        key1Info.content?.passphrase?.iterations ?: 0,
+                        null
+                )
+        )
     }
 
     private fun assertAccountData(testHelper: CommonTestHelper, session: Session, type: String): UserAccountDataEvent {
@@ -284,43 +262,35 @@ class QuadSTests : InstrumentedTest {
         return accountData!!
     }
 
-    private fun generatedSecret(testHelper: CommonTestHelper, session: Session, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
+    private suspend fun generatedSecret(testHelper: CommonTestHelper, session: Session, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService()
 
-        val creationInfo = testHelper.runBlockingTest {
-            quadS.generateKey(keyId, null, keyId, emptyKeySigner)
-        }
+        val creationInfo = quadS.generateKey(keyId, null, keyId, emptyKeySigner)
 
         assertAccountData(testHelper, session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")
 
         if (asDefault) {
-            testHelper.runBlockingTest {
-                quadS.setDefaultKey(keyId)
-            }
+            quadS.setDefaultKey(keyId)
             assertAccountData(testHelper, session, DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
 
         return creationInfo
     }
 
-    private fun generatedSecretFromPassphrase(testHelper: CommonTestHelper, session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
+    private suspend fun generatedSecretFromPassphrase(testHelper: CommonTestHelper, session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService()
 
-        val creationInfo = testHelper.runBlockingTest {
-            quadS.generateKeyWithPassphrase(
-                    keyId,
-                    keyId,
-                    passphrase,
-                    emptyKeySigner,
-                    null
-            )
-        }
+        val creationInfo = quadS.generateKeyWithPassphrase(
+                keyId,
+                keyId,
+                passphrase,
+                emptyKeySigner,
+                null
+        )
 
         assertAccountData(testHelper, session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")
         if (asDefault) {
-            testHelper.runBlockingTest {
-                quadS.setDefaultKey(keyId)
-            }
+            quadS.setDefaultKey(keyId)
             assertAccountData(testHelper, session, DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
 

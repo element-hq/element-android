@@ -298,7 +298,7 @@ class KeysBackupTest : InstrumentedTest {
         val keyBackupCreationInfo = keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup).megolmBackupCreationInfo
 
         // - Check encryptGroupSession() returns stg
-        val keyBackupData = testHelper.runBlockingTest { keysBackup.encryptGroupSession(session) }
+        val keyBackupData = keysBackup.encryptGroupSession(session)
         assertNotNull(keyBackupData)
         assertNotNull(keyBackupData!!.sessionData)
 
@@ -1006,7 +1006,7 @@ class KeysBackupTest : InstrumentedTest {
 
         val room2 = aliceSession2.getRoom(cryptoTestData.roomId)!!
 
-        testHelper.launch { testHelper.sendTextMessage(room2, "New key", 1) }
+        testHelper.sendTextMessage(room2, "New key", 1)
 
         // - Try to backup all in aliceSession2, it must fail
         val keysBackup2 = aliceSession2.cryptoService().keysBackupService()

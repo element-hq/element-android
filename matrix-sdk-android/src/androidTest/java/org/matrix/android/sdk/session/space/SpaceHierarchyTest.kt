@@ -442,7 +442,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         //     + c1, c2
 
         commonTestHelper.retryPeriodically {
-            val rootSpaces = commonTestHelper.runBlockingTest { session.spaceService().getRootSpaceSummaries() }
+            val rootSpaces = session.spaceService().getRootSpaceSummaries()
             rootSpaces.size == 2
         }
     }

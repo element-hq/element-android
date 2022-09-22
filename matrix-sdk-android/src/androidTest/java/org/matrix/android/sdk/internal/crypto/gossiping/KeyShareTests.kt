@@ -63,14 +63,12 @@ class KeyShareTests : InstrumentedTest {
         Log.v("TEST", "=======> AliceSession 1 is ${aliceSession.sessionParams.deviceId}")
 
         // Create an encrypted room and add a message
-        val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.roomService().createRoom(
-                    CreateRoomParams().apply {
-                        visibility = RoomDirectoryVisibility.PRIVATE
-                        enableEncryption()
-                    }
-            )
-        }
+        val roomId = aliceSession.roomService().createRoom(
+                CreateRoomParams().apply {
+                    visibility = RoomDirectoryVisibility.PRIVATE
+                    enableEncryption()
+                }
+        )
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
         Thread.sleep(4_000)
@@ -94,10 +92,8 @@ class KeyShareTests : InstrumentedTest {
         assertNotNull(receivedEvent)
         assert(receivedEvent!!.isEncrypted())
 
-        commonTestHelper.runBlockingTest {
-            mustFail {
-                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
-            }
+        mustFail {
+            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
         }
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
@@ -165,10 +161,8 @@ class KeyShareTests : InstrumentedTest {
             }
         }
 
-        commonTestHelper.runBlockingTest {
-            mustFail {
-                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
-            }
+        mustFail {
+            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
         }
 
         // Mark the device as trusted
@@ -226,7 +220,7 @@ class KeyShareTests : InstrumentedTest {
     @Test
     fun test_reShareToUnverifiedIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
-        val testData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(true) }
+        val testData = cryptoTestHelper.doE2ETestWithAliceInARoom(true)
         val aliceSession = testData.firstSession
         val roomFromAlice = aliceSession.getRoom(testData.roomId)!!
 

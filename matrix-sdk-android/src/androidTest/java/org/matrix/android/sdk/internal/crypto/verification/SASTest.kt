@@ -195,7 +195,7 @@ class SASTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun test_key_agreement_macs_Must_include_hmac_sha256() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
 
@@ -232,7 +232,7 @@ class SASTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun test_key_agreement_short_code_include_decimal() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
 
@@ -301,7 +301,7 @@ class SASTest : InstrumentedTest {
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
     fun test_aliceStartTwoRequests() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -342,7 +342,7 @@ class SASTest : InstrumentedTest {
     @Test
     @Ignore("This test will be ignored until it is fixed")
     fun test_aliceAndBobAgreement() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -399,7 +399,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_aliceAndBobSASCode() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -455,7 +455,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_happyPath() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -531,7 +531,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_ConcurrentStart() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val cryptoTestData = testHelper.launch { cryptoTestHelper.doE2ETestWithAliceAndBobInARoom() }
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
