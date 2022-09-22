@@ -100,7 +100,6 @@ class CommonTestHelper internal constructor(context: Context) {
     }
 
     internal val matrix: TestMatrix
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var accountNumber = 0
 
     private val trackedSessions = mutableListOf<Session>()
