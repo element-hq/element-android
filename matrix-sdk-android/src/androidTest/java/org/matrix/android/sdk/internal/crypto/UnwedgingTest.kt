@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.amshove.kluent.shouldBe
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.FixMethodOrder
@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
@@ -133,14 +132,14 @@ class UnwedgingTest : InstrumentedTest {
         testHelper.await(latch)
         bobTimeline.removeListener(bobEventsListener)
 
-        messagesReceivedByBob.size shouldBe 1
+        messagesReceivedByBob.size shouldBeEqualTo 1
         val firstMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
 
         //  - Store the olm session between A&B devices
         // Let us pickle our session with bob here so we can later unpickle it
         // and wedge our session.
         val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(bobSession.cryptoService().getMyDevice().identityKey()!!)
-        sessionIdsForBob!!.size shouldBe 1
+        sessionIdsForBob!!.size shouldBeEqualTo 1
         val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyDevice().identityKey()!!)!!
 
         val oldSession = serializeForRealm(olmSession.olmSession)
@@ -161,7 +160,7 @@ class UnwedgingTest : InstrumentedTest {
         testHelper.await(latch)
         bobTimeline.removeListener(bobEventsListener)
 
-        messagesReceivedByBob.size shouldBe 2
+        messagesReceivedByBob.size shouldBeEqualTo 2
         // Session should have changed
         val secondMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
         Assert.assertNotEquals(firstMessageSession, secondMessageSession)
@@ -192,7 +191,7 @@ class UnwedgingTest : InstrumentedTest {
         }
         bobTimeline.removeListener(bobEventsListener)
 
-        messagesReceivedByBob.size shouldBe 3
+        messagesReceivedByBob.size shouldBeEqualTo 3
 
         val thirdMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
         Timber.i("## CRYPTO | testUnwedging: third message session ID $thirdMessageSession")
