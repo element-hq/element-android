@@ -52,7 +52,10 @@ class DeactivateAccountViewModel @AssistedInject constructor(
     override fun handle(action: DeactivateAccountAction) {
         when (action) {
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
-            DeactivateAccountAction.SsoAuthDone -> pendingAuthHandler.ssoAuthDone()
+            DeactivateAccountAction.SsoAuthDone -> {
+                _viewEvents.post(DeactivateAccountViewEvents.Loading())
+                pendingAuthHandler.ssoAuthDone()
+            }
             is DeactivateAccountAction.PasswordAuthDone -> {
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 pendingAuthHandler.passwordAuthDone(action.password)
