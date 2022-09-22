@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Before
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmSession
 import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -98,39 +98,13 @@ class UnwedgingTest : InstrumentedTest {
         val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(20))
         bobTimeline.start()
 
-        val bobFinalLatch = CountDownLatch(1)
-        val bobHasThreeDecryptedEventsListener = object : Timeline.Listener {
-            override fun onTimelineFailure(throwable: Throwable) {
-                // noop
-            }
-
-            override fun onNewTimelineEvents(eventIds: List<String>) {
-                // noop
-            }
-
-            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val decryptedEventReceivedByBob = snapshot.filter { it.root.type == EventType.ENCRYPTED }
-                Timber.d("Bob can now decrypt ${decryptedEventReceivedByBob.size} messages")
-                if (decryptedEventReceivedByBob.size == 3) {
-                    if (decryptedEventReceivedByBob[0].root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                        bobFinalLatch.countDown()
-                    }
-                }
-            }
-        }
-        bobTimeline.addListener(bobHasThreeDecryptedEventsListener)
-
-        var latch = CountDownLatch(1)
-        var bobEventsListener = createEventListener(latch, 1)
-        bobTimeline.addListener(bobEventsListener)
         messagesReceivedByBob = emptyList()
 
         // - Alice sends a 1st message with a 1st megolm session
         roomFromAlicePOV.sendService().sendTextMessage("First message")
 
         // Wait for the message to be received by Bob
-        testHelper.await(latch)
-        bobTimeline.removeListener(bobEventsListener)
+        messagesReceivedByBob = bobTimeline.waitForMessages(expectedCount = 1)
 
         messagesReceivedByBob.size shouldBeEqualTo 1
         val firstMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
@@ -146,18 +120,13 @@ class UnwedgingTest : InstrumentedTest {
 
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
 
-        latch = CountDownLatch(1)
-        bobEventsListener = createEventListener(latch, 2)
-        bobTimeline.addListener(bobEventsListener)
         messagesReceivedByBob = emptyList()
-
         Timber.i("## CRYPTO | testUnwedging:  Alice sends a 2nd message with a 2nd megolm session")
         // - Alice sends a 2nd message with a 2nd megolm session
         roomFromAlicePOV.sendService().sendTextMessage("Second message")
 
         // Wait for the message to be received by Bob
-        testHelper.await(latch)
-        bobTimeline.removeListener(bobEventsListener)
+        messagesReceivedByBob = bobTimeline.waitForMessages(expectedCount = 2)
 
         messagesReceivedByBob.size shouldBeEqualTo 2
         // Session should have changed
@@ -176,18 +145,12 @@ class UnwedgingTest : InstrumentedTest {
         // Force new session, and key share
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
 
+        Timber.i("## CRYPTO | testUnwedging: Alice sends a 3rd message with a 3rd megolm session but a wedged olm session")
+        // - Alice sends a 3rd message with a 3rd megolm session but a wedged olm session
+        roomFromAlicePOV.sendService().sendTextMessage("Third message")
+        // Bob should not be able to decrypt, because the session key could not be sent
         // Wait for the message to be received by Bob
-        testHelper.waitWithLatch {
-            bobEventsListener = createEventListener(it, 3)
-            bobTimeline.addListener(bobEventsListener)
-            messagesReceivedByBob = emptyList()
-
-            Timber.i("## CRYPTO | testUnwedging: Alice sends a 3rd message with a 3rd megolm session but a wedged olm session")
-            // - Alice sends a 3rd message with a 3rd megolm session but a wedged olm session
-            roomFromAlicePOV.sendService().sendTextMessage("Third message")
-            // Bob should not be able to decrypt, because the session key could not be sent
-        }
-        bobTimeline.removeListener(bobEventsListener)
+        messagesReceivedByBob = bobTimeline.waitForMessages(expectedCount = 3)
 
         messagesReceivedByBob.size shouldBeEqualTo 3
 
@@ -199,8 +162,8 @@ class UnwedgingTest : InstrumentedTest {
         Assert.assertEquals(EventType.MESSAGE, messagesReceivedByBob[1].root.getClearType())
         Assert.assertEquals(EventType.MESSAGE, messagesReceivedByBob[2].root.getClearType())
         // Bob Should not be able to decrypt last message, because session could not be sent as the olm channel was wedged
-        testHelper.await(bobFinalLatch)
-        bobTimeline.removeListener(bobHasThreeDecryptedEventsListener)
+
+        Assert.assertTrue(messagesReceivedByBob[0].root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // It's a trick to force key request on fail to decrypt
         testHelper.doSyncSuspending<Unit> {
@@ -232,9 +195,11 @@ class UnwedgingTest : InstrumentedTest {
 
         bobTimeline.dispose()
     }
+}
 
-    private fun createEventListener(latch: CountDownLatch, expectedNumberOfMessages: Int): Timeline.Listener {
-        return object : Timeline.Listener {
+private suspend fun Timeline.waitForMessages(expectedCount: Int): List<TimelineEvent> {
+    return suspendCancellableCoroutine { continuation ->
+        val listener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
                 // noop
             }
@@ -244,12 +209,16 @@ class UnwedgingTest : InstrumentedTest {
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                messagesReceivedByBob = snapshot.filter { it.root.type == EventType.ENCRYPTED }
+                val messagesReceived = snapshot.filter { it.root.type == EventType.ENCRYPTED }
 
-                if (messagesReceivedByBob.size == expectedNumberOfMessages) {
-                    latch.countDown()
+                if (messagesReceived.size == expectedCount) {
+                    removeListener(this)
+                    continuation.resume(messagesReceived)
                 }
             }
         }
+
+        addListener(listener)
+        continuation.invokeOnCancellation { removeListener(listener) }
     }
 }
