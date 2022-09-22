@@ -33,6 +33,7 @@ import org.junit.Ignore
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -90,7 +91,7 @@ class PendingAuthHandlerTest {
         pendingAuthHandler.ssoAuthDone()
 
         // Then
-        verify { continuation.resumeWithException(match { it is IllegalArgumentException })}
+        verify { continuation.resumeWithException(match { it is IllegalArgumentException }) }
     }
 
     @Test
@@ -138,6 +139,6 @@ class PendingAuthHandlerTest {
         // Then
         pendingAuthHandler.pendingAuth shouldBe null
         pendingAuthHandler.uiaContinuation shouldBe null
-        verify { continuation.resumeWithException(match { it is Exception })}
+        verify { continuation.resumeWithException(match { it is UiaCancelledException }) }
     }
 }

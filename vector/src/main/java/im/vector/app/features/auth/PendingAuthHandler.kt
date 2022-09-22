@@ -20,6 +20,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import org.matrix.android.sdk.api.util.fromBase64
 import timber.log.Timber
 import javax.inject.Inject
@@ -62,7 +63,7 @@ class PendingAuthHandler @Inject constructor(
 
     fun reAuthCancelled() {
         Timber.d("reAuthCancelled")
-        uiaContinuation?.resumeWithException(Exception())
+        uiaContinuation?.resumeWithException(UiaCancelledException())
         uiaContinuation = null
         pendingAuth = null
     }
