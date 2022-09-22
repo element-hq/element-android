@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.session.room.timeline
 
 import androidx.test.filters.LargeTest
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
@@ -72,7 +71,6 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
         val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
-
 
         waitFor(
                 continueWhen = {

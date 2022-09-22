@@ -24,8 +24,8 @@ import org.matrix.android.sdk.test.shared.createTimberTestRule
 
 interface InstrumentedTest {
 
-//    @Rule
-//    fun retryTestRule() = RetryTestRule(3)
+    @Rule
+    fun retryTestRule() = RetryTestRule(3)
 
     @Rule
     fun timberTestRule() = createTimberTestRule()

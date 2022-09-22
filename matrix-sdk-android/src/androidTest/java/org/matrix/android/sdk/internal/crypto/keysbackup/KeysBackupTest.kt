@@ -48,7 +48,6 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.common.waitFor
 import java.security.InvalidParameterException
 import java.util.Collections
@@ -926,7 +925,6 @@ class KeysBackupTest : InstrumentedTest {
                         keysBackup.addListener(listener)
                         continuation.invokeOnCancellation { keysBackup.removeListener(listener) }
                     }
-
                 },
                 action = {
                     // - Make alice back up her keys to her homeserver
@@ -1007,7 +1005,7 @@ class KeysBackupTest : InstrumentedTest {
 
         val stateObserver2 = StateObserver(keysBackup2)
 
-        testHelper.waitForCallbackError<Unit> {keysBackup2.backupAllGroupSessions(null, it) }
+        testHelper.waitForCallbackError<Unit> { keysBackup2.backupAllGroupSessions(null, it) }
 
         // Backup state must be NotTrusted
         assertEquals("Backup state must be NotTrusted", KeysBackupState.NotTrusted, keysBackup2.getState())
