@@ -20,7 +20,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +27,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
@@ -433,14 +431,6 @@ class CommonTestHelper internal constructor(context: Context) {
                 runBlocking { delay(500) }
             }
         }
-    }
-
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
-        val latch = CountDownLatch(1)
-        val job = coroutineScope.launch(dispatcher) {
-            block(latch)
-        }
-        await(latch, timeout, job)
     }
 
     suspend fun <T> doSync(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {

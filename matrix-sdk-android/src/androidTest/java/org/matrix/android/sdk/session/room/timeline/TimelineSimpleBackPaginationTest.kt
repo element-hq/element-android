@@ -18,6 +18,7 @@ package org.matrix.android.sdk.session.room.timeline
 
 import androidx.test.filters.LargeTest
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Ignore
@@ -35,6 +36,9 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.TestConstants
+import org.matrix.android.sdk.common.waitFor
+import org.matrix.android.sdk.common.wrapWithTimeout
+import kotlin.coroutines.resume
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -69,30 +73,37 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
 
-        commonTestHelper.waitWithLatch(timeout = TestConstants.timeOutMillis * 10) {
-            val listener = object : Timeline.Listener {
 
-                override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
-                    if (direction == Timeline.Direction.FORWARDS) {
-                        return
+        waitFor(
+                continueWhen = {
+                    wrapWithTimeout(timeout = TestConstants.timeOutMillis * 10) {
+                        suspendCancellableCoroutine<Unit> { continuation ->
+                            val listener = object : Timeline.Listener {
+
+                                override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
+                                    if (direction == Timeline.Direction.FORWARDS) {
+                                        return
+                                    }
+                                    if (state.hasMoreToLoad && !state.loading) {
+                                        bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
+                                    } else if (!state.hasMoreToLoad) {
+                                        bobTimeline.removeListener(this)
+                                        continuation.resume(Unit)
+                                    }
+                                }
+                            }
+                            bobTimeline.addListener(listener)
+                            continuation.invokeOnCancellation { bobTimeline.removeListener(listener) }
+                        }
                     }
-                    if (state.hasMoreToLoad && !state.loading) {
-                        bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
-                    } else if (!state.hasMoreToLoad) {
-                        bobTimeline.removeListener(this)
-                        it.countDown()
-                    }
-                }
-            }
-            bobTimeline.addListener(listener)
-            bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
-        }
+                },
+                action = { bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30) }
+        )
+
         assertEquals(false, bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS))
         assertEquals(false, bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS))
 
-        val onlySentEvents = runBlocking {
-            bobTimeline.getSnapshot()
-        }
+        val onlySentEvents = bobTimeline.getSnapshot()
                 .filter {
                     it.root.isTextMessage()
                 }.filter {
