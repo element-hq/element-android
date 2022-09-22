@@ -21,7 +21,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
-import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -88,7 +87,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
-    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
@@ -114,6 +112,24 @@ class HomeRoomListViewModel @AssistedInject constructor(
         observeRecents()
         observeFilterTabs()
         observeRooms()
+        observeSelectedSpace()
+    }
+
+    private fun observeSelectedSpace() {
+        spaceStateHandler.getSelectedSpaceFlow()
+                .distinctUntilChanged()
+                .onStart {
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
+                }
+                .onEach { selectedSpaceOption ->
+                    val liveResults = filteredPagedRoomSummariesLive ?: return@onEach
+                    val selectedSpace = selectedSpaceOption.orNull()
+                    liveResults.queryParams = liveResults.queryParams.copy(
+                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                    )
+                    emitEmptyState()
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun observeInvites() {
@@ -248,22 +264,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         ).also {
             filteredPagedRoomSummariesLive = it
         }
-
-        spaceStateHandler.getSelectedSpaceFlow()
-                .distinctUntilChanged()
-                .onStart {
-                    emit(spaceStateHandler.getCurrentSpace().toOption())
-                }
-                .onEach { selectedSpaceOption ->
-                    val selectedSpace = selectedSpaceOption.orNull()
-                    filteredPagedRoomSummariesLive?.queryParams = liveResults.queryParams.copy(
-                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
-                    )
-                    emitEmptyState()
-                }
-                .also { roomsFlow = it }
-                .launchIn(viewModelScope)
-
         liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
