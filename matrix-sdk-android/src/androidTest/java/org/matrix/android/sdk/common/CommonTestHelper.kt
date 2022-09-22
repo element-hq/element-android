@@ -54,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.CancellationException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -387,13 +386,13 @@ class CommonTestHelper internal constructor(context: Context) {
         matrix.authenticationService.getLoginFlow(hs)
 
         var requestFailure: Throwable? = null
-            try {
-                matrix.authenticationService
-                        .getLoginWizard()
-                        .login(userName, password, "myDevice")
-            } catch (failure: Throwable) {
-                requestFailure = failure
-            }
+        try {
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice")
+        } catch (failure: Throwable) {
+            requestFailure = failure
+        }
 
         assertNotNull(requestFailure)
         return requestFailure!!
@@ -432,21 +431,6 @@ class CommonTestHelper internal constructor(context: Context) {
         wrapWithTimeout(timeout) {
             while (!predicate()) {
                 runBlocking { delay(500) }
-            }
-        }
-    }
-
-    suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
-        while (true) {
-            try {
-                delay(1000)
-            } catch (ex: CancellationException) {
-                // the job was canceled, just stop
-                return
-            }
-            if (condition()) {
-                latch.countDown()
-                return
             }
         }
     }

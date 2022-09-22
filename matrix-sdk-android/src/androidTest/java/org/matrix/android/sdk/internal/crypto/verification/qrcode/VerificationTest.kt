@@ -290,11 +290,9 @@ class VerificationTest : InstrumentedTest {
                 otherDevices = listOfNotNull(aliceSessionThatVerifies.sessionParams.deviceId, aliceSessionThatReceivesCanceledEvent.sessionParams.deviceId),
         )
 
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val requests = serviceOfUserWhoReceivesCancellation.getExistingVerificationRequests(aliceSessionToVerify.myUserId)
-                requests.any { it.cancelConclusion == CancelCode.AcceptedByAnotherDevice }
-            }
+        testHelper.retryPeriodically {
+            val requests = serviceOfUserWhoReceivesCancellation.getExistingVerificationRequests(aliceSessionToVerify.myUserId)
+            requests.any { it.cancelConclusion == CancelCode.AcceptedByAnotherDevice }
         }
 
         testHelper.signOutAndClose(aliceSessionToVerify)
