@@ -40,7 +40,7 @@ class ChangePasswordTest : InstrumentedTest {
 
     @Test
     fun changePasswordTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
-        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Change password
         session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)

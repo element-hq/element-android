@@ -68,7 +68,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
      * @return alice session
      */
     suspend fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true, roomHistoryVisibility: RoomHistoryVisibility? = null): CryptoTestData {
-        val aliceSession = testHelper.createAccountSuspending(TestConstants.USER_ALICE, defaultSessionParams)
+        val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
             historyVisibility = roomHistoryVisibility
@@ -94,7 +94,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
         val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
-        val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, defaultSessionParams)
+        val bobSession = testHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
         waitFor(
                 continueWhen = { bobSession.roomService().onMain { getRoomSummariesLive(roomSummaryQueryParams { }) }.first { it.isNotEmpty() } },
@@ -369,25 +369,21 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
+    suspend fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
         aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        val roomId = testHelper.runBlockingTest {
-            aliceSession.roomService().createRoom(CreateRoomParams().apply { name = "MyRoom" })
-        }
+        val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply { name = "MyRoom" })
         val room = aliceSession.getRoom(roomId)!!
 
-        testHelper.runBlockingTest {
-            room.roomCryptoService().enableEncryption()
-        }
+        room.roomCryptoService().enableEncryption()
 
         val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
             val session = testHelper.createAccount("User_$index", defaultSessionParams)
-            testHelper.runBlockingTest(timeout = 600_000) { room.membershipService().invite(session.myUserId, null) }
+            room.membershipService().invite(session.myUserId, null)
             println("TEST -> " + session.myUserId + " invited")
-            testHelper.runBlockingTest { session.roomService().joinRoom(room.roomId, null, emptyList()) }
+            session.roomService().joinRoom(room.roomId, null, emptyList())
             println("TEST -> " + session.myUserId + " joined")
             sessions.add(session)
         }

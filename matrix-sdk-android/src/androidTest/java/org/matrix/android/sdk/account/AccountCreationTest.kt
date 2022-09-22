@@ -36,13 +36,13 @@ class AccountCreationTest : InstrumentedTest {
 
     @Test
     fun createAccountTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
-        commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
     fun createAccountAndLoginAgainTest() = runSuspendingSessionTest(context()) { commonTestHelper ->
-        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Log again to the same account
         commonTestHelper.logIntoAccount(session.myUserId, SessionTestParams(withInitialSync = true))

@@ -45,7 +45,7 @@ class ApiInterceptorTest : InstrumentedTest {
 
         commonTestHelper.matrix.registerApiInterceptorListener(ApiPath.REGISTER, listener)
 
-        val session = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         commonTestHelper.signOutAndClose(session)
 

@@ -40,7 +40,6 @@ import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -109,7 +108,7 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    fun test_StoreSecret() = runSessionTest(context()) { testHelper ->
+    fun test_StoreSecret() = runSuspendingSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         val keyId = "My.Key"
@@ -152,7 +151,7 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    fun test_SetDefaultLocalEcho() = runSessionTest(context()) { testHelper ->
+    fun test_SetDefaultLocalEcho() = runSuspendingSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
@@ -171,7 +170,7 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
-    fun test_StoreSecretWithMultipleKey() = runSessionTest(context()) { testHelper ->
+    fun test_StoreSecretWithMultipleKey() = runSuspendingSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         val keyId1 = "Key.1"
@@ -220,7 +219,7 @@ class QuadSTests : InstrumentedTest {
 
     @Test
     @Ignore("Test is working locally, not in GitHub actions")
-    fun test_GetSecretWithBadPassphrase() = runSessionTest(context()) { testHelper ->
+    fun test_GetSecretWithBadPassphrase() = runSuspendingSessionTest(context()) { testHelper ->
 
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         val keyId1 = "Key.1"

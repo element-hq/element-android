@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
@@ -53,7 +52,7 @@ class SpaceCreationTest : InstrumentedTest {
 
     @Test
     fun createSimplePublicSpace() = runSuspendingSessionTest(context()) { commonTestHelper ->
-        val session = commonTestHelper.createAccountSuspending("Hubble", SessionTestParams(true))
+        val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
         val spaceId = session.spaceService().createSpace(roomName, topic, null, true)
@@ -105,8 +104,8 @@ class SpaceCreationTest : InstrumentedTest {
     @Ignore
     fun testJoinSimplePublicSpace() = runSuspendingSessionTest(context()) { commonTestHelper ->
 
-        val aliceSession = commonTestHelper.createAccountSuspending("alice", SessionTestParams(true))
-        val bobSession = commonTestHelper.createAccountSuspending("bob", SessionTestParams(true))
+        val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
+        val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
         val roomName = "My Space"
         val topic = "A public space for test"
@@ -130,8 +129,8 @@ class SpaceCreationTest : InstrumentedTest {
 
     @Test
     fun testSimplePublicSpaceWithChildren() = runSuspendingSessionTest(context()) { commonTestHelper ->
-        val aliceSession = commonTestHelper.createAccountSuspending("alice", SessionTestParams(true))
-        val bobSession = commonTestHelper.createAccountSuspending("bob", SessionTestParams(true))
+        val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
+        val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
         val roomName = "My Space"
         val topic = "A public space for test"

@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
 import java.util.concurrent.CountDownLatch
 
 /** !! Not working with the new timeline
@@ -51,7 +52,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
      */
 
     @Test
-    fun everyone_should_decrypt_message_in_a_crowded_room() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun everyone_should_decrypt_message_in_a_crowded_room() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithManyMembers(NUMBER_OF_MEMBERS)
 
         val sessionForFirstMember = cryptoTestData.firstSession

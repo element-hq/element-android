@@ -59,8 +59,8 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.mustFail
 import kotlin.coroutines.resume
@@ -95,7 +95,7 @@ class E2eeSanityTests : InstrumentedTest {
         // add some more users and invite them
         val otherAccounts = listOf("benoit", "valere", "ganfra") // , "adam", "manu")
                 .map {
-                    testHelper.createAccountSuspending(it, SessionTestParams(true)).also {
+                    testHelper.createAccount(it, SessionTestParams(true)).also {
                         it.cryptoService().enableKeyGossiping(false)
                     }
                 }
@@ -137,7 +137,7 @@ class E2eeSanityTests : InstrumentedTest {
         // Add a new user to the room, and check that he can't decrypt
         val newAccount = listOf("adam") // , "adam", "manu")
                 .map {
-                    testHelper.createAccountSuspending(it, SessionTestParams(true))
+                    testHelper.createAccount(it, SessionTestParams(true))
                 }
 
         newAccount.forEach {
@@ -186,7 +186,7 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     @Test
-    fun testKeyGossipingIsEnabledByDefault() = runSessionTest(context()) { testHelper ->
+    fun testKeyGossipingIsEnabledByDefault() = runSuspendingSessionTest(context()) { testHelper ->
         val session = testHelper.createAccount("alice", SessionTestParams(true))
         Assert.assertTrue("Key gossiping should be enabled by default", session.cryptoService().isKeyGossipingEnabled())
     }
@@ -537,7 +537,7 @@ class E2eeSanityTests : InstrumentedTest {
     @Test
     fun testASelfInteractiveVerificationAndGossip() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
-        val aliceSession = testHelper.createAccountSuspending("alice", SessionTestParams(true))
+        val aliceSession = testHelper.createAccount("alice", SessionTestParams(true))
         cryptoTestHelper.bootstrapSecurity(aliceSession)
 
         // now let's create a new login from alice

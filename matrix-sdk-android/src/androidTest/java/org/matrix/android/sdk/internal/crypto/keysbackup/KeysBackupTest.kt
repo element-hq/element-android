@@ -44,8 +44,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreation
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
@@ -104,7 +104,7 @@ class KeysBackupTest : InstrumentedTest {
      * Check that prepareKeysBackupVersionWithPassword returns valid data
      */
     @Test
-    fun prepareKeysBackupVersionTest() = runSessionTest(context()) { testHelper ->
+    fun prepareKeysBackupVersionTest() = runSuspendingSessionTest(context()) { testHelper ->
 
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
 
@@ -133,7 +133,7 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun createKeysBackupVersionTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val bobSession = testHelper.createAccountSuspending(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
+        val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
         cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val keysBackup = bobSession.cryptoService().keysBackupService()

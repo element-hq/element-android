@@ -48,13 +48,13 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
     @Test
     fun msc3061ShouldBeDisabledByDefault() = runSuspendingCryptoTest(context()) { _, commonTestHelper ->
-        val aliceSession = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+        val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
         Assert.assertFalse("MSC3061 is lab and should be disabled by default", aliceSession.cryptoService().isShareKeysOnInviteEnabled())
     }
 
     @Test
     fun ensureKeysAreNotSharedIfOptionDisabled() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val aliceSession = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
             historyVisibility = RoomHistoryVisibility.SHARED
@@ -73,7 +73,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val withSession2 = commonTestHelper.sendTextMessageSuspending(roomAlice, "World", 1)
 
         // Create bob account
-        val bobSession = commonTestHelper.createAccountSuspending(TestConstants.USER_BOB, SessionTestParams(withInitialSync = true))
+        val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(withInitialSync = true))
 
         // Let alice invite bob
         roomAlice.membershipService().invite(bobSession.myUserId)
@@ -104,7 +104,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         )
 
         // Invite a new user
-        val samSession = commonTestHelper.createAccountSuspending(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
+        val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
 
         // Let alice invite sam
         roomAlice.membershipService().invite(samSession.myUserId)
@@ -183,7 +183,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Now let bob invite Sam
         // Invite a new user
-        val samSession = commonTestHelper.createAccountSuspending(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
+        val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
 
         // Let bob invite sam
         bobSession.getRoom(testData.roomId)!!.membershipService().invite(samSession.myUserId)
@@ -196,7 +196,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
     @Test
     fun testBackupFlagIsCorrect() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
-        val aliceSession = commonTestHelper.createAccountSuspending(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+        val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
             historyVisibility = RoomHistoryVisibility.SHARED
@@ -255,7 +255,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Now let's invite sam
         // Invite a new user
-        val samSession = commonTestHelper.createAccountSuspending(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
+        val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
 
         // Let alice invite sam
         newAliceSession.getRoom(roomId)!!.membershipService().invite(samSession.myUserId)
