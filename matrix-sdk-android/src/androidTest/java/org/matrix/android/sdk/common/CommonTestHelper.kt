@@ -272,7 +272,7 @@ class CommonTestHelper internal constructor(context: Context) {
      * @param message the message to send
      * @param numberOfMessages the number of time the message will be sent
      */
-    fun replyInThreadMessage(
+    suspend fun replyInThreadMessage(
             room: Room,
             message: String,
             numberOfMessages: Int,
@@ -281,7 +281,7 @@ class CommonTestHelper internal constructor(context: Context) {
     ): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
-        val sentEvents = runBlocking { sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId) }
+        val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
         timeline.dispose()
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", numberOfMessages.toLong(), sentEvents.size.toLong())
