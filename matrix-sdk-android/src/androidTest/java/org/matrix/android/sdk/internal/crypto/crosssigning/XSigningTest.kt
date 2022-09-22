@@ -101,14 +101,14 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(aliceAuthParams)
                 }
             }, it)
         }
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(bobAuthParams)
@@ -154,14 +154,14 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(aliceAuthParams)
                 }
             }, it)
         }
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(bobAuthParams)
@@ -171,12 +171,12 @@ class XSigningTest : InstrumentedTest {
 
         // Check that alice can see bob keys
         val bobUserId = bobSession.myUserId
-        testHelper.doSyncSuspending<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
+        testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
         assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
 
-        testHelper.doSyncSuspending<Unit> { aliceSession.cryptoService().crossSigningService().trustUser(bobUserId, it) }
+        testHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().trustUser(bobUserId, it) }
 
         // Now bobs logs in on a new device and verifies it
         // We will want to test that in alice POV, this new device would be trusted by cross signing
@@ -185,7 +185,7 @@ class XSigningTest : InstrumentedTest {
         val bobSecondDeviceId = bobSession2.sessionParams.deviceId!!
 
         // Check that bob first session sees the new login
-        val data = testHelper.doSyncSuspending<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        val data = testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             bobSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
         }
 
@@ -197,12 +197,12 @@ class XSigningTest : InstrumentedTest {
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId, it)
         }
 
         // Now alice should cross trust bob's second device
-        val data2 = testHelper.doSyncSuspending<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        val data2 = testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
         }
 

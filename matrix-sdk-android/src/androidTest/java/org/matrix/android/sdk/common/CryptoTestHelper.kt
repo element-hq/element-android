@@ -221,7 +221,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     suspend fun initializeCrossSigning(session: Session) {
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {

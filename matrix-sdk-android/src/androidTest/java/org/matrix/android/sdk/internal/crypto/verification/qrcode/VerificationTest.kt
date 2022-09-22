@@ -164,7 +164,7 @@ class VerificationTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
 
-        testHelper.doSyncSuspending<Unit> { callback ->
+        testHelper.doSync<Unit> { callback ->
             aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -181,7 +181,7 @@ class VerificationTest : InstrumentedTest {
                     )
         }
 
-        testHelper.doSyncSuspending<Unit> { callback ->
+        testHelper.doSync<Unit> { callback ->
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {

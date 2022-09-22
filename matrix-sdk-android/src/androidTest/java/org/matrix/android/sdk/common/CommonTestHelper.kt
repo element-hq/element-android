@@ -477,27 +477,7 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
-    // Transform a method with a MatrixCallback to a synchronous method
-    inline fun <reified T> doSync(timeout: Long? = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
-        val lock = CountDownLatch(1)
-        var result: T? = null
-
-        val callback = object : TestMatrixCallback<T>(lock) {
-            override fun onSuccess(data: T) {
-                result = data
-                super.onSuccess(data)
-            }
-        }
-
-        block.invoke(callback)
-
-        await(lock, timeout)
-
-        assertNotNull(result)
-        return result!!
-    }
-
-    suspend fun <T> doSyncSuspending(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
+    suspend fun <T> doSync(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
         return wrapWithTimeout(timeout) {
             suspendCoroutine { continuation ->
                 val callback = object : MatrixCallback<T> {

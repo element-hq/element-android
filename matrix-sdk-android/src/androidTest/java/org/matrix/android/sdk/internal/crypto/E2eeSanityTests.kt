@@ -216,10 +216,10 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val bobKeysBackupService = bobSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
-        val megolmBackupCreationInfo = testHelper.doSyncSuspending<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
             bobKeysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
         }
-        val version = testHelper.doSyncSuspending<KeysVersion> {
+        val version = testHelper.doSync<KeysVersion> {
             bobKeysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
         Log.v("#E2E TEST", "... Key backup started and enabled for bob")

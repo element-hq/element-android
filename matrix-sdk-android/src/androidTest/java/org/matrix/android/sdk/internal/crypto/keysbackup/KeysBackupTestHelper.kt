@@ -65,7 +65,7 @@ internal class KeysBackupTestHelper(
 
         var lastProgress = 0
         var lastTotal = 0
-        testHelper.doSyncSuspending<Unit> {
+        testHelper.doSync<Unit> {
             keysBackup.backupAllGroupSessions(object : ProgressListener {
                 override fun onProgress(progress: Int, total: Int) {
                     lastProgress = progress
@@ -98,7 +98,7 @@ internal class KeysBackupTestHelper(
         )
     }
 
-    fun prepareAndCreateKeysBackupData(
+    suspend fun prepareAndCreateKeysBackupData(
             keysBackup: KeysBackupService,
             password: String? = null
     ): PrepareKeysBackupDataResult {
