@@ -32,15 +32,15 @@ class PendingAuthHandler @Inject constructor(
         private val matrix: Matrix,
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
-
     var uiaContinuation: Continuation<UIABaseAuth>? = null
     var pendingAuth: UIABaseAuth? = null
 
     fun ssoAuthDone() {
-        Timber.d("ssoAuthDone $pendingAuth , continuation: $uiaContinuation")
         pendingAuth?.let {
+            Timber.d("ssoAuthDone, resuming action")
             uiaContinuation?.resume(it)
         } ?: run {
+            Timber.d("ssoAuthDone, cannot resume: no pendingAuth")
             uiaContinuation?.resumeWithException(IllegalArgumentException())
         }
     }
