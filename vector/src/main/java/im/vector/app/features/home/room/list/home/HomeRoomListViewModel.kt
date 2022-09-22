@@ -17,6 +17,9 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import arrow.core.Option
 import arrow.core.toOption
@@ -92,6 +95,14 @@ class HomeRoomListViewModel @AssistedInject constructor(
             .setEnablePlaceholders(true)
             .setPrefetchDistance(10)
             .build()
+
+    private val roomListRelay = MutableLiveData<PagedList<RoomSummary>>()
+    // PagedList doesn't work well with State, so extract in a variable for now
+    val roomsLivePagedList: LiveData<PagedList<RoomSummary>> = roomListRelay
+
+    private val roomListRelayObserver = Observer<PagedList<RoomSummary>> {
+        roomListRelay.postValue(it)
+    }
 
     private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
     private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
@@ -220,6 +231,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms() = viewModelScope.launch {
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(roomListRelayObserver)
+
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
         }
@@ -230,7 +243,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         } else {
             RoomSortOrder.ACTIVITY
         }
-
         val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
                 params,
                 pagedListConfig,
@@ -246,7 +258,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 }
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
-                    liveResults.queryParams = liveResults.queryParams.copy(
+                    filteredPagedRoomSummariesLive?.queryParams = liveResults.queryParams.copy(
                             spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
                     )
                     emitEmptyState()
@@ -254,7 +266,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .also { roomsFlow = it }
                 .launchIn(viewModelScope)
 
-        setState { copy(roomsLivePagedList = liveResults.livePagedList) }
+        liveResults.livePagedList.observeForever(roomListRelayObserver)
     }
 
     private fun observeOrderPreferences() {
