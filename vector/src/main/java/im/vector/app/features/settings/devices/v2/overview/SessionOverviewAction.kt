@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class SessionOverviewAction : VectorViewModelAction {
     object VerifySession : SessionOverviewAction()
+    object SignoutSession : SessionOverviewAction()
 }
