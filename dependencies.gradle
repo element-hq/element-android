@@ -7,7 +7,7 @@ ext.versions = [
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.2.2"
+def gradle = "7.3.0"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.7.10"
 def kotlinCoroutines = "1.6.4"
