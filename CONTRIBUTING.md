@@ -120,7 +120,7 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 Translations are handled using an external tool: [Weblate](https://translate.element.io/projects/element-android/)
 
-As a general rule, please never edit or add or remove translations to the project in a Pull Request. It can lead to merge conflict if the translations are also modified in Weblate side.
+**As a general rule, please never edit or add or remove translations to the project in a Pull Request**. It can lead to merge conflict if the translations are also modified in Weblate side. Pull Request containing change(s) on the translation files cannot be merged.
 
 #### Adding new string
 
@@ -149,6 +149,17 @@ Instead, please comment the original string with:
 And add `tools:ignore="UnusedResources"` to the string, to let lint ignore that the string is not used.
 
 The string will be removed during the next sync with Weblate.
+
+#### Renaming string ids
+
+This is possible to rename ids of the String resources, but since translation files cannot be edited, add TODO in the main strings.xml file above the strings you want to rename. 
+
+```xml
+<!-- TODO Rename to [put_new_id_here] -->
+<string name="current_id">Hello Matrix world!</string>
+```
+
+The string id(s) will be renamed during the next Weblate sync.
 
 ### Accessibility
 
