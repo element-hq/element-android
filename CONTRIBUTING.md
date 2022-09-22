@@ -130,7 +130,11 @@ The file `values/strings.xml` must only contain American English (U. S. English)
 
 New strings can be added anywhere in the file `values/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
 
-Do not hesitate to use plurals when appropriate.
+##### Plurals
+
+Please use `plurals` resources when appropriate, and note that some languages have specific rules for `plurals`, so even if the string will always be at the plural form for English, please always create a `plurals` resource.
+
+Specific plural forms can be found [here](https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html).
 
 #### Editing existing strings
 
