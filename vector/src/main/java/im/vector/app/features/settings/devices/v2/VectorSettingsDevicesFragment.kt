@@ -101,8 +101,7 @@ class VectorSettingsDevicesFragment :
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvent.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
@@ -226,6 +225,9 @@ class VectorSettingsDevicesFragment :
             }
             views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+            }
+            views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
+                viewModel.handle(DevicesAction.VerifyCurrentSession)
             }
         } ?: run {
             hideCurrentSessionView()

@@ -34,6 +34,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
@@ -61,12 +62,33 @@ class SessionOverviewFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
         initSessionInfoView()
+        initVerifyButton()
     }
 
     private fun initSessionInfoView() {
         views.sessionOverviewInfo.onLearnMoreClickListener = {
             Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun initVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.VerifySession)
+        }
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                is SessionOverviewViewEvent.SelfVerification -> {
+                    navigator.requestSelfSessionVerification(requireActivity())
+                }
+                is SessionOverviewViewEvent.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                }
+            }
         }
     }
 
