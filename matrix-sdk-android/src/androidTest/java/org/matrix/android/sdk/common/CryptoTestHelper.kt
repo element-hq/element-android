@@ -221,7 +221,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     suspend fun initializeCrossSigning(session: Session) {
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -272,10 +272,10 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
 
         // set up megolm backup
-        val creationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val creationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
             session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
         }
-        val version = testHelper.doSync<KeysVersion> {
+        val version = testHelper.waitForCallback<KeysVersion> {
             session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
         }
         // Save it for gossiping

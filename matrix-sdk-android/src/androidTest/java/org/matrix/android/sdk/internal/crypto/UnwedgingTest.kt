@@ -166,7 +166,7 @@ class UnwedgingTest : InstrumentedTest {
         Assert.assertTrue(messagesReceivedByBob[0].root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // It's a trick to force key request on fail to decrypt
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {

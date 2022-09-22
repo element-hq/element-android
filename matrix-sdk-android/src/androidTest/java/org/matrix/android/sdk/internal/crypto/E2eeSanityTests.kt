@@ -216,10 +216,10 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val bobKeysBackupService = bobSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
             bobKeysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
         }
-        val version = testHelper.doSync<KeysVersion> {
+        val version = testHelper.waitForCallback<KeysVersion> {
             bobKeysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
         Log.v("#E2E TEST", "... Key backup started and enabled for bob")
@@ -249,7 +249,7 @@ class E2eeSanityTests : InstrumentedTest {
         // Let's wait a bit to be sure that bob has backed up the session
 
         Log.v("#E2E TEST", "Force key backup for Bob...")
-        testHelper.doSync<Unit> { bobKeysBackupService.backupAllGroupSessions(null, it) }
+        testHelper.waitForCallback<Unit> { bobKeysBackupService.backupAllGroupSessions(null, it) }
         Log.v("#E2E TEST", "... Key backup done for Bob")
 
         // Now lets logout both alice and bob to ensure that we won't have any gossiping
@@ -282,11 +282,11 @@ class E2eeSanityTests : InstrumentedTest {
         // Let's now import keys from backup
 
         newBobSession.cryptoService().keysBackupService().let { kbs ->
-            val keyVersionResult = testHelper.doSync<KeysVersionResult?> {
+            val keyVersionResult = testHelper.waitForCallback<KeysVersionResult?> {
                 kbs.getVersion(version.version, it)
             }
 
-            val importedResult = testHelper.doSync<ImportRoomKeysResult> {
+            val importedResult = testHelper.waitForCallback<ImportRoomKeysResult> {
                 kbs.restoreKeyBackupWithPassword(
                         keyVersionResult!!,
                         keyBackupPassword,

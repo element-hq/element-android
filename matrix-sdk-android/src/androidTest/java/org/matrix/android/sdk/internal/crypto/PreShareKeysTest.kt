@@ -52,7 +52,7 @@ class PreShareKeysTest : InstrumentedTest {
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             aliceSession.cryptoService().prepareToEncrypt(e2eRoomID, it)
         }
 

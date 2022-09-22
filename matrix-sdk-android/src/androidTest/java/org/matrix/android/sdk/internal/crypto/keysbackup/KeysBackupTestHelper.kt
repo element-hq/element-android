@@ -65,7 +65,7 @@ internal class KeysBackupTestHelper(
 
         var lastProgress = 0
         var lastTotal = 0
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             keysBackup.backupAllGroupSessions(object : ProgressListener {
                 override fun onProgress(progress: Int, total: Int) {
                     lastProgress = progress
@@ -104,7 +104,7 @@ internal class KeysBackupTestHelper(
     ): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
             keysBackup.prepareKeysBackupVersion(password, null, it)
         }
 
@@ -113,7 +113,7 @@ internal class KeysBackupTestHelper(
         Assert.assertFalse("Key backup should not be enabled before creation", keysBackup.isEnabled())
 
         // Create the version
-        val keysVersion = testHelper.doSync<KeysVersion> {
+        val keysVersion = testHelper.waitForCallback<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 

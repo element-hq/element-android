@@ -116,7 +116,7 @@ class KeysBackupTest : InstrumentedTest {
 
         assertFalse(keysBackup.isEnabled())
 
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
             keysBackup.prepareKeysBackupVersion(null, null, it)
         }
 
@@ -142,14 +142,14 @@ class KeysBackupTest : InstrumentedTest {
 
         assertFalse(keysBackup.isEnabled())
 
-        val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
             keysBackup.prepareKeysBackupVersion(null, null, it)
         }
 
         assertFalse(keysBackup.isEnabled())
 
         // Create the version
-        val version = testHelper.doSync<KeysVersion> {
+        val version = testHelper.waitForCallback<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
@@ -157,10 +157,10 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(keysBackup.isEnabled())
 
         // Check that it's signed with MSK
-        val versionResult = testHelper.doSync<KeysVersionResult?> {
+        val versionResult = testHelper.waitForCallback<KeysVersionResult?> {
             keysBackup.getVersion(version.version, it)
         }
-        val trust = testHelper.doSync<KeysBackupVersionTrust> {
+        val trust = testHelper.waitForCallback<KeysBackupVersionTrust> {
             keysBackup.getKeysBackupTrust(versionResult!!, it)
         }
 
@@ -256,7 +256,7 @@ class KeysBackupTest : InstrumentedTest {
 
         var lastBackedUpKeysProgress = 0
 
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             keysBackup.backupAllGroupSessions(object : ProgressListener {
                 override fun onProgress(progress: Int, total: Int) {
                     assertEquals(nbOfKeys, total)
@@ -333,7 +333,7 @@ class KeysBackupTest : InstrumentedTest {
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
 
         // - Restore the e2e backup from the homeserver
-        val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
+        val importRoomKeysResult = testHelper.waitForCallback<ImportRoomKeysResult> {
             testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
@@ -428,7 +428,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Trust the backup from the new device
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersion(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     true,
@@ -444,14 +444,14 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled())
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
+        val keysVersionResult = testHelper.waitForCallback<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
         }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
 
-        val keysBackupVersionTrust = testHelper.doSync<KeysBackupVersionTrust> {
+        val keysBackupVersionTrust = testHelper.waitForCallback<KeysBackupVersionTrust> {
             testData.aliceSession2.cryptoService().keysBackupService().getKeysBackupTrust(keysVersionResult, it)
         }
 
@@ -488,7 +488,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Trust the backup from the new device with the recovery key
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
@@ -504,14 +504,14 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled())
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
+        val keysVersionResult = testHelper.waitForCallback<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
         }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
 
-        val keysBackupVersionTrust = testHelper.doSync<KeysBackupVersionTrust> {
+        val keysBackupVersionTrust = testHelper.waitForCallback<KeysBackupVersionTrust> {
             testData.aliceSession2.cryptoService().keysBackupService().getKeysBackupTrust(keysVersionResult, it)
         }
 
@@ -590,7 +590,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Trust the backup from the new device with the password
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithPassphrase(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     password,
@@ -606,14 +606,14 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled())
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
+        val keysVersionResult = testHelper.waitForCallback<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
         }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
 
-        val keysBackupVersionTrust = testHelper.doSync<KeysBackupVersionTrust> {
+        val keysBackupVersionTrust = testHelper.waitForCallback<KeysBackupVersionTrust> {
             testData.aliceSession2.cryptoService().keysBackupService().getKeysBackupTrust(keysVersionResult, it)
         }
 
@@ -717,7 +717,7 @@ class KeysBackupTest : InstrumentedTest {
         // - Restore the e2e backup with the password
         val steps = ArrayList<StepProgressListener.Step>()
 
-        val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
+        val importRoomKeysResult = testHelper.waitForCallback<ImportRoomKeysResult> {
             testData.aliceSession2.cryptoService().keysBackupService().restoreKeyBackupWithPassword(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     password,
@@ -807,7 +807,7 @@ class KeysBackupTest : InstrumentedTest {
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(password)
 
         // - Restore the e2e backup with the recovery key.
-        val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
+        val importRoomKeysResult = testHelper.waitForCallback<ImportRoomKeysResult> {
             testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
@@ -873,12 +873,12 @@ class KeysBackupTest : InstrumentedTest {
         keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
         // Get key backup version from the homeserver
-        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
+        val keysVersionResult = testHelper.waitForCallback<KeysBackupLastVersionResult> {
             keysBackup.getCurrentVersion(it)
         }.toKeysVersionResult()
 
         // - Check the returned KeyBackupVersion is trusted
-        val keysBackupVersionTrust = testHelper.doSync<KeysBackupVersionTrust> {
+        val keysBackupVersionTrust = testHelper.waitForCallback<KeysBackupVersionTrust> {
             keysBackup.getKeysBackupTrust(keysVersionResult!!, it)
         }
 
@@ -944,7 +944,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Create a new backup with fake data on the homeserver, directly using the rest client
         val megolmBackupCreationInfo = cryptoTestHelper.createFakeMegolmBackupCreationInfo()
-        testHelper.doSync<KeysVersion> {
+        testHelper.waitForCallback<KeysVersion> {
             (keysBackup as DefaultKeysBackupService).createFakeKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
@@ -990,7 +990,7 @@ class KeysBackupTest : InstrumentedTest {
         keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
         // Wait for keys backup to finish by asking again to backup keys.
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             keysBackup.backupAllGroupSessions(null, it)
         }
 
@@ -1058,7 +1058,7 @@ class KeysBackupTest : InstrumentedTest {
         // -> It must use the same backup version
         assertEquals(oldKeyBackupVersion, aliceSession2.cryptoService().keysBackupService().currentBackupVersion)
 
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             aliceSession2.cryptoService().keysBackupService().backupAllGroupSessions(null, it)
         }
 
@@ -1091,7 +1091,7 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(keysBackup.isEnabled())
 
         // Delete the backup
-        testHelper.doSync<Unit> { keysBackup.deleteBackup(keyBackupCreationInfo.version, it) }
+        testHelper.waitForCallback<Unit> { keysBackup.deleteBackup(keyBackupCreationInfo.version, it) }
 
         // Backup is now disabled
         assertFalse(keysBackup.isEnabled())

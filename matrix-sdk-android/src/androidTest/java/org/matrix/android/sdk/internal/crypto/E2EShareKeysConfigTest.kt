@@ -217,14 +217,14 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val keysBackupService = aliceSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
-        val megolmBackupCreationInfo = commonTestHelper.doSync<MegolmBackupCreationInfo> {
+        val megolmBackupCreationInfo = commonTestHelper.waitForCallback<MegolmBackupCreationInfo> {
             keysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
         }
-        val version = commonTestHelper.doSync<KeysVersion> {
+        val version = commonTestHelper.waitForCallback<KeysVersion> {
             keysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
-        commonTestHelper.doSync<Unit> {
+        commonTestHelper.waitForCallback<Unit> {
             keysBackupService.backupAllGroupSessions(null, it)
         }
 
@@ -235,11 +235,11 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         newAliceSession.cryptoService().enableShareKeyOnInvite(true)
 
         newAliceSession.cryptoService().keysBackupService().let { kbs ->
-            val keyVersionResult = commonTestHelper.doSync<KeysVersionResult?> {
+            val keyVersionResult = commonTestHelper.waitForCallback<KeysVersionResult?> {
                 kbs.getVersion(version.version, it)
             }
 
-            val importedResult = commonTestHelper.doSync<ImportRoomKeysResult> {
+            val importedResult = commonTestHelper.waitForCallback<ImportRoomKeysResult> {
                 kbs.restoreKeyBackupWithPassword(
                         keyVersionResult!!,
                         keyBackupPassword,

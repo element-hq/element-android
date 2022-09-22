@@ -433,7 +433,7 @@ class CommonTestHelper internal constructor(context: Context) {
         }
     }
 
-    suspend fun <T> doSync(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
+    suspend fun <T> waitForCallback(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
         return wrapWithTimeout(timeout) {
             suspendCoroutine { continuation ->
                 val callback = object : MatrixCallback<T> {
