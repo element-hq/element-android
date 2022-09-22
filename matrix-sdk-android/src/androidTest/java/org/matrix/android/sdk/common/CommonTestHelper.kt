@@ -71,7 +71,7 @@ class CommonTestHelper internal constructor(context: Context) {
     companion object {
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runSuspendingSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
+        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
                 try {
@@ -87,7 +87,7 @@ class CommonTestHelper internal constructor(context: Context) {
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runSuspendingCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
+        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {

@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
@@ -43,7 +43,7 @@ import java.util.concurrent.CountDownLatch
 class ThreadMessagingTest : InstrumentedTest {
 
     @Test
-    fun reply_in_thread_should_create_a_thread() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun reply_in_thread_should_create_a_thread() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -101,7 +101,7 @@ class ThreadMessagingTest : InstrumentedTest {
     }
 
     @Test
-    fun reply_in_thread_should_create_a_thread_from_other_user() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun reply_in_thread_should_create_a_thread_from_other_user() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -174,7 +174,7 @@ class ThreadMessagingTest : InstrumentedTest {
     }
 
     @Test
-    fun reply_in_thread_to_timeline_message_multiple_times() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun reply_in_thread_to_timeline_message_multiple_times() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -237,7 +237,7 @@ class ThreadMessagingTest : InstrumentedTest {
     }
 
     @Test
-    fun thread_summary_advanced_validation_after_multiple_messages_in_multiple_threads() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun thread_summary_advanced_validation_after_multiple_messages_in_multiple_threads() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession

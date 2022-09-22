@@ -42,7 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
@@ -51,7 +51,7 @@ import org.matrix.android.sdk.common.SessionTestParams
 class SpaceCreationTest : InstrumentedTest {
 
     @Test
-    fun createSimplePublicSpace() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun createSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
@@ -102,7 +102,7 @@ class SpaceCreationTest : InstrumentedTest {
 
     @Test
     @Ignore
-    fun testJoinSimplePublicSpace() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testJoinSimplePublicSpace() = runSessionTest(context()) { commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
@@ -128,7 +128,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
-    fun testSimplePublicSpaceWithChildren() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testSimplePublicSpaceWithChildren() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 

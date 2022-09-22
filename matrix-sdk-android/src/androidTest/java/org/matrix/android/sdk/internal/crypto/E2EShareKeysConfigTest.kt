@@ -36,7 +36,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestData
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -47,13 +47,13 @@ import org.matrix.android.sdk.common.TestConstants
 class E2EShareKeysConfigTest : InstrumentedTest {
 
     @Test
-    fun msc3061ShouldBeDisabledByDefault() = runSuspendingCryptoTest(context()) { _, commonTestHelper ->
+    fun msc3061ShouldBeDisabledByDefault() = runCryptoTest(context()) { _, commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
         Assert.assertFalse("MSC3061 is lab and should be disabled by default", aliceSession.cryptoService().isShareKeysOnInviteEnabled())
     }
 
     @Test
-    fun ensureKeysAreNotSharedIfOptionDisabled() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun ensureKeysAreNotSharedIfOptionDisabled() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
@@ -126,7 +126,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     }
 
     @Test
-    fun ifSharingDisabledOnAliceSideBobShouldNotShareAliceHistory() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun ifSharingDisabledOnAliceSideBobShouldNotShareAliceHistory() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(roomHistoryVisibility = RoomHistoryVisibility.SHARED)
         val aliceSession = testData.firstSession.also {
             it.cryptoService().enableShareKeyOnInvite(false)
@@ -153,7 +153,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     }
 
     @Test
-    fun ifSharingEnabledOnAliceSideBobShouldShareAliceHistory() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun ifSharingEnabledOnAliceSideBobShouldShareAliceHistory() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(roomHistoryVisibility = RoomHistoryVisibility.SHARED)
         val aliceSession = testData.firstSession.also {
             it.cryptoService().enableShareKeyOnInvite(true)
@@ -195,7 +195,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     // test flag on backup is correct
 
     @Test
-    fun testBackupFlagIsCorrect() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun testBackupFlagIsCorrect() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {

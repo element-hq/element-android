@@ -43,7 +43,7 @@ import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.first
 import org.matrix.android.sdk.common.onMain
@@ -54,7 +54,7 @@ import org.matrix.android.sdk.common.waitFor
 class SpaceHierarchyTest : InstrumentedTest {
 
     @Test
-    fun createCanonicalChildRelation() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun createCanonicalChildRelation() = runSessionTest(context()) { commonTestHelper ->
 
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
@@ -152,7 +152,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 //    }
 
     @Test
-    fun testFilteringBySpace() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testFilteringBySpace() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -223,7 +223,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun testBreakCycle() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testBreakCycle() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -264,7 +264,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testLiveFlatChildren() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testLiveFlatChildren() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(
@@ -399,7 +399,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testRootSpaces() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testRootSpaces() = runSessionTest(context()) { commonTestHelper ->
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
         /* val spaceAInfo = */ createPublicSpace(
@@ -448,7 +448,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testParentRelation() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testParentRelation() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("Bib", SessionTestParams(true))
 
@@ -516,7 +516,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    fun testDirectParentNames() = runSuspendingSessionTest(context()) { commonTestHelper ->
+    fun testDirectParentNames() = runSessionTest(context()) { commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
 
         val spaceAInfo = createPublicSpace(

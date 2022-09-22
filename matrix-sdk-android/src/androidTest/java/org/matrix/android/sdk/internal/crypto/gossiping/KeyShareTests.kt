@@ -42,7 +42,7 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
@@ -57,7 +57,7 @@ class KeyShareTests : InstrumentedTest {
     @get:Rule val rule = RetryTestRule(3)
 
     @Test
-    fun test_DoNotSelfShareIfNotTrusted() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun test_DoNotSelfShareIfNotTrusted() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         Log.v("TEST", "=======> AliceSession 1 is ${aliceSession.sessionParams.deviceId}")
@@ -193,7 +193,7 @@ class KeyShareTests : InstrumentedTest {
      * if the key was originally shared with him
      */
     @Test
-    fun test_reShareIfWasIntendedToBeShared() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun test_reShareIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
@@ -224,7 +224,7 @@ class KeyShareTests : InstrumentedTest {
      * if the key was originally shared with him
      */
     @Test
-    fun test_reShareToUnverifiedIfWasIntendedToBeShared() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun test_reShareToUnverifiedIfWasIntendedToBeShared() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.testHelper.launch { cryptoTestHelper.doE2ETestWithAliceInARoom(true) }
         val aliceSession = testData.firstSession
@@ -261,7 +261,7 @@ class KeyShareTests : InstrumentedTest {
      * Tests that keys reshared with own verified session are done from the earliest known index
      */
     @Test
-    fun test_reShareFromTheEarliestKnownIndexWithOwnVerifiedSession() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun test_reShareFromTheEarliestKnownIndexWithOwnVerifiedSession() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
@@ -381,7 +381,7 @@ class KeyShareTests : InstrumentedTest {
      * Tests that we don't cancel a request to early on first forward if the index is not good enough
      */
     @Test
-    fun test_dontCancelToEarly() = runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun test_dontCancelToEarly() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!

@@ -32,8 +32,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
@@ -158,7 +158,7 @@ class VerificationTest : InstrumentedTest {
             bobSupportedMethods: List<VerificationMethod>,
             expectedResultForAlice: ExpectedResult,
             expectedResultForBob: ExpectedResult
-    ) = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -256,7 +256,7 @@ class VerificationTest : InstrumentedTest {
     }
 
     @Test
-    fun test_selfVerificationAcceptedCancelsItForOtherSessions() = runSuspendingSessionTest(context()) { testHelper ->
+    fun test_selfVerificationAcceptedCancelsItForOtherSessions() = runSessionTest(context()) { testHelper ->
         val defaultSessionParams = SessionTestParams(true)
 
         val aliceSessionToVerify = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)

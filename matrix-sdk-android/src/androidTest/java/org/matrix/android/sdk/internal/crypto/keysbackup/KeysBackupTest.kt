@@ -44,8 +44,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreation
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingSessionTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.RetryTestRule
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
@@ -65,7 +65,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Reset keys backup markers
      */
     @Test
-    fun roomKeysTest_testBackupStore_ok() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun roomKeysTest_testBackupStore_ok() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
@@ -104,7 +104,7 @@ class KeysBackupTest : InstrumentedTest {
      * Check that prepareKeysBackupVersionWithPassword returns valid data
      */
     @Test
-    fun prepareKeysBackupVersionTest() = runSuspendingSessionTest(context()) { testHelper ->
+    fun prepareKeysBackupVersionTest() = runSessionTest(context()) { testHelper ->
 
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
 
@@ -132,7 +132,7 @@ class KeysBackupTest : InstrumentedTest {
      * Test creating a keys backup version and check that createKeysBackupVersion() returns valid data
      */
     @Test
-    fun createKeysBackupVersionTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun createKeysBackupVersionTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
         cryptoTestHelper.initializeCrossSigning(bobSession)
 
@@ -197,7 +197,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Check the backup completes
      */
     @Test
-    fun backupAfterCreateKeysBackupVersionTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun backupAfterCreateKeysBackupVersionTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
@@ -238,7 +238,7 @@ class KeysBackupTest : InstrumentedTest {
      * Check that backupAllGroupSessions() returns valid data
      */
     @Test
-    fun backupAllGroupSessionsTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun backupAllGroupSessionsTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
@@ -283,7 +283,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Compare the decrypted megolm key with the original one
      */
     @Test
-    fun testEncryptAndDecryptKeysBackupData() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testEncryptAndDecryptKeysBackupData() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
@@ -327,7 +327,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Restore must be successful
      */
     @Test
-    fun restoreKeysBackupTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun restoreKeysBackupTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
@@ -413,7 +413,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must be trusted and must have with 2 signatures now
      */
     @Test
-    fun trustKeyBackupVersionTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun trustKeyBackupVersionTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Do an e2e backup to the homeserver with a recovery key
@@ -473,7 +473,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must be trusted and must have with 2 signatures now
      */
     @Test
-    fun trustKeyBackupVersionWithRecoveryKeyTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun trustKeyBackupVersionWithRecoveryKeyTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Do an e2e backup to the homeserver with a recovery key
@@ -531,7 +531,7 @@ class KeysBackupTest : InstrumentedTest {
      * - The backup must still be untrusted and disabled
      */
     @Test
-    fun trustKeyBackupVersionWithWrongRecoveryKeyTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun trustKeyBackupVersionWithWrongRecoveryKeyTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Do an e2e backup to the homeserver with a recovery key
@@ -573,7 +573,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must be trusted and must have with 2 signatures now
      */
     @Test
-    fun trustKeyBackupVersionWithPasswordTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun trustKeyBackupVersionWithPasswordTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "Password"
@@ -633,7 +633,7 @@ class KeysBackupTest : InstrumentedTest {
      * - The backup must still be untrusted and disabled
      */
     @Test
-    fun trustKeyBackupVersionWithWrongPasswordTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun trustKeyBackupVersionWithWrongPasswordTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "Password"
@@ -674,7 +674,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must fail
      */
     @Test
-    fun restoreKeysBackupWithAWrongRecoveryKeyTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun restoreKeysBackupWithAWrongRecoveryKeyTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
@@ -707,7 +707,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Restore must be successful
      */
     @Test
-    fun testBackupWithPassword() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testBackupWithPassword() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "password"
@@ -763,7 +763,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must fail
      */
     @Test
-    fun restoreKeysBackupWithAWrongPasswordTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun restoreKeysBackupWithAWrongPasswordTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "password"
@@ -799,7 +799,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Restore must be successful
      */
     @Test
-    fun testUseRecoveryKeyToRestoreAPasswordBasedKeysBackup() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testUseRecoveryKeyToRestoreAPasswordBasedKeysBackup() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "password"
@@ -828,7 +828,7 @@ class KeysBackupTest : InstrumentedTest {
      * - It must fail
      */
     @Test
-    fun testUsePasswordToRestoreARecoveryKeyBasedKeysBackup() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testUsePasswordToRestoreARecoveryKeyBasedKeysBackup() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(null)
@@ -859,7 +859,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Check the returned KeysVersionResult is trusted
      */
     @Test
-    fun testIsKeysBackupTrusted() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testIsKeysBackupTrusted() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Create a backup version
@@ -904,7 +904,7 @@ class KeysBackupTest : InstrumentedTest {
      * -> That must fail and her backup state must be WrongBackUpVersion
      */
     @Test
-    fun testBackupWhenAnotherBackupWasCreated() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testBackupWhenAnotherBackupWasCreated() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Create a backup version
@@ -976,7 +976,7 @@ class KeysBackupTest : InstrumentedTest {
      * -> It must success
      */
     @Test
-    fun testBackupAfterVerifyingADevice() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testBackupAfterVerifyingADevice() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Create a backup version
@@ -1074,7 +1074,7 @@ class KeysBackupTest : InstrumentedTest {
      * - Delete the backup
      */
     @Test
-    fun deleteKeysBackupTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun deleteKeysBackupTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         // - Create a backup version

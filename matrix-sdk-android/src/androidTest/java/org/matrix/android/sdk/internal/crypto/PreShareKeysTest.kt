@@ -30,14 +30,14 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class PreShareKeysTest : InstrumentedTest {
 
     @Test
-    fun ensure_outbound_session_happy_path() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun ensure_outbound_session_happy_path() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val e2eRoomID = testData.roomId
         val aliceSession = testData.firstSession

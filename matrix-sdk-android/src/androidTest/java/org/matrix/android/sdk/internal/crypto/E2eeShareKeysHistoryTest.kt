@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.wrapWithTimeout
 
@@ -76,7 +76,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
      * We should not be able to view messages/decrypt otherwise
      */
     private fun testShareHistoryWithRoomVisibility(roomHistoryVisibility: RoomHistoryVisibility? = null) =
-            runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+            runCryptoTest(context()) { cryptoTestHelper, testHelper ->
                 val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, roomHistoryVisibility)
 
                 val e2eRoomID = cryptoTestData.roomId
@@ -230,7 +230,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     private fun testRotationDueToVisibilityChange(
             initRoomHistoryVisibility: RoomHistoryVisibility,
             nextRoomHistoryVisibility: RoomHistoryVisibilityContent
-    ) = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, initRoomHistoryVisibility)
         val e2eRoomID = cryptoTestData.roomId
 

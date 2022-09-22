@@ -28,7 +28,7 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -36,7 +36,7 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCry
 class ReplayAttackTest : InstrumentedTest {
 
     @Test
-    fun replayAttackAlreadyDecryptedEventTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun replayAttackAlreadyDecryptedEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId
@@ -72,7 +72,7 @@ class ReplayAttackTest : InstrumentedTest {
     }
 
     @Test
-    fun replayAttackSameEventTest() = runSuspendingCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun replayAttackSameEventTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
         val e2eRoomID = cryptoTestData.roomId

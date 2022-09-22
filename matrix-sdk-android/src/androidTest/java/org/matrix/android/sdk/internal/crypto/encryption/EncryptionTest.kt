@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSuspendingCryptoTest
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.waitFor
 import kotlin.coroutines.resume
@@ -44,7 +44,7 @@ import kotlin.coroutines.resume
 class EncryptionTest : InstrumentedTest {
 
     @Test
-    fun test_EncryptionEvent() = runSuspendingCryptoTest(context()) { cryptoTestHelper, _ ->
+    fun test_EncryptionEvent() = runCryptoTest(context()) { cryptoTestHelper, _ ->
         performTest(cryptoTestHelper, roomShouldBeEncrypted = false) { room ->
             // Send an encryption Event as an Event (and not as a state event)
             room.sendService().sendEvent(
@@ -55,7 +55,7 @@ class EncryptionTest : InstrumentedTest {
     }
 
     @Test
-    fun test_EncryptionStateEvent() = runSuspendingCryptoTest(context()) { cryptoTestHelper, _ ->
+    fun test_EncryptionStateEvent() = runCryptoTest(context()) { cryptoTestHelper, _ ->
         performTest(cryptoTestHelper, roomShouldBeEncrypted = true) { room ->
             // Send an encryption Event as a State Event
             room.stateService().sendStateEvent(

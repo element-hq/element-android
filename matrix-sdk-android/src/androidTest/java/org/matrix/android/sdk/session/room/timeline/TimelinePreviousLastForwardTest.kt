@@ -49,7 +49,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
      */
 
     @Test
-    fun previousLastForwardTest() = CommonTestHelper.runSuspendingCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun previousLastForwardTest() = CommonTestHelper.runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
