@@ -100,7 +100,7 @@ The project should compile out of the box.
 The project is split into several modules. The main ones are:
 For the app
 - `vector-app`: application entry point;
-- `vector`: legacy application, but now a library. In the process of being splitted into several modules;
+- `vector`: legacy application, but now a library. In the process of being split into several modules;
 - `vector-config`: this is where all the configuration of the application should occurs. Should because we are in the process of migrating all the configuration here;
 - `library/ui-strings`: this is where all the string resources are stored. Please refer to [contributing doc](../CONTRIBUTING.md) to know how to make change on this module;
 - `library/ui-styles`: this is where the Android styles are defined.
@@ -197,7 +197,7 @@ This is the classical scenario:
 
 All the dependencies are declared in `build.gradle` files. But some versions are declared in [this dedicated file](../dependencies.gradle).
 
-When adding a new dependency, you will have to update the file [dependencies_groups.gradle](../dependencies_groups.gradle) to allow the dependency to be downloaded from the artifact repository. Sometimes subdependencies need to be added too, until the project can compile.
+When adding a new dependency, you will have to update the file [dependencies_groups.gradle](../dependencies_groups.gradle) to allow the dependency to be downloaded from the artifact repository. Sometimes sub-dependencies need to be added too, until the project can compile.
 
 [Dependabot](https://github.com/dependabot) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one.
 dependencies_group, gradle files, Dependabot, etc.
@@ -243,7 +243,7 @@ Rageshake can be very useful to get logs from a release version of the applicati
 ### Tips
 
 - Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here;
-- Show hidden Events can also help to debug feature. When devepor mode is enabled, it is possible to view the source (= the Json content) of any Events;
+- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events;
 - Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled;
 - Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags;
 - Using logcat, filtering with `onResume` can help you to understand what screen are currently displayed on your device. Searching for string displayed on the screen can also help to find the running code in the codebase.
