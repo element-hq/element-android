@@ -1,0 +1,2 @@
+Main changes in this version: New App Layout and Deferred DM enabled by default. 
+Full changelog: https://github.com/vector-im/element-android/releases
