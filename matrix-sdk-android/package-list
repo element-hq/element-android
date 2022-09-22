@@ -4430,6 +4430,7 @@ $dokka.location:org.matrix.android.sdk.api.util//toOptional/TypeParam(bounds=[ko
 $dokka.location:org.matrix.android.sdk.api.util//toRoomAliasMatrixItem/org.matrix.android.sdk.api.session.room.model.RoomSummary#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-room-alias-matrix-item.html
 $dokka.location:org.matrix.android.sdk.api.util/BuildVersionSdkIntProvider///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-build-version-sdk-int-provider/index.html
 $dokka.location:org.matrix.android.sdk.api.util/BuildVersionSdkIntProvider/get/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-build-version-sdk-int-provider/get.html
+$dokka.location:org.matrix.android.sdk.api.util/BuildVersionSdkIntProvider/isAtLeast/#kotlin.Int/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-build-version-sdk-int-provider/is-at-least.html
 $dokka.location:org.matrix.android.sdk.api.util/BuildVersionSdkIntProvider/whenAtLeast/#kotlin.Int#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-build-version-sdk-int-provider/when-at-least.html
 $dokka.location:org.matrix.android.sdk.api.util/Cancelable///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-cancelable/index.html
 $dokka.location:org.matrix.android.sdk.api.util/Cancelable/cancel/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-cancelable/cancel.html
