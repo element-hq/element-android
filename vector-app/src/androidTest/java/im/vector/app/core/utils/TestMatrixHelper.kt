@@ -20,11 +20,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.SyncConfig
 
 fun getMatrixInstance(): Matrix {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val configuration = MatrixConfiguration(
-            roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
+            roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context),
+            syncConfig = SyncConfig(longPollTimeout = 5_000L),
     )
     return Matrix(context, configuration)
 }
