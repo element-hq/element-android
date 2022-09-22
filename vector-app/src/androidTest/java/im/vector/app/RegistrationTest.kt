@@ -19,8 +19,10 @@ package im.vector.app
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -29,8 +31,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import im.vector.app.features.MainActivity
-import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
-import im.vector.app.features.home.HomeActivity
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -46,83 +46,82 @@ class RegistrationTest {
 
     @Test
     fun simpleRegister() {
-        val userId: String = "UiAutoTest_${Random.nextLong()}"
+        val userId: String = "test-${Random.nextLong()}"
         val password: String = "password"
         val homeServerUrl: String = "http://10.0.2.2:8080"
 
         // Check splashscreen is there
         onView(withId(R.id.loginSplashSubmit))
                 .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_splash_submit)))
+                .check(matches(withText(R.string.login_splash_create_account)))
 
         // Click on get started
         onView(withId(R.id.loginSplashSubmit))
                 .perform(click())
 
-        // Check that homeserver options are shown
-        onView(withId(R.id.loginServerTitle))
+        // Check that use case screen is shown
+        onView(withId(R.id.useCaseHeaderTitle))
                 .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_server_title)))
+                .check(matches(withText(R.string.ftue_auth_use_case_title)))
 
-        // Chose custom server
-        onView(withId(R.id.loginServerChoiceOther))
+        // Chose friends and family
+        onView(withId(R.id.useCaseOptionOne))
+                .perform(click())
+
+        // Wait for matrix.org data to be retrieved
+        onView(ViewMatchers.isRoot())
+                .perform(waitForView(withId(R.id.editServerButton)))
+        // Edit server url
+        onView(withId(R.id.editServerButton))
                 .perform(click())
 
         // Enter local synapse
-        onView(withId(R.id.loginServerUrlFormHomeServerUrl))
-                .perform(typeText(homeServerUrl))
+        onView(withId(R.id.chooseServerInputEditText))
+                .perform()
+                // Text is not empty so use `replaceText` instead of `typeText`
+                .perform(replaceText(homeServerUrl))
 
         // Click on continue
-        onView(withId(R.id.loginServerUrlFormSubmit))
+        onView(withId(R.id.chooseServerSubmit))
                 .check(matches(isEnabled()))
                 .perform(closeSoftKeyboard(), click())
 
-        // Click on the signup button
-        onView(withId(R.id.loginSignupSigninSubmit))
-                .check(matches(isDisplayed()))
-                .perform(click())
+        // Ensure password flow supported (wait for data to be retrieved)
+        onView(ViewMatchers.isRoot())
+                .perform(waitForView(withId(R.id.createAccountHeaderTitle)))
 
-        // Ensure password flow supported
-        onView(withId(R.id.loginField))
+        onView(withId(R.id.createAccountEditText))
                 .check(matches(isDisplayed()))
-        onView(withId(R.id.passwordField))
+        onView(withId(R.id.createAccountPassword))
                 .check(matches(isDisplayed()))
 
-        // Ensure user id
-        onView(withId(R.id.loginField))
+        // Type user id
+        onView(withId(R.id.createAccountEditText))
                 .perform(typeText(userId))
 
         // Ensure login button not yet enabled
-        onView(withId(R.id.loginSubmit))
+        onView(withId(R.id.createAccountSubmit))
                 .check(matches(not(isEnabled())))
 
-        // Ensure password
-        onView(withId(R.id.passwordField))
+        // Type password
+        onView(withId(R.id.createAccountPassword))
                 .perform(closeSoftKeyboard(), typeText(password))
 
         // Submit
-        onView(withId(R.id.loginSubmit))
+        onView(withId(R.id.createAccountSubmit))
                 .check(matches(isEnabled()))
                 .perform(closeSoftKeyboard(), click())
 
-        withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
-            onView(withId(R.id.later))
-                    .check(matches(isDisplayed()))
-                    .perform(click())
-        }
+        // Personalization
+        onView(ViewMatchers.isRoot())
+                .perform(waitForView(withId(R.id.accountCreatedTakeMeHome)))
+        onView(withId(R.id.accountCreatedTakeMeHome))
+                .perform(click())
 
-        withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
-            onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
-        }
-
-        val activity = EspressoHelper.getCurrentActivity()!!
-        val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
-
-        // Wait for initial sync and check room list is there
-        withIdlingResource(initialSyncIdlingResource(uiSession)) {
-            onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
-        }
+        // Analytics
+        onView(ViewMatchers.isRoot())
+                .perform(waitForView(withId(R.id.submit)))
+        onView(withId(R.id.submit))
+                .perform(click())
     }
 }
