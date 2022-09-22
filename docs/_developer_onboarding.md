@@ -61,14 +61,14 @@ There are many object and data in the Matrix worlds. Let's focus on the most imp
 
 ##### Event
 
-`Events` are item of a Room, where data is embedded.
+`Events` are items of a Room, where data is embedded.
 
-There are 2 types of Event:
+There are 2 types of Room Event:
 
-- Room Events: contain useful content for the user (message, image, etc.), but are not necessarily displayed as this in the timeline (reaction, message edition, call signaling).
+- Regular Events: contain useful content for the user (message, image, etc.), but are not necessarily displayed as this in the timeline (reaction, message edition, call signaling).
 - State Events: contain the state of the Room (name, topic, etc.). They have a non null value for the key `state_key`.
 
-Also all the Room Member details are State Events: one State Event per member. In this casen the `state_key` is the matrixId (= userId).
+Also all the Room Member details are in State Events: one State Event per member. In this case, the `state_key` is the matrixId (= userId).
 
 Important Fields of an Event:
 - `event_id`: unique across the Matrix universe;
