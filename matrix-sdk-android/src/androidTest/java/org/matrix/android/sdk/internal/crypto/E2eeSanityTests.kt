@@ -553,7 +553,6 @@ class E2eeSanityTests : InstrumentedTest {
                 listOf(aliceNewSession.sessionParams.deviceId!!)
         )
 
-
         val (oldCode, newCode) = awaitAll(deferredOldCode, deferredNewCode)
 
         assertEquals("Decimal code should have matched", oldCode, newCode)
@@ -635,9 +634,9 @@ class E2eeSanityTests : InstrumentedTest {
                                 sasTx.userHasVerifiedShortCode()
                             }
                             OutgoingSasVerificationTransaction.UxState.VERIFIED -> {
+                                removeListener(this)
                                 // we can release this latch?
                                 continuation.resume(oldCode!!)
-                                removeListener(this)
                             }
                             else -> Unit
                         }
@@ -682,8 +681,8 @@ class E2eeSanityTests : InstrumentedTest {
                                 }
                             }
                             IncomingSasVerificationTransaction.UxState.VERIFIED -> {
-                                continuation.resume(newCode!!)
                                 removeListener(this)
+                                continuation.resume(newCode!!)
                             }
                             else -> Unit
                         }
