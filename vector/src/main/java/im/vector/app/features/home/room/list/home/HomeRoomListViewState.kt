@@ -16,14 +16,11 @@
 
 package im.vector.app.features.home.room.list.home
 
-import androidx.paging.PagedList
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.core.platform.StateView
 import im.vector.app.features.home.room.list.home.header.RoomsHeadersData
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class HomeRoomListViewState(
         val state: StateView.State = StateView.State.Content,
         val headersData: RoomsHeadersData = RoomsHeadersData(),
-        val roomsPagedList: PagedList<RoomSummary>? = null,
 ) : MavericksState
