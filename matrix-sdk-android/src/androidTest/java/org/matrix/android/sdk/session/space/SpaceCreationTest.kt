@@ -58,7 +58,8 @@ class SpaceCreationTest : InstrumentedTest {
         val spaceId = session.spaceService().createSpace(roomName, topic, null, true)
 
         commonTestHelper.retryPeriodically {
-            session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()?.name != null
+            val roomSummary = session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()
+            roomSummary?.name == roomName && roomSummary.topic == topic
         }
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
