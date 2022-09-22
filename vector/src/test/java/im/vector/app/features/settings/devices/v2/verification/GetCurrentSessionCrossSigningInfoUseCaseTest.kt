@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.verification
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeSession
@@ -30,7 +30,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.toOptional
 
@@ -107,11 +106,8 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
     }
 
     private fun givenSession(deviceId: String): FakeSession {
-        val sessionParams = mockk<SessionParams>()
-        every { sessionParams.deviceId } returns deviceId
-
         val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionParams(sessionParams)
+        fakeSession.givenSessionId(deviceId)
 
         return fakeSession
     }

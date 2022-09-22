@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.overview
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class SessionOverviewViewEvent : VectorViewEvents {
-    object SelfVerification : SessionOverviewViewEvent()
+    object ShowVerifyCurrentSession : SessionOverviewViewEvent()
+    data class ShowVerifyOtherSession(val deviceId: String) : SessionOverviewViewEvent()
     object PromptResetSecrets : SessionOverviewViewEvent()
 }

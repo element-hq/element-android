@@ -21,17 +21,22 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -49,6 +54,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
             copy(isCurrentSession = isCurrentSession(deviceId))
         }
         observeSessionInfo(initialState.deviceId)
+        observeCurrentSessionInfo()
     }
 
     private fun isCurrentSession(deviceId: String): Boolean {
@@ -61,6 +67,19 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    private fun observeCurrentSessionInfo() {
+        activeSessionHolder.getSafeActiveSession()
+                ?.sessionParams
+                ?.deviceId
+                ?.let { deviceId ->
+                    getDeviceFullInfoUseCase.execute(deviceId)
+                            .map { it.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted }
+                            .distinctUntilChanged()
+                            .onEach { setState { copy(isCurrentSessionTrusted = it) } }
+                            .launchIn(viewModelScope)
+                }
+    }
+
     override fun handle(action: SessionOverviewAction) {
         when (action) {
             is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
@@ -68,8 +87,10 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun handleVerifySessionAction() = withState { viewState ->
-        if (isCurrentSession(viewState.deviceId)) {
+        if (viewState.isCurrentSession) {
             handleVerifyCurrentSession()
+        } else {
+            handleVerifyOtherSession(viewState.deviceId)
         }
     }
 
@@ -77,10 +98,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
             if (currentSessionCanBeVerified) {
-                _viewEvents.post(SessionOverviewViewEvent.SelfVerification)
+                _viewEvents.post(SessionOverviewViewEvent.ShowVerifyCurrentSession)
             } else {
                 _viewEvents.post(SessionOverviewViewEvent.PromptResetSecrets)
             }
         }
+    }
+
+    private fun handleVerifyOtherSession(deviceId: String) {
+        _viewEvents.post(SessionOverviewViewEvent.ShowVerifyOtherSession(deviceId))
     }
 }

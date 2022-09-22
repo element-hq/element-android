@@ -19,6 +19,8 @@ package im.vector.app.features.settings.devices.v2
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
