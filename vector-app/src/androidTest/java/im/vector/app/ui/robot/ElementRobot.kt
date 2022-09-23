@@ -50,7 +50,7 @@ import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot(
-        private val labsPreferences: LabFeaturesPreferences = LabFeaturesPreferences(true)
+        private val labsPreferences: LabFeaturesPreferences = LabFeaturesPreferences(false)
 ) {
     fun onboarding(block: OnboardingRobot.() -> Unit) {
         block(OnboardingRobot())
