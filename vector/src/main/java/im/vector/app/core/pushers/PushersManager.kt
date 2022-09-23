@@ -66,14 +66,14 @@ class PushersManager @Inject constructor(
             pushKey,
             stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
-            localeProvider.current().language,
-            appNameProvider.getAppName(),
-            activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
-            gateway,
+            lang = localeProvider.current().language,
+            appDisplayName = appNameProvider.getAppName(),
+            deviceDisplayName = android.os.Build.MODEL,
+            url = gateway,
             enabled = true,
             deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
             append = false,
-            withEventIdOnly = true
+            withEventIdOnly = true,
     )
 
     suspend fun registerEmailForPush(email: String) {
