@@ -16,7 +16,8 @@
 
 package im.vector.app.features.settings
 
-import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -63,8 +64,8 @@ class VectorSettingsP2PFragment :
 
         mBluetoothPeersEnabled.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            @Suppress("DEPRECATION")
-            mBLECodedPhy.isEnabled = BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
+            val bluetoothManager = context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
+            mBLECodedPhy.isEnabled = bluetoothManager?.adapter?.isLeCodedPhySupported ?: false
         } else {
             mBLECodedPhy.isEnabled = false
         }
