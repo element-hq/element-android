@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.othersessions
 
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import android.os.Parcelable
+import androidx.annotation.StringRes
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import kotlinx.parcelize.Parcelize
 
-data class DeviceFullInfo(
-        val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
-        val isInactive: Boolean,
-        val isCurrentDevice: Boolean,
-)
+@Parcelize
+data class OtherSessionsArgs(
+        @StringRes
+        val titleResourceId: Int,
+        val defaultFilter: DeviceManagerFilterType,
+        val excludeCurrentDevice: Boolean,
+) : Parcelable

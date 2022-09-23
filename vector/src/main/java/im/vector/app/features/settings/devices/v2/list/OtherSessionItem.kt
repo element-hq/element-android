@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.list
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -44,6 +45,10 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
 
     @EpoxyAttribute
     var sessionDescription: String? = null
+
+    @EpoxyAttribute
+    @ColorInt
+    var sessionDescriptionColor: Int? = null
 
     @EpoxyAttribute
     var sessionDescriptionDrawable: Drawable? = null
@@ -82,6 +87,9 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
         holder.otherSessionVerificationStatusImageView.render(roomEncryptionTrustLevel)
         holder.otherSessionNameTextView.text = sessionName
         holder.otherSessionDescriptionTextView.text = sessionDescription
+        sessionDescriptionColor?.let {
+            holder.otherSessionDescriptionTextView.setTextColor(it)
+        }
         holder.otherSessionDescriptionTextView.setCompoundDrawablesWithIntrinsicBounds(sessionDescriptionDrawable, null, null, null)
     }
 

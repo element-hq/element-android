@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
@@ -30,11 +31,16 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
@@ -60,6 +66,17 @@ class DevicesViewModelTest {
                 checkIfCurrentSessionCanBeVerifiedUseCase,
                 refreshDevicesUseCase,
         )
+    }
+
+    @Before
+    fun setup() {
+        mockkStatic(SystemClock::class)
+        every { SystemClock.elapsedRealtime() } returns 1234
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -216,21 +233,23 @@ class DevicesViewModelTest {
      */
     private fun givenDeviceFullInfoList(): List<DeviceFullInfo> {
         val verifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
-        every { verifiedCryptoDeviceInfo.isVerified } returns true
+        every { verifiedCryptoDeviceInfo.trustLevel } returns DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         val unverifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
-        every { unverifiedCryptoDeviceInfo.isVerified } returns false
+        every { unverifiedCryptoDeviceInfo.trustLevel } returns DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
         val deviceFullInfo1 = DeviceFullInfo(
                 deviceInfo = mockk(),
                 cryptoDeviceInfo = verifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = true
         )
         val deviceFullInfo2 = DeviceFullInfo(
                 deviceInfo = mockk(),
                 cryptoDeviceInfo = unverifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                isInactive = true
+                isInactive = true,
+                isCurrentDevice = false
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)

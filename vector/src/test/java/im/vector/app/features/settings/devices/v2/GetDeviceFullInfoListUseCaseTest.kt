@@ -109,19 +109,22 @@ class GetDeviceFullInfoListUseCaseTest {
                 deviceInfo = deviceInfo1,
                 cryptoDeviceInfo = cryptoDeviceInfo1,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = true
+                isInactive = true,
+                isCurrentDevice = true
         )
         val expectedResult2 = DeviceFullInfo(
                 deviceInfo = deviceInfo2,
                 cryptoDeviceInfo = cryptoDeviceInfo2,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false
         )
         val expectedResult3 = DeviceFullInfo(
                 deviceInfo = deviceInfo3,
                 cryptoDeviceInfo = cryptoDeviceInfo3,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
         every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
@@ -163,6 +166,7 @@ class GetDeviceFullInfoListUseCaseTest {
     private fun givenCurrentSessionCrossSigningInfo(): CurrentSessionCrossSigningInfo {
         val currentSessionCrossSigningInfo = mockk<CurrentSessionCrossSigningInfo>()
         every { getCurrentSessionCrossSigningInfoUseCase.execute() } returns flowOf(currentSessionCrossSigningInfo)
+        every { currentSessionCrossSigningInfo.deviceId } returns A_DEVICE_ID_1
         return currentSessionCrossSigningInfo
     }
 

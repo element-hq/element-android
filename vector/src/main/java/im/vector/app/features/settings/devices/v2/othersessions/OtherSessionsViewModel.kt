@@ -30,7 +30,7 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import kotlinx.coroutines.Job
 
 class OtherSessionsViewModel @AssistedInject constructor(
-        @Assisted initialState: OtherSessionsViewState,
+        @Assisted private val initialState: OtherSessionsViewState,
         activeSessionHolder: ActiveSessionHolder,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase
@@ -55,7 +55,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
         observeDevicesJob?.cancel()
         observeDevicesJob = getDeviceFullInfoListUseCase.execute(
                 filterType = currentFilter,
-                excludeCurrentDevice = true
+                excludeCurrentDevice = initialState.excludeCurrentDevice
         )
                 .execute { async ->
                     copy(
