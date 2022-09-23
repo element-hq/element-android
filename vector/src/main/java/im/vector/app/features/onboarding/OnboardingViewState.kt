@@ -78,10 +78,11 @@ data class SelectedHomeserverState(
 
 @Parcelize
 data class PersonalizationState(
+        val userId: String = "",
         val supportsChangingDisplayName: Boolean = false,
         val supportsChangingProfilePicture: Boolean = false,
         val displayName: String? = null,
-        val selectedPictureUri: Uri? = null
+        val selectedPictureUri: Uri? = null,
 ) : Parcelable {
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture

@@ -687,7 +687,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_USERNAME)) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_MATRIX_ID, A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -1196,7 +1196,8 @@ class OnboardingViewModelTest {
     }
 }
 
-private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
+private fun HomeServerCapabilities.toPersonalisationState(userId: String, displayName: String? = null) = PersonalizationState(
+        userId = userId,
         supportsChangingDisplayName = canChangeDisplayName,
         supportsChangingProfilePicture = canChangeAvatar,
         displayName = displayName,
