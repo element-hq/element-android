@@ -473,7 +473,7 @@
     <string name="start_video_call_prompt_msg">Você tem certeza que você quer começar uma chamada de vídeo\?</string>
     <string name="option_take_photo">Tirar foto</string>
     <string name="option_take_video">Tirar vídeo</string>
-    <string name="call">Chamar</string>
+    <string name="call">Chamada</string>
     <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai removê-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_add_homescreen_shortcut">Adicionar a tela de Início</string>
@@ -2658,8 +2658,8 @@
     <string name="device_manager_header_section_security_recommendations_description">Melhore a segurança de sua conta ao seguir estas recomendações.</string>
     <string name="device_manager_header_section_security_recommendations_title">Recomendações de segurança</string>
     <plurals name="device_manager_other_sessions_description_inactive">
-        <item quantity="one">Inativa(o) por %1$d+ dia (%2$s)</item>
-        <item quantity="other">Inativa(o) por %1$d+ dias (%2$s)</item>
+        <item quantity="one">Inativa por %1$d+ dia (%2$s)</item>
+        <item quantity="other">Inativa por %1$d+ dias (%2$s)</item>
     </plurals>
     <string name="invites_empty_message">Isto é onde suas novas requisições e convites vão estar.</string>
     <string name="invites_empty_title">Nada novo.</string>
@@ -2668,4 +2668,46 @@
     <string name="a11y_collapse_space_children">Colapsar filhos de %s</string>
     <string name="a11y_expand_space_children">Expandir filhos de %s</string>
     <string name="change_space">Mudar Espaço</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Não-verificadas</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verificadas</string>
+    <string name="device_manager_filter_option_unverified">Não-verificadas</string>
+    <string name="device_manager_filter_option_verified">Verificadas</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inativas</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inativas por %1$d dia ou mais longo</item>
+        <item quantity="other">Inativas por %1$d dias ou mais longo</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inativas</string>
+    <string name="device_manager_session_details_device_ip_address">Endereço de IP</string>
+    <string name="device_manager_session_details_session_last_activity">Última atividade</string>
+    <string name="device_manager_session_details_session_name">Nome de sessão</string>
+    <string name="device_manager_session_details_description">Informação de aplicativo, dispositivo, e atividade.</string>
+    <string name="device_manager_session_details_title">Detalhes de sessão</string>
+    <string name="device_manager_other_sessions_clear_filter">Limpar Filtro</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Nenhuma sessão inativa encontrada.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Nenhuma sessão não-verificada encontrada.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Nenhuma sessão verificada encontrada.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Considere fazer signout de sessões antigas (%1$d dia ou mais) que você não usa mais.</item>
+        <item quantity="other">Considere fazer signout de sessões antigas (%1$d dias ou mais) que você não usa mais.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifique suas sessões para mensageria segura melhorada ou faça signout daquelas que você não reconhece ou usa mais.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Para melhor segurança, faça signout de qualquer sessão que você não reconhece ou usa mais.</string>
+    <string name="a11y_device_manager_filter">Filtrar</string>
+    <string name="device_manager_filter_option_verified_description">Pronta para mensageria segura</string>
+    <string name="device_manager_filter_option_unverified_description">Não pronta para mensageria segura</string>
+    <string name="device_manager_filter_option_all_sessions">Todas as sessões</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtrar</string>
+    <string name="device_manager_session_last_activity">Última atividade %1$s</string>
+    <string name="device_manager_device_title">Dispositivo</string>
+    <string name="device_manager_session_title">Sessão</string>
+    <string name="device_manager_current_session_title">Sessão Atual</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifique ou faça signout desta sessão para melhor segurança e fiabilidade.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifique sua sessão atual para mensageria segura melhorada.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Esta sessão está pronta para mensageria segura.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Sua sessão atual está pronta para mensageria segura.</string>
+    <string name="labs_enable_deferred_dm_summary">Criar DM somente em primeira mensagem</string>
+    <string name="labs_enable_deferred_dm_title">Habilitar DMs diferidas</string>
+    <string name="labs_enable_new_app_layout_summary">Um Element simplificado com abas opcionais</string>
+    <string name="labs_enable_new_app_layout_title">Habilitar novo layout</string>
 </resources>
