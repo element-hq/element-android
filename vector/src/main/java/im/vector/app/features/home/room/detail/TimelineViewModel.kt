@@ -65,6 +65,7 @@ import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.lib.core.utils.flow.chunk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -149,6 +150,7 @@ class TimelineViewModel @AssistedInject constructor(
         buildMeta: BuildMeta,
         timelineFactory: TimelineFactory,
         private val spaceStateHandler: SpaceStateHandler,
+        private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
@@ -456,7 +458,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
             is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
-            is RoomDetailAction.StartVoiceBroadcast -> handleStartVoiceBroadcast()
+            is RoomDetailAction.VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
             is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
@@ -598,9 +600,16 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleStartVoiceBroadcast() {
-        // Todo implement start voice broadcast action
-        Timber.d("Start voice broadcast clicked")
+    private fun handleVoiceBroadcastAction(action: RoomDetailAction.VoiceBroadcastAction) {
+        if (room == null) return
+        viewModelScope.launch {
+            when (action) {
+                RoomDetailAction.VoiceBroadcastAction.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Start -> voiceBroadcastHelper.startVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+            }
+        }
     }
 
     private fun handleOpenIntegrationManager() {

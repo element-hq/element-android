@@ -21,6 +21,7 @@ import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
+import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -88,6 +89,7 @@ class TimelineItemFactory @Inject constructor(
                     // State room create
                     EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(params)
                     in EventType.STATE_ROOM_BEACON_INFO -> messageItemFactory.create(params)
+                    STATE_ROOM_VOICE_BROADCAST_INFO -> messageItemFactory.create(params)
                     // Unhandled state event types
                     else -> {
                         // Should only happen when shouldShowHiddenEvents() settings is ON

@@ -73,6 +73,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.home.room.detail.RoomDetailAction
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
@@ -653,7 +654,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 locationOwnerId = session.myUserId
                         )
             }
-            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(RoomDetailAction.StartVoiceBroadcast)
+            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(VoiceBroadcastAction.Start)
         }
     }
 
