@@ -956,11 +956,11 @@
     <string name="no_message_edits_found">Изменения не найдены</string>
     <string name="room_filtering_filter_hint">Отфильтровать беседы…</string>
     <string name="room_filtering_footer_title">Не можете найти нужное\?</string>
-    <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
-    <string name="room_filtering_footer_create_new_direct_message">Отправить новое личное сообщение</string>
+    <string name="room_filtering_footer_create_new_room">Создать комнату</string>
+    <string name="room_filtering_footer_create_new_direct_message">Отправить личное сообщение</string>
     <string name="room_filtering_footer_open_room_directory">Просмотр каталога комнат</string>
     <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Включить жест смахивания для ответа в ленте сообщений</string>
+    <string name="labs_swipe_to_reply_in_timeline">Жест смахивания для ответа в ленте сообщений</string>
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
     <string name="creating_direct_room">Создаем комнату…</string>
     <string name="message_view_edit_history">История изменений</string>
@@ -2435,7 +2435,7 @@
     <string name="location_timeline_failed_to_load_map">Не удалось загрузить карту</string>
     <string name="a11y_static_map_image">Карта</string>
     <string name="labs_enable_thread_messages_desc">Примечание: приложение будет перезапущено</string>
-    <string name="labs_enable_thread_messages">Включить обсуждения сообщений</string>
+    <string name="labs_enable_thread_messages">Обсуждения сообщений</string>
     <string name="ftue_auth_use_case_connect_to_server">Подключиться к серверу</string>
     <string name="ftue_auth_use_case_join_existing_server">Хотите присоединиться к существующему серверу\?</string>
     <string name="ftue_auth_use_case_skip_partial">Пропустить вопрос</string>
@@ -2666,7 +2666,7 @@
     <string name="a11y_create_message">Создать беседу или комнату</string>
     <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>
     <string name="room_list_filter_people">Люди</string>
-    <string name="home_layout_preferences">Настройки макета</string>
+    <string name="home_layout_preferences">Настройки оформления</string>
     <string name="home_layout_preferences_filters">Фильтры</string>
     <string name="home_layout_preferences_recents">Недавние</string>
     <string name="room_list_filter_favourites">Избранные</string>
@@ -2693,4 +2693,23 @@
     <string name="home_empty_no_rooms_title">Добро пожаловать в ${app_name},
 \n%s.</string>
     <string name="onboarding_new_app_layout_feedback_title">Оставить отзыв</string>
+    <string name="device_manager_session_details_session_name">Название сессии</string>
+    <string name="device_manager_filter_option_inactive">Неактивные</string>
+    <string name="device_manager_session_details_device_ip_address">IP-адрес</string>
+    <string name="device_manager_session_details_session_last_activity">Последняя активность</string>
+    <string name="device_manager_session_details_title">Сведения о сессии</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Для лучшей безопасности выйдите из всех сессий, которые более не признаёте или не используете.</string>
+    <string name="device_manager_filter_option_verified">Заверено</string>
+    <string name="device_manager_filter_option_all_sessions">Все сессии</string>
+    <string name="device_manager_session_last_activity">Последняя активность %1$s</string>
+    <string name="device_manager_device_title">Устройство</string>
+    <string name="device_manager_session_title">Сессия</string>
+    <string name="device_manager_current_session_title">Текущая сессия</string>
+    <string name="device_manager_verify_session">Заверить сессию</string>
+    <string name="device_manager_view_details">Подробности</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Эта сессия готова к безопасному обмену сообщениями.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Текущая сессия готова к безопасному обмену сообщениями.</string>
+    <string name="a11y_device_manager_device_type_web">Веб-браузер</string>
+    <string name="space_list_empty_message">Пространства — это новый способ организации комнат и людей. Создайте пространство, чтобы начать.</string>
+    <string name="labs_enable_new_app_layout_title">Новое оформление</string>
 </resources>
