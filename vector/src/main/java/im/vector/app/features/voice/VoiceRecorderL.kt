@@ -42,6 +42,7 @@ import kotlin.coroutines.CoroutineContext
 class VoiceRecorderL(
         context: Context,
         coroutineContext: CoroutineContext,
+        private val codec: OggOpusEncoder,
 ) : VoiceRecorder {
 
     companion object {
@@ -58,7 +59,6 @@ class VoiceRecorderL(
     private var audioRecorder: AudioRecord? = null
     private var noiseSuppressor: NoiseSuppressor? = null
     private var automaticGainControl: AutomaticGainControl? = null
-    private val codec = OggOpusEncoder()
 
     // Size of the audio buffer for Short values
     private var bufferSizeInShorts = 0
