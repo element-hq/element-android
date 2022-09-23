@@ -1,3 +1,39 @@
+Changes in Element v1.5.0 (2022-09-23)
+======================================
+
+Features ✨
+----------
+ - Deferred DMs - Enable and move the feature to labs settings ([#7180](https://github.com/vector-im/element-android/issues/7180))
+
+Bugfixes 🐛
+----------
+ - Fix text margin in QR code view when no display name is set ([#5424](https://github.com/vector-im/element-android/issues/5424))
+ - [App Layout] Recents carousel now scrolled to first position when new item added to or moved to this position ([#6776](https://github.com/vector-im/element-android/issues/6776))
+ - Fixed problem when room list's scroll did jump after rooms placeholders were replaced with rooms summary items ([#7079](https://github.com/vector-im/element-android/issues/7079))
+ - Fixes crash when quickly double clicking FABs in the new app layout ([#7102](https://github.com/vector-im/element-android/issues/7102))
+ - Fixes space list and new chat bottom sheets showing too small in New App Layout (especially evident in landscape) ([#7103](https://github.com/vector-im/element-android/issues/7103))
+ - [App Layout] Room leaving prompt dialog now waits user to confirm leaving before do so ([#7122](https://github.com/vector-im/element-android/issues/7122))
+ - Fix empty verification bottom sheet. ([#7130](https://github.com/vector-im/element-android/issues/7130))
+ - [New Layout] Fixes new chat dialog not getting dismissed after selecting its actions ([#7132](https://github.com/vector-im/element-android/issues/7132))
+ - Fixes Room List not getting updated when fragment is not in focus ([#7186](https://github.com/vector-im/element-android/issues/7186))
+
+In development 🚧
+----------------
+ - Create DM room only on first message - Add a spinner when sending the first message ([#6970](https://github.com/vector-im/element-android/issues/6970))
+ - [Device Manager] Filter Other Sessions ([#7045](https://github.com/vector-im/element-android/issues/7045))
+ - [Device management] Session details screen ([#7077](https://github.com/vector-im/element-android/issues/7077))
+ - Create DM room only on first message - Fix glitch in the room list ([#7121](https://github.com/vector-im/element-android/issues/7121))
+ - Create DM room only on first message - Handle the local rooms within the new AppLayout ([#7153](https://github.com/vector-im/element-android/issues/7153))
+
+Other changes
+-------------
+ - [Modules] Lifts the application variants to the app module ([#6779](https://github.com/vector-im/element-android/issues/6779))
+ - Ensure that we do not expect all the Event fields when requesting `rooms/{roomId}/hierarchy` endpoint. ([#7035](https://github.com/vector-im/element-android/issues/7035))
+ - Move some GitHub actions to buildjet runners, and remove the second attempt to run integration tests. ([#7108](https://github.com/vector-im/element-android/issues/7108))
+ - Exclude legacy android support annotation library ([#7140](https://github.com/vector-im/element-android/issues/7140))
+ - Pulling no longer hosted im.dlg:android-dialer directly into the repository and removing legacy support library usages ([#7142](https://github.com/vector-im/element-android/issues/7142))
+ - Fixing build cache misses when compiling the vector module ([#7157](https://github.com/vector-im/element-android/issues/7157))
+
 Changes in Element v1.4.36 (2022-09-10)
 =======================================
 

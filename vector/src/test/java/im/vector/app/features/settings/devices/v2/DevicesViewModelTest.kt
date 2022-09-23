@@ -19,6 +19,9 @@ package im.vector.app.features.settings.devices.v2
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -51,6 +54,7 @@ class DevicesViewModelTest {
     private val getDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>()
+    private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
@@ -59,6 +63,7 @@ class DevicesViewModelTest {
                 getCurrentSessionCrossSigningInfoUseCase,
                 getDeviceFullInfoListUseCase,
                 refreshDevicesOnCryptoDevicesChangeUseCase,
+                checkIfCurrentSessionCanBeVerifiedUseCase,
                 refreshDevicesUseCase,
         )
     }
@@ -157,6 +162,54 @@ class DevicesViewModelTest {
 
         // Then
         coVerify { refreshDevicesOnCryptoDevicesChangeUseCase.execute() }
+    }
+
+    @Test
+    fun `given current session can be verified when handling verify current session action then self verification event is posted`() {
+        // Given
+        givenVerificationService()
+        givenCurrentSessionCrossSigningInfo()
+        givenDeviceFullInfoList()
+        givenRefreshDevicesOnCryptoDevicesChange()
+        val verifyCurrentSessionAction = DevicesAction.VerifyCurrentSession
+        coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns true
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(verifyCurrentSessionAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it is DevicesViewEvent.SelfVerification }
+                .finish()
+        coVerify {
+            checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+        }
+    }
+
+    @Test
+    fun `given current session cannot be verified when handling verify current session action then reset secrets event is posted`() {
+        // Given
+        givenVerificationService()
+        givenCurrentSessionCrossSigningInfo()
+        givenDeviceFullInfoList()
+        givenRefreshDevicesOnCryptoDevicesChange()
+        val verifyCurrentSessionAction = DevicesAction.VerifyCurrentSession
+        coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns false
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(verifyCurrentSessionAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it is DevicesViewEvent.PromptResetSecrets }
+                .finish()
+        coVerify {
+            checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+        }
     }
 
     private fun givenVerificationService(): FakeVerificationService {

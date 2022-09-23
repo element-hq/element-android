@@ -39,6 +39,7 @@ import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
@@ -78,6 +79,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
@@ -1247,8 +1249,12 @@ class TimelineViewModel @AssistedInject constructor(
                             LocalRoomCreationState.FAILURE -> {
                                 _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
                             }
-                            LocalRoomCreationState.CREATED ->
-                                _viewEvents.post(RoomDetailViewEvents.OpenRoom(room.localRoomSummary()?.replacementRoomId!!, true))
+                            LocalRoomCreationState.CREATED -> {
+                                room.localRoomSummary()?.let {
+                                    analyticsTracker.capture(CreatedRoom(isDM = it.roomSummary?.isDirect.orFalse()))
+                                    _viewEvents.post(RoomDetailViewEvents.OpenRoom(it.replacementRoomId!!, true))
+                                }
+                            }
                         }
                     }
                     .launchIn(viewModelScope)

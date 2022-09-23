@@ -19,9 +19,9 @@ package im.vector.app.features.settings.devices.v2.overview
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow

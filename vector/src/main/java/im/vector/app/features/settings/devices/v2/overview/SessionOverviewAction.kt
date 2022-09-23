@@ -18,4 +18,6 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class SessionOverviewAction : VectorViewModelAction
+sealed class SessionOverviewAction : VectorViewModelAction {
+    object VerifySession : SessionOverviewAction()
+}

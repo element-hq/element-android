@@ -34,7 +34,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
 
@@ -61,12 +61,36 @@ class SessionOverviewFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
         initSessionInfoView()
+        initVerifyButton()
     }
 
     private fun initSessionInfoView() {
         views.sessionOverviewInfo.onLearnMoreClickListener = {
             Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun initVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.VerifySession)
+        }
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                is SessionOverviewViewEvent.ShowVerifyCurrentSession -> {
+                    navigator.requestSelfSessionVerification(requireActivity())
+                }
+                is SessionOverviewViewEvent.ShowVerifyOtherSession -> {
+                    navigator.requestSessionVerification(requireActivity(), it.deviceId)
+                }
+                is SessionOverviewViewEvent.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                }
+            }
         }
     }
 
@@ -82,11 +106,7 @@ class SessionOverviewFragment :
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
         updateEntryDetails(state.deviceId)
-        if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
-        } else {
-            hideSessionInfo()
-        }
+        updateSessionInfo(state)
     }
 
     private fun updateToolbar(isCurrentSession: Boolean) {
@@ -102,16 +122,22 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
-        views.sessionOverviewInfo.isVisible = true
-        val viewState = SessionInfoViewState(
-                isCurrentSession = isCurrentSession,
-                deviceFullInfo = deviceFullInfo,
-                isDetailsButtonVisible = false,
-                isLearnMoreLinkVisible = true,
-                isLastSeenDetailsVisible = true,
-        )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider)
+    private fun updateSessionInfo(viewState: SessionOverviewViewState) {
+        if (viewState.deviceInfo is Success) {
+            views.sessionOverviewInfo.isVisible = true
+            val isCurrentSession = viewState.isCurrentSession
+            val infoViewState = SessionInfoViewState(
+                    isCurrentSession = isCurrentSession,
+                    deviceFullInfo = viewState.deviceInfo.invoke(),
+                    isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
+                    isDetailsButtonVisible = false,
+                    isLearnMoreLinkVisible = true,
+                    isLastSeenDetailsVisible = true,
+            )
+            views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
+        } else {
+            hideSessionInfo()
+        }
     }
 
     private fun hideSessionInfo() {

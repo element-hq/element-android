@@ -21,6 +21,7 @@ import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 data class SessionInfoViewState(
         val isCurrentSession: Boolean,
         val deviceFullInfo: DeviceFullInfo,
+        val isVerifyButtonVisible: Boolean = true,
         val isDetailsButtonVisible: Boolean = true,
         val isLearnMoreLinkVisible: Boolean = false,
         val isLastSeenDetailsVisible: Boolean = false,

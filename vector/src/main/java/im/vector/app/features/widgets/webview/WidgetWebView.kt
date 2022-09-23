@@ -16,7 +16,6 @@
 
 package im.vector.app.features.widgets.webview
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.ViewGroup
 import android.webkit.CookieManager
@@ -29,7 +28,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.webview.VectorWebViewClient
 import im.vector.app.features.webview.WebEventListener
 
-@SuppressLint("NewApi")
 fun WebView.setupForWidget(activity: Activity,
                            checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase,
                            eventListener: WebEventListener,

@@ -78,6 +78,13 @@ class FakeSession(
         every { this@FakeSession.sessionParams } returns sessionParams
     }
 
+    fun givenSessionId(sessionId: String): SessionParams {
+        val sessionParams = mockk<SessionParams>()
+        every { sessionParams.deviceId } returns sessionId
+        givenSessionParams(sessionParams)
+        return sessionParams
+    }
+
     /**
      * Do not forget to call mockkStatic("org.matrix.android.sdk.flow.FlowSessionKt") in the setup method of the tests.
      */
