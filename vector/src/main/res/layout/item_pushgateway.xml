@@ -83,6 +83,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        tools:text="Pixel 6" />
+
+    <TextView
+        android:id="@+id/pushGatewayDeviceId"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_device_id"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pushGatewayDeviceIdValue"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         tools:text="EBMDOLFJD" />
 
     <TextView
@@ -134,6 +151,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/pushGatewayEnabled"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/push_gateway_item_enabled"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pushGatewayEnabledValue"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        tools:text="true" />
 
     <Button
         android:id="@+id/pushGatewayDeleteButton"
