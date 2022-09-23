@@ -17,77 +17,21 @@
 package org.matrix.android.sdk.internal.network
 
 import android.content.Context
-import android.os.Build
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.di.MatrixScope
 import javax.inject.Inject
 
 @MatrixScope
 internal class UserAgentHolder @Inject constructor(
-        private val context: Context,
-        matrixConfiguration: MatrixConfiguration
+        context: Context,
+        matrixConfiguration: MatrixConfiguration,
+        computeUserAgentUseCase: ComputeUserAgentUseCase,
 ) {
 
     var userAgent: String = ""
         private set
 
     init {
-        setApplicationFlavor(matrixConfiguration.applicationFlavor)
-    }
-
-    /**
-     * Create an user agent with the application version.
-     * Ex: Element/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
-     *
-     * @param flavorDescription the flavor description
-     */
-    private fun setApplicationFlavor(flavorDescription: String) {
-        val appPackageName = context.applicationContext.packageName
-        val pm = context.packageManager
-
-        val appName = tryOrNull { pm.getApplicationLabel(pm.getApplicationInfo(appPackageName, 0)).toString() }
-                ?.takeIf {
-                    it.matches("\\A\\p{ASCII}*\\z".toRegex())
-                }
-                ?: run {
-                    // Use appPackageName instead of appName if appName contains any non-ASCII character
-                    appPackageName
-                }
-        val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName }
-
-        if (appName.isNullOrEmpty() || appVersion.isNullOrEmpty()) {
-            userAgent = tryOrNull { System.getProperty("http.agent") } ?: ("Java" + System.getProperty("java.version"))
-            return
-        }
-
-        val deviceManufacturer = Build.MANUFACTURER
-        val deviceModel = Build.MODEL
-        val androidVersion = Build.VERSION.RELEASE
-        val deviceBuildId = Build.DISPLAY
-        val matrixSdkVersion = BuildConfig.SDK_VERSION
-
-        userAgent = buildString {
-            append(appName)
-            append("/")
-            append(appVersion)
-            append(" (")
-            append(deviceManufacturer)
-            append(" ")
-            append(deviceModel)
-            append("; ")
-            append("Android ")
-            append(androidVersion)
-            append("; ")
-            append(deviceBuildId)
-            append("; ")
-            append("Flavour ")
-            append(flavorDescription)
-            append("; ")
-            append("MatrixAndroidSdk2 ")
-            append(matrixSdkVersion)
-            append(")")
-        }
+        userAgent = computeUserAgentUseCase.execute(context, matrixConfiguration.applicationFlavor)
     }
 }
