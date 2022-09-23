@@ -58,8 +58,14 @@ data class HttpPusher(
          */
         val url: String,
 
+        /**
+         * Whether the pusher should actively create push notifications
+         */
         val enabled: Boolean,
 
+        /**
+         * The device ID of the session that registered the pusher
+         */
         val deviceId: String,
 
         /**
