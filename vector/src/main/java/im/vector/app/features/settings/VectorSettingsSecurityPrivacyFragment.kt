@@ -17,7 +17,6 @@
 
 package im.vector.app.features.settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -448,7 +447,6 @@ class VectorSettingsSecurityPrivacyFragment :
     /**
      * Manage the e2e keys import.
      */
-    @SuppressLint("NewApi")
     private fun importKeys() {
         openFileSelection(
                 requireActivity(),

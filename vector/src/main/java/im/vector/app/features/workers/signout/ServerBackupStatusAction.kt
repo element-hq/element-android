@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.di
+package im.vector.app.features.workers.signout
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
+import im.vector.app.core.platform.VectorViewModelAction
 
-object DefaultSharedPreferences {
-
-    @Volatile private var INSTANCE: SharedPreferences? = null
-
-    fun getInstance(context: Context): SharedPreferences =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: PreferenceManager.getDefaultSharedPreferences(context.applicationContext).also { INSTANCE = it }
-            }
+sealed interface ServerBackupStatusAction : VectorViewModelAction {
+    data class OnRecoverDoneForVersion(val version: String) : ServerBackupStatusAction
+    object OnBannerDisplayed : ServerBackupStatusAction
+    object OnBannerClosed : ServerBackupStatusAction
 }
