@@ -70,6 +70,8 @@ class PushersManager @Inject constructor(
             appNameProvider.getAppName(),
             activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
             gateway,
+            enabled = true,
+            deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
             append = false,
             withEventIdOnly = true
     )

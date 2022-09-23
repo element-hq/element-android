@@ -58,6 +58,10 @@ data class HttpPusher(
          */
         val url: String,
 
+        val enabled: Boolean,
+
+        val deviceId: String,
+
         /**
          * If true, the homeserver should add another pusher with the given pushkey and App ID in addition
          * to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
