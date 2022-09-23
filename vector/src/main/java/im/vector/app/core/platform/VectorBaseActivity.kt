@@ -56,6 +56,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
@@ -161,10 +162,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     // For debug only
     @Inject lateinit var debugReceiver: DebugReceiver
-
 
     // Filter for multiple invalid token error
     private var mainActivityStarted = false

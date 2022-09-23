@@ -24,7 +24,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
@@ -45,7 +44,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
-    @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
 
     private val startAppViewModel: StartAppViewModel by viewModel()
