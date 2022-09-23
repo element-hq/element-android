@@ -139,6 +139,7 @@ class SessionOverviewFragment :
         updateToolbar(state.isCurrentSession)
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
+        updateLoading(state.isLoading)
     }
 
     private fun updateToolbar(isCurrentSession: Boolean) {
@@ -169,6 +170,14 @@ class SessionOverviewFragment :
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
         } else {
             views.sessionOverviewInfo.isVisible = false
+        }
+    }
+
+    private fun updateLoading(isLoading: Boolean) {
+        if (isLoading) {
+            showLoading(null)
+        } else {
+            dismissLoadingDialog()
         }
     }
 

@@ -139,16 +139,10 @@ class SessionOverviewViewModel @AssistedInject constructor(
     // TODO add unit tests
     private fun handleSignoutSession() = withState { state ->
         // TODO for current session: do the same process as sign out button in the general settings
-        // TODO add a loading viewState or ViewEvent
         viewModelScope.launch {
-            val signoutResult = signoutSessionUseCase.execute(state.deviceId, object : UserInteractiveAuthInterceptor {
-                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                    when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
-                        is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
-                        is SignoutSessionResult.Completed -> Unit
-                    }
-                }
-            })
+            setLoading(true)
+            val signoutResult = signout(state.deviceId)
+            setLoading(false)
 
             if (signoutResult.isSuccess) {
                 onSignoutSuccess()
@@ -161,11 +155,24 @@ class SessionOverviewViewModel @AssistedInject constructor(
         }
     }
 
+    private suspend fun signout(deviceId: String) = signoutSessionUseCase.execute(deviceId, object : UserInteractiveAuthInterceptor {
+        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+            when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
+                is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
+                is SignoutSessionResult.Completed -> Unit
+            }
+        }
+    })
+
     private fun onReAuthNeeded(reAuthNeeded: SignoutSessionResult.ReAuthNeeded) {
         Timber.d("onReAuthNeeded")
         pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         pendingAuthHandler.uiaContinuation = reAuthNeeded.uiaContinuation
         _viewEvents.post(SessionOverviewViewEvent.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode))
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        setState { copy(isLoading = isLoading) }
     }
 
     private fun onSignoutSuccess() {

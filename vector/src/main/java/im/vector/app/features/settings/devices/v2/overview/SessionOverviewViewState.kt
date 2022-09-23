@@ -26,6 +26,7 @@ data class SessionOverviewViewState(
         val isCurrentSession: Boolean = false,
         val isCurrentSessionTrusted: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
+        val isLoading: Boolean = false,
 ) : MavericksState {
     constructor(args: SessionOverviewArgs) : this(
             deviceId = args.deviceId
