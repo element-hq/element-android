@@ -131,13 +131,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private lateinit var args: MainActivityArgs
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var uiStateRepository: UiStateRepository
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var pinCodeHelper: PinCodeHelper
-    @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var vectorAnalytics: VectorAnalytics
     @Inject lateinit var lockScreenKeyRepository: LockScreenKeyRepository
@@ -232,7 +229,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun doCleanUp() {
-        val session = sessionHolder.getSafeActiveSession()
+        val session = activeSessionHolder.getSafeActiveSession()
         if (session == null) {
             startNextActivityAndFinish()
             return
@@ -244,7 +241,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 lifecycleScope.launch {
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
-                    sessionHolder.clearActiveSession()
+                    activeSessionHolder.clearActiveSession()
                     doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
@@ -258,7 +255,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                         return@launch
                     }
                     Timber.w("SIGN_OUT: success, start app")
-                    sessionHolder.clearActiveSession()
+                    activeSessionHolder.clearActiveSession()
                     doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
@@ -330,10 +327,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession() ->
+            activeSessionHolder.hasActiveSession() ->
                 // We have a session.
                 // Check it can be opened
-                if (sessionHolder.getActiveSession().isOpenable) {
+                if (activeSessionHolder.getActiveSession().isOpenable) {
                     HomeActivity.newIntent(this, firstStartMainActivity = false, existingSession = true)
                 } else {
                     // The token is still invalid
