@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -30,13 +31,16 @@ import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
 /**
@@ -92,6 +96,7 @@ class SessionOverviewFragment :
                 is SessionOverviewViewEvent.PromptResetSecrets -> {
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
+                is SessionOverviewViewEvent.RequestReAuth -> askForReAuthentication(it)
             }
         }
     }
@@ -155,6 +160,39 @@ class SessionOverviewFragment :
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
         } else {
             views.sessionOverviewInfo.isVisible = false
+        }
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(SessionOverviewAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(SessionOverviewAction.PasswordAuthDone(password))
+                }
+                else -> {
+                    viewModel.handle(SessionOverviewAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(SessionOverviewAction.ReAuthCancelled)
+        }
+    }
+
+    /**
+     * Launch the re auth activity to get credentials.
+     */
+    private fun askForReAuthentication(reAuthReq: SessionOverviewViewEvent.RequestReAuth) {
+        ReAuthActivity.newIntent(
+                requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
         }
     }
 }

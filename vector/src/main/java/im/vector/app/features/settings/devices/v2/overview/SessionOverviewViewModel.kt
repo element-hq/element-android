@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import timber.log.Timber
 import kotlin.coroutines.Continuation
 
 class SessionOverviewViewModel @AssistedInject constructor(
@@ -91,10 +93,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 }
     }
 
+    // TODO add unit tests
     override fun handle(action: SessionOverviewAction) {
         when (action) {
             is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
             SessionOverviewAction.SignoutSession -> handleSignoutSession()
+            SessionOverviewAction.SsoAuthDone -> handleSsoAuthDone()
+            is SessionOverviewAction.PasswordAuthDone -> handlePasswordAuthDone(action)
+            SessionOverviewAction.ReAuthCancelled -> handleReAuthCancelled()
         }
     }
 
@@ -129,7 +135,11 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
                         is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
-                        is SignoutSessionResult.Completed -> Unit // TODO refresh devices list? + post event to close the associated screen
+                        is SignoutSessionResult.Completed -> {
+                            Timber.d("signout completed")
+                            // TODO check if it is called after a reAuth
+                            // TODO refresh devices list? + post event to close the associated screen
+                        }
                     }
                 }
             })
@@ -137,8 +147,21 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun onReAuthNeeded(reAuthNeeded: SignoutSessionResult.ReAuthNeeded) {
+        Timber.d("onReAuthNeeded")
         pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         pendingAuthHandler.uiaContinuation = reAuthNeeded.uiaContinuation
         _viewEvents.post(SessionOverviewViewEvent.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode))
+    }
+
+    private fun handleSsoAuthDone() {
+        pendingAuthHandler.ssoAuthDone()
+    }
+
+    private fun handlePasswordAuthDone(action: SessionOverviewAction.PasswordAuthDone) {
+        pendingAuthHandler.passwordAuthDone(action.password)
+    }
+
+    private fun handleReAuthCancelled() {
+        pendingAuthHandler.reAuthCancelled()
     }
 }
