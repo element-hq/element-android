@@ -1,10 +1,42 @@
-# Contributing code to Matrix
+# Contributing to Element Android
+
+<!--- TOC -->
+
+* [Contributing code to Matrix](#contributing-code-to-matrix)
+* [Android Studio settings](#android-studio-settings)
+  * [Template](#template)
+* [Compilation](#compilation)
+* [I want to help translating Element](#i-want-to-help-translating-element)
+* [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
+  * [Kotlin](#kotlin)
+  * [Changelog](#changelog)
+  * [Code quality](#code-quality)
+    * [Internal tool](#internal-tool)
+    * [ktlint](#ktlint)
+    * [lint](#lint)
+  * [Unit tests](#unit-tests)
+  * [Tests](#tests)
+  * [Internationalisation](#internationalisation)
+    * [Adding new string](#adding-new-string)
+      * [Plurals](#plurals)
+    * [Editing existing strings](#editing-existing-strings)
+    * [Removing existing strings](#removing-existing-strings)
+    * [Renaming string ids](#renaming-string-ids)
+    * [Reordering strings](#reordering-strings)
+  * [Accessibility](#accessibility)
+  * [Layout](#layout)
+  * [Authors](#authors)
+* [Thanks](#thanks)
+
+<!--- END -->
+
+## Contributing code to Matrix
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 
 Element Android support can be found in this room: [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org).
 
-# Specific rules for Matrix Android projects
+The rest of the document contains specific rules for Matrix Android projects
 
 ## Android Studio settings
 
@@ -120,17 +152,21 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 Translations are handled using an external tool: [Weblate](https://translate.element.io/projects/element-android/)
 
-As a general rule, please never edit or add or remove translations to the project in a Pull Request. It can lead to merge conflict if the translations are also modified in Weblate side.
+**As a general rule, please never edit or add or remove translations to the project in a Pull Request**. It can lead to merge conflict if the translations are also modified in Weblate side. Pull Request containing change(s) on the translation files cannot be merged.
 
 #### Adding new string
 
-When adding new string resources, please only add new entries in the file `value/strings.xml`. Translations will be added later by the community of translators using Weblate.
+When adding new string resources, please only add new entries in the file `values/strings.xml` ([this file](./library/ui-strings/src/main/res/values/strings.xml)). Translations will be added later by the community of translators using Weblate.
 
-The file `value/strings.xml` must only contain American English (U. S. English) values, as this is the default language of the Android operating system. So for instance, please use "color" instead of "colour". Element Android will still use the language set on the system by the user, like any other Android applications which provide translations. The system language can be any other English language variants, or any other languages. Note that this is also possible to override the system language using the Element Android in-app language settings.
+The file `values/strings.xml` must only contain American English (U. S. English) values, as this is the default language of the Android operating system. So for instance, please use "color" instead of "colour". Element Android will still use the language set on the system by the user, like any other Android applications which provide translations. The system language can be any other English language variants, or any other languages. Note that this is also possible to override the system language using the Element Android in-app language settings.
 
-New strings can be added anywhere in the file `value/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
+New strings can be added anywhere in the file `values/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
 
-Do not hesitate to use plurals when appropriate.
+##### Plurals
+
+Please use `plurals` resources when appropriate, and note that some languages have specific rules for `plurals`, so even if the string will always be at the plural form for English, please always create a `plurals` resource.
+
+Specific plural forms can be found [here](https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html).
 
 #### Editing existing strings
 
@@ -149,6 +185,23 @@ Instead, please comment the original string with:
 And add `tools:ignore="UnusedResources"` to the string, to let lint ignore that the string is not used.
 
 The string will be removed during the next sync with Weblate.
+
+#### Renaming string ids
+
+This is possible to rename ids of the String resources, but since translation files cannot be edited, add TODO in the main strings.xml file above the strings you want to rename. 
+
+```xml
+<!-- TODO Rename id to put_new_id_here -->
+<string name="current_id">Hello Matrix world!</string>
+```
+
+The string id(s) will be renamed during the next Weblate sync.
+
+#### Reordering strings
+
+To group strings per feature, or for any other reasons, it is possible to reorder string resources, but only in the [main strings.xml file](./library/ui-strings/src/main/res/values/strings.xml). ). We do not mind about ordering in the translation files, and anyway this is forbidden to edit manually the translation files.
+
+It is also possible to add empty lines between string resources, and to add XML comments. Please note that the XML comment just above a String resource will also appear on Weblate and be visible to the translators.
 
 ### Accessibility
 
