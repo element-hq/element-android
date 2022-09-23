@@ -70,18 +70,7 @@ class SessionOverviewFragment :
         observeViewEvents()
         initSessionInfoView()
         initVerifyButton()
-    }
-
-    private fun initSessionInfoView() {
-        views.sessionOverviewInfo.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun initVerifyButton() {
-        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
-            viewModel.handle(SessionOverviewAction.VerifySession)
-        }
+        initSignoutButton()
     }
 
     private fun observeViewEvents() {
@@ -97,7 +86,27 @@ class SessionOverviewFragment :
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
                 is SessionOverviewViewEvent.RequestReAuth -> askForReAuthentication(it)
+                SessionOverviewViewEvent.SignoutSuccess -> viewNavigator.goBack(requireActivity())
+                is SessionOverviewViewEvent.SignoutError -> showFailure(it.error)
             }
+        }
+    }
+
+    private fun initSessionInfoView() {
+        views.sessionOverviewInfo.onLearnMoreClickListener = {
+            Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun initVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.VerifySession)
+        }
+    }
+
+    private fun initSignoutButton() {
+        views.sessionOverviewSignout.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.SignoutSession)
         }
     }
 

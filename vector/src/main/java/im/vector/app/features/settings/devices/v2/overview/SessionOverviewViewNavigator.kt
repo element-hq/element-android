@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.overview
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsActivity
 import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import javax.inject.Inject
@@ -29,5 +30,10 @@ class SessionOverviewViewNavigator @Inject constructor() {
 
     fun goToRenameSession(context: Context, deviceId: String) {
         context.startActivity(RenameSessionActivity.newIntent(context, deviceId))
+    }
+
+    // TODO add unit test
+    fun goBack(fragmentActivity: FragmentActivity) {
+        fragmentActivity.finish()
     }
 }

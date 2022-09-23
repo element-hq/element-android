@@ -27,4 +27,7 @@ sealed class SessionOverviewViewEvent : VectorViewEvents {
             val registrationFlowResponse: RegistrationFlowResponse,
             val lastErrorCode: String?
     ) : SessionOverviewViewEvent()
+
+    object SignoutSuccess : SessionOverviewViewEvent()
+    data class SignoutError(val error: Throwable) : SessionOverviewViewEvent()
 }
