@@ -58,8 +58,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
-    @Inject
-    lateinit var clock: Clock
+    @Inject lateinit var clock: Clock
 
     private lateinit var buffer: ByteArray
 
