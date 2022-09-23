@@ -1,4 +1,4 @@
-Changes in Element v1.5.0 (2022-09-21)
+Changes in Element v1.5.0 (2022-09-23)
 ======================================
 
 Features ✨
@@ -33,8 +33,6 @@ Other changes
  - Exclude legacy android support annotation library ([#7140](https://github.com/vector-im/element-android/issues/7140))
  - Pulling no longer hosted im.dlg:android-dialer directly into the repository and removing legacy support library usages ([#7142](https://github.com/vector-im/element-android/issues/7142))
  - Fixing build cache misses when compiling the vector module ([#7157](https://github.com/vector-im/element-android/issues/7157))
- - New App Layout is now enabled by default! Go to the Settings > Labs to toggle this ([#7166](https://github.com/vector-im/element-android/issues/7166))
-
 
 Changes in Element v1.4.36 (2022-09-10)
 =======================================
