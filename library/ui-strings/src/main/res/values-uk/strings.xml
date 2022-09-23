@@ -2703,7 +2703,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Показати всі сеанси (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
     <string name="device_manager_sessions_other_title">Інші сеанси</string>
-    <string name="device_manager_sessions_list_title">Сеанси</string>
+    <string name="settings_sessions_list">Сеанси</string>
     <string name="a11y_open_spaces">Відкрити список кімнат</string>
     <string name="a11y_create_message">Створити нову розмову або кімнату</string>
     <string name="room_list_filter_people">Люди</string>

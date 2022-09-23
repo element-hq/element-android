@@ -2594,7 +2594,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Mostra tutte le sessioni (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Per una maggiore sicurezza, verifica le tue sessioni e disconnetti quelle che non riconosci o che non usi più.</string>
     <string name="device_manager_sessions_other_title">Altre sessioni</string>
-    <string name="device_manager_sessions_list_title">Sessioni</string>
+    <string name="settings_sessions_list">Sessioni</string>
     <string name="a11y_open_spaces">Apri elenco spazi</string>
     <string name="a11y_create_message">Crea una nuova conversazione o stanza</string>
     <string name="room_list_filter_people">Persone</string>

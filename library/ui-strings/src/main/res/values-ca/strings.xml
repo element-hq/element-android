@@ -2604,7 +2604,7 @@
     <string name="explore_rooms">Explora sales</string>
     <string name="device_manager_sessions_other_description">Per estar més segur, verifica les teves sessions i tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
     <string name="device_manager_sessions_other_title">Altres sessions</string>
-    <string name="device_manager_sessions_list_title">Sessions</string>
+    <string name="settings_sessions_list">Sessions</string>
     <string name="a11y_open_spaces">Obre la llista d\'espais</string>
     <string name="a11y_create_message">Crea un nou xat o sala</string>
     <string name="room_list_filter_people">Gent</string>

@@ -2553,7 +2553,7 @@
     <string name="device_manager_settings_active_sessions_show_all">顯示所有工作階段 (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出任何您無法識別或不再使用的工作階段。</string>
     <string name="device_manager_sessions_other_title">其他工作階段</string>
-    <string name="device_manager_sessions_list_title">工作階段</string>
+    <string name="settings_sessions_list">工作階段</string>
     <string name="a11y_open_spaces">開啟空間清單</string>
     <string name="a11y_create_message">建立新的對話或聊天室</string>
     <string name="room_list_filter_people">聯絡人</string>

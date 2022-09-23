@@ -76,7 +76,7 @@ class VectorSettingsDevicesFragment :
     private fun initToolbar() {
         (activity as? AppCompatActivity)
                 ?.supportActionBar
-                ?.setTitle(R.string.device_manager_sessions_list_title)
+                ?.setTitle(R.string.settings_sessions_list)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
