@@ -33,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 
 class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager: PopupAlertManager) : Application.ActivityLifecycleCallbacks {
@@ -94,9 +95,13 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
         val context = activity.applicationContext
         val packageManager: PackageManager = context.packageManager
 
-        // Get all activities from app manifest
+        // Get all activities from element android and android permission controller app
         if (activitiesInfo.isEmpty()) {
             activitiesInfo = packageManager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES).activities
+
+            activitiesInfo += tryOrNull {
+                packageManager.getPackageInfo("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
+            } ?: emptyArray()
         }
 
         // Get all running activities on app task
