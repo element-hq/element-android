@@ -117,13 +117,13 @@ internal data class JsonPusher(
         val append: Boolean? = false,
 
         /**
-         * Whether the pusher should actively create push notifications
+         * Whether the pusher should actively create push notifications.
          */
         @Json(name = "org.matrix.msc3881.enabled")
-        val enabled: Boolean = false,
+        val enabled: Boolean = true,
 
         /**
-         * The device_id of the session that registered the pusher
+         * The device_id of the session that registered the pusher.
          */
         @Json(name = "org.matrix.msc3881.device_id")
         val deviceId: String? = null,
