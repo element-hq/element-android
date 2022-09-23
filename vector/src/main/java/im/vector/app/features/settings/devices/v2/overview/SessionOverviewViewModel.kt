@@ -58,7 +58,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val signoutSessionUseCase: SignoutSessionUseCase,
         private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
-        activeSessionHolder: ActiveSessionHolder,
+        private val activeSessionHolder: ActiveSessionHolder,
         refreshDevicesUseCase: RefreshDevicesUseCase,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
