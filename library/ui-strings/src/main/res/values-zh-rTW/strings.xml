@@ -2616,4 +2616,44 @@
     <string name="a11y_collapse_space_children">折疊 %s 個子空間</string>
     <string name="a11y_expand_space_children">展開 %s 個子空間</string>
     <string name="change_space">變更空間</string>
+    <string name="device_manager_session_details_device_ip_address">IP 位置</string>
+    <string name="device_manager_session_details_session_last_activity">最後活動</string>
+    <string name="device_manager_session_details_session_name">工作階段名稱</string>
+    <string name="device_manager_session_details_description">應用程式、裝置與活動資訊。</string>
+    <string name="device_manager_session_details_title">工作階段詳細資訊</string>
+    <string name="device_manager_other_sessions_clear_filter">清除過濾條件</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">找不到不活躍的工作階段。</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">找不到未驗證的工作階段。</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">找不到已驗證的工作階段。</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="other">閒置%1$d天或更久</item>
+    </plurals>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="other">考慮登出您不再使用的舊工作階段（%1$d天或更久）。</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">不活躍</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">驗證您的工作階段以強化安全通訊或從您無法識別或不再使用的工作階段登出。</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">未驗證</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">為取得最佳安全性，請從任何您無法識別或不再使用的工作階段登出。</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">已驗證</string>
+    <string name="a11y_device_manager_filter">過濾</string>
+    <string name="device_manager_filter_option_inactive">不活躍</string>
+    <string name="device_manager_filter_option_unverified_description">尚未準備好安全通訊</string>
+    <string name="device_manager_filter_option_unverified">未驗證</string>
+    <string name="device_manager_filter_option_verified_description">準備好安全通訊</string>
+    <string name="device_manager_filter_option_verified">已驗證</string>
+    <string name="device_manager_filter_option_all_sessions">所有工作階段</string>
+    <string name="device_manager_filter_bottom_sheet_title">過濾</string>
+    <string name="device_manager_session_last_activity">最後活動 %1$s</string>
+    <string name="device_manager_device_title">裝置</string>
+    <string name="device_manager_session_title">工作階段</string>
+    <string name="device_manager_current_session_title">目前的工作階段</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">驗證或從此工作階段登出以取得最佳安全性與可靠性。</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">驗證您目前的工作階段以強化安全通訊。</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">此工作階段已準備好安全通訊。</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">您目前的工作階段已準備好安全通訊。</string>
+    <string name="labs_enable_deferred_dm_summary">僅在第一則訊息上建立直接訊息</string>
+    <string name="labs_enable_deferred_dm_title">啟用延期直接訊息</string>
+    <string name="labs_enable_new_app_layout_summary">包含選擇性分頁的簡潔 Element</string>
+    <string name="labs_enable_new_app_layout_title">啟用新佈局</string>
 </resources>
