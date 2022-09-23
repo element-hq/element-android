@@ -40,14 +40,10 @@ class ComputeUserAgentUseCase @Inject constructor() {
                     it.matches("\\A\\p{ASCII}*\\z".toRegex())
                 }
                 ?: run {
-                    // Use appPackageName instead of appName if appName contains any non-ASCII character
+                    // Use appPackageName instead of appName if appName is null or contains any non-ASCII character
                     appPackageName
                 }
-        val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName }
-
-        if (appName.isNullOrEmpty() || appVersion.isNullOrEmpty()) {
-            return tryOrNull { System.getProperty("http.agent") } ?: ("Java" + System.getProperty("java.version"))
-        }
+        val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName } ?: FALLBACK_APP_VERSION
 
         val deviceManufacturer = Build.MANUFACTURER
         val deviceModel = Build.MODEL
@@ -76,5 +72,9 @@ class ComputeUserAgentUseCase @Inject constructor() {
             append(matrixSdkVersion)
             append(")")
         }
+    }
+
+    companion object {
+        const val FALLBACK_APP_VERSION = "0.0.0"
     }
 }
