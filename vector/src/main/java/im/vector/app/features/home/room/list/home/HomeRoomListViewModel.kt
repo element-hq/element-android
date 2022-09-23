@@ -51,6 +51,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -108,12 +110,34 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
+    private val switchDataSourceMutex = Mutex()
+
     init {
         observeOrderPreferences()
         observeInvites()
         observeRecents()
         observeFilterTabs()
         observeRooms()
+        observeSpaceChanges()
+    }
+
+    private fun observeSpaceChanges() {
+        spaceStateHandler.getSelectedSpaceFlow()
+                .distinctUntilChanged()
+                .onStart {
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
+                }
+                .onEach { selectedSpaceOption ->
+                    val selectedSpace = selectedSpaceOption.orNull()
+                    filteredPagedRoomSummariesLive?.let { liveResults ->
+                        liveResults.queryParams = liveResults.queryParams.copy(
+                                spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                        )
+                        emitEmptyState()
+                    }
+                }
+                .also { roomsFlow = it }
+                .launchIn(viewModelScope)
     }
 
     private fun observeInvites() {
@@ -229,42 +253,30 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms() = viewModelScope.launch {
-        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
+        switchDataSourceMutex.withLock {
+            filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
 
-        val builder = RoomSummaryQueryParams.Builder().also {
-            it.memberships = listOf(Membership.JOIN)
+            val builder = RoomSummaryQueryParams.Builder().also {
+                it.memberships = listOf(Membership.JOIN)
+                it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
+            }
+
+            val params = getFilteredQueryParams(currentFilter, builder.build())
+            val sortOrder = if (preferencesStore.isAZOrderingEnabledFlow.first()) {
+                RoomSortOrder.NAME
+            } else {
+                RoomSortOrder.ACTIVITY
+            }
+            val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
+                    params,
+                    pagedListConfig,
+                    sortOrder
+            ).also {
+                filteredPagedRoomSummariesLive = it
+            }
+
+            liveResults.livePagedList.observeForever(internalPagedListObserver)
         }
-
-        val params = getFilteredQueryParams(currentFilter, builder.build())
-        val sortOrder = if (preferencesStore.isAZOrderingEnabledFlow.first()) {
-            RoomSortOrder.NAME
-        } else {
-            RoomSortOrder.ACTIVITY
-        }
-        val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
-                params,
-                pagedListConfig,
-                sortOrder
-        ).also {
-            filteredPagedRoomSummariesLive = it
-        }
-
-        spaceStateHandler.getSelectedSpaceFlow()
-                .distinctUntilChanged()
-                .onStart {
-                    emit(spaceStateHandler.getCurrentSpace().toOption())
-                }
-                .onEach { selectedSpaceOption ->
-                    val selectedSpace = selectedSpaceOption.orNull()
-                    filteredPagedRoomSummariesLive?.queryParams = liveResults.queryParams.copy(
-                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
-                    )
-                    emitEmptyState()
-                }
-                .also { roomsFlow = it }
-                .launchIn(viewModelScope)
-
-        liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
     private fun observeOrderPreferences() {
