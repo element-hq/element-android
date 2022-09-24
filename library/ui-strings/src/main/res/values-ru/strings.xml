@@ -907,7 +907,7 @@
     <string name="event_redacted_by_user_reason">Событие удалено пользователем</string>
     <string name="event_redacted_by_admin_reason">Событие модерируется администратором комнаты</string>
     <string name="malformed_message">Некорректное событие, не могу отобразить</string>
-    <string name="create_new_room">Создать новую комнату</string>
+    <string name="create_new_room">Создать комнату</string>
     <string name="error_no_network">Нет сети. Пожалуйста, проверьте подключение к Интернету.</string>
     <string name="action_change">Изменить</string>
     <string name="change_room_directory_network">Изменить сеть</string>
@@ -916,7 +916,7 @@
     <string name="fab_menu_create_room">Комнаты</string>
     <string name="fab_menu_create_chat">Личные сообщения</string>
     <string name="create_room_action_create">СОЗДАТЬ</string>
-    <string name="create_room_name_hint">Имя</string>
+    <string name="create_room_name_hint">Название</string>
     <string name="create_room_public_title">Публичная</string>
     <string name="create_room_public_description">Каждый сможет присоединиться к этой комнате</string>
     <string name="keys_backup_unable_to_get_trust_info">Произошла ошибка при получении информации о доверии</string>
@@ -958,8 +958,8 @@
     <string name="room_filtering_footer_title">Не можете найти нужное\?</string>
     <string name="room_filtering_footer_create_new_room">Создать комнату</string>
     <string name="room_filtering_footer_create_new_direct_message">Отправить личное сообщение</string>
-    <string name="room_filtering_footer_open_room_directory">Просмотр каталога комнат</string>
-    <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
+    <string name="room_filtering_footer_open_room_directory">Каталог комнат</string>
+    <string name="room_directory_search_hint">Название или ID (#example:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Жест смахивания для ответа в ленте сообщений</string>
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
     <string name="creating_direct_room">Создаем комнату…</string>
@@ -2116,7 +2116,7 @@
     <string name="verification_scan_self_notice">Сканируйте код с помощью другого устройства или переключитесь и сканируйте с помощью этого устройства</string>
     <string name="create_space_alias_hint">Адрес пространства</string>
     <string name="error_file_too_big_simple">Файл слишком большой для загрузки.</string>
-    <string name="search_hint_room_name">Поиск по имени</string>
+    <string name="search_hint_room_name">Поиск по названию</string>
     <string name="send_file_step_compressing_video">Сжатие видео %d%%</string>
     <string name="send_file_step_compressing_image">Сжатие изображения…</string>
     <string name="give_feedback">Оставить отзыв</string>
@@ -2374,11 +2374,11 @@
     <string name="attachment_type_poll">Опрос</string>
     <string name="create_poll_title">Создать опрос</string>
     <string name="restart_the_application_to_apply_changes">Перезапустите приложение, чтобы изменения вступили в силу.</string>
-    <string name="labs_enable_latex_maths">Включить математику LaTeX</string>
+    <string name="labs_enable_latex_maths">Математика LaTeX</string>
     <string name="labs_auto_report_uisi_desc">Ваша система будет автоматически отправлять журналы при возникновении ошибки невозможности расшифровки</string>
     <string name="labs_auto_report_uisi">Автоматически сообщать об ошибках расшифровки.</string>
     <string name="encryption_misconfigured">Шифрование неправильно настроено</string>
-    <string name="room_member_override_nick_color">Изменить цвет отображаемого имени</string>
+    <string name="room_member_override_nick_color">Изменить цвет имени</string>
     <string name="room_profile_section_restore_security">Восстановить шифрование</string>
     <string name="contact_admin_to_restore_encryption">Обратитесь к администратору, чтобы восстановить шифрование до рабочего состояния.</string>
     <string name="encryption_has_been_misconfigured">Шифрование настроено неправильно.</string>
@@ -2507,7 +2507,7 @@
     <string name="live_location_sharing_notification_description">Идёт отправка местоположения</string>
     <string name="location_share_live_remaining_time">Осталось %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Обновлено %1$s назад</string>
-    <string name="labs_enable_live_location">Включить функцию \"Поделиться трансляцией местоположения\"</string>
+    <string name="labs_enable_live_location">Функция \"Поделиться трансляцией местоположения\"</string>
     <string name="live_location_sharing_notification_title">${app_name} Трансляция местоположения</string>
     <string name="location_share_live_until">Транслировать до %1$s</string>
     <string name="location_share_live_ended">Трансляция завершена</string>
@@ -2666,7 +2666,7 @@
     <string name="a11y_create_message">Создать беседу или комнату</string>
     <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>
     <string name="room_list_filter_people">Люди</string>
-    <string name="home_layout_preferences">Настройки оформления</string>
+    <string name="home_layout_preferences">Настройки вида</string>
     <string name="home_layout_preferences_filters">Фильтры</string>
     <string name="home_layout_preferences_recents">Недавние</string>
     <string name="room_list_filter_favourites">Избранные</string>
@@ -2675,8 +2675,8 @@
     <string name="home_layout_preferences_sort_name">А - Я</string>
     <string name="home_layout_preferences_sort_activity">Активности</string>
     <string name="home_layout_preferences_sort_by">Сортировать по</string>
-    <string name="explore_rooms">Обзор комнат</string>
-    <string name="start_chat">Начать беседу</string>
+    <string name="explore_rooms">Каталог комнат</string>
+    <string name="start_chat">Отправить ЛС</string>
     <string name="create_room">Создать комнату</string>
     <string name="device_manager_other_sessions_view_all">Посмотреть все (%1$d)</string>
     <string name="device_manager_header_section_security_recommendations_description">Повысьте безопасность учётной записи, следуя этим рекомендациям.</string>
@@ -2711,5 +2711,20 @@
     <string name="device_manager_verification_status_detail_current_session_verified">Текущая сессия готова к безопасному обмену сообщениями.</string>
     <string name="a11y_device_manager_device_type_web">Веб-браузер</string>
     <string name="space_list_empty_message">Пространства — это новый способ организации комнат и людей. Создайте пространство, чтобы начать.</string>
-    <string name="labs_enable_new_app_layout_title">Новое оформление</string>
+    <string name="labs_enable_new_app_layout_title">Новый вид</string>
+    <string name="home_empty_no_unreads_title">Нечего отображать.</string>
+    <string name="home_empty_no_unreads_message">Здесь будут отображаться непрочитанные сообщения, когда таковые будут.</string>
+    <string name="font_size_use_system">Присущий системе</string>
+    <string name="change_space">Смена пространства</string>
+    <string name="labs_enable_new_app_layout_summary">Упрощённый Element с дополнительными вкладками</string>
+    <string name="onboarding_new_app_layout_welcome_title">Добро пожаловать в новый вид!</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nвыглядит слегка пустовато.</string>
+    <string name="onboarding_new_app_layout_button_try">Попробовать</string>
+    <string name="device_manager_session_details_description">Сведения о приложении, устройстве и активности.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Подтвердите текущую сессию для более безопасного обмена сообщениями.</string>
+    <string name="space_list_empty_title">Пока нет пространств.</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Подтвердите свои сессии для более безопасного обмена сообщениями или выйдите из тех, которые более не признаёте или не используете.</string>
+    <string name="device_manager_unverified_sessions_description">Подтвердите или выйдите из незаверенных сессий.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Подтвердите или выйдите из этой сессии для лучшей безопасности и надёжности.</string>
 </resources>
