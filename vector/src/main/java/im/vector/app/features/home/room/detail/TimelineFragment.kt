@@ -1536,7 +1536,9 @@ class TimelineFragment :
 
         observerUserTyping()
 
-        composerEditText.setUseIncognitoKeyboard(vectorPreferences.useIncognitoKeyboard())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            composerEditText.setUseIncognitoKeyboard(vectorPreferences.useIncognitoKeyboard())
+        }
         composerEditText.setSendMessageWithEnter(vectorPreferences.sendMessageWithEnter())
 
         composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
