@@ -38,6 +38,7 @@ internal class DefaultAddPusherTask @Inject constructor(
         private val requestExecutor: RequestExecutor,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPusherTask {
+
     override suspend fun execute(params: AddPusherTask.Params) {
         val pusher = params.pusher
         try {
