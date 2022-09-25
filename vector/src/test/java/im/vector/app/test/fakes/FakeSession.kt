@@ -41,6 +41,7 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         val fakeRoomService: FakeRoomService = FakeRoomService(),
+        val fakePushersService: FakePushersService = FakePushersService(),
         private val fakeEventService: FakeEventService = FakeEventService(),
 ) : Session by mockk(relaxed = true) {
 
@@ -58,6 +59,7 @@ class FakeSession(
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
     override fun eventService() = fakeEventService
+    override fun pushersService() = fakePushersService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {

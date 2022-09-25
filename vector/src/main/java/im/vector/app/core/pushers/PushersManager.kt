@@ -16,6 +16,7 @@
 
 package im.vector.app.core.pushers
 
+import im.vector.app.AppBuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -26,7 +27,7 @@ import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
 
-private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
+internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
@@ -64,11 +65,11 @@ class PushersManager @Inject constructor(
             gateway: String
     ) = HttpPusher(
             pushKey,
-            stringProvider.getString(R.string.pusher_app_id),
+            appId = stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
             lang = localeProvider.current().language,
             appDisplayName = appNameProvider.getAppName(),
-            deviceDisplayName = android.os.Build.MODEL,
+            deviceDisplayName = AppBuildConfig.getModel(),
             url = gateway,
             enabled = true,
             deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
