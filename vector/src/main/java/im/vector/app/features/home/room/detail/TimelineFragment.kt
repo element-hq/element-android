@@ -1537,12 +1537,7 @@ class TimelineFragment :
         observerUserTyping()
 
         composerEditText.setUseIncognitoKeyboard(vectorPreferences.useIncognitoKeyboard())
-
-        if (vectorPreferences.sendMessageWithEnter()) {
-            // imeOptions="actionSend" only works with single line, so we remove multiline inputType
-            composerEditText.inputType = composerEditText.inputType and EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE.inv()
-            composerEditText.imeOptions = EditorInfo.IME_ACTION_SEND
-        }
+        composerEditText.setSendMessageWithEnter(vectorPreferences.sendMessageWithEnter())
 
         composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
             val imeActionId = actionId and EditorInfo.IME_MASK_ACTION

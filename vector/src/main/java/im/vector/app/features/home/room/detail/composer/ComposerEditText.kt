@@ -81,7 +81,22 @@ class ComposerEditText @JvmOverloads constructor(
 
     /** Set whether the keyboard should disable personalized learning. */
     fun setUseIncognitoKeyboard(useIncognitoKeyboard: Boolean) {
-        imeOptions = if (useIncognitoKeyboard) imeOptions or INCOGNITO_KEYBOARD_IME else imeOptions and INCOGNITO_KEYBOARD_IME.inv()
+        imeOptions = if (useIncognitoKeyboard) {
+            imeOptions or EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
+        } else {
+            imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+        }
+    }
+
+    /** Set whether enter should send the message or add a new line. */
+    fun setSendMessageWithEnter(sendMessageWithEnter: Boolean) {
+        if (sendMessageWithEnter) {
+            inputType = inputType and EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE.inv()
+            imeOptions = imeOptions or EditorInfo.IME_ACTION_SEND
+        } else {
+            inputType = inputType or EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE
+            imeOptions = imeOptions and EditorInfo.IME_ACTION_SEND.inv()
+        }
     }
 
     init {
@@ -120,9 +135,5 @@ class ComposerEditText @JvmOverloads constructor(
                     }
                 }
         )
-    }
-
-    companion object {
-        const val INCOGNITO_KEYBOARD_IME = EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
     }
 }
