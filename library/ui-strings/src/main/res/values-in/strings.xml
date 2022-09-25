@@ -2617,7 +2617,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_list_empty_title">Belum ada space.</string>
     <string name="a11y_collapse_space_children">Tutup %s anak</string>
     <string name="a11y_expand_space_children">Buka %s anak</string>
-    <string name="change_space">Buat Space</string>
+    <string name="change_space">Ubah Space</string>
     <string name="device_manager_session_details_device_ip_address">Alamat IP</string>
     <string name="device_manager_session_details_session_last_activity">Aktivitas terakhir</string>
     <string name="device_manager_session_details_session_name">Nama sesi</string>
