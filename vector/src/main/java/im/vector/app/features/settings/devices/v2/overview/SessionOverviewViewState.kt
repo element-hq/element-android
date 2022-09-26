@@ -23,7 +23,6 @@ import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 
 data class SessionOverviewViewState(
         val deviceId: String,
-        val isCurrentSession: Boolean = false,
         val isCurrentSessionTrusted: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
         val isLoading: Boolean = false,

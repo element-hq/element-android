@@ -136,17 +136,20 @@ class SessionOverviewFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        updateToolbar(state.isCurrentSession)
+        updateToolbar(state)
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
     }
 
-    private fun updateToolbar(isCurrentSession: Boolean) {
-        val titleResId = if (isCurrentSession) R.string.device_manager_current_session_title else R.string.device_manager_session_title
-        (activity as? AppCompatActivity)
-                ?.supportActionBar
-                ?.setTitle(titleResId)
+    private fun updateToolbar(viewState: SessionOverviewViewState) {
+        if (viewState.deviceInfo is Success) {
+            val titleResId =
+                    if (viewState.deviceInfo.invoke().isCurrentDevice) R.string.device_manager_current_session_title else R.string.device_manager_session_title
+            (activity as? AppCompatActivity)
+                    ?.supportActionBar
+                    ?.setTitle(titleResId)
+        }
     }
 
     private fun updateEntryDetails(deviceId: String) {
@@ -158,10 +161,11 @@ class SessionOverviewFragment :
     private fun updateSessionInfo(viewState: SessionOverviewViewState) {
         if (viewState.deviceInfo is Success) {
             views.sessionOverviewInfo.isVisible = true
-            val isCurrentSession = viewState.isCurrentSession
+            val deviceInfo = viewState.deviceInfo.invoke()
+            val isCurrentSession = deviceInfo.isCurrentDevice
             val infoViewState = SessionInfoViewState(
                     isCurrentSession = isCurrentSession,
-                    deviceFullInfo = viewState.deviceInfo.invoke(),
+                    deviceFullInfo = deviceInfo,
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = true,

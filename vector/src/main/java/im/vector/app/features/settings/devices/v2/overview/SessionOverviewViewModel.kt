@@ -27,7 +27,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
-import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
@@ -42,6 +41,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
@@ -51,7 +51,6 @@ import kotlin.coroutines.Continuation
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val stringProvider: StringProvider,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -72,15 +71,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
-        setState {
-            copy(isCurrentSession = isCurrentSession(deviceId))
-        }
         observeSessionInfo(initialState.deviceId)
         observeCurrentSessionInfo()
-    }
-
-    private fun isCurrentSession(deviceId: String): Boolean {
-        return isCurrentSessionUseCase.execute(deviceId)
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -114,7 +106,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun handleVerifySessionAction() = withState { viewState ->
-        if (viewState.isCurrentSession) {
+        if (viewState.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
             handleVerifyCurrentSession()
         } else {
             handleVerifyOtherSession(viewState.deviceId)
