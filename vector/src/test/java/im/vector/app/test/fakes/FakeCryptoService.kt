@@ -17,7 +17,10 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.MutableLiveData
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -50,4 +53,18 @@ class FakeCryptoService(
     override fun getLiveCryptoDeviceInfoWithId(deviceId: String) = cryptoDeviceInfoWithIdLiveData
 
     override fun getMyDevicesInfoLive(deviceId: String) = myDevicesInfoWithIdLiveData
+
+    fun givenSetDeviceNameSucceeds() {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        }
+    }
+
+    fun givenSetDeviceNameFailsWithError(error: Exception) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onFailure(error)
+        }
+    }
 }

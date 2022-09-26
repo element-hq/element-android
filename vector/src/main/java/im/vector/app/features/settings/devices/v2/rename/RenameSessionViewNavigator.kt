@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.features.settings.devices.v2.rename
 
-import android.content.Context
-import im.vector.app.features.settings.devices.v2.details.SessionDetailsActivity
-import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
+import androidx.fragment.app.FragmentActivity
 import javax.inject.Inject
 
-class SessionOverviewViewNavigator @Inject constructor() {
+class RenameSessionViewNavigator @Inject constructor() {
 
-    fun goToSessionDetails(context: Context, deviceId: String) {
-        context.startActivity(SessionDetailsActivity.newIntent(context, deviceId))
-    }
-
-    fun goToRenameSession(context: Context, deviceId: String) {
-        context.startActivity(RenameSessionActivity.newIntent(context, deviceId))
+    fun goBack(activity: FragmentActivity) {
+        activity.finish()
     }
 }

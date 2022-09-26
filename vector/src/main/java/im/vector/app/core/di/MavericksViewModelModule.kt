@@ -91,6 +91,7 @@ import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsViewModel
 import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsViewModel
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewViewModel
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
@@ -653,4 +654,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(SessionDetailsViewModel::class)
     fun sessionDetailsViewModelFactory(factory: SessionDetailsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RenameSessionViewModel::class)
+    fun renameSessionViewModelFactory(factory: RenameSessionViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

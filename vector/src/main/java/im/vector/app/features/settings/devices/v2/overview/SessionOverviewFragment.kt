@@ -18,11 +18,11 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -31,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
@@ -43,7 +44,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class SessionOverviewFragment :
-        VectorBaseFragment<FragmentSessionOverviewBinding>() {
+        VectorBaseFragment<FragmentSessionOverviewBinding>(),
+        VectorMenuProvider {
 
     @Inject lateinit var viewNavigator: SessionOverviewViewNavigator
 
@@ -103,6 +105,22 @@ class SessionOverviewFragment :
         views.sessionOverviewInfo.onLearnMoreClickListener = null
     }
 
+    override fun getMenuRes() = R.menu.menu_session_overview
+
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sessionOverviewRename -> {
+                goToRenameSession()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun goToRenameSession() = withState(viewModel) { state ->
+        viewNavigator.goToRenameSession(requireContext(), state.deviceId)
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
         updateEntryDetails(state.deviceId)
@@ -118,7 +136,7 @@ class SessionOverviewFragment :
 
     private fun updateEntryDetails(deviceId: String) {
         views.sessionOverviewEntryDetails.setOnClickListener {
-            viewNavigator.navigateToSessionDetails(requireContext(), deviceId)
+            viewNavigator.goToSessionDetails(requireContext(), deviceId)
         }
     }
 
@@ -136,11 +154,7 @@ class SessionOverviewFragment :
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
         } else {
-            hideSessionInfo()
+            views.sessionOverviewInfo.isVisible = false
         }
-    }
-
-    private fun hideSessionInfo() {
-        views.sessionOverviewInfo.isGone = true
     }
 }
