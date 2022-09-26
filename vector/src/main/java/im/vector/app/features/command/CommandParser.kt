@@ -344,6 +344,9 @@ class CommandParser @Inject constructor() {
                 Command.LENNY.matches(slashCommand) -> {
                     ParsedCommand.SendLenny(message)
                 }
+                Command.TABLE_FLIP.matches(slashCommand) -> {
+                    ParsedCommand.SendTableFlip(message)
+                }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
                         ParsedCommand.DiscardSession
