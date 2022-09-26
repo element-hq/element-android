@@ -70,6 +70,7 @@ class DevicesViewModelTest {
 
     @Before
     fun setup() {
+        // Needed for internal usage of Flow<T>.throttleFirst() inside the ViewModel
         mockkStatic(SystemClock::class)
         every { SystemClock.elapsedRealtime() } returns 1234
     }
