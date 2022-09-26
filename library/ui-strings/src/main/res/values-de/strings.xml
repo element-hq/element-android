@@ -2401,7 +2401,7 @@
     <string name="location_share_live_stop">Beenden</string>
     <string name="location_share_live_enabled">Live-Standort aktiviert</string>
     <string name="a11y_location_share_option_pinned_icon">Standort teilen</string>
-    <string name="location_share_option_pinned">Standort teilen</string>
+    <string name="location_share_option_pinned">Diesen Standort teilen</string>
     <string name="location_share_option_user_current">Meinen Standort teilen</string>
     <string name="a11y_location_share_option_user_current_icon">Meinen Standort teilen</string>
     <string name="a11y_location_share_option_user_live_icon">Live-Standort teilen</string>
