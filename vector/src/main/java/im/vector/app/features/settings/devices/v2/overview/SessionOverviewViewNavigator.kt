@@ -32,7 +32,6 @@ class SessionOverviewViewNavigator @Inject constructor() {
         context.startActivity(RenameSessionActivity.newIntent(context, deviceId))
     }
 
-    // TODO add unit test
     fun goBack(fragmentActivity: FragmentActivity) {
         fragmentActivity.finish()
     }
