@@ -16,15 +16,31 @@
 
 package im.vector.app.features.settings.devices.v2
 
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 
-data class DeviceFullInfo(
-        val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
-        val isInactive: Boolean,
-        val isCurrentDevice: Boolean,
-        val deviceUserAgent: DeviceUserAgent,
+data class DeviceUserAgent(
+        /**
+         * One of MOBILE, WEB, DESKTOP or UNKNOWN
+         */
+        val deviceType: DeviceType,
+        /**
+         * i.e. Google Pixel 6
+         */
+        val deviceModel: String?,
+        /**
+         * i.e. Android
+         */
+        val deviceOperatingSystem: String?,
+        /**
+         * i.e. Android 11
+         */
+        val deviceOperatingSystemVersion: String?,
+        /**
+         * i.e. Element Nightly
+         */
+        val clientName: String?,
+        /**
+         * i.e. 1.5.0
+         */
+        val clientVersion: String?,
 )
