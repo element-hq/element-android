@@ -16,13 +16,17 @@
 
 package im.vector.app.test.fakes
 
+import android.content.ClipboardManager
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import java.io.OutputStream
 
 class FakeContext(
@@ -66,5 +70,15 @@ class FakeContext(
         val connectivityManager = FakeConnectivityManager()
         connectivityManager.givenHasActiveConnection()
         givenService(Context.CONNECTIVITY_SERVICE, ConnectivityManager::class.java, connectivityManager.instance)
+    }
+
+    fun givenStartActivity(intent: Intent) {
+        every { instance.startActivity(intent) } just runs
+    }
+
+    fun givenClipboardManager(): FakeClipboardManager {
+        val fakeClipboardManager = FakeClipboardManager()
+        givenService(Context.CLIPBOARD_SERVICE, ClipboardManager::class.java, fakeClipboardManager.instance)
+        return fakeClipboardManager
     }
 }

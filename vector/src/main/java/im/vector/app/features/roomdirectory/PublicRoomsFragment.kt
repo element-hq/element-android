@@ -130,7 +130,7 @@ class PublicRoomsFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
             val isHandled = permalinkHandler
-                    .launch(requireContext(), permalink, object : NavigationInterceptor {
+                    .launch(requireActivity(), permalink, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             requireActivity().finish()
                             return false

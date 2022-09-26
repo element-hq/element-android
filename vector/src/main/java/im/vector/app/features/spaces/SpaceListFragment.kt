@@ -21,6 +21,7 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -28,16 +29,17 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -56,7 +58,7 @@ class SpaceListFragment :
 
     @Inject lateinit var spaceController: SpaceSummaryController
     @Inject lateinit var newSpaceController: NewSpaceSummaryController
-    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private lateinit var homeActivitySharedActionViewModel: HomeSharedActionViewModel
     private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
@@ -71,12 +73,13 @@ class SpaceListFragment :
         homeActivitySharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         views.stateView.contentView = views.groupListView
+        views.spacesEmptyButton.onClick { onAddSpaceSelected() }
         setupSpaceController()
         observeViewEvents()
     }
 
     private fun setupSpaceController() {
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.callback = this
             views.groupListView.configureWith(newSpaceController)
         } else {
@@ -147,17 +150,26 @@ class SpaceListFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        when (state.asyncSpaces) {
+        when (val spaces = state.asyncSpaces) {
             Uninitialized,
             is Loading -> {
                 views.stateView.state = StateView.State.Loading
                 return@withState
             }
-            is Success -> views.stateView.state = StateView.State.Content
+            is Success -> {
+                views.stateView.state = StateView.State.Content
+                if (spaces.invoke().isEmpty()) {
+                    views.spacesEmptyGroup.isVisible = true
+                    views.groupListView.isVisible = false
+                } else {
+                    views.spacesEmptyGroup.isVisible = false
+                    views.groupListView.isVisible = true
+                }
+            }
             else -> Unit
         }
 
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             newSpaceController.update(state)
         } else {
             spaceController.update(state)

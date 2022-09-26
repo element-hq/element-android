@@ -22,21 +22,22 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
+import io.mockk.verify
+import io.mockk.verifyOrder
 import io.realm.kotlin.where
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.LocalRoomCreationState
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -44,29 +45,24 @@ import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
-import org.matrix.android.sdk.internal.util.time.DefaultClock
 import org.matrix.android.sdk.test.fakes.FakeMonarchy
-import org.matrix.android.sdk.test.fakes.FakeStateEventDataSource
+import org.matrix.android.sdk.test.fakes.FakeRoomSummaryDataSource
 
 private const val A_LOCAL_ROOM_ID = "local.a-local-room-id"
 private const val AN_EXISTING_ROOM_ID = "an-existing-room-id"
 private const val A_ROOM_ID = "a-room-id"
-private const val MY_USER_ID = "my-user-id"
 
 @ExperimentalCoroutinesApi
 internal class DefaultCreateRoomFromLocalRoomTaskTest {
 
     private val fakeMonarchy = FakeMonarchy()
-    private val clock = DefaultClock()
     private val createRoomTask = mockk<CreateRoomTask>()
-    private val fakeStateEventDataSource = FakeStateEventDataSource()
+    private val fakeRoomSummaryDataSource = FakeRoomSummaryDataSource()
 
     private val defaultCreateRoomFromLocalRoomTask = DefaultCreateRoomFromLocalRoomTask(
-            userId = MY_USER_ID,
             monarchy = fakeMonarchy.instance,
             createRoomTask = createRoomTask,
-            stateEventDataSource = fakeStateEventDataSource.instance,
-            clock = clock
+            roomSummaryDataSource = fakeRoomSummaryDataSource.instance,
     )
 
     @Before
@@ -91,13 +87,12 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
     @Test
     fun `given a local room id when execute then the existing room id is kept`() = runTest {
         // Given
-        givenATombstoneEvent(
-                Event(
-                        roomId = A_LOCAL_ROOM_ID,
-                        type = EventType.STATE_ROOM_TOMBSTONE,
-                        stateKey = "",
-                        content = RoomTombstoneContent(replacementRoomId = AN_EXISTING_ROOM_ID).toContent()
-                )
+        val aCreateRoomParams = mockk<CreateRoomParams>(relaxed = true)
+        givenALocalRoomSummary(aCreateRoomParams = aCreateRoomParams, aCreationState = LocalRoomCreationState.CREATED, aReplacementRoomId = AN_EXISTING_ROOM_ID)
+        val aLocalRoomSummaryEntity = givenALocalRoomSummaryEntity(
+                aCreateRoomParams = aCreateRoomParams,
+                aCreationState = LocalRoomCreationState.CREATED,
+                aReplacementRoomId = AN_EXISTING_ROOM_ID
         )
 
         // When
@@ -105,20 +100,18 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
         val result = defaultCreateRoomFromLocalRoomTask.execute(params)
 
         // Then
-        verifyTombstoneEvent(AN_EXISTING_ROOM_ID)
+        fakeRoomSummaryDataSource.verifyGetLocalRoomSummary(A_LOCAL_ROOM_ID)
         result shouldBeEqualTo AN_EXISTING_ROOM_ID
+        aLocalRoomSummaryEntity.replacementRoomId shouldBeEqualTo AN_EXISTING_ROOM_ID
+        aLocalRoomSummaryEntity.creationState shouldBeEqualTo LocalRoomCreationState.CREATED
     }
 
     @Test
     fun `given a local room id when execute then it is correctly executed`() = runTest {
         // Given
-        val aCreateRoomParams = mockk<CreateRoomParams>()
-        val aLocalRoomSummaryEntity = mockk<LocalRoomSummaryEntity> {
-            every { roomSummaryEntity } returns mockk(relaxed = true)
-            every { createRoomParams } returns aCreateRoomParams
-        }
-        givenATombstoneEvent(null)
-        givenALocalRoomSummaryEntity(aLocalRoomSummaryEntity)
+        val aCreateRoomParams = mockk<CreateRoomParams>(relaxed = true)
+        givenALocalRoomSummary(aCreateRoomParams = aCreateRoomParams, aReplacementRoomId = null)
+        val aLocalRoomSummaryEntity = givenALocalRoomSummaryEntity(aCreateRoomParams = aCreateRoomParams, aReplacementRoomId = null)
 
         coEvery { createRoomTask.execute(any()) } returns A_ROOM_ID
 
@@ -127,32 +120,84 @@ internal class DefaultCreateRoomFromLocalRoomTaskTest {
         val result = defaultCreateRoomFromLocalRoomTask.execute(params)
 
         // Then
-        verifyTombstoneEvent(null)
+        fakeRoomSummaryDataSource.verifyGetLocalRoomSummary(A_LOCAL_ROOM_ID)
         // CreateRoomTask has been called with the initial CreateRoomParams
         coVerify { createRoomTask.execute(aCreateRoomParams) }
         // The resulting roomId matches the roomId returned by the createRoomTask
         result shouldBeEqualTo A_ROOM_ID
-        // A tombstone state event has been created
-        coVerify { CurrentStateEventEntity.getOrCreate(realm = any(), roomId = A_LOCAL_ROOM_ID, stateKey = any(), type = EventType.STATE_ROOM_TOMBSTONE) }
+        // The room creation state has correctly been updated
+        verifyOrder {
+            aLocalRoomSummaryEntity.creationState = LocalRoomCreationState.CREATING
+            aLocalRoomSummaryEntity.creationState = LocalRoomCreationState.CREATED
+        }
+        // The local room summary has been updated with the created room id
+        verify { aLocalRoomSummaryEntity.replacementRoomId = A_ROOM_ID }
+        aLocalRoomSummaryEntity.replacementRoomId shouldBeEqualTo A_ROOM_ID
+        aLocalRoomSummaryEntity.creationState shouldBeEqualTo LocalRoomCreationState.CREATED
     }
 
-    private fun givenATombstoneEvent(event: Event?) {
-        fakeStateEventDataSource.givenGetStateEventReturns(event)
+    @Test
+    fun `given a local room id when execute with an exception then the creation state is correctly updated`() = runTest {
+        // Given
+        val aCreateRoomParams = mockk<CreateRoomParams>(relaxed = true)
+        givenALocalRoomSummary(aCreateRoomParams = aCreateRoomParams, aReplacementRoomId = null)
+        val aLocalRoomSummaryEntity = givenALocalRoomSummaryEntity(aCreateRoomParams = aCreateRoomParams, aReplacementRoomId = null)
+
+        coEvery { createRoomTask.execute(any()) }.throws(mockk())
+
+        // When
+        val params = CreateRoomFromLocalRoomTask.Params(A_LOCAL_ROOM_ID)
+        tryOrNull { defaultCreateRoomFromLocalRoomTask.execute(params) }
+
+        // Then
+        fakeRoomSummaryDataSource.verifyGetLocalRoomSummary(A_LOCAL_ROOM_ID)
+        // CreateRoomTask has been called with the initial CreateRoomParams
+        coVerify { createRoomTask.execute(aCreateRoomParams) }
+        // The room creation state has correctly been updated
+        verifyOrder {
+            aLocalRoomSummaryEntity.creationState = LocalRoomCreationState.CREATING
+            aLocalRoomSummaryEntity.creationState = LocalRoomCreationState.FAILURE
+        }
+        // The local room summary has been updated with the created room id
+        aLocalRoomSummaryEntity.replacementRoomId.shouldBeNull()
+        aLocalRoomSummaryEntity.creationState shouldBeEqualTo LocalRoomCreationState.FAILURE
     }
 
-    private fun givenALocalRoomSummaryEntity(localRoomSummaryEntity: LocalRoomSummaryEntity) {
+    private fun givenALocalRoomSummary(
+            aCreateRoomParams: CreateRoomParams,
+            aCreationState: LocalRoomCreationState = LocalRoomCreationState.NOT_CREATED,
+            aReplacementRoomId: String? = null
+    ): LocalRoomSummary {
+        val aLocalRoomSummary = LocalRoomSummary(
+                roomId = A_LOCAL_ROOM_ID,
+                roomSummary = mockk(relaxed = true),
+                createRoomParams = aCreateRoomParams,
+                creationState = aCreationState,
+                replacementRoomId = aReplacementRoomId,
+        )
+        fakeRoomSummaryDataSource.givenGetLocalRoomSummaryReturns(A_LOCAL_ROOM_ID, aLocalRoomSummary)
+        return aLocalRoomSummary
+    }
+
+    private fun givenALocalRoomSummaryEntity(
+            aCreateRoomParams: CreateRoomParams,
+            aCreationState: LocalRoomCreationState = LocalRoomCreationState.NOT_CREATED,
+            aReplacementRoomId: String? = null
+    ): LocalRoomSummaryEntity {
+        val aLocalRoomSummaryEntity = spyk(LocalRoomSummaryEntity(
+                roomId = A_LOCAL_ROOM_ID,
+                roomSummaryEntity = mockk(relaxed = true),
+                replacementRoomId = aReplacementRoomId,
+        ).apply {
+            createRoomParams = aCreateRoomParams
+            creationState = aCreationState
+        })
         every {
             fakeMonarchy.fakeRealm.instance
                     .where<LocalRoomSummaryEntity>()
                     .equalTo(LocalRoomSummaryEntityFields.ROOM_ID, A_LOCAL_ROOM_ID)
                     .findFirst()
-        } returns localRoomSummaryEntity
-    }
-
-    private fun verifyTombstoneEvent(expectedRoomId: String?) {
-        fakeStateEventDataSource.verifyGetStateEvent(A_LOCAL_ROOM_ID, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
-        fakeStateEventDataSource.instance.getStateEvent(A_LOCAL_ROOM_ID, EventType.STATE_ROOM_TOMBSTONE, QueryStringValue.IsEmpty)
-                ?.content.toModel<RoomTombstoneContent>()
-                ?.replacementRoomId shouldBeEqualTo expectedRoomId
+        } returns aLocalRoomSummaryEntity
+        return aLocalRoomSummaryEntity
     }
 }

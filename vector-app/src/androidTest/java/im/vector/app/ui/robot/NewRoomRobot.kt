@@ -21,10 +21,15 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 
 class NewRoomRobot(
-        var createdRoom: Boolean = false
+        var createdRoom: Boolean = false,
+        private val labsPreferences: LabFeaturesPreferences
 ) {
+    private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
         clickOn(R.string.create_new_room)

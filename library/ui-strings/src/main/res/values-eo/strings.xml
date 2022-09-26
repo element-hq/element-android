@@ -1084,7 +1084,7 @@
     <string name="encryption_export_room_keys">Elporti ŝlosilojn de ĉambroj</string>
     <string name="encryption_export_e2e_room_keys">Elporti tutvoje ĉifrajn ŝlosilojn de ĉambroj</string>
     <string name="encryption_information_device_key">Ŝlosilo de salutaĵo</string>
-    <string name="encryption_information_device_id">Identigilo de salutaĵo</string>
+    <string name="device_manager_session_details_session_id">Identigilo de salutaĵo</string>
     <string name="encryption_information_device_name">Publika nomo</string>
     <string name="encryption_information_decryption_error">Eraris malĉifrado</string>
     <string name="settings_theme">Haŭto</string>

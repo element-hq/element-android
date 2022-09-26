@@ -54,6 +54,7 @@
                 "grimacing-face",
                 "face-exhaling",
                 "lying-face",
+                "shaking-face",
                 "relieved-face",
                 "pensive-face",
                 "sleepy-face",
@@ -104,7 +105,7 @@
                 "tired-face",
                 "yawning-face",
                 "face-with-steam-from-nose",
-                "pouting-face",
+                "enraged-face",
                 "angry-face",
                 "face-with-symbols-on-mouth",
                 "smiling-face-with-horns",
@@ -131,7 +132,6 @@
                 "seenoevil-monkey",
                 "hearnoevil-monkey",
                 "speaknoevil-monkey",
-                "kiss-mark",
                 "love-letter",
                 "heart-with-arrow",
                 "heart-with-ribbon",
@@ -146,14 +146,18 @@
                 "heart-on-fire",
                 "mending-heart",
                 "red-heart",
+                "pink-heart",
                 "orange-heart",
                 "yellow-heart",
                 "green-heart",
                 "blue-heart",
+                "light-blue-heart",
                 "purple-heart",
                 "brown-heart",
                 "black-heart",
+                "grey-heart",
                 "white-heart",
+                "kiss-mark",
                 "hundred-points",
                 "anger-symbol",
                 "collision",
@@ -161,7 +165,6 @@
                 "sweat-droplets",
                 "dashing-away",
                 "hole",
-                "bomb",
                 "speech-balloon",
                 "eye-in-speech-bubble",
                 "left-speech-bubble",
@@ -183,6 +186,8 @@
                 "leftwards-hand",
                 "palm-down-hand",
                 "palm-up-hand",
+                "leftwards-pushing-hand",
+                "rightwards-pushing-hand",
                 "ok-hand",
                 "pinched-fingers",
                 "pinching-hand",
@@ -561,6 +566,8 @@
                 "tiger",
                 "leopard",
                 "horse-face",
+                "moose",
+                "donkey",
                 "horse",
                 "unicorn",
                 "zebra",
@@ -623,6 +630,9 @@
                 "flamingo",
                 "peacock",
                 "parrot",
+                "wing",
+                "black-bird",
+                "goose",
                 "frog",
                 "crocodile",
                 "turtle",
@@ -643,6 +653,7 @@
                 "octopus",
                 "spiral-shell",
                 "coral",
+                "jellyfish",
                 "snail",
                 "butterfly",
                 "bug",
@@ -670,6 +681,7 @@
                 "sunflower",
                 "blossom",
                 "tulip",
+                "hyacinth",
                 "seedling",
                 "potted-plant",
                 "evergreen-tree",
@@ -684,7 +696,8 @@
                 "fallen-leaf",
                 "leaf-fluttering-in-wind",
                 "empty-nest",
-                "nest-with-eggs"
+                "nest-with-eggs",
+                "mushroom"
             ]
         },
         {
@@ -722,10 +735,11 @@
                 "broccoli",
                 "garlic",
                 "onion",
-                "mushroom",
                 "peanuts",
                 "beans",
                 "chestnut",
+                "ginger-root",
+                "pea-pod",
                 "bread",
                 "croissant",
                 "baguette-bread",
@@ -1110,11 +1124,10 @@
                 "bullseye",
                 "yoyo",
                 "kite",
+                "water-pistol",
                 "pool-8-ball",
                 "crystal-ball",
                 "magic-wand",
-                "nazar-amulet",
-                "hamsa",
                 "video-game",
                 "joystick",
                 "slot-machine",
@@ -1165,6 +1178,7 @@
                 "shorts",
                 "bikini",
                 "womans-clothes",
+                "folding-hand-fan",
                 "purse",
                 "handbag",
                 "clutch-bag",
@@ -1179,6 +1193,7 @@
                 "womans-sandal",
                 "ballet-shoes",
                 "womans-boot",
+                "hair-pick",
                 "crown",
                 "womans-hat",
                 "top-hat",
@@ -1217,6 +1232,8 @@
                 "banjo",
                 "drum",
                 "long-drum",
+                "maracas",
+                "flute",
                 "mobile-phone",
                 "mobile-phone-with-arrow",
                 "telephone",
@@ -1336,7 +1353,7 @@
                 "hammer-and-wrench",
                 "dagger",
                 "crossed-swords",
-                "water-pistol",
+                "bomb",
                 "boomerang",
                 "bow-and-arrow",
                 "shield",
@@ -1397,6 +1414,8 @@
                 "coffin",
                 "headstone",
                 "funeral-urn",
+                "nazar-amulet",
+                "hamsa",
                 "moai",
                 "placard",
                 "identification-card"
@@ -1465,6 +1484,7 @@
                 "peace-symbol",
                 "menorah",
                 "dotted-sixpointed-star",
+                "khanda",
                 "aries",
                 "taurus",
                 "gemini",
@@ -1500,6 +1520,7 @@
                 "dim-button",
                 "bright-button",
                 "antenna-bars",
+                "wireless",
                 "vibration-mode",
                 "mobile-phone-off",
                 "female-sign",
@@ -2050,7 +2071,7 @@
             ]
         },
         "melting-face": {
-            "a": "⊛ Melting Face",
+            "a": "Melting Face",
             "b": "1FAE0",
             "j": [
                 "disappear",
@@ -2345,7 +2366,7 @@
             ]
         },
         "face-with-open-eyes-and-hand-over-mouth": {
-            "a": "⊛ Face with Open Eyes and Hand over Mouth",
+            "a": "Face with Open Eyes and Hand over Mouth",
             "b": "1FAE2",
             "j": [
                 "amazement",
@@ -2360,7 +2381,7 @@
             ]
         },
         "face-with-peeking-eye": {
-            "a": "⊛ Face with Peeking Eye",
+            "a": "Face with Peeking Eye",
             "b": "1FAE3",
             "j": [
                 "captivated",
@@ -2368,7 +2389,8 @@
                 "stare",
                 "scared",
                 "frightening",
-                "embarrassing"
+                "embarrassing",
+                "shy"
             ]
         },
         "shushing-face": {
@@ -2393,10 +2415,10 @@
             ]
         },
         "saluting-face": {
-            "a": "⊛ Saluting Face",
+            "a": "Saluting Face",
             "b": "1FAE1",
             "j": [
-                "ok",
+                "OK",
                 "salute",
                 "sunny",
                 "troops",
@@ -2469,7 +2491,7 @@
             ]
         },
         "dotted-line-face": {
-            "a": "⊛ Dotted Line Face",
+            "a": "Dotted Line Face",
             "b": "1FAE5",
             "j": [
                 "depressed",
@@ -2569,6 +2591,17 @@
                 "pinocchio"
             ]
         },
+        "shaking-face": {
+            "a": "⊛ Shaking Face",
+            "b": "1FAE8",
+            "j": [
+                "earthquake",
+                "face",
+                "shaking",
+                "shock",
+                "vibrate"
+            ]
+        },
         "relieved-face": {
             "a": "Relieved Face",
             "b": "1F60C",
@@ -2598,6 +2631,7 @@
             "b": "1F62A",
             "j": [
                 "face",
+                "good night",
                 "sleep",
                 "tired",
                 "rest",
@@ -2617,11 +2651,13 @@
             "b": "1F634",
             "j": [
                 "face",
+                "good night",
                 "sleep",
-                "zzz",
+                "ZZZ",
                 "tired",
                 "sleepy",
-                "night"
+                "night",
+                "zzz"
             ]
         },
         "face-with-medical-mask": {
@@ -2851,9 +2887,10 @@
             "a": "Face with Monocle",
             "b": "1F9D0",
             "j": [
+                "face",
+                "monocle",
                 "stuffy",
-                "wealthy",
-                "face"
+                "wealthy"
             ]
         },
         "confused-face": {
@@ -2871,7 +2908,7 @@
             ]
         },
         "face-with-diagonal-mouth": {
-            "a": "⊛ Face with Diagonal Mouth",
+            "a": "Face with Diagonal Mouth",
             "b": "1FAE4",
             "j": [
                 "disappointed",
@@ -2980,7 +3017,7 @@
             ]
         },
         "face-holding-back-tears": {
-            "a": "⊛ Face Holding Back Tears",
+            "a": "Face Holding Back Tears",
             "b": "1F979",
             "j": [
                 "angry",
@@ -3191,16 +3228,18 @@
                 "pride"
             ]
         },
-        "pouting-face": {
-            "a": "Pouting Face",
+        "enraged-face": {
+            "a": "Enraged Face",
             "b": "1F621",
             "j": [
                 "angry",
+                "enraged",
                 "face",
                 "mad",
                 "pouting",
                 "rage",
                 "red",
+                "pouting_face",
                 "hate",
                 "despise"
             ]
@@ -3578,19 +3617,6 @@
                 "omg"
             ]
         },
-        "kiss-mark": {
-            "a": "Kiss Mark",
-            "b": "1F48B",
-            "j": [
-                "kiss",
-                "lips",
-                "face",
-                "love",
-                "like",
-                "affection",
-                "valentines"
-            ]
-        },
         "love-letter": {
             "a": "Love Letter",
             "b": "1F48C",
@@ -3764,6 +3790,17 @@
                 "valentines"
             ]
         },
+        "pink-heart": {
+            "a": "⊛ Pink Heart",
+            "b": "1FA77",
+            "j": [
+                "cute",
+                "heart",
+                "like",
+                "love",
+                "pink"
+            ]
+        },
         "orange-heart": {
             "a": "Orange Heart",
             "b": "1F9E1",
@@ -3808,6 +3845,17 @@
                 "valentines"
             ]
         },
+        "light-blue-heart": {
+            "a": "⊛ Light Blue Heart",
+            "b": "1FA75",
+            "j": [
+                "cyan",
+                "heart",
+                "light blue",
+                "light blue heart",
+                "teal"
+            ]
+        },
         "purple-heart": {
             "a": "Purple Heart",
             "b": "1F49C",
@@ -3837,6 +3885,17 @@
                 "wicked"
             ]
         },
+        "grey-heart": {
+            "a": "⊛ Grey Heart",
+            "b": "1FA76",
+            "j": [
+                "gray",
+                "grey heart",
+                "heart",
+                "silver",
+                "slate"
+            ]
+        },
         "white-heart": {
             "a": "White Heart",
             "b": "1F90D",
@@ -3844,6 +3903,19 @@
                 "heart",
                 "white",
                 "pure"
+            ]
+        },
+        "kiss-mark": {
+            "a": "Kiss Mark",
+            "b": "1F48B",
+            "j": [
+                "kiss",
+                "lips",
+                "face",
+                "love",
+                "like",
+                "affection",
+                "valentines"
             ]
         },
         "hundred-points": {
@@ -3930,17 +4002,6 @@
                 "embarrassing"
             ]
         },
-        "bomb": {
-            "a": "Bomb",
-            "b": "1F4A3",
-            "j": [
-                "comic",
-                "boom",
-                "explode",
-                "explosion",
-                "terrorism"
-            ]
-        },
         "speech-balloon": {
             "a": "Speech Balloon",
             "b": "1F4AC",
@@ -3960,8 +4021,10 @@
             "a": "Eye in Speech Bubble",
             "b": "1F441-FE0F-200D-1F5E8-FE0F",
             "j": [
+                "balloon",
+                "bubble",
                 "eye",
-                "speech bubble",
+                "speech",
                 "witness",
                 "info"
             ]
@@ -3970,6 +4033,8 @@
             "a": "Left Speech Bubble",
             "b": "1F5E8",
             "j": [
+                "balloon",
+                "bubble",
                 "dialog",
                 "speech",
                 "words",
@@ -4010,7 +4075,9 @@
             "b": "1F4A4",
             "j": [
                 "comic",
+                "good night",
                 "sleep",
+                "ZZZ",
                 "sleepy",
                 "tired",
                 "dream"
@@ -4080,7 +4147,7 @@
             ]
         },
         "rightwards-hand": {
-            "a": "⊛ Rightwards Hand",
+            "a": "Rightwards Hand",
             "b": "1FAF1",
             "j": [
                 "hand",
@@ -4091,7 +4158,7 @@
             ]
         },
         "leftwards-hand": {
-            "a": "⊛ Leftwards Hand",
+            "a": "Leftwards Hand",
             "b": "1FAF2",
             "j": [
                 "hand",
@@ -4102,7 +4169,7 @@
             ]
         },
         "palm-down-hand": {
-            "a": "⊛ Palm Down Hand",
+            "a": "Palm Down Hand",
             "b": "1FAF3",
             "j": [
                 "dismiss",
@@ -4112,7 +4179,7 @@
             ]
         },
         "palm-up-hand": {
-            "a": "⊛ Palm Up Hand",
+            "a": "Palm Up Hand",
             "b": "1FAF4",
             "j": [
                 "beckon",
@@ -4121,6 +4188,32 @@
                 "offer",
                 "lift",
                 "demand"
+            ]
+        },
+        "leftwards-pushing-hand": {
+            "a": "⊛ Leftwards Pushing Hand",
+            "b": "1FAF7",
+            "j": [
+                "high five",
+                "leftward",
+                "leftwards pushing hand",
+                "push",
+                "refuse",
+                "stop",
+                "wait"
+            ]
+        },
+        "rightwards-pushing-hand": {
+            "a": "⊛ Rightwards Pushing Hand",
+            "b": "1FAF8",
+            "j": [
+                "high five",
+                "push",
+                "refuse",
+                "rightward",
+                "rightwards pushing hand",
+                "stop",
+                "wait"
             ]
         },
         "ok-hand": {
@@ -4186,7 +4279,7 @@
             ]
         },
         "hand-with-index-finger-and-thumb-crossed": {
-            "a": "⊛ Hand with Index Finger and Thumb Crossed",
+            "a": "Hand with Index Finger and Thumb Crossed",
             "b": "1FAF0",
             "j": [
                 "expensive",
@@ -4228,6 +4321,8 @@
             "j": [
                 "call",
                 "hand",
+                "hang loose",
+                "Shaka",
                 "hands",
                 "gesture",
                 "shaka"
@@ -4313,7 +4408,7 @@
             ]
         },
         "index-pointing-at-the-viewer": {
-            "a": "⊛ Index Pointing at the Viewer",
+            "a": "Index Pointing at the Viewer",
             "b": "1FAF5",
             "j": [
                 "point",
@@ -4429,7 +4524,7 @@
             ]
         },
         "heart-hands": {
-            "a": "⊛ Heart Hands",
+            "a": "Heart Hands",
             "b": "1FAF6",
             "j": [
                 "love",
@@ -4686,7 +4781,7 @@
             ]
         },
         "biting-lip": {
-            "a": "⊛ Biting Lip",
+            "a": "Biting Lip",
             "b": "1FAE6",
             "j": [
                 "anxious",
@@ -6088,7 +6183,7 @@
             ]
         },
         "person-with-crown": {
-            "a": "⊛ Person with Crown",
+            "a": "Person with Crown",
             "b": "1FAC5",
             "j": [
                 "monarch",
@@ -6262,7 +6357,7 @@
             ]
         },
         "pregnant-man": {
-            "a": "⊛ Pregnant Man",
+            "a": "Pregnant Man",
             "b": "1FAC3",
             "j": [
                 "belly",
@@ -6273,7 +6368,7 @@
             ]
         },
         "pregnant-person": {
-            "a": "⊛ Pregnant Person",
+            "a": "Pregnant Person",
             "b": "1FAC4",
             "j": [
                 "belly",
@@ -6669,7 +6764,7 @@
             ]
         },
         "troll": {
-            "a": "⊛ Troll",
+            "a": "Troll",
             "b": "1F9CC",
             "j": [
                 "fairy tale",
@@ -7633,6 +7728,7 @@
             "a": "Person in Bed",
             "b": "1F6CC",
             "j": [
+                "good night",
                 "hotel",
                 "sleep",
                 "bed",
@@ -8514,6 +8610,30 @@
                 "nature"
             ]
         },
+        "moose": {
+            "a": "⊛ Moose",
+            "b": "1FACE",
+            "j": [
+                "animal",
+                "antlers",
+                "elk",
+                "mammal",
+                "moose"
+            ]
+        },
+        "donkey": {
+            "a": "⊛ Donkey",
+            "b": "1FACF",
+            "j": [
+                "animal",
+                "ass",
+                "burro",
+                "donkey",
+                "mammal",
+                "mule",
+                "stubborn"
+            ]
+        },
         "horse": {
             "a": "Horse",
             "b": "1F40E",
@@ -9180,6 +9300,40 @@
                 "nature"
             ]
         },
+        "wing": {
+            "a": "⊛ Wing",
+            "b": "1FABD",
+            "j": [
+                "angelic",
+                "aviation",
+                "bird",
+                "flying",
+                "mythology",
+                "wing"
+            ]
+        },
+        "black-bird": {
+            "a": "⊛ Black Bird",
+            "b": "1F426-200D-2B1B",
+            "j": [
+                "bird",
+                "black",
+                "crow",
+                "raven",
+                "rook"
+            ]
+        },
+        "goose": {
+            "a": "⊛ Goose",
+            "b": "1FABF",
+            "j": [
+                "bird",
+                "fowl",
+                "goose",
+                "honk",
+                "silly"
+            ]
+        },
         "frog": {
             "a": "Frog",
             "b": "1F438",
@@ -9410,12 +9564,25 @@
             ]
         },
         "coral": {
-            "a": "⊛ Coral",
+            "a": "Coral",
             "b": "1FAB8",
             "j": [
                 "ocean",
                 "reef",
                 "sea"
+            ]
+        },
+        "jellyfish": {
+            "a": "⊛ Jellyfish",
+            "b": "1FABC",
+            "j": [
+                "burn",
+                "invertebrate",
+                "jelly",
+                "jellyfish",
+                "marine",
+                "ouch",
+                "stinger"
             ]
         },
         "snail": {
@@ -9621,7 +9788,7 @@
             ]
         },
         "lotus": {
-            "a": "⊛ Lotus",
+            "a": "Lotus",
             "b": "1FAB7",
             "j": [
                 "Buddhism",
@@ -9662,7 +9829,8 @@
                 "flower",
                 "wilted",
                 "plant",
-                "nature"
+                "nature",
+                "rose"
             ]
         },
         "hibiscus": {
@@ -9707,6 +9875,18 @@
                 "nature",
                 "summer",
                 "spring"
+            ]
+        },
+        "hyacinth": {
+            "a": "⊛ Hyacinth",
+            "b": "1FABB",
+            "j": [
+                "bluebonnet",
+                "flower",
+                "hyacinth",
+                "lavender",
+                "lupine",
+                "snapdragon"
             ]
         },
         "seedling": {
@@ -9873,7 +10053,7 @@
             ]
         },
         "empty-nest": {
-            "a": "⊛ Empty Nest",
+            "a": "Empty Nest",
             "b": "1FAB9",
             "j": [
                 "nesting",
@@ -9881,11 +10061,20 @@
             ]
         },
         "nest-with-eggs": {
-            "a": "⊛ Nest with Eggs",
+            "a": "Nest with Eggs",
             "b": "1FABA",
             "j": [
                 "nesting",
                 "bird"
+            ]
+        },
+        "mushroom": {
+            "a": "Mushroom",
+            "b": "1F344",
+            "j": [
+                "toadstool",
+                "plant",
+                "vegetable"
             ]
         },
         "grapes": {
@@ -10199,15 +10388,6 @@
                 "spice"
             ]
         },
-        "mushroom": {
-            "a": "Mushroom",
-            "b": "1F344",
-            "j": [
-                "toadstool",
-                "plant",
-                "vegetable"
-            ]
-        },
         "peanuts": {
             "a": "Peanuts",
             "b": "1F95C",
@@ -10219,7 +10399,7 @@
             ]
         },
         "beans": {
-            "a": "⊛ Beans",
+            "a": "Beans",
             "b": "1FAD8",
             "j": [
                 "food",
@@ -10234,6 +10414,28 @@
                 "plant",
                 "food",
                 "squirrel"
+            ]
+        },
+        "ginger-root": {
+            "a": "⊛ Ginger Root",
+            "b": "1FADA",
+            "j": [
+                "beer",
+                "ginger root",
+                "root",
+                "spice"
+            ]
+        },
+        "pea-pod": {
+            "a": "⊛ Pea Pod",
+            "b": "1FADB",
+            "j": [
+                "beans",
+                "edamame",
+                "legume",
+                "pea",
+                "pod",
+                "vegetable"
             ]
         },
         "bread": {
@@ -11080,7 +11282,8 @@
                 "tea",
                 "caffeine",
                 "latte",
-                "espresso"
+                "espresso",
+                "mug"
             ]
         },
         "teapot": {
@@ -11255,7 +11458,7 @@
             ]
         },
         "pouring-liquid": {
-            "a": "⊛ Pouring Liquid",
+            "a": "Pouring Liquid",
             "b": "1FAD7",
             "j": [
                 "drink",
@@ -11384,7 +11587,7 @@
             ]
         },
         "jar": {
-            "a": "⊛ Jar",
+            "a": "Jar",
             "b": "1FAD9",
             "j": [
                 "condiment",
@@ -12075,7 +12278,7 @@
             ]
         },
         "playground-slide": {
-            "a": "⊛ Playground Slide",
+            "a": "Playground Slide",
             "b": "1F6DD",
             "j": [
                 "amusement park",
@@ -12606,7 +12809,7 @@
             ]
         },
         "wheel": {
-            "a": "⊛ Wheel",
+            "a": "Wheel",
             "b": "1F6DE",
             "j": [
                 "circle",
@@ -12688,7 +12891,7 @@
             ]
         },
         "ring-buoy": {
-            "a": "⊛ Ring Buoy",
+            "a": "Ring Buoy",
             "b": "1F6DF",
             "j": [
                 "float",
@@ -14683,6 +14886,20 @@
                 "wind"
             ]
         },
+        "water-pistol": {
+            "a": "Water Pistol",
+            "b": "1F52B",
+            "j": [
+                "gun",
+                "handgun",
+                "pistol",
+                "revolver",
+                "tool",
+                "water",
+                "weapon",
+                "violence"
+            ]
+        },
         "pool-8-ball": {
             "a": "Pool 8 Ball",
             "b": "1F3B1",
@@ -14724,30 +14941,6 @@
                 "wizard",
                 "supernature",
                 "power"
-            ]
-        },
-        "nazar-amulet": {
-            "a": "Nazar Amulet",
-            "b": "1F9FF",
-            "j": [
-                "bead",
-                "charm",
-                "evil-eye",
-                "nazar",
-                "talisman"
-            ]
-        },
-        "hamsa": {
-            "a": "⊛ Hamsa",
-            "b": "1FAAC",
-            "j": [
-                "amulet",
-                "Fatima",
-                "hand",
-                "Mary",
-                "Miriam",
-                "protection",
-                "religion"
             ]
         },
         "video-game": {
@@ -14831,7 +15024,7 @@
             ]
         },
         "mirror-ball": {
-            "a": "⊛ Mirror Ball",
+            "a": "Mirror Ball",
             "b": "1FAA9",
             "j": [
                 "dance",
@@ -15252,6 +15445,19 @@
                 "female"
             ]
         },
+        "folding-hand-fan": {
+            "a": "⊛ Folding Hand Fan",
+            "b": "1FAAD",
+            "j": [
+                "cooling",
+                "dance",
+                "fan",
+                "flutter",
+                "folding hand fan",
+                "hot",
+                "shy"
+            ]
+        },
         "purse": {
             "a": "Purse",
             "b": "1F45B",
@@ -15424,6 +15630,16 @@
                 "woman_s_boot",
                 "shoes",
                 "fashion"
+            ]
+        },
+        "hair-pick": {
+            "a": "⊛ Hair Pick",
+            "b": "1FAAE",
+            "j": [
+                "Afro",
+                "comb",
+                "hair",
+                "pick"
             ]
         },
         "crown": {
@@ -15864,6 +16080,30 @@
                 "music"
             ]
         },
+        "maracas": {
+            "a": "⊛ Maracas",
+            "b": "1FA87",
+            "j": [
+                "instrument",
+                "maracas",
+                "music",
+                "percussion",
+                "rattle",
+                "shake"
+            ]
+        },
+        "flute": {
+            "a": "⊛ Flute",
+            "b": "1FA88",
+            "j": [
+                "fife",
+                "flute",
+                "music",
+                "pipe",
+                "recorder",
+                "woodwind"
+            ]
+        },
         "mobile-phone": {
             "a": "Mobile Phone",
             "b": "1F4F1",
@@ -15941,7 +16181,7 @@
             ]
         },
         "low-battery": {
-            "a": "⊛ Low Battery",
+            "a": "Low Battery",
             "b": "1FAAB",
             "j": [
                 "electronic",
@@ -16054,7 +16294,7 @@
             "a": "Optical Disk",
             "b": "1F4BF",
             "j": [
-                "cd",
+                "CD",
                 "computer",
                 "disk",
                 "optical",
@@ -16068,9 +16308,10 @@
             "a": "Dvd",
             "b": "1F4C0",
             "j": [
-                "blu-ray",
+                "Blu-ray",
                 "computer",
                 "disk",
+                "DVD",
                 "optical",
                 "cd",
                 "disc"
@@ -17258,18 +17499,15 @@
                 "weapon"
             ]
         },
-        "water-pistol": {
-            "a": "Water Pistol",
-            "b": "1F52B",
+        "bomb": {
+            "a": "Bomb",
+            "b": "1F4A3",
             "j": [
-                "gun",
-                "handgun",
-                "pistol",
-                "revolver",
-                "tool",
-                "water",
-                "weapon",
-                "violence"
+                "comic",
+                "boom",
+                "explode",
+                "explosion",
+                "terrorism"
             ]
         },
         "boomerang": {
@@ -17584,7 +17822,7 @@
             ]
         },
         "crutch": {
-            "a": "⊛ Crutch",
+            "a": "Crutch",
             "b": "1FA7C",
             "j": [
                 "cane",
@@ -17607,7 +17845,7 @@
             ]
         },
         "xray": {
-            "a": "⊛ X-Ray",
+            "a": "X-Ray",
             "b": "1FA7B",
             "j": [
                 "bones",
@@ -17814,7 +18052,7 @@
             ]
         },
         "bubbles": {
-            "a": "⊛ Bubbles",
+            "a": "Bubbles",
             "b": "1FAE7",
             "j": [
                 "burp",
@@ -17917,6 +18155,30 @@
                 "rip"
             ]
         },
+        "nazar-amulet": {
+            "a": "Nazar Amulet",
+            "b": "1F9FF",
+            "j": [
+                "bead",
+                "charm",
+                "evil-eye",
+                "nazar",
+                "talisman"
+            ]
+        },
+        "hamsa": {
+            "a": "Hamsa",
+            "b": "1FAAC",
+            "j": [
+                "amulet",
+                "Fatima",
+                "hand",
+                "Mary",
+                "Miriam",
+                "protection",
+                "religion"
+            ]
+        },
         "moai": {
             "a": "Moai",
             "b": "1F5FF",
@@ -17940,7 +18202,7 @@
             ]
         },
         "identification-card": {
-            "a": "⊛ Identification Card",
+            "a": "Identification Card",
             "b": "1FAAA",
             "j": [
                 "credentials",
@@ -17954,7 +18216,7 @@
             "a": "Atm Sign",
             "b": "1F3E7",
             "j": [
-                "atm",
+                "ATM",
                 "ATM sign",
                 "automated",
                 "bank",
@@ -18006,13 +18268,15 @@
             "a": "Men’S Room",
             "b": "1F6B9",
             "j": [
+                "bathroom",
                 "lavatory",
                 "man",
                 "men’s room",
                 "restroom",
-                "wc",
-                "men_s_room",
                 "toilet",
+                "WC",
+                "men_s_room",
+                "wc",
                 "blue-square",
                 "gender",
                 "male"
@@ -18022,15 +18286,16 @@
             "a": "Women’S Room",
             "b": "1F6BA",
             "j": [
+                "bathroom",
                 "lavatory",
                 "restroom",
-                "wc",
+                "toilet",
+                "WC",
                 "woman",
                 "women’s room",
                 "women_s_room",
                 "purple-square",
                 "female",
-                "toilet",
                 "loo",
                 "gender"
             ]
@@ -18039,10 +18304,11 @@
             "a": "Restroom",
             "b": "1F6BB",
             "j": [
+                "bathroom",
                 "lavatory",
+                "toilet",
                 "WC",
                 "blue-square",
-                "toilet",
                 "refresh",
                 "wc",
                 "gender"
@@ -18062,12 +18328,13 @@
             "a": "Water Closet",
             "b": "1F6BE",
             "j": [
+                "bathroom",
                 "closet",
                 "lavatory",
                 "restroom",
-                "water",
-                "wc",
                 "toilet",
+                "water",
+                "WC",
                 "blue-square"
             ]
         },
@@ -18504,8 +18771,7 @@
             "b": "1F519",
             "j": [
                 "arrow",
-                "back",
-                "BACK arrow",
+                "BACK",
                 "words",
                 "return"
             ]
@@ -18515,8 +18781,7 @@
             "b": "1F51A",
             "j": [
                 "arrow",
-                "end",
-                "END arrow",
+                "END",
                 "words"
             ]
         },
@@ -18526,8 +18791,8 @@
             "j": [
                 "arrow",
                 "mark",
-                "on",
-                "ON! arrow",
+                "ON",
+                "ON!",
                 "words"
             ]
         },
@@ -18536,8 +18801,7 @@
             "b": "1F51C",
             "j": [
                 "arrow",
-                "soon",
-                "SOON arrow",
+                "SOON",
                 "words"
             ]
         },
@@ -18546,8 +18810,7 @@
             "b": "1F51D",
             "j": [
                 "arrow",
-                "top",
-                "TOP arrow",
+                "TOP",
                 "up",
                 "words",
                 "blue-square"
@@ -18687,6 +18950,15 @@
                 "religion",
                 "jewish",
                 "hexagram"
+            ]
+        },
+        "khanda": {
+            "a": "⊛ Khanda",
+            "b": "1FAAF",
+            "j": [
+                "khanda",
+                "religion",
+                "Sikh"
             ]
         },
         "aries": {
@@ -18966,7 +19238,6 @@
             "j": [
                 "arrow",
                 "button",
-                "red",
                 "blue-square",
                 "triangle",
                 "direction",
@@ -18993,7 +19264,6 @@
                 "arrow",
                 "button",
                 "down",
-                "red",
                 "blue-square",
                 "direction",
                 "bottom"
@@ -19101,6 +19371,16 @@
                 "wifi",
                 "bluetooth",
                 "bars"
+            ]
+        },
+        "wireless": {
+            "a": "⊛ Wireless",
+            "b": "1F6DC",
+            "j": [
+                "computer",
+                "internet",
+                "network",
+                "wireless"
             ]
         },
         "vibration-mode": {
@@ -19213,7 +19493,7 @@
             ]
         },
         "heavy-equals-sign": {
-            "a": "⊛ Heavy Equals Sign",
+            "a": "Heavy Equals Sign",
             "b": "1F7F0",
             "j": [
                 "equality",
@@ -19592,7 +19872,7 @@
             "a": "Copyright",
             "b": "00A9",
             "j": [
-                "c",
+                "C",
                 "ip",
                 "license",
                 "circle",
@@ -19604,7 +19884,7 @@
             "a": "Registered",
             "b": "00AE",
             "j": [
-                "r",
+                "R",
                 "alphabet",
                 "circle"
             ]
@@ -19614,7 +19894,7 @@
             "b": "2122",
             "j": [
                 "mark",
-                "tm",
+                "TM",
                 "trademark",
                 "brand",
                 "law",
@@ -19812,7 +20092,7 @@
             "a": "A Button (Blood Type)",
             "b": "1F170",
             "j": [
-                "a",
+                "A",
                 "A button (blood type)",
                 "blood type",
                 "a_button",
@@ -19825,7 +20105,7 @@
             "a": "Ab Button (Blood Type)",
             "b": "1F18E",
             "j": [
-                "ab",
+                "AB",
                 "AB button (blood type)",
                 "blood type",
                 "ab_button",
@@ -19837,7 +20117,7 @@
             "a": "B Button (Blood Type)",
             "b": "1F171",
             "j": [
-                "b",
+                "B",
                 "B button (blood type)",
                 "blood type",
                 "b_button",
@@ -19850,7 +20130,7 @@
             "a": "Cl Button",
             "b": "1F191",
             "j": [
-                "cl",
+                "CL",
                 "CL button",
                 "alphabet",
                 "words",
@@ -19861,7 +20141,7 @@
             "a": "Cool Button",
             "b": "1F192",
             "j": [
-                "cool",
+                "COOL",
                 "COOL button",
                 "words",
                 "blue-square"
@@ -19871,7 +20151,7 @@
             "a": "Free Button",
             "b": "1F193",
             "j": [
-                "free",
+                "FREE",
                 "FREE button",
                 "blue-square",
                 "words"
@@ -19891,7 +20171,7 @@
             "a": "Id Button",
             "b": "1F194",
             "j": [
-                "id",
+                "ID",
                 "ID button",
                 "identity",
                 "purple-square",
@@ -19904,7 +20184,7 @@
             "j": [
                 "circle",
                 "circled M",
-                "m",
+                "M",
                 "alphabet",
                 "blue-circle",
                 "letter"
@@ -19914,7 +20194,7 @@
             "a": "New Button",
             "b": "1F195",
             "j": [
-                "new",
+                "NEW",
                 "NEW button",
                 "blue-square",
                 "words",
@@ -19925,7 +20205,7 @@
             "a": "Ng Button",
             "b": "1F196",
             "j": [
-                "ng",
+                "NG",
                 "NG button",
                 "blue-square",
                 "words",
@@ -19938,7 +20218,7 @@
             "b": "1F17E",
             "j": [
                 "blood type",
-                "o",
+                "O",
                 "O button (blood type)",
                 "o_button",
                 "alphabet",
@@ -19962,6 +20242,7 @@
             "a": "P Button",
             "b": "1F17F",
             "j": [
+                "P",
                 "P button",
                 "parking",
                 "cars",
@@ -19975,7 +20256,7 @@
             "b": "1F198",
             "j": [
                 "help",
-                "sos",
+                "SOS",
                 "SOS button",
                 "red-square",
                 "words",
@@ -19988,7 +20269,8 @@
             "b": "1F199",
             "j": [
                 "mark",
-                "up",
+                "UP",
+                "UP!",
                 "UP! button",
                 "blue-square",
                 "above",
@@ -20000,7 +20282,7 @@
             "b": "1F19A",
             "j": [
                 "versus",
-                "vs",
+                "VS",
                 "VS button",
                 "words",
                 "orange-square"

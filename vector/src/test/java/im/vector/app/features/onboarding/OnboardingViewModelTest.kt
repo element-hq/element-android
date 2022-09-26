@@ -170,7 +170,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
@@ -189,7 +189,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
@@ -284,7 +284,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
@@ -870,7 +870,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()

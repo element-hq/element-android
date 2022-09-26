@@ -431,7 +431,7 @@
     <string name="settings_theme">테마</string>
     <string name="encryption_information_decryption_error">암호 복호화 오류</string>
     <string name="encryption_information_device_name">공개 이름</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="device_manager_session_details_session_id">ID</string>
     <string name="encryption_information_device_key">기기 키</string>
     <string name="encryption_export_e2e_room_keys">종단간 암호화 방 키 내보내기</string>
     <string name="encryption_export_room_keys">방 키 내보내기</string>

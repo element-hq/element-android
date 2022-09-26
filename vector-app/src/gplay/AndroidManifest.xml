@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <application android:name="im.vector.app.VectorApplication">
+    <application>
 
         <!-- Firebase components -->
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
 
-        <receiver
-            android:name="im.vector.app.push.fcm.EmbeddedFCMDistributor"
-            android:enabled="true"
-            android:exported="false">
-
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by the CI :/ -->
+        <service android:name="im.vector.app.push.fcm.VectorFirebaseMessagingService"
+            android:exported="false"
+            tools:ignore="Instantiatable">
             <intent-filter>
-                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
-                <action android:name="org.unifiedpush.android.distributor.UNREGISTER" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
-        </receiver>
-
+        </service>
     </application>
 
 </manifest>

@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -43,7 +44,9 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.mapper.LocalRoomSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
+import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.findByAlias
@@ -57,6 +60,7 @@ import javax.inject.Inject
 internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomSummaryMapper: RoomSummaryMapper,
+        private val localRoomSummaryMapper: LocalRoomSummaryMapper,
         private val queryStringValueProcessor: QueryStringValueProcessor,
 ) {
 
@@ -93,6 +97,25 @@ internal class RoomSummaryDataSource @Inject constructor(
                 { roomSummariesQuery(it, queryParams).process(sortOrder) },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    fun getLocalRoomSummary(roomId: String): LocalRoomSummary? {
+        return monarchy
+                .fetchCopyMap({
+                    LocalRoomSummaryEntity.where(it, roomId).findFirst()
+                }, { entity, _ ->
+                    localRoomSummaryMapper.map(entity)
+                })
+    }
+
+    fun getLocalRoomSummaryLive(roomId: String): LiveData<Optional<LocalRoomSummary>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm -> LocalRoomSummaryEntity.where(realm, roomId) },
+                { localRoomSummaryMapper.map(it) }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
+        }
     }
 
     fun getRoomSummariesLive(
@@ -272,6 +295,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
                     .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
+                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
                     .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
                     .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)

@@ -16,14 +16,25 @@
 
 package im.vector.app.features.home.room.list.home.invites
 
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.resources.StringProvider
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -36,6 +47,8 @@ import timber.log.Timber
 class InvitesViewModel @AssistedInject constructor(
         @Assisted val initialState: InvitesViewState,
         private val session: Session,
+        private val stringProvider: StringProvider,
+        private val drawableProvider: DrawableProvider
 ) : VectorViewModel<InvitesViewState, InvitesAction, InvitesViewEvents>(initialState) {
 
     private val pagedListConfig = PagedList.Config.Builder()
@@ -52,15 +65,29 @@ class InvitesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<InvitesViewModel, InvitesViewState> by hiltMavericksViewModelFactory()
 
+    private val _invites = MutableSharedFlow<InvitesContentState>(replay = 1)
+    val invites = _invites.asSharedFlow()
+
+    private var invitesCount = -1
+
     init {
         observeInvites()
     }
 
     override fun handle(action: InvitesAction) {
         when (action) {
+            is InvitesAction.SelectRoom -> handleSelectRoom(action)
             is InvitesAction.AcceptInvitation -> handleAcceptInvitation(action)
             is InvitesAction.RejectInvitation -> handleRejectInvitation(action)
         }
+    }
+
+    private fun handleSelectRoom(action: InvitesAction.SelectRoom) {
+        _viewEvents.post(InvitesViewEvents.OpenRoom(
+                roomSummary = action.roomSummary,
+                shouldCloseInviteView = false,
+                isInviteAlreadySelected = false,
+        ))
     }
 
     private fun handleRejectInvitation(action: InvitesAction.RejectInvitation) = withState { state ->
@@ -72,8 +99,6 @@ class InvitesViewModel @AssistedInject constructor(
             return@withState
         }
 
-        val shouldCloseInviteView = state.pagedList?.value?.size == 1
-
         viewModelScope.launch {
             try {
                 session.roomService().leaveRoom(roomId)
@@ -81,9 +106,6 @@ class InvitesViewModel @AssistedInject constructor(
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
                 // If we update the state, the button will be displayed again, so it's not ideal...
-                if (shouldCloseInviteView) {
-                    _viewEvents.post(InvitesViewEvents.Close)
-                }
             } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(InvitesViewEvents.Failure(failure))
@@ -101,9 +123,7 @@ class InvitesViewModel @AssistedInject constructor(
         }
         // close invites view when navigate to a room from the last one invite
 
-        val shouldCloseInviteView = state.pagedList?.value?.size == 1
-
-        _viewEvents.post(InvitesViewEvents.OpenRoom(action.roomSummary, shouldCloseInviteView))
+        val shouldCloseInviteView = invitesCount == 1
 
         // quick echo
         setState {
@@ -117,6 +137,8 @@ class InvitesViewModel @AssistedInject constructor(
                     }
             )
         }
+
+        _viewEvents.post(InvitesViewEvents.OpenRoom(action.roomSummary, shouldCloseInviteView, isInviteAlreadySelected = true))
     }
 
     private fun observeInvites() {
@@ -129,8 +151,26 @@ class InvitesViewModel @AssistedInject constructor(
                 sortOrder = RoomSortOrder.ACTIVITY
         )
 
-        setState {
-            copy(pagedList = pagedList)
-        }
+        pagedList.asFlow()
+                .map {
+                    if (it.isEmpty()) {
+                        InvitesContentState.Empty(
+                                title = stringProvider.getString(R.string.invites_empty_title),
+                                image = drawableProvider.getDrawable(R.drawable.ic_invites_empty),
+                                message = stringProvider.getString(R.string.invites_empty_message)
+                        )
+                    } else {
+                        invitesCount = it.loadedCount
+                        InvitesContentState.Content(it)
+                    }
+                }
+                .catch {
+                    emit(InvitesContentState.Error(it))
+                }
+                .onStart {
+                    emit(InvitesContentState.Loading)
+                }.onEach {
+                    _invites.emit(it)
+                }.launchIn(viewModelScope)
     }
 }

@@ -52,6 +52,7 @@ enum class Command(
     MARKDOWN("/markdown", null, "<on|off>", R.string.command_description_markdown, false, false),
     RAINBOW("/rainbow", null, "<message>", R.string.command_description_rainbow, false, true),
     RAINBOW_EMOTE("/rainbowme", null, "<message>", R.string.command_description_rainbow_emote, false, true),
+    DEVTOOLS("/devtools", null, "", R.string.command_description_devtools, true, false),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", null, "", R.string.command_description_clear_scalar_token, false, false),
     SPOILER("/spoiler", null, "<message>", R.string.command_description_spoiler, false, true),
     SHRUG("/shrug", null, "<message>", R.string.command_description_shrug, false, true),

@@ -17,7 +17,6 @@
 
 package im.vector.app.features.settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -448,7 +447,6 @@ class VectorSettingsSecurityPrivacyFragment :
     /**
      * Manage the e2e keys import.
      */
-    @SuppressLint("NewApi")
     private fun importKeys() {
         openFileSelection(
                 requireActivity(),
@@ -585,7 +583,7 @@ class VectorSettingsSecurityPrivacyFragment :
         }
 
         // crypto section: device key (fingerprint)
-        val deviceInfo = session.cryptoService().getDeviceInfo(userId, deviceId)
+        val deviceInfo = session.cryptoService().getCryptoDeviceInfo(userId, deviceId)
 
         val fingerprint = deviceInfo?.fingerprint()
         if (fingerprint?.isNotEmpty() == true) {

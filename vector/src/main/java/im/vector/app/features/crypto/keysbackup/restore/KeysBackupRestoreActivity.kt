@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.keysbackup.restore
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -27,8 +28,9 @@ import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
-import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
+import im.vector.app.features.workers.signout.ServerBackupStatusAction
+import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import javax.inject.Inject
 
@@ -46,6 +48,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
     override fun getTitleRes() = R.string.title_activity_keys_backup_restore
 
     private lateinit var viewModel: KeysBackupRestoreSharedViewModel
+    private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
 
     override fun onBackPressed() {
         hideWaitingView()
@@ -95,7 +98,8 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS -> {
                     viewModel.keyVersionResult.value?.version?.let {
-                        KeysBackupBanner.onRecoverDoneForVersion(this, it)
+                        // Inform the banner that a Recover has been done for this version, so do not show the Recover banner for this version.
+                        serverBackupStatusViewModel.handle(ServerBackupStatusAction.OnRecoverDoneForVersion(it))
                     }
                     replaceFragment(views.container, KeysBackupRestoreSuccessFragment::class.java, allowStateLoss = true)
                 }

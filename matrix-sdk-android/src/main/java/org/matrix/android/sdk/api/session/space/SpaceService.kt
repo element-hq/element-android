@@ -18,10 +18,10 @@ package org.matrix.android.sdk.api.session.space
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.space.model.SpaceChildSummaryEvent
 import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
@@ -75,12 +75,12 @@ interface SpaceService {
             suggestedOnly: Boolean? = null,
             limit: Int? = null,
             from: String? = null,
-            knownStateList: List<Event>? = null
+            knownStateList: List<SpaceChildSummaryEvent>? = null
     ): SpaceHierarchyData
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
-     * @return the [LiveData] of List[SpaceSummary]
+     * @return the [LiveData] of List[RoomSummary]
      */
     fun getSpaceSummariesLive(
             queryParams: SpaceSummaryQueryParams,

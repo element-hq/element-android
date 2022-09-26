@@ -493,11 +493,11 @@ class TimelineFragment :
                 is RoomDetailViewEvents.ShowInfoOkDialog -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference -> joinJitsiRoom(it.widget, it.withVideo)
                 RoomDetailViewEvents.LeaveJitsiConference -> leaveJitsiConference()
-                RoomDetailViewEvents.ShowWaitingView -> vectorBaseActivity.showWaitingView()
+                is RoomDetailViewEvents.ShowWaitingView -> vectorBaseActivity.showWaitingView(it.text)
                 RoomDetailViewEvents.HideWaitingView -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission -> requestNativeWidgetPermission(it)
                 is RoomDetailViewEvents.OpenRoom -> handleOpenRoom(it)
-                RoomDetailViewEvents.OpenInvitePeople -> navigator.openInviteUsersToRoom(requireContext(), timelineArgs.roomId)
+                RoomDetailViewEvents.OpenInvitePeople -> navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
                 RoomDetailViewEvents.OpenSetRoomAvatarDialog -> galleryOrCameraDialogHelper.show()
                 RoomDetailViewEvents.OpenRoomSettings -> handleOpenRoomSettings(RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS)
                 RoomDetailViewEvents.OpenRoomProfile -> handleOpenRoomSettings()
@@ -1124,6 +1124,7 @@ class TimelineFragment :
                         .findViewById<ImageView>(R.id.action_view_icon_image)
                         .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                 actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                @Suppress("AlwaysShowAction")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
 
@@ -1810,6 +1811,9 @@ class TimelineFragment :
         dismissLoadingDialog()
         views.composerLayout.setTextIfDifferent("")
         when (parsedCommand) {
+            is ParsedCommand.DevTools -> {
+                navigator.openDevTools(requireContext(), timelineArgs.roomId)
+            }
             is ParsedCommand.SetMarkdown -> {
                 showSnackWithMessage(getString(if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
             }
@@ -2190,7 +2194,7 @@ class TimelineFragment :
     override fun onRoomCreateLinkClicked(url: String) {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             permalinkHandler
-                    .launch(requireContext(), url, object : NavigationInterceptor {
+                    .launch(requireActivity(), url, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             requireActivity().finish()
                             return false

@@ -66,30 +66,6 @@ android {
                 testCoverageEnabled = coverage.enableTestCoverage
             }
         }
-        nightly {
-            initWith release
-            matchingFallbacks = ['release']
-        }
-        release
-    }
-
-    flavorDimensions "store"
-
-    productFlavors {
-        gplay {
-            dimension "store"
-            isDefault = true
-
-            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
-            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
-        }
-
-        fdroid {
-            dimension "store"
-
-            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
-            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
-        }
     }
 
     compileOptions {
@@ -118,17 +94,12 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
-        // Add sourceSets for `release` version when building `nightly`
-        nightly {
-            java.srcDirs += "src/release/java"
-        }
     }
 
     buildFeatures {
         viewBinding true
     }
 }
-
 dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
@@ -190,12 +161,6 @@ dependencies {
     // Snap Helper https://github.com/rubensousa/GravitySnapHelper
     api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
-    // Nightly
-    // API-only library
-    gplayImplementation libs.google.appdistributionApi
-    // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
-
     // Work
     api libs.androidx.work
 
@@ -211,7 +176,9 @@ dependencies {
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    implementation 'me.gujun.android:span:1.7'
+    api('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
     implementation libs.markwon.inlineParser
@@ -240,7 +207,6 @@ dependencies {
     // Image Loading
     implementation libs.github.bigImageViewer
     implementation libs.github.glideImageLoader
-    implementation libs.github.progressPieIndicator
     implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
@@ -259,21 +225,14 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation 'com.posthog.android:posthog:1.1.2'
-
-    // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
-    // UnifiedPush gplay flavor only
-    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.2') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
+    implementation('com.posthog.android:posthog:1.1.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    // UnifiedPush
+    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
 
-    implementation "androidx.emoji2:emoji2:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -285,12 +244,22 @@ dependencies {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
+
+        // Exclude jitsi's android-scalablevideoview fork's support library
+        // The library exports a jetified artifact but doesn't remove the support library dependency
+        // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
+        exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    // Excludes the legacy support library annotation usages
+    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
+    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
 
     // Emoji Keyboard
     api libs.vanniktech.emojiMaterial
@@ -307,14 +276,12 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    fdroidApi(libs.maplibre.androidSdk) {
+    api(libs.maplibre.androidSdk) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    fdroidApi(libs.maplibre.pluginAnnotation) {
+    api(libs.maplibre.pluginAnnotation) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    gplayApi libs.maplibre.androidSdk
-    gplayApi libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
@@ -326,19 +293,6 @@ dependencies {
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
-
-    // Flipper, debug builds only
-    debugImplementation(libs.flipper.flipper) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation(libs.flipper.flipperNetworkPlugin) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
-
-    // Activate when you want to check for leaks, from time to time.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner

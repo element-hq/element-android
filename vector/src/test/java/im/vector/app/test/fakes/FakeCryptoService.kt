@@ -20,11 +20,22 @@ import androidx.lifecycle.MutableLiveData
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.util.Optional
 
-class FakeCryptoService : CryptoService by mockk() {
+class FakeCryptoService(
+        val fakeCrossSigningService: FakeCrossSigningService = FakeCrossSigningService(),
+        val fakeVerificationService: FakeVerificationService = FakeVerificationService(),
+) : CryptoService by mockk() {
 
     var roomKeysExport = ByteArray(size = 1)
     var cryptoDeviceInfos = mutableMapOf<String, CryptoDeviceInfo>()
+    var cryptoDeviceInfoWithIdLiveData: MutableLiveData<Optional<CryptoDeviceInfo>> = MutableLiveData()
+    var myDevicesInfoWithIdLiveData: MutableLiveData<Optional<DeviceInfo>> = MutableLiveData()
+
+    override fun crossSigningService() = fakeCrossSigningService
+
+    override fun verificationService() = fakeVerificationService
 
     override suspend fun exportRoomKeys(password: String) = roomKeysExport
 
@@ -35,4 +46,8 @@ class FakeCryptoService : CryptoService by mockk() {
     override fun getLiveCryptoDeviceInfo(userIds: List<String>) = MutableLiveData(
             cryptoDeviceInfos.filterKeys { userIds.contains(it) }.values.toList()
     )
+
+    override fun getLiveCryptoDeviceInfoWithId(deviceId: String) = cryptoDeviceInfoWithIdLiveData
+
+    override fun getMyDevicesInfoLive(deviceId: String) = myDevicesInfoWithIdLiveData
 }

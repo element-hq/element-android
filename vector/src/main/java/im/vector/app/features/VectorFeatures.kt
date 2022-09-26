@@ -18,6 +18,7 @@ package im.vector.app.features
 
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.features.settings.VectorPreferences
 
 interface VectorFeatures {
 
@@ -32,8 +33,13 @@ interface VectorFeatures {
     fun isScreenSharingEnabled(): Boolean
     fun isLocationSharingEnabled(): Boolean
     fun forceUsageOfOpusEncoder(): Boolean
-    fun shouldStartDmOnFirstMessage(): Boolean
-    fun isNewAppLayoutEnabled(): Boolean
+
+    /**
+     * This is only to enable if the labs flag should be visible and effective.
+     * If on the client-side you want functionality that should be enabled with the new layout,
+     * use [VectorPreferences.isNewAppLayoutEnabled] instead.
+     */
+    fun isNewAppLayoutFeatureEnabled(): Boolean
     fun isNewDeviceManagementEnabled(): Boolean
 }
 
@@ -49,7 +55,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
-    override fun shouldStartDmOnFirstMessage(): Boolean = false
-    override fun isNewAppLayoutEnabled(): Boolean = true
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = true
     override fun isNewDeviceManagementEnabled(): Boolean = false
 }

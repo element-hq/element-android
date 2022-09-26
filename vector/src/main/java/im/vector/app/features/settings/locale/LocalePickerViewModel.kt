@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 
 class LocalePickerViewModel @AssistedInject constructor(
         @Assisted initialState: LocalePickerViewState,
-        private val vectorConfiguration: VectorConfiguration
+        private val vectorConfiguration: VectorConfiguration,
+        private val vectorLocale: VectorLocale,
 ) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
 
     @AssistedFactory
@@ -39,8 +40,13 @@ class LocalePickerViewModel @AssistedInject constructor(
     }
 
     init {
+        setState {
+            copy(
+                    currentLocale = vectorLocale.applicationLocale
+            )
+        }
         viewModelScope.launch {
-            val result = VectorLocale.getSupportedLocales()
+            val result = vectorLocale.getSupportedLocales()
 
             setState {
                 copy(
@@ -59,7 +65,7 @@ class LocalePickerViewModel @AssistedInject constructor(
     }
 
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {
-        VectorLocale.saveApplicationLocale(action.locale)
+        vectorLocale.saveApplicationLocale(action.locale)
         vectorConfiguration.applyToApplicationContext()
         _viewEvents.post(LocalePickerViewEvents.RestartActivity)
     }

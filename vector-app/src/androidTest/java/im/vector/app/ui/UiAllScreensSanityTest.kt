@@ -21,6 +21,7 @@ import androidx.test.espresso.IdlingPolicies
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import im.vector.app.R
 import im.vector.app.espresso.tools.ScreenshotFailureRule
@@ -28,6 +29,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.ui.robot.settings.labs.LabFeature
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.ui.robot.withDeveloperMode
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +51,14 @@ class UiAllScreensSanityTest {
             .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE))
             .around(ScreenshotFailureRule())
 
-    private val elementRobot = ElementRobot()
+    private val elementRobot = ElementRobot(
+            LabFeaturesPreferences(
+                    InstrumentationRegistry.getInstrumentation()
+                            .targetContext
+                            .resources
+                            .getBoolean(R.bool.settings_labs_new_app_layout_default)
+            )
+    )
 
     // Last passing:
     // 2020-11-09
@@ -101,11 +110,11 @@ class UiAllScreensSanityTest {
 
         val spaceName = UUID.randomUUID().toString()
         elementRobot.space {
-            createSpace {
+            createSpace(true) {
                 createAndCrawl(spaceName)
             }
             val publicSpaceName = UUID.randomUUID().toString()
-            createSpace {
+            createSpace(false) {
                 createPublicSpace(publicSpaceName)
             }
 

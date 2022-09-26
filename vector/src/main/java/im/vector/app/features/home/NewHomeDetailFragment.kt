@@ -57,15 +57,13 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.app.features.spaces.SpaceListBottomSheet
 import im.vector.app.features.workers.signout.BannerState
+import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -204,13 +202,12 @@ class NewHomeDetailFragment :
     private fun setupFabs() {
         showFABs()
 
-        views.newLayoutCreateChatButton.setOnClickListener {
-            newChatBottomSheet.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
+        views.newLayoutCreateChatButton.debouncedClicks {
+            newChatBottomSheet.takeIf { !it.isAdded }?.show(requireActivity().supportFragmentManager, NewChatBottomSheet.TAG)
         }
 
-        views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here
-            spaceListBottomSheet.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
+        views.newLayoutOpenSpacesButton.debouncedClicks {
+            spaceListBottomSheet.takeIf { !it.isAdded }?.show(requireActivity().supportFragmentManager, SpaceListBottomSheet.TAG)
         }
     }
 
@@ -253,9 +250,10 @@ class NewHomeDetailFragment :
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
-                                ?.navigator
-                                ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { vectorBaseActivity ->
+                            vectorBaseActivity.navigator
+                                    .requestSessionVerification(vectorBaseActivity, newest.deviceId ?: "")
+                        }
                         unknownDeviceDetectorSharedViewModel.handle(
                                 UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
@@ -303,13 +301,15 @@ class NewHomeDetailFragment :
     }
 
     private fun setupKeysBackupBanner() {
+        serverBackupStatusViewModel.handle(ServerBackupStatusAction.OnBannerDisplayed)
         serverBackupStatusViewModel
                 .onEach {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
-                        BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
-                        null,
-                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        is BannerState.Setup,
+                        BannerState.BackingUp,
+                        BannerState.Hidden -> views.homeKeysBackupBanner.render(banState, false)
+                        null -> views.homeKeysBackupBanner.render(BannerState.Hidden, false)
+                        else -> Unit /* No op? */
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -321,12 +321,6 @@ class NewHomeDetailFragment :
 
     private fun setupToolbar() {
         setupToolbar(views.toolbar)
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            session.userService().getUser(session.myUserId)?.let { user ->
-                avatarRenderer.render(user.toMatrixItem(), views.avatar)
-            }
-        }
 
         views.collapsingToolbar.debouncedClicks(::openSpaceSettings)
         views.toolbar.debouncedClicks(::openSpaceSettings)
@@ -357,6 +351,10 @@ class NewHomeDetailFragment :
      * KeysBackupBanner Listener
      * ========================================================================================== */
 
+    override fun onCloseClicked() {
+        serverBackupStatusViewModel.handle(ServerBackupStatusAction.OnBannerClosed)
+    }
+
     override fun setupKeysBackup() {
         navigator.openKeysBackupSetup(requireActivity(), false)
     }
@@ -373,7 +371,14 @@ class NewHomeDetailFragment :
                 vectorPreferences.developerShowDebugInfo()
         )
 
+        refreshAvatar()
         hasUnreadRooms = it.hasUnreadMessages
+    }
+
+    private fun refreshAvatar() = withState(viewModel) { state ->
+        state.myMatrixItem?.let { user ->
+            avatarRenderer.render(user, views.avatar)
+        }
     }
 
     override fun onTapToReturnToCall() {

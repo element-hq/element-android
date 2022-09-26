@@ -35,6 +35,7 @@ import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -101,6 +102,8 @@ class DevicesViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val matrix: Matrix,
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
+        getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
+        private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -116,8 +119,9 @@ class DevicesViewModel @AssistedInject constructor(
     private val refreshSource = PublishDataSource<Unit>()
 
     init {
-        val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
-        val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+        val currentSessionCrossSigningInfo = getCurrentSessionCrossSigningInfoUseCase.execute()
+        val hasAccountCrossSigning = currentSessionCrossSigningInfo.isCrossSigningInitialized
+        val accountCrossSigningIsTrusted = currentSessionCrossSigningInfo.isCrossSigningVerified
 
         setState {
             copy(
@@ -143,12 +147,7 @@ class DevicesViewModel @AssistedInject constructor(
                     .sortedByDescending { it.lastSeenTs }
                     .map { deviceInfo ->
                         val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                        val trustLevelForShield = computeTrustLevelForShield(
-                                currentSessionCrossTrusted = accountCrossSigningIsTrusted,
-                                legacyMode = !hasAccountCrossSigning,
-                                deviceTrustLevel = cryptoDeviceInfo?.trustLevel,
-                                isCurrentDevice = deviceInfo.deviceId == session.sessionParams.deviceId
-                        )
+                        val trustLevelForShield = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
                         val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
                         DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield, isInactive)
                     }
@@ -266,20 +265,6 @@ class DevicesViewModel @AssistedInject constructor(
             }
             DevicesAction.ResetSecurity -> _viewEvents.post(DevicesViewEvents.PromptResetSecrets)
         }
-    }
-
-    private fun computeTrustLevelForShield(
-            currentSessionCrossTrusted: Boolean,
-            legacyMode: Boolean,
-            deviceTrustLevel: DeviceTrustLevel?,
-            isCurrentDevice: Boolean,
-    ): RoomEncryptionTrustLevel {
-        return TrustUtils.shieldForTrust(
-                currentDevice = isCurrentDevice,
-                trustMSK = currentSessionCrossTrusted,
-                legacyMode = legacyMode,
-                deviceTrustLevel = deviceTrustLevel
-        )
     }
 
     private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {

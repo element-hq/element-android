@@ -119,7 +119,7 @@
     <string name="room_settings_banned_users_title">Bannlyste brukere</string>
     <string name="room_settings_category_advanced_title">Avansert</string>
     <string name="settings_theme">Tema</string>
-    <string name="encryption_information_device_id">Økt-ID</string>
+    <string name="device_manager_session_details_session_id">Økt-ID</string>
     <string name="encryption_information_device_key">Øktnøkkel</string>
     <string name="encryption_export_export">Eksporter</string>
     <string name="encryption_import_import">Importer</string>

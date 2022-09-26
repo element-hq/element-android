@@ -26,11 +26,14 @@ import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.flow.FlowSession
+import org.matrix.android.sdk.flow.flow
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
@@ -69,6 +72,26 @@ class FakeSession(
             this@FakeSession.configureAndStart(any(), startSyncing = true)
             this@FakeSession.startSyncing(any())
         }
+    }
+
+    fun givenSessionParams(sessionParams: SessionParams) {
+        every { this@FakeSession.sessionParams } returns sessionParams
+    }
+
+    fun givenSessionId(sessionId: String): SessionParams {
+        val sessionParams = mockk<SessionParams>()
+        every { sessionParams.deviceId } returns sessionId
+        givenSessionParams(sessionParams)
+        return sessionParams
+    }
+
+    /**
+     * Do not forget to call mockkStatic("org.matrix.android.sdk.flow.FlowSessionKt") in the setup method of the tests.
+     */
+    fun givenFlowSession(): FlowSession {
+        val fakeFlowSession = mockk<FlowSession>()
+        every { flow() } returns fakeFlowSession
+        return fakeFlowSession
     }
 
     companion object {

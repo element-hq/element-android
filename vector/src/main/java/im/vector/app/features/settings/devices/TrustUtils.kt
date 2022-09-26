@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
+// TODO Replace usage by the use case GetEncryptionTrustLevelForDeviceUseCase
 object TrustUtils {
 
     fun shieldForTrust(

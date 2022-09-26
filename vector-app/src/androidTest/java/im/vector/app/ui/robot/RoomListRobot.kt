@@ -27,9 +27,11 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
+import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 
-class RoomListRobot {
+class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
 
     fun openRoom(roomName: String, block: RoomDetailRobot.() -> Unit) {
         clickOn(roomName)
@@ -49,11 +51,17 @@ class RoomListRobot {
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
-        clickOn(R.id.createGroupRoomButton)
-        waitUntilActivityVisible<RoomDirectoryActivity> {
-            BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
+        if (labsPreferences.isNewAppLayoutEnabled) {
+            clickOn(R.id.newLayoutCreateChatButton)
+            waitUntilDialogVisible(ViewMatchers.withId(R.id.create_room))
+            clickOn(R.id.create_room)
+        } else {
+            clickOn(R.id.createGroupRoomButton)
+            waitUntilActivityVisible<RoomDirectoryActivity> {
+                BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
+            }
         }
-        val newRoomRobot = NewRoomRobot()
+        val newRoomRobot = NewRoomRobot(false, labsPreferences)
         block(newRoomRobot)
         if (!newRoomRobot.createdRoom) {
             pressBack()

@@ -55,8 +55,9 @@ dependencies {
 
     implementation libs.airbnb.mavericks
     // Span utils
-    implementation 'me.gujun.android:span:1.7'
-
+    implementation('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid

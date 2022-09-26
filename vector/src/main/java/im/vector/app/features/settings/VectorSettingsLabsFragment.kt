@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.threads.ThreadsManager
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
@@ -39,6 +40,7 @@ class VectorSettingsLabsFragment :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var lightweightSettingsStorage: LightweightSettingsStorage
     @Inject lateinit var threadsManager: ThreadsManager
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
@@ -71,6 +73,24 @@ class VectorSettingsLabsFragment :
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
                 true
             }
+        }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_NEW_APP_LAYOUT_KEY)?.let { pref ->
+            pref.isVisible = vectorFeatures.isNewAppLayoutFeatureEnabled()
+
+            pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                onNewLayoutPreferenceClicked()
+                true
+            }
+        }
+
+        configureUnreadNotificationsAsTabPreference()
+    }
+
+    private fun configureUnreadNotificationsAsTabPreference() {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)?.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
         }
     }
 
@@ -112,5 +132,12 @@ class VectorSettingsLabsFragment :
         lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
         displayLoadingView()
         MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+    }
+
+    /**
+     * Action when new layout preference switch is actually clicked.
+     */
+    private fun onNewLayoutPreferenceClicked() {
+        configureUnreadNotificationsAsTabPreference()
     }
 }

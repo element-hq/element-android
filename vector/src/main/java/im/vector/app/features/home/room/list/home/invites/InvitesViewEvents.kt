@@ -21,6 +21,9 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class InvitesViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : InvitesViewEvents()
-    data class OpenRoom(val roomSummary: RoomSummary, val shouldCloseInviteView: Boolean) : InvitesViewEvents()
-    object Close : InvitesViewEvents()
+    data class OpenRoom(
+            val roomSummary: RoomSummary,
+            val shouldCloseInviteView: Boolean,
+            val isInviteAlreadySelected: Boolean,
+    ) : InvitesViewEvents()
 }
