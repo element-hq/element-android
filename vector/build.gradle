@@ -24,6 +24,8 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
+initScreenshotTests(project)
+
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441

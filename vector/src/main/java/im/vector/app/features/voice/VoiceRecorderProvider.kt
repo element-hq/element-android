@@ -23,6 +23,7 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import im.vector.app.features.VectorFeatures
+import io.element.android.opusencoder.OggOpusEncoder
 import kotlinx.coroutines.Dispatchers
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class VoiceRecorderProvider @Inject constructor(
         return if (useNativeRecorder()) {
             VoiceRecorderQ(context)
         } else {
-            VoiceRecorderL(context, Dispatchers.IO)
+            VoiceRecorderL(context, Dispatchers.IO, OggOpusEncoder.create())
         }
     }
 
