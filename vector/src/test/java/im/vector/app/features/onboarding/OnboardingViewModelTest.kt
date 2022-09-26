@@ -687,7 +687,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_MATRIX_ID, A_USERNAME)) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState("@fake:server.fake", A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
