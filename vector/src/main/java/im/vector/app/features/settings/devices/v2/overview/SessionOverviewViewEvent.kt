@@ -28,6 +28,7 @@ sealed class SessionOverviewViewEvent : VectorViewEvents {
             val lastErrorCode: String?
     ) : SessionOverviewViewEvent()
 
+    object ConfirmSignoutCurrentSession : SessionOverviewViewEvent()
     object SignoutSuccess : SessionOverviewViewEvent()
     data class SignoutError(val error: Throwable) : SessionOverviewViewEvent()
 }

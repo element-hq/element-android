@@ -40,6 +40,7 @@ import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
@@ -86,10 +87,15 @@ class SessionOverviewFragment :
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
                 is SessionOverviewViewEvent.RequestReAuth -> askForReAuthentication(it)
+                SessionOverviewViewEvent.ConfirmSignoutCurrentSession -> confirmSignoutCurrentSession()
                 SessionOverviewViewEvent.SignoutSuccess -> viewNavigator.goBack(requireActivity())
                 is SessionOverviewViewEvent.SignoutError -> showFailure(it.error)
             }
         }
+    }
+
+    private fun confirmSignoutCurrentSession() {
+        activity?.let { SignOutUiWorker(it).perform() }
     }
 
     private fun initSessionInfoView() {

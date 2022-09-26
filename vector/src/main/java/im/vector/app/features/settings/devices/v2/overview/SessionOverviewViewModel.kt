@@ -130,10 +130,21 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     // TODO add unit tests
     private fun handleSignoutSession() = withState { state ->
-        // TODO for current session: do the same process as sign out button in the general settings
+        if (state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
+            handleSignoutCurrentSession()
+        } else {
+            handleSignoutOtherSession(state.deviceId)
+        }
+    }
+
+    private fun handleSignoutCurrentSession() {
+        _viewEvents.post(SessionOverviewViewEvent.ConfirmSignoutCurrentSession)
+    }
+
+    private fun handleSignoutOtherSession(deviceId: String) {
         viewModelScope.launch {
             setLoading(true)
-            val signoutResult = signout(state.deviceId)
+            val signoutResult = signout(deviceId)
             setLoading(false)
 
             if (signoutResult.isSuccess) {
