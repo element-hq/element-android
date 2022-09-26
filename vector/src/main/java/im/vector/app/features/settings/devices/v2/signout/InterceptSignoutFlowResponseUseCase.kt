@@ -28,7 +28,6 @@ import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-// TODO add unit tests
 class InterceptSignoutFlowResponseUseCase @Inject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val activeSessionHolder: ActiveSessionHolder,
