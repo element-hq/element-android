@@ -24,12 +24,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          lfs: true
           fetch-depth: 0
       - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '11'
       - uses: gradle/gradle-build-action@v2
+
+      - name: Run screenshot tests
+        run: ./gradlew verifyScreenshots
+
+      - name: Archive Screenshot Results on Error
+        if: failure()
+        uses: actions/upload-artifact@v1
+        with:
+          name: screenshot-results
+          path: |
+            **/out/failures/
+            **/build/reports/tests/*UnitTest/
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.8
