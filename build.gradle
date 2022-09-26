@@ -224,7 +224,7 @@ project(":vector") {
     }
 }
 
-project(":library:diff-match-patch") {
+project(":library:external:diff-match-patch") {
     sonarqube {
         skipProject = true
     }
