@@ -33,7 +33,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
 
       - name: Run screenshot tests
-        run: ./gradlew verifyScreenshots
+        run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
 
       - name: Archive Screenshot Results on Error
         if: failure()
