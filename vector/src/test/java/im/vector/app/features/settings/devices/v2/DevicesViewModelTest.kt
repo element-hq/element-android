@@ -217,8 +217,8 @@ class DevicesViewModelTest {
                 .fakeSession
                 .fakeCryptoService
                 .fakeVerificationService
-        every { fakeVerificationService.addListener(any()) } just runs
-        every { fakeVerificationService.removeListener(any()) } just runs
+        fakeVerificationService.givenAddListenerSucceeds()
+        fakeVerificationService.givenRemoveListenerSucceeds()
         return fakeVerificationService
     }
 

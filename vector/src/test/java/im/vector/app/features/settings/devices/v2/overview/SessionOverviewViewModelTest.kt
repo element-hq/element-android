@@ -19,9 +19,14 @@ package im.vector.app.features.settings.devices.v2.overview
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
+import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
@@ -46,29 +51,35 @@ class SessionOverviewViewModelTest {
             deviceId = A_SESSION_ID_1
     )
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val isCurrentSessionUseCase = mockk<IsCurrentSessionUseCase>()
+    private val fakeStringProvider = FakeStringProvider()
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
+    private val signoutSessionUseCase = mockk<SignoutSessionUseCase>()
+    private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
+    private val fakePendingAuthHandler = FakePendingAuthHandler()
+    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
-            activeSessionHolder = fakeActiveSessionHolder.instance,
-            isCurrentSessionUseCase = isCurrentSessionUseCase,
+            stringProvider = fakeStringProvider.instance,
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
+            signoutSessionUseCase = signoutSessionUseCase,
+            interceptSignoutFlowResponseUseCase = interceptSignoutFlowResponseUseCase,
+            pendingAuthHandler = fakePendingAuthHandler.instance,
+            activeSessionHolder = fakeActiveSessionHolder.instance,
+            refreshDevicesUseCase = refreshDevicesUseCase,
     )
 
     @Test
     fun `given the viewModel has been initialized then viewState is updated with session info and current session verification status`() {
         // Given
+        givenVerificationService()
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val isCurrentSession = true
-        every { isCurrentSessionUseCase.execute(any()) } returns isCurrentSession
         givenCurrentSessionIsTrusted()
         val expectedState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID_1,
-                isCurrentSession = isCurrentSession,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
         )
@@ -81,7 +92,6 @@ class SessionOverviewViewModelTest {
                 .assertLatestState { state -> state == expectedState }
                 .finish()
         verify {
-            isCurrentSessionUseCase.execute(A_SESSION_ID_1)
             getDeviceFullInfoUseCase.execute(A_SESSION_ID_1)
         }
     }
@@ -89,9 +99,10 @@ class SessionOverviewViewModelTest {
     @Test
     fun `given current session can be verified when handling verify current session action then self verification event is posted`() {
         // Given
+        givenVerificationService()
         val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns true
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        every { isCurrentSessionUseCase.execute(any()) } returns true
         val verifySessionAction = SessionOverviewAction.VerifySession
         coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns true
         givenCurrentSessionIsTrusted()
@@ -113,9 +124,10 @@ class SessionOverviewViewModelTest {
     @Test
     fun `given current session cannot be verified when handling verify current session action then reset secrets event is posted`() {
         // Given
+        givenVerificationService()
         val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns true
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        every { isCurrentSessionUseCase.execute(any()) } returns true
         val verifySessionAction = SessionOverviewAction.VerifySession
         coEvery { checkIfCurrentSessionCanBeVerifiedUseCase.execute() } returns false
         givenCurrentSessionIsTrusted()
@@ -137,9 +149,10 @@ class SessionOverviewViewModelTest {
     @Test
     fun `given another session when handling verify session action then verify session event is posted`() {
         // Given
+        givenVerificationService()
         val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        every { isCurrentSessionUseCase.execute(any()) } returns false
         val verifySessionAction = SessionOverviewAction.VerifySession
         givenCurrentSessionIsTrusted()
 
@@ -152,6 +165,16 @@ class SessionOverviewViewModelTest {
         viewModelTest
                 .assertEvent { it is SessionOverviewViewEvent.ShowVerifyOtherSession }
                 .finish()
+    }
+
+    private fun givenVerificationService(): FakeVerificationService {
+        val fakeVerificationService = fakeActiveSessionHolder
+                .fakeSession
+                .fakeCryptoService
+                .fakeVerificationService
+        fakeVerificationService.givenAddListenerSucceeds()
+        fakeVerificationService.givenRemoveListenerSucceeds()
+        return fakeVerificationService
     }
 
     private fun givenCurrentSessionIsTrusted() {
