@@ -21,7 +21,6 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
-// TODO add unit tests
 class SignoutSessionUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
@@ -31,7 +30,7 @@ class SignoutSessionUseCase @Inject constructor(
     }
 
     private suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) = runCatching {
-        awaitCallback<Unit> { matrixCallback ->
+        awaitCallback { matrixCallback ->
             activeSessionHolder.getActiveSession()
                     .cryptoService()
                     .deleteDevice(deviceId, userInteractiveAuthInterceptor, matrixCallback)
