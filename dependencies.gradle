@@ -85,7 +85,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.55"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.56"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
