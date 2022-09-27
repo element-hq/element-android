@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.biometrics
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.MainThread
@@ -156,7 +155,6 @@ class BiometricHelper @AssistedInject constructor(
         return authenticate(activity)
     }
 
-    @SuppressLint("NewApi")
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun authenticateInternal(
         activity: FragmentActivity,

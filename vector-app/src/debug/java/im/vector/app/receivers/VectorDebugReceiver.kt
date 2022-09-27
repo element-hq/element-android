@@ -23,7 +23,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import im.vector.app.core.debug.DebugReceiver
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.utils.lsFiles
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +31,10 @@ import javax.inject.Inject
 /**
  * Receiver to handle some command from ADB
  */
-class VectorDebugReceiver @Inject constructor() : BroadcastReceiver(), DebugReceiver {
+class VectorDebugReceiver @Inject constructor(
+        @DefaultPreferences
+        private val sharedPreferences: SharedPreferences,
+) : BroadcastReceiver(), DebugReceiver {
 
     override fun register(context: Context) {
         context.registerReceiver(this, getIntentFilter(context))
@@ -47,14 +50,14 @@ class VectorDebugReceiver @Inject constructor() : BroadcastReceiver(), DebugRece
         intent.action?.let {
             when {
                 it.endsWith(DEBUG_ACTION_DUMP_FILESYSTEM) -> lsFiles(context)
-                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES) -> dumpPreferences(context)
-                it.endsWith(DEBUG_ACTION_ALTER_SCALAR_TOKEN) -> alterScalarToken(context)
+                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES) -> dumpPreferences()
+                it.endsWith(DEBUG_ACTION_ALTER_SCALAR_TOKEN) -> alterScalarToken()
             }
         }
     }
 
-    private fun dumpPreferences(context: Context) {
-        logPrefs("DefaultSharedPreferences", DefaultSharedPreferences.getInstance(context))
+    private fun dumpPreferences() {
+        logPrefs("DefaultSharedPreferences", sharedPreferences)
     }
 
     private fun logPrefs(name: String, sharedPreferences: SharedPreferences?) {
@@ -67,8 +70,8 @@ class VectorDebugReceiver @Inject constructor() : BroadcastReceiver(), DebugRece
         }
     }
 
-    private fun alterScalarToken(context: Context) {
-        DefaultSharedPreferences.getInstance(context).edit {
+    private fun alterScalarToken() {
+        sharedPreferences.edit {
             // putString("SCALAR_TOKEN_PREFERENCE_KEY" + Matrix.getInstance(context).defaultSession.myUserId, "bad_token")
         }
     }

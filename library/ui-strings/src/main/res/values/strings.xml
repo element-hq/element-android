@@ -442,6 +442,9 @@
     <string name="labs_enable_new_app_layout_title">Enable new layout</string>
     <string name="labs_enable_new_app_layout_summary">A simplified Element with optional tabs</string>
 
+    <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
+    <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
@@ -1401,6 +1404,7 @@
     <string name="command_description_avatar_for_room">Changes your avatar in this current room only</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+    <string name="command_description_devtools">Open the developer tools screen</string>
     <string name="command_description_whois">Displays information about a user</string>
 
     <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
@@ -3229,23 +3233,18 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_verified -->
-    <string name="device_manager_verification_status_detail_verified" tools:ignore="UnusedResources">Your current session is ready for secure messaging.</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_verification_status_detail_current_session_unverified -->
-    <string name="device_manager_verification_status_detail_unverified" tools:ignore="UnusedResources">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
-    <!-- TODO TO BE REMOVED: replaced by device_manager_current_session_title -->
-    <string name="device_manager_header_section_current_session" tools:ignore="UnusedResources">Current Session</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
     <!--  Examples: Verified · Last activity Yesterday at 6PM, Verified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
     <!--  Examples: Unverified · Last activity Yesterday at 6PM, Unverified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Unverified · Your current session</string>
     <!--  Example: Inactive for 90+ days (Dec 25, 2021) -->
     <plurals name="device_manager_other_sessions_description_inactive">
         <item quantity="one">Inactive for %1$d+ day (%2$s)</item>
@@ -3296,6 +3295,10 @@
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
+    <string name="device_manager_session_rename">Rename session</string>
+    <string name="device_manager_session_rename_edit_hint">Session name</string>
+    <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
+    <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

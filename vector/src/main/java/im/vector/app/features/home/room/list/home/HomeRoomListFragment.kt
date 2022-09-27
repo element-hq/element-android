@@ -83,6 +83,13 @@ class HomeRoomListFragment :
         setupRecyclerView()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(HomeRoomListAction.DeleteAllLocalRoom)
+    }
+
     private fun setupObservers() {
         sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
         sharedQuickActionsViewModel
@@ -145,12 +152,10 @@ class HomeRoomListFragment :
             headersController.submitData(it)
         }
 
-        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList) { roomsListLive ->
-            roomsListLive?.observe(viewLifecycleOwner) { roomsList ->
-                roomsController.submitList(roomsList)
-                if (roomsList.isEmpty()) {
-                    roomsController.requestForcedModelBuild()
-                }
+        roomListViewModel.roomsLivePagedList.observe(viewLifecycleOwner) { roomsList ->
+            roomsController.submitList(roomsList)
+            if (roomsList.isEmpty()) {
+                roomsController.requestForcedModelBuild()
             }
         }
 

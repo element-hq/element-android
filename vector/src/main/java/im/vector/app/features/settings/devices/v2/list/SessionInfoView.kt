@@ -49,6 +49,7 @@ class SessionInfoView @JvmOverloads constructor(
     }
 
     val viewDetailsButton = views.sessionInfoViewDetailsButton
+    val viewVerifyButton = views.sessionInfoVerifySessionButton
 
     fun render(
             sessionInfoViewState: SessionInfoViewState,
@@ -61,6 +62,7 @@ class SessionInfoView @JvmOverloads constructor(
                 sessionInfoViewState.deviceFullInfo.roomEncryptionTrustLevel,
                 sessionInfoViewState.isCurrentSession,
                 sessionInfoViewState.isLearnMoreLinkVisible,
+                sessionInfoViewState.isVerifyButtonVisible,
         )
         renderDeviceLastSeenDetails(
                 sessionInfoViewState.deviceFullInfo.isInactive,
@@ -77,12 +79,13 @@ class SessionInfoView @JvmOverloads constructor(
             encryptionTrustLevel: RoomEncryptionTrustLevel,
             isCurrentSession: Boolean,
             hasLearnMoreLink: Boolean,
+            isVerifyButtonVisible: Boolean,
     ) {
         views.sessionInfoVerificationStatusImageView.render(encryptionTrustLevel)
         if (encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted) {
             renderCrossSigningVerified(isCurrentSession)
         } else {
-            renderCrossSigningUnverified(isCurrentSession)
+            renderCrossSigningUnverified(isCurrentSession, isVerifyButtonVisible)
         }
         if (hasLearnMoreLink) {
             appendLearnMoreToVerificationStatus()
@@ -119,7 +122,7 @@ class SessionInfoView @JvmOverloads constructor(
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
-    private fun renderCrossSigningUnverified(isCurrentSession: Boolean) {
+    private fun renderCrossSigningUnverified(isCurrentSession: Boolean, isVerifyButtonVisible: Boolean) {
         views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
         views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
         val statusResId = if (isCurrentSession) {
@@ -128,7 +131,7 @@ class SessionInfoView @JvmOverloads constructor(
             R.string.device_manager_verification_status_detail_other_session_unverified
         }
         views.sessionInfoVerificationStatusDetailTextView.text = context.getString(statusResId)
-        views.sessionInfoVerifySessionButton.isVisible = true
+        views.sessionInfoVerifySessionButton.isVisible = isVerifyButtonVisible
     }
 
     // TODO. We don't have this info yet. Update later accordingly.

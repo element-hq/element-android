@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +47,7 @@ class OtherSessionsFragment :
         OtherSessionsView.Callback {
 
     private val viewModel: OtherSessionsViewModel by fragmentViewModel()
+    private val args: OtherSessionsArgs by args()
 
     @Inject lateinit var colorProvider: ColorProvider
 
@@ -57,7 +59,7 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.otherSessionsToolbar).allowBack()
+        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
         observeViewEvents()
         initFilterView()
     }
@@ -85,6 +87,10 @@ class OtherSessionsFragment :
         }
 
         views.deviceListOtherSessions.callback = this
+
+        if (args.defaultFilter != DeviceManagerFilterType.ALL_SESSIONS) {
+            viewModel.handle(OtherSessionsAction.FilterDevices(args.defaultFilter))
+        }
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {

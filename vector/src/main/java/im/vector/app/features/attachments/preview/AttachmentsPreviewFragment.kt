@@ -169,11 +169,11 @@ class AttachmentsPreviewFragment :
         )
     }
 
-    @Suppress("DEPRECATION")
     private fun applyInsets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activity?.window?.setDecorFitsSystemWindows(false)
         } else {
+            @Suppress("DEPRECATION")
             view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
         ViewCompat.setOnApplyWindowInsetsListener(views.attachmentPreviewerBottomContainer) { v, insets ->

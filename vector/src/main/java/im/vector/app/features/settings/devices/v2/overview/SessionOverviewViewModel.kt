@@ -21,19 +21,26 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.devices.v2.IsCurrentSessionUseCase
+import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        session: Session,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val isCurrentSessionUseCase: IsCurrentSessionUseCase,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
-) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
+        private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
+) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(initialState) {
 
     companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> by hiltMavericksViewModelFactory()
 
@@ -43,12 +50,15 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
-        val currentDeviceId = session.sessionParams.deviceId.orEmpty()
         setState {
-            copy(isCurrentSession = deviceId.isNotEmpty() && deviceId == currentDeviceId)
+            copy(isCurrentSession = isCurrentSession(deviceId))
         }
-
         observeSessionInfo(initialState.deviceId)
+        observeCurrentSessionInfo()
+    }
+
+    private fun isCurrentSession(deviceId: String): Boolean {
+        return isCurrentSessionUseCase.execute(deviceId)
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -57,7 +67,45 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    private fun observeCurrentSessionInfo() {
+        activeSessionHolder.getSafeActiveSession()
+                ?.sessionParams
+                ?.deviceId
+                ?.let { deviceId ->
+                    getDeviceFullInfoUseCase.execute(deviceId)
+                            .map { it.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted }
+                            .distinctUntilChanged()
+                            .onEach { setState { copy(isCurrentSessionTrusted = it) } }
+                            .launchIn(viewModelScope)
+                }
+    }
+
     override fun handle(action: SessionOverviewAction) {
-        TODO("Implement when adding the first action")
+        when (action) {
+            is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
+        }
+    }
+
+    private fun handleVerifySessionAction() = withState { viewState ->
+        if (viewState.isCurrentSession) {
+            handleVerifyCurrentSession()
+        } else {
+            handleVerifyOtherSession(viewState.deviceId)
+        }
+    }
+
+    private fun handleVerifyCurrentSession() {
+        viewModelScope.launch {
+            val currentSessionCanBeVerified = checkIfCurrentSessionCanBeVerifiedUseCase.execute()
+            if (currentSessionCanBeVerified) {
+                _viewEvents.post(SessionOverviewViewEvent.ShowVerifyCurrentSession)
+            } else {
+                _viewEvents.post(SessionOverviewViewEvent.PromptResetSecrets)
+            }
+        }
+    }
+
+    private fun handleVerifyOtherSession(deviceId: String) {
+        _viewEvents.post(SessionOverviewViewEvent.ShowVerifyOtherSession(deviceId))
     }
 }

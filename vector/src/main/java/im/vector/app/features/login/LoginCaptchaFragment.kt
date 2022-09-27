@@ -144,7 +144,6 @@ class LoginCaptchaFragment :
                 // runOnUiThread(Runnable { finish() })
             }
 
-            @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
 
