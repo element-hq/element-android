@@ -2220,6 +2220,7 @@
 
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
     <string name="command_description_lenny">Prepends ( ͡° ͜ʖ ͡°) to a plain-text message</string>
+    <string name="command_description_table_flip">Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>
     <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>

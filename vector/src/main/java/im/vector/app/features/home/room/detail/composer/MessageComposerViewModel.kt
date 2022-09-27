@@ -366,6 +366,11 @@ class MessageComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
+                        is ParsedCommand.SendTableFlip -> {
+                            sendPrefixedMessage("(╯°□°）╯︵ ┻━┻", parsedCommand.message, state.rootThreadEventId)
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
+                        }
                         is ParsedCommand.SendChatEffect -> {
                             sendChatEffect(parsedCommand)
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
