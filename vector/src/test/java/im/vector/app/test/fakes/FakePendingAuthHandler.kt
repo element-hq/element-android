@@ -18,8 +18,9 @@ package im.vector.app.test.fakes
 
 import im.vector.app.features.auth.PendingAuthHandler
 import io.mockk.mockk
+import io.mockk.spyk
 
 class FakePendingAuthHandler {
 
-    val instance = mockk<PendingAuthHandler>()
+    val instance = spyk(mockk<PendingAuthHandler>())
 }

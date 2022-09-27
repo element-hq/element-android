@@ -44,6 +44,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -53,6 +54,7 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 
@@ -322,6 +324,31 @@ class SessionOverviewViewModelTest {
     }
 
     @Test
+    fun `given another session and reAuth is needed during signout when handling signout action then requestReAuth is sent and pending auth is stored`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val reAuthNeeded = givenSignoutReAuthNeeded(A_SESSION_ID_1)
+        val signoutAction = SessionOverviewAction.SignoutSession
+        givenCurrentSessionIsTrusted()
+        val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
+        val expectedReAuthEvent = SessionOverviewViewEvent.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(signoutAction)
+
+        // Then
+        viewModelTest
+                .assertEvent { it == expectedReAuthEvent }
+                .finish()
+        fakePendingAuthHandler.instance.pendingAuth shouldBeEqualTo expectedPendingAuth
+        fakePendingAuthHandler.instance.uiaContinuation shouldBeEqualTo reAuthNeeded.uiaContinuation
+    }
+
+    @Test
     fun `given SSO auth has been done when handling ssoAuthDone action then corresponding method of pending auth handler is called`() {
         // Given
         val deviceFullInfo = mockk<DeviceFullInfo>()
@@ -397,6 +424,27 @@ class SessionOverviewViewModelTest {
             secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
             Result.success(Unit)
         }
+    }
+
+    private fun givenSignoutReAuthNeeded(deviceId: String): SignoutSessionResult.ReAuthNeeded {
+        val interceptor = slot<UserInteractiveAuthInterceptor>()
+        val flowResponse = mockk<RegistrationFlowResponse>()
+        every { flowResponse.session } returns A_SESSION_ID_1
+        val errorCode = "errorCode"
+        val promise = mockk<Continuation<UIABaseAuth>>()
+        val reAuthNeeded = SignoutSessionResult.ReAuthNeeded(
+                pendingAuth = mockk(),
+                uiaContinuation = promise,
+                flowResponse = flowResponse,
+                errCode = errorCode,
+        )
+        every { interceptSignoutFlowResponseUseCase.execute(flowResponse, errorCode, promise) } returns reAuthNeeded
+        coEvery { signoutSessionUseCase.execute(deviceId, capture(interceptor)) } coAnswers {
+            secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
+            Result.success(Unit)
+        }
+
+        return reAuthNeeded
     }
 
     private fun givenSignoutError(deviceId: String, error: Throwable) {

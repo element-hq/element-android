@@ -94,7 +94,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 }
     }
 
-    // TODO add unit tests
     override fun handle(action: SessionOverviewAction) {
         when (action) {
             is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
@@ -128,7 +127,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
         _viewEvents.post(SessionOverviewViewEvent.ShowVerifyOtherSession(deviceId))
     }
 
-    // TODO add unit tests
     private fun handleSignoutSession() = withState { state ->
         if (state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
             handleSignoutCurrentSession()
