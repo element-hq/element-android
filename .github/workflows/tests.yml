@@ -31,6 +31,9 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
       - uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          gradle-home-cache-cleanup: ${{ github.ref == 'refs/heads/develop' }}
 
       - name: Run screenshot tests
         run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
