@@ -31,6 +31,7 @@ class PaparazziExampleScreenshotTest {
     val paparazzi = Paparazzi(
             deviceConfig = PIXEL_3,
             theme = "Theme.Vector.Light",
+            maxPercentDifference = 0.0,
     )
 
     @Test
