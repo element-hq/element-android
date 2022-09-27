@@ -42,6 +42,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
 import org.junit.After
 import org.junit.Before
@@ -59,6 +60,7 @@ private const val A_SESSION_ID_1 = "session-id-1"
 private const val A_SESSION_ID_2 = "session-id-2"
 private const val AUTH_ERROR_MESSAGE = "auth-error-message"
 private const val AN_ERROR_MESSAGE = "error-message"
+private const val A_PASSWORD = "password"
 
 class SessionOverviewViewModelTest {
 
@@ -317,6 +319,72 @@ class SessionOverviewViewModelTest {
                 )
                 .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
                 .finish()
+    }
+
+    @Test
+    fun `given SSO auth has been done when handling ssoAuthDone action then corresponding method of pending auth handler is called`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val action = SessionOverviewAction.SsoAuthDone
+        givenCurrentSessionIsTrusted()
+        every { fakePendingAuthHandler.instance.ssoAuthDone() } just runs
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(action)
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.ssoAuthDone()
+        }
+    }
+
+    @Test
+    fun `given password auth has been done when handling passwordAuthDone action then corresponding method of pending auth handler is called`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val action = SessionOverviewAction.PasswordAuthDone(password = A_PASSWORD)
+        givenCurrentSessionIsTrusted()
+        every { fakePendingAuthHandler.instance.passwordAuthDone(any()) } just runs
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(action)
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.passwordAuthDone(A_PASSWORD)
+        }
+    }
+
+    @Test
+    fun `given reAuth has been cancelled when handling reAuthCancelled action then corresponding method of pending auth handler is called`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val action = SessionOverviewAction.ReAuthCancelled
+        givenCurrentSessionIsTrusted()
+        every { fakePendingAuthHandler.instance.reAuthCancelled() } just runs
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(action)
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.reAuthCancelled()
+        }
     }
 
     private fun givenSignoutSuccess(deviceId: String) {
