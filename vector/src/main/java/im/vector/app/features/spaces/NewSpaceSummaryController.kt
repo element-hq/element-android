@@ -72,7 +72,7 @@ class NewSpaceSummaryController @Inject constructor(
             text(host.stringProvider.getString(R.string.all_chats))
             selected(selected)
             countState(UnreadCounterBadgeView.State.Count(homeCount.totalCount, homeCount.isHighlight))
-            listener { host.callback?.onSpaceSelected(null) }
+            listener { host.callback?.onSpaceSelected(null, isSubSpace = false) }
         }
     }
 
@@ -99,7 +99,7 @@ class NewSpaceSummaryController @Inject constructor(
                         hasChildren(hasChildren)
                         matrixItem(spaceSummary.toMatrixItem())
                         onLongClickListener { host.callback?.onSpaceSettings(spaceSummary) }
-                        onSpaceSelectedListener { host.callback?.onSpaceSelected(spaceSummary) }
+                        onSpaceSelectedListener { host.callback?.onSpaceSelected(spaceSummary, isSubSpace = false) }
                         onToggleExpandListener { host.callback?.onToggleExpand(spaceSummary) }
                         selected(isSelected)
                     }
@@ -140,7 +140,7 @@ class NewSpaceSummaryController @Inject constructor(
             indent(depth)
             matrixItem(childSummary.toMatrixItem())
             onLongClickListener { host.callback?.onSpaceSettings(childSummary) }
-            onSubSpaceSelectedListener { host.callback?.onSpaceSelected(childSummary) }
+            onSubSpaceSelectedListener { host.callback?.onSpaceSelected(childSummary, isSubSpace = true) }
             onToggleExpandListener { host.callback?.onToggleExpand(childSummary) }
             selected(isSelected)
         }
@@ -184,8 +184,10 @@ class NewSpaceSummaryController @Inject constructor(
         }
     }
 
+    /**
+     * This is a full duplicate of [SpaceSummaryController.Callback]. We need to merge them ASAP*/
     interface Callback {
-        fun onSpaceSelected(spaceSummary: RoomSummary?)
+        fun onSpaceSelected(spaceSummary: RoomSummary?, isSubSpace: Boolean)
         fun onSpaceInviteSelected(spaceSummary: RoomSummary)
         fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onToggleExpand(spaceSummary: RoomSummary)
