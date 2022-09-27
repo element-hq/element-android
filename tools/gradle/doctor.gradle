@@ -1,4 +1,8 @@
 // Default configuration copied from https://runningcode.github.io/gradle-doctor/configuration/
+
+def isCiBuild = System.env.BUILDKITE == "true" || System.env.GITHUB_ACTIONS == "true"
+println "Is CI build: $isCiBuild"
+
 doctor {
     /**
      * Throw an exception when multiple Gradle Daemons are running.
@@ -50,7 +54,7 @@ doctor {
     /**
      * Warn when not using parallel GC. Parallel GC is faster for build type tasks and is no longer the default in Java 9+.
      */
-    warnWhenNotUsingParallelGC = true
+    warnWhenNotUsingParallelGC = !isCiBuild
     /**
      * Throws an error when the `Delete` or `clean` task has dependencies.
      * If a clean task depends on other tasks, clean can be reordered and made to run after the tasks that would produce
@@ -78,7 +82,7 @@ doctor {
         /**
          * Fail on any `JAVA_HOME` issues.
          */
-        failOnError.set(true)
+        failOnError.set(!isCiBuild)
         /**
          * Extra message text, if any, to show with the Gradle Doctor message. This is useful if you have a wiki page or
          * other instructions that you want to link for developers on your team if they encounter an issue.
