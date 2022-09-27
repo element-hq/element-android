@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.overview
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
@@ -49,11 +50,15 @@ import org.junit.Test
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 
 private const val A_SESSION_ID_1 = "session-id-1"
 private const val A_SESSION_ID_2 = "session-id-2"
+private const val AUTH_ERROR_MESSAGE = "auth-error-message"
+private const val AN_ERROR_MESSAGE = "error-message"
 
 class SessionOverviewViewModelTest {
 
@@ -246,6 +251,74 @@ class SessionOverviewViewModelTest {
         }
     }
 
+    @Test
+    fun `given another session and server error during signout when handling signout action then signout process is performed`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
+        givenSignoutError(A_SESSION_ID_1, serverError)
+        val signoutAction = SessionOverviewAction.SignoutSession
+        givenCurrentSessionIsTrusted()
+        val expectedViewState = SessionOverviewViewState(
+                deviceId = A_SESSION_ID_1,
+                isCurrentSessionTrusted = true,
+                deviceInfo = Success(deviceFullInfo),
+                isLoading = false,
+        )
+        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(signoutAction)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
+                .finish()
+    }
+
+    @Test
+    fun `given another session and unexpected error during signout when handling signout action then signout process is performed`() {
+        // Given
+        val deviceFullInfo = mockk<DeviceFullInfo>()
+        every { deviceFullInfo.isCurrentDevice } returns false
+        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
+        val error = Exception()
+        givenSignoutError(A_SESSION_ID_1, error)
+        val signoutAction = SessionOverviewAction.SignoutSession
+        givenCurrentSessionIsTrusted()
+        val expectedViewState = SessionOverviewViewState(
+                deviceId = A_SESSION_ID_1,
+                isCurrentSessionTrusted = true,
+                deviceInfo = Success(deviceFullInfo),
+                isLoading = false,
+        )
+        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(signoutAction)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
+                .finish()
+    }
+
     private fun givenSignoutSuccess(deviceId: String) {
         val interceptor = slot<UserInteractiveAuthInterceptor>()
         val flowResponse = mockk<RegistrationFlowResponse>()
@@ -256,6 +329,10 @@ class SessionOverviewViewModelTest {
             secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
             Result.success(Unit)
         }
+    }
+
+    private fun givenSignoutError(deviceId: String, error: Throwable) {
+        coEvery { signoutSessionUseCase.execute(deviceId, any()) } returns Result.failure(error)
     }
 
     private fun givenVerificationService(): FakeVerificationService {
