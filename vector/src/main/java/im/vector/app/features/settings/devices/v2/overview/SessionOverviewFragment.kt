@@ -207,7 +207,7 @@ class SessionOverviewFragment :
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
-                showLearnMoreInfoVerificationStatus(deviceFullInfo.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted)
+                showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted)
             }
         } else {
             views.sessionOverviewInfo.isVisible = false
