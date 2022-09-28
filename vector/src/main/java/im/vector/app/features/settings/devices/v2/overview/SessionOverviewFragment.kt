@@ -41,10 +41,10 @@ import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
-import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
