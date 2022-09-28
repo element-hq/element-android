@@ -77,6 +77,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
      */
     private fun testShareHistoryWithRoomVisibility(roomHistoryVisibility: RoomHistoryVisibility? = null) =
             runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+                val aliceMessageText = "Hello Bob, I am Alice!"
                 val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, roomHistoryVisibility)
 
                 val e2eRoomID = cryptoTestData.roomId
@@ -96,7 +97,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 assertEquals(bobRoomPOV.roomSummary()?.joinedMembersCount, 2)
                 Log.v("#E2E TEST", "Alice and Bob are in roomId: $e2eRoomID")
 
-                val aliceMessageId: String? = sendMessageInRoom(aliceRoomPOV, "Hello Bob, I am Alice!", testHelper)
+                val aliceMessageId: String? = sendMessageInRoom(aliceRoomPOV, aliceMessageText, testHelper)
                 Assert.assertTrue("Message should be sent", aliceMessageId != null)
                 Log.v("#E2E TEST", "Alice sent message to roomId: $e2eRoomID")
 
@@ -106,7 +107,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                         val timelineEvent = bobSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)
                         (timelineEvent != null &&
                                 timelineEvent.isEncrypted() &&
-                                timelineEvent.root.getClearType() == EventType.MESSAGE).also {
+                                timelineEvent.root.getClearType() == EventType.MESSAGE &&
+                                timelineEvent.root.mxDecryptionResult?.isSafe == true).also {
                             if (it) {
                                 Log.v("#E2E TEST", "Bob can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
                             }
@@ -142,7 +144,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                                 val timelineEvent = arisSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)
                                 (timelineEvent != null &&
                                         timelineEvent.isEncrypted() &&
-                                        timelineEvent.root.getClearType() == EventType.MESSAGE
+                                        timelineEvent.root.getClearType() == EventType.MESSAGE &&
+                                        timelineEvent.root.mxDecryptionResult?.isSafe == false
                                         ).also {
                                             if (it) {
                                                 Log.v("#E2E TEST", "Aris can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
@@ -377,7 +380,10 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     }
 
     private fun sendMessageInRoom(aliceRoomPOV: Room, text: String, testHelper: CommonTestHelper): String? {
-        return testHelper.sendTextMessage(aliceRoomPOV, text, 1).firstOrNull()?.eventId
+        return testHelper.sendTextMessage(aliceRoomPOV, text, 1).firstOrNull()?.let {
+            Log.v("#E2E TEST", "Message sent with session ${it.root.content?.get("session_id")}")
+            return it.eventId
+        }
     }
 
     private fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String, testHelper: CommonTestHelper) {

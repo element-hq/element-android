@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo015
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo016
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo017
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo018
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
@@ -48,7 +49,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,
 ) : MatrixRealmMigration(
         dbName = "Crypto",
-        schemaVersion = 17L,
+        schemaVersion = 18L,
 ) {
     /**
      * Forces all RealmCryptoStoreMigration instances to be equal.
@@ -75,5 +76,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         if (oldVersion < 15) MigrateCryptoTo015(realm).perform()
         if (oldVersion < 16) MigrateCryptoTo016(realm).perform()
         if (oldVersion < 17) MigrateCryptoTo017(realm).perform()
+        if (oldVersion < 18) MigrateCryptoTo018(realm).perform()
     }
 }

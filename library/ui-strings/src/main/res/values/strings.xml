@@ -2615,6 +2615,7 @@
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
+    <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
     <string name="review_logins">Review where you’re logged in</string>
     <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
