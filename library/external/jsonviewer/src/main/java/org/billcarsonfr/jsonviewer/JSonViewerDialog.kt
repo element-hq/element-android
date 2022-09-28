@@ -40,12 +40,13 @@ class JSonViewerDialog : DialogFragment() {
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
                     .replace(
-                            R.id.fragmentContainer, JSonViewerFragment.newInstance(
-                            args.jsonString,
-                            args.defaultOpenDepth,
-                            true,
-                            args.styleProvider
-                    )
+                            R.id.fragmentContainer,
+                            JSonViewerFragment.newInstance(
+                                    args.jsonString,
+                                    args.defaultOpenDepth,
+                                    true,
+                                    args.styleProvider
+                            )
                     )
                     .commitNow()
         }
