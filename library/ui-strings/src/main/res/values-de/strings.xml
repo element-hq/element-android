@@ -103,7 +103,7 @@
     <string name="notice_room_avatar_changed_by_you">Du hast das Bild des Raumes geändert</string>
     <string name="notice_room_name_changed_by_you">Du hast den Raumnamen zu %1$s geändert</string>
     <string name="notice_placed_video_call_by_you">Du hast einen Videoanruf gestartet.</string>
-    <string name="notice_placed_voice_call_by_you">Du hast einen Audioanruf gestartet.</string>
+    <string name="notice_placed_voice_call_by_you">Du hast einen Sprachanruf gestartet.</string>
     <string name="notice_answered_call_by_you">Du hast den Anruf angenommen.</string>
     <string name="notice_ended_call_by_you">Du hast den Anruf beendet.</string>
     <string name="notice_made_future_room_visibility_by_you">Du hast den zukünftigen Nachrichtenverlauf für %1$s sichtbar gemacht</string>
@@ -278,7 +278,7 @@
     <string name="join_room">Raum betreten</string>
     <string name="username">Benutzername</string>
     <string name="logout">Abmelden</string>
-    <string name="hs_url">Heimserver-Adresse</string>
+    <string name="hs_url">Heim-Server-Adresse</string>
     <string name="search">Suchen</string>
     <string name="start_voice_call">Sprachanruf starten</string>
     <string name="start_video_call">Videoanruf starten</string>
@@ -308,7 +308,7 @@
     <string name="call_error_user_not_responding">Die Gegenseite hat den Anruf nicht angenommen.</string>
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_record_audio">${app_name} benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">${app_name} benötigt die Berechtigung, auf Kamera und Mikrofon zu zugreifen, um Video-Anrufe durchzuführen.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} benötigt die Berechtigung, auf Kamera und Mikrofon zuzugreifen, um Videoanrufe durchzuführen.
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
     <string name="yes">Ja</string>
@@ -351,8 +351,8 @@
     <string name="settings_display_name">Anzeigename</string>
     <string name="settings_add_email_address">E-Mail-Adresse hinzufügen</string>
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
-    <string name="settings_app_info_link_summary">Appinfo in den Systemeinstellungen öffnen.</string>
-    <string name="settings_app_info_link_title">App-Info</string>
+    <string name="settings_app_info_link_summary">Anwendungsinformationen in den Systemeinstellungen anzeigen.</string>
+    <string name="settings_app_info_link_title">Anwendungsinformationen</string>
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account</string>
     <string name="settings_enable_this_device">Benachrichtigungen für diese Sitzung</string>
     <string name="settings_messages_in_one_to_one">Direktnachrichten</string>
@@ -366,7 +366,7 @@
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">OLM-Version</string>
     <string name="settings_app_term_conditions">Nutzungsbedingungen</string>
-    <string name="settings_third_party_notices">Nutzungshinweise von Drittanbietern</string>
+    <string name="settings_third_party_notices">Drittanbieter-Lizenzen</string>
     <string name="settings_copyright">Urheberrechtserklärung</string>
     <string name="settings_privacy_policy">Datenschutzerklärung</string>
     <string name="settings_clear_cache">Cache leeren</string>
@@ -390,8 +390,8 @@
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_title">Authentifizierung</string>
     <string name="settings_logged_in">Angemeldet als</string>
-    <string name="settings_home_server">Heimserver</string>
-    <string name="settings_identity_server">Identitätsserver</string>
+    <string name="settings_home_server">Heim-Server</string>
+    <string name="settings_identity_server">Identitäts-Server</string>
     <string name="account_email_validation_message">Bitte prüfe deinen E-Mail-Posteingang und klicke auf den in der E-Mail enthaltenen Link. Klicke anschließend auf Fortsetzen.</string>
     <string name="account_email_already_used_error">Diese E-Mail-Adresse wird bereits verwendet.</string>
     <string name="account_phone_number_already_used_error">Diese Telefonnummer wird bereits verwendet.</string>
@@ -412,8 +412,8 @@
     <string name="room_settings_banned_users_title">Verbannte Benutzer</string>
     <string name="room_settings_category_advanced_title">Erweitert</string>
     <string name="room_settings_room_internal_id">Interne ID dieses Raumes</string>
-    <string name="room_settings_labs_pref_title">Experimentelle Einstellungen</string>
-    <string name="room_settings_labs_warning_message">Dies sind experimentelle Funktionen, die in unerwarteter Weise Fehler verursachen können. Mit Vorsicht zu verwenden.</string>
+    <string name="room_settings_labs_pref_title">Labor</string>
+    <string name="room_settings_labs_warning_message">Dies sind experimentelle Funktionen, die in unerwarteter Weise Fehler verursachen können. Verwende sie mit Vorsicht.</string>
     <string name="room_settings_set_main_address">Als Hauptadresse setzen</string>
     <string name="room_settings_unset_main_address">Als Hauptadresse aufheben</string>
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
@@ -551,9 +551,9 @@
     <string name="dialog_user_consent_content">Um %1$s weiter zu verwenden, musst die Geschäftsbedingungen begutachten und ihnen zustimmen.</string>
     <string name="dialog_user_consent_submit">Jetzt prüfen</string>
     <string name="deactivate_account_title">Konto deaktivieren</string>
-    <string name="deactivate_account_content">Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird denselben Nutzernamen erneut registrieren können. Du verlässt automatisch alle Räume, in denen du bist, und deine Kontoangaben werden vom Identitätsserver gelöscht. <b>Diese Aktion ist unumkehrbar</b>.
+    <string name="deactivate_account_content">Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht anmelden können und keiner wird denselben Nutzernamen erneut registrieren können. Du verlässt automatisch alle Räume, in denen du bist, und deine Kontoangaben werden vom Identitäts-Server gelöscht. <b>Diese Aktion ist unumkehrbar</b>.
 \n
-\nDie Deaktivierung deines Konto wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die Option unten.
+\nDie Deaktivierung deines Kontos wird standardmäßig <b>keine deiner gesendeten Nachrichten löschen</b>. Wenn du möchtest, dass auch deine Nachrichten gelöscht werden, wähle zusätzlich die Option unten.
 \n
 \nDie Sichtbarkeit deiner Nachrichten ist ähnlich wie bei E-Mails: Wenn deine Nachrichten gelöscht werden, bedeutet dies, dass von dir verschickte Nachrichten nicht mit neuen oder unregistrierten Nutzer geteilt werden. Aber registrierte Nutzer, die bereits Zugang zu diesen Nachrichten haben, behalten weiterhin Zugriff auf ihre Kopie.</string>
     <string name="deactivate_account_delete_checkbox">Bitte alle Nachrichten, die ich gesendet habe, löschen, wenn mein Konto deaktiviert wird (Warnung: Unterhaltungen werden für zukünftige Nutzer unvollständig erscheinen)</string>
@@ -614,7 +614,7 @@
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
     <string name="settings_show_join_leave_messages_summary">Einladungen, Entfernungen und Verbannungen bleiben sichtbar.</string>
     <string name="settings_password">Passwort</string>
-    <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
+    <string name="settings_labs_native_camera_summary">Starte die Kamera des Systems anstelle der selbstdefinierten.</string>
     <string name="command_problem_with_parameters">Das Kommando \"%s\" braucht mehr Parameter oder einige Parameter sind inkorrekt.</string>
     <string name="markdown_has_been_enabled">Markdown wurde aktiviert.</string>
     <string name="markdown_has_been_disabled">Markdown wurde deaktiviert.</string>
@@ -934,7 +934,7 @@
     <string name="settings_background_fdroid_sync_mode_disabled">Keine Hintergrundsynchronisation</string>
     <string name="settings_discovery_category">Auffindbarkeit</string>
     <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
-    <string name="identity_server_not_defined">Du verwendest keinen Identitätsserver</string>
+    <string name="identity_server_not_defined">Du verwendest keinen Identitäts-Server</string>
     <string name="error_user_already_logged_in">Du versuchst anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchtest du dich abmelden\?</string>
     <string name="push_gateway_item_push_key">Push-Key:</string>
     <string name="push_gateway_item_app_display_name">App-Anzeigename:</string>
@@ -942,13 +942,13 @@
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="terms_description_for_identity_server">Für andere auffindbar sein</string>
     <string name="terms_description_for_integration_manager">Verwende Bots, Bridges, Widgets und Sticker-Pakete</string>
-    <string name="identity_server">Identitätsserver</string>
-    <string name="disconnect_identity_server">Verbindung zum Identitätsserver trennen</string>
-    <string name="add_identity_server">Identitätsserver konfigurieren</string>
-    <string name="change_identity_server">Identitätsserver ändern</string>
+    <string name="identity_server">Identitäts-Server</string>
+    <string name="disconnect_identity_server">Verbindung zum Identitäts-Server trennen</string>
+    <string name="add_identity_server">Identitäts-Server konfigurieren</string>
+    <string name="change_identity_server">Identitäts-Server ändern</string>
     <string name="settings_discovery_emails_title">Auffindbare E-Mail-Adressen</string>
     <string name="settings_discovery_no_mails">Erkennungsoptionen werden angezeigt, sobald du eine E-Mail hinzugefügt hast.</string>
-    <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
+    <string name="settings_discovery_enter_identity_server">Gib eine Identitäts-Server-Adresse ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Homeserver herstellen</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Homeserver nicht unter dieser URL erreichen. Bitte überprüfen</string>
@@ -986,15 +986,15 @@
     <string name="push_gateway_item_device_name">Sitzungsname:</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um vorhandene Kontakte zu finden und um von dir bekannten Kontakten gefunden zu werden.</string>
-    <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
+    <string name="settings_discovery_identity_server_info_none">Aktuell nutzt du keinen Identitäts-Server. Richte einen ein, um andere zu finden und selbst auffindbar zu sein.</string>
     <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
-    <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
-    <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
+    <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitäts-Servers ein</string>
+    <string name="settings_discovery_no_terms_title">Identitäts-Server hat keine Nutzungsbedingungen</string>
+    <string name="settings_discovery_no_terms">Der Identitäts-Server, den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du den Betreibenden des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
-    <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
-    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Heimservers akzeptiert hast.</string>
+    <string name="labs_allow_extended_logging_summary">Ausführliche Protokolle werden bei der Entwicklung der App helfen. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Heim-Servers akzeptiert hast.</string>
     <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
     <string name="settings_discovery_no_msisdn">Optionen zum Finden werden erscheinen, sobald du eine Telefonnummer hinzugefügt hast.</string>
@@ -1063,9 +1063,9 @@
     <string name="login_server_other_title">Andere</string>
     <string name="login_server_other_text">Benutzerdefinierte und erweiterte Einstellungen</string>
     <string name="login_continue">Fortfahren</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzern gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine E-Mail-Adressen oder Telefonnummern momentan auf dem Identitätsserver %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
-    <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitäts-Server würde bedeuten, dass du weder von anderen gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Du teilst deine E-Mail-Adressen oder Telefonnummern momentan auf dem Identitäts-Server %1$s. Du wirst dich erneut mit %2$s verbinden müssen, um mit dem Teilen aufzuhören.</string>
+    <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitäts-Servers (%s) zu, um per E-Mail-Adresse oder Telefonnummer auffindbar zu sein zu können.</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
     <string name="login_splash_text3">Erweitere und individualisiere dein Benutzererlebnis</string>
     <string name="login_connect_to">Mit %1$s verbinden</string>
@@ -1272,21 +1272,21 @@
     <string name="verification_code_notice">Vergleiche den Code mit dem Code auf dem Bildschirm deines Gegenübers.</string>
     <string name="verification_conclusion_ok_notice">Nachrichten mit diesem Gegenüber sind Ende-zu-Ende-verschlüsselt und können nicht von Dritten gelesen werden.</string>
     <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer sehen sie als vertrauenswürdig an.</string>
-    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
-    <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
-\nPrivate Schlüssel auf dem Gerät.</string>
-    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing ist aktiviert
+    <string name="encryption_information_cross_signing_state">Quersignierung</string>
+    <string name="encryption_information_dg_xsigning_complete">Quersignierung ist aktiviert,
+\nprivate Schlüssel auf dem Gerät.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Quersignierung ist aktiviert,
 \nSchlüssel sind vertrauenswürdig.
 \nPrivate Schlüssel sind nicht bekannt</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing ist aktiviert
+    <string name="encryption_information_dg_xsigning_not_trusted">Quersignierung ist aktiviert,
 \nSchlüssel sind nicht vertrauenswürdig</string>
-    <string name="encryption_information_dg_xsigning_disabled">Cross-Signing ist nicht aktiviert</string>
+    <string name="encryption_information_dg_xsigning_disabled">Quersignierung ist nicht aktiviert</string>
     <string name="settings_active_sessions_list">Aktive Sitzungen</string>
     <string name="settings_active_sessions_show_all">Alle Sitzungen anzeigen</string>
     <string name="settings_active_sessions_manage">Sitzungen verwalten</string>
     <string name="settings_active_sessions_signout_device">Diese Sitzung abmelden</string>
     <string name="settings_failed_to_get_crypto_device_info">Keine kryptografischen Informationen verfügbar</string>
-    <string name="settings_active_sessions_verified_device_desc">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, da du sie überprüft hast:</string>
+    <string name="settings_active_sessions_verified_device_desc">Diese Sitzung ist für sichere Kommunikation vertrauenswürdig, da du sie überprüft hast:</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifiziere diese Sitzung, um sie als vertrauenswürdig zu markieren, und gewähren ihr Zugriff auf verschlüsselte Nachrichten. Wenn du dich nicht bei dieser Sitzung angemeldet hast, ist dein Konto möglicherweise gefährdet:</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">Eine aktive Sitzung</item>
@@ -1301,10 +1301,10 @@
     <string name="room_member_profile_sessions_section_title">Sitzungen</string>
     <string name="trusted">Vertraut</string>
     <string name="not_trusted">Nicht vertraut</string>
-    <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
+    <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Kommunikation vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) hat sich in einer neuen Sitzung angemeldet:</string>
     <string name="verification_profile_device_untrust_info">Bis dieser Benutzer dieser Sitzung vertraut, werden an und von ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
-    <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
+    <string name="initialize_cross_signing">Quersignierung initialisieren</string>
     <string name="reset_cross_signing">Schlüssel zurücksetzen</string>
     <string name="a11y_qr_code_for_verification">QR-Code</string>
     <string name="qr_code_scanned_by_other_notice">Fast geschafft! Zeigt %s ein Häkchen\?</string>
@@ -1461,7 +1461,7 @@
     <string name="action_dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
-\nBitte den Administrator deines Heimservers, einen TURN-Server zu konfigurieren, damit Anrufe zuverlässig funktionieren.</string>
+\nBitte den Administrator deines Heim-Servers, einen TURN-Server zu konfigurieren, damit Anrufe zuverlässig funktionieren.</string>
     <string name="call_select_sound_device">Audiogerät auswählen</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Lautsprecher</string>
@@ -1555,20 +1555,20 @@
     <string name="choose_locale_other_locales_title">Andere verfügbare Sprachen</string>
     <string name="choose_locale_loading_locales">Lade verfügbare Sprachen…</string>
     <string name="open_terms_of">Öffne AGBs von %s</string>
-    <string name="disconnect_identity_server_dialog_content">Trenne Verbindung zu Identitätsserver %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Dieser Identitätsserver ist veraltet. ${app_name} unterstützt nur API V2.</string>
+    <string name="disconnect_identity_server_dialog_content">Verbindung zu Identitäts-Server %s trennen\?</string>
+    <string name="identity_server_error_outdated_identity_server">Dieser Identitäts-Server ist veraltet. ${app_name} unterstützt nur API V2.</string>
     <string name="identity_server_error_outdated_home_server">Diese Operation ist nicht möglich. Der Homeserver ist veraltet.</string>
-    <string name="identity_server_error_no_identity_server_configured">Bitte konfiguriere zuerst einen Identitätsserver.</string>
-    <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitätsservers in den Einstellungen.</string>
+    <string name="identity_server_error_no_identity_server_configured">Bitte konfiguriere zuerst einen Identitäts-Server.</string>
+    <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitäts-Servers in den Einstellungen.</string>
     <string name="identity_server_error_bulk_sha256_not_supported">Deiner Privatsphäre wegen unterstützt ${app_name} nur das Senden gehashter E-Mail-Adressen und Telefonnummern.</string>
     <string name="identity_server_error_binding_error">Die Assoziierung ist fehlgeschlagen.</string>
     <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Zuordnung.</string>
-    <string name="identity_server_set_default_notice">Dein Homeserver (%1$s) schlägt %2$s als Identitätsserver vor</string>
+    <string name="identity_server_set_default_notice">Dein Heim-Server (%1$s) schlägt %2$s als Identitäts-Server vor</string>
     <string name="identity_server_set_default_submit">Benutze %1$s</string>
-    <string name="identity_server_set_alternative_notice">Alternativ kannst du die URL eines beliebigen anderen Identitätsservers angeben</string>
-    <string name="identity_server_set_alternative_notice_no_default">Gib die URL von einem Identitätsserver ein</string>
-    <string name="identity_server_set_alternative_submit">Bestätigen</string>
-    <string name="power_level_edit_title">Lege Rolle fest</string>
+    <string name="identity_server_set_alternative_notice">Alternativ kannst du die URL eines beliebigen anderen Identitäts-Servers angeben</string>
+    <string name="identity_server_set_alternative_notice_no_default">Gib die Adresse eines Identitäts-Servers ein</string>
+    <string name="identity_server_set_alternative_submit">Absenden</string>
+    <string name="power_level_edit_title">Rolle festlegen</string>
     <string name="power_level_title">Rolle</string>
     <string name="a11y_open_chat">Unterhaltung öffnen</string>
     <string name="a11y_mute_microphone">Stelle Mikrophon stumm</string>
@@ -1747,7 +1747,7 @@
     <string name="start_chatting">Beginne eine Unterhaltung</string>
     <string name="settings_discovery_consent_action_give_consent">Autorisieren</string>
     <string name="settings_discovery_consent_action_revoke">Meine Zustimmung widerrufen</string>
-    <string name="settings_discovery_consent_notice_on">Du hast zugestimmt E-Mails und Telefonnummern an diesen Identitätsserver zu senden, um von anderen Nutzern entdeckt zu werden.</string>
+    <string name="settings_discovery_consent_notice_on">Du hast zugestimmt, E-Mail-Adressen und Telefonnummern an diesen Identitäts-Server zu übermitteln, um für andere auffindbar zu sein.</string>
     <string name="settings_discovery_consent_title">E-Mails und Telefonnummern senden</string>
     <string name="direct_room_user_list_suggestions_title">Vorschläge</string>
     <string name="direct_room_user_list_known_title">Bekannte Personen</string>
@@ -1794,7 +1794,7 @@
     <string name="create_room_alias_invalid">Manche Zeichen sind nicht zulässig</string>
     <string name="create_room_alias_empty">Bitte gib eine Raumadresse an</string>
     <string name="create_room_alias_already_in_use">Diese Adresse ist bereits vergeben</string>
-    <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Heimservers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
+    <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Heim-Servers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
     <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
@@ -1859,7 +1859,7 @@
     <string name="authentication_error">Authentifizierung fehlgeschlagen</string>
     <string name="re_authentication_default_confirm_text">Deine Anmeldeinformationen müssen für ${app_name} eingegeben werden, um diese Aktion auszuführen.</string>
     <string name="re_authentication_activity_title">Erneute Authentifizierung erforderlich</string>
-    <string name="failed_to_initialize_cross_signing">Cross-Signing konnte nicht eingerichtet werden</string>
+    <string name="failed_to_initialize_cross_signing">Quersignierung konnte nicht eingerichtet werden</string>
     <string name="error_unauthorized">Nicht autorisierte, fehlende gültige Authentifizierungsdaten</string>
     <string name="call_transfer_users_tab_title">Nutzer</string>
     <string name="call_transfer_failure">Beim Weiterleiten des Anrufs ist ein Fehler aufgetreten</string>
@@ -1917,7 +1917,7 @@
         <item quantity="other">%d Einträge</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">Die Obergrenze ist nicht bekannt.</string>
-    <string name="settings_server_upload_size_content">Dein Homeserver akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
+    <string name="settings_server_upload_size_content">Dein Heim-Server akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
     <string name="settings_server_upload_size_title">Datei-Upload-Obergrenze des Servers</string>
     <string name="settings_server_version">Serverversion</string>
     <string name="settings_server_name">Servername</string>
@@ -2086,7 +2086,7 @@
     <string name="a11y_pause_voice_message">Sprachnachricht pausieren</string>
     <string name="a11y_play_voice_message">Sprachnachricht abspielen</string>
     <string name="a11y_start_voice_message">Sprachnachricht aufnehmen</string>
-    <string name="room_using_unstable_room_version">Dieser Raum verwendet die Raumversion %s, die von diesem Heimserver als instabil markiert ist.</string>
+    <string name="room_using_unstable_room_version">Dieser Raum verwendet die Raumversion %s, die von diesem Heim-Server als instabil markiert ist.</string>
     <string name="upgrade_room_no_power_to_manage">Du benötigst die Berechtigung, um einen Raum upzugraden</string>
     <string name="upgrade_room_update_parent_space">Übergeordneten Space automatisch updaten</string>
     <string name="upgrade_room_auto_invite">Benutzer automatisch einladen</string>
@@ -2129,7 +2129,7 @@
         <item quantity="one">Verpasster Sprachanruf</item>
         <item quantity="other">%d verpasste Sprachanrufe</item>
     </plurals>
-    <string name="hs_client_url">Heimserver API URL</string>
+    <string name="hs_client_url">Heim-Server API URL</string>
     <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, erlaube bitte Zugriff aufs Mikrofon.</string>
     <string name="denied_permission_camera">Um fortzufahren, erlaube bitte in den Systemeinstellungen Zugriff auf die Kamera.</string>
     <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
@@ -2243,8 +2243,8 @@
     <string name="open_discovery_settings">Auffindungseinstellungen öffnen</string>
     <string name="shortcut_disabled_reason_sign_out">Sitzung abgemeldet!</string>
     <string name="shortcut_disabled_reason_room_left">Raum verlassen!</string>
-    <string name="login_error_homeserver_from_url_not_found_enter_manual">Heimserver auswählen</string>
-    <string name="login_error_homeserver_from_url_not_found">Es konnte kein Heimserver mit der Adresse %s gefunden werden. Bitte überprüfe die Adresse oder wähle den Heimserver manuell.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Heim-Server auswählen</string>
+    <string name="login_error_homeserver_from_url_not_found">Es konnte kein Heim-Server mit der Adresse %s gefunden werden. Bitte überprüfe die Adresse oder wähle den Heim-Server manuell.</string>
     <string name="space_add_space_to_any_space_you_manage">Untergeordneten Space hinzufügen.</string>
     <string name="identity_server_consent_dialog_content_question">Bist du dir wirklich sicher, dass du diese Informationen senden willst\?</string>
     <string name="identity_server_consent_dialog_title_2">E-Mail-Adressen und Telefonnummern an %s senden</string>
@@ -2259,9 +2259,9 @@
 \n%s kannst du alle unsere Bedingungen lesen.</string>
     <string name="create_spaces_invite_public_header_desc">Stelle sicher, dass die richtigen Personen Zugriff auf %s haben. Du kannst jederzeit weitere Personen einladen.</string>
     <string name="create_spaces_invite_public_header">Wer ist Mitglied deines Teams\?</string>
-    <string name="settings_discovery_no_policy_provided">Der Identitätsserver gibt keine Bedingungen an</string>
-    <string name="settings_discovery_hide_identity_server_policy_title">Bedingungen des Identitätsservers ausblenden</string>
-    <string name="settings_discovery_show_identity_server_policy_title">Bedingungen des Identitätsservers anzeigen</string>
+    <string name="settings_discovery_no_policy_provided">Der Identitäts-Server gibt keine Bedingungen an</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Richtlinie des Identitäts-Servers ausblenden</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Bedingungen des Identitäts-Servers anzeigen</string>
     <string name="preference_system_settings">Systemeinstellungen</string>
     <string name="preference_versions">Versionen</string>
     <string name="preference_help_summary">Erhalte Hilfe bei der Bedienung von ${app_name}</string>
@@ -2296,15 +2296,15 @@
     <string name="discovery_section">Auffindbarkeit (%s)</string>
     <string name="discovery_invite">Per E-Mail einladen, finde deine Kontakte und mehr…</string>
     <string name="finish_setting_up_discovery">Schließe die Konfiguration des Auffindbarkeitsdienstes ab.</string>
-    <string name="create_space_identity_server_info_none">Du verwendest derzeit keinen Identitätsserver. Um Teammitglieder einzuladen und für sie auffindbar zu sein, müssen du einen solchen Server konfigurieren.</string>
-    <string name="login_splash_already_have_account">Ich habe schon ein Konto</string>
-    <string name="ftue_auth_carousel_encrypted_title">Sichere Nachrichtenübertragung.</string>
-    <string name="ftue_auth_carousel_secure_title">Besitze deine Konversationen.</string>
-    <string name="identity_server_consent_dialog_content_3">Um bestehende Kontakte ermitteln zu können, müsst du Kontaktinformationen (E-Mails und Telefonnummern) an Ihren Identitätsserver senden. Wir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten.</string>
-    <string name="settings_discovery_consent_notice_off_2">Deine Kontakte sind privat. Um in deinen Kontakten Benutzer erkennen zu können, benötigen wir deine Erlaubnis, Kontaktinformationen an deinen Identitätsserver zu senden.</string>
+    <string name="create_space_identity_server_info_none">Du verwendest derzeit keinen Identitäts-Server. Um Team-Mitglieder einzuladen und für sie auffindbar zu sein, konfiguriere zunächst einen.</string>
+    <string name="login_splash_already_have_account">Ich habe bereits ein Konto</string>
+    <string name="ftue_auth_carousel_encrypted_title">Sichere Kommunikation.</string>
+    <string name="ftue_auth_carousel_secure_title">Besitze deine Unterhaltungen.</string>
+    <string name="identity_server_consent_dialog_content_3">Um bestehende Kontakte ermitteln zu können, musst du Kontaktinformationen (E-Mail-Adressen und Telefonnummern) an deinen Identitäts-Server übermitteln. Wir verschlüsseln deine Daten vor der Übermittlung, um den Datenschutz gewährleisten zu können.</string>
+    <string name="settings_discovery_consent_notice_off_2">Deine Kontakte sind privat. Um unter deinen Kontakten Matrix-Nutzer finden zu können, benötigen wir deine Erlaubnis, Kontaktinformationen an deinen Identitäts-Server zu übermitteln.</string>
     <string name="legals_no_policy_provided">Dieser Server stellt keine Richtlinie bereit.</string>
-    <string name="legals_identity_server_title">Deine Identitätsserver-Richtlinie</string>
-    <string name="legals_home_server_title">Deine Heimserver Richtlinie</string>
+    <string name="legals_identity_server_title">Richtlinie deines Identitäts-Servers</string>
+    <string name="legals_home_server_title">Richtlinie deines Heim-Servers</string>
     <string name="legals_application_title">${app_name} Richtlinie</string>
     <string name="tooltip_attachment_poll">Abstimmung erstellen</string>
     <string name="tooltip_attachment_contact">Kontakte öffnen</string>
@@ -2340,10 +2340,10 @@
     <string name="edit_poll_title">Umfrage bearbeiten</string>
     <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
     <string name="login_splash_create_account">Konto erstellen</string>
-    <string name="ftue_auth_carousel_workplace_title">Nachrichtenaustausch für dein Team.</string>
+    <string name="ftue_auth_carousel_workplace_title">Kommunikation für dein Team.</string>
     <string name="ftue_auth_carousel_encrypted_body">Ende-zu-Ende-verschlüsselt und ohne Telefonnummer nutzbar. Keine Werbung oder Datenerfassung.</string>
-    <string name="ftue_auth_carousel_control_body">Wähle wo deine Gespräche liegen, für Kontrolle und Unabhängigkeit. Verbunden mit Matrix.</string>
-    <string name="ftue_auth_carousel_secure_body">Sichere und unabhängige Kommunikation, die für die gleiche Vertraulichkeit sorgt, wie ein Gespräch von Angesicht zu Angesicht in deinem eigenen Zuhause.</string>
+    <string name="ftue_auth_carousel_control_body">Wähle, wo deine Unterhaltungen gespeichert werden, um Kontrolle und Unabhängigkeit zu erhalten. Verbunden via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Sichere und unabhängige Kommunikation, die für eine Vertraulichkeit sorgt, wie ein Gespräch von Angesicht zu Angesicht in deinen eigenen vier Wänden.</string>
     <string name="attachment_type_location">Standort</string>
     <string name="encryption_misconfigured">Die Verschlüsselung ist fehlerhaft konfiguriert</string>
     <string name="contact_admin_to_restore_encryption">Bitte kontaktiere einen Admin, um die Verschlüsselung zurückzusetzen.</string>
@@ -2411,7 +2411,7 @@
     <string name="beta">BETA</string>
     <string name="give_feedback_threads">Rückmeldung geben</string>
     <string name="beta_title_bottom_sheet_action">BETA</string>
-    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_labs_enable_notice_title">Threads-Beta</string>
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <string name="call_start_screen_sharing">Bildschirm teilen</string>
     <string name="action_try_it_out">Probiere es aus</string>
@@ -2480,11 +2480,11 @@
     <string name="settings_presence">Präsenz</string>
     <string name="settings_autoplay_animated_images_summary">Animierte Bilder in der Zeitleiste abspielen, sobald sie sichtbar sind</string>
     <string name="settings_autoplay_animated_images_title">Animierte Bilder automatisch abspielen</string>
-    <string name="settings_troubleshoot_test_endpoint_registration_failed">Das Endpunkt-Token konnte nicht auf dem Heimserver registriert werden:
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Das Endpunkt-Token konnte nicht auf dem Heim-Server registriert werden:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpunkt erfolgreich beim Heimserver registriert.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpunkt erfolgreich beim Heim-Server registriert.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Endpunkt-Registrierung</string>
-    <string name="threads_labs_enable_notice_message">Dein Heimserver unterstützt derzeit keine Threads, daher kann diese Funktion evtl. nicht richtig funktionieren. Einige Nachrichten mit Threads sind möglicherweise nicht zuverlässig verfügbar. %sMöchtest Du Threads trotzdem aktivieren\?</string>
+    <string name="threads_labs_enable_notice_message">Dein Heim-Server unterstützt derzeit keine Threads, daher könnte diese Funktion evtl. nicht richtig funktionieren. Einige Nachrichten mit Threads sind möglicherweise nicht zuverlässig verfügbar. %sMöchtest Du Threads trotzdem aktivieren\?</string>
     <string name="threads_beta_enable_notice_message">Threads helfen dabei, Unterhaltungen beim Thema zu halten und leichter zu verfolgen. %sDie Aktivierung von Threads aktualisiert die App. Dies kann bei einigen Konten länger dauern.</string>
     <string name="threads_notice_migration_message">Wir nähern uns der Veröffentlichung einer öffentlichen Beta für Threads.
 \n
@@ -2506,7 +2506,7 @@
     <string name="a11y_presence_busy">Beschäftigt</string>
     <string name="settings_security_pin_code_use_biometrics_error">Die biometrische Authentifizierung konnte nicht aktiviert werden.</string>
     <string name="auth_biometric_key_invalidated_message">Die biometrische Authentifizierung wurde deaktiviert, weil kürzlich eine neue biometrische Authentifizierungsmethode hinzugefügt wurde. Du kannst sie in den Einstellungen wieder aktivieren.</string>
-    <string name="error_forbidden_digits_only_username">Der Heimserver akzeptiert keine Benutzernamen, die nur aus Ziffern bestehen.</string>
+    <string name="error_forbidden_digits_only_username">Der Heim-Server akzeptiert keine Benutzernamen, die nur aus Ziffern bestehen.</string>
     <string name="sent_live_location">teilten ihren Live-Standort</string>
     <string name="ftue_personalize_skip_this_step">Schritt überspringen</string>
     <string name="ftue_personalize_submit">Speichern und fortfahren</string>
@@ -2527,7 +2527,7 @@
     <string name="ftue_auth_terms_title">Server-Richtlinien</string>
     <string name="ftue_auth_email_verification_subtitle">Folge den Anweisungen, die an %s gesendet wurden</string>
     <string name="ftue_auth_email_verification_title">E-Mail bestätigen</string>
-    <string name="poll_undisclosed_not_ended">Ergebnisse sind nach Beenden der Abstimmung sichtbar</string>
+    <string name="poll_undisclosed_not_ended">Ergebnisse werden nach Abschluss der Abstimmung sichtbar sein</string>
     <string name="ftue_auth_reset_password_breaker_title">Prüfe deine E-Mails.</string>
     <string name="ftue_auth_reset_password">Passwort zurücksetzen</string>
     <string name="ftue_auth_new_password_subtitle">Gib mindestens 8 Zeichen ein.</string>
@@ -2550,12 +2550,12 @@
         <item quantity="one">%d Nachricht gelöscht</item>
         <item quantity="other">%d Nachrichten gelöscht</item>
     </plurals>
-    <string name="labs_enable_element_call_permission_shortcuts">Keine Element Call-Berechtigungsabfragen</string>
-    <string name="labs_enable_element_call_permission_shortcuts_summary">Bestätige automatisch Element Call-Widgets und erlaube Kamera- und Mikrofonzugriff</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Keine Element-Call-Berechtigungsabfragen</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Bestätige automatisch Element-Call-Widgets und erlaube Kamera- und Mikrofonzugriff</string>
     <string name="create_room_action_go">Los</string>
     <string name="ftue_auth_create_account_edit_server_selection">ändern</string>
     <string name="ftue_auth_create_account_sso_section_header">oder</string>
-    <string name="ftue_auth_sign_in_choose_server_header">Das Zuhause deiner Gespräche</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Der Ort, an dem deine Gespräche stattfinden</string>
     <string name="ftue_auth_create_account_choose_server_header">Das zukünftige Zuhause für deine Gespräche</string>
     <string name="font_size_use_system">Systemstandard nutzen</string>
     <string name="font_size_section_auto">Automatisch festlegen</string>
@@ -2565,9 +2565,9 @@
     <string name="auth_reset_password_error_unverified">E-Mail nicht bestätigt, prüfe deinen Posteingang</string>
     <string name="ftue_auth_welcome_back_title">Willkommen zurück!</string>
     <string name="ftue_auth_forgot_password">Passwort vergessen</string>
-    <string name="ftue_auth_login_username_entry">Benutzername / E-Mail / Telefon</string>
+    <string name="ftue_auth_login_username_entry">Nutzername / E-Mail-Adresse / Telefonnummer</string>
     <string name="ftue_auth_create_account_title">Erstelle dein Konto</string>
-    <string name="ftue_auth_choose_server_entry_hint">Serveradresse</string>
+    <string name="ftue_auth_choose_server_entry_hint">Server-URL</string>
     <string name="ftue_auth_choose_server_subtitle">Wie lautet die Adresse deines Servers\? Das wird eine Art Zuhause für deine Daten</string>
     <string name="ftue_auth_choose_server_sign_in_subtitle">Wie lautet die Adresse deines Servers\?</string>
     <string name="ftue_auth_create_account_password_entry_footer">Muss 8 oder mehr Zeichen umfassen</string>
@@ -2595,7 +2595,7 @@
     <string name="room_list_filter_favourites">Favoriten</string>
     <string name="room_list_filter_all">Alle</string>
     <string name="location_share_loading_map_error">Karte laden nicht möglich
-\nDieser Heimserver könnte für die Kartendarstellung nicht konfiguriert sein.</string>
+\nDieser Heim-Server könnte für die Kartendarstellung nicht konfiguriert sein.</string>
     <string name="a11y_open_settings">Einstellungen öffnen</string>
     <string name="verify_invalid_qr_notice">Dieser QR-Code ist fehlerhaft. Bitte versuche es mit einer anderen Methode.</string>
     <string name="crosssigning_cannot_verify_this_session_desc">Du wirst deinen verschlüsselten Nachrichtenverlauf nicht abrufen können. Um neu zu beginnen, setze deine Sicherung und Verifizierungsschlüssel zurück.</string>
