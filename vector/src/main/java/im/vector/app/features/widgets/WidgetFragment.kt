@@ -52,6 +52,7 @@ import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
+import im.vector.lib.core.utils.compat.resolveActivityCompat
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
@@ -264,7 +265,7 @@ class WidgetFragment :
                 val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
                 if (intent != null) {
                     val packageManager: PackageManager = context.packageManager
-                    val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                    val info = packageManager.resolveActivityCompat(intent, PackageManager.MATCH_DEFAULT_ONLY)
                     if (info != null) {
                         context.startActivity(intent)
                     } else {

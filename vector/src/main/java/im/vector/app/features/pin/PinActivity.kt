@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.lib.core.utils.compat.getParcelableCompat
 
 @AndroidEntryPoint
 class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), UnlockedActivity {
@@ -41,7 +42,7 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), UnlockedActivit
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: PinArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
+            val fragmentArgs: PinArgs = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG) ?: return
             addFragment(views.simpleFragmentContainer, PinFragment::class.java, fragmentArgs)
         }
     }

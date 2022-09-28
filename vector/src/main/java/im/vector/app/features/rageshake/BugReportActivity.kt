@@ -128,7 +128,7 @@ class BugReportActivity :
             val isValid = !views.bugReportMaskView.isVisible
 
             it.isEnabled = isValid
-            it.icon.alpha = if (isValid) 255 else 100
+            it.icon?.alpha = if (isValid) 255 else 100
         }
     }
 

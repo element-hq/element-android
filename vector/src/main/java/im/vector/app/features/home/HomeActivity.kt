@@ -86,6 +86,7 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -245,7 +246,7 @@ class HomeActivity :
                 }
                 .launchIn(lifecycleScope)
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
@@ -327,7 +328,7 @@ class HomeActivity :
     private fun migrateThreadsIfNeeded(checkSession: Boolean) {
         if (checkSession) {
             // We should check session to ensure we will only clear cache if needed
-            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
             if (args?.hasExistingSession == true) {
                 // existingSession --> Will be true only if we came from an existing active session
                 Timber.i("----> Migrating threads from an existing session..")
@@ -538,7 +539,7 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val parcelableExtra = intent?.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }

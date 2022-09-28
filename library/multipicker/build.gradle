@@ -35,9 +35,14 @@ android {
         }
     }
 
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
+    implementation project(":library:core-utils")
+
     api libs.androidx.activity
     implementation libs.androidx.exifinterface
     implementation libs.androidx.core

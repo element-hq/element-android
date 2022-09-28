@@ -43,6 +43,7 @@ import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRul
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,7 +59,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     val viewModel: RoomJoinRuleChooseRestrictedViewModel by viewModel()
 
     override fun initUiAndData() {
-        roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
+        roomProfileArgs = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
             addFragment(
                     views.simpleFragmentContainer,

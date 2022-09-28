@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.getPackageInfoCompat
 import javax.inject.Inject
 
 class ComputeUserAgentUseCase @Inject constructor(
@@ -44,7 +45,7 @@ class ComputeUserAgentUseCase @Inject constructor(
                     // Use appPackageName instead of appName if appName is null or contains any non-ASCII character
                     appPackageName
                 }
-        val appVersion = tryOrNull { pm.getPackageInfo(context.applicationContext.packageName, 0).versionName } ?: FALLBACK_APP_VERSION
+        val appVersion = tryOrNull { pm.getPackageInfoCompat(context.applicationContext.packageName, 0).versionName } ?: FALLBACK_APP_VERSION
 
         val deviceManufacturer = Build.MANUFACTURER
         val deviceModel = Build.MODEL

@@ -113,11 +113,11 @@ internal fun ViewPropertyAnimator.setAnimatorListener(
         onAnimationStart: ((Animator?) -> Unit)? = null
 ) = this.setListener(
         object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 onAnimationEnd?.invoke(animation)
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 onAnimationStart?.invoke(animation)
             }
         })

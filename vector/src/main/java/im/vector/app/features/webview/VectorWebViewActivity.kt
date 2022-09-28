@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorWebViewBinding
+import im.vector.lib.core.utils.compat.getSerializableCompat
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -79,7 +80,7 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
             setTitle(title)
         }
 
-        val webViewMode = intent.extras?.getSerializable(EXTRA_MODE) as WebViewMode
+        val webViewMode = intent.extras?.getSerializableCompat<WebViewMode>(EXTRA_MODE)!!
         val eventListener = webViewMode.eventListener(this, session)
         views.simpleWebview.webViewClient = VectorWebViewClient(eventListener)
         views.simpleWebview.webChromeClient = object : WebChromeClient() {
