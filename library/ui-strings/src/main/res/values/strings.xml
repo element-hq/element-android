@@ -3302,9 +3302,13 @@
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
     <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
-    <string name="device_manager_learn_more_session_verified">This session has logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means it holds encryption keys for your previous messages, and confirms to other users you are communicating with that the session is really you.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
+    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
