@@ -43,7 +43,6 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
-import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import javax.inject.Inject
 
 /**
@@ -82,7 +81,6 @@ class VectorSettingsDevicesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -153,24 +151,6 @@ class VectorSettingsDevicesFragment :
     override fun onDestroyView() {
         cleanUpLearnMoreButtonsListeners()
         super.onDestroyView()
-    }
-
-    private fun initLearnMoreButtons() {
-        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
-            showLearnMoreInfoOtherSessions()
-        }
-    }
-
-    private fun showLearnMoreInfoOtherSessions() {
-        val args = SessionLearnMoreBottomSheet.Args(
-                title = getString(R.string.device_manager_sessions_other_title),
-                description = buildString {
-                    append(getString(R.string.device_manager_learn_more_sessions_unverified))
-                    append("\n\n\n")
-                    append(getString(R.string.device_manager_learn_more_sessions_inactive))
-                },
-        )
-        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {
