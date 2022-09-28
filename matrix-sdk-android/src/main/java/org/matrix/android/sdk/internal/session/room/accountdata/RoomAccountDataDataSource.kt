@@ -19,23 +19,24 @@ package org.matrix.android.sdk.internal.session.room.accountdata
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.RealmQuery
+import androidx.lifecycle.asLiveData
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.database.RealmObjectMapper
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.mapper.AccountDataMapper
-import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.queryIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
 internal class RoomAccountDataDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val realmSessionProvider: RealmSessionProvider,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val accountDataMapper: AccountDataMapper
 ) {
 
@@ -55,8 +56,9 @@ internal class RoomAccountDataDataSource @Inject constructor(
      *
      */
     fun getAccountDataEvents(roomId: String?, types: Set<String>): List<RoomAccountDataEvent> {
-        return realmSessionProvider.withRealm { realm ->
-            buildRoomQuery(realm, roomId, types).findAll().flatMap { it.accountDataEvents(types) }
+        val realm = realmInstance.getBlockingRealm()
+        return buildRoomQuery(realm, roomId, types).find().flatMap {
+            it.accountDataEvents(types)
         }
     }
 
@@ -66,34 +68,35 @@ internal class RoomAccountDataDataSource @Inject constructor(
      *
      */
     fun getLiveAccountDataEvents(roomId: String?, types: Set<String>): LiveData<List<RoomAccountDataEvent>> {
-        val liveRoomEntity = monarchy.findAllManagedWithChanges {
+        val liveRoomEntity = realmInstance.queryResults {
             buildRoomQuery(it, roomId, types)
-        }
+        }.asLiveData()
         val resultLiveData = MediatorLiveData<List<RoomAccountDataEvent>>()
         resultLiveData.addSource(liveRoomEntity) { changeSet ->
-            val mappedResult = changeSet.realmResults.flatMap { it.accountDataEvents(types) }
+            val mappedResult = changeSet.list.flatMap { it.accountDataEvents(types) }
             resultLiveData.postValue(mappedResult)
         }
         return resultLiveData
     }
 
-    private fun buildRoomQuery(realm: Realm, roomId: String?, types: Set<String>): RealmQuery<RoomEntity> {
-        val query = realm.where(RoomEntity::class.java)
-        if (roomId != null) {
-            query.equalTo(RoomEntityFields.ROOM_ID, roomId)
-        }
-        query.isNotEmpty(RoomEntityFields.ACCOUNT_DATA.`$`)
-        if (types.isNotEmpty()) {
-            query.`in`(RoomEntityFields.ACCOUNT_DATA.TYPE, types.toTypedArray())
-        }
-        return query
+    private fun buildRoomQuery(realm: TypedRealm, roomId: String?, types: Set<String>): RealmQuery<RoomEntity> {
+        return realm.query(RoomEntity::class)
+                .andIf(roomId != null) {
+                    query("roomId == $0", roomId!!)
+                }
+                .query("accountData.@count > 0")
+                .andIf(types.isNotEmpty()) {
+                    queryIn("accountData.type", types)
+                }
     }
 
     private fun RoomEntity.accountDataEvents(types: Set<String>): List<RoomAccountDataEvent> {
-        val query = accountData.where()
-        if (types.isNotEmpty()) {
-            query.`in`(RoomAccountDataEntityFields.TYPE, types.toTypedArray())
+        return if (types.isNotEmpty()) {
+            accountData.filter { types.contains(it.type) }
+        } else {
+            accountData
+        }.map {
+            accountDataMapper.map(roomId, it)
         }
-        return query.findAll().map { accountDataMapper.map(roomId, it) }
     }
 }

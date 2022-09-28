@@ -52,11 +52,25 @@ internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
 
 internal fun <T : RealmObject> RealmQuery<T>.queryIn(
         field: String,
+        values: Set<String>
+): RealmQuery<T> {
+    return queryIn(field, values.toList())
+}
+
+internal fun <T : RealmObject> RealmQuery<T>.queryIn(
+        field: String,
         values: List<String>
 ): RealmQuery<T> {
     if (values.isEmpty()) return this
     val filter = buildQueryInFilter(field, values)
     return query(filter)
+}
+
+internal fun <T : RealmObject> RealmQuery<T>.queryNotIn(
+        field: String,
+        values: Set<String>
+): RealmQuery<T> {
+    return queryNotIn(field, values.toList())
 }
 
 internal fun <T : RealmObject> RealmQuery<T>.queryNotIn(

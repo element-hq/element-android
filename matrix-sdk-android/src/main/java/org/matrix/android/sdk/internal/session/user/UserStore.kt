@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.user
 
-import com.zhuinden.monarchy.Monarchy
+import io.realm.kotlin.UpdatePolicy
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.UserEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface UserStore {
@@ -29,26 +29,30 @@ internal interface UserStore {
     suspend fun updateDisplayName(userId: String, displayName: String? = null)
 }
 
-internal class RealmUserStore @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : UserStore {
+internal class RealmUserStore @Inject constructor(@SessionDatabase private val realmInstance: RealmInstance) : UserStore {
 
     override suspend fun createOrUpdate(userId: String, displayName: String?, avatarUrl: String?) {
-        monarchy.awaitTransaction {
-            val userEntity = UserEntity(userId, displayName ?: "", avatarUrl ?: "")
-            it.insertOrUpdate(userEntity)
+        realmInstance.write {
+            val userEntity = UserEntity().apply {
+                this.userId = userId
+                this.displayName = displayName ?: ""
+                this.avatarUrl = avatarUrl ?: ""
+            }
+            copyToRealm(userEntity, UpdatePolicy.ALL)
         }
     }
 
     override suspend fun updateAvatar(userId: String, avatarUrl: String?) {
-        monarchy.awaitTransaction { realm ->
-            UserEntity.where(realm, userId).findFirst()?.let {
+        realmInstance.write {
+            UserEntity.where(this, userId).first().find()?.let {
                 it.avatarUrl = avatarUrl ?: ""
             }
         }
     }
 
     override suspend fun updateDisplayName(userId: String, displayName: String?) {
-        monarchy.awaitTransaction { realm ->
-            UserEntity.where(realm, userId).findFirst()?.let {
+        realmInstance.write {
+            UserEntity.where(this, userId).first().find()?.let {
                 it.displayName = displayName ?: ""
             }
         }

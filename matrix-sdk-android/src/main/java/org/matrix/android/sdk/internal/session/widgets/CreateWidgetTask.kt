@@ -16,12 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.widgets
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.query.whereStateKey
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -42,7 +41,7 @@ internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, String> {
 }
 
 internal class DefaultCreateWidgetTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomAPI: RoomAPI,
         @UserId private val userId: String,
         private val globalErrorReceiver: GlobalErrorReceiver
@@ -57,11 +56,10 @@ internal class DefaultCreateWidgetTask @Inject constructor(
                     params = params.content
             )
         }
-        awaitNotEmptyResult(monarchy.realmConfiguration, 30_000L) {
+        awaitNotEmptyResult(realmInstance, 30_000L) {
             CurrentStateEventEntity
                     .whereStateKey(it, params.roomId, type = EventType.STATE_ROOM_WIDGET_LEGACY, stateKey = params.widgetId)
-                    .and()
-                    .equalTo(CurrentStateEventEntityFields.ROOT.SENDER, userId)
+                    .query("root.sender == $0", userId)
         }
         return response.eventId.also {
             Timber.d("Widget state event: $it just sent in room ${params.roomId}")

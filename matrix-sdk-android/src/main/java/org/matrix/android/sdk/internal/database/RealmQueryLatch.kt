@@ -21,9 +21,11 @@ import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
+import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
@@ -57,6 +59,18 @@ internal suspend fun <T> awaitNotEmptyResult(
                     throw e
                 }
             }
+        }
+    }
+}
+
+internal suspend fun <T : RealmObject> awaitNotEmptyResult(
+        realmInstance: RealmInstance,
+        timeoutMillis: Long,
+        builder: RealmQueryBuilder<T>
+) {
+    withTimeout(timeoutMillis) {
+        realmInstance.queryResults(builder).first {
+            it.list.isNotEmpty()
         }
     }
 }

@@ -17,107 +17,85 @@
 package org.matrix.android.sdk.internal.session.user
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.paging.DataSource
-import androidx.paging.LivePagedListBuilder
+import androidx.lifecycle.asLiveData
 import androidx.paging.PagedList
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Case
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntityFields
 import org.matrix.android.sdk.internal.database.model.UserEntity
 import org.matrix.android.sdk.internal.database.model.UserEntityFields
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.queryNotIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.util.mapOptional
 import javax.inject.Inject
 
 internal class UserDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val realmSessionProvider: RealmSessionProvider
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) {
 
-    private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
-        monarchy.createDataSourceFactory { realm ->
-            realm.where(UserEntity::class.java)
-                    .isNotEmpty(UserEntityFields.USER_ID)
-                    .sort(UserEntityFields.DISPLAY_NAME)
-        }
+    private fun mapUser(userEntity: UserEntity): User {
+        return userEntity.asDomain()
     }
 
-    private val domainDataSourceFactory: DataSource.Factory<Int, User> by lazy {
-        realmDataSourceFactory.map {
-            it.asDomain()
-        }
-    }
-
-    private val livePagedListBuilder: LivePagedListBuilder<Int, User> by lazy {
-        LivePagedListBuilder(domainDataSourceFactory, PagedList.Config.Builder().setPageSize(100).setEnablePlaceholders(false).build())
+    private val pagedListConfig by lazy {
+        PagedList.Config.Builder().setPageSize(100).setEnablePlaceholders(false).build()
     }
 
     fun getUser(userId: String): User? {
-        return realmSessionProvider.withRealm {
-            val userEntity = UserEntity.where(it, userId).findFirst()
-            userEntity?.asDomain()
-        }
+        val realm = realmInstance.getBlockingRealm()
+        return UserEntity.where(realm, userId)
+                .first()
+                .find()
+                ?.asDomain()
     }
 
     fun getUserLive(userId: String): LiveData<Optional<User>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { UserEntity.where(it, userId) },
-                { it.asDomain() }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
+        return realmInstance.queryFirst {
+            UserEntity.where(it, userId).first()
         }
+                .mapOptional(this::mapUser)
+                .asLiveData()
     }
 
     fun getUsersLive(): LiveData<List<User>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    realm.where(UserEntity::class.java)
-                            .isNotEmpty(UserEntityFields.USER_ID)
-                            .sort(UserEntityFields.DISPLAY_NAME)
-                },
-                { it.asDomain() }
-        )
+        return realmInstance.queryList(this::mapUser) { realm ->
+            realm.query(UserEntity::class)
+                    .query("userId != ''")
+                    .sort("displayName")
+        }.asLiveData()
     }
 
     fun getPagedUsersLive(filter: String?, excludedUserIds: Set<String>?): LiveData<PagedList<User>> {
-        realmDataSourceFactory.updateQuery { realm ->
-            val query = realm.where(UserEntity::class.java)
-            if (filter.isNullOrEmpty()) {
-                query.isNotEmpty(UserEntityFields.USER_ID)
+        return realmInstance.queryPagedList(pagedListConfig, this::mapUser) { realm ->
+            var query = realm.query(UserEntity::class)
+            query = if (filter.isNullOrEmpty()) {
+                query.query("userId != ''")
             } else {
-                query
-                        .beginGroup()
-                        .contains(UserEntityFields.DISPLAY_NAME, filter, Case.INSENSITIVE)
-                        .or()
-                        .contains(UserEntityFields.USER_ID, filter)
-                        .endGroup()
+                query.query("displayName CONTAINS[c] $0 OR userId CONTAINS $1", filter, filter)
             }
             excludedUserIds
                     ?.takeIf { it.isNotEmpty() }
                     ?.let {
-                        query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
+                        query = query.queryNotIn("userId", it)
                     }
             query.sort(UserEntityFields.DISPLAY_NAME)
-        }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
+        }.asLiveData()
     }
 
     fun getIgnoredUsersLive(): LiveData<List<User>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    realm.where(IgnoredUserEntity::class.java)
-                            .isNotEmpty(IgnoredUserEntityFields.USER_ID)
-                            .sort(IgnoredUserEntityFields.USER_ID)
-                },
-                { getUser(it.userId) ?: User(userId = it.userId) }
-        )
+
+        fun mapper(ignoredUserEntity: IgnoredUserEntity): User {
+            return getUser(ignoredUserEntity.userId) ?: User(userId = ignoredUserEntity.userId)
+        }
+
+        return realmInstance.queryList(::mapper) { realm ->
+            realm.query(IgnoredUserEntity::class)
+                    .query("userId != ''")
+                    .sort(IgnoredUserEntityFields.USER_ID)
+        }.asLiveData()
     }
 }
