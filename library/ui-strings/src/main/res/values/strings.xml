@@ -3291,6 +3291,8 @@
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
+    <string name="device_manager_push_notifications_title">Push notifications</string>
+    <string name="device_manager_push_notifications_description">Receive push notifications on this session.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
