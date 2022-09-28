@@ -92,6 +92,21 @@ internal class InboundGroupSessionStore @Inject constructor(
     }
 
     @Synchronized
+    fun updateToSafe(old: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
+        Timber.tag(loggerTag.value).v("## updateToSafe for session ${old.wrapper.roomId}-${old.wrapper.senderKey}")
+
+        store.storeInboundGroupSessions(
+                listOf(
+                        old.wrapper.copy(
+                                sessionData = old.wrapper.sessionData.copy(trusted = true)
+                        )
+                )
+        )
+        // will release it :/
+        sessionCache.remove(CacheKey(sessionId, senderKey))
+    }
+
+    @Synchronized
     fun storeInBoundGroupSession(holder: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
         internalStoreGroupSession(holder, sessionId, senderKey)
     }

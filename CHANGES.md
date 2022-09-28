@@ -1,3 +1,12 @@
+Changes in Element v1.5.1 (2022-09-28)
+======================================
+
+Security ⚠️
+----------
+
+This update provides important security fixes, update now.
+Ref: CVE-2022-39246 CVE-2022-39248
+
 Changes in Element v1.5.0 (2022-09-23)
 ======================================
 

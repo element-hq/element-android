@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.SyncConfig
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -60,13 +61,13 @@ import kotlin.coroutines.suspendCoroutine
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
  */
-class CommonTestHelper internal constructor(context: Context) {
+class CommonTestHelper internal constructor(context: Context, val cryptoConfig: MXCryptoConfig? = null) {
 
     companion object {
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
+        internal fun runSessionTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context, cryptoConfig)
             return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
                 try {
                     withContext(Dispatchers.Default) {
@@ -81,8 +82,8 @@ class CommonTestHelper internal constructor(context: Context) {
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
+        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null,  autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
                 try {
@@ -114,6 +115,7 @@ class CommonTestHelper internal constructor(context: Context) {
                             applicationFlavor = "TestFlavor",
                             roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
                             syncConfig = SyncConfig(longPollTimeout = 5_000L),
+                            cryptoConfig = cryptoConfig ?: MXCryptoConfig()
                     )
             )
         }
