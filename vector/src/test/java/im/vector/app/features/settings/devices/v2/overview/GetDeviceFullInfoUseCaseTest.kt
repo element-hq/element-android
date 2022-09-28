@@ -19,7 +19,10 @@ package im.vector.app.features.settings.devices.v2.overview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceUserAgent
+import im.vector.app.features.settings.devices.v2.ParseDeviceUserAgentUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
@@ -53,12 +56,14 @@ class GetDeviceFullInfoUseCaseTest {
     private val getEncryptionTrustLevelForDeviceUseCase = mockk<GetEncryptionTrustLevelForDeviceUseCase>()
     private val checkIfSessionIsInactiveUseCase = mockk<CheckIfSessionIsInactiveUseCase>()
     private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
+    private val parseDeviceUserAgentUseCase = mockk<ParseDeviceUserAgentUseCase>()
 
     private val getDeviceFullInfoUseCase = GetDeviceFullInfoUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
             getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
             getEncryptionTrustLevelForDeviceUseCase = getEncryptionTrustLevelForDeviceUseCase,
             checkIfSessionIsInactiveUseCase = checkIfSessionIsInactiveUseCase,
+            parseDeviceUserAgentUseCase = parseDeviceUserAgentUseCase,
     )
 
     @Before
@@ -97,7 +102,8 @@ class GetDeviceFullInfoUseCaseTest {
                 cryptoDeviceInfo = cryptoDeviceInfo,
                 roomEncryptionTrustLevel = trustLevel,
                 isInactive = isInactive,
-                isCurrentDevice = isCurrentDevice
+                isCurrentDevice = isCurrentDevice,
+                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }

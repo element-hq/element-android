@@ -38,6 +38,7 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
         private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val filterDevicesUseCase: FilterDevicesUseCase,
+        private val parseDeviceUserAgentUseCase: ParseDeviceUserAgentUseCase,
 ) {
 
     fun execute(filterType: DeviceManagerFilterType, excludeCurrentDevice: Boolean = false): Flow<List<DeviceFullInfo>> {
@@ -72,7 +73,8 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
                     val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
                     val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoDeviceInfo?.deviceId
-                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, roomEncryptionTrustLevel, isInactive, isCurrentDevice)
+                    val deviceUserAgent = parseDeviceUserAgentUseCase.execute(deviceInfo.lastSeenUserAgent)
+                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, roomEncryptionTrustLevel, isInactive, isCurrentDevice, deviceUserAgent)
                 }
     }
 }

@@ -21,7 +21,9 @@ import javax.inject.Inject
 
 class ParseDeviceUserAgentUseCase @Inject constructor() {
 
-    fun execute(userAgent: String): DeviceUserAgent {
+    fun execute(userAgent: String?): DeviceUserAgent {
+        if (userAgent == null) return createUnknownUserAgent()
+
         return when {
             userAgent.contains(ANDROID_KEYWORD) -> parseAndroidUserAgent(userAgent)
             userAgent.contains(IOS_KEYWORD) -> parseIosUserAgent(userAgent)
@@ -35,23 +37,26 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
         val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceManufacturer = deviceInfoSegments.getOrNull(0)
-        val deviceModel = deviceInfoSegments.getOrNull(1)
-        val deviceOsInfo = deviceInfoSegments.getOrNull(2)?.takeIf { it.startsWith("Android") }
-        val deviceOs = deviceOsInfo?.substringBefore(" ")
-        val deviceOsVersion = deviceOsInfo?.substringAfter(" ")
-        return DeviceUserAgent(DeviceType.MOBILE, deviceManufacturer, deviceModel, deviceOs, deviceOsVersion, appName, appVersion)
+        val deviceModel: String?
+        val deviceOperatingSystem: String?
+        if (deviceInfoSegments.firstOrNull() == "Linux") {
+            val deviceOperatingSystemIndex = deviceInfoSegments.indexOfFirst { it.startsWith("Android") }
+            deviceOperatingSystem = deviceInfoSegments.getOrNull(deviceOperatingSystemIndex)
+            deviceModel = deviceInfoSegments.getOrNull(deviceOperatingSystemIndex + 1)
+        } else {
+            deviceModel = deviceInfoSegments.getOrNull(0)
+            deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
+        }
+        return DeviceUserAgent(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
     }
 
     private fun parseIosUserAgent(userAgent: String): DeviceUserAgent {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
         val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceManufacturer = "Apple"
         val deviceModel = deviceInfoSegments.getOrNull(0)
-        val deviceOs = deviceInfoSegments.getOrNull(1)?.substringBefore(" ")
-        val deviceOsVersion = deviceInfoSegments.getOrNull(1)?.substringAfter(" ")
-        return DeviceUserAgent(DeviceType.MOBILE, deviceManufacturer, deviceModel, deviceOs, deviceOsVersion, appName, appVersion)
+        val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
+        return DeviceUserAgent(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
     }
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceUserAgent {
@@ -59,9 +64,8 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         val appName = appInfoSegments.getOrNull(0)
         val appVersion = appInfoSegments.getOrNull(1)
         val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceOs = deviceInfoSegments.getOrNull(1)?.substringBeforeLast(" ")
-        val deviceOsVersion = deviceInfoSegments.getOrNull(1)?.substringAfterLast(" ")
-        return DeviceUserAgent(DeviceType.DESKTOP, null, null, deviceOs, deviceOsVersion, appName, appVersion)
+        val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
+        return DeviceUserAgent(DeviceType.DESKTOP, null, deviceOperatingSystem, appName, appVersion)
     }
 
     private fun parseWebUserAgent(userAgent: String): DeviceUserAgent {
@@ -76,6 +80,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     companion object {
         // Element dbg/1.5.0-dev (Xiaomi; Mi 9T; Android 11; RKQ1.200826.002 test-keys; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
+        // Legacy : Element/1.0.0 (Linux; U; Android 6.0.1; SM-A510F Build/MMB29; Flavour GPlay; MatrixAndroidSdk2 1.0)
         private val ANDROID_KEYWORD = "; MatrixAndroidSdk2"
 
         // Element/1.8.21 (iPhone XS Max; iOS 15.2; Scale/3.00)

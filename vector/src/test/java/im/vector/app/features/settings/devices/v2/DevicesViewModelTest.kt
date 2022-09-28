@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
@@ -36,6 +37,7 @@ import io.mockk.runs
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
+import okhttp3.internal.userAgent
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -242,14 +244,16 @@ class DevicesViewModelTest {
                 cryptoDeviceInfo = verifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 isInactive = false,
-                isCurrentDevice = true
+                isCurrentDevice = true,
+                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
         )
         val deviceFullInfo2 = DeviceFullInfo(
                 deviceInfo = mockk(),
                 cryptoDeviceInfo = unverifiedCryptoDeviceInfo,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
                 isInactive = true,
-                isCurrentDevice = false
+                isCurrentDevice = false,
+                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)

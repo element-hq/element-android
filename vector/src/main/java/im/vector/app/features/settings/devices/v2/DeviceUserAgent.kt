@@ -24,21 +24,13 @@ data class DeviceUserAgent(
          */
         val deviceType: DeviceType,
         /**
-         * i.e. Google
-         */
-        val deviceManufacturer: String? = null,
-        /**
-         * i.e. Pixel 6
+         * i.e. Google Pixel 6
          */
         val deviceModel: String? = null,
         /**
-         * i.e. Android
-         */
-        val deviceOperatingSystem: String? = null,
-        /**
          * i.e. Android 11
          */
-        val deviceOperatingSystemVersion: String? = null,
+        val deviceOperatingSystem: String? = null,
         /**
          * i.e. Element Nightly
          */

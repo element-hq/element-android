@@ -17,6 +17,8 @@
 package im.vector.app.features.settings.devices.v2.filter
 
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.DeviceUserAgent
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.junit.Test
@@ -34,7 +36,8 @@ private val activeVerifiedDevice = DeviceFullInfo(
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = false,
-        isCurrentDevice = true
+        isCurrentDevice = true,
+        deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
 )
 private val inactiveVerifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_VERIFIED_DEVICE"),
@@ -45,7 +48,8 @@ private val inactiveVerifiedDevice = DeviceFullInfo(
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = true,
-        isCurrentDevice = false
+        isCurrentDevice = false,
+        deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
 )
 private val activeUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "ACTIVE_UNVERIFIED_DEVICE"),
@@ -56,7 +60,8 @@ private val activeUnverifiedDevice = DeviceFullInfo(
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = false,
-        isCurrentDevice = false
+        isCurrentDevice = false,
+        deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
 )
 private val inactiveUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_UNVERIFIED_DEVICE"),
@@ -67,7 +72,8 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = true,
-        isCurrentDevice = false
+        isCurrentDevice = false,
+        deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
 )
 
 private val devices = listOf(
