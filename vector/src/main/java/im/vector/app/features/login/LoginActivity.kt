@@ -317,7 +317,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     }
 
     override fun onBackPressed() {
-        validateBackPressed { super.onBackPressed() }
+        validateBackPressed {
+            @Suppress("DEPRECATION")
+            super.onBackPressed()
+        }
     }
 
     private fun onRegistrationStageNotSupported() {

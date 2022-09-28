@@ -194,6 +194,7 @@ class VectorCallActivity :
 
     override fun onBackPressed() {
         if (!enterPictureInPictureIfRequired()) {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
@@ -231,6 +232,7 @@ class VectorCallActivity :
             }
             android.R.id.home -> {
                 // We check here as we want PiP in some cases
+                @Suppress("DEPRECATION")
                 onBackPressed()
                 true
             }

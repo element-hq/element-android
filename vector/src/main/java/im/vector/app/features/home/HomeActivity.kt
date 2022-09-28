@@ -668,7 +668,10 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            validateBackPressed { super.onBackPressed() }
+            validateBackPressed {
+                @Suppress("DEPRECATION")
+                super.onBackPressed()
+            }
         }
     }
 

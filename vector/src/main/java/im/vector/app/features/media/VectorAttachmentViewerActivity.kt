@@ -175,6 +175,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             transitionImageContainer.isVisible = true
         }
         isAnimatingOut = true
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 

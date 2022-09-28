@@ -267,6 +267,7 @@ class BugReportActivity :
         // Ensure there is no crash status remaining, which will be sent later on by mistake
         bugReporter.deleteCrashFile()
 
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 

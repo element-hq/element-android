@@ -101,6 +101,7 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
         if (views.simpleWebview.canGoBack()) {
             views.simpleWebview.goBack()
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

@@ -178,6 +178,7 @@ class RoomDetailActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

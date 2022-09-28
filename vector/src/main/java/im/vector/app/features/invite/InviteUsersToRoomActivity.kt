@@ -68,6 +68,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         sharedActionViewModel
                 .stream()
                 .onEach { sharedAction ->
+                    @Suppress("DEPRECATION")
                     when (sharedAction) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()
