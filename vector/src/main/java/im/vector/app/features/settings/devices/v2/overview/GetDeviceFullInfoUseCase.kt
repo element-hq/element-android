@@ -26,7 +26,6 @@ import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
-import okhttp3.internal.userAgent
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject

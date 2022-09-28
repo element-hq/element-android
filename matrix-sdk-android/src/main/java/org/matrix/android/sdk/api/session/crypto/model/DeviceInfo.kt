@@ -54,10 +54,10 @@ data class DeviceInfo(
         @Json(name = "last_seen_ip")
         val lastSeenIp: String? = null,
 
-        @Json(name="org.matrix.msc3852.last_seen_user_agent")
+        @Json(name = "org.matrix.msc3852.last_seen_user_agent")
         val unstableLastSeenUserAgent: String? = null,
 
-        @Json(name="last_seen_user_agent")
+        @Json(name = "last_seen_user_agent")
         val lastSeenUserAgent: String? = null,
 ) : DatedObject {
 

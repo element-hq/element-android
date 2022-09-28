@@ -46,6 +46,30 @@ private val AN_EXPECTED_RESULT_LIST_FOR_IOS = listOf(
         DeviceUserAgent(DeviceType.MOBILE, "iPhone XS Max", "iOS 15.2", "Element", "1.8.21"),
 )
 
+private val A_USER_AGENT_LIST_FOR_DESKTOP = listOf(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
+)
+private val AN_EXPECTED_RESULT_LIST_FOR_DESKTOP = listOf(
+        DeviceUserAgent(DeviceType.DESKTOP, "Electron", "Macintosh", null, null),
+        DeviceUserAgent(DeviceType.DESKTOP, "Electron", "Windows NT 10.0", null, null),
+)
+
+private val A_USER_AGENT_LIST_FOR_WEB = listOf(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18",
+        "Mozilla/5.0 (Linux; Android 9; SM-G973U Build/PPR1.180610.011) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Mobile Safari/537.36",
+        )
+private val AN_EXPECTED_RESULT_LIST_FOR_WEB = listOf(
+        DeviceUserAgent(DeviceType.WEB, "Chrome", "Macintosh", null, null),
+        DeviceUserAgent(DeviceType.WEB, "Chrome", "Windows NT 10.0", null, null),
+        DeviceUserAgent(DeviceType.WEB, "Firefox", "Macintosh", null, null),
+        DeviceUserAgent(DeviceType.WEB, "Safari", "Macintosh", null, null),
+        DeviceUserAgent(DeviceType.WEB, "Chrome", "Android 9", null, null),
+)
+
 class ParseDeviceUserAgentUseCaseTest {
 
     private val parseDeviceUserAgentUseCase = ParseDeviceUserAgentUseCase()
@@ -61,6 +85,20 @@ class ParseDeviceUserAgentUseCaseTest {
     fun `given an iOS user agent then it should be parsed as expected`() {
         A_USER_AGENT_LIST_FOR_IOS.forEachIndexed { index, userAgent ->
             parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_IOS[index]
+        }
+    }
+
+    @Test
+    fun `given a Desktop user agent then it should be parsed as expected`() {
+        A_USER_AGENT_LIST_FOR_DESKTOP.forEachIndexed { index, userAgent ->
+            parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_DESKTOP[index]
+        }
+    }
+
+    @Test
+    fun `given a Web user agent then it should be parsed as expected`() {
+        A_USER_AGENT_LIST_FOR_WEB.forEachIndexed { index, userAgent ->
+            parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_WEB[index]
         }
     }
 }

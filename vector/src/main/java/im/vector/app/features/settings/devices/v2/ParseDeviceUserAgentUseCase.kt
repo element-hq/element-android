@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.features.settings.devices.v2.list.DeviceType
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 class ParseDeviceUserAgentUseCase @Inject constructor() {
@@ -60,12 +61,29 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceUserAgent {
-        val appInfoSegments = userAgent.substringBeforeLast(" ").substringAfterLast(" ").split("/")
-        val appName = appInfoSegments.getOrNull(0)
-        val appVersion = appInfoSegments.getOrNull(1)
-        val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
-        return DeviceUserAgent(DeviceType.DESKTOP, null, deviceOperatingSystem, appName, appVersion)
+        val browserSegments = userAgent.split(" ")
+        val browserName = when {
+            isFirefox(browserSegments) -> {
+                "Firefox"
+            }
+            isMobile(browserSegments) -> {
+                getMobileBrowserName(browserSegments)
+            }
+            isSafari(browserSegments) -> {
+                "Safari"
+            }
+            else -> {
+                getRegularBrowserName(browserSegments)
+            }
+        }
+
+        val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
+        val deviceOperatingSystem = if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
+            deviceOperatingSystemSegments.getOrNull(1)
+        } else {
+            deviceOperatingSystemSegments.getOrNull(0)
+        }
+        return DeviceUserAgent(DeviceType.DESKTOP, browserName, deviceOperatingSystem, null, null)
     }
 
     private fun parseWebUserAgent(userAgent: String): DeviceUserAgent {
@@ -76,6 +94,33 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun createUnknownUserAgent(): DeviceUserAgent {
         return DeviceUserAgent(DeviceType.UNKNOWN)
+    }
+
+    private fun isFirefox(browserSegments: List<String>): Boolean {
+        return browserSegments.lastOrNull()?.startsWith("Firefox").orFalse()
+    }
+
+    private fun isSafari(browserSegments: List<String>): Boolean {
+        return browserSegments.lastOrNull()?.startsWith("Safari").orFalse() &&
+                browserSegments.getOrNull(browserSegments.size - 2)?.startsWith("Version").orFalse()
+    }
+
+    private fun isMobile(browserSegments: List<String>): Boolean {
+        return browserSegments.lastOrNull()?.startsWith("Safari").orFalse() &&
+                browserSegments.getOrNull(browserSegments.size - 2) == "Mobile"
+    }
+
+    private fun getMobileBrowserName(browserSegments: List<String>): String? {
+        val possibleBrowserName = browserSegments.getOrNull(browserSegments.size - 3)?.split("/")?.firstOrNull()
+        return if (possibleBrowserName == "Version") {
+            "Safari"
+        } else {
+            possibleBrowserName
+        }
+    }
+
+    private fun getRegularBrowserName(browserSegments: List<String>): String? {
+        return browserSegments.getOrNull(browserSegments.size - 2)?.split("/")?.firstOrNull()
     }
 
     companion object {
