@@ -166,7 +166,7 @@ class VectorSettingsDevicesFragment :
                 title = getString(R.string.device_manager_sessions_other_title),
                 description = buildString {
                     append(getString(R.string.device_manager_learn_more_sessions_unverified))
-                    append("\n\n")
+                    append("\n\n\n")
                     append(getString(R.string.device_manager_learn_more_sessions_inactive))
                 },
         )
