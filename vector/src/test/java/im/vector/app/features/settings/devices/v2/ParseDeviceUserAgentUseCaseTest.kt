@@ -37,6 +37,15 @@ private val AN_EXPECTED_RESULT_LIST_FOR_ANDROID = listOf(
         DeviceUserAgent(DeviceType.MOBILE, "SM-G610M Build/NRD90M", "Android 7.0", "Element", "1.0.0"),
 )
 
+private val A_USER_AGENT_LIST_FOR_IOS = listOf(
+        "Element/1.8.21 (iPhone; iOS 15.2; Scale/3.00)",
+        "Element/1.8.21 (iPhone XS Max; iOS 15.2; Scale/3.00)",
+)
+private val AN_EXPECTED_RESULT_LIST_FOR_IOS = listOf(
+        DeviceUserAgent(DeviceType.MOBILE, "iPhone", "iOS 15.2", "Element", "1.8.21"),
+        DeviceUserAgent(DeviceType.MOBILE, "iPhone XS Max", "iOS 15.2", "Element", "1.8.21"),
+)
+
 class ParseDeviceUserAgentUseCaseTest {
 
     private val parseDeviceUserAgentUseCase = ParseDeviceUserAgentUseCase()
@@ -45,6 +54,13 @@ class ParseDeviceUserAgentUseCaseTest {
     fun `given an Android user agent then it should be parsed as expected`() {
         A_USER_AGENT_LIST_FOR_ANDROID.forEachIndexed { index, userAgent ->
             parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_ANDROID[index]
+        }
+    }
+
+    @Test
+    fun `given an iOS user agent then it should be parsed as expected`() {
+        A_USER_AGENT_LIST_FOR_IOS.forEachIndexed { index, userAgent ->
+            parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_IOS[index]
         }
     }
 }
