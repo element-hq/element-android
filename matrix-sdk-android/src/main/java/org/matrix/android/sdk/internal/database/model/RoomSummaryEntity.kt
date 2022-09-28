@@ -129,7 +129,6 @@ internal class RoomSummaryEntity : RealmObject {
 
     fun tags(): List<RoomTagEntity> = tags
 
-
     fun updateTags(newTags: List<Pair<String, Double?>>) {
         val toDelete = mutableListOf<RoomTagEntity>()
         tags.forEach { existingTag ->
@@ -240,7 +239,7 @@ internal class RoomSummaryEntity : RealmObject {
             if (value != field) field = value
         }
 
-    var flattenParentIds: String? = null
+    var flattenParentIds: RealmList<String> = realmListOf()
         set(value) {
             if (value != field) field = value
         }

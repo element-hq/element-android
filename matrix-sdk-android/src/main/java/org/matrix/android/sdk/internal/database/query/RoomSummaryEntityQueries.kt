@@ -16,69 +16,76 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.RealmResults
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
+import org.matrix.android.sdk.internal.database.queryNotIn
 
-internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
-    val query = realm.where<RoomSummaryEntity>()
-    if (roomId != null) {
-        query.equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-    }
-    return query
+internal fun RoomSummaryEntity.Companion.where(realm: TypedRealm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
+    return realm.query(RoomSummaryEntity::class)
+            .andIf(roomId != null) {
+                query("roomId == $0", roomId!!)
+            }
 }
 
-internal fun RoomSummaryEntity.Companion.findByAlias(realm: Realm, roomAlias: String): RoomSummaryEntity? {
-    val roomSummary = realm.where<RoomSummaryEntity>()
-            .equalTo(RoomSummaryEntityFields.CANONICAL_ALIAS, roomAlias)
-            .findFirst()
+internal fun RoomSummaryEntity.Companion.findByAlias(realm: TypedRealm, roomAlias: String): RoomSummaryEntity? {
+    val roomSummary = realm.query(RoomSummaryEntity::class)
+            .query("canonicalAlias == $0", roomAlias)
+            .first()
+            .find()
     if (roomSummary != null) {
         return roomSummary
     }
-    return realm.where<RoomSummaryEntity>()
-            .contains(RoomSummaryEntityFields.FLAT_ALIASES, "|$roomAlias")
-            .findFirst()
+    return realm.query(RoomSummaryEntity::class)
+            .query("flatAliases CONTAINS |$roomAlias")
+            .first()
+            .find()
 }
 
-internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomSummaryEntity {
-    return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+private fun RoomSummaryEntity.Companion.create(realm: MutableRealm, roomId: String): RoomSummaryEntity {
+    val roomSummaryEntity = RoomSummaryEntity().apply {
+        this.roomId = roomId
+    }
+    return realm.copyToRealm(roomSummaryEntity)
 }
 
-internal fun RoomSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String): RoomSummaryEntity? {
-    return where(realm, roomId).findFirst()
+internal fun RoomSummaryEntity.Companion.getOrCreate(realm: MutableRealm, roomId: String): RoomSummaryEntity {
+    return getOrNull(realm, roomId) ?: create(realm, roomId)
+}
+
+internal fun RoomSummaryEntity.Companion.getOrNull(realm: TypedRealm, roomId: String): RoomSummaryEntity? {
+    return where(realm, roomId).first().find()
 }
 
 internal fun RoomSummaryEntity.Companion.getDirectRooms(
-        realm: Realm,
+        realm: TypedRealm,
         excludeRoomIds: Set<String>? = null
 ): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
-            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            .apply {
-                if (!excludeRoomIds.isNullOrEmpty()) {
-                    not().`in`(RoomSummaryEntityFields.ROOM_ID, excludeRoomIds.toTypedArray())
-                }
+            .query("isDirect == true")
+            .andIf(!excludeRoomIds.isNullOrEmpty()) {
+                queryNotIn("roomId", excludeRoomIds.orEmpty().toList())
             }
-            .findAll()
+            .find()
 }
 
-internal fun RoomSummaryEntity.Companion.isDirect(realm: Realm, roomId: String): Boolean {
+internal fun RoomSummaryEntity.Companion.isDirect(realm: TypedRealm, roomId: String): Boolean {
     return RoomSummaryEntity.where(realm)
-            .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            .findAll()
+            .query("roomId == $0", roomId)
+            .query("isDirect == true")
+            .find()
             .isNotEmpty()
 }
 
-internal fun RoomSummaryEntity.Companion.updateDirectUserPresence(realm: Realm, directUserId: String, userPresenceEntity: UserPresenceEntity) {
+internal fun RoomSummaryEntity.Companion.updateDirectUserPresence(realm: MutableRealm, directUserId: String, userPresenceEntity: UserPresenceEntity) {
     RoomSummaryEntity.where(realm)
-            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            .equalTo(RoomSummaryEntityFields.DIRECT_USER_ID, directUserId)
-            .findFirst()
+            .query("isDirect == true", true)
+            .query("directUserId == $0", directUserId)
+            .first()
+            .find()
             ?.directUserPresence = userPresenceEntity
 }

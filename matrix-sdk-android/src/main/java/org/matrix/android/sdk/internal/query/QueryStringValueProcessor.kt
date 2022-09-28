@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.query
 
-import io.realm.Case
-import io.realm.RealmModel
-import io.realm.RealmQuery
+import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.QueryStringValue.ContentQueryStringValue
 import org.matrix.android.sdk.internal.util.Normalizer
@@ -28,16 +27,16 @@ internal class QueryStringValueProcessor @Inject constructor(
         private val normalizer: Normalizer
 ) {
 
-    fun <T : RealmModel> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
+    fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
         return when (queryStringValue) {
             is QueryStringValue.NoCondition -> this
-            is QueryStringValue.IsNotNull -> isNotNull(field)
-            is QueryStringValue.IsNull -> isNull(field)
-            is QueryStringValue.IsEmpty -> isEmpty(field)
-            is QueryStringValue.IsNotEmpty -> isNotEmpty(field)
+            is QueryStringValue.IsNotNull -> query("$field != nil")
+            is QueryStringValue.IsNull -> query("$field == nil")
+            is QueryStringValue.IsEmpty -> query("$field == ''")
+            is QueryStringValue.IsNotEmpty -> query("$field != ''")
             is ContentQueryStringValue -> when (queryStringValue) {
-                is QueryStringValue.Equals -> equalTo(field, queryStringValue.toRealmValue(), queryStringValue.case.toRealmCase())
-                is QueryStringValue.Contains -> contains(field, queryStringValue.toRealmValue(), queryStringValue.case.toRealmCase())
+                is QueryStringValue.Equals -> query("$field ==${queryStringValue.case.toRealmCase()} ${queryStringValue.toRealmValue()}")
+                is QueryStringValue.Contains -> query("$field CONTAINS${queryStringValue.case.toRealmCase()} ${queryStringValue.toRealmValue()}")
             }
         }
     }
@@ -49,12 +48,13 @@ internal class QueryStringValueProcessor @Inject constructor(
             QueryStringValue.Case.INSENSITIVE -> string
         }
     }
-}
 
-private fun QueryStringValue.Case.toRealmCase(): Case {
-    return when (this) {
-        QueryStringValue.Case.INSENSITIVE -> Case.INSENSITIVE
-        QueryStringValue.Case.SENSITIVE,
-        QueryStringValue.Case.NORMALIZED -> Case.SENSITIVE
+    private fun QueryStringValue.Case.toRealmCase(): String {
+        return when (this) {
+            QueryStringValue.Case.INSENSITIVE -> "[c]"
+            QueryStringValue.Case.SENSITIVE,
+            QueryStringValue.Case.NORMALIZED -> ""
+        }
     }
 }
+

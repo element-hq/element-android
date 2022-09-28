@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
-import io.realm.Realm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.session.room.summary.RoomSummaryConstants
 import org.matrix.android.sdk.api.session.room.timeline.EventTypeFilter
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
@@ -33,7 +33,7 @@ internal object RoomSummaryEventsHelper {
             filterEdits = true
     )
 
-    fun getLatestPreviewableEvent(realm: Realm, roomId: String): TimelineEventEntity? {
+    fun getLatestPreviewableEvent(realm: TypedRealm, roomId: String): TimelineEventEntity? {
         return TimelineEventEntity.latestEvent(
                 realm = realm,
                 roomId = roomId,

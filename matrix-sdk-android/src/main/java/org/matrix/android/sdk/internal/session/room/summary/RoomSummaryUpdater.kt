@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.coroutines.runBlocking
@@ -205,13 +206,13 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
     }
 
-    private fun RoomSummaryEntity.updateHasFailedSending() {
+    private fun RoomSummaryEntity.updateHasFailedSending(realm: TypedRealm) {
         hasFailedSending = TimelineEventEntity.findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES).isNotEmpty()
     }
 
-    fun updateSendingInformation(realm: Realm, roomId: String) {
+    fun updateSendingInformation(realm: MutableRealm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        roomSummaryEntity.updateHasFailedSending()
+        roomSummaryEntity.updateHasFailedSending(realm)
         roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
     }
 
@@ -220,11 +221,12 @@ internal class RoomSummaryUpdater @Inject constructor(
      */
     fun validateSpaceRelationship(realm: MutableRealm) {
         measureTimeMillis {
-            val lookupMap = realm.where(RoomSummaryEntity::class.java)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+            val lookupMap = realm.query(RoomSummaryEntity::class)
+                    .process("membershipStr", Membership.activeMemberships())
                     // we order by roomID to be consistent when breaking parent/child cycles
-                    .sort(RoomSummaryEntityFields.ROOM_ID)
-                    .findAll().map {
+                    .sort("roomId")
+                    .find()
+                    .map {
                         it.flattenParentIds = null
                         it.directParentNames.clear()
                         it to emptyList<RoomSummaryEntity>().toMutableSet()
