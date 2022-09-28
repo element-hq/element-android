@@ -20,11 +20,13 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import org.matrix.android.sdk.api.session.pushers.Pusher
 
 data class SessionOverviewViewState(
         val deviceId: String,
         val isCurrentSession: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
+        val pushers: Async<List<Pusher>> = Uninitialized,
 ) : MavericksState {
     constructor(args: SessionOverviewArgs) : this(
             deviceId = args.deviceId

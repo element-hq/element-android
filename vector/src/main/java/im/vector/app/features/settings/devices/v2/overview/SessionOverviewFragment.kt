@@ -81,7 +81,8 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
-        updateEntryDetails(state.deviceId)
+        updateSessionInfo(state.deviceId)
+        updatePushNotificationToggle(state.deviceId, state.pushers.invoke()?.all { it.enabled } == true)
         if (state.deviceInfo is Success) {
             renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
         } else {
@@ -96,10 +97,23 @@ class SessionOverviewFragment :
                 ?.setTitle(titleResId)
     }
 
-    private fun updateEntryDetails(deviceId: String) {
+    private fun updateSessionInfo(deviceId: String) {
         views.sessionOverviewEntryDetails.setOnClickListener {
             viewNavigator.navigateToSessionDetails(requireContext(), deviceId)
         }
+    }
+
+    private fun updatePushNotificationToggle(deviceId: String, checked: Boolean) {
+        views.sessionOverviewPushNotifications.apply {
+            setOnCheckedChangeListener { _, _ -> }
+            setChecked(checked)
+            post {
+                setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                }
+            }
+        }
+
     }
 
     private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {

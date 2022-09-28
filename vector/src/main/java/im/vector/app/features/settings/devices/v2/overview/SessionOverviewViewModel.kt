@@ -26,12 +26,15 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.flow.flow
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        session: Session,
+        private val session: Session,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
 ) : VectorViewModel<SessionOverviewViewState, SessionOverviewAction, EmptyViewEvents>(initialState) {
 
@@ -49,6 +52,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         }
 
         observeSessionInfo(initialState.deviceId)
+        observePushers(initialState.deviceId)
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -57,7 +61,25 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    private fun observePushers(deviceId: String) {
+        session.flow()
+                .livePushers()
+                .map { it.filter { pusher -> pusher.deviceId == deviceId }}
+                .execute { copy(pushers = it) }
+    }
+
     override fun handle(action: SessionOverviewAction) {
-        TODO("Implement when adding the first action")
+        when (action) {
+            is SessionOverviewAction.TogglePushNotifications -> handleTogglePusherAction(action)
+        }
+    }
+
+    private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
+        viewModelScope.launch {
+            val devicePushers = awaitState().pushers.invoke()?.filter { it.deviceId == action.deviceId }
+            devicePushers?.forEach { pusher ->
+                session.pushersService().togglePusher(pusher, action.enabled)
+            }
+        }
     }
 }

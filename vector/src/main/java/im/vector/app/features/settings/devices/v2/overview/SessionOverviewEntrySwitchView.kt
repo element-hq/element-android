@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.CompoundButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import im.vector.app.R
@@ -69,5 +70,13 @@ class SessionOverviewEntrySwitchView @JvmOverloads constructor(
     private fun setSwitchedEnabled(typedArray: TypedArray) {
         val enabled = typedArray.getBoolean(R.styleable.SessionOverviewEntrySwitchView_sessionOverviewEntrySwitchEnabled, true)
         binding.sessionsOverviewEntrySwitch.isChecked = enabled
+    }
+
+    fun setChecked(checked: Boolean) {
+        binding.sessionsOverviewEntrySwitch.isChecked = checked
+    }
+
+    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
+        binding.sessionsOverviewEntrySwitch.setOnCheckedChangeListener(listener)
     }
 }
