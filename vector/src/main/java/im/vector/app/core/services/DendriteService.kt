@@ -55,8 +55,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.ParcelUuid
-import android.os.StrictMode
-import android.os.StrictMode.VmPolicy
 import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
@@ -73,7 +71,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.InputStream
 import java.io.OutputStream
+import java.net.NetworkInterface
 import java.nio.ByteBuffer
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
@@ -90,7 +90,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     private val serviceUUID = ParcelUuid(UUID.fromString("a2fda8dd-d250-4a64-8b9a-248f50b93c64"))
     private val psmUUID = UUID.fromString("15d4151b-1008-41c0-85f2-950facf8a3cd")
 
-    private lateinit var manager: BluetoothManager
+    private var manager: BluetoothManager? = null
     private lateinit var gattServer: BluetoothGattServer
     private lateinit var gattCharacteristic: BluetoothGattCharacteristic
     private var gattService = BluetoothGattService(serviceUUID.uuid, BluetoothGattService.SERVICE_TYPE_PRIMARY)
@@ -470,7 +470,26 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         if (vectorPreferences.p2pEnableStatic()) {
             monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
         }
-        monolith!!.setMulticastEnabled(vectorPreferences.p2pEnableMulticast())
+
+        for (iface in NetworkInterface.getNetworkInterfaces()) {
+            val addrs = StringBuilder("")
+            for (ia in iface.interfaceAddresses) {
+                val parts: List<String> = ia.toString().split("/")
+                if (parts.size > 1) {
+                    addrs.append(java.lang.String.format(Locale.ROOT, "%s/%d ", parts[1], ia.networkPrefixLength))
+                }
+            }
+
+            monolith!!.registerNetworkInterface(iface.name, iface.index.toLong(), iface.mtu.toLong(), iface.isUp,
+                    iface.supportsMulticast(), iface.isLoopback, iface.isPointToPoint, iface.supportsMulticast(), addrs.toString())
+        }
+        val wifi = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+        multicastLock = wifi.createMulticastLock("Element.P2P")
+        val enabled = vectorPreferences.p2pEnableMulticast()
+        if (enabled) {
+            multicastLock.acquire()
+        }
+        monolith!!.setMulticastEnabled(enabled)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startBluetooth()
@@ -507,6 +526,13 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         when (key){
             VectorPreferences.SETTINGS_P2P_ENABLE_MULTICAST -> {
                 val enabled = vectorPreferences.p2pEnableMulticast()
+                if (enabled) {
+                    multicastLock.acquire()
+                } else {
+                    if (multicastLock.isHeld) {
+                        multicastLock.release()
+                    }
+                }
                 m.setMulticastEnabled(enabled)
             }
 
@@ -617,10 +643,14 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         }
 
         manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        advertiser = manager.adapter.bluetoothLeAdvertiser
-        scanner = manager.adapter.bluetoothLeScanner
+        if (manager?.adapter?.bluetoothLeAdvertiser == null) {
+            Timber.i("BLE: Bluetooth adapter not available")
+            return
+        }
+        advertiser = manager!!.adapter.bluetoothLeAdvertiser
+        scanner = manager!!.adapter.bluetoothLeScanner
 
-        val isCodedPHY = vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported
+        val isCodedPHY = vectorPreferences.p2pBLECodedPhy() && manager!!.adapter.isLeCodedPhySupported
 
         advertiser.stopAdvertising(advertiseCallback)
         advertiser.stopAdvertisingSet(advertiseSetCallback)
@@ -634,7 +664,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 .addServiceUuid(serviceUUID)
                 .build()
 
-        l2capServer = manager.adapter.listenUsingInsecureL2capChannel()
+        l2capServer = manager!!.adapter.listenUsingInsecureL2capChannel()
         l2capPSM = intToBytes(l2capServer.psm.toShort())
 
         if (isCodedPHY) {
@@ -665,7 +695,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
         gattService.addCharacteristic(gattCharacteristic)
 
-        gattServer = manager.openGattServer(applicationContext, gattServerCallback)
+        gattServer = manager!!.openGattServer(applicationContext, gattServerCallback)
         gattServer.addService(gattService)
 
         val scanFilter = ScanFilter.Builder()
@@ -744,7 +774,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             return
         }
 
-        if (manager.adapter.isEnabled) {
+        if (manager?.adapter?.isEnabled == true) {
             advertiser.stopAdvertising(advertiseCallback)
             advertiser.stopAdvertisingSet(advertiseSetCallback)
             scanner.stopScan(scanCallback)

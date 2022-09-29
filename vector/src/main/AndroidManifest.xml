@@ -66,6 +66,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+    <!-- Multicast for P2P -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
     <!-- Since Android 11, see https://developer.android.com/training/package-visibility -->
     <queries>
         <!-- To open URL in CustomTab (prefetch, etc.). It makes CustomTabsClient.getPackageName() work
@@ -347,6 +353,7 @@
         <activity android:name=".features.home.room.list.home.invites.InvitesActivity"/>
         <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity"/>
         <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity"/>
+        <activity android:name="com.android.permissioncontroller.permission.ui.GrantPermissionsActivity"/>
 
         <!-- Services -->
 
