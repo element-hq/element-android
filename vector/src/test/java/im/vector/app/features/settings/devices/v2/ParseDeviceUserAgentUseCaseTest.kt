@@ -88,6 +88,15 @@ private val AN_EXPECTED_RESULT_LIST_FOR_WEB = listOf(
         DeviceUserAgent(DeviceType.WEB, "Edge", "Windows NT 10.0", null, null),
 )
 
+private val AN_UNKNOWN_USER_AGENT_LIST = listOf(
+        "AppleTV11,1/11.1",
+        "Curl Client/1.0",
+)
+private val AN_UNKNOWN_USER_AGENT_EXPECTED_RESULT_LIST = listOf(
+        DeviceUserAgent(DeviceType.UNKNOWN, null, null, null, null),
+        DeviceUserAgent(DeviceType.UNKNOWN, null, null, null, null),
+)
+
 class ParseDeviceUserAgentUseCaseTest {
 
     private val parseDeviceUserAgentUseCase = ParseDeviceUserAgentUseCase()
@@ -117,6 +126,13 @@ class ParseDeviceUserAgentUseCaseTest {
     fun `given a Web user agent then it should be parsed as expected`() {
         A_USER_AGENT_LIST_FOR_WEB.forEachIndexed { index, userAgent ->
             parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_EXPECTED_RESULT_LIST_FOR_WEB[index]
+        }
+    }
+
+    @Test
+    fun `given an unknown user agent then it should be parsed as expected`() {
+        AN_UNKNOWN_USER_AGENT_LIST.forEachIndexed { index, userAgent ->
+            parseDeviceUserAgentUseCase.execute(userAgent) shouldBeEqualTo AN_UNKNOWN_USER_AGENT_EXPECTED_RESULT_LIST[index]
         }
     }
 }
