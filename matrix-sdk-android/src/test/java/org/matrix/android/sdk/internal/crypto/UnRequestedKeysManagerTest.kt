@@ -53,8 +53,10 @@ class UnRequestedKeysManagerTest {
             ),
             signatures = mapOf(
                     aliceMxId to mapOf(
-                            "ed25519:$device1Id" to "bPOAqM40+QSMgeEzUbYbPSZZccDDMUG00lCNdSXCoaS1gKKBGkSEaHO1OcibISIabjLYzmhp9mgtivz32fbABQ",
-                            "ed25519:Ru4ni66dbQ6FZgUoHyyBtmjKecOHMvMSsSBZ2SABtt0" to "owzUsQ4Pvn35uEIc5FdVnXVRPzsVYBV8uJRUSqr4y8r5tp0DvrMArtJukKETgYEAivcZMT1lwNihHIN9xh06DA"
+                            "ed25519:$device1Id"
+                                    to "bPOAqM40+QSMgeEzUbYbPSZZccDDMUG00lCNdSXCoaS1gKKBGkSEaHO1OcibISIabjLYzmhp9mgtivz32fbABQ",
+                            "ed25519:Ru4ni66dbQ6FZgUoHyyBtmjKecOHMvMSsSBZ2SABtt0"
+                                    to "owzUsQ4Pvn35uEIc5FdVnXVRPzsVYBV8uJRUSqr4y8r5tp0DvrMArtJukKETgYEAivcZMT1lwNihHIN9xh06DA"
                     )
             ),
             unsigned = UnsignedDeviceInfo(deviceDisplayName = "Element Web"),

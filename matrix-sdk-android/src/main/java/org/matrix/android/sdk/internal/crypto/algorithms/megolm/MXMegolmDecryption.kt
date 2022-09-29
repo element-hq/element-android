@@ -187,6 +187,7 @@ internal class MXMegolmDecryption(
      *
      * @param event the key event.
      * @param defaultKeysBackupService the keys backup service
+     * @param forceAccept if true will force to accept the forwarded key
      */
     override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService, forceAccept: Boolean) {
         Timber.tag(loggerTag.value).v("onRoomKeyEvent(${event.getSenderKey()})")
@@ -274,7 +275,8 @@ internal class MXMegolmDecryption(
 
             if (!shouldAcceptForward) {
                 Timber.tag(loggerTag.value)
-                        .w("Ignoring forwarded_room_key device:$eventSenderKey, ownVerified:{$isOwnDevice&&$isDeviceVerified}, fromInitiator:$isFromSessionInitiator")
+                        .w("Ignoring forwarded_room_key device:$eventSenderKey, ownVerified:{$isOwnDevice&&$isDeviceVerified}," +
+                                " fromInitiator:$isFromSessionInitiator")
                 return
             }
         } else {

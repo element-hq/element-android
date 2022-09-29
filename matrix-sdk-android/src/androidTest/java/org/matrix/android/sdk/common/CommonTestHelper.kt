@@ -19,23 +19,22 @@ package org.matrix.android.sdk.common
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.SyncConfig
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
@@ -51,12 +50,12 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.api.session.sync.SyncState
 import timber.log.Timber
 import java.util.UUID
-import java.util.concurrent.CancellationException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * This class exposes methods to be used in common cases
@@ -65,34 +64,42 @@ import java.util.concurrent.TimeUnit
 class CommonTestHelper internal constructor(context: Context, val cryptoConfig: MXCryptoConfig? = null) {
 
     companion object {
-        internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
-            return try {
-                block(testHelper)
-            } finally {
-                if (autoSignoutOnClose) {
-                    testHelper.cleanUpOpenedSessions()
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        internal fun runSessionTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context, cryptoConfig)
+            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+                try {
+                    withContext(Dispatchers.Default) {
+                        block(testHelper)
+                    }
+                } finally {
+                    if (autoSignoutOnClose) {
+                        testHelper.cleanUpOpenedSessions()
+                    }
                 }
             }
         }
 
-        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true,
-                                   cryptoConfig: MXCryptoConfig? = null,
-                                   block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
+        @OptIn(ExperimentalCoroutinesApi::class)
+        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null,  autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return try {
-                block(cryptoTestHelper, testHelper)
-            } finally {
-                if (autoSignoutOnClose) {
-                    testHelper.cleanUpOpenedSessions()
+            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+                try {
+                    withContext(Dispatchers.Default) {
+                        block(cryptoTestHelper, testHelper)
+                    }
+                } finally {
+                    if (autoSignoutOnClose) {
+                        testHelper.cleanUpOpenedSessions()
+                    }
                 }
             }
         }
     }
 
     internal val matrix: TestMatrix
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var accountNumber = 0
 
     private val trackedSessions = mutableListOf<Session>()
@@ -107,6 +114,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
                             roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
+                            syncConfig = SyncConfig(longPollTimeout = 5_000L),
                             cryptoConfig = cryptoConfig ?: MXCryptoConfig()
                     )
             )
@@ -114,19 +122,17 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         matrix = _matrix!!
     }
 
-    fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {
+    suspend fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {
         return createAccount(userNamePrefix, TestConstants.PASSWORD, testParams)
     }
 
-    fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
+    suspend fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
     }
 
-    fun cleanUpOpenedSessions() {
+    suspend fun cleanUpOpenedSessions() {
         trackedSessions.forEach {
-            runBlockingTest {
-                it.signOutService().signOut(true)
-            }
+            it.signOutService().signOut(true)
         }
         trackedSessions.clear()
     }
@@ -140,27 +146,10 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 .build()
     }
 
-    /**
-     * This methods init the event stream and check for initial sync
-     *
-     * @param session the session to sync
-     */
-    fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
-        val lock = CountDownLatch(1)
-        coroutineScope.launch {
-            session.syncService().startSync(true)
-            val syncLiveData = session.syncService().getSyncStateLive()
-            val syncObserver = object : Observer<SyncState> {
-                override fun onChanged(t: SyncState?) {
-                    if (session.syncService().hasAlreadySynced()) {
-                        lock.countDown()
-                        syncLiveData.removeObserver(this)
-                    }
-                }
-            }
-            syncLiveData.observeForever(syncObserver)
-        }
-        await(lock, timeout)
+    suspend fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
+        session.syncService().startSync(true)
+        val syncLiveData = session.syncService().getSyncStateLive()
+        syncLiveData.first(timeout) { session.syncService().hasAlreadySynced() }
     }
 
     /**
@@ -168,22 +157,11 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
      *
      * @param session the session to sync
      */
-    fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
-        waitWithLatch(timeout) { latch ->
-            session.clearCache()
-            val syncLiveData = session.syncService().getSyncStateLive()
-            val syncObserver = object : Observer<SyncState> {
-                override fun onChanged(t: SyncState?) {
-                    if (session.syncService().hasAlreadySynced()) {
-                        Timber.v("Clear cache and synced")
-                        syncLiveData.removeObserver(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            syncLiveData.observeForever(syncObserver)
-            session.syncService().startSync(true)
-        }
+    suspend fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
+        session.clearCache()
+        syncSession(session, timeout)
+        session.syncService().getSyncStateLive().first(timeout) { session.syncService().hasAlreadySynced() }
+        Timber.v("Clear cache and synced")
     }
 
     /**
@@ -193,7 +171,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
      * @param message the message to send
      * @param nbOfMessages the number of time the message will be sent
      */
-    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+    suspend fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, nbOfMessages, timeout)
@@ -206,66 +184,72 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
     /**
      * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
+    private suspend fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(count)
         (1 until count + 1)
                 .map { "$message #$it" }
                 .chunked(10)
                 .forEach { batchedMessages ->
-                    batchedMessages.forEach { formattedMessage ->
-                        if (rootThreadEventId != null) {
-                            room.relationService().replyInThread(
-                                    rootThreadEventId = rootThreadEventId,
-                                    replyInThreadText = formattedMessage
-                            )
-                        } else {
-                            room.sendService().sendTextMessage(formattedMessage)
-                        }
-                    }
-                    waitWithLatch(timeout) { latch ->
-                        val timelineListener = object : Timeline.Listener {
+                    waitFor(
+                            continueWhen = {
+                                wrapWithTimeout(timeout) {
+                                    suspendCoroutine<Unit> { continuation ->
+                                        val timelineListener = object : Timeline.Listener {
 
-                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                                val allSentMessages = snapshot
-                                        .filter { it.root.sendState == SendState.SYNCED }
-                                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+                                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                                                val allSentMessages = snapshot
+                                                        .filter { it.root.sendState == SendState.SYNCED }
+                                                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
-                                val hasSyncedAllBatchedMessages = allSentMessages
-                                        .map {
-                                            it.root.getClearContent().toModel<MessageContent>()?.body
+                                                val hasSyncedAllBatchedMessages = allSentMessages
+                                                        .map {
+                                                            it.root.getClearContent().toModel<MessageContent>()?.body
+                                                        }
+                                                        .containsAll(batchedMessages)
+
+                                                if (allSentMessages.size == count) {
+                                                    sentEvents.addAll(allSentMessages)
+                                                }
+                                                if (hasSyncedAllBatchedMessages) {
+                                                    timeline.removeListener(this)
+                                                    continuation.resume(Unit)
+                                                }
+                                            }
                                         }
-                                        .containsAll(batchedMessages)
-
-                                if (allSentMessages.size == count) {
-                                    sentEvents.addAll(allSentMessages)
+                                        timeline.addListener(timelineListener)
+                                    }
                                 }
-                                if (hasSyncedAllBatchedMessages) {
-                                    timeline.removeListener(this)
-                                    latch.countDown()
+                            },
+                            action = {
+                                batchedMessages.forEach { formattedMessage ->
+                                    if (rootThreadEventId != null) {
+                                        room.relationService().replyInThread(
+                                                rootThreadEventId = rootThreadEventId,
+                                                replyInThreadText = formattedMessage
+                                        )
+                                    } else {
+                                        room.sendService().sendTextMessage(formattedMessage)
+                                    }
                                 }
                             }
-                        }
-                        timeline.addListener(timelineListener)
-                    }
+                    )
                 }
         return sentEvents
     }
 
-    fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
-                val roomSummary = otherSession.getRoomSummary(roomID)
-                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
-                    if (it) {
-                        Log.v("# TEST", "${otherSession.myUserId} can see the invite")
-                    }
+    suspend fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
+        retryPeriodically {
+            val roomSummary = otherSession.getRoomSummary(roomID)
+            (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                if (it) {
+                    Log.v("# TEST", "${otherSession.myUserId} can see the invite")
                 }
             }
         }
 
         // not sure why it's taking so long :/
-        runBlockingTest(90_000) {
+        wrapWithTimeout(90_000) {
             Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
             try {
                 otherSession.roomService().joinRoom(roomID)
@@ -275,11 +259,9 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
 
         Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        waitWithLatch {
-            retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(roomID)
-                roomSummary != null && roomSummary.membership == Membership.JOIN
-            }
+        retryPeriodically {
+            val roomSummary = otherSession.getRoomSummary(roomID)
+            roomSummary != null && roomSummary.membership == Membership.JOIN
         }
     }
 
@@ -289,7 +271,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
      * @param message the message to send
      * @param numberOfMessages the number of time the message will be sent
      */
-    fun replyInThreadMessage(
+    suspend fun replyInThreadMessage(
             room: Room,
             message: String,
             numberOfMessages: Int,
@@ -307,15 +289,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
 
     // PRIVATE METHODS *****************************************************************************
 
-    /**
-     * Creates a unique account
-     *
-     * @param userNamePrefix the user name prefix
-     * @param password the password
-     * @param testParams test params about the session
-     * @return the session associated with the newly created account
-     */
-    private fun createAccount(
+    private suspend fun createAccount(
             userNamePrefix: String,
             password: String,
             testParams: SessionTestParams
@@ -333,15 +307,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
     }
 
-    /**
-     * Logs into an existing account
-     *
-     * @param userId the userId to log in
-     * @param password the password to log in
-     * @param testParams test params about the session
-     * @return the session associated with the existing account
-     */
-    fun logIntoAccount(
+    suspend fun logIntoAccount(
             userId: String,
             password: String,
             testParams: SessionTestParams
@@ -353,32 +319,25 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
     }
 
-    /**
-     * Create an account and a dedicated session
-     *
-     * @param userName the account username
-     * @param password the password
-     * @param sessionTestParams parameters for the test
-     */
-    private fun createAccountAndSync(
+    private suspend fun createAccountAndSync(
             userName: String,
             password: String,
             sessionTestParams: SessionTestParams
     ): Session {
         val hs = createHomeServerConfig()
 
-        runBlockingTest {
+        wrapWithTimeout(TestConstants.timeOutMillis) {
             matrix.authenticationService.getLoginFlow(hs)
         }
 
-        runBlockingTest(timeout = 60_000) {
+        wrapWithTimeout(60_000L) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .createAccount(userName, password, null)
         }
 
         // Perform dummy step
-        val registrationResult = runBlockingTest(timeout = 60_000) {
+        val registrationResult = wrapWithTimeout(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .dummy()
@@ -393,29 +352,14 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         return session
     }
 
-    /**
-     * Start an account login
-     *
-     * @param userName the account username
-     * @param password the password
-     * @param sessionTestParams session test params
-     */
-    private fun logAccountAndSync(
-            userName: String,
-            password: String,
-            sessionTestParams: SessionTestParams
-    ): Session {
+    private suspend fun logAccountAndSync(userName: String, password: String, sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
-        runBlockingTest {
-            matrix.authenticationService.getLoginFlow(hs)
-        }
+        matrix.authenticationService.getLoginFlow(hs)
 
-        val session = runBlockingTest {
-            matrix.authenticationService
-                    .getLoginWizard()
-                    .login(userName, password, "myDevice")
-        }
+        val session = matrix.authenticationService
+                .getLoginWizard()
+                .login(userName, password, "myDevice")
         session.open()
         if (sessionTestParams.withInitialSync) {
             syncSession(session)
@@ -430,25 +374,21 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
      * @param userName the account username
      * @param password the password
      */
-    fun logAccountWithError(
+    suspend fun logAccountWithError(
             userName: String,
             password: String
     ): Throwable {
         val hs = createHomeServerConfig()
 
-        runBlockingTest {
-            matrix.authenticationService.getLoginFlow(hs)
-        }
+        matrix.authenticationService.getLoginFlow(hs)
 
         var requestFailure: Throwable? = null
-        runBlockingTest {
-            try {
-                matrix.authenticationService
-                        .getLoginWizard()
-                        .login(userName, password, "myDevice")
-            } catch (failure: Throwable) {
-                requestFailure = failure
-            }
+        try {
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice")
+        } catch (failure: Throwable) {
+            requestFailure = failure
         }
 
         assertNotNull(requestFailure)
@@ -484,65 +424,48 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         )
     }
 
-    suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
-        while (true) {
-            try {
-                delay(1000)
-            } catch (ex: CancellationException) {
-                // the job was canceled, just stop
-                return
-            }
-            if (condition()) {
-                latch.countDown()
-                return
+    suspend fun retryPeriodically(timeout: Long = TestConstants.timeOutMillis, predicate: suspend () -> Boolean) {
+        wrapWithTimeout(timeout) {
+            while (!predicate()) {
+                runBlocking { delay(500) }
             }
         }
     }
 
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
-        val latch = CountDownLatch(1)
-        val job = coroutineScope.launch(dispatcher) {
-            block(latch)
-        }
-        await(latch, timeout, job)
-    }
-
-    fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
-        return runBlocking {
-            withTimeout(timeout) {
-                block()
+    suspend fun <T> waitForCallback(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
+        return wrapWithTimeout(timeout) {
+            suspendCoroutine { continuation ->
+                val callback = object : MatrixCallback<T> {
+                    override fun onSuccess(data: T) {
+                        continuation.resume(data)
+                    }
+                }
+                block(callback)
             }
         }
     }
 
-    // Transform a method with a MatrixCallback to a synchronous method
-    inline fun <reified T> doSync(timeout: Long? = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
-        val lock = CountDownLatch(1)
-        var result: T? = null
-
-        val callback = object : TestMatrixCallback<T>(lock) {
-            override fun onSuccess(data: T) {
-                result = data
-                super.onSuccess(data)
+    suspend fun <T> waitForCallbackError(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): Throwable {
+        return wrapWithTimeout(timeout) {
+            suspendCoroutine { continuation ->
+                val callback = object : MatrixCallback<T> {
+                    override fun onFailure(failure: Throwable) {
+                        continuation.resume(failure)
+                    }
+                }
+                block(callback)
             }
         }
-
-        block.invoke(callback)
-
-        await(lock, timeout)
-
-        assertNotNull(result)
-        return result!!
     }
 
     /**
      * Clear all provided sessions
      */
-    fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
+    suspend fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
-    fun signOutAndClose(session: Session) {
+    suspend fun signOutAndClose(session: Session) {
         trackedSessions.remove(session)
-        runBlockingTest(timeout = 60_000) {
+        wrapWithTimeout(timeout = 60_000L) {
             session.signOutService().signOut(true)
         }
         // no need signout will close

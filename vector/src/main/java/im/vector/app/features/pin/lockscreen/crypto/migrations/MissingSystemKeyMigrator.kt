@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.crypto.migrations
 
-import android.annotation.SuppressLint
 import android.os.Build
 import im.vector.app.features.pin.lockscreen.crypto.KeyStoreCrypto
 import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
@@ -38,9 +37,9 @@ class MissingSystemKeyMigrator @Inject constructor(
     /**
      * If user had biometric auth enabled, ensure system key exists, creating one if needed.
      */
-    @SuppressLint("NewApi")
     fun migrateIfNeeded() {
-        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && vectorPreferences.useBiometricsToUnlock()) {
+        if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M) &&
+                vectorPreferences.useBiometricsToUnlock()) {
             val systemKeyStoreCrypto = keystoreCryptoFactory.provide(systemKeyAlias, true)
             runCatching {
                 systemKeyStoreCrypto.ensureKey()

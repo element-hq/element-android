@@ -18,11 +18,11 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.givenAsFlow
@@ -85,6 +85,7 @@ class GetDeviceFullInfoUseCaseTest {
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData.givenAsFlow()
         val trustLevel = givenTrustLevel(currentSessionCrossSigningInfo, cryptoDeviceInfo)
         val isInactive = false
+        val isCurrentDevice = true
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
 
         // When
@@ -96,6 +97,7 @@ class GetDeviceFullInfoUseCaseTest {
                 cryptoDeviceInfo = cryptoDeviceInfo,
                 roomEncryptionTrustLevel = trustLevel,
                 isInactive = isInactive,
+                isCurrentDevice = isCurrentDevice
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }

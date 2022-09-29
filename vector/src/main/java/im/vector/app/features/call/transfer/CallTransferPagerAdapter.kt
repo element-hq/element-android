@@ -22,12 +22,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.call.dialpad.DialPadFragment
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 
 class CallTransferPagerAdapter(
-        private val fragmentActivity: FragmentActivity
+        private val fragmentActivity: FragmentActivity,
+        private val vectorLocale: VectorLocaleProvider,
 ) : FragmentStateAdapter(fragmentActivity) {
 
     companion object {
@@ -61,7 +62,7 @@ class CallTransferPagerAdapter(
                 arguments = Bundle().apply {
                     putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
                     putBoolean(DialPadFragment.EXTRA_ENABLE_OK, false)
-                    putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                    putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
                 }
             }
         }

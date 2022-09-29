@@ -22,3 +22,4 @@
 /package.json
 /yarn.lock
 /node_modules
+**/out/failures

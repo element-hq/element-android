@@ -19,7 +19,6 @@
 package im.vector.app.features.notifications
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -34,6 +33,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.annotation.AttrRes
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -102,6 +102,7 @@ class NotificationUtils @Inject constructor(
         const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
         fun openSystemSettingsForSilentCategory(fragment: Fragment) {
@@ -126,7 +127,6 @@ class NotificationUtils @Inject constructor(
     /**
      * Create notification channels.
      */
-    @TargetApi(Build.VERSION_CODES.O)
     fun createNotificationChannels() {
         if (!supportNotificationChannels()) {
             return
@@ -218,7 +218,6 @@ class NotificationUtils @Inject constructor(
      * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
-    @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
         val i = HomeActivity.newIntent(context, firstStartMainActivity = false)
@@ -287,7 +286,6 @@ class NotificationUtils @Inject constructor(
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildIncomingCallNotification(
             call: WebRtcCall,
             title: String,
@@ -420,7 +418,6 @@ class NotificationUtils @Inject constructor(
      * @param title title of the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildPendingCallNotification(
             call: WebRtcCall,
             title: String
@@ -966,6 +963,7 @@ class NotificationUtils @Inject constructor(
         }
     }
 
+    @SuppressLint("LaunchActivityFromNotification")
     fun displayDiagnosticNotification() {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = actionIds.diagnostic

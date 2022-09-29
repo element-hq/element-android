@@ -36,7 +36,7 @@ ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 1
+ext.versionPatch = 2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -191,7 +191,7 @@ android {
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
                 // See https://issuetracker.google.com/issues/171133218
                 output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
-                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
+                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCode + "\n"
                 output.outputFileName = output.outputFileName.replace("vector-app", "vector")
             }
         }

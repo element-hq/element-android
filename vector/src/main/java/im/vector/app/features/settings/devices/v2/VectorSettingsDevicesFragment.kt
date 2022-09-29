@@ -37,9 +37,11 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import javax.inject.Inject
@@ -83,6 +85,7 @@ class VectorSettingsDevicesFragment :
         initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
+        initSecurityRecommendationsView()
         observeViewEvents()
     }
 
@@ -101,8 +104,7 @@ class VectorSettingsDevicesFragment :
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvent.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
@@ -123,6 +125,29 @@ class VectorSettingsDevicesFragment :
 
     private fun initOtherSessionsView() {
         views.deviceListOtherSessions.callback = this
+    }
+
+    private fun initSecurityRecommendationsView() {
+        views.deviceListUnverifiedSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.UNVERIFIED,
+                        excludeCurrentDevice = false
+                )
+            }
+        }
+        views.deviceListInactiveSessionsRecommendation.callback = object : SecurityRecommendationView.Callback {
+            override fun onViewAllClicked() {
+                viewNavigator.navigateToOtherSessions(
+                        requireActivity(),
+                        R.string.device_manager_header_section_security_recommendations_title,
+                        DeviceManagerFilterType.INACTIVE,
+                        excludeCurrentDevice = false
+                )
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -227,6 +252,9 @@ class VectorSettingsDevicesFragment :
             views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }
+            views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
+                viewModel.handle(DevicesAction.VerifyCurrentSession)
+            }
         } ?: run {
             hideCurrentSessionView()
         }
@@ -260,6 +288,11 @@ class VectorSettingsDevicesFragment :
     }
 
     override fun onViewAllOtherSessionsClicked() {
-        viewNavigator.navigateToOtherSessions(requireActivity())
+        viewNavigator.navigateToOtherSessions(
+                context = requireActivity(),
+                titleResourceId = R.string.device_manager_sessions_other_title,
+                defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
+                excludeCurrentDevice = true
+        )
     }
 }

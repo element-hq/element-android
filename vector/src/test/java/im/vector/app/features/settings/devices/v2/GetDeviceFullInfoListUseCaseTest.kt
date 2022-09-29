@@ -19,6 +19,9 @@ package im.vector.app.features.settings.devices.v2
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.filter.FilterDevicesUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -106,19 +109,22 @@ class GetDeviceFullInfoListUseCaseTest {
                 deviceInfo = deviceInfo1,
                 cryptoDeviceInfo = cryptoDeviceInfo1,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = true
+                isInactive = true,
+                isCurrentDevice = true
         )
         val expectedResult2 = DeviceFullInfo(
                 deviceInfo = deviceInfo2,
                 cryptoDeviceInfo = cryptoDeviceInfo2,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false
         )
         val expectedResult3 = DeviceFullInfo(
                 deviceInfo = deviceInfo3,
                 cryptoDeviceInfo = cryptoDeviceInfo3,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
         every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
@@ -160,6 +166,7 @@ class GetDeviceFullInfoListUseCaseTest {
     private fun givenCurrentSessionCrossSigningInfo(): CurrentSessionCrossSigningInfo {
         val currentSessionCrossSigningInfo = mockk<CurrentSessionCrossSigningInfo>()
         every { getCurrentSessionCrossSigningInfoUseCase.execute() } returns flowOf(currentSessionCrossSigningInfo)
+        every { currentSessionCrossSigningInfo.deviceId } returns A_DEVICE_ID_1
         return currentSessionCrossSigningInfo
     }
 

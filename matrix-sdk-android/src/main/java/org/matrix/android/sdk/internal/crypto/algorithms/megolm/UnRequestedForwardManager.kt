@@ -31,7 +31,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.math.abs
 
-private val INVITE_VALIDITY_TIME_WINDOW_MILLIS = 10 * 60_000
+private const val INVITE_VALIDITY_TIME_WINDOW_MILLIS = 10 * 60_000
 
 @SessionScope
 internal class UnRequestedForwardManager @Inject constructor(

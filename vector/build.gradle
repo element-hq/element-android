@@ -24,6 +24,8 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
+initScreenshotTests(project)
+
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
@@ -104,12 +106,12 @@ dependencies {
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":library:jsonviewer")
+    implementation project(":library:external:jsonviewer")
+    implementation project(":library:external:diff-match-patch")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation project(":library:attachment-viewer")
-    implementation project(":library:diff-match-patch")
     implementation project(":library:multipicker")
 
     implementation libs.jetbrains.coroutinesCore
@@ -230,9 +232,9 @@ dependencies {
     }
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.1'
+    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
 
-    implementation "androidx.emoji2:emoji2:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -265,7 +267,7 @@ dependencies {
     api libs.vanniktech.emojiMaterial
     api libs.vanniktech.emojiGoogle
 
-    implementation 'im.dlg:android-dialer:1.2.5'
+    implementation project(":library:external:dialpad")
 
     // JWT
     api libs.jsonwebtoken.jjwtApi
