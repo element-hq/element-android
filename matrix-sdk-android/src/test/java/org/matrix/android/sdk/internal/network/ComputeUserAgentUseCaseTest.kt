@@ -42,7 +42,7 @@ class ComputeUserAgentUseCaseTest {
     private val applicationInfo = mockk<ApplicationInfo>()
     private val packageInfo = mockk<PackageInfo>()
 
-    private val computeUserAgentUseCase = ComputeUserAgentUseCase()
+    private val computeUserAgentUseCase = ComputeUserAgentUseCase(context)
 
     @Before
     fun setUp() {
@@ -60,7 +60,7 @@ class ComputeUserAgentUseCaseTest {
         givenAppVersion(AN_APP_VERSION)
 
         // When
-        val result = computeUserAgentUseCase.execute(context, A_FLAVOUR)
+        val result = computeUserAgentUseCase.execute(A_FLAVOUR)
 
         // Then
         val expectedUserAgent = constructExpectedUserAgent(AN_APP_NAME, AN_APP_VERSION)
@@ -74,7 +74,7 @@ class ComputeUserAgentUseCaseTest {
         givenAppVersion(AN_APP_VERSION)
 
         // When
-        val result = computeUserAgentUseCase.execute(context, A_FLAVOUR)
+        val result = computeUserAgentUseCase.execute(A_FLAVOUR)
 
         // Then
         val expectedUserAgent = constructExpectedUserAgent(A_PACKAGE_NAME, AN_APP_VERSION)
@@ -88,7 +88,7 @@ class ComputeUserAgentUseCaseTest {
         givenAppVersion(AN_APP_VERSION)
 
         // When
-        val result = computeUserAgentUseCase.execute(context, A_FLAVOUR)
+        val result = computeUserAgentUseCase.execute(A_FLAVOUR)
 
         // Then
         val expectedUserAgent = constructExpectedUserAgent(A_PACKAGE_NAME, AN_APP_VERSION)
@@ -102,7 +102,7 @@ class ComputeUserAgentUseCaseTest {
         givenAppVersion(null)
 
         // When
-        val result = computeUserAgentUseCase.execute(context, A_FLAVOUR)
+        val result = computeUserAgentUseCase.execute(A_FLAVOUR)
 
         // Then
         val expectedUserAgent = constructExpectedUserAgent(AN_APP_NAME, ComputeUserAgentUseCase.FALLBACK_APP_VERSION)

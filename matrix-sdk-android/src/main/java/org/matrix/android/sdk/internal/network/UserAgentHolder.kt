@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.network
 
-import android.content.Context
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.internal.di.MatrixScope
 import javax.inject.Inject
 
 @MatrixScope
 internal class UserAgentHolder @Inject constructor(
-        context: Context,
         matrixConfiguration: MatrixConfiguration,
         computeUserAgentUseCase: ComputeUserAgentUseCase,
 ) {
@@ -32,6 +30,6 @@ internal class UserAgentHolder @Inject constructor(
         private set
 
     init {
-        userAgent = computeUserAgentUseCase.execute(context, matrixConfiguration.applicationFlavor)
+        userAgent = computeUserAgentUseCase.execute(matrixConfiguration.applicationFlavor)
     }
 }

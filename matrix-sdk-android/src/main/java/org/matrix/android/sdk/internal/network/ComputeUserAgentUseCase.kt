@@ -22,16 +22,17 @@ import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class ComputeUserAgentUseCase @Inject constructor() {
+class ComputeUserAgentUseCase @Inject constructor(
+        private val context: Context,
+) {
 
     /**
      * Create an user agent with the application version.
      * Ex: Element/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
      *
-     * @param context the context
      * @param flavorDescription the flavor description
      */
-    fun execute(context: Context, flavorDescription: String): String {
+    fun execute(flavorDescription: String): String {
         val appPackageName = context.applicationContext.packageName
         val pm = context.packageManager
 
