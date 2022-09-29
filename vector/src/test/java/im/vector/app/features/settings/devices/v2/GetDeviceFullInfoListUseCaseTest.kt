@@ -46,7 +46,6 @@ private const val A_DEVICE_ID_3 = "device-id-3"
 private const val A_TIMESTAMP_1 = 100L
 private const val A_TIMESTAMP_2 = 200L
 private const val A_TIMESTAMP_3 = 300L
-private const val A_USER_AGENT = "Element dbg/1.5.0-dev (Xiaomi Mi 9T; Android 11; RKQ1.200826.002 test-keys; Flavour GooglePlay; MatrixAndroidSdk2 1.5.2)"
 
 class GetDeviceFullInfoListUseCaseTest {
 
@@ -92,7 +91,6 @@ class GetDeviceFullInfoListUseCaseTest {
                 isInactive = true,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 cryptoDeviceInfo = cryptoDeviceInfo1,
-                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfo2 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_2,
@@ -100,7 +98,6 @@ class GetDeviceFullInfoListUseCaseTest {
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 cryptoDeviceInfo = cryptoDeviceInfo2,
-                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfo3 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_3,
@@ -108,7 +105,6 @@ class GetDeviceFullInfoListUseCaseTest {
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
                 cryptoDeviceInfo = cryptoDeviceInfo3,
-                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfoList = listOf(deviceInfo1, deviceInfo2, deviceInfo3)
         every { fakeFlowSession.liveMyDevicesInfo() } returns flowOf(deviceInfoList)
@@ -118,7 +114,7 @@ class GetDeviceFullInfoListUseCaseTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 isInactive = true,
                 isCurrentDevice = true,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult2 = DeviceFullInfo(
                 deviceInfo = deviceInfo2,
@@ -126,7 +122,7 @@ class GetDeviceFullInfoListUseCaseTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 isInactive = false,
                 isCurrentDevice = false,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult3 = DeviceFullInfo(
                 deviceInfo = deviceInfo3,
@@ -134,7 +130,7 @@ class GetDeviceFullInfoListUseCaseTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
                 isInactive = false,
                 isCurrentDevice = false,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
         every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
@@ -192,20 +188,15 @@ class GetDeviceFullInfoListUseCaseTest {
             isInactive: Boolean,
             roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
             cryptoDeviceInfo: CryptoDeviceInfo,
-            lastSeenUserAgent: String,
     ): DeviceInfo {
         val deviceInfo = mockk<DeviceInfo>()
         every { deviceInfo.deviceId } returns deviceId
         every { deviceInfo.lastSeenTs } returns lastSeenTs
-        every { deviceInfo.getBestLastSeenUserAgent() } returns lastSeenUserAgent
+        every { deviceInfo.getBestLastSeenUserAgent() } returns ""
         every { getEncryptionTrustLevelForDeviceUseCase.execute(any(), cryptoDeviceInfo) } returns roomEncryptionTrustLevel
         every { checkIfSessionIsInactiveUseCase.execute(lastSeenTs) } returns isInactive
-        every { parseDeviceUserAgentUseCase.execute(lastSeenUserAgent) } returns DeviceUserAgent(
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceExtendedInfo(
                 DeviceType.MOBILE,
-                "Xiaomi Mi 9T",
-                "Android 11",
-                "Element dbg",
-                "1.5.0-dev"
         )
 
         return deviceInfo

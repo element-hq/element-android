@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class ParseDeviceUserAgentUseCase @Inject constructor() {
 
-    fun execute(userAgent: String?): DeviceUserAgent {
+    fun execute(userAgent: String?): DeviceExtendedInfo {
         if (userAgent == null) return createUnknownUserAgent()
 
         return when {
@@ -34,7 +34,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         }
     }
 
-    private fun parseAndroidUserAgent(userAgent: String): DeviceUserAgent {
+    private fun parseAndroidUserAgent(userAgent: String): DeviceExtendedInfo {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
         val deviceInfoSegments = userAgent.substringAfter("(").substringBeforeLast(")").split("; ")
@@ -48,19 +48,19 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
             deviceModel = deviceInfoSegments.getOrNull(0)
             deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
         }
-        return DeviceUserAgent(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
+        return DeviceExtendedInfo(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
     }
 
-    private fun parseIosUserAgent(userAgent: String): DeviceUserAgent {
+    private fun parseIosUserAgent(userAgent: String): DeviceExtendedInfo {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
         val deviceInfoSegments = userAgent.substringAfter("(").substringBeforeLast(")").split("; ")
         val deviceModel = deviceInfoSegments.getOrNull(0)
         val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
-        return DeviceUserAgent(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
+        return DeviceExtendedInfo(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
     }
 
-    private fun parseDesktopUserAgent(userAgent: String): DeviceUserAgent {
+    private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
         val browserSegments = userAgent.split(" ")
         val browserName = when {
             isFirefox(browserSegments) -> {
@@ -86,17 +86,17 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         } else {
             deviceOperatingSystemSegments.getOrNull(0)
         }
-        return DeviceUserAgent(DeviceType.DESKTOP, browserName, deviceOperatingSystem, null, null)
+        return DeviceExtendedInfo(DeviceType.DESKTOP, browserName, deviceOperatingSystem, null, null)
     }
 
-    private fun parseWebUserAgent(userAgent: String): DeviceUserAgent {
+    private fun parseWebUserAgent(userAgent: String): DeviceExtendedInfo {
         return parseDesktopUserAgent(userAgent).copy(
                 deviceType = DeviceType.WEB
         )
     }
 
-    private fun createUnknownUserAgent(): DeviceUserAgent {
-        return DeviceUserAgent(DeviceType.UNKNOWN)
+    private fun createUnknownUserAgent(): DeviceExtendedInfo {
+        return DeviceExtendedInfo(DeviceType.UNKNOWN)
     }
 
     private fun isFirefox(browserSegments: List<String>): Boolean {

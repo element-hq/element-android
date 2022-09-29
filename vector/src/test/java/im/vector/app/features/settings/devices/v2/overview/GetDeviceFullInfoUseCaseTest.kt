@@ -19,7 +19,7 @@ package im.vector.app.features.settings.devices.v2.overview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.DeviceUserAgent
+import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.ParseDeviceUserAgentUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.app.features.settings.devices.v2.list.DeviceType
@@ -92,7 +92,7 @@ class GetDeviceFullInfoUseCaseTest {
         val isInactive = false
         val isCurrentDevice = true
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
-        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceUserAgent(DeviceType.MOBILE)
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceExtendedInfo(DeviceType.MOBILE)
 
         // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
@@ -104,7 +104,7 @@ class GetDeviceFullInfoUseCaseTest {
                 roomEncryptionTrustLevel = trustLevel,
                 isInactive = isInactive,
                 isCurrentDevice = isCurrentDevice,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }

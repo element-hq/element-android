@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 
-data class DeviceUserAgent(
+data class DeviceExtendedInfo(
         /**
          * One of MOBILE, WEB, DESKTOP or UNKNOWN.
          */

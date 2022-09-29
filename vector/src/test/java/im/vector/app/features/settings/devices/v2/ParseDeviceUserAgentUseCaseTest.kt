@@ -32,13 +32,13 @@ private val A_USER_AGENT_LIST_FOR_ANDROID = listOf(
         "Element/1.0.0 (Linux; Android 7.0; SM-G610M Build/NRD90M; Flavour GPlay; MatrixAndroidSdk2 1.0)",
 )
 private val AN_EXPECTED_RESULT_LIST_FOR_ANDROID = listOf(
-        DeviceUserAgent(DeviceType.MOBILE, "Xiaomi Mi 9T", "Android 11", "Element dbg", "1.5.0-dev"),
-        DeviceUserAgent(DeviceType.MOBILE, "Samsung SM-G960F", "Android 6.0.1", "Element", "1.5.0"),
-        DeviceUserAgent(DeviceType.MOBILE, "Google Nexus 5", "Android 7.0", "Element", "1.5.0"),
-        DeviceUserAgent(DeviceType.MOBILE, "Google (Nexus) 5", "Android 7.0", "Element", "1.5.0"),
-        DeviceUserAgent(DeviceType.MOBILE, "Google (Nexus) (5)", "Android 7.0", "Element", "1.5.0"),
-        DeviceUserAgent(DeviceType.MOBILE, "SM-A510F Build/MMB29", "Android 6.0.1", "Element", "1.0.0"),
-        DeviceUserAgent(DeviceType.MOBILE, "SM-G610M Build/NRD90M", "Android 7.0", "Element", "1.0.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "Xiaomi Mi 9T", "Android 11", "Element dbg", "1.5.0-dev"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "Samsung SM-G960F", "Android 6.0.1", "Element", "1.5.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "Google Nexus 5", "Android 7.0", "Element", "1.5.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "Google (Nexus) 5", "Android 7.0", "Element", "1.5.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "Google (Nexus) (5)", "Android 7.0", "Element", "1.5.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "SM-A510F Build/MMB29", "Android 6.0.1", "Element", "1.0.0"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "SM-G610M Build/NRD90M", "Android 7.0", "Element", "1.0.0"),
 )
 
 private val A_USER_AGENT_LIST_FOR_IOS = listOf(
@@ -48,10 +48,10 @@ private val A_USER_AGENT_LIST_FOR_IOS = listOf(
         "Element/1.8.21 (iPad Pro (12.9-inch) (3rd generation); iOS 15.2; Scale/3.00)",
 )
 private val AN_EXPECTED_RESULT_LIST_FOR_IOS = listOf(
-        DeviceUserAgent(DeviceType.MOBILE, "iPhone", "iOS 15.2", "Element", "1.8.21"),
-        DeviceUserAgent(DeviceType.MOBILE, "iPhone XS Max", "iOS 15.2", "Element", "1.8.21"),
-        DeviceUserAgent(DeviceType.MOBILE, "iPad Pro (11-inch)", "iOS 15.2", "Element", "1.8.21"),
-        DeviceUserAgent(DeviceType.MOBILE, "iPad Pro (12.9-inch) (3rd generation)", "iOS 15.2",
+        DeviceExtendedInfo(DeviceType.MOBILE, "iPhone", "iOS 15.2", "Element", "1.8.21"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "iPhone XS Max", "iOS 15.2", "Element", "1.8.21"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "iPad Pro (11-inch)", "iOS 15.2", "Element", "1.8.21"),
+        DeviceExtendedInfo(DeviceType.MOBILE, "iPad Pro (12.9-inch) (3rd generation)", "iOS 15.2",
                 "Element", "1.8.21"),
 )
 
@@ -61,8 +61,8 @@ private val A_USER_AGENT_LIST_FOR_DESKTOP = listOf(
         "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
 )
 private val AN_EXPECTED_RESULT_LIST_FOR_DESKTOP = listOf(
-        DeviceUserAgent(DeviceType.DESKTOP, "Electron", "Macintosh", null, null),
-        DeviceUserAgent(DeviceType.DESKTOP, "Electron", "Windows NT 10.0", null, null),
+        DeviceExtendedInfo(DeviceType.DESKTOP, "Electron", "Macintosh", null, null),
+        DeviceExtendedInfo(DeviceType.DESKTOP, "Electron", "Windows NT 10.0", null, null),
 )
 
 private val A_USER_AGENT_LIST_FOR_WEB = listOf(
@@ -77,15 +77,15 @@ private val A_USER_AGENT_LIST_FOR_WEB = listOf(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
         )
 private val AN_EXPECTED_RESULT_LIST_FOR_WEB = listOf(
-        DeviceUserAgent(DeviceType.WEB, "Chrome", "Macintosh", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Chrome", "Windows NT 10.0", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Firefox", "Macintosh", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Safari", "Macintosh", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Chrome", "Android 9", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Safari", "iPad", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Safari", "iPhone", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Firefox", "Windows NT 6.0", null, null),
-        DeviceUserAgent(DeviceType.WEB, "Edge", "Windows NT 10.0", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Chrome", "Macintosh", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Chrome", "Windows NT 10.0", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Firefox", "Macintosh", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Safari", "Macintosh", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Chrome", "Android 9", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Safari", "iPad", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Safari", "iPhone", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Firefox", "Windows NT 6.0", null, null),
+        DeviceExtendedInfo(DeviceType.WEB, "Edge", "Windows NT 10.0", null, null),
 )
 
 private val AN_UNKNOWN_USER_AGENT_LIST = listOf(
@@ -93,8 +93,8 @@ private val AN_UNKNOWN_USER_AGENT_LIST = listOf(
         "Curl Client/1.0",
 )
 private val AN_UNKNOWN_USER_AGENT_EXPECTED_RESULT_LIST = listOf(
-        DeviceUserAgent(DeviceType.UNKNOWN, null, null, null, null),
-        DeviceUserAgent(DeviceType.UNKNOWN, null, null, null, null),
+        DeviceExtendedInfo(DeviceType.UNKNOWN, null, null, null, null),
+        DeviceExtendedInfo(DeviceType.UNKNOWN, null, null, null, null),
 )
 
 class ParseDeviceUserAgentUseCaseTest {

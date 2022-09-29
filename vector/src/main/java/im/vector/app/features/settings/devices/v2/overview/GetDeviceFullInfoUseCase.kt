@@ -58,7 +58,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                             roomEncryptionTrustLevel = roomEncryptionTrustLevel,
                             isInactive = isInactive,
                             isCurrentDevice = isCurrentDevice,
-                            deviceUserAgent = deviceUserAgent,
+                            deviceExtendedInfo = deviceUserAgent,
                     )
                 } else {
                     null

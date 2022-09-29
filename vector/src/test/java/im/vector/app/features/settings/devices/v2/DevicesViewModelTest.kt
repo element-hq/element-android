@@ -244,7 +244,7 @@ class DevicesViewModelTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 isInactive = false,
                 isCurrentDevice = true,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val deviceFullInfo2 = DeviceFullInfo(
                 deviceInfo = mockk(),
@@ -252,7 +252,7 @@ class DevicesViewModelTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
                 isInactive = true,
                 isCurrentDevice = false,
-                deviceUserAgent = DeviceUserAgent(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)
