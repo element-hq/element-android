@@ -267,10 +267,21 @@ internal class SecretShareManager @Inject constructor(
             Timber.tag(loggerTag.value).e("onSecretSend() :Received unencrypted secret send event")
             return
         }
+        // no need to download keys, after a verification we already forced download
+        val sendingDevice = toDevice.getSenderKey()?.let { cryptoStore.deviceWithIdentityKey(it) }
+        if (sendingDevice == null) {
+            Timber.tag(loggerTag.value).e("onSecretSend() : Ignore secret from unknown  device ${toDevice.getSenderKey()}")
+            return
+        }
 
         // Was that sent by us?
-        if (toDevice.senderId != credentials.userId) {
+        if (sendingDevice.userId != credentials.userId) {
             Timber.tag(loggerTag.value).e("onSecretSend() : Ignore secret from other user ${toDevice.senderId}")
+            return
+        }
+
+        if (!sendingDevice.isVerified) {
+            Timber.tag(loggerTag.value).e("onSecretSend() : Ignore secret from untrusted device ${toDevice.getSenderKey()}")
             return
         }
 

@@ -394,14 +394,16 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     suspend fun ensureCanDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
         sentEventIds.forEachIndexed { index, sentEventId ->
             testHelper.retryPeriodically {
-                val event = session.getRoom(e2eRoomID)!!.timelineService().getTimelineEvent(sentEventId)!!.root
+                val event = session.getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(sentEventId)?.root
+                        ?: return@retryPeriodically false
                 try {
                     session.cryptoService().decryptEvent(event, "").let { result ->
                         event.mxDecryptionResult = OlmDecryptionResult(
                                 payload = result.clearEvent,
                                 senderKey = result.senderCurve25519Key,
                                 keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                                isSafe = result.isSafe
                         )
                     }
                 } catch (error: MXCryptoError) {

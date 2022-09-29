@@ -41,6 +41,7 @@ internal interface IMXDecrypting {
      *
      * @param event the key event.
      * @param defaultKeysBackupService the keys backup service
+     * @param forceAccept the keys backup service
      */
-    fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
+    fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService, forceAccept: Boolean = false) {}
 }
