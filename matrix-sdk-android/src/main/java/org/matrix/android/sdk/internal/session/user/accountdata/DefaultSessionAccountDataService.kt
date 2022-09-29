@@ -64,9 +64,10 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         return roomAccountDataDataSource.getLiveAccountDataEvents(null, types)
     }
 
+    // TODO add unit tests
     override suspend fun updateUserAccountData(type: String, content: Content) {
         val params = UpdateUserAccountDataTask.AnyParams(type = type, any = content)
-        awaitCallback<Unit> { callback ->
+        awaitCallback { callback ->
             updateUserAccountDataTask.configureWith(params) {
                 this.retryCount = 5 // TODO Need to refactor retrying out into a helper method.
                 this.callback = callback
