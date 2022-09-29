@@ -18,8 +18,8 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.ParseDeviceUserAgentUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.app.features.settings.devices.v2.list.DeviceType

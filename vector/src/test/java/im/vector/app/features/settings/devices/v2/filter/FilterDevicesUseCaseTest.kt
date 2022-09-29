@@ -16,8 +16,8 @@
 
 package im.vector.app.features.settings.devices.v2.filter
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
