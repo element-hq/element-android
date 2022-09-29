@@ -16,10 +16,13 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fixtures.PusherFixture.aPusher
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.every
@@ -37,11 +40,14 @@ class SessionOverviewViewModelTest {
     @get:Rule
     val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
 
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID
     )
     private val fakeSession = FakeSession()
-    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
+    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -51,20 +57,18 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `given the viewModel has been initialized then viewState is updated with session info`() {
-        // Given
         val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID) } returns flowOf(deviceFullInfo)
         val expectedState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID,
                 isCurrentSession = true,
-                deviceInfo = Success(deviceFullInfo)
+                deviceInfo = Success(deviceFullInfo),
+                pushers = Loading(),
         )
 
-        // When
         val viewModel = createViewModel()
 
-        // Then
         viewModel.test()
                 .assertLatestState { state -> state == expectedState }
                 .finish()
@@ -77,5 +81,31 @@ class SessionOverviewViewModelTest {
         every { sessionParams.deviceId } returns deviceId
         fakeSession.givenSessionParams(sessionParams)
         return sessionParams
+    }
+
+    @Test
+    fun `when viewModel init, then observe pushers and emit to state`() {
+        val pushers = listOf(aPusher(deviceId = A_SESSION_ID))
+        fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+
+        viewModel.test()
+                .assertLatestState { state -> state.pushers.invoke() == pushers }
+                .finish()
+    }
+
+    @Test
+    fun `when handle TogglePushNotifications, then toggle enabled for device pushers`() {
+        val pushers = listOf(
+                aPusher(deviceId = A_SESSION_ID, enabled = false),
+                aPusher(deviceId = "another id", enabled = false)
+        )
+        fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID, true))
+
+        fakeSession.pushersService().verifyOnlyTogglePusherCalled(pushers.first(), true)
     }
 }
