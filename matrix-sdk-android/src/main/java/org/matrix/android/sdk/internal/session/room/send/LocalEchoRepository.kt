@@ -16,9 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.send
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -26,8 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.database.RealmSessionProvider
-import org.matrix.android.sdk.internal.database.asyncTransaction
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -42,17 +39,13 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val taskExecutor: TaskExecutor,
-        private val realmSessionProvider: RealmSessionProvider,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val timelineInput: TimelineInput,
         private val timelineEventMapper: TimelineEventMapper,
@@ -65,30 +58,33 @@ internal class LocalEchoRepository @Inject constructor(
         event.eventId ?: throw IllegalStateException("You should have set an eventId for your event")
         event.type ?: throw IllegalStateException("You should have set a type for your event")
 
-        val timelineEventEntity = realmSessionProvider.withRealm { realm ->
-            val eventEntity = event.toEntity(roomId, SendState.UNSENT, clock.epochMillis())
-            val roomMemberHelper = RoomMemberHelper(realm, roomId)
-            val myUser = roomMemberHelper.getLastRoomMember(senderId)
-            val localId = UUID.randomUUID().mostSignificantBits
-            TimelineEventEntity(localId).also {
-                it.root = eventEntity
-                it.eventId = event.eventId
-                it.roomId = roomId
-                it.senderName = myUser?.displayName
-                it.senderAvatar = myUser?.avatarUrl
-                it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(myUser?.displayName)
-            }
+        val realm = realmInstance.getBlockingRealm()
+        val eventEntity = event.toEntity(roomId, SendState.UNSENT, clock.epochMillis())
+        val roomMemberHelper = RoomMemberHelper(realm, roomId)
+        val myUser = roomMemberHelper.getLastRoomMember(senderId)
+        val localId = UUID.randomUUID().mostSignificantBits
+        val timelineEventEntity = TimelineEventEntity().also {
+            it.localId = localId
+            it.root = eventEntity
+            it.eventId = event.eventId
+            it.roomId = roomId
+            it.senderName = myUser?.displayName
+            it.senderAvatar = myUser?.avatarUrl
+            it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(myUser?.displayName)
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         timelineInput.onLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent)
-        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
-            val eventInsertEntity = EventInsertEntity(event.eventId, event.type, canBeProcessed = true).apply {
+        realmInstance.asyncWrite {
+            val eventInsertEntity = EventInsertEntity().apply {
+                this.eventId = event.eventId
+                this.insertType = EventInsertType.INCREMENTAL_SYNC
+                this.canBeProcessed = true
                 this.insertType = EventInsertType.LOCAL_ECHO
             }
-            realm.insert(eventInsertEntity)
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
+            copyToRealm(eventInsertEntity)
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).first().find() ?: return@asyncWrite
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
-            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+            roomSummaryUpdater.updateSendingInformation(this, roomId)
         }
     }
 
@@ -106,28 +102,28 @@ internal class LocalEchoRepository @Inject constructor(
         }
     }
 
-    suspend fun updateEcho(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
-        monarchy.awaitTransaction { realm ->
-            val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
+    suspend fun updateEcho(eventId: String, block: (realm: MutableRealm, eventEntity: EventEntity) -> Unit) {
+        realmInstance.write {
+            val sendingEventEntity = EventEntity.where(this, eventId).first().find()
             if (sendingEventEntity != null) {
-                block(realm, sendingEventEntity)
+                block(this, sendingEventEntity)
             }
         }
     }
 
-    fun updateEchoAsync(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
-        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
-            val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
+    fun updateEchoAsync(eventId: String, block: (realm: MutableRealm, eventEntity: EventEntity) -> Unit) {
+        realmInstance.asyncWrite {
+            val sendingEventEntity = EventEntity.where(this, eventId).first().find()
             if (sendingEventEntity != null) {
-                block(realm, sendingEventEntity)
+                block(this, sendingEventEntity)
             }
         }
     }
 
     suspend fun getUpToDateEcho(eventId: String): Event? {
         // We are using awaitTransaction here to make sure this executes after other transactions
-        return monarchy.awaitTransaction { realm ->
-            EventEntity.where(realm, eventId).findFirst()?.asDomain(castJsonNumbers = true)
+        return realmInstance.write {
+            EventEntity.where(this, eventId).first().find()?.asDomain(castJsonNumbers = true)
         }
     }
 
@@ -136,40 +132,48 @@ internal class LocalEchoRepository @Inject constructor(
     }
 
     suspend fun deleteFailedEcho(roomId: String, eventId: String?) {
-        monarchy.awaitTransaction { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
-            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
-            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+        realmInstance.write {
+            TimelineEventEntity.where(this, roomId = roomId, eventId = eventId ?: "").first().find()?.also {
+                delete(it)
+            }
+            EventEntity.where(this, eventId = eventId ?: "").first().find()?.also {
+                delete(it)
+            }
+            roomSummaryUpdater.updateSendingInformation(this, roomId)
         }
     }
 
     fun deleteFailedEchoAsync(roomId: String, eventId: String?) {
-        monarchy.runTransactionSync { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
-            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
-            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+        realmInstance.blockingWrite {
+            TimelineEventEntity.where(this, roomId = roomId, eventId = eventId ?: "").first().find()?.also {
+                delete(it)
+            }
+            EventEntity.where(this, eventId = eventId ?: "").first().find()?.also {
+                delete(it)
+            }
+            roomSummaryUpdater.updateSendingInformation(this, roomId)
         }
     }
 
     suspend fun clearSendingQueue(roomId: String) {
-        monarchy.awaitTransaction { realm ->
+        realmInstance.write {
             TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, SendState.IS_SENDING_STATES)
+                    .findAllInRoomWithSendStates(this, roomId, SendState.IS_SENDING_STATES)
                     .forEach {
                         it.root?.sendState = SendState.UNSENT
                     }
-            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+            roomSummaryUpdater.updateSendingInformation(this, roomId)
         }
     }
 
     suspend fun updateSendState(roomId: String, eventIds: List<String>, sendState: SendState) {
-        monarchy.awaitTransaction { realm ->
-            val timelineEvents = TimelineEventEntity.where(realm, roomId, eventIds).findAll()
+        realmInstance.write {
+            val timelineEvents = TimelineEventEntity.where(this, roomId, eventIds).find()
             timelineEvents.forEach {
                 it.root?.sendState = sendState
                 it.root?.sendStateDetails = null
             }
-            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+            roomSummaryUpdater.updateSendingInformation(this, roomId)
         }
     }
 
@@ -178,55 +182,56 @@ internal class LocalEchoRepository @Inject constructor(
     }
 
     fun getAllEventsWithStates(roomId: String, states: List<SendState>): List<TimelineEvent> {
-        return realmSessionProvider.withRealm { realm ->
-            TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, states)
-                    .sortedByDescending { it.displayIndex }
-                    .mapNotNull { it?.let { timelineEventMapper.map(it) } }
-                    .filter { event ->
-                        when (event.root.getClearType()) {
-                            EventType.MESSAGE,
-                            EventType.REDACTION,
-                            EventType.REACTION -> {
-                                val content = event.root.getClearContent().toModel<MessageContent>()
-                                if (content != null) {
-                                    when (content.msgType) {
-                                        MessageType.MSGTYPE_EMOTE,
-                                        MessageType.MSGTYPE_NOTICE,
-                                        MessageType.MSGTYPE_LOCATION,
-                                        MessageType.MSGTYPE_TEXT,
-                                        MessageType.MSGTYPE_FILE,
-                                        MessageType.MSGTYPE_VIDEO,
-                                        MessageType.MSGTYPE_IMAGE,
-                                        MessageType.MSGTYPE_AUDIO -> {
-                                            // need to resend the attachment
-                                            true
-                                        }
-                                        else -> {
-                                            Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
-                                            false
-                                        }
+        val realm = realmInstance.getBlockingRealm()
+        return TimelineEventEntity
+                .findAllInRoomWithSendStates(realm, roomId, states)
+                .sortedByDescending { it.displayIndex }
+                .map { it.let { timelineEventMapper.map(it) } }
+                .filter { event ->
+                    when (event.root.getClearType()) {
+                        EventType.MESSAGE,
+                        EventType.REDACTION,
+                        EventType.REACTION -> {
+                            val content = event.root.getClearContent().toModel<MessageContent>()
+                            if (content != null) {
+                                when (content.msgType) {
+                                    MessageType.MSGTYPE_EMOTE,
+                                    MessageType.MSGTYPE_NOTICE,
+                                    MessageType.MSGTYPE_LOCATION,
+                                    MessageType.MSGTYPE_TEXT,
+                                    MessageType.MSGTYPE_FILE,
+                                    MessageType.MSGTYPE_VIDEO,
+                                    MessageType.MSGTYPE_IMAGE,
+                                    MessageType.MSGTYPE_AUDIO -> {
+                                        // need to resend the attachment
+                                        true
                                     }
-                                } else {
-                                    Timber.e("Unsupported message to resend ${event.root.getClearType()}")
-                                    false
+                                    else -> {
+                                        Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
+                                        false
+                                    }
                                 }
-                            }
-                            else -> {
+                            } else {
                                 Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                 false
                             }
                         }
+                        else -> {
+                            Timber.e("Unsupported message to resend ${event.root.getClearType()}")
+                            false
+                        }
                     }
-        }
+                }
     }
 
     /**
      * Returns the latest known thread event message, or the rootThreadEventId if no other event found.
      */
     fun getLatestThreadEvent(rootThreadEventId: String): String {
-        return realmSessionProvider.withRealm { realm ->
-            EventEntity.where(realm, eventId = rootThreadEventId).findFirst()?.threadSummaryLatestMessage?.eventId
-        } ?: rootThreadEventId
+        val realm = realmInstance.getBlockingRealm()
+        return EventEntity.where(realm, eventId = rootThreadEventId)
+                .first()
+                .find()
+                ?.threadSummaryLatestMessage?.eventId ?: rootThreadEventId
     }
 }
