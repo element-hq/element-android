@@ -20,18 +20,17 @@ import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
 internal fun EventAnnotationsSummaryEntity.Companion.where(realm: TypedRealm, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
-    return realm.where<EventAnnotationsSummaryEntity>()
-            .equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
+    return realm.query(EventAnnotationsSummaryEntity::class)
+            .query("eventId == $0", eventId)
 }
 
 internal fun EventAnnotationsSummaryEntity.Companion.where(realm: TypedRealm, roomId: String, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
-    return realm.where<EventAnnotationsSummaryEntity>()
-            .equalTo(EventAnnotationsSummaryEntityFields.ROOM_ID, roomId)
-            .equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
+    return realm.query(EventAnnotationsSummaryEntity::class)
+            .query("roomId == $0", roomId)
+            .query("eventId == $0", eventId)
 }
 
 internal fun EventAnnotationsSummaryEntity.Companion.create(realm: MutableRealm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
@@ -41,8 +40,8 @@ internal fun EventAnnotationsSummaryEntity.Companion.create(realm: MutableRealm,
     }
     val managedObj = realm.copyToRealm(obj)
     // Denormalization
-    TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findAll()?.forEach {
-        it.annotations = obj
+    TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).find().forEach {
+        it.annotations = managedObj
     }
     return obj
 }

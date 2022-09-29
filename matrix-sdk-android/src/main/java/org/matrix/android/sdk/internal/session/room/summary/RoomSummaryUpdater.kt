@@ -80,7 +80,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAccountDataDataSource: RoomAccountDataDataSource
 ) {
 
-    fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
+    fun refreshLatestPreviewContent(realm: MutableRealm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
         if (roomSummaryEntity != null) {
             val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)

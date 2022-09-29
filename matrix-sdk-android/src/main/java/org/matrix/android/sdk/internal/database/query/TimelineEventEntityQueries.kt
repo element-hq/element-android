@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.database.query
 
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.RealmResults
+import io.realm.kotlin.types.RealmList
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -37,7 +39,7 @@ internal fun TimelineEventEntity.Companion.where(
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .query("roomId == $0", roomId)
-            .query("evendId == $0", eventId)
+            .query("eventId == $0", eventId)
 }
 
 internal fun TimelineEventEntity.Companion.where(
@@ -47,7 +49,7 @@ internal fun TimelineEventEntity.Companion.where(
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .query("roomId == $0", roomId)
-            .queryIn("evendId", eventIds)
+            .queryIn("eventId", eventIds)
 }
 
 internal fun TimelineEventEntity.Companion.whereRoomId(
@@ -73,7 +75,7 @@ internal fun TimelineEventEntity.Companion.latestEvent(
         includesSending: Boolean,
         filters: TimelineEventFilters = TimelineEventFilters()
 ): TimelineEventEntity? {
-    val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
+    val roomEntity = RoomEntity.where(realm, roomId).first().find() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterEvents(filters)
 
     val liveEvents = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.where()?.filterEvents(filters)
@@ -126,7 +128,7 @@ internal fun RealmQuery<TimelineEventEntity>.filterTypes(filterTypes: List<Strin
     return if (filterTypes.isEmpty()) {
         this
     } else {
-        `in`(TimelineEventEntityFields.ROOT.TYPE, filterTypes.toTypedArray())
+        queryIn("root.type", filterTypes)
     }
 }
 
@@ -137,29 +139,29 @@ internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEvent
 }
 
 internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         sendStates: List<SendState>
 ): RealmResults<TimelineEventEntity> {
     return whereRoomId(realm, roomId)
             .filterSendStates(sendStates)
-            .findAll()
+            .find()
 }
 
 internal fun RealmQuery<TimelineEventEntity>.filterSendStates(sendStates: List<SendState>): RealmQuery<TimelineEventEntity> {
-    val sendStatesStr = sendStates.map { it.name }.toTypedArray()
-    return `in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
+    val sendStatesStr = sendStates.map { it.name }
+    return queryIn("root.sendStateStr", sendStatesStr)
 }
 
 /**
  * Find all TimelineEventEntity items where sender is in senderIds collection, excluding state events.
  */
 internal fun TimelineEventEntity.Companion.findAllFrom(
-        realm: Realm,
+        realm: TypedRealm,
         senderIds: Collection<String>
 ): RealmResults<TimelineEventEntity> {
     return where(realm)
-            .`in`(TimelineEventEntityFields.ROOT.SENDER, senderIds.toTypedArray())
-            .isNull(TimelineEventEntityFields.ROOT.STATE_KEY)
-            .findAll()
+            .queryIn("root.sender", senderIds.toList())
+            .query("root.stateKey == nil")
+            .find()
 }

@@ -18,27 +18,23 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.RealmQuery
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.util.mapOptional
 
 /**
  * This class takes care of handling case where local echo is replaced by the synced event in the db.
  */
 internal class LiveTimelineEvent(
-        private val monarchy: Monarchy,
-        private val coroutineScope: CoroutineScope,
+        private val realmInstance: RealmInstance,
         private val timelineEventMapper: TimelineEventMapper,
         private val roomId: String,
         private val eventId: String
@@ -49,16 +45,17 @@ internal class LiveTimelineEvent(
         buildAndObserveQuery()
     }
 
-    private var initialLiveData: LiveData<List<TimelineEvent>>? = null
+    private var initialLiveData: LiveData<Optional<TimelineEvent>>? = null
 
-    // Makes sure it's made on the main thread
-    private fun buildAndObserveQuery() = coroutineScope.launch(Dispatchers.Main) {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
-                { timelineEventMapper.map(it) }
-        )
+    private fun buildAndObserveQuery() {
+        val liveData = realmInstance.queryFirst {
+            TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).first()
+        }
+                .mapOptional(timelineEventMapper::map)
+                .asLiveData()
+
         addSource(liveData) { newValue ->
-            value = newValue.firstOrNull().toOptional()
+            value = newValue
         }
         initialLiveData = liveData
         if (LocalEcho.isLocalEchoId(eventId)) {
@@ -67,22 +64,22 @@ internal class LiveTimelineEvent(
     }
 
     private fun observeTimelineEventWithTxId() {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { it.queryTimelineEventWithTxId() },
-                { timelineEventMapper.map(it) }
-        )
+        val liveData = realmInstance.queryFirst {
+            it.queryTimelineEventWithTxId().first()
+        }
+                .mapOptional(timelineEventMapper::map)
+                .asLiveData()
         addSource(liveData) { newValue ->
-            val optionalValue = newValue.firstOrNull().toOptional()
-            if (optionalValue.hasValue()) {
+            if (newValue.hasValue()) {
                 initialLiveData?.also { removeSource(it) }
-                value = optionalValue
+                value = newValue
             }
         }
     }
 
-    private fun Realm.queryTimelineEventWithTxId(): RealmQuery<TimelineEventEntity> {
-        return where(TimelineEventEntity::class.java)
-                .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-                .like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, """{*"transaction_id":*"$eventId"*}""")
+    private fun TypedRealm.queryTimelineEventWithTxId(): RealmQuery<TimelineEventEntity> {
+        return query(TimelineEventEntity::class)
+                .query("roomId == $0", roomId)
+                .query("root.unsignedData LIKE $0", """{*"transaction_id":*"$eventId"*}""")
     }
 }

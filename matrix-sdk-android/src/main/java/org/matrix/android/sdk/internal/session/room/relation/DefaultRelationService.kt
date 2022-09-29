@@ -16,8 +16,7 @@
 package org.matrix.android.sdk.internal.session.room.relation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -29,7 +28,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -37,7 +36,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDataSource
-import org.matrix.android.sdk.internal.util.fetchCopyMap
+import org.matrix.android.sdk.internal.util.mapOptional
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
@@ -48,7 +47,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val timelineEventDataSource: TimelineEventDataSource,
-        @SessionDatabase private val monarchy: Monarchy
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : RelationService {
 
     @AssistedFactory
@@ -146,22 +145,19 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
-        return monarchy.fetchCopyMap(
-                { EventAnnotationsSummaryEntity.where(it, roomId, eventId).findFirst() },
-                { entity, _ ->
-                    entity.asDomain()
-                }
-        )
+        val realm = realmInstance.getBlockingRealm()
+        return EventAnnotationsSummaryEntity.where(realm, roomId, eventId)
+                .first()
+                .find()
+                ?.asDomain()
     }
 
     override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, roomId, eventId) },
-                { it.asDomain() }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
+        return realmInstance.queryFirst {
+            EventAnnotationsSummaryEntity.where(it, roomId, eventId).first()
         }
+                .mapOptional { it.asDomain() }
+                .asLiveData()
     }
 
     override fun replyInThread(

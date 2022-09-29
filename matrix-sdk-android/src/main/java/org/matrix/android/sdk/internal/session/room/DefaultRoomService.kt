@@ -17,9 +17,8 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.asLiveData
 import androidx.paging.PagedList
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.Room
@@ -37,9 +36,8 @@ import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
@@ -56,11 +54,11 @@ import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
-import org.matrix.android.sdk.internal.util.fetchCopied
+import org.matrix.android.sdk.internal.util.mapOptional
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val createRoomTask: CreateRoomTask,
         private val createLocalRoomTask: CreateLocalRoomTask,
         private val deleteLocalRoomTask: DeleteLocalRoomTask,
@@ -125,9 +123,9 @@ internal class DefaultRoomService @Inject constructor(
         }
 
         if (roomSummaries.isNotEmpty()) {
-            monarchy.runTransactionSync { realm ->
+            realmInstance.blockingWrite {
                 roomSummaries.forEach {
-                    roomSummaryUpdater.refreshLatestPreviewContent(realm, it.roomId)
+                    roomSummaryUpdater.refreshLatestPreviewContent(this, it.roomId)
                 }
             }
         }
@@ -213,23 +211,21 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override fun getRoomMember(userId: String, roomId: String): RoomMemberSummary? {
-        val roomMemberEntity = monarchy.fetchCopied {
-            RoomMemberHelper(it, roomId).getLastRoomMember(userId)
-        }
-        return roomMemberEntity?.asDomain()
+        val realm = realmInstance.getBlockingRealm()
+        return RoomMemberHelper(realm, roomId)
+                .getLastRoomMember(userId)
+                ?.asDomain()
     }
 
     override fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
-                            .equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-                },
-                { it.asDomain() }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
+        return realmInstance.queryFirst { realm ->
+            RoomMemberHelper(realm, roomId)
+                    .queryRoomMembersEvent()
+                    .query("userId == $0", userId)
+                    .first()
         }
+                .mapOptional { it.asDomain() }
+                .asLiveData()
     }
 
     override suspend fun getRoomState(roomId: String): List<Event> {
