@@ -16,14 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room
 
-import io.realm.Realm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -39,7 +38,7 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
      * @param roomId the roomId of the room to resolve avatar
      * @return the room avatar url, can be a fallback to a room member avatar or null
      */
-    fun resolve(realm: Realm, roomId: String): String? {
+    fun resolve(realm: TypedRealm, roomId: String): String? {
         val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_AVATAR, stateKey = "")
                 ?.root
                 ?.asDomain()
@@ -50,21 +49,21 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
             return roomName
         }
         val roomMembers = RoomMemberHelper(realm, roomId)
-        val members = roomMembers.queryActiveRoomMembersEvent().findAll()
+        val members = roomMembers.queryActiveRoomMembersEvent().find()
         // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
-        val isDirectRoom = RoomSummaryEntity.where(realm, roomId).findFirst()?.isDirect.orFalse()
+        val isDirectRoom = RoomSummaryEntity.where(realm, roomId).first().find()?.isDirect.orFalse()
 
         if (isDirectRoom) {
             if (members.size == 1) {
                 // Use avatar of a left user
                 val firstLeftAvatarUrl = roomMembers.queryLeftRoomMembersEvent()
-                        .findAll()
+                        .find()
                         .firstOrNull { !it.avatarUrl.isNullOrEmpty() }
                         ?.avatarUrl
 
                 return firstLeftAvatarUrl ?: members.firstOrNull()?.avatarUrl
             } else if (members.size == 2) {
-                val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
+                val firstOtherMember = roomMembers.queryActiveRoomMembersEvent().query("userId != $0", userId).first().find()
                 return firstOtherMember?.avatarUrl
             }
         }

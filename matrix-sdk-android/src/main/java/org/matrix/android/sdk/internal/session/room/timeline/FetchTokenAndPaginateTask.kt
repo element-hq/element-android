@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.query.findIncludingEvent
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface FetchTokenAndPaginateTask : Task<FetchTokenAndPaginateTask.Params, TokenChunkEventPersistor.Result> {
@@ -40,7 +39,7 @@ internal interface FetchTokenAndPaginateTask : Task<FetchTokenAndPaginateTask.Pa
 
 internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val filterRepository: FilterRepository,
         private val paginationTask: PaginationTask,
         private val globalErrorReceiver: GlobalErrorReceiver
@@ -58,8 +57,8 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
         }
                 ?: throw IllegalStateException("No token found")
 
-        monarchy.awaitTransaction { realm ->
-            val chunkToUpdate = ChunkEntity.findIncludingEvent(realm, params.lastKnownEventId)
+        realmInstance.write {
+            val chunkToUpdate = ChunkEntity.findIncludingEvent(this, params.lastKnownEventId)
             if (params.direction == PaginationDirection.FORWARDS) {
                 chunkToUpdate?.nextToken = fromToken
             } else {

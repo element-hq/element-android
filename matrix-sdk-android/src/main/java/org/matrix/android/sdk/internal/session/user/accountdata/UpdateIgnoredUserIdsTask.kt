@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -37,17 +37,18 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         private val accountDataApi: AccountDataAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @UserId private val userId: String,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateIgnoredUserIdsTask {
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
         // Get current list
-        val ignoredUserIds = monarchy.fetchAllMappedSync(
-                { realm -> realm.where(IgnoredUserEntity::class.java) },
-                { it.userId }
-        ).toMutableSet()
+        val realm = realmInstance.getRealm()
+        val ignoredUserIds = realm.query(IgnoredUserEntity::class)
+                .find()
+                .map { it.userId }
+                .toMutableSet()
 
         val original = ignoredUserIds.toSet()
 

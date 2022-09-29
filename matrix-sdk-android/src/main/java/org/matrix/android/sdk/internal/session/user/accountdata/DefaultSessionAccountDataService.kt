@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
@@ -32,7 +33,7 @@ import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultSessionAccountDataService @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val userAccountDataDataSource: UserAccountDataDataSource,
@@ -74,8 +75,8 @@ internal class DefaultSessionAccountDataService @Inject constructor(
                     .executeBy(taskExecutor)
         }
         // TODO Move that to the task (but it created a circular dependencies...)
-        monarchy.runTransactionSync { realm ->
-            userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
+        realmInstance.write {
+            userAccountDataSyncHandler.handleGenericAccountData(this, type, content)
         }
     }
 }

@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.uploads
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Sort
+import io.realm.kotlin.query.Sort
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -26,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.uploads.GetUploadsResult
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -55,7 +55,7 @@ internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult
 internal class DefaultGetUploadsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val tokenStore: SyncTokenStore,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetUploadsTask {
 
@@ -63,6 +63,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
         val result: GetUploadsResult
         val events: List<Event>
 
+        val realm = realmInstance.getRealm()
         if (params.isRoomEncrypted) {
             // Get a chunk of events from cache for e2e rooms
 
@@ -72,17 +73,13 @@ internal class DefaultGetUploadsTask @Inject constructor(
                     hasMore = false
             )
 
-            var eventsFromRealm = emptyList<Event>()
-            monarchy.doWithRealm { realm ->
-                eventsFromRealm = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
-                        .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
-                        .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
-                        .findAll()
-                        .map { it.asDomain() }
-                        // Exclude stickers
-                        .filter { it.getClearType() != EventType.STICKER }
-            }
-            events = eventsFromRealm
+            events = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
+                    .query("decryptionResultJson LIKE $0", TimelineEventFilter.DecryptedContent.URL)
+                    .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
+                    .find()
+                    .map { it.asDomain() }
+                    // Exclude stickers
+                    .filter { it.getClearType() != EventType.STICKER }
         } else {
             val since = params.since ?: tokenStore.getLastToken() ?: throw IllegalStateException("No token available")
 
@@ -104,32 +101,29 @@ internal class DefaultGetUploadsTask @Inject constructor(
         val cacheOfSenderInfos = mutableMapOf<String, SenderInfo>()
 
         // Get a snapshot of all room members
-        monarchy.doWithRealm { realm ->
-            val roomMemberHelper = RoomMemberHelper(realm, params.roomId)
+        val roomMemberHelper = RoomMemberHelper(realm, params.roomId)
+        uploadEvents = events.mapNotNull { event ->
+            val eventId = event.eventId ?: return@mapNotNull null
+            val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return@mapNotNull null
+            val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@mapNotNull null
+            val senderId = event.senderId ?: return@mapNotNull null
 
-            uploadEvents = events.mapNotNull { event ->
-                val eventId = event.eventId ?: return@mapNotNull null
-                val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return@mapNotNull null
-                val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@mapNotNull null
-                val senderId = event.senderId ?: return@mapNotNull null
-
-                val senderInfo = cacheOfSenderInfos.getOrPut(senderId) {
-                    val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(senderId)
-                    SenderInfo(
-                            userId = senderId,
-                            displayName = roomMemberSummaryEntity?.displayName,
-                            isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
-                            avatarUrl = roomMemberSummaryEntity?.avatarUrl
-                    )
-                }
-
-                UploadEvent(
-                        root = event,
-                        eventId = eventId,
-                        contentWithAttachmentContent = messageWithAttachmentContent,
-                        senderInfo = senderInfo
+            val senderInfo = cacheOfSenderInfos.getOrPut(senderId) {
+                val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(senderId)
+                SenderInfo(
+                        userId = senderId,
+                        displayName = roomMemberSummaryEntity?.displayName,
+                        isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
+                        avatarUrl = roomMemberSummaryEntity?.avatarUrl
                 )
             }
+
+            UploadEvent(
+                    root = event,
+                    eventId = eventId,
+                    contentWithAttachmentContent = messageWithAttachmentContent,
+                    senderInfo = senderInfo
+            )
         }
 
         return result.copy(uploadEvents = uploadEvents)

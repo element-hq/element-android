@@ -16,12 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.RealmList
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.where
+import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
@@ -35,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.api.session.sync.model.UserAccountDataSync
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -42,11 +40,8 @@ import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
-import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
-import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.findAllFrom
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -70,7 +65,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UserAccountDataSyncHandler @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @UserId private val userId: String,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
@@ -99,24 +94,23 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         if (invites.isNullOrEmpty()) return
         val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
         var hasUpdate = false
-        monarchy.doWithRealm { realm ->
-            invites.forEach { (roomId, _) ->
-                val myUserStateEvent = RoomMemberHelper(realm, roomId).getLastStateEvent(userId)
-                val inviterId = myUserStateEvent?.sender
-                val myUserRoomMember: RoomMemberContent? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
-                val isDirect = myUserRoomMember?.isDirect
-                if (inviterId != null && inviterId != userId && isDirect == true) {
-                    directChats
-                            .getOrPut(inviterId, { arrayListOf() })
-                            .apply {
-                                if (contains(roomId)) {
-                                    Timber.v("Direct chats already include room $roomId with user $inviterId")
-                                } else {
-                                    add(roomId)
-                                    hasUpdate = true
-                                }
+        val realm = realmInstance.getRealm()
+        invites.forEach { (roomId, _) ->
+            val myUserStateEvent = RoomMemberHelper(realm, roomId).getLastStateEvent(userId)
+            val inviterId = myUserStateEvent?.sender
+            val myUserRoomMember: RoomMemberContent? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
+            val isDirect = myUserRoomMember?.isDirect
+            if (inviterId != null && inviterId != userId && isDirect == true) {
+                directChats
+                        .getOrPut(inviterId) { arrayListOf() }
+                        .apply {
+                            if (contains(roomId)) {
+                                Timber.v("Direct chats already include room $roomId with user $inviterId")
+                            } else {
+                                add(roomId)
+                                hasUpdate = true
                             }
-                }
+                        }
             }
         }
         if (hasUpdate) {
@@ -160,7 +154,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         realm.copyToRealm(override, updatePolicy = UpdatePolicy.ALL)
 
         val rooms = PushRulesEntity().apply {
-        scope = RuleScope.GLOBAL
+            scope = RuleScope.GLOBAL
             kind = RuleSetKey.ROOM
         }
         globalRules.room?.forEach { rule ->
@@ -169,7 +163,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         realm.copyToRealm(rooms, updatePolicy = UpdatePolicy.ALL)
 
         val senders = PushRulesEntity().apply {
-        scope = RuleScope.GLOBAL
+            scope = RuleScope.GLOBAL
             kind = RuleSetKey.SENDER
         }
         globalRules.sender?.forEach { rule ->
@@ -191,7 +185,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         val content = event.content.toModel<DirectMessagesContent>() ?: return
         content.forEach { (userId, roomIds) ->
             roomIds.forEach { roomId ->
-                val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
+                val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).first().find()
                 if (roomSummaryEntity != null) {
                     roomSummaryEntity.isDirect = true
                     roomSummaryEntity.directUserId = userId
@@ -234,7 +228,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         TimelineEventEntity.findAllFrom(realm, userIds)
                 .also { Timber.d("Deleting ${it.size} TimelineEventEntity from ignored users") }
                 .forEach {
-                    it.deleteOnCascade(true)
+                    //TODO DELETE ON CASCADE
+                    //it.deleteOnCascade(true)
                 }
 
         // Handle the case when some users are unignored from another session
@@ -257,13 +252,13 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         val entity = BreadcrumbsEntity.getOrCreate(realm)
 
         // And save the new received list
-        entity.recentRoomIds = RealmList<String>().apply { addAll(recentRoomIds) }
+        entity.recentRoomIds = realmListOf<String>().apply { addAll(recentRoomIds) }
 
         // Update the room summaries
         // Reset all the indexes...
         RoomSummaryEntity.where(realm)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                .findAll()
+                .query("breadcrumbsIndex > $0", RoomSummary.NOT_IN_BREADCRUMBS)
+                .find()
                 .forEach {
                     it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
                 }
@@ -271,23 +266,26 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         // ...and apply new indexes
         recentRoomIds.forEachIndexed { index, roomId ->
             RoomSummaryEntity.where(realm, roomId)
-                    .findFirst()
+                    .first()
+                    .find()
                     ?.breadcrumbsIndex = index
         }
     }
 
     fun handleGenericAccountData(realm: MutableRealm, type: String, content: Content?) {
-        val existing = realm.where<UserAccountDataEntity>()
-                .equalTo(UserAccountDataEntityFields.TYPE, type)
-                .findFirst()
+        val existing = realm.query(UserAccountDataEntity::class)
+                .query("type == $0", type)
+                .first()
+                .find()
         if (existing != null) {
             // Update current value
             existing.contentStr = ContentMapper.map(content)
         } else {
-            realm.createObject(UserAccountDataEntity::class.java).let { accountDataEntity ->
-                accountDataEntity.type = type
-                accountDataEntity.contentStr = ContentMapper.map(content)
+            val newEntity = UserAccountDataEntity().apply {
+                this.type = type
+                this.contentStr = ContentMapper.map(content)
             }
+            realm.copyToRealm(newEntity)
         }
     }
 }

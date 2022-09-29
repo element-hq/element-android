@@ -15,8 +15,8 @@
  */
 package org.matrix.android.sdk.internal.session.room.relation.threads
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -48,7 +49,6 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
@@ -84,7 +84,7 @@ internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params
 internal class DefaultFetchThreadTimelineTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val cryptoService: DefaultCryptoService,
         private val clock: Clock,
 ) : FetchThreadTimelineTask {
@@ -117,11 +117,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
 
-        monarchy.awaitTransaction { realm ->
+        realmInstance.write {
 
-            val threadChunk = ChunkEntity.findLastForwardChunkOfThread(realm, params.roomId, params.rootThreadEventId)
+            val threadChunk = ChunkEntity.findLastForwardChunkOfThread(this, params.roomId, params.rootThreadEventId)
                     ?: run {
-                        return@awaitTransaction
+                        return@write
                     }
 
             threadChunk.prevToken = response.nextBatch
@@ -139,8 +139,9 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                 }
 
                 val timelineEvent = TimelineEventEntity
-                        .where(realm, roomId = params.roomId, event.eventId)
-                        .findFirst()
+                        .where(this, roomId = params.roomId, event.eventId)
+                        .first()
+                        .find()
 
                 if (timelineEvent != null) {
                     // Event already exists but not in the thread chunk
@@ -149,8 +150,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     threadChunk.timelineEvents.add(timelineEvent)
                 } else {
                     Timber.i("###THREADS FetchThreadTimelineTask event: ${event.eventId} is brand NEW create an entity and add it!")
-                    val eventEntity = createEventEntity(params.roomId, event, realm)
-                    roomMemberContentsByUser.addSenderState(realm, params.roomId, event.senderId)
+                    val eventEntity = createEventEntity(params.roomId, event, this)
+                    roomMemberContentsByUser.addSenderState(this, params.roomId, event.senderId)
                     threadChunk.addTimelineEvent(
                             roomId = params.roomId,
                             eventEntity = eventEntity,
@@ -163,8 +164,9 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
             if (hasReachEnd) {
                 val rootThread = TimelineEventEntity
-                        .where(realm, roomId = params.roomId, params.rootThreadEventId)
-                        .findFirst()
+                        .where(this, roomId = params.roomId, params.rootThreadEventId)
+                        .first()
+                        .find()
                 if (rootThread != null) {
                     // If root thread event already exists add it to our chunk
                     threadChunk.timelineEvents.add(rootThread)
@@ -172,8 +174,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                 } else if (threadRootEvent?.senderId != null) {
                     // Case when thread event is not in the device
                     Timber.i("###THREADS FetchThreadTimelineTask root thread event: ${params.rootThreadEventId} NOT FOUND! Lets create a temp one")
-                    val eventEntity = createEventEntity(params.roomId, threadRootEvent, realm)
-                    roomMemberContentsByUser.addSenderState(realm, params.roomId, threadRootEvent.senderId)
+                    val eventEntity = createEventEntity(params.roomId, threadRootEvent, this)
+                    roomMemberContentsByUser.addSenderState(this, params.roomId, threadRootEvent.senderId)
                     threadChunk.addTimelineEvent(
                             roomId = params.roomId,
                             eventEntity = eventEntity,
@@ -196,7 +198,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     /**
      * If we don't have any new state on this user, get it from db.
      */
-    private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
+    private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: TypedRealm, roomId: String, senderId: String) {
         getOrPut(senderId) {
             CurrentStateEventEntity
                     .getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)
@@ -208,7 +210,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     /**
      * Create an EventEntity to be added in the TimelineEventEntity.
      */
-    private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
+    private fun createEventEntity(roomId: String, event: Event, realm: MutableRealm): EventEntity {
         val now = clock.epochMillis()
         val ageLocalTs = now - (event.unsignedData?.age ?: 0)
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
@@ -236,7 +238,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     private fun handleReaction(
-            realm: Realm,
+            realm: MutableRealm,
             event: Event,
             roomId: String
     ) {
@@ -250,17 +252,17 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                 Timber.i("----> Annotation found in ${event.eventId} ${relationChunk.key} ")
 
                 val eventSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, relatedEventId)
-                var sum = eventSummary.reactionsSummary.find { it.key == reaction }
-
+                val sum = eventSummary.reactionsSummary.find { it.key == reaction }
                 if (sum == null) {
-                    sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
-                    sum.key = reaction
-                    sum.firstTimestamp = event.originServerTs ?: 0
+                    val newSum = ReactionAggregatedSummaryEntity().apply {
+                        this.key = reaction
+                        this.firstTimestamp = event.originServerTs ?: 0
+                        this.count = 1
+                    }
                     Timber.v("Adding synced reaction")
-                    sum.count = 1
                     // reactionEventId not included in the /relations API
 //                    sum.sourceEvents.add(reactionEventId)
-                    eventSummary.reactionsSummary.add(sum)
+                    eventSummary.reactionsSummary.add(newSum)
                 } else {
                     sum.count += 1
                 }

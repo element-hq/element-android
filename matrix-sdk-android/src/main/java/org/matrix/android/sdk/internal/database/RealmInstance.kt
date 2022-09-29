@@ -48,7 +48,7 @@ internal fun interface RealmObjectMapper<T : RealmObject, R> {
  */
 internal class RealmInstance(
         val coroutineScope: CoroutineScope,
-        private val realmConfiguration: RealmConfiguration,
+        val realmConfiguration: RealmConfiguration,
         coroutineDispatcher: CoroutineDispatcher
 ) {
 

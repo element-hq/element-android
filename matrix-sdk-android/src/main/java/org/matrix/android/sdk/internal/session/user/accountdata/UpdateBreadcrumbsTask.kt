@@ -16,13 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.BreadcrumbsContent
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.fetchCopied
 import javax.inject.Inject
 
 // Use the same arbitrary value than Riot-Web
@@ -37,23 +36,22 @@ internal interface UpdateBreadcrumbsTask : Task<UpdateBreadcrumbsTask.Params, Un
 internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
         private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        @SessionDatabase private val monarchy: Monarchy
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : UpdateBreadcrumbsTask {
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {
-        val newBreadcrumbs =
+        val realm = realmInstance.getRealm()
+        val newBreadcrumbs = BreadcrumbsEntity.get(realm)?.recentRoomIds
                 // Get the breadcrumbs entity, if any
-                monarchy.fetchCopied { BreadcrumbsEntity.get(it) }
-                        ?.recentRoomIds
-                        ?.apply {
-                            // Modify the list to add the newTopRoomId first
-                            // Ensure the newTopRoomId is not already in the list
-                            remove(params.newTopRoomId)
-                            // Add the newTopRoomId at first position
-                            add(0, params.newTopRoomId)
-                        }
-                        ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
-                        ?: listOf(params.newTopRoomId)
+                ?.apply {
+                    // Modify the list to add the newTopRoomId first
+                    // Ensure the newTopRoomId is not already in the list
+                    remove(params.newTopRoomId)
+                    // Add the newTopRoomId at first position
+                    add(0, params.newTopRoomId)
+                }
+                ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
+                ?: listOf(params.newTopRoomId)
 
         // Update the DB locally, do not wait for the sync
         saveBreadcrumbsTask.execute(SaveBreadcrumbsTask.Params(newBreadcrumbs))

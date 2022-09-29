@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import io.realm.Realm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -56,7 +57,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
      * @param roomId the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(realm: Realm, roomId: String): RoomName {
+    fun resolve(realm: TypedRealm, roomId: String): RoomName {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
@@ -64,7 +65,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
         // For Lazy Loaded room, see algorithm here:
         // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
         var name: String?
-        val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+        val roomEntity = RoomEntity.where(realm, roomId = roomId).first().find()
         val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
         if (!name.isNullOrEmpty()) {
@@ -77,22 +78,23 @@ internal class RoomDisplayNameResolver @Inject constructor(
         }
 
         val roomMembers = RoomMemberHelper(realm, roomId)
-        val activeMembers = roomMembers.queryActiveRoomMembersEvent().findAll()
+        val activeMembers = roomMembers.queryActiveRoomMembersEvent().find()
 
         if (roomEntity?.membership == Membership.INVITE) {
             val inviteMeEvent = roomMembers.getLastStateEvent(userId)
             val inviterId = inviteMeEvent?.sender
             name = inviterId
                     ?.let {
-                        activeMembers.where()
-                                .equalTo(RoomMemberSummaryEntityFields.USER_ID, it)
-                                .findFirst()
+                        roomMembers.queryActiveRoomMembersEvent()
+                                .query("userId == $0", it)
+                                .first()
+                                .find()
                                 ?.toMatrixItem()
                                 ?.let { matrixItem -> displayNameResolver.getBestName(matrixItem) }
                     }
                     ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
-            val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+            val roomSummary = RoomSummaryEntity.where(realm, roomId).first().find()
             val invitedCount = roomSummary?.invitedMembersCount ?: 0
             val joinedCount = roomSummary?.joinedMembersCount ?: 0
             val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
@@ -102,18 +104,17 @@ internal class RoomDisplayNameResolver @Inject constructor(
                     }
                 }
             } else {
-                activeMembers.where()
-                        .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                roomMembers.queryActiveRoomMembersEvent()
+                        .query("userId != $0", userId)
                         .limit(5)
-                        .findAll()
-                        .createSnapshot()
+                        .find()
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
                 0 -> {
                     // Get left members if any
                     val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
-                            .findAll()
+                            .find()
                             .map { displayNameResolver.getBestName(it.toMatrixItem()) }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
