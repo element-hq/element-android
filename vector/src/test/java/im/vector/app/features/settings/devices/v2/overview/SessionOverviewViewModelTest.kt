@@ -200,26 +200,6 @@ class SessionOverviewViewModelTest {
     }
 
     @Test
-    fun `given current session when handling signout action then confirmation event is posted`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns true
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val signoutAction = SessionOverviewAction.SignoutSession
-        givenCurrentSessionIsTrusted()
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertEvent { it is SessionOverviewViewEvent.ConfirmSignoutCurrentSession }
-                .finish()
-    }
-
-    @Test
     fun `given another session and no reAuth is needed when handling signout action then signout process is performed`() {
         // Given
         val deviceFullInfo = mockk<DeviceFullInfo>()
@@ -227,7 +207,7 @@ class SessionOverviewViewModelTest {
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         givenSignoutSuccess(A_SESSION_ID_1)
         every { refreshDevicesUseCase.execute() } just runs
-        val signoutAction = SessionOverviewAction.SignoutSession
+        val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID_1,
@@ -263,7 +243,7 @@ class SessionOverviewViewModelTest {
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
         givenSignoutError(A_SESSION_ID_1, serverError)
-        val signoutAction = SessionOverviewAction.SignoutSession
+        val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID_1,
@@ -297,7 +277,7 @@ class SessionOverviewViewModelTest {
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         val error = Exception()
         givenSignoutError(A_SESSION_ID_1, error)
-        val signoutAction = SessionOverviewAction.SignoutSession
+        val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
                 deviceId = A_SESSION_ID_1,
@@ -330,7 +310,7 @@ class SessionOverviewViewModelTest {
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         val reAuthNeeded = givenSignoutReAuthNeeded(A_SESSION_ID_1)
-        val signoutAction = SessionOverviewAction.SignoutSession
+        val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         val expectedReAuthEvent = SessionOverviewViewEvent.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode)

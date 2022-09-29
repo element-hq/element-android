@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
@@ -42,6 +43,7 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 /**
@@ -87,15 +89,10 @@ class SessionOverviewFragment :
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
                 is SessionOverviewViewEvent.RequestReAuth -> askForReAuthentication(it)
-                SessionOverviewViewEvent.ConfirmSignoutCurrentSession -> confirmSignoutCurrentSession()
                 SessionOverviewViewEvent.SignoutSuccess -> viewNavigator.goBack(requireActivity())
                 is SessionOverviewViewEvent.SignoutError -> showFailure(it.error)
             }
         }
-    }
-
-    private fun confirmSignoutCurrentSession() {
-        activity?.let { SignOutUiWorker(it).perform() }
     }
 
     private fun initSessionInfoView() {
@@ -112,8 +109,37 @@ class SessionOverviewFragment :
 
     private fun initSignoutButton() {
         views.sessionOverviewSignout.debouncedClicks {
-            viewModel.handle(SessionOverviewAction.SignoutSession)
+            confirmSignoutSession()
         }
+    }
+
+    private fun confirmSignoutSession() = withState(viewModel) { state ->
+        if (state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
+            confirmSignoutCurrentSession()
+        } else {
+            confirmSignoutOtherSession()
+        }
+    }
+
+    private fun confirmSignoutCurrentSession() {
+        activity?.let { SignOutUiWorker(it).perform() }
+    }
+
+    private fun confirmSignoutOtherSession() {
+        activity?.let {
+            MaterialAlertDialogBuilder(it)
+                    .setTitle(R.string.action_sign_out)
+                    .setMessage(R.string.action_sign_out_confirmation_simple)
+                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
+                        signoutSession()
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
+        }
+    }
+
+    private fun signoutSession() {
+        viewModel.handle(SessionOverviewAction.SignoutOtherSession)
     }
 
     override fun onDestroyView() {

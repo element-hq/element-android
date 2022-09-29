@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class SessionOverviewAction : VectorViewModelAction {
     object VerifySession : SessionOverviewAction()
-    object SignoutSession : SessionOverviewAction()
+    object SignoutOtherSession : SessionOverviewAction()
     object SsoAuthDone : SessionOverviewAction()
     data class PasswordAuthDone(val password: String) : SessionOverviewAction()
     object ReAuthCancelled : SessionOverviewAction()

@@ -97,7 +97,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     override fun handle(action: SessionOverviewAction) {
         when (action) {
             is SessionOverviewAction.VerifySession -> handleVerifySessionAction()
-            SessionOverviewAction.SignoutSession -> handleSignoutSession()
+            SessionOverviewAction.SignoutOtherSession -> handleSignoutOtherSession()
             SessionOverviewAction.SsoAuthDone -> handleSsoAuthDone()
             is SessionOverviewAction.PasswordAuthDone -> handlePasswordAuthDone(action)
             SessionOverviewAction.ReAuthCancelled -> handleReAuthCancelled()
@@ -127,16 +127,11 @@ class SessionOverviewViewModel @AssistedInject constructor(
         _viewEvents.post(SessionOverviewViewEvent.ShowVerifyOtherSession(deviceId))
     }
 
-    private fun handleSignoutSession() = withState { state ->
-        if (state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
-            handleSignoutCurrentSession()
-        } else {
+    private fun handleSignoutOtherSession() = withState { state ->
+        // signout process for current session is not handled here
+        if (!state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
             handleSignoutOtherSession(state.deviceId)
         }
-    }
-
-    private fun handleSignoutCurrentSession() {
-        _viewEvents.post(SessionOverviewViewEvent.ConfirmSignoutCurrentSession)
     }
 
     private fun handleSignoutOtherSession(deviceId: String) {
