@@ -36,6 +36,7 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
 /**
@@ -82,7 +83,7 @@ class SessionOverviewFragment :
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
         updateSessionInfo(state.deviceId)
-        updatePushNotificationToggle(state.deviceId, state.pushers.invoke()?.all { it.enabled } == true)
+        updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
         if (state.deviceInfo is Success) {
             renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
         } else {
@@ -103,17 +104,21 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, checked: Boolean) {
+    private fun updatePushNotificationToggle(deviceId: String, pushers: List<Pusher>) {
         views.sessionOverviewPushNotifications.apply {
-            setOnCheckedChangeListener { _, _ -> }
-            setChecked(checked)
-            post {
-                setOnCheckedChangeListener { _, isChecked ->
-                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+            if (pushers.isEmpty()) {
+                isVisible = false
+            } else {
+                val allPushersAreEnabled = pushers.all { it.enabled }
+                setOnCheckedChangeListener { _, _ -> }
+                setChecked(allPushersAreEnabled)
+                post {
+                    setOnCheckedChangeListener { _, isChecked ->
+                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                    }
                 }
             }
         }
-
     }
 
     private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
