@@ -603,6 +603,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param keysClaimed Other keys the sender claims.
      * @param exportFormat true if the megolm keys are in export format
      * @param sharedHistory MSC3061, this key is sharable on invite
+     * @param trusted True if the key is coming from a trusted source
      * @return true if the operation succeeds.
      */
     fun addInboundGroupSession(

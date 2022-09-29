@@ -165,7 +165,7 @@ class MessageInformationDataFactory @Inject constructor(
                     E2EDecoration.NONE
                 } else {
                     val sendingDevice = event.root.getSenderKey()
-                            ?.let { it ->
+                            ?.let {
                                 session.cryptoService().deviceWithIdentityKey(
                                         it,
                                         event.root.content?.get("algorithm") as? String ?: ""

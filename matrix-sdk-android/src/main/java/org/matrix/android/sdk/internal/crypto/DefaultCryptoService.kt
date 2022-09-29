@@ -855,10 +855,12 @@ internal class DefaultCryptoService @Inject constructor(
      * Handle a key event.
      *
      * @param event the key event.
+     * @param acceptUnrequested, if true it will force to accept unrequested keys.
      */
     private fun onRoomKeyEvent(event: Event, acceptUnrequested: Boolean = false) {
         val roomKeyContent = event.getDecryptedContent().toModel<RoomKeyContent>() ?: return
-        Timber.tag(loggerTag.value).i("onRoomKeyEvent(forceAccept:$acceptUnrequested) from: ${event.senderId} type<${event.getClearType()}> , sessionId<${roomKeyContent.sessionId}>")
+        Timber.tag(loggerTag.value)
+                .i("onRoomKeyEvent(f:$acceptUnrequested) from: ${event.senderId} type<${event.getClearType()}> , session<${roomKeyContent.sessionId}>")
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.algorithm.isNullOrEmpty()) {
             Timber.tag(loggerTag.value).e("onRoomKeyEvent() : missing fields")
             return
