@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
-import javax.inject.Inject
+import im.vector.app.features.login.ReAuthHelper
+import io.mockk.every
+import io.mockk.mockk
 
-class IsCurrentSessionUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
+class FakeReAuthHelper {
 
-    fun execute(deviceId: String): Boolean {
-        val currentDeviceId = activeSessionHolder.getSafeActiveSession()?.sessionParams?.deviceId.orEmpty()
-        return deviceId.isNotEmpty() && deviceId == currentDeviceId
+    val instance = mockk<ReAuthHelper>()
+
+    fun givenStoredPassword(pwd: String?) {
+        every { instance.data } returns pwd
     }
 }

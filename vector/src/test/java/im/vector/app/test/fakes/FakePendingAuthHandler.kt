@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.test.fakes
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.auth.PendingAuthHandler
+import io.mockk.mockk
+import io.mockk.spyk
 
-data class SessionOverviewViewState(
-        val deviceId: String,
-        val isCurrentSessionTrusted: Boolean = false,
-        val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
-        val isLoading: Boolean = false,
-) : MavericksState {
-    constructor(args: SessionOverviewArgs) : this(
-            deviceId = args.deviceId
-    )
+class FakePendingAuthHandler {
+
+    val instance = spyk(mockk<PendingAuthHandler>())
 }

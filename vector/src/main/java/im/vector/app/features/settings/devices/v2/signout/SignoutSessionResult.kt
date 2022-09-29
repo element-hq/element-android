@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.features.settings.devices.v2.signout
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import kotlin.coroutines.Continuation
 
-data class SessionOverviewViewState(
-        val deviceId: String,
-        val isCurrentSessionTrusted: Boolean = false,
-        val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
-        val isLoading: Boolean = false,
-) : MavericksState {
-    constructor(args: SessionOverviewArgs) : this(
-            deviceId = args.deviceId
-    )
+sealed class SignoutSessionResult {
+    data class ReAuthNeeded(
+            val pendingAuth: UIABaseAuth,
+            val uiaContinuation: Continuation<UIABaseAuth>,
+            val flowResponse: RegistrationFlowResponse,
+            val errCode: String?
+    ) : SignoutSessionResult()
+
+    object Completed : SignoutSessionResult()
 }
