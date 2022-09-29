@@ -112,6 +112,7 @@ internal class DefaultUpdateUserAccountDataTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateUserAccountDataTask {
 
+    // TODO add unit tests
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
         return executeRequest(globalErrorReceiver) {
             accountDataApi.setAccountData(userId, params.type, params.getData())
