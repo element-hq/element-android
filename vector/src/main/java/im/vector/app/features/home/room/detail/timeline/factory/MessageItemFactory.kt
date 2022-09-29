@@ -55,6 +55,8 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
@@ -200,7 +202,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
-            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, highlight, callback, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -723,32 +725,16 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildVoiceBroadcastItem(
             messageContent: MessageVoiceBroadcastInfoContent,
-            @Suppress("UNUSED_PARAMETER")
-            informationData: MessageInformationData,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
-    ): MessageTextItem? {
-        val htmlBody = "voice broadcast state: ${messageContent.voiceBroadcastState}"
-        val formattedBody = span {
-            text = htmlBody
-            textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-            textStyle = "italic"
-        }
-
-        val bindingOptions = spanUtils.getBindingOptions(htmlBody)
-        val message = formattedBody.linkify(callback)
-
-        return MessageTextItem_()
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
-                .imageContentRenderer(imageContentRenderer)
-                .previewUrlCallback(callback)
+    ): MessageVoiceBroadcastItem? {
+        return MessageVoiceBroadcastItem_()
                 .attributes(attributes)
-                .message(message.toEpoxyCharSequence())
-                .bindingOptions(bindingOptions)
                 .highlighted(highlight)
-                .movementMethod(createLinkMovementMethod(callback))
+                .playingState(messageContent.voiceBroadcastStateStr.toEpoxyCharSequence())
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
     }
 
     private fun List<Int?>?.toFft(): List<Int>? {
