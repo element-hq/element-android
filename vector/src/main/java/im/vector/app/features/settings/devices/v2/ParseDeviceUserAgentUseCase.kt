@@ -37,7 +37,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     private fun parseAndroidUserAgent(userAgent: String): DeviceUserAgent {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
-        val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
+        val deviceInfoSegments = userAgent.substringAfter("(").substringBeforeLast(")").split("; ")
         val deviceModel: String?
         val deviceOperatingSystem: String?
         if (deviceInfoSegments.firstOrNull() == "Linux") {
@@ -54,7 +54,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     private fun parseIosUserAgent(userAgent: String): DeviceUserAgent {
         val appName = userAgent.substringBefore("/")
         val appVersion = userAgent.substringAfter("/").substringBefore(" (")
-        val deviceInfoSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
+        val deviceInfoSegments = userAgent.substringAfter("(").substringBeforeLast(")").split("; ")
         val deviceModel = deviceInfoSegments.getOrNull(0)
         val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
         return DeviceUserAgent(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
@@ -65,6 +65,9 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         val browserName = when {
             isFirefox(browserSegments) -> {
                 "Firefox"
+            }
+            isEdge(browserSegments) -> {
+                "Edge"
             }
             isMobile(browserSegments) -> {
                 getMobileBrowserName(browserSegments)
@@ -100,6 +103,10 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         return browserSegments.lastOrNull()?.startsWith("Firefox").orFalse()
     }
 
+    private fun isEdge(browserSegments: List<String>): Boolean {
+        return browserSegments.lastOrNull()?.startsWith("Edge").orFalse()
+    }
+
     private fun isSafari(browserSegments: List<String>): Boolean {
         return browserSegments.lastOrNull()?.startsWith("Safari").orFalse() &&
                 browserSegments.getOrNull(browserSegments.size - 2)?.startsWith("Version").orFalse()
@@ -107,7 +114,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun isMobile(browserSegments: List<String>): Boolean {
         return browserSegments.lastOrNull()?.startsWith("Safari").orFalse() &&
-                browserSegments.getOrNull(browserSegments.size - 2) == "Mobile"
+                browserSegments.getOrNull(browserSegments.size - 2)?.startsWith("Mobile").orFalse()
     }
 
     private fun getMobileBrowserName(browserSegments: List<String>): String? {
