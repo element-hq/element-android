@@ -20,27 +20,27 @@ import im.vector.app.features.settings.devices.v2.list.DeviceType
 
 data class DeviceUserAgent(
         /**
-         * One of MOBILE, WEB, DESKTOP or UNKNOWN
+         * One of MOBILE, WEB, DESKTOP or UNKNOWN.
          */
         val deviceType: DeviceType,
         /**
-         * i.e. Google Pixel 6
+         * i.e. Google Pixel 6.
          */
         val deviceModel: String? = null,
         /**
-         * i.e. Android 11
+         * i.e. Android 11.
          */
         val deviceOperatingSystem: String? = null,
         /**
-         * i.e. Element Nightly
+         * i.e. Element Nightly.
          */
         val clientName: String? = null,
         /**
-         * i.e. 1.5.0
+         * i.e. 1.5.0.
          */
         val clientVersion: String? = null,
         /**
-         * i.e. Chrome
+         * i.e. Chrome.
          */
         val browser: String? = null,
 )

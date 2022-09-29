@@ -51,11 +51,13 @@ private val AN_EXPECTED_RESULT_LIST_FOR_IOS = listOf(
         DeviceUserAgent(DeviceType.MOBILE, "iPhone", "iOS 15.2", "Element", "1.8.21"),
         DeviceUserAgent(DeviceType.MOBILE, "iPhone XS Max", "iOS 15.2", "Element", "1.8.21"),
         DeviceUserAgent(DeviceType.MOBILE, "iPad Pro (11-inch)", "iOS 15.2", "Element", "1.8.21"),
-        DeviceUserAgent(DeviceType.MOBILE, "iPad Pro (12.9-inch) (3rd generation)", "iOS 15.2", "Element", "1.8.21"),
+        DeviceUserAgent(DeviceType.MOBILE, "iPad Pro (12.9-inch) (3rd generation)", "iOS 15.2",
+                "Element", "1.8.21"),
 )
 
 private val A_USER_AGENT_LIST_FOR_DESKTOP = listOf(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102" +
+                " Electron/20.1.1 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
 )
 private val AN_EXPECTED_RESULT_LIST_FOR_DESKTOP = listOf(

@@ -133,15 +133,16 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     companion object {
         // Element dbg/1.5.0-dev (Xiaomi; Mi 9T; Android 11; RKQ1.200826.002 test-keys; Flavour GooglePlay; MatrixAndroidSdk2 1.5.0)
         // Legacy : Element/1.0.0 (Linux; U; Android 6.0.1; SM-A510F Build/MMB29; Flavour GPlay; MatrixAndroidSdk2 1.0)
-        private val ANDROID_KEYWORD = "; MatrixAndroidSdk2"
+        private const val ANDROID_KEYWORD = "; MatrixAndroidSdk2"
 
         // Element/1.8.21 (iPhone XS Max; iOS 15.2; Scale/3.00)
-        private val IOS_KEYWORD = "; iOS "
+        private const val IOS_KEYWORD = "; iOS "
 
-        // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36
-        private val DESKTOP_KEYWORD = " Electron/"
+        // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301
+        // Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36
+        private const val DESKTOP_KEYWORD = " Electron/"
 
         // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
-        private val WEB_KEYWORD = "Mozilla/"
+        private const val WEB_KEYWORD = "Mozilla/"
     }
 }
