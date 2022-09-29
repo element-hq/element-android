@@ -46,6 +46,7 @@ private const val A_DEVICE_ID_3 = "device-id-3"
 private const val A_TIMESTAMP_1 = 100L
 private const val A_TIMESTAMP_2 = 200L
 private const val A_TIMESTAMP_3 = 300L
+private const val A_USER_AGENT = "Element dbg/1.5.0-dev (Xiaomi Mi 9T; Android 11; RKQ1.200826.002 test-keys; Flavour GooglePlay; MatrixAndroidSdk2 1.5.2)"
 
 class GetDeviceFullInfoListUseCaseTest {
 
@@ -90,21 +91,24 @@ class GetDeviceFullInfoListUseCaseTest {
                 lastSeenTs = A_TIMESTAMP_1,
                 isInactive = true,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                cryptoDeviceInfo = cryptoDeviceInfo1
+                cryptoDeviceInfo = cryptoDeviceInfo1,
+                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfo2 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_2,
                 lastSeenTs = A_TIMESTAMP_2,
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                cryptoDeviceInfo = cryptoDeviceInfo2
+                cryptoDeviceInfo = cryptoDeviceInfo2,
+                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfo3 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_3,
                 lastSeenTs = A_TIMESTAMP_3,
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                cryptoDeviceInfo = cryptoDeviceInfo3
+                cryptoDeviceInfo = cryptoDeviceInfo3,
+                lastSeenUserAgent = A_USER_AGENT
         )
         val deviceInfoList = listOf(deviceInfo1, deviceInfo2, deviceInfo3)
         every { fakeFlowSession.liveMyDevicesInfo() } returns flowOf(deviceInfoList)
@@ -188,12 +192,21 @@ class GetDeviceFullInfoListUseCaseTest {
             isInactive: Boolean,
             roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
             cryptoDeviceInfo: CryptoDeviceInfo,
+            lastSeenUserAgent: String,
     ): DeviceInfo {
         val deviceInfo = mockk<DeviceInfo>()
         every { deviceInfo.deviceId } returns deviceId
         every { deviceInfo.lastSeenTs } returns lastSeenTs
+        every { deviceInfo.getBestLastSeenUserAgent() } returns lastSeenUserAgent
         every { getEncryptionTrustLevelForDeviceUseCase.execute(any(), cryptoDeviceInfo) } returns roomEncryptionTrustLevel
         every { checkIfSessionIsInactiveUseCase.execute(lastSeenTs) } returns isInactive
+        every { parseDeviceUserAgentUseCase.execute(lastSeenUserAgent) } returns DeviceUserAgent(
+                DeviceType.MOBILE,
+                "Xiaomi Mi 9T",
+                "Android 11",
+                "Element dbg",
+                "1.5.0-dev"
+        )
 
         return deviceInfo
     }

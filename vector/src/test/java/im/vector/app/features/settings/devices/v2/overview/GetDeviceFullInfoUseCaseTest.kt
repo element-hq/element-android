@@ -81,7 +81,7 @@ class GetDeviceFullInfoUseCaseTest {
         // Given
         val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
         val deviceInfo = DeviceInfo(
-                lastSeenTs = A_TIMESTAMP
+                lastSeenTs = A_TIMESTAMP,
         )
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData = MutableLiveData(Optional(deviceInfo))
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData.givenAsFlow()
@@ -92,6 +92,7 @@ class GetDeviceFullInfoUseCaseTest {
         val isInactive = false
         val isCurrentDevice = true
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceUserAgent(DeviceType.MOBILE)
 
         // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()

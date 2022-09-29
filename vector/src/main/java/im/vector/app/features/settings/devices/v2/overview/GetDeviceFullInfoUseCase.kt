@@ -51,7 +51,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoInfo)
                     val isInactive = checkIfSessionIsInactiveUseCase.execute(info.lastSeenTs ?: 0)
                     val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoInfo.deviceId
-                    val deviceUserAgent = parseDeviceUserAgentUseCase.execute(info.lastSeenUserAgent)
+                    val deviceUserAgent = parseDeviceUserAgentUseCase.execute(info.getBestLastSeenUserAgent())
                     DeviceFullInfo(
                             deviceInfo = info,
                             cryptoDeviceInfo = cryptoInfo,
