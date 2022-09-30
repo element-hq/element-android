@@ -273,7 +273,7 @@
     <string name="home_filter_placeholder_home">Фильтр названий комнат</string>
     <string name="invitations_header">Приглашения</string>
     <string name="low_priority_header">Маловажные</string>
-    <string name="direct_chats_header">Беседы</string>
+    <string name="direct_chats_header">Личные сообщения</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_result_placeholder">Нет результатов</string>
     <string name="rooms_header">Комнаты</string>
@@ -452,7 +452,7 @@
     <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к ее владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
     <string name="encryption_information_verify_device_warning2">Если они не совпадают, безопасность вашего общения может быть поставлена под угрозу.</string>
     <string name="select_room_directory">Выбор каталога комнат</string>
-    <string name="directory_server_placeholder">Имя сервера</string>
+    <string name="directory_server_placeholder">Название сервера</string>
     <string name="directory_server_all_rooms_on_server">Все комнаты на сервере %s</string>
     <string name="directory_server_native_rooms">Все местные комнаты %s</string>
     <string name="settings_user_interface">Пользовательский интерфейс</string>
@@ -910,7 +910,7 @@
     <string name="create_new_room">Создать комнату</string>
     <string name="error_no_network">Нет сети. Пожалуйста, проверьте подключение к Интернету.</string>
     <string name="action_change">Изменить</string>
-    <string name="change_room_directory_network">Изменить сеть</string>
+    <string name="change_room_directory_network">Изменить сервер</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
     <string name="fab_menu_create_room">Комнаты</string>
@@ -1039,7 +1039,7 @@
     <string name="room_widget_webview_access_camera">Использовать камеру</string>
     <string name="room_widget_webview_access_microphone">Использовать микрофон</string>
     <string name="room_widget_webview_read_protected_media">Получать доступ к медиа, защищённым DRM</string>
-    <string name="a11y_create_room">Создать новую комнату</string>
+    <string name="a11y_create_room">Создать комнату</string>
     <string name="attachment_type_file">Файл</string>
     <string name="attachment_type_camera">Камера</string>
     <string name="attachment_type_gallery">Галерея</string>
@@ -1390,7 +1390,7 @@
     <string name="verification_request_you_accepted">Вы приняли</string>
     <string name="verification_sent">Подтверждение отправлено</string>
     <string name="verification_request">Запрос на подтверждение</string>
-    <string name="verification_verify_device">Подтвердите эту сессию</string>
+    <string name="verification_verify_device">Заверьте эту сессию</string>
     <string name="verification_scan_notice">Сканируйте код с помощью устройства другого пользователя, чтобы безопасно проверить друг друга</string>
     <string name="verification_scan_their_code">Сканировать их код</string>
     <string name="verification_scan_emoji_title">Невозможно сканировать</string>
@@ -1450,7 +1450,7 @@
         <item quantity="few">%d сессии активны</item>
         <item quantity="many">%d сессий активно</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Подтвердите это устройство</string>
+    <string name="crosssigning_verify_this_session">Заверьте эту сессию</string>
     <string name="verification_open_other_to_verify">Используйте существующую сессию для подтверждения этой, предоставив ей доступ к зашифрованным сообщениям.</string>
     <string name="settings_dev_tools">Инструменты для разработчиков</string>
     <string name="settings_account_data">Данные учётной записи</string>
@@ -1473,13 +1473,13 @@
     <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
     <string name="settings_active_sessions_verified_device_desc">Эта сессия является надежной для безопасного обмена сообщениями, поскольку вы подтвердили ее:</string>
     <string name="settings_active_sessions_unverified_device_desc">Подтвердите эту сессию, чтобы пометить её доверенной и предоставить ей доступ к зашифрованным сообщениям. Если вы не входили в эту сессию, ваша учетная запись может быть скомпрометирована:</string>
-    <string name="verification_profile_verify">Проверить</string>
-    <string name="verification_profile_verified">Проверено</string>
+    <string name="verification_profile_verify">Заверить</string>
+    <string name="verification_profile_verified">Заверено</string>
     <string name="verification_profile_warning">Предупреждение</string>
     <string name="room_member_profile_failed_to_get_devices">Не удалось получить список сессий</string>
     <string name="room_member_profile_sessions_section_title">Сессии</string>
-    <string name="trusted">Доверенные</string>
-    <string name="not_trusted">Недоверенные</string>
+    <string name="trusted">Заверенная</string>
+    <string name="not_trusted">Незаверенная</string>
     <string name="verification_profile_device_verified_because">Эта сессия является доверенной для безопасного обмена сообщениями, так как %1$s (%2$s) проверил(а) его:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) вошел(ла), используя новую сессию:</string>
     <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этой сессии, сообщения, отправленные в обе стороны, помечаются предупреждениями. Кроме того, вы можете подтвердить сессию вручную.</string>
@@ -2037,7 +2037,7 @@
     <string name="space_leave_prompt_msg_only_you">Вы здесь единственный человек. Если вы уйдёте, никто не сможет присоединиться в будущем, включая вас.</string>
     <string name="leave_space">Покинуть</string>
     <string name="space_add_child_title">Добавить комнаты</string>
-    <string name="space_explore_activity_title">Исследуйте комнаты</string>
+    <string name="space_explore_activity_title">Обзор комнат</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d человек, которого вы знаете, уже присоединился</item>
         <item quantity="few">%d людей, которых вы знаете, уже присоединились</item>
@@ -2665,7 +2665,7 @@
     <string name="settings_sessions_list">Сессии</string>
     <string name="a11y_create_message">Создать беседу или комнату</string>
     <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>
-    <string name="room_list_filter_people">Люди</string>
+    <string name="room_list_filter_people">ЛС</string>
     <string name="home_layout_preferences">Настройки вида</string>
     <string name="home_layout_preferences_filters">Фильтры</string>
     <string name="home_layout_preferences_recents">Недавние</string>
@@ -2675,7 +2675,7 @@
     <string name="home_layout_preferences_sort_name">А - Я</string>
     <string name="home_layout_preferences_sort_activity">Активности</string>
     <string name="home_layout_preferences_sort_by">Сортировать по</string>
-    <string name="explore_rooms">Каталог комнат</string>
+    <string name="explore_rooms">Обзор комнат</string>
     <string name="start_chat">Отправить ЛС</string>
     <string name="create_room">Создать комнату</string>
     <string name="device_manager_other_sessions_view_all">Посмотреть все (%1$d)</string>
@@ -2699,7 +2699,7 @@
     <string name="device_manager_session_details_session_last_activity">Последняя активность</string>
     <string name="device_manager_session_details_title">Сведения о сессии</string>
     <string name="device_manager_other_sessions_recommendation_description_verified">Для лучшей безопасности выйдите из всех сессий, которые более не признаёте или не используете.</string>
-    <string name="device_manager_filter_option_verified">Заверено</string>
+    <string name="device_manager_filter_option_verified">Заверенные</string>
     <string name="device_manager_filter_option_all_sessions">Все сессии</string>
     <string name="device_manager_session_last_activity">Последняя активность %1$s</string>
     <string name="device_manager_device_title">Устройство</string>
@@ -2727,4 +2727,19 @@
     <string name="device_manager_other_sessions_recommendation_description_unverified">Подтвердите свои сессии для более безопасного обмена сообщениями или выйдите из тех, которые более не признаёте или не используете.</string>
     <string name="device_manager_unverified_sessions_description">Подтвердите или выйдите из незаверенных сессий.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Подтвердите или выйдите из этой сессии для лучшей безопасности и надёжности.</string>
+    <string name="invites_empty_title">Ничего нового.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Заверенных сессий не обнаружено.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Незаверенных сессий не обнаружено.</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Неактивных сессий не обнаружено.</string>
+    <string name="device_manager_other_sessions_clear_filter">Очистить фильтр</string>
+    <string name="device_manager_filter_option_unverified_description">Не готовы к безопасному обмену сообщениями</string>
+    <string name="device_manager_filter_option_verified_description">Готовы к безопасному обмену сообщениями</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Неактивны %1$d день или дольше</item>
+        <item quantity="few">Неактивны %1$d дня или дольше</item>
+        <item quantity="many">Неактивны %1$d дней или дольше</item>
+        <item quantity="other">Неактивны %1$d дней или дольше</item>
+    </plurals>
+    <string name="device_manager_filter_option_unverified">Незаверенные</string>
+    <string name="device_manager_filter_bottom_sheet_title">Фильтр</string>
 </resources>
