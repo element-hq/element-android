@@ -18,23 +18,24 @@ package im.vector.app.features.settings.devices.v2.details.extended
 
 import MATRIX_CLIENT_INFO_KEY_PREFIX
 import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
 /**
- * This use case retrieves the current account data event containing extended client info.
+ * This use case retrieves the current account data event containing extended client info
+ * for a given deviceId.
  */
 class GetMatrixClientInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    // TODO add unit tests
-    fun execute(): MatrixClientInfoContent? {
+    fun execute(deviceId: String): MatrixClientInfoContent? {
         return activeSessionHolder
                 .getSafeActiveSession()
                 ?.let { session ->
-                    val type = MATRIX_CLIENT_INFO_KEY_PREFIX + session.sessionParams.deviceId
+                    val type = MATRIX_CLIENT_INFO_KEY_PREFIX + deviceId
                     val content = session.accountDataService().getUserAccountDataEvent(type)?.content
-                    MatrixClientInfoContent.fromJson(content)
+                    content.toModel()
                 }
     }
 }
