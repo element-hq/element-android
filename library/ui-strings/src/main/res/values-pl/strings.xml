@@ -732,7 +732,7 @@
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
     <string name="settings_discovery_category">Ustawienia wyszukiwania</string>
-    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleść twoje konto.</string>
+    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleźć twoje konto.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
     <string name="encryption_message_recovery">Odzyskiwanie zaszyfrowanych wiadomości</string>
