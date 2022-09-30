@@ -79,6 +79,7 @@ import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationActio
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
@@ -183,7 +184,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope,
         private val eventDecryptor: EventDecryptor,
         private val verificationMessageProcessor: VerificationMessageProcessor,
-        private val liveEventManager: Lazy<StreamEventsManager>
+        private val liveEventManager: Lazy<StreamEventsManager>,
+        private val unrequestedForwardManager: UnRequestedForwardManager,
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -399,6 +401,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         incomingKeyRequestManager.close()
         outgoingKeyRequestManager.close()
+        unrequestedForwardManager.close()
         olmDevice.release()
         cryptoStore.close()
     }
@@ -484,6 +487,14 @@ internal class DefaultCryptoService @Inject constructor(
                 } catch (failure: Throwable) {
                     // just for safety but should not throw
                     Timber.tag(loggerTag.value).w("failed to process incoming room key requests")
+                }
+
+                unrequestedForwardManager.postSyncProcessParkedKeysIfNeeded(clock.epochMillis()) { events ->
+                    cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                        events.forEach {
+                            onRoomKeyEvent(it, true)
+                        }
+                    }
                 }
             }
         }
@@ -845,9 +856,9 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param event the key event.
      */
-    private fun onRoomKeyEvent(event: Event) {
-        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
-        Timber.tag(loggerTag.value).i("onRoomKeyEvent() from: ${event.senderId} type<${event.getClearType()}> , sessionId<${roomKeyContent.sessionId}>")
+    private fun onRoomKeyEvent(event: Event, acceptUnrequested: Boolean = false) {
+        val roomKeyContent = event.getDecryptedContent().toModel<RoomKeyContent>() ?: return
+        Timber.tag(loggerTag.value).i("onRoomKeyEvent(forceAccept:$acceptUnrequested) from: ${event.senderId} type<${event.getClearType()}> , sessionId<${roomKeyContent.sessionId}>")
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.algorithm.isNullOrEmpty()) {
             Timber.tag(loggerTag.value).e("onRoomKeyEvent() : missing fields")
             return
@@ -857,7 +868,7 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.tag(loggerTag.value).e("GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
-        alg.onRoomKeyEvent(event, keysBackupService)
+        alg.onRoomKeyEvent(event, keysBackupService, acceptUnrequested)
     }
 
     private fun onKeyWithHeldReceived(event: Event) {
@@ -950,6 +961,15 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the membership event causing the change
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
+        // because the encryption event can be after the join/invite in the same batch
+        event.stateKey?.let { _ ->
+            val roomMember: RoomMemberContent? = event.content.toModel()
+            val membership = roomMember?.membership
+            if (membership == Membership.INVITE) {
+                unrequestedForwardManager.onInviteReceived(roomId, event.senderId.orEmpty(), clock.epochMillis())
+            }
+        }
+
         roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
 
         event.stateKey?.let { userId ->

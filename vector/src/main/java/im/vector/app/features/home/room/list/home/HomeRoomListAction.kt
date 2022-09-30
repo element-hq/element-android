@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.list.home
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
+import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
@@ -27,4 +27,5 @@ sealed class HomeRoomListAction : VectorViewModelAction {
     data class ToggleTag(val roomId: String, val tag: String) : HomeRoomListAction()
     data class LeaveRoom(val roomId: String) : HomeRoomListAction()
     data class ChangeRoomFilter(val filter: HomeRoomFilter) : HomeRoomListAction()
+    object DeleteAllLocalRoom : HomeRoomListAction()
 }

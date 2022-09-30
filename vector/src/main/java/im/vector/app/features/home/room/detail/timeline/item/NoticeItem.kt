@@ -52,6 +52,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timel
             E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
                 holder.e2EDecorationView.render(RoomEncryptionTrustLevel.Warning)
             }
+            E2EDecoration.WARN_SENT_BY_DELETED_SESSION -> TODO()
+            E2EDecoration.WARN_UNSAFE_KEY -> TODO()
         }
     }
 

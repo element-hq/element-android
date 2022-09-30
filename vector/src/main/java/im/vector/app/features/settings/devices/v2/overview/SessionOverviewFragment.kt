@@ -45,6 +45,8 @@ import javax.inject.Inject
 class SessionOverviewFragment :
         VectorBaseFragment<FragmentSessionOverviewBinding>() {
 
+    @Inject lateinit var viewNavigator: SessionOverviewViewNavigator
+
     @Inject lateinit var dateFormatter: VectorDateFormatter
 
     @Inject lateinit var drawableProvider: DrawableProvider
@@ -79,6 +81,7 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state.isCurrentSession)
+        updateEntryDetails(state.deviceId)
         if (state.deviceInfo is Success) {
             renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
         } else {
@@ -91,6 +94,12 @@ class SessionOverviewFragment :
         (activity as? AppCompatActivity)
                 ?.supportActionBar
                 ?.setTitle(titleResId)
+    }
+
+    private fun updateEntryDetails(deviceId: String) {
+        views.sessionOverviewEntryDetails.setOnClickListener {
+            viewNavigator.navigateToSessionDetails(requireContext(), deviceId)
+        }
     }
 
     private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {

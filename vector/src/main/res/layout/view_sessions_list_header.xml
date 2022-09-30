@@ -23,10 +23,10 @@
         style="@style/TextAppearance.Vector.Body.DevicesManagement"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
         android:layout_marginTop="18.5dp"
-        android:layout_marginEnd="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/sessions_list_header_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sessions_list_header_title"
         tools:text="For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore. Learn More." />
 </merge>

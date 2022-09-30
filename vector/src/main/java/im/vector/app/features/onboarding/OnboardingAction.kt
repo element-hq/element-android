@@ -18,7 +18,6 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode

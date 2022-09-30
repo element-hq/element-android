@@ -20,7 +20,7 @@
     <string name="notice_placed_voice_call">%s hat einen Sprachanruf getätigt.</string>
     <string name="notice_answered_call">%s hat den Anruf angenommen.</string>
     <string name="notice_ended_call">%s hat den Anruf beendet.</string>
-    <string name="notice_made_future_room_visibility">%1$s hat den zukünftigen Chatverlauf sichtbar gemacht für %2$s</string>
+    <string name="notice_made_future_room_visibility">%1$s hat den zukünftigen Nachrichtenverlauf sichtbar gemacht für %2$s</string>
     <string name="notice_room_visibility_invited">alle Mitglieder, ab Einladung.</string>
     <string name="notice_room_visibility_joined">alle Mitglieder, ab Beitritt.</string>
     <string name="notice_room_visibility_shared">alle Mitglieder.</string>
@@ -265,11 +265,11 @@
     <string name="rooms_header">Räume</string>
     <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
-    <string name="send_bug_report_include_screenshot">Screenshot übermitteln</string>
+    <string name="send_bug_report_include_screenshot">Bildschirmfoto übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht\? Was sollte passieren\? Was ist tatsächlich passiert\?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle des Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle des Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und das Bildschirmfoto, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du das Fenster zum Senden eines Fehlerberichts öffnen\?</string>
     <string name="send_bug_report_sent">Dein Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -418,7 +418,7 @@
     <string name="room_settings_unset_main_address">Als Hauptadresse aufheben</string>
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
     <string name="encryption_information_device_name">Öffentlicher Name</string>
-    <string name="encryption_information_device_id">Sitzungs-ID</string>
+    <string name="device_manager_session_details_session_id">Sitzungs-ID</string>
     <string name="encryption_information_device_key">Sitzungsschlüssel</string>
     <string name="encryption_export_e2e_room_keys">Ende-zu-Ende-Raumschlüssel exportieren</string>
     <string name="encryption_export_room_keys">Raumschlüssel exportieren</string>
@@ -908,7 +908,7 @@
     <string name="edited_suffix">(bearbeitet)</string>
     <string name="message_edits">Nachrichtenbearbeitung</string>
     <string name="no_message_edits_found">Keine Änderungen gefunden</string>
-    <string name="room_filtering_filter_hint">Gespräche filtern…</string>
+    <string name="room_filtering_filter_hint">Konversationen filtern …</string>
     <string name="room_filtering_footer_create_new_direct_message">Sende eine neue Direktnachricht</string>
     <string name="room_filtering_footer_open_room_directory">Das Raumverzeichnis anzeigen</string>
     <string name="link_copied_to_clipboard">Link in die Zwischenablage kopiert</string>
@@ -994,7 +994,7 @@
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
-    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Homeservers akzeptiert hast.</string>
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Heimservers akzeptiert hast.</string>
     <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
     <string name="settings_discovery_no_msisdn">Optionen zum Finden werden erscheinen, sobald du eine Telefonnummer hinzugefügt hast.</string>
@@ -1409,8 +1409,8 @@
     <string name="bootstrap_migration_use_recovery_key">nutze deinen Schlüsselbackup-Wiederherstellungsschlüssel</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Wenn du dein Schlüsselbackup-Passwort nicht weißt, kannst du %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Schlüsselbackup-Wiederherstellungsschlüssel</string>
-    <string name="settings_security_prevent_screenshots_title">Screenshots innerhalb der Anwendung verhindern</string>
-    <string name="settings_security_prevent_screenshots_summary">Das Aktivieren dieser Einstellung setzt das FLAG_SECURE in allen Aktivitäten. Starte die Anwendung neu, damit die Änderung wirksam wird.</string>
+    <string name="settings_security_prevent_screenshots_title">Bildschirmfotos der Anwendung verhindern</string>
+    <string name="settings_security_prevent_screenshots_summary">Das Aktivieren dieser Einstellung setzt FLAG_SECURE in allen Aktivitäten. Starte die Anwendung neu, damit die Änderung wirksam wird.</string>
     <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
     <string name="use_other_session_content_description">Nutze die neueste Version von ${app_name} auf deinen anderen Geräten, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} für Android oder einen anderen cross-signing-fähigen Matrix-Client</string>
     <string name="app_desktop_web">${app_name} Web
@@ -1461,7 +1461,7 @@
     <string name="action_dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
-\nBitte den Administrator deines Homeservers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
+\nBitte den Administrator deines Heimservers, einen TURN-Server zu konfigurieren, damit Anrufe zuverlässig funktionieren.</string>
     <string name="call_select_sound_device">Audiogerät auswählen</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Lautsprecher</string>
@@ -1744,13 +1744,13 @@
     <string name="room_member_open_or_create_dm">Direktnachricht</string>
     <string name="send_bug_report_include_key_share_history">Verlauf der Anfragen von Schlüsselfreigaben senden</string>
     <string name="no_more_results">Keine weiteren Ergebnisse</string>
-    <string name="start_chatting">Starte die Diskussion</string>
+    <string name="start_chatting">Beginne ein Gespräch</string>
     <string name="settings_discovery_consent_action_give_consent">Autorisieren</string>
     <string name="settings_discovery_consent_action_revoke">Meine Zustimmung widerrufen</string>
     <string name="settings_discovery_consent_notice_on">Du hast zugestimmt E-Mails und Telefonnummern an diesen Identitätsserver zu senden, um von anderen Nutzern entdeckt zu werden.</string>
     <string name="settings_discovery_consent_title">E-Mails und Telefonnummern senden</string>
     <string name="direct_room_user_list_suggestions_title">Vorschläge</string>
-    <string name="direct_room_user_list_known_title">Bekannte Nutzer</string>
+    <string name="direct_room_user_list_known_title">Bekannte Personen</string>
     <string name="qr_code">QR-Code</string>
     <string name="add_by_qr_code">Hinzufügen via QR-Code</string>
     <string name="permissions_denied_add_contact">Gib die Erlaubnis, um auf die Kamera zu zugreifen.</string>
@@ -1794,7 +1794,7 @@
     <string name="create_room_alias_invalid">Manche Zeichen sind nicht zulässig</string>
     <string name="create_room_alias_empty">Bitte gib eine Raumadresse an</string>
     <string name="create_room_alias_already_in_use">Diese Adresse ist bereits vergeben</string>
-    <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Homeservers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
+    <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Heimservers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
     <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
@@ -1845,7 +1845,7 @@
     <string name="login_social_sso">Einmalanmeldung</string>
     <string name="login_social_signin_with">Anmelden mit %s</string>
     <string name="login_social_signup_with">Registrieren mit %s</string>
-    <string name="login_social_continue_with">Mit %s weitermachen</string>
+    <string name="login_social_continue_with">Weiter mit %s</string>
     <string name="settings_show_emoji_keyboard_summary">Knopf zum Nachrichteneditor hinzufügen, der die Emoji-Tastatur öffnet</string>
     <string name="settings_show_emoji_keyboard">Emoji-Tastatur anzeigen</string>
     <string name="settings_chat_effects_description">Nutze /confetti oder sende Nachrichten mit ❄️ oder 🎉</string>
@@ -2188,7 +2188,7 @@
     <string name="settings_developer_mode_show_info_on_screen_summary">Hilfreiche Informationen zur Fehlersuche anzeigen</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Debug-Info anzeigen</string>
     <string name="does_not_look_like_valid_email">Das schaut nicht nach einer gültigen E-Mail-Adresse aus</string>
-    <string name="user_directory_search_hint_2">Nach Name, ID oder E-Mail suchen</string>
+    <string name="user_directory_search_hint_2">Mittels Name, ID oder E-Mail-Adresse suchen</string>
     <string name="create_new_space">Neuen Space erstellen</string>
     <string name="room_settings_space_access_title">Zugriff</string>
     <string name="room_settings_access_rules_pref_dialog_title">Wer hat Zugriff\?</string>
@@ -2587,8 +2587,8 @@
     <string name="room_list_filter_people">Personen</string>
     <string name="send_your_first_msg_to_invite">Schreibe deine erste Nachricht, um %s zur Konversation einzuladen</string>
     <string name="device_manager_settings_active_sessions_show_all">Alle Sitzungen anzeigen (V2, in Arbeit)</string>
-    <string name="settings_sessions_other_description">Für bestmögliche Sicherheit verifiziere deine Sitzungen und melde dich von allen ab, die du nicht erkennst oder nutzt.</string>
-    <string name="settings_sessions_other_title">Andere Sitzungen</string>
+    <string name="device_manager_sessions_other_description">Für bestmögliche Sicherheit verifiziere deine Sitzungen und melde dich von allen ab, die du nicht erkennst oder nutzt.</string>
+    <string name="device_manager_sessions_other_title">Andere Sitzungen</string>
     <string name="settings_sessions_list">Sitzungen</string>
     <string name="a11y_open_spaces">Space-Liste öffnen</string>
     <string name="a11y_create_message">Beginne ein Gespräch oder erstelle einen Raum</string>
@@ -2620,6 +2620,23 @@
 \nBitte versuche es später erneut.%s</string>
     <string name="invites_title">Einladungen</string>
     <string name="device_manager_other_sessions_description_unverified">Nicht verifiziert · Letzte Aktivität %1$s</string>
-    <string name="device_manager_verification_status_detail_unverified">Verifiziere deine aktuelle Sitzung für besonders sichere Nachrichtenübertragung.</string>
     <string name="device_manager_verification_status_unverified">Nicht verifizierte Sitzung</string>
+    <string name="device_manager_unverified_sessions_title">Nicht verifizierte Sitzung</string>
+    <string name="device_manager_header_section_security_recommendations_description">Verbessere deine Kontosicherheit, indem du diese Empfehlungen beherzigst.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Sicherheitsempfehlungen</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Inaktiv seit %1$d+ Tag (%2$s)</item>
+        <item quantity="other">Inaktiv seit %1$d+ Tagen (%2$s)</item>
+    </plurals>
+    <string name="device_manager_other_sessions_description_verified">Verifiziert · Letzte Aktivität %1$s</string>
+    <string name="device_manager_verification_status_verified">Verifizierte Sitzung</string>
+    <string name="a11y_device_manager_device_type_unknown">Unbekannter Gerätetyp</string>
+    <string name="invites_empty_title">Nichts Neues.</string>
+    <string name="space_list_empty_message">Spaces sind eine neue Art, Räume und Personen zu organisieren. Erstelle einen Space, um zu beginnen.</string>
+    <string name="space_list_empty_title">Noch keine Spaces.</string>
+    <string name="home_empty_no_unreads_message">Hier werden deine ungelesenen Nachrichten erscheinen, wenn du welche hast.</string>
+    <string name="home_empty_no_unreads_title">Es gibt nichts Neues.</string>
+    <string name="all_chats">Alle Unterhaltungen</string>
+    <string name="change_space">Space wechseln</string>
+    <string name="start_chat">Unterhaltung beginnen</string>
 </resources>

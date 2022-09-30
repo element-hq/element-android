@@ -26,7 +26,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 
@@ -54,7 +53,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun observeSessionInfo(deviceId: String) {
         getDeviceFullInfoUseCase.execute(deviceId)
-                .mapNotNull { it.getOrNull() }
                 .onEach { setState { copy(deviceInfo = Success(it)) } }
                 .launchIn(viewModelScope)
     }

@@ -469,7 +469,7 @@
     <string name="settings_theme">主題</string>
     <string name="encryption_information_decryption_error">解密錯誤</string>
     <string name="encryption_information_device_name">公開名稱</string>
-    <string name="encryption_information_device_id">工作階段 ID</string>
+    <string name="device_manager_session_details_session_id">工作階段 ID</string>
     <string name="encryption_information_device_key">工作階段金鑰</string>
     <string name="encryption_export_e2e_room_keys">匯出聊天室的端到端加密金鑰</string>
     <string name="encryption_export_room_keys">匯出聊天室的加密金鑰</string>
@@ -2551,8 +2551,8 @@
     <string name="a11y_open_settings">開啟設定</string>
     <string name="all_chats">所有聊天</string>
     <string name="device_manager_settings_active_sessions_show_all">顯示所有工作階段 (V2, WIP)</string>
-    <string name="settings_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出任何您無法識別或不再使用的工作階段。</string>
-    <string name="settings_sessions_other_title">其他工作階段</string>
+    <string name="device_manager_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出任何您無法識別或不再使用的工作階段。</string>
+    <string name="device_manager_sessions_other_title">其他工作階段</string>
     <string name="settings_sessions_list">工作階段</string>
     <string name="a11y_open_spaces">開啟空間清單</string>
     <string name="a11y_create_message">建立新的對話或聊天室</string>
@@ -2572,11 +2572,8 @@
     <string name="device_manager_other_sessions_description_unverified">未驗證 · 最後活動 %1$s</string>
     <string name="device_manager_other_sessions_description_verified">已驗證 · 最後活動 %1$s</string>
     <string name="device_manager_other_sessions_view_all">檢視全部 (%1$d)</string>
-    <string name="device_manager_header_section_current_session">目前工作階段</string>
     <string name="device_manager_view_details">檢視詳細資訊</string>
     <string name="device_manager_verify_session">驗證工作階段</string>
-    <string name="device_manager_verification_status_detail_unverified">驗證您目前的工作階段以強化安全通訊。</string>
-    <string name="device_manager_verification_status_detail_verified">您目前的工作階段已準備好進行安全通訊。</string>
     <string name="device_manager_verification_status_unverified">未驗證的工作階段</string>
     <string name="device_manager_verification_status_verified">已驗證的工作階段</string>
     <string name="a11y_device_manager_device_type_unknown">未知的裝置類型</string>
@@ -2586,4 +2583,37 @@
     <string name="timeline_error_room_not_found">抱歉，找不到此聊天室。
 \n請稍後再試。%s</string>
     <string name="invites_title">邀請</string>
+    <string name="onboarding_new_app_layout_button_try">試試看</string>
+    <string name="onboarding_new_app_layout_feedback_message">輕點右上角來檢視回饋選項。</string>
+    <string name="onboarding_new_app_layout_feedback_title">給予回饋</string>
+    <string name="onboarding_new_app_layout_spaces_message">存取您的空間（右下角）比以往任何時候都更快且更輕鬆。</string>
+    <string name="onboarding_new_app_layout_spaces_title">存取空間</string>
+    <string name="onboarding_new_app_layout_welcome_message">為了簡化您的 ${app_name}，分頁現在是選擇性的。使用右上角的選單管理它們。</string>
+    <string name="onboarding_new_app_layout_welcome_title">歡迎使用新的檢視！</string>
+    <string name="home_empty_no_unreads_message">當您有一些未讀的訊息時，這裡會顯示您的未讀訊息。</string>
+    <string name="home_empty_no_unreads_title">沒有要回報的東西。</string>
+    <string name="home_empty_no_rooms_message">適用於團隊、朋友與組織的多合一安全聊天應用程式。建立聊天室，或加入一個既有的聊天室。</string>
+    <string name="home_empty_no_rooms_title">歡迎使用 ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">空間是一種為聊天室與人們分組的新方式。使用右下角的按鈕新增既有的聊天室或建立新的。</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\n看起來有點空。</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="other">考慮登出您不再使用的舊工作階段（%1$d天或更久）。</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">不活躍的工作階段</string>
+    <string name="device_manager_unverified_sessions_description">驗證或從未驗證的工作階段登出。</string>
+    <string name="device_manager_unverified_sessions_title">未驗證的工作階段</string>
+    <string name="device_manager_header_section_security_recommendations_description">按照這些建議提高您的帳號安全性。</string>
+    <string name="device_manager_header_section_security_recommendations_title">安全建議</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="other">不活躍 %1$d+ 天 (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">這是您的新請求與邀請的所在。</string>
+    <string name="invites_empty_title">沒有新東西。</string>
+    <string name="space_list_empty_message">空間是一種對聊天室與人們分組的新方式。建立空間以開始。</string>
+    <string name="space_list_empty_title">尚無空間。</string>
+    <string name="a11y_collapse_space_children">折疊 %s 個子空間</string>
+    <string name="a11y_expand_space_children">展開 %s 個子空間</string>
+    <string name="change_space">變更空間</string>
 </resources>

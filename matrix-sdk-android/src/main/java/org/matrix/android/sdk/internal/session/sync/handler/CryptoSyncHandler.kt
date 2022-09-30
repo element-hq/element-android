@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
@@ -42,17 +43,41 @@ internal class CryptoSyncHandler @Inject constructor(
 
     suspend fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0
-        toDevice.events?.forEachIndexed { index, event ->
-            progressReporter?.reportProgress(index * 100F / total)
-            // Decrypt event if necessary
-            Timber.tag(loggerTag.value).i("To device event from ${event.senderId} of type:${event.type}")
-            decryptToDeviceEvent(event, null)
-            if (event.getClearType() == EventType.MESSAGE &&
-                    event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
-                Timber.tag(loggerTag.value).e("handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
-            } else {
-                verificationService.onToDeviceEvent(event)
-                cryptoService.onToDeviceEvent(event)
+        toDevice.events
+                ?.filter { isSupportedToDevice(it) }
+                ?.forEachIndexed { index, event ->
+                    progressReporter?.reportProgress(index * 100F / total)
+                    // Decrypt event if necessary
+                    Timber.tag(loggerTag.value).i("To device event from ${event.senderId} of type:${event.type}")
+                    decryptToDeviceEvent(event, null)
+                    if (event.getClearType() == EventType.MESSAGE &&
+                            event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
+                        Timber.tag(loggerTag.value).e("handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
+                    } else {
+                        verificationService.onToDeviceEvent(event)
+                        cryptoService.onToDeviceEvent(event)
+                    }
+                }
+    }
+
+    private val unsupportedPlainToDeviceEventTypes = listOf(
+            EventType.ROOM_KEY,
+            EventType.FORWARDED_ROOM_KEY,
+            EventType.SEND_SECRET
+    )
+
+    private fun isSupportedToDevice(event: Event): Boolean {
+        val algorithm = event.content?.get("algorithm") as? String
+        val type = event.type.orEmpty()
+        return if (event.isEncrypted()) {
+            algorithm == MXCRYPTO_ALGORITHM_OLM
+        } else {
+            // some clear events are not allowed
+            type !in unsupportedPlainToDeviceEventTypes
+        }.also {
+            if (!it) {
+                Timber.tag(loggerTag.value)
+                        .w("Ignoring unsupported to device event ${event.type} alg:${algorithm}")
             }
         }
     }
@@ -91,7 +116,8 @@ internal class CryptoSyncHandler @Inject constructor(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                        isSafe = result.isSafe
                 )
                 return true
             } else {

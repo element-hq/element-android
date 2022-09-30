@@ -301,7 +301,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Kesalahan dekripsi</string>
     <string name="encryption_information_device_name">Nama perangkat</string>
-    <string name="encryption_information_device_id">ID Sesi</string>
+    <string name="device_manager_session_details_session_id">ID Sesi</string>
     <string name="encryption_information_device_key">Kunci perangkat</string>
     <string name="encryption_export_e2e_room_keys">Ekspor kunci ruangan terenkripsi</string>
     <string name="encryption_export_room_keys">Ekspor ruangan kunci</string>
@@ -593,7 +593,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_action_ignore_title">Abaikan pengguna</string>
     <string name="room_participants_power_level_demote">Turunkan</string>
     <string name="room_participants_power_level_demote_warning_prompt">Anda tidak akan dapat membatalkan perubahan ini karena Anda menurunkan diri sendiri, jika Anda adalah pengguna istimewa terakhir di ruangan itu akan tidak mungkin untuk mendapatkan kembali hak istimewa.</string>
-    <string name="room_participants_power_level_demote_warning_title">Turunkan dirimu\?</string>
+    <string name="room_participants_power_level_demote_warning_title">Turunkan diri Anda\?</string>
     <string name="room_participants_action_cancel_invite">Batalkan undangan</string>
     <string name="room_participants_leave_private_warning">Ruangan ini tidak umum. Anda tidak akan dapat bergabung kembali tanpa undangan.</string>
     <string name="permissions_denied_add_contact">Izinkan untuk mengakses kontak.</string>
@@ -2553,8 +2553,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
     <string name="all_chats">Semua Obrolan</string>
     <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
-    <string name="settings_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
-    <string name="settings_sessions_other_title">Sesi lainnya</string>
+    <string name="device_manager_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
+    <string name="device_manager_sessions_other_title">Sesi lainnya</string>
     <string name="settings_sessions_list">Sesi</string>
     <string name="a11y_open_spaces">Buka daftar space</string>
     <string name="a11y_create_message">Buat percakapan atau ruangan baru</string>
@@ -2576,11 +2576,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="device_manager_other_sessions_description_unverified">Belum diverifikasi · Aktivitas terakhir %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Terverifikasi · Aktivitas terakhir %1$s</string>
     <string name="device_manager_other_sessions_view_all">Tampilkan Semua (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Sesi Saat Ini</string>
     <string name="device_manager_view_details">Tampilkan Detail</string>
     <string name="device_manager_verify_session">Verifikasi Sesi</string>
-    <string name="device_manager_verification_status_detail_unverified">Verifikasi sesi Anda saat ini untuk perpesanan yang aman.</string>
-    <string name="device_manager_verification_status_detail_verified">Sesi Anda saat ini siap untuk perpesanan yang aman.</string>
     <string name="device_manager_verification_status_unverified">Sesi belum diverifikasi</string>
     <string name="device_manager_verification_status_verified">Sesi terverifikasi</string>
     <string name="a11y_device_manager_device_type_unknown">Tipe perangkat tidak diketahui</string>
@@ -2588,4 +2585,37 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_mobile">Ponsel</string>
     <string name="invites_title">Undangan</string>
+    <string name="onboarding_new_app_layout_button_try">Coba</string>
+    <string name="onboarding_new_app_layout_feedback_message">Ketuk kanan atas untuk melihat opsi untuk memberikan masukan.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Beri Masukan</string>
+    <string name="home_empty_no_rooms_message">Aplikasi obrolan aman untuk tim, teman, dan organisasi. Buat sebuah obrolan, atau bergabung ke ruangan yang sudah ada, untuk memulai.</string>
+    <string name="onboarding_new_app_layout_spaces_message">Akses Space Anda (di kanan bawah) dengan lebih cepat dan lebih mudah dari sebelumnya.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Akses Space</string>
+    <string name="onboarding_new_app_layout_welcome_message">Untuk membuat ${app_name} Anda lebih sederhana, fitur tab sekarang opsional. Kelola menggunakan menu kanan atas.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Selamat datang di tampilan yang baru!</string>
+    <string name="home_empty_no_unreads_message">Ini di mana pesan Anda yang belum dibaca akan ditampilkan, ketika Anda menerimanya.</string>
+    <string name="home_empty_no_unreads_title">Tidak ada untuk dilaporkan.</string>
+    <string name="home_empty_no_rooms_title">Selamat datang di ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Space adalah cara baru untuk mengelompokkan ruangan dan orang. Tambahkan ruangan yang sudah ada, atau buat yang baru, dengan tombol di kanan bawah.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nkelihatannya masih kosong.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="other">Pertimbangkan untuk mengeluarkan sesi lawas (%1$d hari atau lebih) yang Anda tidak gunakan lagi.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Sesi yang tidak aktif</string>
+    <string name="device_manager_unverified_sessions_description">Verifikasi atau keluarkan sesi yang belum diverifikasi.</string>
+    <string name="device_manager_unverified_sessions_title">Sesi yang belum diverifikasi</string>
+    <string name="device_manager_header_section_security_recommendations_description">Perbaiki keamanan akun Anda dengan mengikuti saran berikut.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Saran keamanan</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="other">Tidak aktif selama %1$d+ hari (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Ini di mana permintaan dan undangan baru Anda akan berada.</string>
+    <string name="invites_empty_title">Belum ada yang baru.</string>
+    <string name="space_list_empty_message">Space adalah cara baru untuk mengelompokkan ruangan dan orang. Buat sebuah space untuk memulai.</string>
+    <string name="space_list_empty_title">Belum ada space.</string>
+    <string name="a11y_collapse_space_children">Tutup %s anak</string>
+    <string name="a11y_expand_space_children">Buka %s anak</string>
+    <string name="change_space">Buat Space</string>
 </resources>

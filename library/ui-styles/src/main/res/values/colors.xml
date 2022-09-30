@@ -141,7 +141,9 @@
 
     <!-- Shield colors -->
     <color name="shield_color_trust">#0DBD8B</color>
+    <color name="shield_color_trust_background">#0F0DBD8B</color>
     <color name="shield_color_black">#17191C</color>
+    <color name="shield_color_gray">#91A1C0</color>
     <color name="shield_color_warning">#FF4B55</color>
     <color name="shield_color_warning_background">#0FFF4B55</color>
 

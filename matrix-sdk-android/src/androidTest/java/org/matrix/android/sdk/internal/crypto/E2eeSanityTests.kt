@@ -29,9 +29,9 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.RequestResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
@@ -45,7 +45,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
-import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
@@ -134,7 +133,8 @@ class E2eeSanityTests : InstrumentedTest {
                     val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!)
                     timeLineEvent != null &&
                             timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                            timeLineEvent.root.getClearType() == EventType.MESSAGE &&
+                            timeLineEvent.root.mxDecryptionResult?.isSafe == true
                 }
             }
         }
@@ -331,6 +331,15 @@ class E2eeSanityTests : InstrumentedTest {
 
         // ensure bob can now decrypt
         cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
+
+        // Check key trust
+        sentEventIds.forEach { sentEventId ->
+            val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)!!
+            val result = testHelper.runBlockingTest {
+                newBobSession.cryptoService().decryptEvent(timelineEvent.root, "")
+            }
+            assertEquals("Keys from history should be deniable", false, result.isSafe)
+        }
     }
 
     /**
@@ -379,10 +388,6 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
 
         cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
-//        newBobSession.cryptoService().getOutgoingRoomKeyRequests()
-//                .firstOrNull {
-//                    it.sessionId ==
-//                }
 
         // Try to request
         sentEventIds.forEach { sentEventId ->
@@ -390,33 +395,30 @@ class E2eeSanityTests : InstrumentedTest {
             newBobSession.cryptoService().requestRoomKeyForEvent(event)
         }
 
-        // wait a bit
-        // we need to wait a couple of syncs to let sharing occurs
-//        testHelper.waitFewSyncs(newBobSession, 6)
-
         // Ensure that new bob still can't decrypt (keys must have been withheld)
-        sentEventIds.forEach { sentEventId ->
-            val megolmSessionId = newBobSession.getRoom(e2eRoomID)!!
-                    .getTimelineEvent(sentEventId)!!
-                    .root.content.toModel<EncryptedEventContent>()!!.sessionId
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val aliceReply = newBobSession.cryptoService().getOutgoingRoomKeyRequests()
-                            .first {
-                                it.sessionId == megolmSessionId &&
-                                        it.roomId == e2eRoomID
-                            }
-                            .results.also {
-                                Log.w("##TEST", "result list is $it")
-                            }
-                            .firstOrNull { it.userId == aliceSession.myUserId }
-                            ?.result
-                    aliceReply != null &&
-                            aliceReply is RequestResult.Failure &&
-                            WithHeldCode.UNAUTHORISED == aliceReply.code
-                }
-            }
-        }
+        // as per new config we won't request to alice, so ignore following test
+//        sentEventIds.forEach { sentEventId ->
+//            val megolmSessionId = newBobSession.getRoom(e2eRoomID)!!
+//                    .getTimelineEvent(sentEventId)!!
+//                    .root.content.toModel<EncryptedEventContent>()!!.sessionId
+//            testHelper.waitWithLatch { latch ->
+//                testHelper.retryPeriodicallyWithLatch(latch) {
+//                    val aliceReply = newBobSession.cryptoService().getOutgoingRoomKeyRequests()
+//                            .first {
+//                                it.sessionId == megolmSessionId &&
+//                                        it.roomId == e2eRoomID
+//                            }
+//                            .results.also {
+//                                Log.w("##TEST", "result list is $it")
+//                            }
+//                            .firstOrNull { it.userId == aliceSession.myUserId }
+//                            ?.result
+//                    aliceReply != null &&
+//                            aliceReply is RequestResult.Failure &&
+//                            WithHeldCode.UNAUTHORISED == aliceReply.code
+//                }
+//            }
+//        }
 
         cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
@@ -438,7 +440,10 @@ class E2eeSanityTests : InstrumentedTest {
      * Test that if a better key is forwarded (lower index, it is then used)
      */
     @Test
-    fun testForwardBetterKey() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testForwardBetterKey() = runCryptoTest(
+            context(),
+            cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false)
+    ) { cryptoTestHelper, testHelper ->
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = cryptoTestData.firstSession

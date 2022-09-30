@@ -693,7 +693,7 @@
     <string name="encryption_information_decryption_error">ডিক্রিপশন সমস্যা</string>
 
     <string name="encryption_information_device_name">সর্বজনীন নাম</string>
-    <string name="encryption_information_device_id">আইডি</string>
+    <string name="device_manager_session_details_session_id">আইডি</string>
     <string name="encryption_information_device_key">সেশানের কুঞ্জি</string>
 
     <string name="encryption_export_e2e_room_keys">শেষ থেকে শেষ রুমের কুঞ্জিগুলি এক্সপোর্ট করুন</string>

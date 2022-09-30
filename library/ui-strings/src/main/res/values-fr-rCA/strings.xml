@@ -778,7 +778,7 @@
     <string name="encryption_export_room_keys">Exporter les clés des salons</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés E2E des salons</string>
     <string name="encryption_information_device_key">Clé de la session</string>
-    <string name="encryption_information_device_id">Identifiant de session</string>
+    <string name="device_manager_session_details_session_id">Identifiant de session</string>
     <string name="encryption_information_device_name">Nom public</string>
     <string name="encryption_information_decryption_error">Erreur de déchiffrement</string>
     <string name="settings_theme">Thème</string>

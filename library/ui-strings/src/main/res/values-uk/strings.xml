@@ -354,7 +354,7 @@
     <string name="room_settings_unset_main_address">Зробити не основною адресою</string>
     <string name="encryption_information_decryption_error">Помилка розшифрування</string>
     <string name="encryption_information_device_name">Загальнодоступна назва</string>
-    <string name="encryption_information_device_id">ID сеансу</string>
+    <string name="device_manager_session_details_session_id">ID сеансу</string>
     <string name="encryption_information_device_key">Ключ сеансу</string>
     <string name="encryption_export_e2e_room_keys">Експортувати E2E ключі кімнати</string>
     <string name="encryption_export_room_keys">Експортувати ключі кімнати</string>
@@ -2701,8 +2701,8 @@
     <string name="a11y_open_settings">Відкрити налаштування</string>
     <string name="all_chats">Усі бесіди</string>
     <string name="device_manager_settings_active_sessions_show_all">Показати всі сеанси (V2, WIP)</string>
-    <string name="settings_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
-    <string name="settings_sessions_other_title">Інші сеанси</string>
+    <string name="device_manager_sessions_other_description">Для найкращої безпеки перевірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.</string>
+    <string name="device_manager_sessions_other_title">Інші сеанси</string>
     <string name="settings_sessions_list">Сеанси</string>
     <string name="a11y_open_spaces">Відкрити список кімнат</string>
     <string name="a11y_create_message">Створити нову розмову або кімнату</string>
@@ -2722,11 +2722,8 @@
     <string name="device_manager_other_sessions_description_unverified">Не звірений · Остання активність %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Звірений · Остання активність %1$s</string>
     <string name="device_manager_other_sessions_view_all">Переглянути всі (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Поточний сеанс</string>
     <string name="device_manager_view_details">Переглянути подробиці</string>
     <string name="device_manager_verify_session">Звірити сеанс</string>
-    <string name="device_manager_verification_status_detail_unverified">Звірте свій поточний сеанс для безпечнішого обміну повідомленнями.</string>
-    <string name="device_manager_verification_status_detail_verified">Ваш поточний сеанс готовий для безпечного обміну повідомленнями.</string>
     <string name="device_manager_verification_status_unverified">Не звірений сеанс</string>
     <string name="device_manager_verification_status_verified">Звірений сеанс</string>
     <string name="a11y_device_manager_device_type_unknown">Невідомий тип пристрою</string>
@@ -2736,4 +2733,43 @@
     <string name="timeline_error_room_not_found">Перепрошуємо, цю кімнату не знайдено.
 \nСпробуйте пізніше.%s</string>
     <string name="invites_title">Запрошення</string>
+    <string name="onboarding_new_app_layout_button_try">Спробувати</string>
+    <string name="onboarding_new_app_layout_feedback_message">Клацніть праворуч вгорі, щоб побачити опцію відгуку.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Надіслати відгук</string>
+    <string name="onboarding_new_app_layout_spaces_message">Отримуйте доступ до своїх просторів (унизу праворуч) швидше та легше, ніж раніше.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Доступ до просторів</string>
+    <string name="onboarding_new_app_layout_welcome_message">Щоб спростити ваш ${app_name}, вкладки тепер необов’язкові. Керуйте ними у верхньому правому меню.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Вітаємо в новому вигляді!</string>
+    <string name="home_empty_no_unreads_message">Тут з\'являтимуться ваші непрочитані повідомлення, якщо вони є.</string>
+    <string name="home_empty_no_unreads_title">Немає про що звітувати.</string>
+    <string name="home_empty_no_rooms_message">Універсальний безпечний застосунок для спілкування з командами, друзями й організаціями. Створіть бесіду або приєднайтеся до наявної кімнати, щоб розпочати.</string>
+    <string name="home_empty_no_rooms_title">Вітаємо в ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Простори – це новий спосіб групувати кімнати та людей. Додайте наявну кімнату або створіть нову, використовуючи кнопку внизу праворуч.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nмає дещо порожній вигляд.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Зважте потребу вийти зі старих сеансів (%1$d день або більше), який ви більше не використовуєте.</item>
+        <item quantity="few">Зважте потребу вийти зі старих сеансів (%1$d дні або більше), які ви більше не використовуєте.</item>
+        <item quantity="many">Зважте потребу вийти зі старих сеансів (%1$d днів або більше), які ви більше не використовуєте.</item>
+        <item quantity="other">Зважте потребу вийти зі старих сеансів (%1$d днів або більше), які ви більше не використовуєте.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Неактивні сеанси</string>
+    <string name="device_manager_unverified_sessions_description">Звірити або вийти з не звірених сеансів.</string>
+    <string name="device_manager_unverified_sessions_title">Не звірений сеанс</string>
+    <string name="device_manager_header_section_security_recommendations_description">Удоскональте безпеку свого облікового запису, дотримуючись цих порад.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Поради щодо безпеки</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Без активності %1$d+ день (%2$s)</item>
+        <item quantity="few">Без активності %1$d+ дні (%2$s)</item>
+        <item quantity="many">Без активності %1$d+ днів (%2$s)</item>
+        <item quantity="other">Без активності %1$d+ днів (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Тут з\'являтимуться нові запити та запрошення.</string>
+    <string name="invites_empty_title">Нічого нового.</string>
+    <string name="space_list_empty_message">Простори – це новий спосіб групувати кімнати та людей. Створіть простір, щоб розпочати.</string>
+    <string name="space_list_empty_title">Ще немає просторів.</string>
+    <string name="a11y_collapse_space_children">Згорнути дочірні елементи %s</string>
+    <string name="a11y_expand_space_children">Розгорнути дочірні елементи %s</string>
+    <string name="change_space">Змінити простір</string>
 </resources>

@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.RequestResult
@@ -153,7 +154,10 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    fun test_WithHeldNoOlm() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_WithHeldNoOlm() = runCryptoTest(
+            context(),
+            cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false)
+    ) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
@@ -233,7 +237,10 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    fun test_WithHeldKeyRequest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_WithHeldKeyRequest() = runCryptoTest(
+            context(),
+            cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false)
+    ) { cryptoTestHelper, testHelper ->
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession

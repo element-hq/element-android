@@ -432,7 +432,7 @@
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
     <string name="encryption_information_device_name">Публичное имя</string>
-    <string name="encryption_information_device_id">ID сессии</string>
+    <string name="device_manager_session_details_session_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
     <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
@@ -2660,8 +2660,8 @@
     <string name="location_share_loading_map_error">Не удалось загрузить карту
 \nВозможно, этот домашний сервер не настроен для отображения карт.</string>
     <string name="all_chats">Все беседы</string>
-    <string name="settings_sessions_other_description">Для лучшей безопасности заверьте свои сессии и выйдите из тех, которые более не признаёте или не используете.</string>
-    <string name="settings_sessions_other_title">Другие сессии</string>
+    <string name="device_manager_sessions_other_description">Для лучшей безопасности заверьте свои сессии и выйдите из тех, которые более не признаёте или не используете.</string>
+    <string name="device_manager_sessions_other_title">Другие сессии</string>
     <string name="settings_sessions_list">Сессии</string>
     <string name="a11y_create_message">Создать беседу или комнату</string>
     <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>
@@ -2678,4 +2678,19 @@
     <string name="explore_rooms">Обзор комнат</string>
     <string name="start_chat">Начать беседу</string>
     <string name="create_room">Создать комнату</string>
+    <string name="device_manager_other_sessions_view_all">Посмотреть все (%1$d)</string>
+    <string name="device_manager_header_section_security_recommendations_description">Повысьте безопасность учётной записи, следуя этим рекомендациям.</string>
+    <string name="device_manager_other_sessions_description_verified">Заверенная · Последняя активность %1$s</string>
+    <string name="device_manager_verification_status_unverified">Незаверенная сессия</string>
+    <string name="device_manager_verification_status_verified">Заверенная сессия</string>
+    <string name="a11y_device_manager_device_type_unknown">Неизвестный тип устройства</string>
+    <string name="a11y_device_manager_device_type_desktop">Компьютер</string>
+    <string name="a11y_device_manager_device_type_mobile">Мобильный</string>
+    <string name="device_manager_other_sessions_description_unverified">Незаверенная · Последняя активность %1$s</string>
+    <string name="device_manager_header_section_security_recommendations_title">Рекомендации по безопасности</string>
+    <string name="device_manager_unverified_sessions_title">Незаверенные сессии</string>
+    <string name="device_manager_inactive_sessions_title">Неактивные сессии</string>
+    <string name="home_empty_no_rooms_title">Добро пожаловать в ${app_name},
+\n%s.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Оставить отзыв</string>
 </resources>

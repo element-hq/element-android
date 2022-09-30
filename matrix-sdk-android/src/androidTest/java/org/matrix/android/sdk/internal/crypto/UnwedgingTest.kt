@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -82,7 +83,10 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
-    fun testUnwedging() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun testUnwedging() = runCryptoTest(
+            context(),
+            cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false)
+    ) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
