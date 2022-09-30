@@ -17,13 +17,6 @@ static def gitRevision() {
     return cmd.execute().text.trim()
 }
 
-project.android.buildTypes.all { buildType ->
-    buildType.javaCompileOptions.annotationProcessorOptions.arguments =
-            [
-                    validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
-            ]
-}
-
 initScreenshotTests(project)
 
 android {
