@@ -588,7 +588,6 @@ internal class DefaultCrossSigningService @Inject constructor(
             }
 
             cryptoStore.setUserKeysAsTrusted(otherUserId, true)
-            // TODO update local copy with new signature directly here? kind of local echo of trust?
 
             Timber.d("## CrossSigning - Upload signature of $otherUserId MSK signed by USK")
             val uploadQuery = UploadSignatureQueryBuilder()
@@ -598,6 +597,13 @@ internal class DefaultCrossSigningService @Inject constructor(
                 this.executionThread = TaskThread.CRYPTO
                 this.callback = callback
             }.executeBy(taskExecutor)
+
+            // Local echo for device cross trust, to avoid having to wait for a notification of key change
+            cryptoStore.getUserDeviceList(otherUserId)?.forEach { device ->
+                val updatedTrust = checkDeviceTrust(device.userId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                cryptoStore.setDeviceTrust(device.userId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+            }
         }
     }
 

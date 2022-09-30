@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -34,7 +33,6 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -43,6 +41,7 @@ import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
+import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -231,14 +230,14 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(aliceAuthParams)
                 }
             }, it)
         }
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(bobAuthParams)
@@ -248,26 +247,27 @@ class XSigningTest : InstrumentedTest {
 
         cryptoTestHelper.verifySASCrossSign(aliceSession, bobSession, cryptoTestData.roomId)
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                aliceSession.cryptoService().crossSigningService().isUserTrusted(bobSession.myUserId)
-            }
+        testHelper.retryPeriodically {
+            aliceSession.cryptoService().crossSigningService().isUserTrusted(bobSession.myUserId)
         }
 
-        aliceSession.cryptoService().crossSigningService().checkUserTrust(bobSession.myUserId).let {
-            assertTrue(it is UserTrustResult.Success)
+        testHelper.retryPeriodically {
+            aliceSession.cryptoService().crossSigningService().checkUserTrust(bobSession.myUserId).isVerified()
         }
 
+        aliceSession.cryptoService()
         // Ensure also that bob device is trusted
-        aliceSession.cryptoService().getUserDevices(bobSession.myUserId).first().let { bobDeviceAlicePoc ->
-            bobDeviceAlicePoc.trustLevel!!.crossSigningVerified shouldBeEqualTo true
+        testHelper.retryPeriodically {
+            val deviceInfo = aliceSession.cryptoService().getUserDevices(bobSession.myUserId).firstOrNull()
+            Timber.v("#TEST device:${deviceInfo?.shortDebugString()} trust ${deviceInfo?.trustLevel}")
+            deviceInfo?.trustLevel?.crossSigningVerified == true
         }
 
         val currentBobMSK = aliceSession.cryptoService().crossSigningService()
                 .getUserCrossSigningKeys(bobSession.myUserId)!!
                 .masterKey()!!.unpaddedBase64PublicKey!!
 
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(bobAuthParams)
@@ -275,50 +275,42 @@ class XSigningTest : InstrumentedTest {
             }, it)
         }
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val newBobMsk = aliceSession.cryptoService().crossSigningService()
-                        .getUserCrossSigningKeys(bobSession.myUserId)
-                        ?.masterKey()?.unpaddedBase64PublicKey
-                newBobMsk != null && newBobMsk != currentBobMSK
-            }
+        testHelper.retryPeriodically {
+            val newBobMsk = aliceSession.cryptoService().crossSigningService()
+                    .getUserCrossSigningKeys(bobSession.myUserId)
+                    ?.masterKey()?.unpaddedBase64PublicKey
+            newBobMsk != null && newBobMsk != currentBobMSK
         }
 
         // trick to force event to sync
         bobSession.roomService().getRoom(cryptoTestData.roomId)!!.typingService().userIsTyping()
 
         // assert that bob is not trusted anymore from alice s
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val trust = aliceSession.cryptoService().crossSigningService().checkUserTrust(bobSession.myUserId)
-                !trust.isVerified()
-            }
+        testHelper.retryPeriodically {
+            val trust = aliceSession.cryptoService().crossSigningService().checkUserTrust(bobSession.myUserId)
+            !trust.isVerified()
         }
 
         // trick to force event to sync
         bobSession.roomService().getRoom(cryptoTestData.roomId)!!.typingService().userStopsTyping()
         bobSession.roomService().getRoom(cryptoTestData.roomId)!!.typingService().userIsTyping()
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val info = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
-                info?.wasTrustedOnce == true
-            }
+        testHelper.retryPeriodically {
+            val info = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
+            info?.wasTrustedOnce == true
         }
 
         // trick to force event to sync
         bobSession.roomService().getRoom(cryptoTestData.roomId)!!.typingService().userStopsTyping()
         bobSession.roomService().getRoom(cryptoTestData.roomId)!!.typingService().userIsTyping()
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                !aliceSession.cryptoService().crossSigningService().isUserTrusted(bobSession.myUserId)
-            }
+        testHelper.retryPeriodically {
+            !aliceSession.cryptoService().crossSigningService().isUserTrusted(bobSession.myUserId)
         }
 
         // Ensure also that bob device are not trusted
-        aliceSession.cryptoService().getUserDevices(bobSession.myUserId).first().let { bobDeviceAlicePoc ->
-            bobDeviceAlicePoc.trustLevel!!.crossSigningVerified shouldBeEqualTo false
+        testHelper.retryPeriodically {
+            aliceSession.cryptoService().getUserDevices(bobSession.myUserId).first().trustLevel?.crossSigningVerified != true
         }
     }
 }
