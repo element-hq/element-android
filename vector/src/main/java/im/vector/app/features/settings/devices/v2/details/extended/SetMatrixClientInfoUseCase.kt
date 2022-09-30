@@ -32,9 +32,12 @@ class SetMatrixClientInfoUseCase @Inject constructor(
     suspend fun execute(clientInfo: MatrixClientInfoContent): Result<Unit> = runCatching {
         activeSessionHolder.getSafeActiveSession()
                 ?.let { session ->
-                    val type = MATRIX_CLIENT_INFO_KEY_PREFIX + session.sessionParams.deviceId
-                    session.accountDataService()
-                            .updateUserAccountData(type, clientInfo.toContent())
+                    val deviceId = session.sessionParams.deviceId
+                    if (deviceId != null) {
+                        val type = MATRIX_CLIENT_INFO_KEY_PREFIX + deviceId
+                        session.accountDataService()
+                                .updateUserAccountData(type, clientInfo.toContent())
+                    }
                 }
     }
 }

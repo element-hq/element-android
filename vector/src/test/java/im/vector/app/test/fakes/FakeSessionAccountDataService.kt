@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.test.fakes
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
+import io.mockk.every
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.events.model.Content
 
-@JsonClass(generateAdapter = true)
-data class MatrixClientInfoContent(
-        // app name
-        @Json(name = "name")
-        val name: String? = null,
-        // app version
-        @Json(name = "version")
-        val version: String? = null,
-        // app url (optional, applicable only for web)
-        @Json(name = "url")
-        val url: String? = null,
-)
+class FakeSessionAccountDataService : SessionAccountDataService by mockk() {
+
+    fun givenGetUserAccountDataEventReturns(type: String, content: Content) {
+        every { getUserAccountDataEvent(type) } returns UserAccountDataEvent(type, content)
+    }
+}

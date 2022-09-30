@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.details.extended
 
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.BuildMeta
 import javax.inject.Inject
@@ -24,19 +25,22 @@ import javax.inject.Inject
  * This use case updates if needed the account data event containing extended client info.
  */
 class UpdateMatrixClientInfoUseCase @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
         private val appNameProvider: AppNameProvider,
         private val buildMeta: BuildMeta,
         private val getMatrixClientInfoUseCase: GetMatrixClientInfoUseCase,
         private val setMatrixClientInfoUseCase: SetMatrixClientInfoUseCase,
 ) {
 
+    // TODO call the use case after signin + on app startup
     // TODO add unit tests
     suspend fun execute(): Result<Unit> = runCatching {
         val clientInfo = MatrixClientInfoContent(
                 name = appNameProvider.getAppName(),
                 version = buildMeta.versionName
         )
-        val storedClientInfo = getMatrixClientInfoUseCase.execute()
+        val sessionId = activeSessionHolder.getActiveSession().sessionParams.deviceId
+        val storedClientInfo = sessionId?.let { getMatrixClientInfoUseCase.execute(it) }
         if (clientInfo != storedClientInfo) {
             setMatrixClientInfoUseCase.execute(clientInfo)
         }
