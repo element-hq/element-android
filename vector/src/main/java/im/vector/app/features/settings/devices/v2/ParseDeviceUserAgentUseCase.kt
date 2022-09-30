@@ -48,7 +48,13 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
             deviceModel = deviceInfoSegments.getOrNull(0)
             deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
         }
-        return DeviceExtendedInfo(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
+        return DeviceExtendedInfo(
+                deviceType = DeviceType.MOBILE,
+                deviceModel = deviceModel,
+                deviceOperatingSystem = deviceOperatingSystem,
+                clientName = appName,
+                clientVersion = appVersion
+        )
     }
 
     private fun parseIosUserAgent(userAgent: String): DeviceExtendedInfo {
@@ -57,7 +63,13 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         val deviceInfoSegments = userAgent.substringAfter("(").substringBeforeLast(")").split("; ")
         val deviceModel = deviceInfoSegments.getOrNull(0)
         val deviceOperatingSystem = deviceInfoSegments.getOrNull(1)
-        return DeviceExtendedInfo(DeviceType.MOBILE, deviceModel, deviceOperatingSystem, appName, appVersion)
+        return DeviceExtendedInfo(
+                deviceType = DeviceType.MOBILE,
+                deviceModel = deviceModel,
+                deviceOperatingSystem = deviceOperatingSystem,
+                clientName = appName,
+                clientVersion = appVersion
+        )
     }
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
@@ -86,7 +98,14 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         } else {
             deviceOperatingSystemSegments.getOrNull(0)
         }
-        return DeviceExtendedInfo(DeviceType.DESKTOP, browserName, deviceOperatingSystem, null, null)
+        return DeviceExtendedInfo(
+                deviceType = DeviceType.DESKTOP,
+                deviceModel = null,
+                deviceOperatingSystem = deviceOperatingSystem,
+                clientName = null,
+                clientVersion = null,
+                browser = browserName
+        )
     }
 
     private fun parseWebUserAgent(userAgent: String): DeviceExtendedInfo {
