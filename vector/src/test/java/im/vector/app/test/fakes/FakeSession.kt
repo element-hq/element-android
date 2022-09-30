@@ -61,7 +61,6 @@ class FakeSession(
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
     override fun eventService() = fakeEventService
-    override fun pushersService() = fakePushersService
     override fun accountDataService() = fakeSessionAccountDataService
     override fun filterService() = fakeFilterService
 
