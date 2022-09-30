@@ -39,8 +39,4 @@ data class DeviceExtendedInfo(
          * i.e. 1.5.0.
          */
         val clientVersion: String? = null,
-        /**
-         * i.e. Chrome.
-         */
-        val browser: String? = null,
 )

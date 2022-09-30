@@ -74,21 +74,38 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
         val browserSegments = userAgent.split(" ")
-        val browserName = when {
+        val (browserName, browserVersion) = when {
             isFirefox(browserSegments) -> {
-                "Firefox"
+                Pair("Firefox", getBrowserVersion(browserSegments, "Firefox"))
             }
             isEdge(browserSegments) -> {
-                "Edge"
+                Pair("Edge", getBrowserVersion(browserSegments, "Edge"))
             }
             isMobile(browserSegments) -> {
-                getMobileBrowserName(browserSegments)
+                when (val name = getMobileBrowserName(browserSegments)) {
+                    null -> {
+                        Pair(null, null)
+                    }
+                    "Safari" -> {
+                        Pair(name, getBrowserVersion(browserSegments, "Version"))
+                    }
+                    else -> {
+                        Pair(name, getBrowserVersion(browserSegments, name))
+                    }
+                }
             }
             isSafari(browserSegments) -> {
-                "Safari"
+                Pair("Safari", getBrowserVersion(browserSegments, "Version"))
             }
             else -> {
-                getRegularBrowserName(browserSegments)
+                when (val name = getRegularBrowserName(browserSegments)) {
+                    null -> {
+                        Pair(null, null)
+                    }
+                    else -> {
+                        Pair(name, getBrowserVersion(browserSegments, name))
+                    }
+                }
             }
         }
 
@@ -102,9 +119,8 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
                 deviceType = DeviceType.DESKTOP,
                 deviceModel = null,
                 deviceOperatingSystem = deviceOperatingSystem,
-                clientName = null,
-                clientVersion = null,
-                browser = browserName
+                clientName = browserName,
+                clientVersion = browserVersion,
         )
     }
 
@@ -120,6 +136,16 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun isFirefox(browserSegments: List<String>): Boolean {
         return browserSegments.lastOrNull()?.startsWith("Firefox").orFalse()
+    }
+
+    private fun getBrowserVersion(browserSegments: List<String>, browserName: String): String? {
+        // Chrome/104.0.3497.100 -> 104
+        return browserSegments
+                .find { it.startsWith(browserName) }
+                ?.split("/")
+                ?.getOrNull(1)
+                ?.split(".")
+                ?.firstOrNull()
     }
 
     private fun isEdge(browserSegments: List<String>): Boolean {
