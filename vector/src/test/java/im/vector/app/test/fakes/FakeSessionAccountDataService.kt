@@ -16,8 +16,12 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -26,5 +30,17 @@ class FakeSessionAccountDataService : SessionAccountDataService by mockk() {
 
     fun givenGetUserAccountDataEventReturns(type: String, content: Content) {
         every { getUserAccountDataEvent(type) } returns UserAccountDataEvent(type, content)
+    }
+
+    fun givenUpdateUserAccountDataEventSucceeds() {
+        coEvery { updateUserAccountData(any(), any()) } just runs
+    }
+
+    fun givenUpdateUserAccountDataEventFailsWithError(error: Exception) {
+        coEvery { updateUserAccountData(any(), any()) } throws error
+    }
+
+    fun verifyUpdateUserAccountDataEventSucceeds(type: String, content: Content, inverse: Boolean = false) {
+        coVerify(inverse = inverse) { updateUserAccountData(type, content) }
     }
 }
