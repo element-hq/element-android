@@ -1194,10 +1194,10 @@ internal class DefaultCryptoService @Inject constructor(
      * Add this room to the ones which don't encrypt messages to unverified devices.
      *
      * @param roomId the room id
-     * @param if true will block sending keys to unverified devices
+     * @param block if true will block sending keys to unverified devices
      */
-    override fun setRoomBlacklistUnverifiedDevices(roomId: String, enable: Boolean) {
-        cryptoStore.blackListUnverifiedDevicesInRoom(roomId, enable)
+    override fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean) {
+        cryptoStore.blockUnverifiedDevicesInRoom(roomId, block)
     }
 
     /**
@@ -1205,8 +1205,8 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param roomId the room id
      */
-    override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
-        setRoomBlacklistUnverifiedDevices(roomId, false)
+    override fun setRoomUnBlockUnverifiedDevices(roomId: String) {
+        setRoomBlockUnverifiedDevices(roomId, false)
     }
 
     /**

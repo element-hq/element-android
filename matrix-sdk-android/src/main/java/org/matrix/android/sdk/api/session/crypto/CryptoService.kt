@@ -104,7 +104,7 @@ interface CryptoService {
      */
     fun isShareKeysOnInviteEnabled(): Boolean
 
-    fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
+    fun setRoomUnBlockUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
 
@@ -116,7 +116,7 @@ interface CryptoService {
 
     suspend fun exportRoomKeys(password: String): ByteArray
 
-    fun setRoomBlacklistUnverifiedDevices(roomId: String, enable: Boolean)
+    fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean)
 
     fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 

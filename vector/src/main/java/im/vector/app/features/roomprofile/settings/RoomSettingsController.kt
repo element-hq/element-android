@@ -154,7 +154,7 @@ class RoomSettingsController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
         data.globalCryptoConfig.invoke()?.let { globalConfig ->
-            if (globalConfig.globalBlacklistUnverifiedDevices) {
+            if (globalConfig.globalBlockUnverifiedDevices) {
                 genericFooterItem {
                     id("globalConfig")
                     centered(false)

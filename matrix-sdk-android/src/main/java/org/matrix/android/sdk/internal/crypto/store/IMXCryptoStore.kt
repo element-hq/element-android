@@ -138,9 +138,9 @@ internal interface IMXCryptoStore {
      * Define if encryption keys should be sent to unverified devices in this room.
      *
      * @param roomId the roomId
-     * @param blacklist if true will not send keys to unverified devices
+     * @param block if true will not send keys to unverified devices
      */
-    fun blackListUnverifiedDevicesInRoom(roomId: String, blacklist: Boolean)
+    fun blockUnverifiedDevicesInRoom(roomId: String, block: Boolean)
 
     /**
      * Get the current keys backup version.

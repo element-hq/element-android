@@ -25,13 +25,14 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
-class E2eeTestConfig : InstrumentedTest {
+class E2eeConfigTest : InstrumentedTest {
 
     @Test
     fun testBlacklistUnverifiedDefault() = runCryptoTest(context()) { cryptoTestHelper, _ ->
@@ -55,10 +56,8 @@ class E2eeTestConfig : InstrumentedTest {
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
-            }
+        testHelper.retryPeriodically {
+            roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
         }
 
         cryptoTestHelper.ensureCannotDecrypt(listOf(sentMessage.eventId), cryptoTestData.secondSession!!, cryptoTestData.roomId)
@@ -81,10 +80,8 @@ class E2eeTestConfig : InstrumentedTest {
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
-            }
+        testHelper.retryPeriodically {
+            roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
         }
 
         cryptoTestHelper.ensureCanDecrypt(
@@ -105,10 +102,8 @@ class E2eeTestConfig : InstrumentedTest {
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                roomBobPOV.timelineService().getTimelineEvent(beforeMessage.eventId) != null
-            }
+        testHelper.retryPeriodically {
+            roomBobPOV.timelineService().getTimelineEvent(beforeMessage.eventId) != null
         }
 
         cryptoTestHelper.ensureCanDecrypt(
@@ -118,9 +113,14 @@ class E2eeTestConfig : InstrumentedTest {
                 listOf(beforeMessage.getLastMessageContent()!!.body)
         )
 
-        cryptoTestData.firstSession.cryptoService().setRoomBlacklistUnverifiedDevices(cryptoTestData.roomId, true)
+        cryptoTestData.firstSession.cryptoService().setRoomBlockUnverifiedDevices(cryptoTestData.roomId, true)
 
         val afterMessage = testHelper.sendTextMessage(roomAlicePOV, "you are blocked", 1).first()
+
+        // ensure received
+        testHelper.retryPeriodically {
+            cryptoTestData.secondSession?.getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(afterMessage.eventId)?.root != null
+        }
 
         cryptoTestHelper.ensureCannotDecrypt(
                 listOf(afterMessage.eventId),

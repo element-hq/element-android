@@ -252,7 +252,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
             is RoomSettingsAction.SetRoomGuestAccess -> handleSetGuestAccess(action)
             is RoomSettingsAction.Save -> saveSettings()
             is RoomSettingsAction.Cancel -> cancel()
-            is RoomSettingsAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enable)
+            is RoomSettingsAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
         }
     }
 
@@ -276,7 +276,7 @@ class RoomSettingsViewModel @AssistedInject constructor(
 
     private fun setEncryptToVerifiedDeviceOnly(enabled: Boolean) {
         session.coroutineScope.launch {
-            session.cryptoService().setRoomBlacklistUnverifiedDevices(room.roomId, enabled)
+            session.cryptoService().setRoomBlockUnverifiedDevices(room.roomId, enabled)
         }
     }
 

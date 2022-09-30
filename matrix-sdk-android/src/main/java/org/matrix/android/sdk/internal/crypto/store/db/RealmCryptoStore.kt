@@ -451,7 +451,7 @@ internal class RealmCryptoStore @Inject constructor(
             realm.where<CryptoMetadataEntity>().findFirst()
                     ?.let {
                         GlobalCryptoConfig(
-                                globalBlacklistUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
+                                globalBlockUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
                                 globalEnableKeyGossiping = it.globalEnableKeyGossiping,
                                 enableKeyForwardingOnInvite = it.enableKeyForwardingOnInvite
                         )
@@ -467,7 +467,7 @@ internal class RealmCryptoStore @Inject constructor(
                 },
                 {
                     GlobalCryptoConfig(
-                            globalBlacklistUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
+                            globalBlockUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
                             globalEnableKeyGossiping = it.globalEnableKeyGossiping,
                             enableKeyForwardingOnInvite = it.enableKeyForwardingOnInvite
                     )
@@ -1121,10 +1121,10 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun blackListUnverifiedDevicesInRoom(roomId: String, blacklist: Boolean) {
+    override fun blockUnverifiedDevicesInRoom(roomId: String, block: Boolean) {
         doRealmTransaction(realmConfiguration) { realm ->
             CryptoRoomEntity.getById(realm, roomId)
-                    ?.blacklistUnverifiedDevices = blacklist
+                    ?.blacklistUnverifiedDevices = block
         }
     }
 
