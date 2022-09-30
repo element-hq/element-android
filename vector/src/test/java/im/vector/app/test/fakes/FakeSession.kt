@@ -80,7 +80,7 @@ class FakeSession(
         every { this@FakeSession.sessionParams } returns sessionParams
     }
 
-    fun givenSessionId(sessionId: String): SessionParams {
+    fun givenSessionId(sessionId: String?): SessionParams {
         val sessionParams = mockk<SessionParams>()
         every { sessionParams.deviceId } returns sessionId
         givenSessionParams(sessionParams)

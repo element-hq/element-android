@@ -39,8 +39,10 @@ class UpdateMatrixClientInfoUseCase @Inject constructor(
                 name = appNameProvider.getAppName(),
                 version = buildMeta.versionName
         )
-        val sessionId = activeSessionHolder.getActiveSession().sessionParams.deviceId
-        val storedClientInfo = sessionId?.let { getMatrixClientInfoUseCase.execute(it) }
+        val deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId.orEmpty()
+        val storedClientInfo = deviceId
+                .takeUnless { it.isEmpty() }
+                ?.let { getMatrixClientInfoUseCase.execute(it) }
         if (clientInfo != storedClientInfo) {
             setMatrixClientInfoUseCase.execute(clientInfo)
         }

@@ -28,15 +28,16 @@ class SetMatrixClientInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(clientInfo: MatrixClientInfoContent): Result<Unit> = runCatching {
         activeSessionHolder.getSafeActiveSession()
                 ?.let { session ->
-                    val deviceId = session.sessionParams.deviceId
-                    if (deviceId != null) {
+                    val deviceId = session.sessionParams.deviceId.orEmpty()
+                    if (deviceId.isNotEmpty()) {
                         val type = MATRIX_CLIENT_INFO_KEY_PREFIX + deviceId
                         session.accountDataService()
                                 .updateUserAccountData(type, clientInfo.toContent())
+                    } else {
+                        throw IllegalStateException("device id is empty")
                     }
                 }
     }
