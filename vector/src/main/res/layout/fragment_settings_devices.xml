@@ -12,8 +12,8 @@
             android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:devicesListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
-            app:devicesListHeaderTitle="@string/device_manager_header_section_security_recommendations_title"
+            app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
+            app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,8 +60,8 @@
             android:id="@+id/deviceListHeaderCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:devicesListHeaderDescription=""
-            app:devicesListHeaderTitle="@string/device_manager_current_session_title"
+            app:sessionsListHeaderDescription=""
+            app:sessionsListHeaderTitle="@string/device_manager_current_session_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />
@@ -90,8 +90,8 @@
             android:id="@+id/deviceListHeaderOtherSessions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:devicesListHeaderDescription="@string/settings_sessions_other_description"
-            app:devicesListHeaderTitle="@string/settings_sessions_other_title"
+            app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+            app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession" />

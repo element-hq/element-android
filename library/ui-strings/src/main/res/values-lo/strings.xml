@@ -909,7 +909,7 @@
     <string name="encryption_export_room_keys">ສົ່ງອອກກະແຈຫ້ອງ</string>
     <string name="encryption_export_e2e_room_keys">ສົ່ງອອກກະແຈຫ້ອງ E2E</string>
     <string name="encryption_information_device_key">ລະຫັດລະບົບ</string>
-    <string name="encryption_information_device_id">ID ລະບົບ</string>
+    <string name="device_manager_session_details_session_id">ID ລະບົບ</string>
     <string name="encryption_information_device_name">ຊື່ສາທາລະນະ</string>
     <string name="encryption_information_decryption_error">ການຖອດລະຫັດຜິດພາດ</string>
     <string name="settings_theme">ຫົວຂໍ້</string>

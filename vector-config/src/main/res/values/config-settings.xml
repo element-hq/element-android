@@ -37,6 +37,8 @@
     <bool name="settings_ignored_users_visible">true</bool>
 
     <!-- Level 1: Labs -->
+    <bool name="settings_labs_deferred_dm_visible">true</bool>
+    <bool name="settings_labs_deferred_dm_default">true</bool>
     <bool name="settings_labs_thread_messages_default">false</bool>
     <bool name="settings_labs_new_app_layout_default">false</bool>
     <bool name="settings_timeline_show_live_sender_info_visible">true</bool>

@@ -388,7 +388,7 @@
     <string name="settings_theme">Vzhľad</string>
     <string name="encryption_information_decryption_error">Chyba dešifrovania</string>
     <string name="encryption_information_device_name">Verejné meno</string>
-    <string name="encryption_information_device_id">ID relácie</string>
+    <string name="device_manager_session_details_session_id">ID relácie</string>
     <string name="encryption_information_device_key">Kľúč relácie</string>
     <string name="encryption_export_e2e_room_keys">Exportovať šifrovacie kľúče miestnosti</string>
     <string name="encryption_export_room_keys">Exportovať kľúče miestnosti</string>
@@ -2651,8 +2651,8 @@
     <string name="a11y_open_settings">Otvoriť nastavenia</string>
     <string name="all_chats">Všetky konverzácie</string>
     <string name="device_manager_settings_active_sessions_show_all">Zobraziť všetky relácie (V2, WIP)</string>
-    <string name="settings_sessions_other_description">V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
-    <string name="settings_sessions_other_title">Iné relácie</string>
+    <string name="device_manager_sessions_other_description">V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
+    <string name="device_manager_sessions_other_title">Iné relácie</string>
     <string name="settings_sessions_list">Relácie</string>
     <string name="a11y_open_spaces">Otvoriť zoznam priestorov</string>
     <string name="a11y_create_message">Vytvoriť novú konverzáciu alebo miestnosť</string>
@@ -2672,11 +2672,8 @@
     <string name="device_manager_other_sessions_description_unverified">Neoverené - Posledná aktivita %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Overené - Posledná aktivita %1$s</string>
     <string name="device_manager_other_sessions_view_all">Zobraziť všetky (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Aktuálna relácia</string>
     <string name="device_manager_view_details">Zobraziť podrobnosti</string>
     <string name="device_manager_verify_session">Overiť reláciu</string>
-    <string name="device_manager_verification_status_detail_unverified">Overte svoju aktuálnu reláciu pre vylepšené bezpečné zasielanie správ.</string>
-    <string name="device_manager_verification_status_detail_verified">Vaša aktuálna relácia je pripravená na bezpečné zasielanie správ.</string>
     <string name="device_manager_verification_status_unverified">Neoverená relácia</string>
     <string name="device_manager_verification_status_verified">Overená relácia</string>
     <string name="a11y_device_manager_device_type_unknown">Neznámy typ zariadenia</string>
@@ -2686,4 +2683,41 @@
     <string name="timeline_error_room_not_found">Je nám ľúto, táto miestnosť nebola nájdená.
 \nProsím, skúste to neskôr.%s</string>
     <string name="invites_title">Pozvánky</string>
+    <string name="onboarding_new_app_layout_button_try">Vyskúšajte si to</string>
+    <string name="onboarding_new_app_layout_feedback_message">Ťuknutím na položku vpravo hore zobrazíte možnosť spätnej väzby.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Poskytnite spätnú väzbu</string>
+    <string name="onboarding_new_app_layout_spaces_message">Získajte prístup k svojim priestorom (vľavo dole) rýchlejšie a jednoduchšie ako kedykoľvek predtým.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Prístup k priestorom</string>
+    <string name="onboarding_new_app_layout_welcome_message">Pre zjednodušenie vašej aplikácie ${app_name}, sú teraz karty voliteľné. Spravujte ich pomocou ponuky vpravo hore.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Vitajte v novom zobrazení!</string>
+    <string name="home_empty_no_unreads_message">Tu sa zobrazia neprečítané správy, ak nejaké máte.</string>
+    <string name="home_empty_no_unreads_title">Nič, o čom by bolo potrebné podať správu.</string>
+    <string name="home_empty_no_rooms_message">Kompletná zabezpečená aplikácia na komunikáciu pre tímy, priateľov a organizácie. Začnite konverzáciu alebo sa pridajte k existujúcej miestnosti.</string>
+    <string name="home_empty_no_rooms_title">Vitajte v aplikácii ${názov_aplikácie},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Priestory sú novým spôsobom zoskupovania miestností a ľudí. Pomocou tlačidla vpravo dole môžete pridať existujúcu miestnosť alebo vytvoriť novú.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nvyzerá trochu prázdne.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Zvážte odhlásenie zo starých relácií (%1$d deň alebo viac), ktoré už nepoužívate.</item>
+        <item quantity="few">Zvážte odhlásenie zo starých relácií (%1$d dni alebo viac), ktoré už nepoužívate.</item>
+        <item quantity="other">Zvážte odhlásenie zo starých relácií (%1$d dní alebo viac), ktoré už nepoužívate.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Neaktívne relácie</string>
+    <string name="device_manager_unverified_sessions_description">Overte alebo sa odhláste z neoverených relácií.</string>
+    <string name="device_manager_unverified_sessions_title">Neoverené relácie</string>
+    <string name="device_manager_header_section_security_recommendations_description">Zlepšite zabezpečenie svojho účtu dodržiavaním týchto odporúčaní.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Bezpečnostné odporúčania</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Neaktívny už %1$d+ deň (%2$s)</item>
+        <item quantity="few">Neaktívny už %1$d+ dni (%2$s)</item>
+        <item quantity="other">Neaktívny už %1$d+ dní (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Tu sa budú nachádzať vaše nové žiadosti a pozvánky.</string>
+    <string name="invites_empty_title">Nič nové.</string>
+    <string name="space_list_empty_message">Priestory sú novým spôsobom zoskupovania miestností a ľudí. Vytvorte si priestor a začnite.</string>
+    <string name="space_list_empty_title">Zatiaľ žiadne priestory.</string>
+    <string name="a11y_collapse_space_children">Zbaliť %s podpriestory</string>
+    <string name="a11y_expand_space_children">Rozbaliť %s podpriestory</string>
+    <string name="change_space">Zmeniť priestor</string>
 </resources>

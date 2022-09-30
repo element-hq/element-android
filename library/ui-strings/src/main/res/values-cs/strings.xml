@@ -635,7 +635,7 @@
     <string name="settings_theme">Motiv vzhledu</string>
     <string name="encryption_information_decryption_error">Chyba dešifrování</string>
     <string name="encryption_information_device_name">Veřejné jméno</string>
-    <string name="encryption_information_device_id">ID relace</string>
+    <string name="device_manager_session_details_session_id">ID relace</string>
     <string name="encryption_information_device_key">Klíč relace</string>
     <string name="encryption_export_e2e_room_keys">Export E2E klíčů místností</string>
     <string name="encryption_export_room_keys">Export klíčů místností</string>
@@ -2651,8 +2651,8 @@
     <string name="a11y_open_settings">Otevřít nastavení</string>
     <string name="all_chats">Všechny konverzace</string>
     <string name="device_manager_settings_active_sessions_show_all">Zobrazit všechny relace (V2, WIP)</string>
-    <string name="settings_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
-    <string name="settings_sessions_other_title">Ostatní relace</string>
+    <string name="device_manager_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
+    <string name="device_manager_sessions_other_title">Ostatní relace</string>
     <string name="settings_sessions_list">Relace</string>
     <string name="a11y_open_spaces">Seznam otevřených prostorů</string>
     <string name="a11y_create_message">Vytvořit novou konverzaci nebo místnost</string>
@@ -2672,11 +2672,8 @@
     <string name="device_manager_other_sessions_description_unverified">Neověřeno · Poslední aktivita %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Ověřeno · Poslední aktivita %1$s</string>
     <string name="device_manager_other_sessions_view_all">Zobrazit všechny (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Aktuální relace</string>
     <string name="device_manager_view_details">Zobrazit podrobnosti</string>
     <string name="device_manager_verify_session">Ověřit relaci</string>
-    <string name="device_manager_verification_status_detail_unverified">Ověřte svou aktuální relaci pro vylepšené zabezpečené zasílání zpráv.</string>
-    <string name="device_manager_verification_status_detail_verified">Vaše aktuální relace je připravena pro bezpečné zasílání zpráv.</string>
     <string name="device_manager_verification_status_unverified">Neověřená relace</string>
     <string name="device_manager_verification_status_verified">Ověřená relace</string>
     <string name="a11y_device_manager_device_type_unknown">Neznámý typ zařízení</string>
@@ -2686,4 +2683,41 @@
     <string name="timeline_error_room_not_found">Je nám líto, tato místnost nebyla nalezena.
 \nZkuste to prosím později.%s</string>
     <string name="invites_title">Pozvánky</string>
+    <string name="onboarding_new_app_layout_button_try">Vyzkoušejte to</string>
+    <string name="onboarding_new_app_layout_feedback_message">Klepnutím vpravo nahoře zobrazíte možnost zpětné vazby.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Poskytněte zpětnou vazbu</string>
+    <string name="onboarding_new_app_layout_spaces_message">Přístup k vašim prostorům (vpravo dole) je rychlejší a snazší než kdykoli předtím.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Přístup do prostorů</string>
+    <string name="onboarding_new_app_layout_welcome_message">Pro zjednodušení aplikace ${app_name} jsou nyní karty nepovinné. Spravujte je pomocí nabídky vpravo nahoře.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Vítejte v novém zobrazení!</string>
+    <string name="home_empty_no_unreads_message">Zde se zobrazí nepřečtené zprávy, pokud nějaké máte.</string>
+    <string name="home_empty_no_unreads_title">Nic k nahlášení.</string>
+    <string name="home_empty_no_rooms_message">Univerzální zabezpečená chatovací aplikace pro týmy, přátele a organizace. Vytvořte si chat nebo se připojte k existující místnosti a začněte.</string>
+    <string name="home_empty_no_rooms_title">Vítejte v aplikaci ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Prostory představují nový způsob seskupování místností a osob. Pomocí tlačítka vpravo dole můžete přidat stávající místnost nebo vytvořit novou.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nvypadá trochu prázdně.</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Zvažte odhlášení ze starých relací (%1$d den nebo více), které již nepoužíváte.</item>
+        <item quantity="few">Zvažte odhlášení ze starých relací (%1$d dny nebo více), které již nepoužíváte.</item>
+        <item quantity="other">Zvažte odhlášení ze starých relací (%1$d dnů nebo více), které již nepoužíváte.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Neaktivní relace</string>
+    <string name="device_manager_unverified_sessions_description">Ověřte nebo se odhlaste z neověřených relací.</string>
+    <string name="device_manager_unverified_sessions_title">Neověřené relace</string>
+    <string name="device_manager_header_section_security_recommendations_description">Zlepšete zabezpečení svého účtu dodržováním těchto doporučení.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Bezpečnostní doporučení</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Neaktivní po dobu %1$d+ dne (%2$s)</item>
+        <item quantity="few">Neaktivní po dobu %1$d+ dnů (%2$s)</item>
+        <item quantity="other">Neaktivní po dobu %1$d+ dnů (%2$s)</item>
+    </plurals>
+    <string name="invites_empty_message">Zde se budou nacházet vaše nové žádosti a pozvánky.</string>
+    <string name="invites_empty_title">Nic nového.</string>
+    <string name="space_list_empty_message">Prostory představují nový způsob seskupování místností a osob. Vytvořte si prostor a začněte.</string>
+    <string name="space_list_empty_title">Zatím žádné prostory.</string>
+    <string name="a11y_collapse_space_children">Sbalit podprostory %s</string>
+    <string name="a11y_expand_space_children">Rozbalit podprostory %s</string>
+    <string name="change_space">Změnit prostor</string>
 </resources>

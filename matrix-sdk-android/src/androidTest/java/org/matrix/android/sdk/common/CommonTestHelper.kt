@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -61,7 +62,7 @@ import java.util.concurrent.TimeUnit
  * This class exposes methods to be used in common cases
  * Registration, login, Sync, Sending messages...
  */
-class CommonTestHelper internal constructor(context: Context) {
+class CommonTestHelper internal constructor(context: Context, val cryptoConfig: MXCryptoConfig? = null) {
 
     companion object {
         internal fun runSessionTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CommonTestHelper) -> Unit) {
@@ -75,8 +76,10 @@ class CommonTestHelper internal constructor(context: Context) {
             }
         }
 
-        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true, block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
-            val testHelper = CommonTestHelper(context)
+        internal fun runCryptoTest(context: Context, autoSignoutOnClose: Boolean = true,
+                                   cryptoConfig: MXCryptoConfig? = null,
+                                   block: (CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return try {
                 block(cryptoTestHelper, testHelper)
@@ -103,7 +106,8 @@ class CommonTestHelper internal constructor(context: Context) {
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
+                            cryptoConfig = cryptoConfig ?: MXCryptoConfig()
                     )
             )
         }

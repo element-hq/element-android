@@ -33,7 +33,6 @@ interface VectorFeatures {
     fun isScreenSharingEnabled(): Boolean
     fun isLocationSharingEnabled(): Boolean
     fun forceUsageOfOpusEncoder(): Boolean
-    fun shouldStartDmOnFirstMessage(): Boolean
 
     /**
      * This is only to enable if the labs flag should be visible and effective.
@@ -56,7 +55,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
-    override fun shouldStartDmOnFirstMessage(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
     override fun isNewDeviceManagementEnabled(): Boolean = false
 }

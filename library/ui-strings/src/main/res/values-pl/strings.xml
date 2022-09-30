@@ -145,7 +145,7 @@
     <string name="room_jump_to_first_unread">Przejdź do pierwszej nieprzeczytanej wiadomości</string>
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
-    <string name="room_participants_header_direct_chats">WIADOMOŚCI BEZPOŚREDNIE</string>
+    <string name="room_participants_header_direct_chats">Wiadomości bezpośrednie</string>
     <string name="room_participants_action_invite">Zaproś</string>
     <string name="room_participants_action_ban">Blokuj</string>
     <string name="room_participants_action_unban">Odbanuj</string>
@@ -231,7 +231,7 @@
     <string name="room_settings_set_main_address">Ustaw jako główny adres</string>
     <string name="settings_theme">Motyw</string>
     <string name="encryption_information_device_name">Nazwa publiczna</string>
-    <string name="encryption_information_device_id">ID sesji</string>
+    <string name="device_manager_session_details_session_id">ID sesji</string>
     <string name="encryption_export_export">Eksportuj</string>
     <string name="passphrase_enter_passphrase">Wprowadź hasło</string>
     <string name="passphrase_confirm_passphrase">Potwierdź hasło</string>
@@ -548,7 +548,7 @@
     <string name="room_list_rooms_empty_title">Pokoje</string>
     <string name="message_add_reaction">Dodaj reakcję</string>
     <string name="create_new_room">Utwórz nowy pokój</string>
-    <string name="fab_menu_create_chat">Wiadomości Bezpośrednie</string>
+    <string name="fab_menu_create_chat">Wiadomości bezpośrednie</string>
     <string name="create_room_action_create">STWÓRZ</string>
     <string name="create_room_name_hint">Nazwa</string>
     <string name="create_room_public_title">Publiczny</string>
@@ -654,7 +654,7 @@
     <string name="keys_backup_setup_step3_please_make_copy">Proszę wykonać kopię</string>
     <string name="settings_preferences">Preferencje</string>
     <string name="preference_voice_and_video">Głos i wideo</string>
-    <string name="bottom_action_people_x">Wiadomości Bezpośrednie</string>
+    <string name="bottom_action_people_x">Wiadomości bezpośrednie</string>
     <string name="room_filtering_filter_hint">Filtruj rozmowy…</string>
     <string name="room_filtering_footer_create_new_direct_message">Wyślij nową wiadomość bezpośrednią</string>
     <string name="settings_sdk_version">Wersja Matrix SDK</string>
@@ -841,7 +841,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Zarejestruj token</string>
-    <string name="send_suggestion_sent">Dziękujemy, sugestia została szczęśliwie wysłana</string>
+    <string name="send_suggestion_sent">Dziękujemy, sugestia została pomyślnie wysłana</string>
     <string name="send_suggestion_failed">Wysłanie sugestii nie powiodło się (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Wyświetl ukryte wydarzenia na linii czasowej</string>
     <string name="edited_suffix">(edytowano)</string>
@@ -2697,8 +2697,8 @@
     <string name="location_share_loading_map_error">Nie można wczytać mapy.
 \nTen serwer macierzysty może nie być skonfigurowany do wyświetlania map.</string>
     <string name="a11y_open_settings">Otwórz ustawienia</string>
-    <string name="settings_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
-    <string name="settings_sessions_other_title">Inne sesje</string>
+    <string name="device_manager_sessions_other_description">Aby zapewnić najlepsze bezpieczeństwo, zweryfikuj swoje sesje i wyloguj się z każdej sesji, której już nie rozpoznajesz lub której już nie używasz.</string>
+    <string name="device_manager_sessions_other_title">Inne sesje</string>
     <string name="settings_sessions_list">Sesje</string>
     <string name="a11y_open_spaces">Lista otwartych przestrzeni</string>
     <string name="a11y_create_message">Utwórz nową rozmowę lub pokój</string>
@@ -2721,10 +2721,8 @@
     <string name="device_manager_other_sessions_description_unverified">Nie zweryfikowano · Ostatnia aktywność %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Zweryfikowano · Ostatnia aktywność %1$s</string>
     <string name="device_manager_other_sessions_view_all">Pokaż wszystkie (%1$d)</string>
-    <string name="device_manager_header_section_current_session">Obecna sesja</string>
     <string name="device_manager_view_details">Pokaż szczegóły</string>
     <string name="device_manager_verify_session">Zweryfikuj sesję</string>
-    <string name="device_manager_verification_status_detail_verified">Twoja obecna sesja jest przygotowana do bezpiecznej komunikacji.</string>
     <string name="device_manager_verification_status_unverified">Niezweryfikowana sesja</string>
     <string name="device_manager_verification_status_verified">Zweryfikowana sesja</string>
     <string name="a11y_device_manager_device_type_unknown">Nieznany typ urządzenia</string>

@@ -918,7 +918,7 @@
     <string name="settings_secure_backup_enter_to_setup">Sätt upp på den här enheten</string>
     <string name="reset_secure_backup_title">Generera en ny säkerhetskopia eller sätt en ny lösenfras för din existerande säkerhetskopia.</string>
     <string name="room_settings_labs_warning_message">Detta är experimentella funktioner som kan gå sönder på oväntade sätt. Använd varsamt.</string>
-    <string name="encryption_information_device_id">Sessions-ID</string>
+    <string name="device_manager_session_details_session_id">Sessions-ID</string>
     <string name="encryption_information_device_key">Sessionsnyckel</string>
     <string name="encryption_export_e2e_room_keys">Exportera krypteringsnycklar</string>
     <string name="encryption_export_room_keys">Exportera rumsnycklar</string>

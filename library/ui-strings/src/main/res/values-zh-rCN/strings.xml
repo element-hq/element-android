@@ -242,7 +242,7 @@
     <string name="settings_password_updated">你的密码已更新</string>
     <string name="encryption_information_decryption_error">解密错误</string>
     <string name="encryption_information_device_name">公开名称</string>
-    <string name="encryption_information_device_id">会话 ID</string>
+    <string name="device_manager_session_details_session_id">会话 ID</string>
     <string name="encryption_information_device_key">会话密钥</string>
     <string name="encryption_import_import">导入</string>
     <string name="encryption_information_verified">已验证</string>
@@ -2500,7 +2500,7 @@
     <string name="settings_presence_user_always_appears_offline_summary">若启用，即使正在使用应用，你也会对其他用户显示为离线状态。</string>
     <string name="settings_presence_user_always_appears_offline">离线模式</string>
     <string name="settings_presence">在场</string>
-    <string name="settings_autoplay_animated_images_summary">动画图片一出现就在时间轴中播放</string>
+    <string name="settings_autoplay_animated_images_summary">动画图片一出现就在时间线中播放</string>
     <string name="threads_labs_enable_notice_title">Threads Beta</string>
     <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, 原因如下：
 \n%s
@@ -2551,8 +2551,8 @@
     <string name="a11y_open_settings">打开设置</string>
     <string name="all_chats">全部聊天</string>
     <string name="device_manager_settings_active_sessions_show_all">显示全部会话（V2, WIP）</string>
-    <string name="settings_sessions_other_description">为获得最佳安全性，请验证你的会话，并从任何你不认识或不再使用的会话登出。</string>
-    <string name="settings_sessions_other_title">其他会话</string>
+    <string name="device_manager_sessions_other_description">为获得最佳安全性，请验证你的会话，并从任何你不认识或不再使用的会话登出。</string>
+    <string name="device_manager_sessions_other_title">其他会话</string>
     <string name="settings_sessions_list">会话</string>
     <string name="a11y_open_spaces">打开空间列表</string>
     <string name="a11y_create_message">创建新对话或房间</string>
@@ -2574,13 +2574,34 @@
     <string name="device_manager_other_sessions_description_unverified">未验证 · 上次活跃 %1$s</string>
     <string name="device_manager_other_sessions_description_verified">已验证 · 上次活跃 %1$s</string>
     <string name="device_manager_other_sessions_view_all">查看全部（%1$d）</string>
-    <string name="device_manager_header_section_current_session">当前会话</string>
     <string name="device_manager_view_details">查看详情</string>
     <string name="device_manager_verify_session">验证会话</string>
-    <string name="device_manager_verification_status_detail_unverified">为了获得增强的安全的消息传送，请验证你当前的会话。</string>
-    <string name="device_manager_verification_status_detail_verified">你的当前会话已准备好安全地收发消息。</string>
     <string name="device_manager_verification_status_unverified">未验证的会话</string>
     <string name="device_manager_verification_status_verified">已验证的会话</string>
     <string name="a11y_device_manager_device_type_unknown">未知的设备类型</string>
     <string name="invites_title">邀请</string>
+    <string name="a11y_device_manager_device_type_mobile">移动设备</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_desktop">桌面</string>
+    <string name="change_space">更改空间</string>
+    <string name="space_list_empty_title">尚无空间。</string>
+    <string name="invites_empty_title">没有新的东西。</string>
+    <string name="invites_empty_message">你的新请求和邀请会在这里。</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="other">%1$d+天不活跃（%2$s）</item>
+    </plurals>
+    <string name="device_manager_header_section_security_recommendations_title">安全建议</string>
+    <string name="device_manager_header_section_security_recommendations_description">按照这些建议改善你的账户安全。</string>
+    <string name="device_manager_unverified_sessions_title">未验证的会话</string>
+    <string name="device_manager_unverified_sessions_description">验证未验证的会话或从之登出。</string>
+    <string name="device_manager_inactive_sessions_title">不活跃的会话</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="other">请考虑从不再使用的旧会话（%1$d天或更久）登出。</item>
+    </plurals>
+    <string name="home_empty_no_rooms_title">欢迎来到${app_name}，
+\n%s。</string>
+    <string name="home_empty_no_unreads_message">未读消息会在这里显示。</string>
+    <string name="onboarding_new_app_layout_feedback_title">提供反馈</string>
+    <string name="onboarding_new_app_layout_feedback_message">点击右上角查看反馈选项。</string>
+    <string name="onboarding_new_app_layout_button_try">试用</string>
 </resources>

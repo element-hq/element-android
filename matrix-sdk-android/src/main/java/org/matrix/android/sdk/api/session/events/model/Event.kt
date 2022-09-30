@@ -174,15 +174,29 @@ data class Event(
      * @return the event type
      */
     fun getClearType(): String {
-        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type ?: EventType.MISSING_TYPE
+        return getDecryptedType() ?: type ?: EventType.MISSING_TYPE
+    }
+
+    /**
+     * @return The decrypted type, or null. Won't fallback to the wired type
+     */
+    fun getDecryptedType(): String? {
+        return mxDecryptionResult?.payload?.get("type")?.toString()
     }
 
     /**
      * @return the event content
      */
     fun getClearContent(): Content? {
+        return getDecryptedContent() ?: content
+    }
+
+    /**
+     * @return the decrypted event content or null, Won't fallback to the wired content
+     */
+    fun getDecryptedContent(): Content? {
         @Suppress("UNCHECKED_CAST")
-        return mxDecryptionResult?.payload?.get("content") as? Content ?: content
+        return mxDecryptionResult?.payload?.get("content") as? Content
     }
 
     fun toContentStringWithIndent(): String {

@@ -396,7 +396,7 @@
     <string name="settings_theme">Тема</string>
     <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
     <string name="encryption_information_device_name">Публично име</string>
-    <string name="encryption_information_device_id">Сесийно ID</string>
+    <string name="device_manager_session_details_session_id">Сесийно ID</string>
     <string name="encryption_information_device_key">Ключ на устройство</string>
     <string name="encryption_export_e2e_room_keys">Експортирай E2E ключове за стая</string>
     <string name="encryption_export_room_keys">Експортиране на ключове за стая</string>
