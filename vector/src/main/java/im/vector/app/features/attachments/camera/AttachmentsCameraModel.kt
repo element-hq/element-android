@@ -19,9 +19,12 @@ package im.vector.app.features.attachments.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
+import android.view.Surface
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -132,9 +135,17 @@ class AttachmentsCameraModel @AssistedInject constructor(
             imageCapture.takePicture(
                     ContextCompat.getMainExecutor(context),
                     object : ImageCapture.OnImageCapturedCallback() {
+                        @SuppressLint("RestrictedApi")
                         override fun onCaptureSuccess(image: ImageProxy) {
                             setState { copy( done = true ) }
-                            saveImageProxyToFile(image, file)?.let {
+                            val orientation =  (
+                                    (imageCapture.camera?.cameraInfo?.sensorRotationDegrees?.toFloat() ?: 0F) - when (state.rotation) {
+                                        Surface.ROTATION_270 -> 270F
+                                        Surface.ROTATION_180 -> 180F
+                                        Surface.ROTATION_90 -> 90F
+                                        else -> 0F
+                                    })
+                            saveImageProxyToFile(image, file, orientation)?.let {
                                 _viewEvents.post(
                                         AttachmentsCameraViewEvents.SetResultAndFinish(
                                                 AttachmentsCameraOutput(
@@ -156,13 +167,17 @@ class AttachmentsCameraModel @AssistedInject constructor(
         }
     }
 
-    private fun saveImageProxyToFile(image: ImageProxy, file: File): Boolean? {
+    private fun saveImageProxyToFile(image: ImageProxy, file: File, orientation: Float): Boolean? {
         val buffer: ByteBuffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.capacity())
         buffer.get(bytes)
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)?.let { bitmap ->
             val bos = ByteArrayOutputStream()
-            bitmap.compress(CompressFormat.JPEG, 90, bos)
+            val matrix = Matrix().apply {
+                postRotate(orientation)
+            }
+            val rotatedBitmap = Bitmap.createBitmap(bitmap, 0,0 , bitmap.width, bitmap.height, matrix, true)
+            rotatedBitmap.compress(CompressFormat.JPEG, 90, bos)
             val fd = FileOutputStream(file)
             fd.write(bos.toByteArray())
             fd.flush()
@@ -176,6 +191,7 @@ class AttachmentsCameraModel @AssistedInject constructor(
         Timber.d("Capturing Video")
 
         videoCapture.camera?.cameraControl?.enableTorch(state.flashMode == ImageCapture.FLASH_MODE_ON)
+        videoCapture.targetRotation = state.rotation
 
         val file = createTempFile(context, MediaType.VIDEO)
         val outputUri = getUri(context, file)

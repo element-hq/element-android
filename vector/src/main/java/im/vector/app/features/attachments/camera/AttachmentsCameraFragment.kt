@@ -232,8 +232,6 @@ class AttachmentsCameraFragment :
                     else -> 0F
                 }
             }
-            imageCapture?.targetRotation = state.rotation
-            videoCapture?.targetRotation = state.rotation
         }
     }
 
