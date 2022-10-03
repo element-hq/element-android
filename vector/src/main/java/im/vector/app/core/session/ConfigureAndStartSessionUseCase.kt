@@ -32,7 +32,6 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val updateMatrixClientInfoUseCase: UpdateMatrixClientInfoUseCase,
 ) {
 
-    // TODO add unit tests
     fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
