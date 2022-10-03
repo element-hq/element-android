@@ -24,9 +24,13 @@ import im.vector.app.test.fakes.FakeLocaleProvider
 import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fixtures.CredentialsFixture
+import im.vector.app.test.fixtures.PusherFixture
+import im.vector.app.test.fixtures.SessionParamsFixture
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
@@ -81,5 +85,35 @@ class PushersManagerTest {
         httpPusher.append shouldBeEqualTo false
         httpPusher.withEventIdOnly shouldBeEqualTo true
         httpPusher.url shouldBeEqualTo gateway
+    }
+
+    @Test
+    fun `when getPusherForCurrentSession, then return pusher`() {
+        val deviceId = "device_id"
+        val sessionParams = SessionParamsFixture.aSessionParams(
+                credentials = CredentialsFixture.aCredentials(deviceId = deviceId)
+        )
+        session.givenSessionParams(sessionParams)
+        val expectedPusher = PusherFixture.aPusher(deviceId = deviceId)
+        pushersService.givenGetPushers(listOf(expectedPusher))
+
+        val pusher = pushersManager.getPusherForCurrentSession()
+
+        pusher shouldBeEqualTo expectedPusher
+    }
+
+    @Test
+    fun `when togglePusherForCurrentSession, then do service toggle pusher`() = runTest {
+        val deviceId = "device_id"
+        val sessionParams = SessionParamsFixture.aSessionParams(
+                credentials = CredentialsFixture.aCredentials(deviceId = deviceId)
+        )
+        session.givenSessionParams(sessionParams)
+        val pusher = PusherFixture.aPusher(deviceId = deviceId)
+        pushersService.givenGetPushers(listOf(pusher))
+
+        pushersManager.togglePusherForCurrentSession(true)
+
+        pushersService.verifyOnlyGetPushersAndTogglePusherCalled(pusher, true)
     }
 }

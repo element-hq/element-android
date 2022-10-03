@@ -106,6 +106,6 @@ class SessionOverviewViewModelTest {
         val viewModel = createViewModel()
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID, true))
 
-        fakeSession.pushersService().verifyOnlyTogglePusherCalled(pushers.first(), true)
+        fakeSession.pushersService().verifyOnlyGetPushersLiveAndTogglePusherCalled(pushers.first(), true)
     }
 }

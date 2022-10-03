@@ -23,6 +23,7 @@ import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.pushers.HttpPusher
+import org.matrix.android.sdk.api.session.pushers.Pusher
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -87,6 +88,18 @@ class PushersManager @Inject constructor(
                 appDisplayName = appName,
                 deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
         )
+    }
+
+    fun getPusherForCurrentSession(): Pusher? {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return null
+        val deviceId = session.sessionParams.deviceId
+        return session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
+    }
+
+    suspend fun togglePusherForCurrentSession(enable: Boolean) {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val pusher = getPusherForCurrentSession() ?: return
+        session.pushersService().togglePusher(pusher, enable)
     }
 
     suspend fun unregisterEmailPusher(email: String) {

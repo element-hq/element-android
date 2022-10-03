@@ -54,6 +54,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -61,6 +62,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -104,6 +106,10 @@ class VectorSettingsNotificationPreferenceFragment :
         }
 
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            pushersManager.getPusherForCurrentSession()?.let { pusher ->
+                it.isChecked = pusher.enabled
+            }
+
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
@@ -117,6 +123,9 @@ class VectorSettingsNotificationPreferenceFragment :
                         }
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
+                        lifecycleScope.launch {
+                            pushersManager.togglePusherForCurrentSession(true)
+                        }
                     }
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
