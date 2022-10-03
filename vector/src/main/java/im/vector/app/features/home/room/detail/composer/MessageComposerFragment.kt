@@ -237,7 +237,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun onDestroyView() {
         super.onDestroyView()
 
-        autoCompleter.clear()
+        if (!vectorPreferences.isRichTextEditorEnabled()) {
+            autoCompleter.clear()
+        }
         messageComposerViewModel.endAllVoiceActions()
     }
 
@@ -252,7 +254,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
 
-        autoCompleter.setup(composerEditText)
+        if (!vectorPreferences.isRichTextEditorEnabled()) {
+            autoCompleter.setup(composerEditText)
+        }
 
         observerUserTyping()
 
