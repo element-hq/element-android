@@ -240,6 +240,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms(currentFilter: HomeRoomFilter, isAZOrdering: Boolean) {
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
             it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
