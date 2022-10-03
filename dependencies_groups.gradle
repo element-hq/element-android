@@ -47,7 +47,6 @@ ext.groups = [
         ],
         mavenCentral: [
                 regex: [
-                        'com\\.google\\.auto\\.*',
                 ],
                 group: [
                         'app.cash.paparazzi',
@@ -85,6 +84,7 @@ ext.groups = [
                         'com.google',
                         'com.google.android',
                         'com.google.api.grpc',
+                        'com.google.auto',
                         'com.google.auto.service',
                         'com.google.auto.value',
                         'com.google.code.findbugs',
