@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import arrow.core.toOption
@@ -93,7 +93,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             .setEnablePlaceholders(true)
             .build()
 
-    private val _roomsLivePagedList = MediatorLiveData<PagedList<RoomSummary>>()
+    private val _roomsLivePagedList = MutableLiveData<PagedList<RoomSummary>>()
     val roomsLivePagedList: LiveData<PagedList<RoomSummary>> = _roomsLivePagedList
 
     private val internalPagedListObserver = Observer<PagedList<RoomSummary>> {
@@ -240,9 +240,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms(currentFilter: HomeRoomFilter, isAZOrdering: Boolean) {
-        filteredPagedRoomSummariesLive?.livePagedList?.let { livePagedList ->
-            _roomsLivePagedList.removeSource(livePagedList)
-        }
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
             it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
@@ -260,7 +257,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         ).also {
             filteredPagedRoomSummariesLive = it
         }
-        _roomsLivePagedList.addSource(liveResults.livePagedList, internalPagedListObserver)
+        liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
     private fun observeOrderPreferences() {
@@ -343,9 +340,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        filteredPagedRoomSummariesLive?.livePagedList?.let { livePagedList ->
-            _roomsLivePagedList.removeSource(livePagedList)
-        }
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
         super.onCleared()
     }
 
