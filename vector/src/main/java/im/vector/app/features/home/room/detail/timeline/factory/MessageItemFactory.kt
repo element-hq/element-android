@@ -245,7 +245,7 @@ class MessageItemFactory @Inject constructor(
                 .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
                 .canVote(pollViewState.canVote)
                 .votesStatus(pollViewState.votesStatus)
-                .optionViewStates(pollViewState.optionViewStates)
+                .optionViewStates(pollViewState.optionViewStates.orEmpty())
                 .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
