@@ -95,7 +95,7 @@ class SetMatrixClientInfoUseCaseTest {
 
         // Then
         result.isFailure shouldBe true
-        result.exceptionOrNull() shouldBeInstanceOf IllegalStateException::class
+        result.exceptionOrNull() shouldBeInstanceOf NoDeviceIdError::class
         fakeActiveSessionHolder.fakeSession
                 .fakeSessionAccountDataService
                 .verifyUpdateUserAccountDataEventSucceeds(type, content, inverse = true)

@@ -37,7 +37,7 @@ class SetMatrixClientInfoUseCase @Inject constructor(
                         session.accountDataService()
                                 .updateUserAccountData(type, clientInfo.toContent())
                     } else {
-                        throw IllegalStateException("device id is empty")
+                        throw NoDeviceIdError()
                     }
                 }
     }
