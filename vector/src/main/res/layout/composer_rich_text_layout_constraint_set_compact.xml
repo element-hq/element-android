@@ -164,7 +164,7 @@
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
-    <ScrollView android:id="@+id/richTextMenuScrollView"
+    <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/sendButton"
@@ -180,7 +180,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </HorizontalScrollView>
 
     <!--
     <ImageButton

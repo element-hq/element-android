@@ -118,6 +118,15 @@ class RichTextComposerView @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_bold, "Bold") {
             views.composerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
+        addRichTextMenuItem(R.drawable.ic_composer_italic, "Italic") {
+            views.composerEditText.toggleInlineFormat(InlineFormat.Italic)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, "Underline") {
+            views.composerEditText.toggleInlineFormat(InlineFormat.Underline)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, "Strikethrough") {
+            views.composerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
+        }
     }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, description: String, action: () -> Unit) {

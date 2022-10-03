@@ -121,9 +121,10 @@
         android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
 
-    <ScrollView android:id="@+id/richTextMenuScrollView"
+    <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         app:layout_constraintStart_toEndOf="@id/attachmentButton"
         app:layout_constraintEnd_toStartOf="@id/sendButton"
@@ -137,7 +138,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </HorizontalScrollView>
 
     <!--
     <ImageButton
