@@ -35,8 +35,9 @@ data class MXCryptoConfig constructor(
 
         /**
          * Currently megolm keys are requested to the sender device and to all of our devices.
-         * You can limit request only to your sessions by turning this setting to `true`
+         * You can limit request only to your sessions by turning this setting to `true`.
+         * Forwarded keys coming from other users will also be ignored if set to true.
          */
-        val limitRoomKeyRequestsToMyDevices: Boolean = false,
+        val limitRoomKeyRequestsToMyDevices: Boolean = true,
 
         )

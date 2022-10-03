@@ -85,9 +85,7 @@ class SearchMessagesTest : InstrumentedTest {
                 2
         )
 
-        val data = commonTestHelper.runBlockingTest {
-            block.invoke(cryptoTestData)
-        }
+        val data = block.invoke(cryptoTestData)
 
         assertTrue(data.results?.size == 2)
         assertTrue(

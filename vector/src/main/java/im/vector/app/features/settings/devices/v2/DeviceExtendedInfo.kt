@@ -16,15 +16,27 @@
 
 package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.core.di.ActiveSessionHolder
-import javax.inject.Inject
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 
-class IsCurrentSessionUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
-
-    fun execute(deviceId: String): Boolean {
-        val currentDeviceId = activeSessionHolder.getSafeActiveSession()?.sessionParams?.deviceId.orEmpty()
-        return deviceId.isNotEmpty() && deviceId == currentDeviceId
-    }
-}
+data class DeviceExtendedInfo(
+        /**
+         * One of MOBILE, WEB, DESKTOP or UNKNOWN.
+         */
+        val deviceType: DeviceType,
+        /**
+         * i.e. Google Pixel 6.
+         */
+        val deviceModel: String? = null,
+        /**
+         * i.e. Android 11.
+         */
+        val deviceOperatingSystem: String? = null,
+        /**
+         * i.e. Element Nightly.
+         */
+        val clientName: String? = null,
+        /**
+         * i.e. 1.5.0.
+         */
+        val clientVersion: String? = null,
+)

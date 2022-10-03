@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -27,16 +28,22 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.workers.signout.SignOutUiWorker
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 /**
@@ -66,18 +73,7 @@ class SessionOverviewFragment :
         observeViewEvents()
         initSessionInfoView()
         initVerifyButton()
-    }
-
-    private fun initSessionInfoView() {
-        views.sessionOverviewInfo.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun initVerifyButton() {
-        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
-            viewModel.handle(SessionOverviewAction.VerifySession)
-        }
+        initSignoutButton()
     }
 
     private fun observeViewEvents() {
@@ -92,8 +88,58 @@ class SessionOverviewFragment :
                 is SessionOverviewViewEvent.PromptResetSecrets -> {
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
+                is SessionOverviewViewEvent.RequestReAuth -> askForReAuthentication(it)
+                SessionOverviewViewEvent.SignoutSuccess -> viewNavigator.goBack(requireActivity())
+                is SessionOverviewViewEvent.SignoutError -> showFailure(it.error)
             }
         }
+    }
+
+    private fun initSessionInfoView() {
+        views.sessionOverviewInfo.onLearnMoreClickListener = {
+            Toast.makeText(context, "Learn more verification status", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun initVerifyButton() {
+        views.sessionOverviewInfo.viewVerifyButton.debouncedClicks {
+            viewModel.handle(SessionOverviewAction.VerifySession)
+        }
+    }
+
+    private fun initSignoutButton() {
+        views.sessionOverviewSignout.debouncedClicks {
+            confirmSignoutSession()
+        }
+    }
+
+    private fun confirmSignoutSession() = withState(viewModel) { state ->
+        if (state.deviceInfo.invoke()?.isCurrentDevice.orFalse()) {
+            confirmSignoutCurrentSession()
+        } else {
+            confirmSignoutOtherSession()
+        }
+    }
+
+    private fun confirmSignoutCurrentSession() {
+        activity?.let { SignOutUiWorker(it).perform() }
+    }
+
+    private fun confirmSignoutOtherSession() {
+        activity?.let {
+            MaterialAlertDialogBuilder(it)
+                    .setTitle(R.string.action_sign_out)
+                    .setMessage(R.string.action_sign_out_confirmation_simple)
+                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
+                        signoutSession()
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
+        }
+    }
+
+    private fun signoutSession() {
+        viewModel.handle(SessionOverviewAction.SignoutOtherSession)
     }
 
     override fun onDestroyView() {
@@ -122,16 +168,20 @@ class SessionOverviewFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        updateToolbar(state.isCurrentSession)
+        updateToolbar(state)
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
+        updateLoading(state.isLoading)
     }
 
-    private fun updateToolbar(isCurrentSession: Boolean) {
-        val titleResId = if (isCurrentSession) R.string.device_manager_current_session_title else R.string.device_manager_session_title
-        (activity as? AppCompatActivity)
-                ?.supportActionBar
-                ?.setTitle(titleResId)
+    private fun updateToolbar(viewState: SessionOverviewViewState) {
+        if (viewState.deviceInfo is Success) {
+            val titleResId =
+                    if (viewState.deviceInfo.invoke().isCurrentDevice) R.string.device_manager_current_session_title else R.string.device_manager_session_title
+            (activity as? AppCompatActivity)
+                    ?.supportActionBar
+                    ?.setTitle(titleResId)
+        }
     }
 
     private fun updateEntryDetails(deviceId: String) {
@@ -143,10 +193,11 @@ class SessionOverviewFragment :
     private fun updateSessionInfo(viewState: SessionOverviewViewState) {
         if (viewState.deviceInfo is Success) {
             views.sessionOverviewInfo.isVisible = true
-            val isCurrentSession = viewState.isCurrentSession
+            val deviceInfo = viewState.deviceInfo.invoke()
+            val isCurrentSession = deviceInfo.isCurrentDevice
             val infoViewState = SessionInfoViewState(
                     isCurrentSession = isCurrentSession,
-                    deviceFullInfo = viewState.deviceInfo.invoke(),
+                    deviceFullInfo = deviceInfo,
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = true,
@@ -155,6 +206,47 @@ class SessionOverviewFragment :
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
         } else {
             views.sessionOverviewInfo.isVisible = false
+        }
+    }
+
+    private fun updateLoading(isLoading: Boolean) {
+        if (isLoading) {
+            showLoading(null)
+        } else {
+            dismissLoadingDialog()
+        }
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(SessionOverviewAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(SessionOverviewAction.PasswordAuthDone(password))
+                }
+                else -> {
+                    viewModel.handle(SessionOverviewAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(SessionOverviewAction.ReAuthCancelled)
+        }
+    }
+
+    /**
+     * Launch the re auth activity to get credentials.
+     */
+    private fun askForReAuthentication(reAuthReq: SessionOverviewViewEvent.RequestReAuth) {
+        ReAuthActivity.newIntent(
+                requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
         }
     }
 }

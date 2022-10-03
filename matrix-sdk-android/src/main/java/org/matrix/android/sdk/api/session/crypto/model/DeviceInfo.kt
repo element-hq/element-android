@@ -52,9 +52,17 @@ data class DeviceInfo(
          * The last ip address.
          */
         @Json(name = "last_seen_ip")
-        val lastSeenIp: String? = null
+        val lastSeenIp: String? = null,
+
+        @Json(name = "org.matrix.msc3852.last_seen_user_agent")
+        val unstableLastSeenUserAgent: String? = null,
+
+        @Json(name = "last_seen_user_agent")
+        val lastSeenUserAgent: String? = null,
 ) : DatedObject {
 
     override val date: Long
         get() = lastSeenTs ?: 0
+
+    fun getBestLastSeenUserAgent() = lastSeenUserAgent ?: unstableLastSeenUserAgent
 }

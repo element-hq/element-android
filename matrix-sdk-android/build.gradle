@@ -221,6 +221,8 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestImplementation libs.androidx.coreTesting
     androidTestImplementation libs.jetbrains.coroutinesAndroid
+    androidTestImplementation libs.jetbrains.coroutinesTest
+
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
 
