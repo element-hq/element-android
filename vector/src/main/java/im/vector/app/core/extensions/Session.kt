@@ -24,7 +24,6 @@ import im.vector.app.core.services.VectorSyncAndroidService
 import im.vector.app.features.session.VectorSessionStore
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
 fun Session.startSyncing(context: Context) {

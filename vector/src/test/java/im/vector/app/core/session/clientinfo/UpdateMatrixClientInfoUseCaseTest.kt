@@ -16,7 +16,6 @@
 
 package im.vector.app.core.session.clientinfo
 
-import android.os.SystemClock
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.test.fakes.FakeAppNameProvider
 import im.vector.app.test.fakes.FakeSession
@@ -25,8 +24,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
