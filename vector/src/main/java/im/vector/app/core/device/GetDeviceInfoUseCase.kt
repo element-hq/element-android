@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.app
+package im.vector.app.core.device
 
-import android.os.Build
+import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import javax.inject.Inject
 
-object AppBuildConfig {
+interface GetDeviceInfoUseCase {
 
-    fun getModel(): String {
-        return Build.MODEL
+    fun execute(): CryptoDeviceInfo
+}
+
+class DefaultGetDeviceInfoUseCase @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder
+) : GetDeviceInfoUseCase {
+
+    override fun execute(): CryptoDeviceInfo {
+        return activeSessionHolder.getActiveSession().cryptoService().getMyDevice()
     }
 }

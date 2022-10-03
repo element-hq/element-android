@@ -17,6 +17,7 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.MutableLiveData
+import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -32,6 +33,7 @@ class FakeCryptoService(
     var cryptoDeviceInfos = mutableMapOf<String, CryptoDeviceInfo>()
     var cryptoDeviceInfoWithIdLiveData: MutableLiveData<Optional<CryptoDeviceInfo>> = MutableLiveData()
     var myDevicesInfoWithIdLiveData: MutableLiveData<Optional<DeviceInfo>> = MutableLiveData()
+    var cryptoDeviceInfo = aCryptoDeviceInfo()
 
     override fun crossSigningService() = fakeCrossSigningService
 
@@ -50,4 +52,6 @@ class FakeCryptoService(
     override fun getLiveCryptoDeviceInfoWithId(deviceId: String) = cryptoDeviceInfoWithIdLiveData
 
     override fun getMyDevicesInfoLive(deviceId: String) = myDevicesInfoWithIdLiveData
+
+    override fun getMyDevice() = cryptoDeviceInfo
 }
