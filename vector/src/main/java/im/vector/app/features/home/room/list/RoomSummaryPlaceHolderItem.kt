@@ -24,7 +24,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass
-abstract class RoomSummaryItemPlaceHolder : VectorEpoxyModel<RoomSummaryItemPlaceHolder.Holder>(R.layout.item_room_placeholder) {
+abstract class RoomSummaryPlaceHolderItem : VectorEpoxyModel<RoomSummaryPlaceHolderItem.Holder>(R.layout.item_room_placeholder) {
 
     @EpoxyAttribute
     var useSingleLineForLastEvent: Boolean = false

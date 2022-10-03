@@ -41,7 +41,7 @@ import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
-abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>(R.layout.item_room_centered) {
+abstract class RoomSummaryCenteredItem : VectorEpoxyModel<RoomSummaryCenteredItem.Holder>(R.layout.item_room_centered) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer

@@ -67,7 +67,7 @@ class RoomSummaryPagedController(
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         return if (item == null) {
             val host = this
-            RoomSummaryItemPlaceHolder_().apply {
+            RoomSummaryPlaceHolderItem_().apply {
                 id(currentPosition)
                 useSingleLineForLastEvent(host.shouldUseSingleLine)
             }

@@ -22,6 +22,6 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass
-abstract class SpaceDirectoryFilterNoResults : VectorEpoxyModel<SpaceDirectoryFilterNoResults.Holder>(R.layout.item_space_directory_filter_no_results) {
+abstract class SpaceDirectoryFilterNoResultsItem : VectorEpoxyModel<SpaceDirectoryFilterNoResultsItem.Holder>(R.layout.item_space_directory_filter_no_results) {
     class Holder : VectorEpoxyHolder()
 }
