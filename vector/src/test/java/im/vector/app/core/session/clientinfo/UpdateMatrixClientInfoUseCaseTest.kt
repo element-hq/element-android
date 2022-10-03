@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.core.session.clientinfo
 
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.test.fakes.FakeActiveSessionHolder

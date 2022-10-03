@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.core.session.clientinfo
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-
-@JsonClass(generateAdapter = true)
-data class MatrixClientInfoContent(
-        // app name
-        @Json(name = "name")
-        val name: String? = null,
-        // app version
-        @Json(name = "version")
-        val version: String? = null,
-        // app url (optional, applicable only for web)
-        @Json(name = "url")
-        val url: String? = null,
-)
+/**
+ * Prefix for the key account data event which holds client info.
+ */
+const val MATRIX_CLIENT_INFO_KEY_PREFIX = "io.element.matrix_client_information."

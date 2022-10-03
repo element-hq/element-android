@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.core.session.clientinfo
 
-import MATRIX_CLIENT_INFO_KEY_PREFIX
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
