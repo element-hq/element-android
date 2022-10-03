@@ -16,7 +16,7 @@
 
 package im.vector.app.core.session.clientinfo
 
-import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -28,11 +28,9 @@ private const val A_CLIENT_URL = "client-url"
 
 class GetMatrixClientInfoUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeSession = FakeSession()
 
-    private val getMatrixClientInfoUseCase = GetMatrixClientInfoUseCase(
-            activeSessionHolder = fakeActiveSessionHolder.instance
-    )
+    private val getMatrixClientInfoUseCase = GetMatrixClientInfoUseCase()
 
     @Test
     fun `given a device id and existing content when getting the info then result should contain that info`() {
@@ -45,22 +43,10 @@ class GetMatrixClientInfoUseCaseTest {
         )
 
         // When
-        val result = getMatrixClientInfoUseCase.execute(A_DEVICE_ID)
+        val result = getMatrixClientInfoUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo expectedClientInfo
-    }
-
-    @Test
-    fun `given no active session when getting the info then result should be null`() {
-        // Given
-        fakeActiveSessionHolder.givenGetSafeActiveSessionReturns(null)
-
-        // When
-        val result = getMatrixClientInfoUseCase.execute(A_DEVICE_ID)
-
-        // Then
-        result shouldBe null
     }
 
     private fun givenClientInfoContent(deviceId: String) {
@@ -70,7 +56,7 @@ class GetMatrixClientInfoUseCaseTest {
                 Pair("version", A_CLIENT_VERSION),
                 Pair("url", A_CLIENT_URL),
         )
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .givenGetUserAccountDataEventReturns(type, content)
     }
