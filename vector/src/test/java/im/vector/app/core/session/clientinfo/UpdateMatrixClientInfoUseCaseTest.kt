@@ -64,7 +64,7 @@ class UpdateMatrixClientInfoUseCaseTest {
     }
 
     @Test
-    fun `given current client info is different than the stored one when trying to update then new client info is set`() = runTest {
+    fun `given current client info is different than the stored one when trying to update then new client info is set`() = runTest(testDispatcher) {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
@@ -83,7 +83,7 @@ class UpdateMatrixClientInfoUseCaseTest {
     }
 
     @Test
-    fun `given current client info is equal to the stored one when trying to update then nothing is done`() = runTest {
+    fun `given current client info is equal to the stored one when trying to update then nothing is done`() = runTest(testDispatcher) {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
@@ -97,7 +97,7 @@ class UpdateMatrixClientInfoUseCaseTest {
     }
 
     @Test
-    fun `given no session id for current session when trying to update then nothing is done`() = runTest {
+    fun `given no session id for current session when trying to update then nothing is done`() = runTest(testDispatcher) {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
