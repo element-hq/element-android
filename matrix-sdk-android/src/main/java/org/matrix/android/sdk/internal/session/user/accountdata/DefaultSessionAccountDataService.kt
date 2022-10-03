@@ -64,7 +64,6 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         return roomAccountDataDataSource.getLiveAccountDataEvents(null, types)
     }
 
-    // TODO add unit tests
     override suspend fun updateUserAccountData(type: String, content: Content) {
         val params = UpdateUserAccountDataTask.AnyParams(type = type, any = content)
         awaitCallback { callback ->
