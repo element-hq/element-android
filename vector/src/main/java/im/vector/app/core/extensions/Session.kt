@@ -27,17 +27,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
-fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
-    Timber.i("Configure and start session for $myUserId. startSyncing: $startSyncing")
-    open()
-    filterService().setFilter(FilterService.FilterPreset.ElementFilter)
-    if (startSyncing) {
-        startSyncing(context)
-    }
-    pushersService().refreshPushers()
-    context.singletonEntryPoint().webRtcCallManager().checkForProtocolsSupportIfNeeded()
-}
-
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
     if (!syncService().hasAlreadySynced()) {

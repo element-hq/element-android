@@ -19,10 +19,10 @@ package im.vector.app.core.di
 import android.content.Context
 import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
@@ -50,6 +50,7 @@ class ActiveSessionHolder @Inject constructor(
         private val sessionInitializer: SessionInitializer,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -109,7 +110,7 @@ class ActiveSessionHolder @Inject constructor(
                 }
                 ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
                     setActiveSession(session)
-                    session.configureAndStart(applicationContext, startSyncing = startSync)
+                    configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
                 }
     }
 
