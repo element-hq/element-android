@@ -128,6 +128,7 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.CanSendStatus
+import im.vector.app.features.home.room.detail.composer.MessageComposer
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerFragment
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
@@ -679,6 +680,7 @@ class TimelineFragment :
         modelBuildListener = null
         debouncer.cancelAll()
         views.timelineRecyclerView.cleanup()
+        composerVoiceRecorderCoordinator.destroy()
         super.onDestroyView()
     }
 

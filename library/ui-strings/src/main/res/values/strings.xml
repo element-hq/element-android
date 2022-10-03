@@ -446,6 +446,9 @@
     <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
+    <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Use a rich text editor to send formatted messages</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>

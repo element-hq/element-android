@@ -105,7 +105,6 @@ android {
 }
 dependencies {
 
-    implementation "io.element.android:wysiwyg:0.0.1-SNAPSHOT"
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -144,6 +143,9 @@ dependencies {
 
     // Opus Encoder
     implementation libs.element.opusencoder
+
+    // WYSIWYG Editor
+    implementation libs.element.wysiwyg
 
     // Log
     api libs.jakewharton.timber

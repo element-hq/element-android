@@ -23,6 +23,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.platform.SimpleTextWatcher
@@ -66,7 +67,7 @@ fun EditText.setTextIfDifferent(newText: CharSequence?): Boolean {
         // Previous text is the same. No op
         return false
     }
-    setText(newText)
+    setText(newText, TextView.BufferType.SPANNABLE)
     // Since the text changed we move the cursor to the end of the new text.
     // This allows us to fill in text programmatically with a different value,
     // but if the user is typing and the view is rebound we won't lose their cursor position.

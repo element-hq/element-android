@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.composer
 import android.content.Context
 import android.net.Uri
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.EditText
@@ -37,27 +38,17 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextIfDifferent
-import im.vector.app.databinding.ComposerLayoutBinding
+import im.vector.app.databinding.ComposerRichTextLayoutBinding
 
-/**
- * Encapsulate the timeline composer UX.
- */
-class MessageComposerView @JvmOverloads constructor(
+class RichTextComposerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), MessageComposer {
 
-    interface Callback : ComposerEditText.Callback {
-        fun onCloseRelatedMessage()
-        fun onSendMessage(text: CharSequence)
-        fun onAddAttachment()
-        fun onExpandOrCompactChange()
-    }
+    val views: ComposerRichTextLayoutBinding
 
-    val views: ComposerLayoutBinding
-
-    override var callback: Callback? = null
+    override var callback: MessageComposerView.Callback? = null
 
     private var currentConstraintSetId: Int = -1
 
@@ -65,19 +56,12 @@ class MessageComposerView @JvmOverloads constructor(
 
     override val text: Editable?
         get() = views.composerEditText.text
-
     override val editText: EditText
         get() = views.composerEditText
-
     override val emojiButton: ImageButton?
-        get() = views.composerEmojiButton
-
+        get() = null
     override val sendButton: ImageButton
         get() = views.sendButton
-
-    override fun setInvisible(isInvisible: Boolean) {
-        this.isInvisible = isInvisible
-    }
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
     override val composerRelatedMessageActionIcon: ImageView
@@ -95,20 +79,19 @@ class MessageComposerView @JvmOverloads constructor(
         set(value) { views.root.isVisible = value }
 
     init {
-        inflate(context, R.layout.composer_layout, this)
-        views = ComposerLayoutBinding.bind(this)
+        inflate(context, R.layout.composer_rich_text_layout, this)
+        views = ComposerRichTextLayoutBinding.bind(this)
 
         collapse(false)
 
-        views.composerEditText.callback = object : ComposerEditText.Callback {
-            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                return callback?.onRichContentSelected(contentUri) ?: false
+        views.composerEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                callback?.onTextChanged(s)
             }
+        })
 
-            override fun onTextChanged(text: CharSequence) {
-                callback?.onTextChanged(text)
-            }
-        }
         views.composerRelatedMessageCloseButton.setOnClickListener {
             collapse()
             callback?.onCloseRelatedMessage()
@@ -125,23 +108,21 @@ class MessageComposerView @JvmOverloads constructor(
     }
 
     override fun collapse(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_compact) {
+        if (currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_compact) {
             // ignore we good
             return
         }
-        currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
+        currentConstraintSetId = R.layout.composer_rich_text_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
-        callback?.onExpandOrCompactChange()
     }
 
     override fun expand(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded) {
+        if (currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_expanded) {
             // ignore we good
             return
         }
-        currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
+        currentConstraintSetId = R.layout.composer_rich_text_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
-        callback?.onExpandOrCompactChange()
     }
 
     override fun setTextIfDifferent(text: CharSequence?): Boolean {
@@ -182,5 +163,9 @@ class MessageComposerView @JvmOverloads constructor(
             })
         }
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
+    }
+
+    override fun setInvisible(isInvisible: Boolean) {
+        this.isInvisible = isInvisible
     }
 }
