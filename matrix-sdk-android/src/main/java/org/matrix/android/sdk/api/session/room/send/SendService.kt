@@ -66,7 +66,13 @@ interface SendService {
      * @param rootThreadEventId when this param is not null, the message will be sent in this specific thread
      * @return a [Cancelable]
      */
-    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, formattedText: String?, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
+    fun sendQuotedTextMessage(
+            quotedEvent: TimelineEvent,
+            text: String,
+            formattedText: String?,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null
+    ): Cancelable
 
     /**
      * Method to send a media asynchronously.

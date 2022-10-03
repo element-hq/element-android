@@ -31,13 +31,14 @@ class CommandParser @Inject constructor() {
     /**
      * Convert the text message into a Slash command.
      *
-     * @param textMessage the text message
+     * @param textMessage the text message in plain text
+     * @param formattedMessage the text messaged in HTML format
      * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
-    fun parseSlashCommand(textMessage: CharSequence, htmlMessage: String?, isInThreadTimeline: Boolean): ParsedCommand {
+    fun parseSlashCommand(textMessage: CharSequence, formattedMessage: String?, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
-        val message = htmlMessage ?: textMessage
+        val message = formattedMessage ?: textMessage
         return if (!message.startsWith("/")) {
             ParsedCommand.ErrorNotACommand
         } else {
@@ -61,7 +62,7 @@ class CommandParser @Inject constructor() {
             when {
                 Command.PLAIN.matches(slashCommand) -> {
                     if (trimmedMessage.isNotEmpty()) {
-                        if (htmlMessage != null) {
+                        if (formattedMessage != null) {
                             val trimmedPlainTextMessage = extractMessage(textMessage.toString())?.second.orEmpty()
                             ParsedCommand.SendFormattedText(message = trimmedPlainTextMessage, formattedMessage = trimmedMessage)
                         } else {

@@ -202,7 +202,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Regular -> {
                     when (val parsedCommand = commandParser.parseSlashCommand(
                             textMessage = action.text,
-                            htmlMessage = action.formattedText,
+                            formattedMessage = action.formattedText,
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand -> {

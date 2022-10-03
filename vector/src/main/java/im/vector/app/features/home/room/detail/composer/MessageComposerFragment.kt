@@ -185,7 +185,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         setupEmojiButton()
 
         views.composerLayout.isGone = vectorPreferences.isRichTextEditorEnabled()
-        views.composerLayout.isVisible = vectorPreferences.isRichTextEditorEnabled()
+        views.richTextComposerLayout.isVisible = vectorPreferences.isRichTextEditorEnabled()
 
         messageComposerViewModel.observeViewEvents {
             when (it) {
@@ -308,7 +308,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
 
             override fun onExpandOrCompactChange() {
-                views.composerLayout.views.composerEmojiButton.isVisible = isEmojiKeyboardVisible
+                composer.emojiButton?.isVisible = isEmojiKeyboardVisible
             }
 
             override fun onSendMessage(text: CharSequence) {
@@ -449,11 +449,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private fun handleSendButtonVisibilityChanged(event: MessageComposerViewEvents.AnimateSendButtonVisibility) {
         if (event.isVisible) {
-            views.composerLayout.sendButton.alpha = 0f
-            views.composerLayout.sendButton.isVisible = true
-            views.composerLayout.sendButton.animate().alpha(1f).setDuration(150).start()
+            composer.sendButton.alpha = 0f
+            composer.sendButton.isVisible = true
+            composer.sendButton.animate().alpha(1f).setDuration(150).start()
         } else {
-            views.composerLayout.sendButton.isInvisible = true
+            composer.sendButton.isInvisible = true
         }
     }
 
@@ -759,7 +759,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 requireContext(),
                                 MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
                         )
-                                .also { it.bind(views.composerLayout.views.composerEditText) },
+                                .also { it.bind(composer.editText) },
                         0,
                         displayName.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -773,7 +773,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 }
                 composer.editText.append(pill)
             } else {
-                composer.editText.text?.insert(views.composerLayout.views.composerEditText.selectionStart, pill)
+                composer.editText.text?.insert(composer.editText.selectionStart, pill)
             }
         }
         focusComposerAndShowKeyboard()

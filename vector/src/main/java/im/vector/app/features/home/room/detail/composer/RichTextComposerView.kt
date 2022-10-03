@@ -89,7 +89,7 @@ class RichTextComposerView @JvmOverloads constructor(
 
         collapse(false)
 
-        views.composerEditText.addTextChangedListener(object: TextWatcher {
+        views.composerEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
@@ -132,7 +132,7 @@ class RichTextComposerView @JvmOverloads constructor(
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, description: String, action: () -> Unit) {
         val inflater = LayoutInflater.from(context)
         val button = ViewRichTextMenuButtonBinding.inflate(inflater, views.richTextMenu, true)
-        with (button.root) {
+        with(button.root) {
             contentDescription = description
             setImageResource(iconId)
             setOnClickListener {
