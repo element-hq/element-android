@@ -59,6 +59,7 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -260,7 +261,10 @@ class MessageComposerViewModel @AssistedInject constructor(
                                         autoMarkdown = false
                                 )
                             } else {
-                                room.sendService().sendFormattedTextMessage(parsedCommand.message.toString(), parsedCommand.formattedMessage)
+                                room.sendService().sendFormattedTextMessage(
+                                        text = parsedCommand.message.toString(),
+                                        formattedText = parsedCommand.formattedMessage
+                                )
                             }
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
@@ -531,16 +535,24 @@ class MessageComposerViewModel @AssistedInject constructor(
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimelineEvent(inReplyTo)?.let {
-                            room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString())
+                            room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString(), action.formattedText)
                         }
                     } else {
                         val messageContent = state.sendMode.timelineEvent.getVectorLastMessageContent()
-                        val existingBody = messageContent?.body ?: ""
-                        if (existingBody != action.text) {
+                        val existingBody: String
+                        val needsEdit = if (messageContent is MessageContentWithFormattedBody) {
+                            existingBody = messageContent.formattedBody ?: ""
+                            existingBody != action.formattedText
+                        } else {
+                            existingBody = messageContent?.body ?: ""
+                            existingBody != action.text
+                        }
+                        if (needsEdit) {
                             room.relationService().editTextMessage(
                                     state.sendMode.timelineEvent,
                                     messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
+                                    (messageContent as? MessageContentWithFormattedBody)?.formattedBody,
                                     action.autoMarkdown
                             )
                         } else {
@@ -554,6 +566,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     room.sendService().sendQuotedTextMessage(
                             quotedEvent = state.sendMode.timelineEvent,
                             text = action.text.toString(),
+                            formattedText = action.formattedText,
                             autoMarkdown = action.autoMarkdown,
                             rootThreadEventId = state.rootThreadEventId
                     )
@@ -570,11 +583,13 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 rootThreadEventId = it,
                                 replyInThreadText = action.text.toString(),
                                 autoMarkdown = action.autoMarkdown,
+                                formattedText = action.formattedText,
                                 eventReplied = timelineEvent
                         )
                     } ?: room.relationService().replyToMessage(
                             eventReplied = timelineEvent,
                             replyText = action.text.toString(),
+                            replyTextFormatted = action.formattedText,
                             autoMarkdown = action.autoMarkdown,
                             showInThread = showInThread,
                             rootThreadEventId = rootThreadEventId

@@ -43,6 +43,7 @@ interface MessageComposer {
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
     fun setTextIfDifferent(text: CharSequence?): Boolean
+    fun replaceFormattedContent(text: CharSequence)
 
     fun setInvisible(isInvisible: Boolean)
 }

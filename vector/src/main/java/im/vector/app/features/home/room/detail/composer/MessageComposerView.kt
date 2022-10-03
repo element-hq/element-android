@@ -126,6 +126,10 @@ class MessageComposerView @JvmOverloads constructor(
         }
     }
 
+    override fun replaceFormattedContent(text: CharSequence) {
+        setTextIfDifferent(text)
+    }
+
     override fun collapse(animate: Boolean, transitionComplete: (() -> Unit)?) {
         if (currentConstraintSetId == R.layout.composer_layout_constraint_set_compact) {
             // ignore we good

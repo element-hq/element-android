@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
+import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
@@ -42,19 +43,25 @@ internal class EventEditor @Inject constructor(
             targetEvent: TimelineEvent,
             msgType: String,
             newBodyText: CharSequence,
+            newBodyFormattedText: CharSequence?,
             newBodyAutoMarkdown: Boolean,
             compatibilityBodyText: String
     ): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
-            val editedEvent = eventFactory.createTextEvent(roomId, msgType, newBodyText, newBodyAutoMarkdown).copy(
+            val editedEvent = if (newBodyFormattedText != null) {
+                val content = TextContent(newBodyText.toString(), newBodyFormattedText.toString())
+                eventFactory.createFormattedTextEvent(roomId, content, msgType)
+            } else {
+                eventFactory.createTextEvent(roomId, msgType, newBodyText, newBodyAutoMarkdown)
+            }.copy(
                     eventId = targetEvent.eventId
             )
             return sendFailedEvent(targetEvent, editedEvent)
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
-                    .createReplaceTextEvent(roomId, targetEvent.eventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
+                    .createReplaceTextEvent(roomId, targetEvent.eventId, newBodyText, newBodyFormattedText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
             return sendReplaceEvent(event)
         } else {
             // Should we throw?
@@ -100,6 +107,7 @@ internal class EventEditor @Inject constructor(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
             newBodyText: String,
+            newBodyFormattedText: String?,
             compatibilityBodyText: String
     ): Cancelable {
         val roomId = replyToEdit.roomId
@@ -109,6 +117,7 @@ internal class EventEditor @Inject constructor(
                     roomId = roomId,
                     eventReplied = originalTimelineEvent,
                     replyText = newBodyText,
+                    replyTextFormatted = newBodyFormattedText,
                     autoMarkdown = false,
                     showInThread = false
             )?.copy(

@@ -680,7 +680,6 @@ class TimelineFragment :
         modelBuildListener = null
         debouncer.cancelAll()
         views.timelineRecyclerView.cleanup()
-        composerVoiceRecorderCoordinator.destroy()
         super.onDestroyView()
     }
 

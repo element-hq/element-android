@@ -288,7 +288,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             // Show keyboard when the user started a thread
             composerEditText.showKeyboard(andRequestFocus = true)
         }
-        // TODO: migrate this too
         composer.callback = object : MessageComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
@@ -359,7 +358,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         return isHandled
     }
 
-    private fun renderRegularMode(content: String) {
+    private fun renderRegularMode(content: CharSequence) {
         autoCompleter.exitSpecialMode()
         composer.collapse()
         composer.setTextIfDifferent(content)
@@ -370,7 +369,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             event: TimelineEvent,
             @DrawableRes iconRes: Int,
             @StringRes descriptionRes: Int,
-            defaultContent: String
+            defaultContent: CharSequence,
     ) {
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
@@ -406,7 +405,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         composer.composerRelatedMessageImage.isVisible = isImageVisible
 
-        composer.setTextIfDifferent(defaultContent)
+        composer.replaceFormattedContent(defaultContent)
 
         composer.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composer.sendButton.contentDescription = getString(descriptionRes)
@@ -450,11 +449,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private fun handleSendButtonVisibilityChanged(event: MessageComposerViewEvents.AnimateSendButtonVisibility) {
         if (event.isVisible) {
-            views.root.views.sendButton.alpha = 0f
-            views.root.views.sendButton.isVisible = true
-            views.root.views.sendButton.animate().alpha(1f).setDuration(150).start()
+            views.composerLayout.sendButton.alpha = 0f
+            views.composerLayout.sendButton.isVisible = true
+            views.composerLayout.sendButton.animate().alpha(1f).setDuration(150).start()
         } else {
-            views.root.views.sendButton.isInvisible = true
+            views.composerLayout.sendButton.isInvisible = true
         }
     }
 

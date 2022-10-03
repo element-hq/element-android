@@ -141,6 +141,10 @@ class RichTextComposerView @JvmOverloads constructor(
         }
     }
 
+    override fun replaceFormattedContent(text: CharSequence) {
+        views.composerEditText.setHtml(text.toString())
+    }
+
     override fun collapse(animate: Boolean, transitionComplete: (() -> Unit)?) {
         if (currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_compact) {
             // ignore we good
