@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.core.session.clientinfo
 
 class NoDeviceIdError : IllegalStateException("device id is empty")

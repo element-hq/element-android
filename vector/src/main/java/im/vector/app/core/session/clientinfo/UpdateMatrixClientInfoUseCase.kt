@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.details.extended
+package im.vector.app.core.session.clientinfo
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -32,7 +32,6 @@ class UpdateMatrixClientInfoUseCase @Inject constructor(
         private val setMatrixClientInfoUseCase: SetMatrixClientInfoUseCase,
 ) {
 
-    // TODO call the use case after signin + on app startup
     suspend fun execute(): Result<Unit> = runCatching {
         val clientInfo = MatrixClientInfoContent(
                 name = appNameProvider.getAppName(),
