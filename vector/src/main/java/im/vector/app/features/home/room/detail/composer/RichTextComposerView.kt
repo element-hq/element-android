@@ -17,15 +17,16 @@
 package im.vector.app.features.home.room.detail.composer
 
 import android.content.Context
-import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
@@ -39,6 +40,8 @@ import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
+import im.vector.app.databinding.ViewRichTextMenuButtonBinding
+import io.element.android.wysiwyg.InlineFormat
 
 class RichTextComposerView @JvmOverloads constructor(
         context: Context,
@@ -56,6 +59,8 @@ class RichTextComposerView @JvmOverloads constructor(
 
     override val text: Editable?
         get() = views.composerEditText.text
+    override val formattedText: String?
+        get() = views.composerEditText.getHtmlOutput()
     override val editText: EditText
         get() = views.composerEditText
     override val emojiButton: ImageButton?
@@ -104,6 +109,26 @@ class RichTextComposerView @JvmOverloads constructor(
 
         views.attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
+        }
+
+        setupRichTextMenu()
+    }
+
+    private fun setupRichTextMenu() {
+        addRichTextMenuItem(R.drawable.ic_composer_bold, "Bold") {
+            views.composerEditText.toggleInlineFormat(InlineFormat.Bold)
+        }
+    }
+
+    private fun addRichTextMenuItem(@DrawableRes iconId: Int, description: String, action: () -> Unit) {
+        val inflater = LayoutInflater.from(context)
+        val button = ViewRichTextMenuButtonBinding.inflate(inflater, views.richTextMenu, true)
+        with (button.root) {
+            contentDescription = description
+            setImageResource(iconId)
+            setOnClickListener {
+                action()
+            }
         }
     }
 

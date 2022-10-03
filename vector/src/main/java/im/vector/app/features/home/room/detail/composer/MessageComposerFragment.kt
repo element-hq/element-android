@@ -244,8 +244,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         if (mainState.tombstoneEvent != null) return@withState
 
-        views.root.isInvisible = !messageComposerState.isComposerVisible
-        views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        composer.setInvisible(!messageComposerState.isComposerVisible)
+        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
     }
 
     private fun setupComposer() {
@@ -309,7 +309,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
 
             override fun onSendMessage(text: CharSequence) {
-                sendTextMessage(text)
+                sendTextMessage(text, composer.formattedText)
             }
 
             override fun onCloseRelatedMessage() {
@@ -326,7 +326,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         }
     }
 
-    private fun sendTextMessage(text: CharSequence) {
+    private fun sendTextMessage(text: CharSequence, formattedText: String? = null) {
         if (lockSendButton) {
             Timber.w("Send button is locked")
             return
@@ -335,7 +335,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             // We collapse ASAP, if not there will be a slight annoying delay
             composer.collapse(true)
             lockSendButton = true
-            messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
+            if (formattedText != null) {
+                messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, formattedText, false))
+            } else {
+                messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, null, vectorPreferences.isMarkdownEnabled()))
+            }
             emojiPopup.dismiss()
         }
     }
@@ -623,7 +627,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
         val formattedContact = contactAttachment.toHumanReadable()
-        messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
+        messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, null, false))
     }
 
     override fun onAttachmentError(throwable: Throwable) {

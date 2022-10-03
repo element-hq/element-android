@@ -25,6 +25,7 @@ import android.widget.TextView
 interface MessageComposer {
 
     val text: Editable?
+    val formattedText: String?
     val editText: EditText
     val emojiButton: ImageButton?
     val sendButton: ImageButton

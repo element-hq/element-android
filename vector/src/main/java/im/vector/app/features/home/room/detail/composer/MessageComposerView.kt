@@ -66,6 +66,8 @@ class MessageComposerView @JvmOverloads constructor(
     override val text: Editable?
         get() = views.composerEditText.text
 
+    override val formattedText: String? = null
+
     override val editText: EditText
         get() = views.composerEditText
 

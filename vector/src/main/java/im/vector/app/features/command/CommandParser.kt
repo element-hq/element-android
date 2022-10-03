@@ -18,6 +18,7 @@ package im.vector.app.features.command
 
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -34,35 +35,24 @@ class CommandParser @Inject constructor() {
      * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
-    fun parseSlashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
+    fun parseSlashCommand(textMessage: CharSequence, htmlMessage: String?, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
-        return if (!textMessage.startsWith("/")) {
+        val message = htmlMessage ?: textMessage
+        return if (!message.startsWith("/")) {
             ParsedCommand.ErrorNotACommand
         } else {
             // "/" only
-            if (textMessage.length == 1) {
+            if (message.length == 1) {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
             // Exclude "//"
-            if ("/" == textMessage.substring(1, 2)) {
+            if ("/" == message.substring(1, 2)) {
                 return ParsedCommand.ErrorNotACommand
             }
 
-            val messageParts = try {
-                textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
-            } catch (e: Exception) {
-                Timber.e(e, "## parseSlashCommand() : split failed")
-                null
-            }
-
-            // test if the string cut fails
-            if (messageParts.isNullOrEmpty()) {
-                return ParsedCommand.ErrorEmptySlashCommand
-            }
-
+            val (messageParts, trimmedMessage) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
             val slashCommand = messageParts.first()
-            val message = textMessage.substring(slashCommand.length).trim()
 
             getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
                 return ParsedCommand.ErrorCommandNotSupportedInThreads(it)
@@ -70,22 +60,27 @@ class CommandParser @Inject constructor() {
 
             when {
                 Command.PLAIN.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.SendPlainText(message = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        if (htmlMessage != null) {
+                            val trimmedPlainTextMessage = extractMessage(textMessage.toString())?.second.orEmpty()
+                            ParsedCommand.SendFormattedText(message = trimmedPlainTextMessage, formattedMessage = trimmedMessage)
+                        } else {
+                            ParsedCommand.SendPlainText(message = trimmedMessage)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PLAIN)
                     }
                 }
                 Command.CHANGE_DISPLAY_NAME.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.ChangeDisplayName(displayName = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayName(displayName = trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME)
                     }
                 }
                 Command.CHANGE_DISPLAY_NAME_FOR_ROOM.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.ChangeDisplayNameForRoom(displayName = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayNameForRoom(displayName = trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME_FOR_ROOM)
                     }
@@ -117,29 +112,29 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.TOPIC.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.ChangeTopic(topic = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.ChangeTopic(topic = trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.TOPIC)
                     }
                 }
                 Command.EMOTE.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.SendEmote(message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.SendEmote(trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.EMOTE)
                     }
                 }
                 Command.RAINBOW.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.SendRainbow(message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.SendRainbow(trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW)
                     }
                 }
                 Command.RAINBOW_EMOTE.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.SendRainbowEmote(message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.SendRainbowEmote(trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW_EMOTE)
                     }
@@ -168,8 +163,8 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.ROOM_NAME.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.ChangeRoomName(name = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.ChangeRoomName(name = trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.ROOM_NAME)
                     }
@@ -332,20 +327,20 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.SPOILER.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.SendSpoiler(message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.SendSpoiler(trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.SPOILER)
                     }
                 }
                 Command.SHRUG.matches(slashCommand) -> {
-                    ParsedCommand.SendShrug(message)
+                    ParsedCommand.SendShrug(trimmedMessage)
                 }
                 Command.LENNY.matches(slashCommand) -> {
-                    ParsedCommand.SendLenny(message)
+                    ParsedCommand.SendLenny(trimmedMessage)
                 }
                 Command.TABLE_FLIP.matches(slashCommand) -> {
-                    ParsedCommand.SendTableFlip(message)
+                    ParsedCommand.SendTableFlip(trimmedMessage)
                 }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
@@ -368,10 +363,10 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.CONFETTI.matches(slashCommand) -> {
-                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
+                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, trimmedMessage)
                 }
                 Command.SNOWFALL.matches(slashCommand) -> {
-                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, message)
+                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, trimmedMessage)
                 }
                 Command.CREATE_SPACE.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
@@ -398,11 +393,11 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.LEAVE_ROOM.matches(slashCommand) -> {
-                    ParsedCommand.LeaveRoom(roomId = message)
+                    ParsedCommand.LeaveRoom(roomId = trimmedMessage)
                 }
                 Command.UPGRADE_ROOM.matches(slashCommand) -> {
-                    if (message.isNotEmpty()) {
-                        ParsedCommand.UpgradeRoom(newVersion = message)
+                    if (trimmedMessage.isNotEmpty()) {
+                        ParsedCommand.UpgradeRoom(newVersion = trimmedMessage)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
                     }
@@ -413,6 +408,25 @@ class CommandParser @Inject constructor() {
                 }
             }
         }
+    }
+
+    private fun extractMessage(message: String): Pair<List<String>, String>? {
+        val messageParts = try {
+            message.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+        } catch (e: Exception) {
+            Timber.e(e, "## parseSlashCommand() : split failed")
+            null
+        }
+
+        // test if the string cut fails
+        if (messageParts.isNullOrEmpty()) {
+            return null
+        }
+
+        val slashCommand = messageParts.first()
+        val trimmedMessage = message.substring(slashCommand.length).trim()
+
+        return messageParts to trimmedMessage
     }
 
     private val notSupportedThreadsCommands: List<Command> by lazy {

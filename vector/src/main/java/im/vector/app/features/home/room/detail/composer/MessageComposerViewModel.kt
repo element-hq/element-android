@@ -201,6 +201,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Regular -> {
                     when (val parsedCommand = commandParser.parseSlashCommand(
                             textMessage = action.text,
+                            htmlMessage = action.formattedText,
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand -> {
@@ -209,10 +210,15 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 room.relationService().replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = action.text,
+                                        formattedText = action.formattedText,
                                         autoMarkdown = action.autoMarkdown
                                 )
                             } else {
-                                room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                                if (action.formattedText != null) {
+                                    room.sendService().sendFormattedTextMessage(action.text.toString(), action.formattedText)
+                                } else {
+                                    room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                                }
                             }
 
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
@@ -240,6 +246,21 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 )
                             } else {
                                 room.sendService().sendTextMessage(parsedCommand.message, autoMarkdown = false)
+                            }
+                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                            popDraft()
+                        }
+                        is ParsedCommand.SendFormattedText -> {
+                            // Send the text message to the room, without markdown
+                            if (state.rootThreadEventId != null) {
+                                room.relationService().replyInThread(
+                                        rootThreadEventId = state.rootThreadEventId,
+                                        replyInThreadText = parsedCommand.message,
+                                        formattedText = parsedCommand.formattedMessage,
+                                        autoMarkdown = false
+                                )
+                            } else {
+                                room.sendService().sendFormattedTextMessage(parsedCommand.message.toString(), parsedCommand.formattedMessage)
                             }
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
