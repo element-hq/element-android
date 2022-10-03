@@ -34,6 +34,9 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toTrackingValue
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.flow.Flow
@@ -74,6 +77,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         private val preferencesStore: HomeLayoutPreferencesStore,
         private val stringProvider: StringProvider,
         private val drawableProvider: DrawableProvider,
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -358,6 +362,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
         setState { copy(headersData = headersData.copy(currentFilter = newFilter)) }
         updateEmptyState()
+        analyticsTracker.updateUserProperties(UserProperties(allChatsActiveFilter = newFilter.toTrackingValue()))
         filteredPagedRoomSummariesLive?.let { liveResults ->
             liveResults.queryParams = getFilteredQueryParams(newFilter, liveResults.queryParams)
         }
