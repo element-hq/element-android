@@ -16,35 +16,43 @@
 
 package im.vector.app.core.session.clientinfo
 
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * This use case updates if needed the account data event containing extended client info.
  */
 class UpdateMatrixClientInfoUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
         private val appNameProvider: AppNameProvider,
         private val buildMeta: BuildMeta,
         private val getMatrixClientInfoUseCase: GetMatrixClientInfoUseCase,
         private val setMatrixClientInfoUseCase: SetMatrixClientInfoUseCase,
 ) {
 
-    suspend fun execute(): Result<Unit> = runCatching {
-        val clientInfo = MatrixClientInfoContent(
-                name = appNameProvider.getAppName(),
-                version = buildMeta.versionName
-        )
-        val deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId.orEmpty()
-        if (deviceId.isNotEmpty()) {
-            val storedClientInfo = getMatrixClientInfoUseCase.execute(deviceId)
-            if (clientInfo != storedClientInfo) {
-                setMatrixClientInfoUseCase.execute(clientInfo)
+    fun execute(session: Session) {
+        session.coroutineScope.launch {
+            runCatching {
+                val clientInfo = MatrixClientInfoContent(
+                        name = appNameProvider.getAppName(),
+                        version = buildMeta.versionName
+                )
+                val deviceId = session.sessionParams.deviceId.orEmpty()
+                if (deviceId.isNotEmpty()) {
+                    val storedClientInfo = getMatrixClientInfoUseCase.execute(session, deviceId)
+                    Timber.d("storedClientInfo=$storedClientInfo, current client info=$clientInfo")
+                    if (clientInfo != storedClientInfo) {
+                        Timber.d("client info need to be updated")
+                        setMatrixClientInfoUseCase.execute(session, clientInfo)
+                    }
+                } else {
+                    throw NoDeviceIdError()
+                }
             }
-        } else {
-            throw NoDeviceIdError()
         }
     }
 }
