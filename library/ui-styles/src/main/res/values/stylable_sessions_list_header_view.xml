@@ -4,6 +4,7 @@
     <declare-styleable name="SessionsListHeaderView">
         <attr name="sessionsListHeaderTitle" format="string" />
         <attr name="sessionsListHeaderDescription" format="string" />
+        <attr name="sessionsListHeaderHasLearnMoreLink" format="boolean" />
     </declare-styleable>
 
 </resources>

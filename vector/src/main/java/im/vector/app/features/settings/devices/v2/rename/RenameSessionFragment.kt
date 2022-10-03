@@ -24,9 +24,11 @@ import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionRenameBinding
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import javax.inject.Inject
 
 /**
@@ -51,6 +53,7 @@ class RenameSessionFragment :
         initEditText()
         initSaveButton()
         initWithLastEditedName()
+        initInfoView()
     }
 
     private fun initToolbar() {
@@ -73,6 +76,20 @@ class RenameSessionFragment :
 
     private fun initWithLastEditedName() {
         viewModel.handle(RenameSessionAction.InitWithLastEditedName)
+    }
+
+    private fun initInfoView() {
+        views.renameSessionInfo.onLearnMoreClickListener = {
+            showLearnMoreInfo()
+        }
+    }
+
+    private fun showLearnMoreInfo() {
+        val args = SessionLearnMoreBottomSheet.Args(
+                title = getString(R.string.device_manager_learn_more_session_rename_title),
+                description = getString(R.string.device_manager_learn_more_session_rename),
+        )
+        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 
     private fun observeViewEvents() {

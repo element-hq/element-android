@@ -406,6 +406,7 @@
     <string name="action_reset">Reset</string>
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
+    <string name="action_got_it">Got it</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -2366,9 +2367,6 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
-    <string name="device_manager_sessions_other_title">Other sessions</string>
-    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
-
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
     <string name="settings_server_upload_size_title">Server file upload limit</string>
@@ -3229,6 +3227,8 @@
 
     <!-- Device Manager -->
     <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
+    <string name="device_manager_sessions_other_title">Other sessions</string>
+    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_desktop">Desktop</string>
@@ -3302,6 +3302,14 @@
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
+    <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
+    <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
+    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
+    <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
