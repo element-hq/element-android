@@ -76,7 +76,12 @@ class SessionOverviewEntrySwitchView @JvmOverloads constructor(
         binding.sessionsOverviewEntrySwitch.isChecked = checked
     }
 
-    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
+    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener?) {
         binding.sessionsOverviewEntrySwitch.setOnCheckedChangeListener(listener)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        binding.sessionsOverviewEntrySwitch.setOnCheckedChangeListener(null)
     }
 }

@@ -110,7 +110,7 @@ class SessionOverviewFragment :
                 isVisible = false
             } else {
                 val allPushersAreEnabled = pushers.all { it.enabled }
-                setOnCheckedChangeListener { _, _ -> }
+                setOnCheckedChangeListener(null)
                 setChecked(allPushersAreEnabled)
                 post {
                     setOnCheckedChangeListener { _, isChecked ->
