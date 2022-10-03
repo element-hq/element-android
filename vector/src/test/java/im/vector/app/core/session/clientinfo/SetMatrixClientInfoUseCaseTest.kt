@@ -16,7 +16,7 @@
 
 package im.vector.app.core.session.clientinfo
 
-import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
@@ -28,11 +28,9 @@ private const val A_DEVICE_ID = "device-id"
 
 class SetMatrixClientInfoUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeSession = FakeSession()
 
-    private val setMatrixClientInfoUseCase = SetMatrixClientInfoUseCase(
-            activeSessionHolder = fakeActiveSessionHolder.instance
-    )
+    private val setMatrixClientInfoUseCase = SetMatrixClientInfoUseCase()
 
     @Test
     fun `given client info and no error when setting the info then account data is correctly updated`() = runTest {
@@ -40,18 +38,18 @@ class SetMatrixClientInfoUseCaseTest {
         val type = MATRIX_CLIENT_INFO_KEY_PREFIX + A_DEVICE_ID
         val clientInfo = givenClientInfo()
         val content = clientInfo.toContent()
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .givenSessionId(A_DEVICE_ID)
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .givenUpdateUserAccountDataEventSucceeds()
 
         // When
-        val result = setMatrixClientInfoUseCase.execute(clientInfo)
+        val result = setMatrixClientInfoUseCase.execute(fakeSession, clientInfo)
 
         // Then
         result.isSuccess shouldBe true
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .verifyUpdateUserAccountDataEventSucceeds(type, content)
     }
@@ -62,20 +60,20 @@ class SetMatrixClientInfoUseCaseTest {
         val type = MATRIX_CLIENT_INFO_KEY_PREFIX + A_DEVICE_ID
         val clientInfo = givenClientInfo()
         val content = clientInfo.toContent()
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .givenSessionId(A_DEVICE_ID)
         val error = Exception()
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .givenUpdateUserAccountDataEventFailsWithError(error)
 
         // When
-        val result = setMatrixClientInfoUseCase.execute(clientInfo)
+        val result = setMatrixClientInfoUseCase.execute(fakeSession, clientInfo)
 
         // Then
         result.isFailure shouldBe true
         result.exceptionOrNull() shouldBeEqualTo error
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .verifyUpdateUserAccountDataEventSucceeds(type, content)
     }
@@ -86,16 +84,16 @@ class SetMatrixClientInfoUseCaseTest {
         val type = MATRIX_CLIENT_INFO_KEY_PREFIX + A_DEVICE_ID
         val clientInfo = givenClientInfo()
         val content = clientInfo.toContent()
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .givenSessionId(null)
 
         // When
-        val result = setMatrixClientInfoUseCase.execute(clientInfo)
+        val result = setMatrixClientInfoUseCase.execute(fakeSession, clientInfo)
 
         // Then
         result.isFailure shouldBe true
         result.exceptionOrNull() shouldBeInstanceOf NoDeviceIdError::class
-        fakeActiveSessionHolder.fakeSession
+        fakeSession
                 .fakeSessionAccountDataService
                 .verifyUpdateUserAccountDataEventSucceeds(type, content, inverse = true)
     }

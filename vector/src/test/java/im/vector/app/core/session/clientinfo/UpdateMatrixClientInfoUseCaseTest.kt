@@ -16,17 +16,23 @@
 
 package im.vector.app.core.session.clientinfo
 
+import android.os.SystemClock
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAppNameProvider
+import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeInstanceOf
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 private const val AN_APP_NAME_1 = "app_name_1"
@@ -37,22 +43,31 @@ private const val A_SESSION_ID = "session-id"
 
 class UpdateMatrixClientInfoUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeSession = FakeSession()
     private val fakeAppNameProvider = FakeAppNameProvider()
     private val fakeBuildMeta = mockk<BuildMeta>()
     private val getMatrixClientInfoUseCase = mockk<GetMatrixClientInfoUseCase>()
     private val setMatrixClientInfoUseCase = mockk<SetMatrixClientInfoUseCase>()
 
     private val updateMatrixClientInfoUseCase = UpdateMatrixClientInfoUseCase(
-            activeSessionHolder = fakeActiveSessionHolder.instance,
             appNameProvider = fakeAppNameProvider,
             buildMeta = fakeBuildMeta,
             getMatrixClientInfoUseCase = getMatrixClientInfoUseCase,
             setMatrixClientInfoUseCase = setMatrixClientInfoUseCase,
     )
 
+    @Before
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun `given current client info is different than the stored one when trying to update then new client info is set and result is success`() = runTest {
+    fun `given current client info is different than the stored one when trying to update then new client info is set`() = runTest {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
@@ -64,63 +79,38 @@ class UpdateMatrixClientInfoUseCaseTest {
         )
 
         // When
-        val result = updateMatrixClientInfoUseCase.execute()
+        updateMatrixClientInfoUseCase.execute(fakeSession)
 
         // Then
-        result.isSuccess shouldBe true
-        coVerify { setMatrixClientInfoUseCase.execute(match { it == expectedClientInfoToSet }) }
+        coVerify { setMatrixClientInfoUseCase.execute(fakeSession, match { it == expectedClientInfoToSet }) }
     }
 
     @Test
-    fun `given current client info is equal to the stored one when trying to update then nothing is done and result is success`() = runTest {
+    fun `given current client info is equal to the stored one when trying to update then nothing is done`() = runTest {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
         givenStoredClientInfo(AN_APP_NAME_1, A_VERSION_NAME_1)
 
         // When
-        val result = updateMatrixClientInfoUseCase.execute()
+        updateMatrixClientInfoUseCase.execute(fakeSession)
 
         // Then
-        result.isSuccess shouldBe true
-        coVerify(inverse = true) { setMatrixClientInfoUseCase.execute(any()) }
+        coVerify(inverse = true) { setMatrixClientInfoUseCase.execute(fakeSession, any()) }
     }
 
     @Test
-    fun `given error during setting new client info when trying to update then result is failure`() = runTest {
+    fun `given no session id for current session when trying to update then nothing is done`() = runTest {
         // Given
         givenCurrentAppName(AN_APP_NAME_1)
         givenCurrentVersionName(A_VERSION_NAME_1)
-        givenStoredClientInfo(AN_APP_NAME_2, A_VERSION_NAME_2)
-        val error = Exception()
-        givenSetClientInfoFailsWithError(error)
-        val expectedClientInfoToSet = MatrixClientInfoContent(
-                name = AN_APP_NAME_1,
-                version = A_VERSION_NAME_1,
-        )
+        fakeSession.givenSessionId(null)
 
         // When
-        val result = updateMatrixClientInfoUseCase.execute()
+        updateMatrixClientInfoUseCase.execute(fakeSession)
 
         // Then
-        result.isFailure shouldBe true
-        result.exceptionOrNull() shouldBeEqualTo error
-        coVerify { setMatrixClientInfoUseCase.execute(match { it == expectedClientInfoToSet }) }
-    }
-
-    @Test
-    fun `given no session id for current session when trying to update then result is failure`() = runTest {
-        // Given
-        givenCurrentAppName(AN_APP_NAME_1)
-        givenCurrentVersionName(A_VERSION_NAME_1)
-        fakeActiveSessionHolder.fakeSession.givenSessionId(null)
-
-        // When
-        val result = updateMatrixClientInfoUseCase.execute()
-
-        // Then
-        result.isFailure shouldBe true
-        result.exceptionOrNull() shouldBeInstanceOf NoDeviceIdError::class
+        coVerify(inverse = true) { setMatrixClientInfoUseCase.execute(fakeSession, any()) }
     }
 
     private fun givenCurrentAppName(appName: String) {
@@ -132,18 +122,14 @@ class UpdateMatrixClientInfoUseCaseTest {
     }
 
     private fun givenStoredClientInfo(appName: String, versionName: String) {
-        fakeActiveSessionHolder.fakeSession.givenSessionId(A_SESSION_ID)
-        every { getMatrixClientInfoUseCase.execute(A_SESSION_ID) } returns MatrixClientInfoContent(
+        fakeSession.givenSessionId(A_SESSION_ID)
+        every { getMatrixClientInfoUseCase.execute(fakeSession, A_SESSION_ID) } returns MatrixClientInfoContent(
                 name = appName,
                 version = versionName,
         )
     }
 
     private fun givenSetClientInfoSucceeds() {
-        coEvery { setMatrixClientInfoUseCase.execute(any()) } returns Result.success(Unit)
-    }
-
-    private fun givenSetClientInfoFailsWithError(error: Exception) {
-        coEvery { setMatrixClientInfoUseCase.execute(any()) } throws error
+        coEvery { setMatrixClientInfoUseCase.execute(any(), any()) } returns Result.success(Unit)
     }
 }
