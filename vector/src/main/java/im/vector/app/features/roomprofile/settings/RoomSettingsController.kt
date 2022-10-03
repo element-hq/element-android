@@ -56,6 +56,7 @@ class RoomSettingsController @Inject constructor(
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
         fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
+        fun openGlobalBlockSettings()
     }
 
     var callback: Callback? = null
@@ -170,6 +171,7 @@ class RoomSettingsController @Inject constructor(
                             }.toEpoxyCharSequence()
                     )
                     itemClickAction {
+                        host.callback?.openGlobalBlockSettings()
                     }
                 }
             } else {

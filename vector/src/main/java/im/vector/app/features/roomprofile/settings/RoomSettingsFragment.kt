@@ -43,6 +43,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
@@ -201,6 +202,10 @@ class RoomSettingsFragment :
 
     override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
         viewModel.handle(RoomSettingsAction.SetEncryptToVerifiedDeviceOnly(enabled))
+    }
+
+    override fun openGlobalBlockSettings() {
+        navigator.openSettings(requireContext(), SettingsActivityPayload.SecurityPrivacy)
     }
 
     override fun onImageReady(uri: Uri?) {
