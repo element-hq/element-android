@@ -33,18 +33,19 @@ class UpdateMatrixClientInfoUseCase @Inject constructor(
 ) {
 
     // TODO call the use case after signin + on app startup
-    // TODO add unit tests
     suspend fun execute(): Result<Unit> = runCatching {
         val clientInfo = MatrixClientInfoContent(
                 name = appNameProvider.getAppName(),
                 version = buildMeta.versionName
         )
         val deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId.orEmpty()
-        val storedClientInfo = deviceId
-                .takeUnless { it.isEmpty() }
-                ?.let { getMatrixClientInfoUseCase.execute(it) }
-        if (clientInfo != storedClientInfo) {
-            setMatrixClientInfoUseCase.execute(clientInfo)
+        if (deviceId.isNotEmpty()) {
+            val storedClientInfo = getMatrixClientInfoUseCase.execute(deviceId)
+            if (clientInfo != storedClientInfo) {
+                setMatrixClientInfoUseCase.execute(clientInfo)
+            }
+        } else {
+            throw NoDeviceIdError()
         }
     }
 }
