@@ -29,13 +29,13 @@ class CircularCache<T : Any>(cacheSize: Int, factory: (Int) -> Array<T?>) {
     private val cache = factory(cacheSize)
     private var writeIndex = 0
 
-    fun contains(key: T): Boolean = cache.contains(key)
+    fun contains(value: T): Boolean = cache.contains(value)
 
-    fun put(key: T) {
+    fun put(value: T) {
         if (writeIndex == cache.size) {
             writeIndex = 0
         }
-        cache[writeIndex] = key
+        cache[writeIndex] = value
         writeIndex++
     }
 }

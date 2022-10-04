@@ -16,7 +16,9 @@
 
 package im.vector.app.features.settings.devices.v2.filter
 
+import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.junit.Test
@@ -33,7 +35,9 @@ private val activeVerifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-        isInactive = false
+        isInactive = false,
+        isCurrentDevice = true,
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
 )
 private val inactiveVerifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_VERIFIED_DEVICE"),
@@ -43,7 +47,9 @@ private val inactiveVerifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-        isInactive = true
+        isInactive = true,
+        isCurrentDevice = false,
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
 )
 private val activeUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "ACTIVE_UNVERIFIED_DEVICE"),
@@ -53,7 +59,9 @@ private val activeUnverifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-        isInactive = false
+        isInactive = false,
+        isCurrentDevice = false,
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
 )
 private val inactiveUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_UNVERIFIED_DEVICE"),
@@ -63,7 +71,9 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
                 trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
         ),
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-        isInactive = true
+        isInactive = true,
+        isCurrentDevice = false,
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
 )
 
 private val devices = listOf(

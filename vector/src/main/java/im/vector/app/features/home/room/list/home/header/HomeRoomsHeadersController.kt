@@ -28,6 +28,7 @@ import com.google.android.material.color.MaterialColors
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstItemUpdatedObserver
+import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomListListener
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -38,6 +39,7 @@ class HomeRoomsHeadersController @Inject constructor(
         val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         resources: Resources,
+        private val analyticsTracker: AnalyticsTracker,
 ) : EpoxyController() {
 
     private var data: RoomsHeadersData = RoomsHeadersData()
@@ -73,7 +75,11 @@ class HomeRoomsHeadersController @Inject constructor(
         }
 
         host.data.filtersList?.let {
-            addRoomFilterHeaderItem(host.onFilterChangedListener, it, host.data.currentFilter)
+            addRoomFilterHeaderItem(
+                    filterChangedListener = host.onFilterChangedListener,
+                    filtersList = it,
+                    currentFilter = host.data.currentFilter,
+                    analyticsTracker = analyticsTracker)
         }
     }
 
@@ -158,12 +164,14 @@ class HomeRoomsHeadersController @Inject constructor(
             filterChangedListener: ((HomeRoomFilter) -> Unit)?,
             filtersList: List<HomeRoomFilter>,
             currentFilter: HomeRoomFilter?,
+            analyticsTracker: AnalyticsTracker,
     ) {
         roomFilterHeaderItem {
             id("filter_header")
             filtersData(filtersList)
             selectedFilter(currentFilter)
             onFilterChangedListener(filterChangedListener)
+            analyticsTracker(analyticsTracker)
         }
     }
 

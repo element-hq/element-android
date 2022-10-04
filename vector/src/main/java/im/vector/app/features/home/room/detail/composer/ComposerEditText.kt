@@ -20,10 +20,12 @@ package im.vector.app.features.home.room.detail.composer
 import android.content.ClipData
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.OnReceiveContentListener
 import androidx.core.view.ViewCompat
@@ -77,6 +79,27 @@ class ComposerEditText @JvmOverloads constructor(
         ViewCompat.setOnReceiveContentListener(this, mimeTypes, onReceiveContentListener)
 
         return ic
+    }
+
+    /** Set whether the keyboard should disable personalized learning. */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setUseIncognitoKeyboard(useIncognitoKeyboard: Boolean) {
+        imeOptions = if (useIncognitoKeyboard) {
+            imeOptions or EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
+        } else {
+            imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+        }
+    }
+
+    /** Set whether enter should send the message or add a new line. */
+    fun setSendMessageWithEnter(sendMessageWithEnter: Boolean) {
+        if (sendMessageWithEnter) {
+            inputType = inputType and EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE.inv()
+            imeOptions = imeOptions or EditorInfo.IME_ACTION_SEND
+        } else {
+            inputType = inputType or EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE
+            imeOptions = imeOptions and EditorInfo.IME_ACTION_SEND.inv()
+        }
     }
 
     init {

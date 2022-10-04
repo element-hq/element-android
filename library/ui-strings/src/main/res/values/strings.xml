@@ -406,6 +406,7 @@
     <string name="action_reset">Reset</string>
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
+    <string name="action_got_it">Got it</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -1404,6 +1405,7 @@
     <string name="command_description_avatar_for_room">Changes your avatar in this current room only</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+    <string name="command_description_devtools">Open the developer tools screen</string>
     <string name="command_description_whois">Displays information about a user</string>
 
     <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
@@ -1872,6 +1874,7 @@
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="attachment_type_poll">Poll</string>
     <string name="attachment_type_location">Location</string>
+    <string name="attachment_type_voice_broadcast">Voice Broadcast</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -2221,6 +2224,7 @@
 
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
     <string name="command_description_lenny">Prepends ( ͡° ͜ʖ ͡°) to a plain-text message</string>
+    <string name="command_description_table_flip">Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>
     <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
@@ -2366,9 +2370,6 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
     <string name="settings_sessions_list">Sessions</string>
-    <string name="device_manager_sessions_other_title">Other sessions</string>
-    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
-
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
     <string name="settings_server_upload_size_title">Server file upload limit</string>
@@ -2579,6 +2580,9 @@
     <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
     <string name="settings_security_prevent_screenshots_summary">Enabling this setting adds the FLAG_SECURE to all Activities. Restart the application for the change to take effect.</string>
 
+    <string name="settings_security_incognito_keyboard_title">Incognito keyboard</string>
+    <string name="settings_security_incognito_keyboard_summary">"Request that the keyboard should not update any personalized data such as typing history and dictionary based on what you've typed in conversations. Notice that some keyboards may not respect this setting."</string>
+
     <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
@@ -2617,6 +2621,7 @@
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
+    <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
     <string name="review_logins">Review where you’re logged in</string>
     <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
@@ -3178,6 +3183,7 @@
     <string name="tooltip_attachment_contact">Open contacts</string>
     <string name="tooltip_attachment_poll">Create poll</string>
     <string name="tooltip_attachment_location">Share location</string>
+    <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
@@ -3228,6 +3234,8 @@
 
     <!-- Device Manager -->
     <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
+    <string name="device_manager_sessions_other_title">Other sessions</string>
+    <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_desktop">Desktop</string>
@@ -3245,6 +3253,7 @@
     <string name="device_manager_other_sessions_description_verified">Verified · Last activity %1$s</string>
     <!--  Examples: Unverified · Last activity Yesterday at 6PM, Unverified · Last activity Aug 31 at 5:47PM -->
     <string name="device_manager_other_sessions_description_unverified">Unverified · Last activity %1$s</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Unverified · Your current session</string>
     <!--  Example: Inactive for 90+ days (Dec 25, 2021) -->
     <plurals name="device_manager_other_sessions_description_inactive">
         <item quantity="one">Inactive for %1$d+ day (%2$s)</item>
@@ -3289,12 +3298,25 @@
     <string name="device_manager_other_sessions_no_unverified_sessions_found">No unverified sessions found.</string>
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
+    <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
+    <string name="device_manager_session_rename">Rename session</string>
+    <string name="device_manager_session_rename_edit_hint">Session name</string>
+    <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
+    <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
+    <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
+    <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
+    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
+    <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

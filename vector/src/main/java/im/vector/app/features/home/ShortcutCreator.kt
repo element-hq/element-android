@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.WorkerThread
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 private val useAdaptiveIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 private const val adaptiveIconSizeDp = 108
 private const val adaptiveIconOuterSidesDp = 18

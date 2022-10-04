@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,4 +18,10 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class SessionOverviewAction : VectorViewModelAction
+sealed class SessionOverviewAction : VectorViewModelAction {
+    object VerifySession : SessionOverviewAction()
+    object SignoutOtherSession : SessionOverviewAction()
+    object SsoAuthDone : SessionOverviewAction()
+    data class PasswordAuthDone(val password: String) : SessionOverviewAction()
+    object ReAuthCancelled : SessionOverviewAction()
+}

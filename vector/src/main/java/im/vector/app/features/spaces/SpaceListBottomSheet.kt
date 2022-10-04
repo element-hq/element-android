@@ -25,11 +25,17 @@ import im.vector.app.R
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.FragmentSpacesBottomSheetBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 
 class SpaceListBottomSheet : VectorBaseBottomSheetDialogFragment<FragmentSpacesBottomSheetBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSpacesBottomSheetBinding {
         return FragmentSpacesBottomSheetBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SpaceBottomSheet
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

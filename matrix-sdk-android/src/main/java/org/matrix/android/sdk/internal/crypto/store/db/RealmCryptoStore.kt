@@ -1611,7 +1611,8 @@ internal class RealmCryptoStore @Inject constructor(
                 userId = userId,
                 crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
                     crossSigningKeysMapper.map(userId, it)
-                }
+                },
+                wasTrustedOnce = xsignInfo.wasUserVerifiedOnce
         )
     }
 

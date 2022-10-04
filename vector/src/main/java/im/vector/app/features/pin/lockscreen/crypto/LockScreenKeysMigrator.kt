@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.crypto
 
-import android.annotation.SuppressLint
 import android.os.Build
 import im.vector.app.features.pin.lockscreen.crypto.migrations.LegacyPinCodeMigrator
 import im.vector.app.features.pin.lockscreen.crypto.migrations.MissingSystemKeyMigrator
@@ -36,14 +35,13 @@ class LockScreenKeysMigrator @Inject constructor(
     /**
      * Performs any needed migrations in order.
      */
-    @SuppressLint("NewApi")
     suspend fun migrateIfNeeded() {
         if (legacyPinCodeMigrator.isMigrationNeeded()) {
             legacyPinCodeMigrator.migrate()
             missingSystemKeyMigrator.migrateIfNeeded()
         }
 
-        if (systemKeyV1Migrator.isMigrationNeeded() && versionProvider.get() >= Build.VERSION_CODES.M) {
+        if (systemKeyV1Migrator.isMigrationNeeded() && versionProvider.isAtLeast(Build.VERSION_CODES.M)) {
             systemKeyV1Migrator.migrate()
         }
     }

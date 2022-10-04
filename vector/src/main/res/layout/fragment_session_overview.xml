@@ -31,6 +31,19 @@
             app:sessionOverviewEntryDescription="@string/device_manager_session_details_description"
             app:sessionOverviewEntryTitle="@string/device_manager_session_details_title" />
 
+        <Button
+            android:id="@+id/sessionOverviewSignout"
+            style="@style/Widget.Vector.Button.Text.Destructive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="@string/device_manager_session_overview_signout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewEntryDetails"
+            app:layout_constraintWidth="wrap_content" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

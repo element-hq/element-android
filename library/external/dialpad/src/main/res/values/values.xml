@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="reference" name="dialpad_style"/>
+    <color name="background_dialpad">#fcfcfc</color>
+    <color name="background_dialpad_pressed">#ececec</color>
+    <color name="dialpad_digits_text_color">#333</color>
+    <color name="dialpad_icon_tint">#89000000</color>
+    <color name="dialpad_ripple_color">#10000000</color>
+    <color name="dialpad_secondary_text_color">#737373</color>
+    <color name="dialpad_separator_line_color">#dadada</color>
+    <color name="dialpad_voicemail_tint">#919191</color>
+    <declare-styleable name="ResizingText"><attr format="dimension" name="resizing_text_min_size"/></declare-styleable>
+    <dimen name="dialpad_bottom_space_height">80dp</dimen>
+    <dimen name="dialpad_button_margin">2dp</dimen>
+    <dimen name="dialpad_center_margin">3dp</dimen>
+    <dimen name="dialpad_digits_height">60dp</dimen>
+    <dimen name="dialpad_digits_menu_left_padding">8dp</dimen>
+    <dimen name="dialpad_digits_menu_right_padding">10dp</dimen>
+    <dimen name="dialpad_digits_padding">16dp</dimen>
+    <dimen name="dialpad_digits_text_min_size">24sp</dimen>
+    <dimen name="dialpad_digits_text_size">34sp</dimen>
+    <dimen name="dialpad_horizontal_padding">5dp</dimen>
+    <dimen name="dialpad_key_button_translate_y">100dp</dimen>
+    <dimen name="dialpad_key_height">64dp</dimen>
+    <dimen name="dialpad_key_letters_size">12sp</dimen>
+    <dimen name="dialpad_key_number_default_margin_bottom">3dp</dimen>
+    <dimen name="dialpad_key_numbers_default_size">36sp</dimen>
+    <dimen name="dialpad_key_plus_size">18sp</dimen>
+    <dimen name="dialpad_key_pound_size">23sp</dimen>
+    <dimen name="dialpad_key_star_size">36sp</dimen>
+    <dimen name="dialpad_overflow_margin">8dp</dimen>
+    <dimen name="dialpad_space_above_keys">14dp</dimen>
+    <dimen name="dialpad_space_below_keys">8dp</dimen>
+    <dimen name="dialpad_symbol_margin_bottom">13dp</dimen>
+    <dimen name="dialpad_voicemail_icon_padding_top">2dp</dimen>
+    <dimen name="dialpad_zero_key_number_default_margin_bottom">1dp</dimen>
+    <dimen name="ild_margin_height">10dp</dimen>
+    <integer name="dialpad_slide_in_duration">400</integer>
+    <integer name="dialpad_slide_out_duration">400</integer>
+    <string name="description_delete_button">backspace</string>
+    <string name="description_dialpad_back">Navigate back</string>
+    <string name="description_dialpad_overflow">More options</string>
+    <string name="description_image_button_plus">plus</string>
+    <string name="description_voicemail_button">voicemail</string>
+    <string name="dialpad_0_letters" translatable="false">+</string>
+    <string name="dialpad_1_letters" translatable="false"/>
+    <string name="dialpad_2_letters" translatable="false">ABC</string>
+    <string name="dialpad_3_letters" translatable="false">DEF</string>
+    <string name="dialpad_4_letters" translatable="false">GHI</string>
+    <string name="dialpad_5_letters" translatable="false">JKL</string>
+    <string name="dialpad_6_letters" translatable="false">MNO</string>
+    <string name="dialpad_7_letters" translatable="false">PQRS</string>
+    <string name="dialpad_8_letters" translatable="false">TUV</string>
+    <string name="dialpad_9_letters" translatable="false">WXYZ</string>
+    <string name="dialpad_pound_letters" translatable="false"/>
+    <string name="dialpad_pound_number" translatable="false">#</string>
+    <string name="dialpad_star_letters" translatable="false"/>
+    <string name="dialpad_star_number" translatable="false">*</string>
+    <style name="DialpadBottomKeyNumberStyle" parent="DialpadKeyNumberStyle">
+    <item name="android:layout_marginBottom">@dimen/dialpad_zero_key_number_default_margin_bottom</item>
+  </style>
+    <style name="DialpadKeyButtonStyle">
+    <item name="android:soundEffectsEnabled">false</item>
+    <item name="android:clickable">true</item>
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">13</item>
+    <item name="android:minHeight">@dimen/dialpad_key_height</item>
+    <item name="android:focusable">true</item>
+    <item name="android:background">@drawable/btn_dialpad_key</item>
+  </style>
+    <style name="DialpadKeyInternalLayoutStyle">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+    <style name="DialpadKeyLettersStyle">
+    <item name="android:textColor">@color/dialpad_secondary_text_color</item>
+    <item name="android:textSize">@dimen/dialpad_key_letters_size</item>
+    <item name="android:fontFamily">sans-serif-regular</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_horizontal</item>
+  </style>
+    <style name="DialpadKeyNumberStyle">
+    <item name="android:textColor">?attr/colorPrimary</item>
+    <item name="android:textSize">@dimen/dialpad_key_numbers_default_size</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">@dimen/dialpad_key_number_default_margin_bottom</item>
+    <item name="android:gravity">center</item>
+  </style>
+    <style name="DialpadKeyPoundStyle">
+    <item name="android:textColor">@color/dialpad_secondary_text_color</item>
+    <item name="android:textSize">@dimen/dialpad_key_pound_size</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:alpha">0.8</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
+    <item name="android:gravity">center</item>
+  </style>
+    <style name="DialpadKeyStarStyle">
+    <item name="android:textColor">@color/dialpad_secondary_text_color</item>
+    <item name="android:textSize">@dimen/dialpad_key_star_size</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:alpha">0.8</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">@dimen/dialpad_symbol_margin_bottom</item>
+    <item name="android:gravity">center</item>
+  </style>
+    <style name="DialpadSpaceStyle">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_weight">3</item>
+  </style>
+</resources>

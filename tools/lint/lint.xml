@@ -19,6 +19,9 @@
     <issue id="IconExpectedSize" severity="error" />
     <issue id="LocaleFolder" severity="error" />
 
+    <!-- AlwaysShowAction is considered as an error to force ignoring the issue when detected -->
+    <issue id="AlwaysShowAction" severity="error" />
+
     <issue id="TooManyViews" severity="warning">
         <!-- Ignore TooManyViews in debug build type -->
         <ignore path="**/src/debug/**" />
@@ -77,6 +80,7 @@
     <issue id="KotlinPropertyAccess" severity="error" />
     <issue id="DefaultLocale" severity="error" />
     <issue id="CheckResult" severity="error" />
+    <issue id="StaticFieldLeak" severity="error" />
 
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
@@ -87,6 +91,7 @@
 
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+    <issue id="DataExtractionRules" severity="error" />
 
     <!-- Performance -->
     <issue id="UselessParent" severity="error" />
@@ -103,6 +108,9 @@
     <issue id="Typos" severity="error" />
     <issue id="TypographyDashes" severity="error" />
     <issue id="PluralsCandidate" severity="error" />
+
+    <!-- Notification -->
+    <issue id="LaunchActivityFromNotification" severity="error" />
 
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
