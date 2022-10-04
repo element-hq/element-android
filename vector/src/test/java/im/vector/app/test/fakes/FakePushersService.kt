@@ -39,14 +39,14 @@ class FakePushersService : PushersService by mockk(relaxed = true) {
 
     fun verifyOnlyGetPushersLiveAndTogglePusherCalled(pusher: Pusher, enable: Boolean) {
         coVerify(ordering = Ordering.ALL) {
-            getPushersLive() // verifies only getPushersLive and the following togglePusher was called
+            getPushersLive()
             togglePusher(pusher, enable)
         }
     }
 
     fun verifyOnlyGetPushersAndTogglePusherCalled(pusher: Pusher, enable: Boolean) {
         coVerify(ordering = Ordering.ALL) {
-            getPushers() // verifies only getPushersLive and the following togglePusher was called
+            getPushers()
             togglePusher(pusher, enable)
         }
     }
