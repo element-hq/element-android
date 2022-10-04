@@ -16,32 +16,38 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.RealmQuery
-import io.realm.kotlin.createObject
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
 
-internal fun ThreadSummaryEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ThreadSummaryEntity> {
-    return realm.where<ThreadSummaryEntity>()
-            .equalTo(ThreadSummaryEntityFields.ROOM.ROOM_ID, roomId)
+internal fun ThreadSummaryEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ThreadSummaryEntity> {
+    return realm.query(ThreadSummaryEntity::class)
+            .query("room.roomId == $0", roomId)
 }
 
-internal fun ThreadSummaryEntity.Companion.where(realm: Realm, roomId: String, rootThreadEventId: String): RealmQuery<ThreadSummaryEntity> {
+internal fun ThreadSummaryEntity.Companion.where(realm: TypedRealm, roomId: String, rootThreadEventId: String): RealmQuery<ThreadSummaryEntity> {
     return where(realm, roomId)
-            .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .query("rootThreadEventId == $0", rootThreadEventId)
 }
 
-internal fun ThreadSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity {
-    return where(realm, roomId, rootThreadEventId).findFirst() ?: realm.createObject<ThreadSummaryEntity>().apply {
+internal fun ThreadSummaryEntity.Companion.getOrCreate(realm: MutableRealm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity {
+    return where(realm, roomId, rootThreadEventId).first().find() ?: create(realm, roomId, rootThreadEventId)
+}
+
+internal fun ThreadSummaryEntity.Companion.create(realm: MutableRealm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity {
+    val threadSummaryEntity = ThreadSummaryEntity().apply {
         this.rootThreadEventId = rootThreadEventId
+        this.roomId = roomId
     }
+    return realm.copyToRealm(threadSummaryEntity)
 }
 
-internal fun ThreadSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity? {
-    return where(realm, roomId, rootThreadEventId).findFirst()
+internal fun ThreadSummaryEntity.Companion.getOrNull(realm: TypedRealm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity? {
+    return where(realm, roomId, rootThreadEventId).first().find()
 }
 
 internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): ThreadSummaryEntity? {
@@ -50,12 +56,9 @@ internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): Thr
             .findFirst()
 }
 
-internal fun RealmList<ThreadSummaryEntity>.findRootOrLatest(eventId: String): ThreadSummaryEntity? {
-    return this.where()
-            .beginGroup()
-            .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, eventId)
-            .or()
-            .equalTo(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.EVENT_ID, eventId)
-            .endGroup()
-            .findFirst()
+internal fun ThreadSummaryEntity.Companion.findRootOrLatest(realm: TypedRealm, eventId: String): ThreadSummaryEntity? {
+    return realm.query(ThreadSummaryEntity::class)
+            .query("rootThreadEventId == $0 OR latestThreadEventEntity.eventId == $1", eventId, eventId)
+            .first()
+            .find()
 }

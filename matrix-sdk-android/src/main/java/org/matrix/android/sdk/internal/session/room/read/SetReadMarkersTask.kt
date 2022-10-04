@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.read
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.isEventRead
@@ -55,7 +56,7 @@ private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
@@ -77,6 +78,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         } else {
             params.readReceiptEventId
         }
+
         if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy.realmConfiguration, params.roomId, fullyReadEventId)) {
             if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")

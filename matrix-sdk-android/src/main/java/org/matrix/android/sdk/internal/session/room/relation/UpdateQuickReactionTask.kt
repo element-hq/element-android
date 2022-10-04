@@ -15,11 +15,9 @@
  */
 package org.matrix.android.sdk.internal.session.room.relation
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -42,48 +40,43 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
 }
 
 internal class DefaultUpdateQuickReactionTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @UserId private val userId: String
 ) : UpdateQuickReactionTask {
 
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
-        var res: Pair<String?, List<String>?>? = null
-        monarchy.doWithRealm { realm ->
-            res = updateQuickReaction(realm, params)
-        }
-        return UpdateQuickReactionTask.Result(res?.first, res?.second.orEmpty())
-    }
-
-    private fun updateQuickReaction(realm: Realm, params: UpdateQuickReactionTask.Params): Pair<String?, List<String>?> {
         // the emoji reaction has been selected, we need to check if we have reacted it or not
-        val existingSummary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst()
-                ?: return Pair(params.reaction, null)
+        val realm = realmInstance.getRealm()
+        val existingSummary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).first().find()
+                ?: return UpdateQuickReactionTask.Result(params.reaction, emptyList())
 
         // Ok there is already reactions on this event, have we reacted to it
-        val aggregationForReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
-                .findFirst()
-        val aggregationForOppositeReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.oppositeReaction)
-                .findFirst()
+        val aggregationForReaction = existingSummary.reactionsSummary
+                .firstOrNull {
+                    it.key == params.reaction
+                }
+        val aggregationForOppositeReaction = existingSummary.reactionsSummary
+                .firstOrNull {
+                    it.key == params.oppositeReaction
+                }
 
-        if (aggregationForReaction == null || !aggregationForReaction.addedByMe) {
+        return if (aggregationForReaction == null || !aggregationForReaction.addedByMe) {
             // i haven't yet reacted to it, so need to add it, but do I need to redact the opposite?
             val toRedact = aggregationForOppositeReaction?.sourceEvents?.mapNotNull {
                 // find source event
-                val entity = EventEntity.where(realm, it).findFirst()
+                val entity = EventEntity.where(realm, it).first().find()
                 if (entity?.sender == userId) entity.eventId else null
             }
-            return Pair(params.reaction, toRedact)
+            UpdateQuickReactionTask.Result(params.reaction, toRedact.orEmpty())
         } else {
             // I already added it, so i need to undo it (like a toggle)
             // find all m.redaction coming from me to readact them
             val toRedact = aggregationForReaction.sourceEvents.mapNotNull {
                 // find source event
-                val entity = EventEntity.where(realm, it).findFirst()
+                val entity = EventEntity.where(realm, it).first().find()
                 if (entity?.sender == userId) entity.eventId else null
             }
-            return Pair(null, toRedact)
+            UpdateQuickReactionTask.Result(null, toRedact)
         }
     }
 }

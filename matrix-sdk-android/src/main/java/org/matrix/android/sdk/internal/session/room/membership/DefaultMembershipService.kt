@@ -17,20 +17,19 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
-import com.otaliastudios.opengl.core.use
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.realm.Realm
-import io.realm.RealmQuery
-import org.matrix.android.sdk.api.MatrixConfiguration
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.helper.findLatestSessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -45,11 +44,10 @@ import org.matrix.android.sdk.internal.session.room.RoomDataSource
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
-import org.matrix.android.sdk.internal.util.fetchCopied
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
@@ -58,7 +56,6 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val cryptoService: CryptoService,
         @UserId
         private val userId: String,
-        private val matrixConfiguration: MatrixConfiguration,
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
@@ -82,35 +79,28 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override fun getRoomMember(userId: String): RoomMemberSummary? {
-        val roomMemberEntity = monarchy.fetchCopied {
-            RoomMemberHelper(it, roomId).getLastRoomMember(userId)
-        }
+        val realm = realmInstance.getBlockingRealm()
+        val roomMemberEntity = RoomMemberHelper(realm, roomId).getLastRoomMember(userId)
         return roomMemberEntity?.asDomain()
     }
 
     override fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMemberSummary> {
-        return monarchy.fetchAllMappedSync(
-                {
-                    roomMembersQuery(it, queryParams)
-                },
-                {
-                    it.asDomain()
-                }
-        )
+        val realm = realmInstance.getBlockingRealm()
+        return roomMembersQuery(realm, queryParams).find()
+                .map(this::mapRoomMember)
     }
 
     override fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMemberSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                {
-                    roomMembersQuery(it, queryParams)
-                },
-                {
-                    it.asDomain()
-                }
-        )
+        return realmInstance.queryList(this::mapRoomMember) {
+            roomMembersQuery(it, queryParams)
+        }.asLiveData()
     }
 
-    private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
+    private fun mapRoomMember(roomMemberSummaryEntity: RoomMemberSummaryEntity): RoomMemberSummary {
+        return roomMemberSummaryEntity.asDomain()
+    }
+
+    private fun roomMembersQuery(realm: TypedRealm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
         return with(queryStringValueProcessor) {
             RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
                     .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
@@ -118,16 +108,15 @@ internal class DefaultMembershipService @AssistedInject constructor(
                     .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
                     .apply {
                         if (queryParams.excludeSelf) {
-                            notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                            query("userId != $0", userId)
                         }
                     }
         }
     }
 
     override fun getNumberOfJoinedMembers(): Int {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomMemberHelper(it, roomId).getNumberOfJoinedMembers()
-        }
+        val realm = realmInstance.getBlockingRealm()
+        return RoomMemberHelper(realm, roomId).getNumberOfJoinedMembers()
     }
 
     override suspend fun ban(userId: String, reason: String?) {
@@ -154,9 +143,8 @@ internal class DefaultMembershipService @AssistedInject constructor(
     private suspend fun sendShareHistoryKeysIfNeeded(userId: String) {
         if (!cryptoService.isShareKeysOnInviteEnabled()) return
         // TODO not sure it's the right way to get the latest messages in a room
-        val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
-            ChunkEntity.findLatestSessionInfo(it, roomId)
-        }
+        val realm = realmInstance.getRealm()
+        val sessionInfo = ChunkEntity.findLatestSessionInfo(realm, roomId)
         cryptoService.sendSharedHistoryKeys(roomId, userId, sessionInfo)
     }
 

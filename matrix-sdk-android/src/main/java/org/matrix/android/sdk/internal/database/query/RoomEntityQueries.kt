@@ -49,5 +49,5 @@ internal fun RoomEntity.Companion.where(realm: TypedRealm, membership: Membershi
 }
 
 internal fun RoomEntity.fastContains(realm: TypedRealm, eventId: String): Boolean {
-    return EventEntity.where(realm, eventId = eventId).findFirst() != null
+    return EventEntity.where(realm, eventId = eventId).first().find() != null
 }

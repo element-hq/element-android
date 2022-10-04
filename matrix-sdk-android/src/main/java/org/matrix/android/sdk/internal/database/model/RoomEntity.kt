@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
+import org.matrix.android.sdk.internal.database.query.findRootOrLatest
 
 internal class RoomEntity : RealmObject {
     @PrimaryKey var roomId: String = ""
@@ -51,13 +53,9 @@ internal class RoomEntity : RealmObject {
     companion object
 }
 
-/*
-internal fun RoomEntity.removeThreadSummaryIfNeeded(eventId: String) {
-    assertIsManaged()
-    threadSummaries.findRootOrLatest(eventId)?.let {
-        threadSummaries.remove(it)
-        it.deleteFromRealm()
+internal fun MutableRealm.removeThreadSummaryIfNeeded(roomEntity: RoomEntity, eventId: String) {
+    ThreadSummaryEntity.findRootOrLatest(this, eventId)?.let {
+        roomEntity.threadSummaries.remove(it)
+        delete(it)
     }
 }
-
- */

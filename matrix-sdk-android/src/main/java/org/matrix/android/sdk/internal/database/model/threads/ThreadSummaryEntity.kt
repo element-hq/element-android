@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 
 internal class ThreadSummaryEntity : RealmObject {
     @Index var rootThreadEventId: String? = ""
+    @Index var roomId: String = ""
     var rootThreadEventEntity: EventEntity? = null
     var latestThreadEventEntity: EventEntity? = null
     var rootThreadSenderName: String? = null

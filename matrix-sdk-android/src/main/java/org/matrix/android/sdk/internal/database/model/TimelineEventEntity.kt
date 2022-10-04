@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.Index
 
@@ -24,6 +26,7 @@ internal class TimelineEventEntity : RealmObject {
     @Index var eventId: String = ""
     @Index var roomId: String = ""
     @Index var displayIndex: Int = 0
+    @Index var chunkId: ObjectId? = null
     var root: EventEntity? = null
     var annotations: EventAnnotationsSummaryEntity? = null
     var senderName: String? = null
@@ -39,12 +42,9 @@ internal class TimelineEventEntity : RealmObject {
     companion object
 }
 
-/*
-internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
-    assertIsManaged()
+internal fun MutableRealm.deleteOnCascade(timelineEventEntity: TimelineEventEntity, canDeleteRoot: Boolean) {
     if (canDeleteRoot) {
-        root?.deleteFromRealm()
+        timelineEventEntity.root?.also { delete(it) }
     }
-    deleteFromRealm()
+    delete(timelineEventEntity)
 }
- */

@@ -16,75 +16,93 @@
 
 package org.matrix.android.sdk.internal.database.query
 
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.RealmResults
+import io.realm.kotlin.types.ObjectId
+import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.queryIn
 
 internal fun ChunkEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.query(ChunkEntity::class)
-            .query(ChunkEntityFields.ROOM.ROOM_ID, roomId)
+            .query("roomId == $0", roomId)
 }
 
-internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
-    val query = where(realm, roomId)
+internal fun ChunkEntity.Companion.find(realm: TypedRealm, chunkId: ObjectId): ChunkEntity? {
+    return realm.query(ChunkEntity::class)
+            .query("chunkId == $0", chunkId)
+            .first()
+            .find()
+}
+
+internal fun ChunkEntity.Companion.find(realm: TypedRealm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
     if (prevToken == null && nextToken == null) return null
-    if (prevToken != null) {
-        query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
-    }
-    if (nextToken != null) {
-        query.equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
-    }
-    return query.findFirst()
-}
-
-internal fun ChunkEntity.Companion.findAll(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): RealmResults<ChunkEntity> {
-    val query = where(realm, roomId)
-    if (prevToken != null) {
-        query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
-    }
-    if (nextToken != null) {
-        query.equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
-    }
-    return query.findAll()
-}
-
-internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-            .findFirst()
+            .andIf(prevToken != null) {
+                query("prevToken == $0", prevToken!!)
+            }
+            .andIf(nextToken != null) {
+                query("nextToken == $0", nextToken!!)
+            }
+            .first()
+            .find()
 }
 
-internal fun ChunkEntity.Companion.findLastForwardChunkOfThread(realm: Realm, roomId: String, rootThreadEventId: String): ChunkEntity? {
+internal fun ChunkEntity.Companion.findAll(realm: TypedRealm, roomId: String, prevToken: String? = null, nextToken: String? = null): RealmResults<ChunkEntity> {
     return where(realm, roomId)
-            .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
-            .findFirst()
+            .andIf(prevToken != null) {
+                query("prevToken == $0", prevToken!!)
+            }
+            .andIf(nextToken != null) {
+                query("nextToken == $0", nextToken!!)
+            }
+            .find()
 }
 
-internal fun ChunkEntity.Companion.findEventInThreadChunk(realm: Realm, roomId: String, event: String): ChunkEntity? {
+internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: TypedRealm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
-            .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, arrayListOf(event).toTypedArray())
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
-            .findFirst()
+            .query("isLastForward == true")
+            .first()
+            .find()
 }
 
-internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
-    return realm.where<ChunkEntity>()
-            .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
-            .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
-            .findAll()
+internal fun ChunkEntity.Companion.findLastForwardChunkOfThread(realm: TypedRealm, roomId: String, rootThreadEventId: String): ChunkEntity? {
+    return where(realm, roomId)
+            .query("rootThreadEventId == $0", rootThreadEventId)
+            .query("isLastForwardThread == true")
+            .first()
+            .find()
 }
 
-internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
+internal fun ChunkEntity.Companion.findEventInThreadChunk(realm: TypedRealm, roomId: String, event: String): ChunkEntity? {
+    return where(realm, roomId)
+            .queryIn("timelineEvents.eventId", arrayListOf(event))
+            .query("isLastForwardThread == true")
+            .first()
+            .find()
+}
+
+internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: TypedRealm, eventIds: List<String>): RealmResults<ChunkEntity> {
+    return realm.query(ChunkEntity::class)
+            .queryIn("timelineEvents.eventId", eventIds)
+            .query("rootThreadEventId == nil")
+            .find()
+}
+
+internal fun ChunkEntity.Companion.findIncludingEvent(realm: TypedRealm, eventId: String): ChunkEntity? {
     return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
 }
 
 internal fun ChunkEntity.Companion.create(
-        realm: Realm,
+        realm: MutableRealm,
         prevToken: String?,
         nextToken: String?
 ): ChunkEntity {
-    return realm.createObject<ChunkEntity>().apply {
+    val chunkEntity = ChunkEntity().apply {
         this.prevToken = prevToken
         this.nextToken = nextToken
     }
+    return realm.copyToRealm(chunkEntity)
 }

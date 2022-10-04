@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
+import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -187,9 +188,9 @@ internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
     return false
 }
 
-internal fun ChunkEntity.Companion.findLatestSessionInfo(realm: Realm, roomId: String): Set<SessionInfo>? =
+internal fun ChunkEntity.Companion.findLatestSessionInfo(realm: TypedRealm, roomId: String): Set<SessionInfo>? =
         ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.mapNotNull { timelineEvent ->
-            timelineEvent?.root?.asDomain()?.content?.toModel<EncryptedEventContent>()?.let { content ->
+            timelineEvent.root?.asDomain()?.content?.toModel<EncryptedEventContent>()?.let { content ->
                 content.sessionId ?: return@mapNotNull null
                 content.senderKey ?: return@mapNotNull null
                 SessionInfo(content.sessionId, content.senderKey)

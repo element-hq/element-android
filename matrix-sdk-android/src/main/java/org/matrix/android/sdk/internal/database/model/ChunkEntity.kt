@@ -16,25 +16,35 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.Index
+import io.realm.kotlin.types.annotations.PrimaryKey
+import org.matrix.android.sdk.internal.database.clearWith
+import org.matrix.android.sdk.internal.database.query.where
 
-internal class ChunkEntity  : RealmObject {
-        @Index var prevToken: String? = null
-        // Because of gaps we can have several chunks with nextToken == null
-        @Index var nextToken: String? = null
-        var prevChunk: ChunkEntity? = null
-        var nextChunk: ChunkEntity? = null
-        var stateEvents: RealmList<EventEntity> = realmListOf()
-        var timelineEvents: RealmList<TimelineEventEntity> = realmListOf()
-        // Only one chunk will have isLastForward == true
-        @Index var isLastForward: Boolean = false
-        @Index var isLastBackward: Boolean = false
-        // Threads
-        @Index var rootThreadEventId: String? = null
-        @Index var isLastForwardThread: Boolean = false
+internal class ChunkEntity : RealmObject {
+    @PrimaryKey var chunkId: ObjectId = ObjectId.create()
+    @Index var roomId: String = ""
+    @Index var prevToken: String? = null
+
+    // Because of gaps we can have several chunks with nextToken == null
+    @Index var nextToken: String? = null
+    var prevChunk: ChunkEntity? = null
+    var nextChunk: ChunkEntity? = null
+    var stateEvents: RealmList<EventEntity> = realmListOf()
+    var timelineEvents: RealmList<TimelineEventEntity> = realmListOf()
+
+    // Only one chunk will have isLastForward == true
+    @Index var isLastForward: Boolean = false
+    @Index var isLastBackward: Boolean = false
+
+    // Threads
+    @Index var rootThreadEventId: String? = null
+    @Index var isLastForwardThread: Boolean = false
 
     fun identifier() = "${prevToken}_$nextToken"
 
@@ -44,36 +54,31 @@ internal class ChunkEntity  : RealmObject {
     companion object
 }
 
-/*
-internal fun ChunkEntity.deleteOnCascade(
+internal fun MutableRealm.deleteOnCascade(
+        chunkEntity: ChunkEntity,
         deleteStateEvents: Boolean,
         canDeleteRoot: Boolean
 ) {
-    assertIsManaged()
     if (deleteStateEvents) {
-        stateEvents.deleteAllFromRealm()
+        delete(chunkEntity.stateEvents)
     }
-    timelineEvents.clearWith {
+    chunkEntity.timelineEvents.clearWith {
         val deleteRoot = canDeleteRoot && (it.root?.stateKey == null || deleteStateEvents)
         if (deleteRoot) {
-            room?.firstOrNull()?.removeThreadSummaryIfNeeded(it.eventId)
+            RoomEntity.where(this, chunkEntity.roomId).first().find()?.let { roomEntity ->
+                removeThreadSummaryIfNeeded(roomEntity, it.eventId)
+            }
         }
-        it.deleteOnCascade(deleteRoot)
+        deleteOnCascade(it, deleteRoot)
     }
-    deleteFromRealm()
+    delete(chunkEntity)
 }
 
-
-/**
- * Delete the chunk along with the thread events that were temporarily created.
- */
-internal fun ChunkEntity.deleteAndClearThreadEvents() {
-    assertIsManaged()
-    timelineEvents
+internal fun MutableRealm.deleteAndClearThreadEvents(chunkEntity: ChunkEntity) {
+    chunkEntity.timelineEvents
             .filter { it.ownedByThreadChunk }
             .forEach {
-                it.deleteOnCascade(false)
+                deleteOnCascade(it, false)
             }
-    deleteFromRealm()
+    delete(chunkEntity)
 }
- */

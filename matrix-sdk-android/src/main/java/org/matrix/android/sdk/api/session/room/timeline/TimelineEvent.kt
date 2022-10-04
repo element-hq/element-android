@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.timeline
 
+import io.realm.kotlin.types.ObjectId
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -53,6 +54,7 @@ data class TimelineEvent(
          */
         val localId: Long,
         val eventId: String,
+        var chunkId: ObjectId? = null,
         /**
          * This display index is the position in the current chunk.
          * It's not unique on the timeline as it's reset on each chunk.

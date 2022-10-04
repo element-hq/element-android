@@ -73,7 +73,7 @@ internal fun EventEntity.Companion.whereType(
 ): RealmQuery<EventEntity> {
     return realm.query(EventEntity::class)
             .query("type == $0", type)
-            .andIf(roomId != null){
+            .andIf(roomId != null) {
                 query("roomId == $0", roomId!!)
             }
 }
@@ -85,7 +85,7 @@ internal fun EventEntity.Companion.whereTypes(
 ): RealmQuery<EventEntity> {
     return realm.query(EventEntity::class)
             .queryIn("type", typeList)
-            .andIf(roomId != null){
+            .andIf(roomId != null) {
                 query("roomId == $0", roomId!!)
             }
 }
@@ -100,7 +100,7 @@ internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {
     return this.find(eventId) != null
 }
 
-internal fun EventEntity.Companion.whereRootThreadEventId(realm: Realm, rootThreadEventId: String): RealmQuery<EventEntity> {
-    return realm.where<EventEntity>()
-            .equalTo(EventEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+internal fun EventEntity.Companion.whereRootThreadEventId(realm: TypedRealm, rootThreadEventId: String): RealmQuery<EventEntity> {
+    return realm.query(EventEntity::class)
+            .query("rootThreadEventId == $0", rootThreadEventId)
 }
