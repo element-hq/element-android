@@ -2578,6 +2578,9 @@
     <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
     <string name="settings_security_prevent_screenshots_summary">Enabling this setting adds the FLAG_SECURE to all Activities. Restart the application for the change to take effect.</string>
 
+    <string name="settings_security_incognito_keyboard_title">Incognito keyboard</string>
+    <string name="settings_security_incognito_keyboard_summary">"Request that the keyboard should not update any personalized data such as typing history and dictionary based on what you've typed in conversations. Notice that some keyboards may not respect this setting."</string>
+
     <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
