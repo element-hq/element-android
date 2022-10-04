@@ -28,6 +28,7 @@ import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -79,7 +80,6 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
@@ -106,8 +106,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
 import javax.inject.Inject
@@ -168,7 +166,7 @@ class MessageItemFactory @Inject constructor(
             return buildRedactedItem(attributes, highlight)
         }
 
-        val messageContent = getLastMessageContent(event)
+        val messageContent = event.getVectorLastMessageContent()
         if (messageContent == null) {
             val malformedText = stringProvider.getString(R.string.malformed_message)
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
@@ -207,17 +205,6 @@ class MessageItemFactory @Inject constructor(
         }
         return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
-        }
-    }
-
-    private fun getLastMessageContent(event: TimelineEvent): MessageContent? {
-        return with(event) {
-            // Iterate on event types which are not part of the matrix sdk, otherwise fallback to the sdk method
-            when (root.getClearType()) {
-                STATE_ROOM_VOICE_BROADCAST_INFO ->
-                    (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageVoiceBroadcastInfoContent>()
-                else -> event.getLastMessageContent()
-            }
         }
     }
 
