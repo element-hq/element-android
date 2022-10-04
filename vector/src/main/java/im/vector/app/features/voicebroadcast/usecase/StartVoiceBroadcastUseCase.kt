@@ -23,6 +23,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 ) {
 
     suspend fun execute(roomId: String) {
-        val room = session.roomService().getRoom(roomId) ?: return
+        val room = session.getRoom(roomId) ?: return
 
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 

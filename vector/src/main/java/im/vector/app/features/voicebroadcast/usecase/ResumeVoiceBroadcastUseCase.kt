@@ -23,6 +23,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import timber.log.Timber
@@ -33,7 +34,7 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
 ) {
 
     suspend fun execute(roomId: String) {
-        val room = session.roomService().getRoom(roomId) ?: return
+        val room = session.getRoom(roomId) ?: return
 
         Timber.d("## ResumeVoiceBroadcastUseCase: Resume voice broadcast requested")
 
