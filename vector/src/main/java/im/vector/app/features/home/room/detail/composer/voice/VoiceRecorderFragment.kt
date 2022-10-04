@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.existingViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +34,6 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentVoiceRecorderBinding
 import im.vector.app.features.home.room.detail.TimelineViewModel
-import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
@@ -47,8 +45,6 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
 
     @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
     @Inject lateinit var clock: Clock
-
-    private val timelineArgs: TimelineArgs by args()
 
     private val timelineViewModel: TimelineViewModel by existingViewModel()
     private val messageComposerViewModel: MessageComposerViewModel by existingViewModel()
@@ -191,6 +187,6 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
-    fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
+    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
 
 }

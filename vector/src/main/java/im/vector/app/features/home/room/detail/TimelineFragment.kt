@@ -300,17 +300,13 @@ class TimelineFragment :
 
         childFragmentManager.findFragmentById(R.id.composerContainer) as? MessageComposerFragment ?: run {
             childFragmentManager.commitTransaction {
-                val fragment = MessageComposerFragment()
-                fragment.arguments = timelineArgs.toMvRxBundle()
-                replace(R.id.composerContainer, fragment)
+                replace(R.id.composerContainer, MessageComposerFragment())
             }
         }
 
         childFragmentManager.findFragmentById(R.id.voiceMessageRecorderContainer) as? VoiceRecorderFragment ?: run {
             childFragmentManager.commitTransaction {
-                val fragment = VoiceRecorderFragment()
-                fragment.arguments = timelineArgs.toMvRxBundle()
-                replace(R.id.voiceMessageRecorderContainer, fragment)
+                replace(R.id.voiceMessageRecorderContainer, VoiceRecorderFragment())
             }
         }
     }
@@ -2010,7 +2006,7 @@ class TimelineFragment :
     /**
      * Returns true if the current room is a Thread room, false otherwise.
      */
-    private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+    private fun isThreadTimeLine(): Boolean = withState(timelineViewModel) { it.isThreadTimeline() }
 
     /**
      * Returns true if the current room is a local room, false otherwise.
@@ -2020,5 +2016,5 @@ class TimelineFragment :
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
-    fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
+    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
 }

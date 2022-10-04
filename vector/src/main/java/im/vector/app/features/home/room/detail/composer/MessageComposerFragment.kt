@@ -40,7 +40,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.existingViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -74,7 +73,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.TimelineViewModel
-import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
@@ -131,14 +129,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var session: Session
 
-    private val timelineArgs: TimelineArgs by args()
+    private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
     private val autoCompleter: AutoCompleter by lazy {
-        autoCompleterFactory.create(timelineArgs.roomId, isThreadTimeLine())
+        autoCompleterFactory.create(roomId, isThreadTimeLine())
     }
 
     private val pillsPostProcessor by lazy {
-        pillsPostProcessorFactory.create(timelineArgs.roomId)
+        pillsPostProcessorFactory.create(roomId)
     }
 
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
@@ -267,7 +265,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
-        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.showKeyboard == true) {
+        val showKeyboard = withState(timelineViewModel) { it.showKeyboardWhenPresented }
+        if (isThreadTimeLine() && showKeyboard) {
             // Show keyboard when the user started a thread
             views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
         }
@@ -555,7 +554,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         views.composerLayout.setTextIfDifferent("")
         when (parsedCommand) {
             is ParsedCommand.DevTools -> {
-                navigator.openDevTools(requireContext(), timelineArgs.roomId)
+                navigator.openDevTools(requireContext(), roomId)
             }
             is ParsedCommand.SetMarkdown -> {
                 showSnackWithMessage(getString(if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
@@ -578,12 +577,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: MessageComposerViewEvents.ShowRoomUpgradeDialog) {
         val tag = MigrateRoomBottomSheet::javaClass.name
-        MigrateRoomBottomSheet.newInstance(timelineArgs.roomId, roomDetailViewEvents.newVersion)
+        val roomId = withState(timelineViewModel) { it.roomId }
+        MigrateRoomBottomSheet.newInstance(roomId, roomDetailViewEvents.newVersion)
                 .show(parentFragmentManager, tag)
     }
 
     private fun openRoomMemberProfile(userId: String) {
-        navigator.openRoomMemberProfile(userId = userId, roomId = timelineArgs.roomId, context = requireActivity())
+        navigator.openRoomMemberProfile(userId = userId, roomId = roomId, context = requireActivity())
     }
 
     private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
@@ -598,12 +598,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     /**
      * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
-    fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
+    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
 
     /**
      * Returns true if the current room is a Thread room, false otherwise.
      */
-    private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+    private fun isThreadTimeLine(): Boolean = withState(timelineViewModel) { it.isThreadTimeline() }
 
 
     // AttachmentsHelper.Callback
@@ -656,12 +656,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> timelineViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL -> navigator.openCreatePoll(requireContext(), timelineArgs.roomId, null, PollMode.CREATE)
+            AttachmentTypeSelectorView.Type.POLL -> navigator.openCreatePoll(requireContext(), roomId, null, PollMode.CREATE)
             AttachmentTypeSelectorView.Type.LOCATION -> {
                 navigator
                         .openLocationSharing(
                                 context = requireContext(),
-                                roomId = timelineArgs.roomId,
+                                roomId = roomId,
                                 mode = LocationSharingMode.STATIC_SHARING,
                                 initialLocationData = null,
                                 locationOwnerId = session.myUserId
@@ -716,7 +716,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun handleShareData() {
-        when (val sharedData = timelineArgs.sharedData) {
+        when (val sharedData = withState(timelineViewModel) { it.sharedData }) {
             is SharedData.Text -> {
                 messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(sharedData.text))
                 messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(fromSharing = true))
