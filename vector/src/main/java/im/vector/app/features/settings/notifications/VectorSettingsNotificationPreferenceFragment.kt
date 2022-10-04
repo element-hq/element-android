@@ -62,7 +62,6 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
-import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -124,7 +123,14 @@ class VectorSettingsNotificationPreferenceFragment :
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
                         lifecycleScope.launch {
-                            pushersManager.togglePusherForCurrentSession(true)
+                            val result = runCatching {
+                                pushersManager.togglePusherForCurrentSession(true)
+                            }
+
+                            result.exceptionOrNull()?.let { _ ->
+                                Toast.makeText(context, R.string.settings_error_toggle_pusher, Toast.LENGTH_SHORT).show()
+                                it.isChecked = false
+                            }
                         }
                     }
                 } else {

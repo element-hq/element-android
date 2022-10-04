@@ -930,6 +930,7 @@
     <string name="settings_call_notifications_preferences">Configure Call Notifications</string>
     <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
     <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
+    <string name="settings_error_toggle_pusher">Something went wrong. Please check your network connection and try again.</string>
 
     <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
     <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
