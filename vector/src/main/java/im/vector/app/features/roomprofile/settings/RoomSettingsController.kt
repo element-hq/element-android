@@ -145,54 +145,5 @@ class RoomSettingsController @Inject constructor(
                 id("guestAccessDivider")
             }
         }
-//
-//        // Security
-//        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-
-//        data.globalCryptoConfig.invoke()?.let { globalConfig ->
-//            if (globalConfig.globalBlockUnverifiedDevices) {
-//                genericFooterItem {
-//                    id("globalConfig")
-//                    centered(false)
-//                    text(
-//                            span {
-//                                +host.stringProvider.getString(R.string.room_settings_global_block_unverified_info_text)
-//                                apply {
-//                                    if (data.unverifiedDevicesInTheRoom.invoke() == true) {
-//                                        +"\n"
-//                                        +host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
-//                                    }
-//                                }
-//                            }.toEpoxyCharSequence()
-//                    )
-//                    itemClickAction {
-//                        host.callback?.openGlobalBlockSettings()
-//                    }
-//                }
-//            } else {
-//                // per room setting is available
-//                val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
-//                formSwitchItem {
-//                    id("send_to_unverified")
-//                    enabled(shouldBlockUnverified != null)
-//                    title(host.stringProvider.getString(R.string.encryption_never_send_to_unverified_devices_in_room))
-//
-//                    switchChecked(shouldBlockUnverified ?: false)
-//
-//                    apply {
-//                        if (shouldBlockUnverified == true && data.unverifiedDevicesInTheRoom.invoke() == true) {
-//                            summary(
-//                                    host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
-//                            )
-//                        } else {
-//                            summary(null)
-//                        }
-//                    }
-//                    listener { value ->
-//                        host.callback?.setEncryptedToVerifiedDevicesOnly(value)
-//                    }
-//                }
-//            }
-//        }
     }
 }
