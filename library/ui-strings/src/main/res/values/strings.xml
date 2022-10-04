@@ -1236,7 +1236,7 @@
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Never send encrypted messages to unverified sessions in this room.</string>
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ There are unverified devices in this room, they won’t be able to decrypt messages you send.</string>
-    <string name="room_settings_global_blacklist_unverified_info_text">🔒 You have enable encrypt to verified sessions only for all rooms in Security Settings.</string>
+    <string name="room_settings_global_blacklist_unverified_info_text">🔒 You have enabled encrypt to verified sessions only for all rooms in Security Settings.</string>
     <plurals name="encryption_import_room_keys_success">
         <item quantity="one">%1$d/%2$d key imported with success.</item>
         <item quantity="other">%1$d/%2$d keys imported with success.</item>
