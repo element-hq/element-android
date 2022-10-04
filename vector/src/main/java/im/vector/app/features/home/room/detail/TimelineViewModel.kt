@@ -456,6 +456,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
             is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
+            is RoomDetailAction.StartVoiceBroadcast -> handleStartVoiceBroadcast()
             is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
@@ -595,6 +596,11 @@ class TimelineViewModel @AssistedInject constructor(
             val viewEvent = stickerPickerActionHandler.handle()
             _viewEvents.post(viewEvent)
         }
+    }
+
+    private fun handleStartVoiceBroadcast() {
+        // Todo implement start voice broadcast action
+        Timber.d("Start voice broadcast clicked")
     }
 
     private fun handleOpenIntegrationManager() {
