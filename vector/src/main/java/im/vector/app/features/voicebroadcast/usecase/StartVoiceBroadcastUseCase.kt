@@ -36,14 +36,17 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 
-        val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
-                STATE_ROOM_VOICE_BROADCAST_INFO,
-                QueryStringValue.Equals(session.myUserId)
-        )?.asVoiceBroadcastEvent()
-        when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
-            VoiceBroadcastState.STOPPED,
-            null -> startVoiceBroadcast(room)
-            else -> Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: currentState=$voiceBroadcastState")
+        val onGoingVoiceBroadcastEvents = room.stateService().getStateEvents(
+                setOf(STATE_ROOM_VOICE_BROADCAST_INFO),
+                QueryStringValue.IsNotEmpty
+        )
+                .mapNotNull { it.asVoiceBroadcastEvent() }
+                .filter { it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+
+        if (onGoingVoiceBroadcastEvents.isEmpty()) {
+            startVoiceBroadcast(room)
+        } else {
+            Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: currentVoiceBroadcastEvents=$onGoingVoiceBroadcastEvents")
         }
     }
 

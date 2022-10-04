@@ -18,10 +18,15 @@ package im.vector.app.test.fakes
 
 import io.mockk.every
 import io.mockk.mockk
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.state.StateService
 
 class FakeStateService : StateService by mockk(relaxed = true) {
+
+    fun givenGetStateEvents(stateKey: QueryStateEventValue, result: List<Event>) {
+        every { getStateEvents(any(), stateKey) } returns result
+    }
 
     fun givenGetStateEvent(event: Event?) {
         every { getStateEvent(any(), any()) } returns event
