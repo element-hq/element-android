@@ -33,8 +33,8 @@ class StopVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
 ) {
 
-    suspend fun execute(roomId: String) {
-        val room = session.getRoom(roomId) ?: return
+    suspend fun execute(roomId: String): Result<Unit> = runCatching {
+        val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
 
         Timber.d("## StopVoiceBroadcastUseCase: Stop voice broadcast requested")
 
