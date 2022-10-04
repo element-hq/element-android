@@ -178,6 +178,7 @@ ext.groups = [
                         'org.apache.httpcomponents',
                         'org.apache.sanselan',
                         'org.bouncycastle',
+                        'org.ccil.cowan.tagsoup',
                         'org.checkerframework',
                         'org.codehaus',
                         'org.codehaus.groovy',

@@ -104,6 +104,8 @@ android {
     }
 }
 dependencies {
+
+    implementation "io.element.android:wysiwyg:0.0.1-SNAPSHOT"
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")

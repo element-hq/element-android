@@ -71,6 +71,7 @@ allprojects {
     apply plugin: "io.gitlab.arturbosch.detekt"
 
     repositories {
+        mavenLocal()
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
         maven {
             url 'https://repo1.maven.org/maven2'
