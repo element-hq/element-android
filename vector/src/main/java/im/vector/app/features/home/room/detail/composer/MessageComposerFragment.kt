@@ -437,8 +437,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private fun renderVoiceMessageMode(content: String) {
         ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
-            // TODO: review this behaviour
-//            views.voiceMessageRecorderView.isVisible = true
             messageComposerViewModel.handle(MessageComposerAction.InitializeVoiceRecorder(audioAttachmentData))
         }
     }
@@ -594,17 +592,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             timelineViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
         }
     }
-
-    /**
-     * Returns the root thread event if we are in a thread room, otherwise returns null.
-     */
-    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
-
-    /**
-     * Returns true if the current room is a Thread room, false otherwise.
-     */
-    private fun isThreadTimeLine(): Boolean = withState(timelineViewModel) { it.isThreadTimeline() }
-
 
     // AttachmentsHelper.Callback
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
@@ -786,6 +773,16 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         return displayName
     }
+
+    /**
+     * Returns the root thread event if we are in a thread room, otherwise returns null.
+     */
+    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
+
+    /**
+     * Returns true if the current room is a Thread room, false otherwise.
+     */
+    private fun isThreadTimeLine(): Boolean = withState(timelineViewModel) { it.isThreadTimeline() }
 
     /** Set whether the keyboard should disable personalized learning. */
     @RequiresApi(Build.VERSION_CODES.O)

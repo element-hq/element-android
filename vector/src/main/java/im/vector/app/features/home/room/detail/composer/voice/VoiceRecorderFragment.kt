@@ -88,8 +88,9 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         if (mainState.tombstoneEvent != null) return@withState
 
+        val hasVoiceDraft = messageComposerState.voiceRecordingUiState is VoiceMessageRecorderView.RecordingUiState.Draft
         with(views.root) {
-            isVisible = messageComposerState.isVoiceMessageRecorderVisible
+            isVisible = messageComposerState.isVoiceMessageRecorderVisible || hasVoiceDraft
             render(messageComposerState.voiceRecordingUiState)
         }
     }
@@ -188,5 +189,4 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
      * Returns the root thread event if we are in a thread room, otherwise returns null.
      */
     fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
-
 }
