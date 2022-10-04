@@ -424,7 +424,7 @@ internal class MXMegolmEncryption(
         // an m.new_device.
         val keys = deviceListManager.downloadKeys(userIds, false)
         val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices() ||
-                cryptoStore.getBlacklistUnverifiedDevices(roomId)
+                cryptoStore.getBlockUnverifiedDevices(roomId)
 
         val devicesInRoom = DeviceInRoomInfo()
         val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()

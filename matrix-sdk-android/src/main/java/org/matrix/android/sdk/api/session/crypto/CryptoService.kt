@@ -61,7 +61,7 @@ interface CryptoService {
 
     fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean
 
-    fun getLiveBlacklistUnverifiedDevices(roomId: String): LiveData<Boolean>
+    fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean>
 
     fun setWarnOnUnknownDevices(warn: Boolean)
 

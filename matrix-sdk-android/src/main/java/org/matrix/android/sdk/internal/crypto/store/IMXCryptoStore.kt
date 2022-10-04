@@ -125,14 +125,14 @@ internal interface IMXCryptoStore {
      *
      * @return Live status
      */
-    fun getLiveBlacklistUnverifiedDevices(roomId: String): LiveData<Boolean>
+    fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean>
 
     /**
      * Tell if unverified devices should be blacklisted when sending keys.
      *
      * @return true if should not send keys to unverified devices
      */
-    fun getBlacklistUnverifiedDevices(roomId: String): Boolean
+    fun getBlockUnverifiedDevices(roomId: String): Boolean
 
     /**
      * Define if encryption keys should be sent to unverified devices in this room.

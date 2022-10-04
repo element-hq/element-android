@@ -1177,7 +1177,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return true if the client should encrypt messages only for the verified devices.
      */
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
-        return roomId?.let { cryptoStore.getBlacklistUnverifiedDevices(roomId) }
+        return roomId?.let { cryptoStore.getBlockUnverifiedDevices(roomId) }
                 ?: false
     }
 
@@ -1186,8 +1186,8 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @return Live status
      */
-    override fun getLiveBlacklistUnverifiedDevices(roomId: String): LiveData<Boolean> {
-        return cryptoStore.getLiveBlacklistUnverifiedDevices(roomId)
+    override fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean> {
+        return cryptoStore.getLiveBlockUnverifiedDevices(roomId)
     }
 
     /**

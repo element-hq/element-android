@@ -1097,7 +1097,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getLiveBlacklistUnverifiedDevices(roomId: String): LiveData<Boolean> {
+    override fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { realm: Realm ->
                     realm.where<CryptoRoomEntity>()
@@ -1112,7 +1112,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getBlacklistUnverifiedDevices(roomId: String): Boolean {
+    override fun getBlockUnverifiedDevices(roomId: String): Boolean {
         return doWithRealm(realmConfiguration) { realm ->
             realm.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)

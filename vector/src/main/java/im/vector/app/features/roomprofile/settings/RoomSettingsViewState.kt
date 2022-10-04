@@ -23,7 +23,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
@@ -47,9 +46,6 @@ data class RoomSettingsViewState(
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
         val canUpgradeToRestricted: Boolean = false,
-        val encryptToVerifiedDeviceOnly: Async<Boolean> = Uninitialized,
-        val globalCryptoConfig: Async<GlobalCryptoConfig> = Uninitialized,
-        val unverifiedDevicesInTheRoom: Async<Boolean> = Uninitialized,
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

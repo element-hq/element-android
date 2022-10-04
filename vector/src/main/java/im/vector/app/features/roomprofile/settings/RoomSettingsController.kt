@@ -22,7 +22,6 @@ import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.verticalMarginItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.form.formEditTextItem
@@ -31,8 +30,6 @@ import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -55,8 +52,6 @@ class RoomSettingsController @Inject constructor(
         fun onHistoryVisibilityClicked()
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
-        fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean)
-        fun openGlobalBlockSettings()
     }
 
     var callback: Callback? = null
@@ -150,54 +145,54 @@ class RoomSettingsController @Inject constructor(
                 id("guestAccessDivider")
             }
         }
+//
+//        // Security
+//        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
-        // Security
-        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-
-        data.globalCryptoConfig.invoke()?.let { globalConfig ->
-            if (globalConfig.globalBlockUnverifiedDevices) {
-                genericFooterItem {
-                    id("globalConfig")
-                    centered(false)
-                    text(
-                            span {
-                                +host.stringProvider.getString(R.string.room_settings_global_blacklist_unverified_info_text)
-                                apply {
-                                    if (data.unverifiedDevicesInTheRoom.invoke() == true) {
-                                        +"\n"
-                                        +host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
-                                    }
-                                }
-                            }.toEpoxyCharSequence()
-                    )
-                    itemClickAction {
-                        host.callback?.openGlobalBlockSettings()
-                    }
-                }
-            } else {
-                // per room setting is available
-                val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
-                formSwitchItem {
-                    id("send_to_unverified")
-                    enabled(shouldBlockUnverified != null)
-                    title(host.stringProvider.getString(R.string.encryption_never_send_to_unverified_devices_in_room))
-
-                    switchChecked(shouldBlockUnverified ?: false)
-
-                    apply {
-                        if (shouldBlockUnverified == true && data.unverifiedDevicesInTheRoom.invoke() == true) {
-                            summary(
-                                    host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
-                            )
-                        } else {
-                            summary(null)
-                        }
-                    }
-                    listener { value ->
-                        host.callback?.setEncryptedToVerifiedDevicesOnly(value)
-                    }
-                }
-            }
-        }
+//        data.globalCryptoConfig.invoke()?.let { globalConfig ->
+//            if (globalConfig.globalBlockUnverifiedDevices) {
+//                genericFooterItem {
+//                    id("globalConfig")
+//                    centered(false)
+//                    text(
+//                            span {
+//                                +host.stringProvider.getString(R.string.room_settings_global_block_unverified_info_text)
+//                                apply {
+//                                    if (data.unverifiedDevicesInTheRoom.invoke() == true) {
+//                                        +"\n"
+//                                        +host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
+//                                    }
+//                                }
+//                            }.toEpoxyCharSequence()
+//                    )
+//                    itemClickAction {
+//                        host.callback?.openGlobalBlockSettings()
+//                    }
+//                }
+//            } else {
+//                // per room setting is available
+//                val shouldBlockUnverified = data.encryptToVerifiedDeviceOnly.invoke()
+//                formSwitchItem {
+//                    id("send_to_unverified")
+//                    enabled(shouldBlockUnverified != null)
+//                    title(host.stringProvider.getString(R.string.encryption_never_send_to_unverified_devices_in_room))
+//
+//                    switchChecked(shouldBlockUnverified ?: false)
+//
+//                    apply {
+//                        if (shouldBlockUnverified == true && data.unverifiedDevicesInTheRoom.invoke() == true) {
+//                            summary(
+//                                    host.stringProvider.getString(R.string.some_devices_will_not_be_able_to_decrypt)
+//                            )
+//                        } else {
+//                            summary(null)
+//                        }
+//                    }
+//                    listener { value ->
+//                        host.callback?.setEncryptedToVerifiedDevicesOnly(value)
+//                    }
+//                }
+//            }
+//        }
     }
 }
