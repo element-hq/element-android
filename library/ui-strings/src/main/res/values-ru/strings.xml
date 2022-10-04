@@ -927,7 +927,7 @@
     <string name="navigate_to_room_when_already_in_the_room">Вы уже просмотрели эту комнату!</string>
     <string name="settings_general_title">Общее</string>
     <string name="settings_preferences">Предпочтения</string>
-    <string name="settings_security_and_privacy">Безопасность и конфиденциальность</string>
+    <string name="settings_security_and_privacy">Безопасность</string>
     <string name="settings_push_rules">Правила push-уведомлений</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
