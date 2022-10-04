@@ -19,12 +19,10 @@ package im.vector.app.features.voicebroadcast.usecase
 import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import timber.log.Timber
@@ -39,28 +37,24 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
 
         Timber.d("## PauseVoiceBroadcastUseCase: Pause voice broadcast requested")
 
-        val lastVoiceBroadcastEvent = room.stateService().getStateEvent(STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(session.myUserId))
-        val lastVoiceBroadcastInfoContent = lastVoiceBroadcastEvent?.content.toModel<MessageVoiceBroadcastInfoContent>()
-        when (val voiceBroadcastState = lastVoiceBroadcastInfoContent?.voiceBroadcastState) {
+        val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
+                STATE_ROOM_VOICE_BROADCAST_INFO,
+                QueryStringValue.Equals(session.myUserId)
+        )?.asVoiceBroadcastEvent()
+        when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
             VoiceBroadcastState.STARTED,
-            VoiceBroadcastState.RESUMED -> pauseVoiceBroadcast(room, lastVoiceBroadcastEvent)
+            VoiceBroadcastState.RESUMED -> pauseVoiceBroadcast(room, lastVoiceBroadcastEvent.reference)
             else -> Timber.d("## PauseVoiceBroadcastUseCase: Cannot pause voice broadcast: currentState=$voiceBroadcastState")
         }
     }
 
-    private suspend fun pauseVoiceBroadcast(room: Room, event: Event?) {
+    private suspend fun pauseVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## PauseVoiceBroadcastUseCase: Send new voice broadcast info state event")
-        val lastVoiceBroadcastContent = event?.content.toModel<MessageVoiceBroadcastInfoContent>()
-        val relatesTo = if (lastVoiceBroadcastContent?.voiceBroadcastState == VoiceBroadcastState.STARTED) {
-            RelationDefaultContent(RelationType.REFERENCE, event?.eventId)
-        } else {
-            lastVoiceBroadcastContent?.relatesTo
-        }
         room.stateService().sendStateEvent(
                 eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
-                        relatesTo = relatesTo,
+                        relatesTo = reference,
                         voiceBroadcastStateStr = VoiceBroadcastState.PAUSED.value,
                 ).toContent(),
         )

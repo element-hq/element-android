@@ -19,12 +19,10 @@ package im.vector.app.features.voicebroadcast.usecase
 import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import timber.log.Timber
@@ -39,26 +37,29 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
 
         Timber.d("## ResumeVoiceBroadcastUseCase: Resume voice broadcast requested")
 
-        val lastVoiceBroadcastEvent = room.stateService().getStateEvent(STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(session.myUserId))
-        when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content.toModel<MessageVoiceBroadcastInfoContent>()?.voiceBroadcastState) {
-            VoiceBroadcastState.PAUSED -> resumeVoiceBroadcast(room, lastVoiceBroadcastEvent)
+        val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
+                STATE_ROOM_VOICE_BROADCAST_INFO,
+                QueryStringValue.Equals(session.myUserId)
+        )?.asVoiceBroadcastEvent()
+        when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
+            VoiceBroadcastState.PAUSED -> resumeVoiceBroadcast(room, lastVoiceBroadcastEvent.reference)
             else -> Timber.d("## ResumeVoiceBroadcastUseCase: Cannot resume voice broadcast: currentState=$voiceBroadcastState")
         }
     }
 
-    private suspend fun resumeVoiceBroadcast(room: Room, event: Event?) {
+    /**
+     * Resume a paused voice broadcast in the given room.
+     *
+     * @param room the room related to the voice broadcast
+     * @param reference reference on the initial voice broadcast state event (ie. state=STARTED)
+     */
+    private suspend fun resumeVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## ResumeVoiceBroadcastUseCase: Send new voice broadcast info state event")
-        val lastVoiceBroadcastContent = event?.content.toModel<MessageVoiceBroadcastInfoContent>()
-        val relatesTo = if (lastVoiceBroadcastContent?.voiceBroadcastState == VoiceBroadcastState.STARTED) {
-            RelationDefaultContent(RelationType.REFERENCE, event?.eventId)
-        } else {
-            lastVoiceBroadcastContent?.relatesTo
-        }
         room.stateService().sendStateEvent(
                 eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
-                        relatesTo = relatesTo,
+                        relatesTo = reference,
                         voiceBroadcastStateStr = VoiceBroadcastState.RESUMED.value,
                 ).toContent(),
         )
