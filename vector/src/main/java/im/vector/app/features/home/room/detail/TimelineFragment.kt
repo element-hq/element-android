@@ -71,9 +71,7 @@ import im.vector.app.core.extensions.ensureEndsLeftToRight
 import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
@@ -249,15 +250,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
             val imeActionId = actionId and EditorInfo.IME_MASK_ACTION
-            if (EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId) {
-                sendTextMessage(v.text)
-                true
-            }
+            val isSendAction = EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId
             // Add external keyboard functionality (to send messages)
-            else if (null != keyEvent &&
+            val externalKeyboardPressedEnter = null != keyEvent &&
                     !keyEvent.isShiftPressed &&
                     keyEvent.keyCode == KeyEvent.KEYCODE_ENTER &&
-                    resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS) {
+                    resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS
+            if (isSendAction || externalKeyboardPressedEnter) {
                 sendTextMessage(v.text)
                 true
             } else false
@@ -716,6 +715,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun insertUserDisplayNameInTextEditor(userId: String) {
         val startToCompose = views.composerLayout.text.isNullOrBlank()
 
@@ -726,36 +726,32 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
-            // TODO move logic outside of fragment
-            sanitizeDisplayName(roomMember?.displayName ?: userId)
-                    .let { displayName ->
-                        buildSpannedString {
-                            append(displayName)
-                            setSpan(
-                                    PillImageSpan(
-                                            glideRequests,
-                                            avatarRenderer,
-                                            requireContext(),
-                                            MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
-                                    )
-                                            .also { it.bind(views.composerLayout.views.composerEditText) },
-                                    0,
-                                    displayName.length,
-                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                            append(if (startToCompose) ": " else " ")
-                        }.let { pill ->
-                            if (startToCompose) {
-                                if (displayName.startsWith("/")) {
-                                    // Ensure displayName will not be interpreted as a Slash command
-                                    views.composerLayout.views.composerEditText.append("\\")
-                                }
-                                views.composerLayout.views.composerEditText.append(pill)
-                            } else {
-                                views.composerLayout.views.composerEditText.text?.insert(views.composerLayout.views.composerEditText.selectionStart, pill)
-                            }
-                        }
-                    }
+            val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
+            val pill = buildSpannedString {
+                append(displayName)
+                setSpan(
+                        PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                requireContext(),
+                                MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
+                        )
+                                .also { it.bind(views.composerLayout.views.composerEditText) },
+                        0,
+                        displayName.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                append(if (startToCompose) ": " else " ")
+            }
+            if (startToCompose) {
+                if (displayName.startsWith("/")) {
+                    // Ensure displayName will not be interpreted as a Slash command
+                    views.composerLayout.views.composerEditText.append("\\")
+                }
+                views.composerLayout.views.composerEditText.append(pill)
+            } else {
+                views.composerLayout.views.composerEditText.text?.insert(views.composerLayout.views.composerEditText.selectionStart, pill)
+            }
         }
         focusComposerAndShowKeyboard()
     }

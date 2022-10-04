@@ -151,19 +151,9 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
                 updateRecordingUiState(VoiceMessageRecorderView.RecordingUiState.Idle)
             }
 
-            override fun onRecordingLimitReached() {
-                messageComposerViewModel.handle(
-                        MessageComposerAction.PauseRecordingVoiceMessage
-                )
-                updateRecordingUiState(VoiceMessageRecorderView.RecordingUiState.Draft)
-            }
+            override fun onRecordingLimitReached() = pauseRecording()
 
-            override fun onRecordingWaveformClicked() {
-                messageComposerViewModel.handle(
-                        MessageComposerAction.PauseRecordingVoiceMessage
-                )
-                updateRecordingUiState(VoiceMessageRecorderView.RecordingUiState.Draft)
-            }
+            override fun onRecordingWaveformClicked() = pauseRecording()
 
             override fun onVoiceWaveformTouchedUp(percentage: Float, duration: Int) {
                 messageComposerViewModel.handle(
@@ -181,6 +171,13 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
                 messageComposerViewModel.handle(
                         MessageComposerAction.OnVoiceRecordingUiStateChanged(state)
                 )
+            }
+
+            private fun pauseRecording() {
+                messageComposerViewModel.handle(
+                        MessageComposerAction.PauseRecordingVoiceMessage
+                )
+                updateRecordingUiState(VoiceMessageRecorderView.RecordingUiState.Draft)
             }
         }
     }
