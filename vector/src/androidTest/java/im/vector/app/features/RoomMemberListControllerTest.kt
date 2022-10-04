@@ -16,36 +16,26 @@
 
 package im.vector.app.features
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.core.epoxy.profiles.ProfileMatrixItemWithPowerLevelWithPresence
+import im.vector.app.core.utils.waitUntil
 import im.vector.app.features.roomprofile.members.RoomMemberListCategories
 import im.vector.app.features.roomprofile.members.RoomMemberListController
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class RoomMemberListControllerTest {
 
-    @get:Rule
-    val mvrxTestRule = MvRxTestRule()
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
     @Test
-    fun testControllerUserVerificationLevel() {
+    fun testControllerUserVerificationLevel() = runTest {
         val roomListController = RoomMemberListController(
                 avatarRenderer = mockk {
                 },
@@ -108,6 +98,8 @@ class RoomMemberListControllerTest {
         )
 
         roomListController.setData(state)
+
+        waitUntil { !roomListController.hasPendingModelBuild() }
 
         val models = roomListController.adapter.copyOfModels
 
