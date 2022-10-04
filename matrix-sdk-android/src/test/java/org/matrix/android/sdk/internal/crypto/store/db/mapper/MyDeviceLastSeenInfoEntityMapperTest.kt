@@ -25,6 +25,7 @@ private const val A_DEVICE_ID = "device-id"
 private const val AN_IP_ADDRESS = "ip-address"
 private const val A_TIMESTAMP = 123L
 private const val A_DISPLAY_NAME = "display-name"
+private const val A_USER_AGENT = "user-agent"
 
 class MyDeviceLastSeenInfoEntityMapperTest {
 
@@ -32,21 +33,55 @@ class MyDeviceLastSeenInfoEntityMapperTest {
 
     @Test
     fun `given an entity when mapping to model then all fields are correctly mapped`() {
+        // Given
         val entity = MyDeviceLastSeenInfoEntity(
                 deviceId = A_DEVICE_ID,
                 lastSeenIp = AN_IP_ADDRESS,
                 lastSeenTs = A_TIMESTAMP,
-                displayName = A_DISPLAY_NAME
+                displayName = A_DISPLAY_NAME,
+                lastSeenUserAgent = A_USER_AGENT,
         )
         val expectedDeviceInfo = DeviceInfo(
                 deviceId = A_DEVICE_ID,
                 lastSeenIp = AN_IP_ADDRESS,
                 lastSeenTs = A_TIMESTAMP,
-                displayName = A_DISPLAY_NAME
+                displayName = A_DISPLAY_NAME,
+                unstableLastSeenUserAgent = A_USER_AGENT,
         )
 
+        // When
         val deviceInfo = myDeviceLastSeenInfoEntityMapper.map(entity)
 
+        // Then
         deviceInfo shouldBeEqualTo expectedDeviceInfo
+    }
+
+    @Test
+    fun `given a device info when mapping to entity then all fields are correctly mapped`() {
+        // Given
+        val deviceInfo = DeviceInfo(
+                deviceId = A_DEVICE_ID,
+                lastSeenIp = AN_IP_ADDRESS,
+                lastSeenTs = A_TIMESTAMP,
+                displayName = A_DISPLAY_NAME,
+                unstableLastSeenUserAgent = A_USER_AGENT,
+        )
+        val expectedEntity = MyDeviceLastSeenInfoEntity(
+                deviceId = A_DEVICE_ID,
+                lastSeenIp = AN_IP_ADDRESS,
+                lastSeenTs = A_TIMESTAMP,
+                displayName = A_DISPLAY_NAME,
+                lastSeenUserAgent = A_USER_AGENT
+        )
+
+        // When
+        val entity = myDeviceLastSeenInfoEntityMapper.map(deviceInfo)
+
+        // Then
+        entity.deviceId shouldBeEqualTo expectedEntity.deviceId
+        entity.lastSeenIp shouldBeEqualTo expectedEntity.lastSeenIp
+        entity.lastSeenTs shouldBeEqualTo expectedEntity.lastSeenTs
+        entity.displayName shouldBeEqualTo expectedEntity.displayName
+        entity.lastSeenUserAgent shouldBeEqualTo expectedEntity.lastSeenUserAgent
     }
 }

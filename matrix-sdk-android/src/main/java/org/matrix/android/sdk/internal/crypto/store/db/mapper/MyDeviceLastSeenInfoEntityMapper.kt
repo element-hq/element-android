@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 internal class MyDeviceLastSeenInfoEntityMapper @Inject constructor() {
 
-    // TODO add unit tests
     fun map(entity: MyDeviceLastSeenInfoEntity): DeviceInfo {
         return DeviceInfo(
                 deviceId = entity.deviceId,
