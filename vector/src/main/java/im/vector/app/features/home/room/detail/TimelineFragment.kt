@@ -71,6 +71,7 @@ import im.vector.app.core.extensions.ensureEndsLeftToRight
 import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.extensions.trackItemsVisibilityChange
@@ -298,13 +299,13 @@ class TimelineFragment :
             }
         }
 
-        childFragmentManager.findFragmentById(R.id.composerContainer) as? MessageComposerFragment ?: run {
+        if (childFragmentManager.findFragmentById(R.id.composerContainer) == null) {
             childFragmentManager.commitTransaction {
                 replace(R.id.composerContainer, MessageComposerFragment())
             }
         }
 
-        childFragmentManager.findFragmentById(R.id.voiceMessageRecorderContainer) as? VoiceRecorderFragment ?: run {
+        if (childFragmentManager.findFragmentById(R.id.voiceMessageRecorderContainer) == null) {
             childFragmentManager.commitTransaction {
                 replace(R.id.voiceMessageRecorderContainer, VoiceRecorderFragment())
             }
