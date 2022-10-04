@@ -38,7 +38,7 @@ import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
-import im.vector.app.features.permalink.PermalinkUseCase
+import im.vector.app.features.permalink.PermalinkFactory
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,7 +60,7 @@ class PublicRoomsFragment :
 
     @Inject lateinit var publicRoomsController: PublicRoomsController
     @Inject lateinit var permalinkHandler: PermalinkHandler
-    @Inject lateinit var permalinkUseCase: PermalinkUseCase
+    @Inject lateinit var permalinkFactory: PermalinkFactory
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -128,7 +128,7 @@ class PublicRoomsFragment :
 
     override fun onUnknownRoomClicked(roomIdOrAlias: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            val permalink = permalinkUseCase.createPermalink(roomIdOrAlias)
+            val permalink = permalinkFactory.createPermalink(roomIdOrAlias)
             val isHandled = permalinkHandler
                     .launch(requireActivity(), permalink, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {

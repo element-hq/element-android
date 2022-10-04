@@ -22,7 +22,7 @@ import javax.inject.Inject
 /**
  * Contains synchronous methods to create permalinks from the Session.
  */
-class PermalinkUseCase @Inject constructor(
+class PermalinkFactory @Inject constructor(
         private val session: Session,
 ) {
     fun createPermalinkOfCurrentUser(): String? {

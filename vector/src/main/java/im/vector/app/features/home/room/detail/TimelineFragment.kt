@@ -169,7 +169,7 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
-import im.vector.app.features.permalink.PermalinkUseCase
+import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
@@ -248,7 +248,7 @@ class TimelineFragment :
     @Inject lateinit var clock: Clock
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
-    @Inject lateinit var permalinkUseCase: PermalinkUseCase
+    @Inject lateinit var permalinkFactory: PermalinkFactory
 
     companion object {
         const val MAX_TYPING_MESSAGE_USERS_COUNT = 4
@@ -869,7 +869,7 @@ class TimelineFragment :
             }
             R.id.menu_thread_timeline_copy_link -> {
                 getRootThreadEventId()?.let {
-                    val permalink = permalinkUseCase.createPermalink(timelineArgs.roomId, it)
+                    val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, it)
                     copyToClipboard(requireContext(), permalink, false)
                     showSnackWithMessage(getString(R.string.copied_to_clipboard))
                 }
@@ -881,7 +881,7 @@ class TimelineFragment :
             }
             R.id.menu_thread_timeline_share -> {
                 getRootThreadEventId()?.let {
-                    val permalink = permalinkUseCase.createPermalink(timelineArgs.roomId, it)
+                    val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, it)
                     shareText(requireContext(), permalink)
                 }
                 true
@@ -1790,7 +1790,7 @@ class TimelineFragment :
                 }
             }
             is EventSharedAction.CopyPermalink -> {
-                val permalink = permalinkUseCase.createPermalink(timelineArgs.roomId, action.eventId)
+                val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(getString(R.string.copied_to_clipboard))
             }

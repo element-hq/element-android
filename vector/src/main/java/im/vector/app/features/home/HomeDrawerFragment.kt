@@ -32,7 +32,7 @@ import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentHomeDrawerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.permalink.PermalinkUseCase
+import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceListFragment
@@ -50,7 +50,7 @@ class HomeDrawerFragment :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var buildMeta: BuildMeta
-    @Inject lateinit var permalinkUseCase: PermalinkUseCase
+    @Inject lateinit var permalinkFactory: PermalinkFactory
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -103,7 +103,7 @@ class HomeDrawerFragment :
         }
 
         views.homeDrawerInviteFriendButton.debouncedClicks {
-            permalinkUseCase.createPermalinkOfCurrentUser()?.let { permalink ->
+            permalinkFactory.createPermalinkOfCurrentUser()?.let { permalink ->
                 analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
                 val text = getString(R.string.invite_friends_text, permalink)
 
