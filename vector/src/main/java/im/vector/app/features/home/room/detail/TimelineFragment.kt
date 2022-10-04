@@ -129,7 +129,6 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.CanSendStatus
-import im.vector.app.features.home.room.detail.composer.MessageComposer
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerFragment
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
@@ -289,8 +288,6 @@ class TimelineFragment :
 
     private val lazyLoadedViews = RoomDetailLazyLoadedViews()
 
-    private lateinit var composer: MessageComposer
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Room
@@ -301,15 +298,13 @@ class TimelineFragment :
             }
         }
 
-        val composer = childFragmentManager.findFragmentById(R.id.composerContainer) as? MessageComposerFragment ?: run {
-            val fragment = MessageComposerFragment()
-            fragment.arguments = timelineArgs.toMvRxBundle()
+        childFragmentManager.findFragmentById(R.id.composerContainer) as? MessageComposerFragment ?: run {
             childFragmentManager.commitTransaction {
+                val fragment = MessageComposerFragment()
+                fragment.arguments = timelineArgs.toMvRxBundle()
                 replace(R.id.composerContainer, fragment)
             }
-            fragment
         }
-        this.composer = composer
 
         childFragmentManager.findFragmentById(R.id.voiceMessageRecorderContainer) as? VoiceRecorderFragment ?: run {
             childFragmentManager.commitTransaction {
@@ -970,7 +965,7 @@ class TimelineFragment :
             is RoomDetailPendingAction.JumpToReadReceipt ->
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser ->
-                insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
+                messageComposerViewModel.handle(MessageComposerAction.InsertUserDisplayName(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.OpenRoom ->
                 handleOpenRoom(RoomDetailViewEvents.OpenRoom(roomDetailPendingAction.roomId, roomDetailPendingAction.closeCurrentRoom))
         }
@@ -1051,7 +1046,7 @@ class TimelineFragment :
                 override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
                     (model as? AbsMessageItem)?.attributes?.informationData?.let {
                         val eventId = it.eventId
-                        messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(eventId, composer.getCurrentText().toString()))
+                        messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(eventId))
                     }
                 }
 
@@ -1573,7 +1568,7 @@ class TimelineFragment :
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
-        insertUserDisplayNameInTextEditor(informationData.senderId)
+        messageComposerViewModel.handle(MessageComposerAction.InsertUserDisplayName(informationData.senderId))
     }
 
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
@@ -1776,11 +1771,11 @@ class TimelineFragment :
                 }
             }
             is EventSharedAction.Quote -> {
-                messageComposerViewModel.handle(MessageComposerAction.EnterQuoteMode(action.eventId, composer.getCurrentText().toString()))
+                messageComposerViewModel.handle(MessageComposerAction.EnterQuoteMode(action.eventId))
             }
             is EventSharedAction.Reply -> {
                 if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
-                    messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(action.eventId, composer.getCurrentText().toString()))
+                    messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(action.eventId))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
@@ -1879,16 +1874,6 @@ class TimelineFragment :
                     timelineViewModel.handle(RoomDetailAction.IgnoreUser(senderId))
                 }
                 .show()
-    }
-
-    /**
-     * Insert a user displayName in the message editor.
-     *
-     * @param userId the userId.
-     */
-    @SuppressLint("SetTextI18n")
-    private fun insertUserDisplayNameInTextEditor(userId: String) {
-        composer.insertUserDisplayNameInTextEditor(userId)
     }
 
     private fun showSnackWithMessage(message: String) {

@@ -22,7 +22,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.text.Spannable
 import android.text.format.DateUtils
 import android.view.KeyEvent
@@ -112,13 +111,8 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
 import javax.inject.Inject
 
-interface MessageComposer {
-    fun getCurrentText(): Editable?
-    fun insertUserDisplayNameInTextEditor(userId: String)
-}
-
 @AndroidEntryPoint
-class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), MessageComposer, AttachmentsHelper.Callback, AttachmentTypeSelectorView.Callback {
+class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), AttachmentsHelper.Callback, AttachmentTypeSelectorView.Callback {
 
     companion object {
         private const val ircPattern = " (IRC)"
@@ -196,6 +190,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), M
                     }
                     showErrorInSnackbar(it.throwable)
                 }
+                is MessageComposerViewEvents.InsertUserDisplayName -> insertUserDisplayNameInTextEditor(it.userId)
             }
         }
 
@@ -204,10 +199,10 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), M
                 return@onEach
             }
             when (mode) {
-                is SendMode.Regular -> renderRegularMode(mode.text)
-                is SendMode.Edit -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.Quote -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.action_quote, mode.text)
-                is SendMode.Reply -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.Regular -> renderRegularMode(mode.text.toString())
+                is SendMode.Edit -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text.toString())
+                is SendMode.Quote -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.action_quote, mode.text.toString())
+                is SendMode.Reply -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text.toString())
                 is SendMode.Voice -> renderVoiceMessageMode(mode.text)
             }
         }
@@ -304,7 +299,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), M
             }
 
             override fun onCloseRelatedMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(views.composerLayout.text.toString(), false))
+                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(false))
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
@@ -723,7 +718,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), M
     private fun handleShareData() {
         when (val sharedData = timelineArgs.sharedData) {
             is SharedData.Text -> {
-                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(sharedData.text, fromSharing = true))
+                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(sharedData.text))
+                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(fromSharing = true))
             }
             is SharedData.Attachments -> {
                 // open share edition
@@ -733,17 +729,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), M
         }
     }
 
-    override fun getCurrentText(): Editable? {
-        return views.composerLayout.text
-    }
-
-    override fun insertUserDisplayNameInTextEditor(userId: String) {
+    private fun insertUserDisplayNameInTextEditor(userId: String) {
         val startToCompose = views.composerLayout.text.isNullOrBlank()
 
         if (startToCompose &&
                 userId == session.myUserId) {
             // Empty composer, current user: start an emote
-            views.composerLayout.views.composerEditText.setText(Command.EMOTE.command + " ")
+            views.composerLayout.views.composerEditText.setText("${Command.EMOTE.command} ")
             views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
