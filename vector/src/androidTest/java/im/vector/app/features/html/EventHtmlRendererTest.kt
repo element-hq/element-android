@@ -18,6 +18,7 @@ package im.vector.app.features.html
 
 import androidx.core.text.toSpannable
 import androidx.test.platform.app.InstrumentationRegistry
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.toTestSpan
 import im.vector.app.features.settings.VectorPreferences
@@ -36,11 +37,13 @@ class EventHtmlRendererTest {
     private val fakeVectorPreferences = mockk<VectorPreferences>().also {
         every { it.latexMathsIsEnabled() } returns false
     }
+    private val fakeSessionHolder = mockk<ActiveSessionHolder>()
 
     private val renderer = EventHtmlRenderer(
             MatrixHtmlPluginConfigure(ColorProvider(context), context.resources),
             context,
-            fakeVectorPreferences
+            fakeVectorPreferences,
+            fakeSessionHolder,
     )
 
     @Test
