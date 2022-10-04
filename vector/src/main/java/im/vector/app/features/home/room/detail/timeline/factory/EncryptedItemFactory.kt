@@ -32,18 +32,20 @@ import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
 // This class handles timeline events who haven't been successfully decrypted
-class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
-                                               private val colorProvider: ColorProvider,
-                                               private val stringProvider: StringProvider,
-                                               private val avatarSizeProvider: AvatarSizeProvider,
-                                               private val drawableProvider: DrawableProvider,
-                                               private val attributesFactory: MessageItemAttributesFactory,
-                                               private val vectorPreferences: VectorPreferences) {
+class EncryptedItemFactory @Inject constructor(
+        private val messageInformationDataFactory: MessageInformationDataFactory,
+        private val colorProvider: ColorProvider,
+        private val stringProvider: StringProvider,
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val drawableProvider: DrawableProvider,
+        private val attributesFactory: MessageItemAttributesFactory,
+        private val vectorPreferences: VectorPreferences
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -89,7 +91,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                     }
                                 }
                             }
-                            else                                  -> {
+                            else -> {
                                 span {
                                     drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
                                         image(it, "baseline")
@@ -106,15 +108,23 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 }
 
                 val informationData = messageInformationDataFactory.create(params)
-                val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, params.callback)
+                val threadDetails = if (params.isFromThreadTimeline()) null else event.root.threadDetails
+                val attributes = attributesFactory.create(
+                        messageContent = event.root.content.toModel<EncryptedEventContent>(),
+                        informationData = informationData,
+                        callback = params.callback,
+                        threadDetails = threadDetails,
+                        reactionsSummaryEvents = params.reactionsSummaryEvents
+                )
                 return MessageTextItem_()
+                        .layout(informationData.messageLayout.layoutRes)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(params.isHighlighted)
                         .attributes(attributes)
                         .message(spannableStr.toEpoxyCharSequence())
                         .movementMethod(createLinkMovementMethod(params.callback))
             }
-            else                                             -> null
+            else -> null
         }
     }
 }

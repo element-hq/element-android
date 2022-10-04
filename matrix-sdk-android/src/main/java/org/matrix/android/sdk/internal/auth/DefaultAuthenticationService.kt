@@ -20,8 +20,9 @@ import android.net.Uri
 import dagger.Lazy
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 import org.matrix.android.sdk.internal.di.Unauthenticated
@@ -73,10 +75,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     override fun getLastAuthenticatedSession(): Session? {
-        val sessionParams = sessionParamsStore.getLast()
-        return sessionParams?.let {
-            sessionManager.getOrCreateSession(it)
-        }
+        return sessionManager.getLastSession()
     }
 
     override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
@@ -130,16 +129,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?.trim { it == '/' }
     }
 
-    /**
-     * This is the entry point of the authentication service.
-     * homeServerConnectionConfig contains a homeserver URL probably entered by the user, which can be a
-     * valid homeserver API url, the url of Element Web, or anything else.
-     */
     override suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        pendingSessionData = null
-
-        pendingSessionStore.delete()
-
         val result = runCatching {
             getLoginFlowInternal(homeServerConnectionConfig)
         }
@@ -290,7 +280,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
                 getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
             }
-            else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+            else -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
     }
 
@@ -304,7 +294,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
-                isOutdatedHomeserver = !versions.isSupportedBySdk()
+                isOutdatedHomeserver = !versions.isSupportedBySdk(),
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
         )
     }
 
@@ -323,8 +314,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 }
     }
 
-    override val isRegistrationStarted: Boolean
-        get() = currentRegistrationWizard?.isRegistrationStarted == true
+    override fun isRegistrationStarted() = currentRegistrationWizard?.isRegistrationStarted() == true
 
     override fun getLoginWizard(): LoginWizard {
         return currentLoginWizard
@@ -368,35 +358,50 @@ internal class DefaultAuthenticationService @Inject constructor(
         pendingSessionStore.delete()
     }
 
-    override suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              credentials: Credentials): Session {
-        return sessionCreator.createSession(credentials, homeServerConnectionConfig)
+    override suspend fun createSessionFromSso(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            credentials: Credentials
+    ): Session {
+        return sessionCreator.createSession(credentials, homeServerConnectionConfig, LoginType.SSO)
     }
 
-    override suspend fun getWellKnownData(matrixId: String,
-                                          homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult {
+    override suspend fun getWellKnownData(
+            matrixId: String,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ): WellknownResult {
         if (!MatrixPatterns.isUserId(matrixId)) {
             throw MatrixIdFailure.InvalidMatrixId
         }
 
-        return getWellknownTask.execute(GetWellknownTask.Params(
-                domain = matrixId.getDomain(),
-                homeServerConnectionConfig = homeServerConnectionConfig)
+        return getWellknownTask.execute(
+                GetWellknownTask.Params(
+                        domain = matrixId.getServerName().substringBeforeLast(":"),
+                        homeServerConnectionConfig = homeServerConnectionConfig.orWellKnownDefaults()
+                )
         )
     }
 
-    override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              matrixId: String,
-                                              password: String,
-                                              initialDeviceName: String,
-                                              deviceId: String?): Session {
-        return directLoginTask.execute(DirectLoginTask.Params(
-                homeServerConnectionConfig = homeServerConnectionConfig,
-                userId = matrixId,
-                password = password,
-                deviceName = initialDeviceName,
-                deviceId = deviceId
-        ))
+    private fun HomeServerConnectionConfig?.orWellKnownDefaults() = this ?: HomeServerConnectionConfig.Builder()
+            // server uri is ignored when doing a wellknown lookup as we use the matrix id domain instead
+            .withHomeServerUri("https://dummy.org")
+            .build()
+
+    override suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String?
+    ): Session {
+        return directLoginTask.execute(
+                DirectLoginTask.Params(
+                        homeServerConnectionConfig = homeServerConnectionConfig,
+                        userId = matrixId,
+                        password = password,
+                        deviceName = initialDeviceName,
+                        deviceId = deviceId
+                )
+        )
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

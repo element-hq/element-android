@@ -25,9 +25,10 @@ import org.matrix.android.sdk.api.session.events.model.EventType
  */
 sealed class EditablePermission(@StringRes val labelResId: Int, @StringRes val spaceLabelResId: Int = labelResId) {
     // Updates `content.events.[eventType]`
-    open class EventTypeEditablePermission(val eventType: String,
-                                           @StringRes labelResId: Int,
-                                           @StringRes spaceLabelResId: Int = labelResId
+    open class EventTypeEditablePermission(
+            val eventType: String,
+            @StringRes labelResId: Int,
+            @StringRes spaceLabelResId: Int = labelResId
     ) : EditablePermission(labelResId, spaceLabelResId)
 
     class ModifyWidgets : EventTypeEditablePermission(
@@ -99,7 +100,7 @@ sealed class EditablePermission(@StringRes val labelResId: Int, @StringRes val s
     class ChangeSettings : EditablePermission(R.string.room_permissions_change_settings)
 
     // Updates `content.kick`
-    class KickUsers : EditablePermission(R.string.room_permissions_kick_users)
+    class KickUsers : EditablePermission(R.string.room_permissions_remove_users)
 
     // Updates `content.ban`
     class BanUsers : EditablePermission(R.string.room_permissions_ban_users)

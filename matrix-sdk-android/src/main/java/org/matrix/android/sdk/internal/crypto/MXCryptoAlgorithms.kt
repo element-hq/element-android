@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
+
 // TODO Update comment
 internal object MXCryptoAlgorithms {
 
@@ -29,7 +32,7 @@ internal object MXCryptoAlgorithms {
         return when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM,
             MXCRYPTO_ALGORITHM_OLM -> true
-            else                   -> false
+            else -> false
         }
     }
 
@@ -44,7 +47,7 @@ internal object MXCryptoAlgorithms {
         return when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM,
             MXCRYPTO_ALGORITHM_OLM -> true
-            else                   -> false
+            else -> false
         }
     }
 

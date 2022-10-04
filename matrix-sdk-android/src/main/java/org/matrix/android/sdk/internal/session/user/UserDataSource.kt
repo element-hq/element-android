@@ -36,8 +36,10 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
-internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                  private val realmSessionProvider: RealmSessionProvider) {
+internal class UserDataSource @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider
+) {
 
     private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
         monarchy.createDataSourceFactory { realm ->

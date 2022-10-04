@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Call feature -->
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
@@ -34,16 +35,12 @@
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <!-- Jitsi libs adds CALENDAR permissions, but we can remove them safely according to https://github.com/jitsi/jitsi-meet/issues/4068#issuecomment-480482481 -->
-    <uses-permission
-        android:name="android.permission.READ_CALENDAR"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.WRITE_CALENDAR"
-        tools:node="remove" />
+    <!-- Location Sharing -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Jitsi SDK is now API23+ -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -70,17 +67,7 @@
         </intent>
     </queries>
 
-    <application
-        android:name=".VectorApplication"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Vector.Light"
-        tools:replace="android:allowBackup">
+    <application android:supportsRtl="true">
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -94,23 +81,6 @@
         <activity
             android:name=".features.MainActivity"
             android:theme="@style/Theme.Vector.Launcher" />
-
-        <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
-        <!-- exported="true" is required to launch application -->
-        <activity-alias
-            android:name=".features.Alias"
-            android:exported="true"
-            android:targetActivity=".features.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity-alias>
 
         <activity android:name=".features.home.HomeActivity" />
 
@@ -171,6 +141,8 @@
         <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
+        <activity android:name=".features.home.room.threads.ThreadsActivity" />
+
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
             android:parentActivityName=".features.home.HomeActivity">
@@ -178,7 +150,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
         </activity>
-        <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
@@ -288,7 +259,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
-            android:taskAffinity=".features.call.VectorCallActivity" />
+            android:taskAffinity=".features.call.VectorCallActivity.${appTaskAffinitySuffix}" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
@@ -297,7 +268,11 @@
             android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
-        <activity android:name=".features.widgets.WidgetActivity" />
+        <activity
+            android:name=".features.widgets.WidgetActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true" />
+
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
@@ -333,11 +308,21 @@
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
+        <activity android:name=".features.location.LocationSharingActivity" />
+        <activity android:name=".features.location.live.map.LiveLocationMapViewActivity" />
+        <activity android:name=".features.settings.font.FontScaleSettingActivity" />
+        <activity android:name=".features.call.dialpad.PstnDialActivity" />
+        <activity android:name=".features.home.room.list.home.invites.InvitesActivity" />
+        <activity android:name=".features.home.room.list.home.release.ReleaseNotesActivity" />
+        <activity android:name=".features.settings.devices.v2.overview.SessionOverviewActivity" />
+        <activity android:name=".features.settings.devices.v2.othersessions.OtherSessionsActivity" />
+        <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity" />
+        <activity android:name=".features.settings.devices.v2.rename.RenameSessionActivity" />
 
         <!-- Services -->
 
         <service
-            android:name=".core.services.CallService"
+            android:name=".core.services.CallAndroidService"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -347,18 +332,34 @@
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
         <service
-            android:name=".core.services.VectorSyncService"
+            android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
             tools:ignore="Instantiatable" />
 
         <service
-            android:name=".features.call.telecom.VectorConnectionService"
+            android:name=".features.call.telecom.VectorConnectionAndroidService"
             android:exported="false"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".features.location.live.tracking.LocationSharingAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <service
+            android:name=".features.start.StartAppAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".features.call.webrtc.ScreenCaptureAndroidService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            tools:targetApi="Q" />
 
         <!-- Receivers -->
 
@@ -388,41 +389,33 @@
             </intent-filter>
         </receiver>
 
-        <!-- Providers -->
+        <!-- UnifiedPush -->
+        <receiver
+            android:name=".core.pushers.VectorUnifiedPushMessagingReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED" />
+            </intent-filter>
+        </receiver>
 
-        <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
-            <!-- We init the lib ourself in EmojiCompatWrapper -->
-            <meta-data
-                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-                tools:node="remove" />
-        </provider>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/sdk_provider_paths" />
-        </provider>
-
-        <!-- Temporary fix for Android 12. android:exported has to be explicitly set when targeting Android 12
-        Do it for services coming from dependencies - BEGIN -->
-        <service
-            android:name="androidx.sharetarget.ChooserTargetServiceCompat"
-            android:exported="false"
-            tools:node="merge" />
-        <!-- Temporary fix for Android 12 change - END -->
+        <receiver
+            android:name=".core.pushers.KeepInternalDistributor"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <!--
+                This action is checked to track installed and uninstalled distributors.
+                We declare it to keep the background sync as an internal
+                unifiedpush distributor.
+                -->
+                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

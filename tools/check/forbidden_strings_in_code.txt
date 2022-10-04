@@ -60,7 +60,7 @@ private short
 final short
 
 ### Line length is limited to 160 chars. Please split long lines
-[^─]{161}
+#[^─]{161}
 
 ### "DO NOT COMMIT" has been committed
 DO NOT COMMIT
@@ -159,9 +159,6 @@ Formatter\.formatShortFileSize===1
 # DISABLED
 # android\.text\.TextUtils
 
-### This is not a rule, but a warning: the number of "enum class" has changed. For Json classes, it is mandatory that they have `@JsonClass(generateAdapter = false)`. If the enum is not used as a Json class, change the value in file forbidden_strings_in_code.txt
-enum class===121
-
 ### Do not import temporary legacy classes
 import org.matrix.android.sdk.internal.legacy.riot===3
 import org.matrix.androidsdk.crypto.data===2
@@ -177,3 +174,17 @@ PreferenceManager\.getDefaultSharedPreferences==2
 
 ### Do not use `template_` string. Please remove the prefix `template_` to use the generated resource instead.
 R\.string\.template_
+
+### Use the Clock interface, or use `measureTimeMillis`
+System\.currentTimeMillis\(\)===2
+
+### Remove extra space between the name and the description
+\* @\w+ \w+  +
+
+### Please use the MenuProvider interface now
+onCreateOptionsMenu
+onOptionsItemSelected
+onPrepareOptionsMenu
+
+### Suspicious String template. Please check that the string template will behave as expected, i.e. the class field and not the whole object will be used. For instance `Timber.d("$event.type")` is not correct, you should write `Timber.d("${event.type}")`. In the former the whole event content will be logged, since it's a data class. If this is expected (i.e. to fix false positive), please add explicit curly braces (`{` and `}`) around the variable, for instance `"elementLogs.${i}.txt"`
+\$[a-zA-Z_]\w*\??\.[a-zA-Z_]

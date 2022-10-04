@@ -26,16 +26,16 @@ import kotlin.math.ceil
  * HMAC-based Extract-and-Expand Key Derivation Function (HkdfSha256)
  * [RFC-5869] https://tools.ietf.org/html/rfc5869
  */
-object HkdfSha256 {
+internal object HkdfSha256 {
 
     fun deriveSecret(inputKeyMaterial: ByteArray, salt: ByteArray?, info: ByteArray, outputLength: Int): ByteArray {
         return expand(extract(salt, inputKeyMaterial), info, outputLength)
     }
 
     /**
-     * HkdfSha256-Extract(salt, IKM) -> PRK
+     * HkdfSha256-Extract(salt, IKM) -> PRK.
      *
-     * @param salt  optional salt value (a non-secret random value);
+     * @param salt optional salt value (a non-secret random value);
      * if not provided, it is set to a string of HashLen (size in octets) zeros.
      * @param ikm input keying material
      */
@@ -45,7 +45,7 @@ object HkdfSha256 {
     }
 
     /**
-     * HkdfSha256-Expand(PRK, info, L) -> OKM
+     * HkdfSha256-Expand(PRK, info, L) -> OKM.
      *
      * @param prk a pseudorandom key of at least HashLen bytes (usually, the output from the extract step)
      * @param info optional context and application specific information (can be empty)
@@ -70,7 +70,7 @@ object HkdfSha256 {
            T(2) = HMAC-Hash(PRK, T(1) | info | 0x02)
            T(3) = HMAC-Hash(PRK, T(2) | info | 0x03)
            ...
-        */
+         */
         val n = ceil(outputLength.toDouble() / HASH_LEN.toDouble()).toInt()
 
         var stepHash = ByteArray(0) // T(0) empty string (zero length)

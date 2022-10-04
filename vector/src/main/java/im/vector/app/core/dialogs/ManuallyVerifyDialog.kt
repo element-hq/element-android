@@ -21,7 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogDeviceVerifyBinding
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 object ManuallyVerifyDialog {
 

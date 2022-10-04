@@ -33,7 +33,7 @@ import javax.inject.Inject
 // value : dict key $UserId
 //              value dict key ts
 //                    dict value ts value
-typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
+internal typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
@@ -44,12 +44,16 @@ internal class ReadReceiptHandler @Inject constructor(
 
     companion object {
 
-        fun createContent(userId: String, eventId: String): ReadReceiptContent {
+        fun createContent(
+                userId: String,
+                eventId: String,
+                currentTimeMillis: Long
+        ): ReadReceiptContent {
             return mapOf(
                     eventId to mapOf(
                             READ_KEY to mapOf(
                                     userId to mapOf(
-                                            TIMESTAMP_KEY to System.currentTimeMillis().toDouble()
+                                            TIMESTAMP_KEY to currentTimeMillis.toDouble()
                                     )
                             )
                     )
@@ -57,11 +61,13 @@ internal class ReadReceiptHandler @Inject constructor(
         }
     }
 
-    fun handle(realm: Realm,
-               roomId: String,
-               content: ReadReceiptContent?,
-               isInitialSync: Boolean,
-               aggregator: SyncResponsePostTreatmentAggregator?) {
+    fun handle(
+            realm: Realm,
+            roomId: String,
+            content: ReadReceiptContent?,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         content ?: return
 
         try {
@@ -71,11 +77,13 @@ internal class ReadReceiptHandler @Inject constructor(
         }
     }
 
-    private fun handleReadReceiptContent(realm: Realm,
-                                         roomId: String,
-                                         content: ReadReceiptContent,
-                                         isInitialSync: Boolean,
-                                         aggregator: SyncResponsePostTreatmentAggregator?) {
+    private fun handleReadReceiptContent(
+            realm: Realm,
+            roomId: String,
+            content: ReadReceiptContent,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         if (isInitialSync) {
             initialSyncStrategy(realm, roomId, content)
         } else {
@@ -99,10 +107,12 @@ internal class ReadReceiptHandler @Inject constructor(
         realm.insertOrUpdate(readReceiptSummaries)
     }
 
-    private fun incrementalSyncStrategy(realm: Realm,
-                                        roomId: String,
-                                        content: ReadReceiptContent,
-                                        aggregator: SyncResponsePostTreatmentAggregator?) {
+    private fun incrementalSyncStrategy(
+            realm: Realm,
+            roomId: String,
+            content: ReadReceiptContent,
+            aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
             Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")

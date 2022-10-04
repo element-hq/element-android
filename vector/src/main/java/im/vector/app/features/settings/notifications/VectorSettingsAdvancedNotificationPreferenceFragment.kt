@@ -17,18 +17,19 @@ package im.vector.app.features.settings.notifications
 
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
-import javax.inject.Inject
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
-class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor() :
-    VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsAdvancedNotificationPreferenceFragment :
+        VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notification_advanced
 
@@ -38,7 +39,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
@@ -57,10 +58,12 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
 
                             lifecycleScope.launch {
                                 val result = runCatching {
-                                    session.updatePushRuleActions(ruleAndKind.kind,
+                                    session.pushRuleService().updatePushRuleActions(
+                                            ruleAndKind.kind,
                                             ruleAndKind.pushRule.ruleId,
                                             enabled,
-                                            newActions)
+                                            newActions
+                                    )
                                 }
                                 if (!isAdded) {
                                     return@launch

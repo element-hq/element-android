@@ -20,8 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
@@ -29,16 +31,17 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.ssoIdentityProviders
+import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
-import javax.inject.Inject
 
 /**
- * In this screen, the user is asked to sign up or to sign in to the homeserver
+ * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
-class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
+@AndroidEntryPoint
+class FtueAuthSignUpSignInSelectionFragment :
+        AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
         return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)
@@ -55,44 +58,39 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         views.loginSignupSigninSignIn.setOnClickListener { signIn() }
     }
 
-    private fun setupUi(state: OnboardingViewState) {
+    private fun render(state: OnboardingViewState) {
         when (state.serverType) {
-            ServerType.MatrixOrg -> {
-                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
-                views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
-            }
-            ServerType.EMS       -> {
-                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
-                views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginSignupSigninText.text = state.homeServerUrlFromUser.toReducedUrl()
-            }
-            ServerType.Other     -> {
-                views.loginSignupSigninServerIcon.isVisible = false
-                views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
-            }
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.MatrixOrg -> renderServerInformation(
+                    icon = R.drawable.ic_logo_matrix_org,
+                    title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
+                    subtitle = getString(R.string.login_server_matrix_org_text)
+            )
+            ServerType.EMS -> renderServerInformation(
+                    icon = R.drawable.ic_logo_element_matrix_services,
+                    title = getString(R.string.login_connect_to_modular),
+                    subtitle = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+            )
+            ServerType.Other -> renderServerInformation(
+                    icon = null,
+                    title = getString(R.string.login_server_other_title),
+                    subtitle = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
+            )
+            ServerType.Unknown -> Unit /* Should not happen */
         }
 
-        when (state.loginMode) {
+        when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()?.sorted()
-                views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(id: String?) {
-                        viewModel.getSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                providerId = id
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSignupSigninSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode.ssoState, Mode.MODE_CONTINUE) { provider ->
+                    viewModel.fetchSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            provider = provider
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             }
-            else                        -> {
+            else -> {
                 // SSO only is managed without container as well as No sso
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
@@ -100,14 +98,22 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         }
     }
 
+    private fun renderServerInformation(@DrawableRes icon: Int?, title: String, subtitle: String) {
+        icon?.let { views.loginSignupSigninServerIcon.setImageResource(it) }
+        views.loginSignupSigninServerIcon.isVisible = icon != null
+        views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+        views.loginSignupSigninTitle.text = title
+        views.loginSignupSigninText.text = subtitle
+    }
+
     private fun setupButtons(state: OnboardingViewState) {
-        when (state.loginMode) {
+        when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
-            else             -> {
+            else -> {
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }
@@ -115,11 +121,11 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     }
 
     private fun submit() = withState(viewModel) { state ->
-        if (state.loginMode is LoginMode.Sso) {
-            viewModel.getSsoUrl(
+        if (state.selectedHomeserver.preferredLoginMode is LoginMode.Sso) {
+            viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
-                    providerId = null
+                    provider = null
             )
                     ?.let { openInCustomTab(it) }
         } else {
@@ -136,7 +142,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        setupUi(state)
+        render(state)
         setupButtons(state)
     }
 }

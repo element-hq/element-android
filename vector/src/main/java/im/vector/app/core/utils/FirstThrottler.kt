@@ -30,7 +30,7 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
 
         fun waitMillis(): Long {
             return when (this) {
-                Yes   -> 0
+                Yes -> 0
                 is No -> shouldWaitMillis
             }
         }

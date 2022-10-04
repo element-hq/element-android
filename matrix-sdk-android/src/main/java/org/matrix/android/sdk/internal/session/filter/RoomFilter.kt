@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class RoomFilter(
+internal data class RoomFilter(
         /**
          * A list of room IDs to exclude. If this list is absent then no rooms are excluded.
          * A matching room will be excluded even if it is listed in the 'rooms' filter.
@@ -40,7 +40,7 @@ data class RoomFilter(
          */
         @Json(name = "ephemeral") val ephemeral: RoomEventFilter? = null,
         /**
-         * Include rooms that the user has left in the sync, default false
+         * Include rooms that the user has left in the sync, default false.
          */
         @Json(name = "include_leave") val includeLeave: Boolean? = null,
         /**

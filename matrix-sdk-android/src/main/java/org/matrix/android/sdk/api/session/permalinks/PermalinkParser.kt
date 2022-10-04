@@ -23,7 +23,7 @@ import timber.log.Timber
 import java.net.URLDecoder
 
 /**
- * This class turns a uri to a [PermalinkData]
+ * This class turns a uri to a [PermalinkData].
  * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
  * or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
  * or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)
@@ -31,7 +31,7 @@ import java.net.URLDecoder
 object PermalinkParser {
 
     /**
-     * Turns a uri string to a [PermalinkData]
+     * Turns a uri string to a [PermalinkData].
      */
     fun parse(uriString: String): PermalinkData {
         val uri = Uri.parse(uriString)
@@ -39,7 +39,7 @@ object PermalinkParser {
     }
 
     /**
-     * Turns a uri to a [PermalinkData]
+     * Turns a uri to a [PermalinkData].
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
      */
     fun parse(uri: Uri): PermalinkData {
@@ -61,27 +61,29 @@ object PermalinkParser {
         val params = safeFragment
                 .split(MatrixPatterns.SEP_REGEX)
                 .filter { it.isNotEmpty() }
-                .map { URLDecoder.decode(it, "UTF-8") }
                 .take(2)
 
+        val decodedParams = params
+                .map { URLDecoder.decode(it, "UTF-8") }
+
         val identifier = params.getOrNull(0)
-        val extraParameter = params.getOrNull(1)
+        val decodedIdentifier = decodedParams.getOrNull(0)
+        val extraParameter = decodedParams.getOrNull(1)
         return when {
-            identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
-            MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier)    -> {
-                handleRoomIdCase(fragment, identifier, matrixToUri, extraParameter, viaQueryParameters)
+            identifier.isNullOrEmpty() || decodedIdentifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isUserId(decodedIdentifier) -> PermalinkData.UserLink(userId = decodedIdentifier)
+            MatrixPatterns.isRoomId(decodedIdentifier) -> {
+                handleRoomIdCase(fragment, decodedIdentifier, matrixToUri, extraParameter, viaQueryParameters)
             }
-            MatrixPatterns.isRoomAlias(identifier) -> {
+            MatrixPatterns.isRoomAlias(decodedIdentifier) -> {
                 PermalinkData.RoomLink(
-                        roomIdOrAlias = identifier,
+                        roomIdOrAlias = decodedIdentifier,
                         isRoomAlias = true,
                         eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
                         viaParameters = viaQueryParameters
                 )
             }
-            else                                   -> PermalinkData.FallbackLink(uri)
+            else -> PermalinkData.FallbackLink(uri, MatrixPatterns.isGroupId(identifier))
         }
     }
 

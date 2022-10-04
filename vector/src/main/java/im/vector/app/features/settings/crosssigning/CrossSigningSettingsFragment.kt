@@ -25,10 +25,10 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
@@ -38,12 +38,14 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
 /**
- * This Fragment is only used when user activates developer mode from the settings
+ * This Fragment is only used when user activates developer mode from the settings.
  */
-class CrossSigningSettingsFragment @Inject constructor(
-        private val controller: CrossSigningSettingsController,
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class CrossSigningSettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         CrossSigningSettingsController.InteractionListener {
+
+    @Inject lateinit var controller: CrossSigningSettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -54,14 +56,14 @@ class CrossSigningSettingsFragment @Inject constructor(
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     viewModel.handle(CrossSigningSettingsAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(CrossSigningSettingsAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(CrossSigningSettingsAction.ReAuthCancelled)
                 }
             }
@@ -77,7 +79,7 @@ class CrossSigningSettingsFragment @Inject constructor(
         setupRecyclerView()
         viewModel.observeViewEvents { event ->
             when (event) {
-                is CrossSigningSettingsViewEvents.Failure              -> {
+                is CrossSigningSettingsViewEvents.Failure -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(event.throwable))
@@ -85,11 +87,13 @@ class CrossSigningSettingsFragment @Inject constructor(
                             .show()
                     Unit
                 }
-                is CrossSigningSettingsViewEvents.RequestReAuth        -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                is CrossSigningSettingsViewEvents.RequestReAuth -> {
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             event.registrationFlowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)).let { intent ->
+                            getString(R.string.initialize_cross_signing)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
@@ -97,10 +101,10 @@ class CrossSigningSettingsFragment @Inject constructor(
                     views.waitingView.waitingView.isVisible = true
                     views.waitingView.waitingStatusText.setTextOrHide(event.status)
                 }
-                CrossSigningSettingsViewEvents.HideModalWaitingView    -> {
+                CrossSigningSettingsViewEvents.HideModalWaitingView -> {
                     views.waitingView.waitingView.isVisible = false
                 }
-            }.exhaustive
+            }
         }
     }
 

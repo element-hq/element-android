@@ -20,18 +20,18 @@ import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.utils.DimensionConverter
 
 /**
- * Children must override getViewType()
+ * Children must override getViewType().
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder>(@LayoutRes layoutId: Int) : VectorEpoxyModel<H>(layoutId), ItemWithEvents {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
@@ -40,8 +40,18 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    lateinit var dimensionConverter: DimensionConverter
+    final override fun getViewType(): Int {
+        // This makes sure we have a unique integer for the combination of layout and ViewStubId.
+        val pairingResult = pairingFunction(layout.toLong(), getViewStubId().toLong())
+        return (pairingResult - Int.MAX_VALUE).toInt()
+    }
+
+    abstract fun getViewStubId(): Int
+
+    // Szudzik function
+    private fun pairingFunction(a: Long, b: Long): Long {
+        return if (a >= b) a * a + a + b else a + b * b
+    }
 
     @CallSuper
     override fun bind(holder: H) {

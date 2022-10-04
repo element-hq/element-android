@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_splash_text3">Extend &amp; customise your experience</string>
+    <string name="room_list_quick_actions_favorite_remove">Remove from favourites</string>
+    <string name="room_list_quick_actions_favorite_add">Add to favourites</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronising Self Signing key</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronising User key</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronising Master key</string>
+    <string name="initialize_cross_signing">Initialise CrossSigning</string>
+    <string name="login_error_threepid_denied">Your email domain is not authorised to register on this server</string>
+    <string name="unrecognized_command">Unrecognised command: %s</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimised for real time</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimised for battery</string>
+    <string name="settings_background_sync">Background synchronisation</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimisation</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
+    <string name="settings_troubleshoot_test_battery_title">Battery Optimisation</string>
+    <string name="error_unauthorized">Unauthorised, missing valid authentication credentials</string>
+    <string name="command_description_rainbow_emote">Sends the given emote coloured as a rainbow</string>
+    <string name="command_description_rainbow">Sends the given message coloured as a rainbow</string>
+    <string name="settings_system_preferences_summary">Choose LED colour, vibration, sound…</string>
+</resources>

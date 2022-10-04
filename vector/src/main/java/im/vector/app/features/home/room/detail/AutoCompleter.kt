@@ -32,7 +32,7 @@ import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.app.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.app.features.autocomplete.emoji.AutocompleteEmojiPresenter
-import im.vector.app.features.autocomplete.group.AutocompleteGroupPresenter
+import im.vector.app.features.autocomplete.member.AutocompleteMemberItem
 import im.vector.app.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.app.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.app.features.command.Command
@@ -40,21 +40,20 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 class AutoCompleter @AssistedInject constructor(
         @Assisted val roomId: String,
+        @Assisted val isInThreadTimeline: Boolean,
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
-        private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
+        autocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
         private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
-        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
 
@@ -62,7 +61,11 @@ class AutoCompleter @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(roomId: String): AutoCompleter
+        fun create(roomId: String, isInThreadTimeline: Boolean): AutoCompleter
+    }
+
+    private val autocompleteCommandPresenter: AutocompleteCommandPresenter by lazy {
+        autocompleteCommandPresenterFactory.create(isInThreadTimeline)
     }
 
     private var editText: EditText? = null
@@ -83,7 +86,6 @@ class AutoCompleter @AssistedInject constructor(
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, android.R.attr.colorBackground))
         setupCommands(backgroundDrawable, editText)
         setupMembers(backgroundDrawable, editText)
-        setupGroups(backgroundDrawable, editText)
         setupEmojis(backgroundDrawable, editText)
         setupRooms(backgroundDrawable, editText)
     }
@@ -91,7 +93,6 @@ class AutoCompleter @AssistedInject constructor(
     fun clear() {
         this.editText = null
         autocompleteEmojiPresenter.clear()
-        autocompleteGroupPresenter.clear()
         autocompleteRoomPresenter.clear()
         autocompleteCommandPresenter.clear()
         autocompleteMemberPresenter.clear()
@@ -101,7 +102,7 @@ class AutoCompleter @AssistedInject constructor(
         Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
-                .with(ELEVATION)
+                .with(ELEVATION_DP)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<Command> {
                     override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
@@ -120,15 +121,24 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
         autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
-        Autocomplete.on<RoomMemberSummary>(editText)
-                .with(CharPolicy('@', true))
+        Autocomplete.on<AutocompleteMemberItem>(editText)
+                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_MEMBERS, true))
                 .with(autocompleteMemberPresenter)
-                .with(ELEVATION)
+                .with(ELEVATION_DP)
                 .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<RoomMemberSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: RoomMemberSummary): Boolean {
-                        insertMatrixItem(editText, editable, "@", item.toMatrixItem())
-                        return true
+                .with(object : AutocompleteCallback<AutocompleteMemberItem> {
+                    override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
+                        return when (item) {
+                            is AutocompleteMemberItem.Header -> false // do nothing header is not clickable
+                            is AutocompleteMemberItem.RoomMember -> {
+                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
+                                true
+                            }
+                            is AutocompleteMemberItem.Everyone -> {
+                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
+                                true
+                            }
+                        }
                     }
 
                     override fun onPopupVisibilityChanged(shown: Boolean) {
@@ -139,31 +149,13 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText) {
         Autocomplete.on<RoomSummary>(editText)
-                .with(CharPolicy('#', true))
+                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_ROOMS, true))
                 .with(autocompleteRoomPresenter)
-                .with(ELEVATION)
+                .with(ELEVATION_DP)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<RoomSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
-                        insertMatrixItem(editText, editable, "#", item.toRoomAliasMatrixItem())
-                        return true
-                    }
-
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
-    }
-
-    private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText) {
-        Autocomplete.on<GroupSummary>(editText)
-                .with(CharPolicy('+', true))
-                .with(autocompleteGroupPresenter)
-                .with(ELEVATION)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<GroupSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
-                        insertMatrixItem(editText, editable, "+", item.toMatrixItem())
+                        insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_ROOMS, item.toRoomAliasMatrixItem())
                         return true
                     }
 
@@ -175,9 +167,9 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupEmojis(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<String>(editText)
-                .with(CharPolicy(':', false))
+                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_EMOJIS, false))
                 .with(autocompleteEmojiPresenter)
-                .with(ELEVATION)
+                .with(ELEVATION_DP)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<String> {
                     override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
@@ -205,7 +197,7 @@ class AutoCompleter @AssistedInject constructor(
                 .build()
     }
 
-    private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: String, matrixItem: MatrixItem) {
+    private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) {
         // Detect last firstChar and remove it
         var startIndex = editable.lastIndexOf(firstChar)
         if (startIndex == -1) {
@@ -223,7 +215,7 @@ class AutoCompleter @AssistedInject constructor(
 
         // Adding trailing space " " or ": " if the user started mention someone
         val displayNameSuffix =
-                if (firstChar == "@" && startIndex == 0) {
+                if (matrixItem is MatrixItem.UserItem) {
                     ": "
                 } else {
                     " "
@@ -244,6 +236,9 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     companion object {
-        private const val ELEVATION = 6f
+        private const val ELEVATION_DP = 6f
+        private const val TRIGGER_AUTO_COMPLETE_MEMBERS = '@'
+        private const val TRIGGER_AUTO_COMPLETE_ROOMS = '#'
+        private const val TRIGGER_AUTO_COMPLETE_EMOJIS = ':'
     }
 }

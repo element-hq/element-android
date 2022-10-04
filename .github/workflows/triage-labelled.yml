@@ -9,16 +9,15 @@ jobs:
     name: Add Z-Labs label for features behind labs flags
     runs-on: ubuntu-latest
     if: >
-        contains(github.event.issue.labels.*.name, 'A-Maths') ||
-        contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
-        contains(github.event.issue.labels.*.name, 'A-Threads') ||
-        contains(github.event.issue.labels.*.name, 'A-Polls') ||
-        contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
-        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA') ||
-        contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
-        contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
-        contains(github.event.issue.labels.*.name, 'A-Tags')
+      contains(github.event.issue.labels.*.name, 'A-Maths') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+      contains(github.event.issue.labels.*.name, 'A-Polls') ||
+      contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
+      contains(github.event.issue.labels.*.name, 'Z-IA') ||
+      contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+      contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+      contains(github.event.issue.labels.*.name, 'A-Tags')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -43,20 +42,13 @@ jobs:
           column-name: "Need info"
           label-name: "X-Needs-Info"
 
-  add_priority_design_issues_to_project:
-    name: P1 X-Needs-Design to Design project board
+  add_design_issues_to_project:
+    name: X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-      (contains(github.event.issue.labels.*.name, 'S-Critical') &&
-        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-          contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-        contains(github.event.issue.labels.*.name, 'S-Major') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-        contains(github.event.issue.labels.*.name, 'A11y') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent'))
+      contains(github.event.issue.labels.*.name, 'X-Needs-Design')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -80,7 +72,7 @@ jobs:
     name: X-Needs-Product to Design project board
     runs-on: ubuntu-latest
     if: >
-        contains(github.event.issue.labels.*.name, 'X-Needs-Product')
+      contains(github.event.issue.labels.*.name, 'X-Needs-Product')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -106,10 +98,8 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'A-Spaces') ||
-        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
-        contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA'))
+      (contains(github.event.issue.labels.*.name, 'Team: Delight') ||
+       contains(github.event.issue.labels.*.name, 'Z-AppLayout'))
     steps:
       - uses: octokit/graphql-action@v2.x
         with:
@@ -152,32 +142,6 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc2KCw"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  move_threads_issues:
-    name: A-Threads to Thread board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'A-Threads')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PN_kwDOAM0swc0rRA"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
   move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
     runs-on: ubuntu-latest
@@ -201,4 +165,84 @@ jobs:
           contentid: ${{ github.event.issue.node_id }}
         env:
           PROJECT_ID: "PN_kwDOAM0swc3m-g"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_ftue_issues:
+    name: Z-FTUE to Mobile FTUE board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      contains(github.event.issue.labels.*.name, 'Z-FTUE')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AAqVx"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_WTF_issues:
+    name: Z-WTF to WTF board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      contains(github.event.issue.labels.*.name, 'Z-WTF')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AArk0"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_element_x_issues:
+    name: ElementX issues to ElementX project board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      (contains(github.event.issue.labels.*.name, 'Z-BBQ-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4ABTXY"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

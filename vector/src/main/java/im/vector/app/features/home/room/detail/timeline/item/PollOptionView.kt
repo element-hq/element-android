@@ -44,9 +44,10 @@ class PollOptionView @JvmOverloads constructor(
 
         when (state) {
             is PollOptionViewState.PollSending -> renderPollSending()
-            is PollOptionViewState.PollEnded   -> renderPollEnded(state)
-            is PollOptionViewState.PollReady   -> renderPollReady()
-            is PollOptionViewState.PollVoted   -> renderPollVoted(state)
+            is PollOptionViewState.PollEnded -> renderPollEnded(state)
+            is PollOptionViewState.PollReady -> renderPollReady()
+            is PollOptionViewState.PollVoted -> renderPollVoted(state)
+            is PollOptionViewState.PollUndisclosed -> renderPollUndisclosed(state)
         }
     }
 
@@ -75,6 +76,13 @@ class PollOptionView @JvmOverloads constructor(
         views.optionCheckImageView.isVisible = true
         views.optionWinnerImageView.isVisible = false
         showVotes(state.voteCount, state.votePercentage)
+        renderVoteSelection(state.isSelected)
+    }
+
+    private fun renderPollUndisclosed(state: PollOptionViewState.PollUndisclosed) {
+        views.optionCheckImageView.isVisible = true
+        views.optionWinnerImageView.isVisible = false
+        hideVotes()
         renderVoteSelection(state.isSelected)
     }
 

@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHand
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -58,7 +59,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val clock: Clock,
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
@@ -125,7 +127,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 roomFullyReadHandler.handle(realm, roomId, FullyReadContent(readMarkerId))
             }
             if (readReceiptId != null) {
-                val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId)
+                val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId, clock.epochMillis())
                 readReceiptHandler.handle(realm, roomId, readReceiptContent, false, null)
             }
             if (shouldUpdateRoomSummary) {

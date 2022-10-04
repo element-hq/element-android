@@ -25,10 +25,10 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -44,10 +44,12 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
-class DiscoverySettingsFragment @Inject constructor(
-        private val controller: DiscoverySettingsController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class DiscoverySettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DiscoverySettingsController.Listener {
+
+    @Inject lateinit var controller: DiscoverySettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -70,7 +72,7 @@ class DiscoverySettingsFragment @Inject constructor(
             when (it) {
                 is DiscoverySharedViewModelAction.ChangeIdentityServer ->
                     viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(it.newUrl))
-            }.exhaustive
+            }
         }
 
         viewModel.observeViewEvents {
@@ -78,7 +80,7 @@ class DiscoverySettingsFragment @Inject constructor(
                 is DiscoverySettingsViewEvents.Failure -> {
                     displayErrorDialog(it.throwable)
                 }
-            }.exhaustive
+            }
         }
         if (discoveryArgs.expandIdentityPolicies) {
             viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true))
@@ -118,7 +120,8 @@ class DiscoverySettingsFragment @Inject constructor(
                     termsActivityResultLauncher,
                     TermsService.ServiceType.IdentityService,
                     state.identityServer()?.serverUrl?.ensureProtocol() ?: "",
-                    null)
+                    null
+            )
         }
     }
 

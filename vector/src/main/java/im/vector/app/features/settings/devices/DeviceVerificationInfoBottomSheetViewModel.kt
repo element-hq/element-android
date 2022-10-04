@@ -27,11 +27,12 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 
-class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
-                                                                             val session: Session
+class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(
+        @Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
+        val session: Session
 ) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -48,7 +49,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
                     accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
+                    isRecoverySetup = session.sharedSecretStorageService().isRecoverySetup()
             )
         }
         session.flow().liveCrossSigningInfo(session.myUserId)

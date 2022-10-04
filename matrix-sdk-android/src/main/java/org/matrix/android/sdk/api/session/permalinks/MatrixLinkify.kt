@@ -29,6 +29,7 @@ object MatrixLinkify {
      * Find the matrix spans i.e matrix id , user id ... to display them as URL.
      *
      * @param spannable the text in which the matrix items has to be clickable.
+     * @param callback listener to be notified when the span is clicked
      */
     @Suppress("UNUSED_PARAMETER")
     fun addLinks(spannable: Spannable, callback: MatrixPermalinkSpan.Callback?): Boolean {
@@ -55,7 +56,7 @@ object MatrixLinkify {
                             MatrixPatterns.isRoomId(url) ||
                             MatrixPatterns.isGroupId(url) ||
                             MatrixPatterns.isEventId(url)) {
-                        url = PermalinkService.MATRIX_TO_URL_BASE  + url
+                        url = PermalinkService.MATRIX_TO_URL_BASE + url
                     }
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

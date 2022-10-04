@@ -25,17 +25,17 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.search.SearchResult
 
 class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
-        session: Session
+        private val session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -54,9 +54,9 @@ class SearchViewModel @AssistedInject constructor(
     override fun handle(action: SearchAction) {
         when (action) {
             is SearchAction.SearchWith -> handleSearchWith(action)
-            is SearchAction.LoadMore   -> handleLoadMore()
-            is SearchAction.Retry      -> handleRetry()
-        }.exhaustive
+            is SearchAction.LoadMore -> handleLoadMore()
+            is SearchAction.Retry -> handleRetry()
+        }
     }
 
     private fun handleSearchWith(action: SearchAction.SearchWith) {
@@ -101,8 +101,9 @@ class SearchViewModel @AssistedInject constructor(
 
         currentTask = viewModelScope.launch {
             try {
-                val result = room.search(
+                val result = session.searchService().search(
                         searchTerm = state.searchTerm,
+                        roomId = initialState.roomId,
                         nextBatch = nextBatch,
                         orderByRecent = true,
                         beforeLimit = 0,

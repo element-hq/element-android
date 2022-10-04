@@ -44,7 +44,7 @@ class JoinReplacementRoomBottomSheet :
     @Inject
     lateinit var errorFormatter: ErrorFormatter
 
-    private val viewModel: RoomDetailViewModel by parentFragmentViewModel()
+    private val viewModel: TimelineViewModel by parentFragmentViewModel()
 
     override val showExpanded: Boolean
         get() = true
@@ -62,15 +62,15 @@ class JoinReplacementRoomBottomSheet :
             when (joinState) {
                 // it should never be Uninitialized
                 Uninitialized,
-                is Loading    -> {
+                is Loading -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loading)
                     views.descriptionText.setText(R.string.it_may_take_some_time)
                 }
-                is Success    -> {
+                is Success -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loaded)
                     dismiss()
                 }
-                is Fail       -> {
+                is Fail -> {
                     // display the error message
                     views.descriptionText.text = errorFormatter.toHumanReadable(joinState.error)
                     views.roomUpgradeButton.render(ButtonStateView.State.Error)

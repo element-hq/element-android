@@ -49,12 +49,12 @@ class SelectChildrenController @Inject constructor(
         val host = this
         when (children) {
             Uninitialized -> return
-            is Loading    -> {
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Success    -> {
+            is Success -> {
                 matchFilter.filter = data.currentFilter
                 val roomList = children.invoke().filter { matchFilter.test(it) }
 
@@ -77,7 +77,7 @@ class SelectChildrenController @Inject constructor(
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
 //                errorWithRetryItem {
 //                    id("failed_to_load")
 //                }

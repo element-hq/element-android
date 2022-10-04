@@ -18,16 +18,20 @@ package org.matrix.android.sdk.api.session.identity
 
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.session.profile.ThirdPartyIdentifier
 
 sealed class ThreePid(open val value: String) {
+    @JsonClass(generateAdapter = true)
     data class Email(val email: String) : ThreePid(email)
+
+    @JsonClass(generateAdapter = true)
     data class Msisdn(val msisdn: String) : ThreePid(msisdn)
 }
 
 internal fun ThreePid.toMedium(): String {
     return when (this) {
-        is ThreePid.Email  -> ThirdPartyIdentifier.MEDIUM_EMAIL
+        is ThreePid.Email -> ThirdPartyIdentifier.MEDIUM_EMAIL
         is ThreePid.Msisdn -> ThirdPartyIdentifier.MEDIUM_MSISDN
     }
 }

@@ -26,7 +26,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.hasSso
-import im.vector.app.features.login.ssoIdentityProviders
+import im.vector.app.features.login.ssoState
 
 abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthFragment<VB>() {
 
@@ -37,7 +37,7 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
 
     override fun onStart() {
         super.onStart()
-        val hasSSO = withState(viewModel) { it.loginMode.hasSso() }
+        val hasSSO = withState(viewModel) { it.selectedHomeserver.preferredLoginMode.hasSso() }
         if (hasSSO) {
             val packageName = CustomTabsClient.getPackageName(requireContext(), null)
 
@@ -67,7 +67,7 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
 
     override fun onStop() {
         super.onStop()
-        val hasSSO = withState(viewModel) { it.loginMode.hasSso() }
+        val hasSSO = withState(viewModel) { it.selectedHomeserver.preferredLoginMode.hasSso() }
         if (hasSSO) {
             customTabsServiceConnection?.let { requireContext().unbindService(it) }
             customTabsServiceConnection = null
@@ -88,12 +88,12 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
 
     private fun prefetchIfNeeded() {
         withState(viewModel) { state ->
-            if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
+            if (state.selectedHomeserver.preferredLoginMode.hasSso() && state.selectedHomeserver.preferredLoginMode.ssoState().isFallback()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
-                viewModel.getSsoUrl(
+                viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        providerId = null
+                        provider = null
                 )
                         ?.let { prefetchUrl(it) }
             }

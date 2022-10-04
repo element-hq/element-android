@@ -31,7 +31,7 @@ import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginViewState
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 @Parcelize
@@ -40,12 +40,13 @@ data class LoginTermsFragmentArgument(
 ) : Parcelable
 
 /**
- * LoginTermsFragment displays the list of policies the user has to accept
+ * LoginTermsFragment displays the list of policies the user has to accept.
  */
-class LoginTermsFragment @Inject constructor(
-        private val policyController: PolicyController
-) : AbstractLoginFragment<FragmentLoginTermsBinding>(),
+class LoginTermsFragment :
+        AbstractLoginFragment<FragmentLoginTermsBinding>(),
         PolicyController.PolicyControllerListener {
+
+    @Inject lateinit var policyController: PolicyController
 
     private val params: LoginTermsFragmentArgument by args()
 

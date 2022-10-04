@@ -20,13 +20,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
-import javax.inject.Inject
 
-class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
+@AndroidEntryPoint
+class KeysBackupRestoreSuccessFragment :
+        VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreSuccessBinding {
         return FragmentKeysBackupRestoreSuccessBinding.inflate(inflater, container, false)
@@ -40,10 +42,14 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
         if (compareValues(sharedViewModel.importKeyResult?.totalNumberOfKeys, 0) > 0) {
             sharedViewModel.importKeyResult?.let {
-                val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,
-                        it.totalNumberOfKeys, it.totalNumberOfKeys)
-                val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
-                        it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
+                val part1 = resources.getQuantityString(
+                        R.plurals.keys_backup_restore_success_description_part1,
+                        it.totalNumberOfKeys, it.totalNumberOfKeys
+                )
+                val part2 = resources.getQuantityString(
+                        R.plurals.keys_backup_restore_success_description_part2,
+                        it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys
+                )
                 views.successDetailsText.text = String.format("%s\n%s", part1, part2)
             }
             // We don't put emoji in string xml as it will crash on old devices

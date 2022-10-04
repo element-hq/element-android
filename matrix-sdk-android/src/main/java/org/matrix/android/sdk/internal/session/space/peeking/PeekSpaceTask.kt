@@ -23,6 +23,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import org.matrix.android.sdk.api.session.space.peeking.ISpaceChild
+import org.matrix.android.sdk.api.session.space.peeking.SpaceChildPeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekSummary
+import org.matrix.android.sdk.api.session.space.peeking.SpaceSubChildPeekResult
 import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.task.Task

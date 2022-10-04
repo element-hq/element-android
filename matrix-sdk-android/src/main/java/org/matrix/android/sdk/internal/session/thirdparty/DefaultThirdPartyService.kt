@@ -21,9 +21,11 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 import javax.inject.Inject
 
-internal class DefaultThirdPartyService @Inject constructor(private val getThirdPartyProtocolTask: GetThirdPartyProtocolsTask,
-                                                            private val getThirdPartyUserTask: GetThirdPartyUserTask) :
-    ThirdPartyService {
+internal class DefaultThirdPartyService @Inject constructor(
+        private val getThirdPartyProtocolTask: GetThirdPartyProtocolsTask,
+        private val getThirdPartyUserTask: GetThirdPartyUserTask
+) :
+        ThirdPartyService {
 
     override suspend fun getThirdPartyProtocols(): Map<String, ThirdPartyProtocol> {
         return getThirdPartyProtocolTask.execute(Unit)

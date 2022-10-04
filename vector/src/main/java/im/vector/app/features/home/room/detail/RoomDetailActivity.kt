@@ -35,10 +35,12 @@ import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
-import im.vector.app.features.analytics.plan.Screen
-import im.vector.app.features.analytics.screen.ScreenEvent
+import im.vector.app.features.MainActivity
+import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
@@ -75,10 +77,10 @@ class RoomDetailActivity :
     }
 
     private var lastKnownPlayingOrRecordingState: Boolean? = null
-    private val playbackActivityListener = VoiceMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
+    private val playbackActivityListener = AudioMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
         if (lastKnownPlayingOrRecordingState == isPlayingOrRecording) return@ActivityListener
         when (isPlayingOrRecording) {
-            true  -> keepScreenOn()
+            true -> keepScreenOn()
             false -> endKeepScreenOn()
         }
         lastKnownPlayingOrRecordingState = isPlayingOrRecording
@@ -86,7 +88,7 @@ class RoomDetailActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    @Inject lateinit var playbackTracker: VoiceMessagePlaybackTracker
+    @Inject lateinit var playbackTracker: AudioMessagePlaybackTracker
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
@@ -97,17 +99,12 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-            RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
-        } else {
-            intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-        }
-        if (roomDetailArgs == null) return
-        intent.putExtra(Mavericks.KEY_ARG, roomDetailArgs)
-        currentRoomId = roomDetailArgs.roomId
+        val timelineArgs: TimelineArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS) ?: return
+        intent.putExtra(Mavericks.KEY_ARG, timelineArgs)
+        currentRoomId = timelineArgs.roomId
 
         if (isFirstCreation()) {
-            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, timelineArgs)
             replaceFragment(views.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }
 
@@ -145,26 +142,20 @@ class RoomDetailActivity :
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
             requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
-            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, TimelineArgs(switchToRoom.roomId))
         }
     }
 
     override fun onDestroy() {
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         views.drawerLayout.removeDrawerListener(drawerListener)
-        playbackTracker.unTrackActivity(playbackActivityListener)
+        playbackTracker.untrackActivity(playbackActivityListener)
         super.onDestroy()
     }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
-        private var drawerScreenEvent: ScreenEvent? = null
         override fun onDrawerOpened(drawerView: View) {
-            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileBreadcrumbs)
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            drawerScreenEvent?.send(analyticsTracker)
-            drawerScreenEvent = null
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Breadcrumbs))
         }
 
         override fun onDrawerStateChanged(newState: Int) {
@@ -191,28 +182,22 @@ class RoomDetailActivity :
     }
 
     companion object {
-
         const val EXTRA_ROOM_DETAIL_ARGS = "EXTRA_ROOM_DETAIL_ARGS"
-        const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
-        const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
-            return Intent(context, RoomDetailActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_DETAIL_ARGS, roomDetailArgs)
+        fun newIntent(context: Context, timelineArgs: TimelineArgs, firstStartMainActivity: Boolean): Intent {
+            val intent = Intent(context, RoomDetailActivity::class.java).apply {
+                putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
             }
-        }
-
-        // Shortcuts can't have intents with parcelables
-        fun shortcutIntent(context: Context, roomId: String): Intent {
-            return Intent(context, RoomDetailActivity::class.java).apply {
-                action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
-                putExtra(EXTRA_ROOM_ID, roomId)
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
             }
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

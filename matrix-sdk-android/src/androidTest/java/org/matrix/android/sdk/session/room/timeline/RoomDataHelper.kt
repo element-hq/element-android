@@ -41,11 +41,12 @@ object RoomDataHelper {
         }
     }
 
-    private fun createFakeEvent(type: String,
-                                content: Content? = null,
-                                prevContent: Content? = null,
-                                sender: String = FAKE_TEST_SENDER,
-                                stateKey: String? = null
+    private fun createFakeEvent(
+            type: String,
+            content: Content? = null,
+            prevContent: Content? = null,
+            sender: String = FAKE_TEST_SENDER,
+            stateKey: String? = null
     ): Event {
         return Event(
                 type = type,

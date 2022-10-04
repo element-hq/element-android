@@ -30,7 +30,8 @@ internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Uni
 
 internal class DefaultSetDisplayNameTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SetDisplayNameTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SetDisplayNameTask() {
 
     override suspend fun execute(params: Params) {
         val body = SetDisplayNameBody(

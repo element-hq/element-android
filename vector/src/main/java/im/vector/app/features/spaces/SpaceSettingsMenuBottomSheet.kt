@@ -30,10 +30,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.roomprofile.RoomProfileActivity
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import kotlinx.parcelize.Parcelize
@@ -71,6 +73,11 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         return BottomSheetSpaceSettingsBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SpaceMenu
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -103,7 +110,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
-            LeaveSpaceBottomSheet.newInstance(spaceArgs.spaceId).show(childFragmentManager, "LOGOUT")
+            startActivity(SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId))
         }
     }
 

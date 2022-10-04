@@ -17,7 +17,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationInfoCancel> {
     /**
-     * machine-readable reason for cancelling, see [CancelCode]
+     * machine-readable reason for cancelling, see [CancelCode].
      */
     val code: String?
 

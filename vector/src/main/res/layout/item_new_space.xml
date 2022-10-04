@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.app.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@drawable/bg_space_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/space_avatars" />
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unread_counter"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Element Corp" />
+
+    <im.vector.app.features.home.room.list.UnreadCounterBadgeView
+        android:id="@+id/unread_counter"
+        style="@style/Widget.Vector.TextView.Micro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:minWidth="16dp"
+        android:minHeight="16dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="?colorOnError"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chevron"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/bg_unread_highlight"
+        tools:text="147"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/chevron"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="21dp"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/a11y_expand_space_children"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_arrow_right"
+        tools:visibility="visible" />
+
+</im.vector.app.core.platform.CheckableConstraintLayout>

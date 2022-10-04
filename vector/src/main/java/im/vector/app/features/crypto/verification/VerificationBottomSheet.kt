@@ -30,7 +30,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseActivity
@@ -49,12 +48,12 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import timber.log.Timber
@@ -94,16 +93,18 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
         viewModel.observeViewEvents {
             when (it) {
-                is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
+                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    secretStartForActivityResult.launch(SharedSecureStorageActivity.newIntent(
-                            requireContext(),
-                            null, // use default key
-                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
-                            SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
-                    ))
+                    secretStartForActivityResult.launch(
+                            SharedSecureStorageActivity.newReadIntent(
+                                    requireContext(),
+                                    null, // use default key
+                                    listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
+                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
+                            )
+                    )
                 }
-                is VerificationBottomSheetViewEvents.ModalError        -> {
+                is VerificationBottomSheetViewEvents.ModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setTitle(getString(R.string.dialog_title_error))
                             .setMessage(it.errorMessage)
@@ -112,13 +113,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             .show()
                     Unit
                 }
-                VerificationBottomSheetViewEvents.GoToSettings         -> {
+                VerificationBottomSheetViewEvents.GoToSettings -> {
                     dismiss()
                     (activity as? VectorBaseActivity<*>)?.let { activity ->
                         activity.navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -151,29 +152,25 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        state.otherUserMxItem?.let { matrixItem ->
-            if (state.isMe) {
-                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
-                if (state.sasTransactionState == VerificationTxState.Verified ||
-                        state.qrTransactionState == VerificationTxState.Verified ||
-                        state.verifiedFromPrivateKeys) {
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
-                } else {
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
-                }
-                views.otherUserNameText.text = getString(
-                        if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
-                )
+        avatarRenderer.render(state.otherUserMxItem, views.otherUserAvatarImageView)
+        if (state.isMe) {
+            if (state.sasTransactionState == VerificationTxState.Verified ||
+                    state.qrTransactionState == VerificationTxState.Verified ||
+                    state.verifiedFromPrivateKeys) {
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
             } else {
-                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
-
-                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
-                    views.otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
-                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
-                } else {
-                    views.otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
-                    views.otherUserShield.render(null)
-                }
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
+            }
+            views.otherUserNameText.text = getString(
+                    if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
+            )
+        } else {
+            if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
+                views.otherUserNameText.text = getString(R.string.verification_verified_user, state.otherUserMxItem.getBestName())
+                views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
+            } else {
+                views.otherUserNameText.text = getString(R.string.verification_verify_user, state.otherUserMxItem.getBestName())
+                views.otherUserShield.render(null)
             }
         }
 
@@ -184,7 +181,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             isSuccessFull = true,
                             isMe = true,
                             cancelReason = null
-                    ))
+                    )
+            )
             return@withState
         }
 
@@ -233,14 +231,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                     showFragment(
                             VerificationEmojiCodeFragment::class,
                             VerificationArgs(
-                                    state.otherUserMxItem?.id ?: "",
+                                    state.otherUserId,
                                     // If it was outgoing it.transaction id would be null, but the pending request
                                     // would be updated (from localId to txId)
                                     state.pendingRequest.invoke()?.transactionId ?: state.transactionId
                             )
                     )
                 }
-                is VerificationTxState.Verified  -> {
+                is VerificationTxState.Verified -> {
                     showFragment(
                             VerificationConclusionFragment::class,
                             VerificationConclusionFragment.Args(true, null, state.isMe)
@@ -252,13 +250,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe)
                     )
                 }
+                else -> Unit
             }
 
             return@withState
         }
 
         when (state.qrTransactionState) {
-            is VerificationTxState.QrScannedByOther               -> {
+            is VerificationTxState.QrScannedByOther -> {
                 showFragment(VerificationQrScannedByOtherFragment::class)
                 return@withState
             }
@@ -268,26 +267,26 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         VerificationQRWaitingFragment::class,
                         VerificationQRWaitingFragment.Args(
                                 isMe = state.isMe,
-                                otherUserName = state.otherUserMxItem?.getBestName() ?: ""
+                                otherUserName = state.otherUserMxItem.getBestName()
                         )
                 )
                 return@withState
             }
-            is VerificationTxState.Verified                       -> {
+            is VerificationTxState.Verified -> {
                 showFragment(
                         VerificationConclusionFragment::class,
                         VerificationConclusionFragment.Args(true, null, state.isMe)
                 )
                 return@withState
             }
-            is VerificationTxState.Cancelled                      -> {
+            is VerificationTxState.Cancelled -> {
                 showFragment(
                         VerificationConclusionFragment::class,
                         VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe)
                 )
                 return@withState
             }
-            else                                                  -> Unit
+            else -> Unit
         }
 
         // At this point there is no SAS transaction for this request
@@ -316,7 +315,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 showFragment(
                         VerificationChooseMethodFragment::class,
                         VerificationArgs(
-                                otherUserId = state.otherUserMxItem?.id ?: "",
+                                otherUserId = state.otherUserId,
                                 verificationId = state.pendingRequest.invoke()?.transactionId
                         )
                 )
@@ -325,7 +324,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 showFragment(
                         VerificationRequestFragment::class,
                         VerificationArgs(
-                                otherUserId = state.otherUserMxItem?.id ?: "",
+                                otherUserId = state.otherUserId,
                                 verificationId = state.pendingRequest.invoke()?.transactionId,
                                 verificationLocalId = state.roomId
                         )
@@ -337,7 +336,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             showFragment(
                     VerificationChooseMethodFragment::class,
                     VerificationArgs(
-                            otherUserId = state.otherUserMxItem?.id ?: "",
+                            otherUserId = state.otherUserId,
                             verificationId = state.pendingRequest.invoke()?.transactionId
                     )
             )
@@ -348,7 +347,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     private fun showFragment(fragmentClass: KClass<out Fragment>, argsParcelable: Parcelable? = null) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
+                replace(
+                        R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         argsParcelable?.toMvRxBundle(),
                         fragmentClass.simpleName
@@ -360,31 +360,37 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     companion object {
         fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = otherUserId,
-                        roomId = roomId,
-                        verificationId = transactionId,
-                        selfVerificationMode = false
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = otherUserId,
+                                roomId = roomId,
+                                verificationId = transactionId,
+                                selfVerificationMode = false
+                        )
+                )
             }
         }
 
         fun forSelfVerification(session: Session): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = session.myUserId,
-                        selfVerificationMode = true
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = session.myUserId,
+                                selfVerificationMode = true
+                        )
+                )
             }
         }
 
         fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
-                setArguments(VerificationArgs(
-                        otherUserId = session.myUserId,
-                        selfVerificationMode = true,
-                        verificationId = outgoingRequest
-                ))
+                setArguments(
+                        VerificationArgs(
+                                otherUserId = session.myUserId,
+                                selfVerificationMode = true,
+                                verificationId = outgoingRequest
+                        )
+                )
             }
         }
 

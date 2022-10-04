@@ -24,8 +24,11 @@ import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import com.tapadoo.alerter.Alerter
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.utils.isAnimationDisabled
+import im.vector.app.core.time.Clock
+import im.vector.app.core.utils.isAnimationEnabled
+import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -41,7 +44,9 @@ import javax.inject.Singleton
  * will be back in the queue in first position.
  */
 @Singleton
-class PopupAlertManager @Inject constructor() {
+class PopupAlertManager @Inject constructor(
+        private val clock: Clock,
+) {
 
     companion object {
         const val INCOMING_CALL_PRIORITY = Int.MAX_VALUE
@@ -87,7 +92,7 @@ class PopupAlertManager @Inject constructor() {
     }
 
     /**
-     * Cancel all alerts, after a sign out for instance
+     * Cancel all alerts, after a sign out for instance.
      */
     fun cancelAll() {
         synchronized(alertQueue) {
@@ -116,7 +121,7 @@ class PopupAlertManager @Inject constructor() {
             return
         }
         if (currentAlerter != null) {
-            if (currentAlerter!!.expirationTimestamp != null && System.currentTimeMillis() > currentAlerter!!.expirationTimestamp!!) {
+            if (currentAlerter!!.expirationTimestamp != null && clock.epochMillis() > currentAlerter!!.expirationTimestamp!!) {
                 // this alert has expired, remove it
                 // perform dismiss
                 try {
@@ -162,7 +167,7 @@ class PopupAlertManager @Inject constructor() {
         currentAlerter = next
         next?.let {
             if (!shouldBeDisplayedIn(next, currentActivity)) return
-            val currentTime = System.currentTimeMillis()
+            val currentTime = clock.epochMillis()
             if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {
                 // skip
                 try {
@@ -215,7 +220,7 @@ class PopupAlertManager @Inject constructor() {
         if (!alert.isLight) {
             clearLightStatusBar()
         }
-        val noAnimation = !animate || isAnimationDisabled(activity)
+        val noAnimation = !(animate && activity.isAnimationEnabled())
 
         alert.weakCurrentActivity = WeakReference(activity)
         val alerter = Alerter.create(activity, alert.layoutRes)
@@ -299,9 +304,11 @@ class PopupAlertManager @Inject constructor() {
 
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
         return alert != null &&
+                activity !is MainActivity &&
                 activity !is PinActivity &&
                 activity !is SignedOutActivity &&
                 activity !is AnalyticsOptInActivity &&
+                activity !is ReleaseNotesActivity &&
                 activity is VectorBaseActivity<*> &&
                 alert.shouldBeDisplayedIn.invoke(activity)
     }

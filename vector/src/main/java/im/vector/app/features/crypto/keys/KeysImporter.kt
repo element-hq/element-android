@@ -23,7 +23,7 @@ import im.vector.app.core.resources.openResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import javax.inject.Inject
 
 class KeysImporter @Inject constructor(
@@ -31,11 +31,13 @@ class KeysImporter @Inject constructor(
         private val session: Session
 ) {
     /**
-     * Import keys from provided Uri
+     * Import keys from provided Uri.
      */
-    suspend fun import(uri: Uri,
-                       mimetype: String?,
-                       password: String): ImportRoomKeysResult {
+    suspend fun import(
+            uri: Uri,
+            mimetype: String?,
+            password: String
+    ): ImportRoomKeysResult {
         return withContext(Dispatchers.IO) {
             val resource = openResource(context, uri, mimetype ?: getMimeTypeFromUri(context, uri))
             val stream = resource?.mContentStream ?: throw Exception("Error")

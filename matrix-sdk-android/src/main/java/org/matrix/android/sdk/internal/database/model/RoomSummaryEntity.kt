@@ -20,8 +20,8 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -34,7 +34,8 @@ internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
         var roomType: String? = null,
         var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
-        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList(),
+        var directParentNames: RealmList<String> = RealmList(),
 ) : RealmObject() {
 
     private var displayName: String? = ""
@@ -236,11 +237,6 @@ internal open class RoomSummaryEntity(
         }
 
     var flattenParentIds: String? = null
-        set(value) {
-            if (value != field) field = value
-        }
-
-    var groupIds: String? = null
         set(value) {
             if (value != field) field = value
         }

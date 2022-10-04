@@ -30,6 +30,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
 import okio.source
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -53,6 +54,7 @@ internal class FileUploader @Inject constructor(
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val context: Context,
         private val temporaryFileCreator: TemporaryFileCreator,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         contentUrlResolver: ContentUrlResolver,
         moshi: Moshi
 ) {
@@ -60,10 +62,12 @@ internal class FileUploader @Inject constructor(
     private val uploadUrl = contentUrlResolver.uploadUrl
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-    suspend fun uploadFile(file: File,
-                           filename: String?,
-                           mimeType: String?,
-                           progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFile(
+            file: File,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
@@ -97,18 +101,22 @@ internal class FileUploader @Inject constructor(
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadByteArray(byteArray: ByteArray,
-                                filename: String?,
-                                mimeType: String?,
-                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadByteArray(
+            byteArray: ByteArray,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val uploadBody = byteArray.toRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadFromUri(uri: Uri,
-                              filename: String?,
-                              mimeType: String?,
-                              progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFromUri(
+            uri: Uri,
+            filename: String?,
+            mimeType: String?,
+            progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val workingFile = context.copyUriToTempFile(uri)
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
             tryOrNull { workingFile.delete() }
@@ -126,9 +134,11 @@ internal class FileUploader @Inject constructor(
         }
     }
 
-    private suspend fun upload(uploadBody: RequestBody,
-                               filename: String?,
-                               progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+    private suspend fun upload(
+            uploadBody: RequestBody,
+            filename: String?,
+            progressListener: ProgressRequestBody.Listener?
+    ): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
@@ -146,14 +156,16 @@ internal class FileUploader @Inject constructor(
                 .post(requestBody)
                 .build()
 
-        return okHttpClient.newCall(request).awaitResponse().use { response ->
-            if (!response.isSuccessful) {
-                throw response.toFailure(globalErrorReceiver)
-            } else {
-                response.body?.source()?.let {
-                    responseAdapter.fromJson(it)
+        return withContext(coroutineDispatchers.io) {
+            okHttpClient.newCall(request).awaitResponse().use { response ->
+                if (!response.isSuccessful) {
+                    throw response.toFailure(globalErrorReceiver)
+                } else {
+                    response.body?.source()?.let {
+                        responseAdapter.fromJson(it)
+                    }
+                            ?: throw IOException()
                 }
-                        ?: throw IOException()
             }
         }
     }

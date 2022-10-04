@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 
 /**
  * When an encrypted message is sent in a room, the megolm key might not be sent to all devices present in the room.

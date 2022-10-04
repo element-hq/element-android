@@ -16,12 +16,27 @@
 
 package im.vector.app.features.home.room.list
 
+import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_room_placeholder)
-abstract class RoomSummaryItemPlaceHolder : VectorEpoxyModel<RoomSummaryItemPlaceHolder.Holder>() {
-    class Holder : VectorEpoxyHolder()
+@EpoxyModelClass
+abstract class RoomSummaryItemPlaceHolder : VectorEpoxyModel<RoomSummaryItemPlaceHolder.Holder>(R.layout.item_room_placeholder) {
+
+    @EpoxyAttribute
+    var useSingleLineForLastEvent: Boolean = false
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        if (useSingleLineForLastEvent) {
+            holder.subtitleView.setLines(1)
+        }
+    }
+
+    class Holder : VectorEpoxyHolder() {
+        val subtitleView by bind<TextView>(R.id.subtitleView)
+    }
 }

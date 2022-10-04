@@ -140,13 +140,15 @@ class CallRingPlayerOutgoing(
             mediaPlayer.setOnErrorListener(MediaPlayerErrorListener())
             mediaPlayer.isLooping = true
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                        // TODO Change to ?
-                        // .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
-                        // .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                        .build())
+                mediaPlayer.setAudioAttributes(
+                        AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                                // TODO Change to ?
+                                // .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
+                                // .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                                .build()
+                )
             } else {
                 @Suppress("DEPRECATION")
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING)

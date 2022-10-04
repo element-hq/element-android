@@ -29,18 +29,17 @@ import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWo
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * This worker creates a new work for each events passed in parameter
+ * This worker creates a new work for each events passed in parameter.
  *
- * Possible previous worker: Always [UploadContentWorker]
- * Possible next worker    : None, but it will post new work to send events, encrypted or not
+ * Possible previous worker: Always [UploadContentWorker].
+ * Possible next worker    : None, but it will post new work to send events, encrypted or not.
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -54,7 +53,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     @Inject lateinit var timelineSendEventWorkCommon: TimelineSendEventWorkCommon
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
-    override fun doOnError(params: Params): Result {
+    override fun doOnError(params: Params, failureMessage: String): Result {
         params.localEchoIds.forEach { localEchoIds ->
             localEchoRepository.updateSendState(
                     eventId = localEchoIds.eventId,
@@ -64,7 +63,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
             )
         }
 
-        return super.doOnError(params)
+        return super.doOnError(params, failureMessage)
     }
 
     override fun injectWith(injector: SessionComponent) {
@@ -77,10 +76,10 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
         params.localEchoIds.forEach { localEchoIds ->
             val roomId = localEchoIds.roomId
             val eventId = localEchoIds.eventId
-                localEchoRepository.updateSendState(eventId, roomId, SendState.SENDING)
-                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event $eventId")
-                val sendWork = createSendEventWork(params.sessionId, eventId, true)
-                timelineSendEventWorkCommon.postWork(roomId, sendWork)
+            localEchoRepository.updateSendState(eventId, roomId, SendState.SENDING)
+            Timber.v("## SendEvent: Schedule send event $eventId")
+            val sendWork = createSendEventWork(params.sessionId, eventId, true)
+            timelineSendEventWorkCommon.postWork(roomId, sendWork)
         }
 
         return Result.success()

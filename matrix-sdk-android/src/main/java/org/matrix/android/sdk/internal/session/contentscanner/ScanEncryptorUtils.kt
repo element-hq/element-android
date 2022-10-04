@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner
 
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
 import org.matrix.android.sdk.internal.crypto.tools.withOlmEncryption
 import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
 import org.matrix.android.sdk.internal.session.contentscanner.model.EncryptedBody

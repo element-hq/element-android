@@ -30,8 +30,10 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
-    data class Params(val pushKey: String,
-                      val pushAppId: String)
+    data class Params(
+            val pushKey: String,
+            val pushAppId: String
+    )
 }
 
 internal class DefaultRemovePusherTask @Inject constructor(

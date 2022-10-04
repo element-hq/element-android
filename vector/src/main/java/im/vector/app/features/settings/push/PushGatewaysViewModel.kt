@@ -25,7 +25,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -36,8 +35,10 @@ data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
 ) : MavericksState
 
-class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
-                                                        private val session: Session) :
+class PushGatewaysViewModel @AssistedInject constructor(
+        @Assisted initialState: PushGatewayViewState,
+        private val session: Session
+) :
         VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
 
     @AssistedFactory
@@ -50,7 +51,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
     init {
         observePushers()
         // Force a refresh
-        session.refreshPushers()
+        session.pushersService().refreshPushers()
     }
 
     private fun observePushers() {
@@ -63,15 +64,15 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: PushGatewayAction) {
         when (action) {
-            is PushGatewayAction.Refresh      -> handleRefresh()
+            is PushGatewayAction.Refresh -> handleRefresh()
             is PushGatewayAction.RemovePusher -> removePusher(action.pusher)
-        }.exhaustive
+        }
     }
 
     private fun removePusher(pusher: Pusher) {
         viewModelScope.launch {
             kotlin.runCatching {
-                session.removePusher(pusher)
+                session.pushersService().removePusher(pusher)
             }.onFailure {
                 _viewEvents.post(PushGatewayViewEvents.RemovePusherFailed(it))
             }
@@ -79,6 +80,6 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun handleRefresh() {
-        session.refreshPushers()
+        session.pushersService().refreshPushers()
     }
 }

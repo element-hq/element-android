@@ -24,12 +24,13 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     @EpoxyAttribute
-    var pollQuestion: String? = null
+    var pollQuestion: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
@@ -38,22 +39,26 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     var eventId: String? = null
 
     @EpoxyAttribute
-    var pollSent: Boolean = false
+    var canVote: Boolean = false
 
     @EpoxyAttribute
-    var totalVotesText: String? = null
+    var votesStatus: String? = null
+
+    @EpoxyAttribute
+    var edited: Boolean = false
 
     @EpoxyAttribute
     lateinit var optionViewStates: List<PollOptionViewState>
 
+    override fun getViewStubId() = STUB_ID
+
     override fun bind(holder: Holder) {
         super.bind(holder)
-        val relatedEventId = eventId ?: return
 
         renderSendState(holder.view, holder.questionTextView)
 
-        holder.questionTextView.text = pollQuestion
-        holder.totalVotesTextView.text = totalVotesText
+        holder.questionTextView.text = pollQuestion?.charSequence
+        holder.votesStatusTextView.text = votesStatus
 
         while (holder.optionsContainer.childCount < optionViewStates.size) {
             holder.optionsContainer.addView(PollOptionView(holder.view.context))
@@ -67,20 +72,26 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         optionViewStates.forEachIndexed { index, optionViewState ->
             views.getOrNull(index)?.let {
                 it.render(optionViewState)
-                it.setOnClickListener {
-                    callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
-                }
+                it.setOnClickListener { onPollItemClick(optionViewState) }
             }
+        }
+    }
+
+    private fun onPollItemClick(optionViewState: PollOptionViewState) {
+        val relatedEventId = eventId
+
+        if (canVote && relatedEventId != null) {
+            callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
         }
     }
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val questionTextView by bind<TextView>(R.id.questionTextView)
         val optionsContainer by bind<LinearLayout>(R.id.optionsContainer)
-        val totalVotesTextView by bind<TextView>(R.id.optionsTotalVotesTextView)
+        val votesStatusTextView by bind<TextView>(R.id.optionsVotesStatusTextView)
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentPollStub
+        private val STUB_ID = R.id.messageContentPollStub
     }
 }

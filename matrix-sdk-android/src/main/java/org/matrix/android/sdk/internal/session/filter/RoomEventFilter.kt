@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class RoomEventFilter(
+internal data class RoomEventFilter(
         /**
          * The maximum number of events to return.
          */
@@ -48,6 +48,17 @@ data class RoomEventFilter(
          * a wildcard to match any sequence of characters.
          */
         @Json(name = "types") val types: List<String>? = null,
+        /**
+         * A list of relation types which must be exist pointing to the event being filtered.
+         * If this list is absent then no filtering is done on relation types.
+         */
+        @Json(name = "related_by_rel_types") val relationTypes: List<String>? = null,
+        /**
+         *  A list of senders of relations which must exist pointing to the event being filtered.
+         *  If this list is absent then no filtering is done on relation types.
+         */
+        @Json(name = "related_by_senders") val relationSenders: List<String>? = null,
+
         /**
          * A list of room IDs to include. If this list is absent then all rooms are included.
          */

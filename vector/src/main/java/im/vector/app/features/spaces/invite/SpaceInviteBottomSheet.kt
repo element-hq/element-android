@@ -118,7 +118,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterMxid.isVisible = false
         }
 
-        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
+        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard, showDescription = true)
 
         views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.action_accept)
         views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.action_decline)
@@ -127,15 +127,15 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
-            is Loading    -> {
+            is Loading -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
             }
-            is Success    -> {
+            is Success -> {
                 interactionListener?.spaceInviteBottomSheetOnAccept(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail       -> {
+            is Fail -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }
@@ -145,15 +145,15 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Button)
             }
-            is Loading    -> {
+            is Loading -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardMainButton.button.isEnabled = false
             }
-            is Success    -> {
+            is Success -> {
                 interactionListener?.spaceInviteBottomSheetOnDecline(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail       -> {
+            is Fail -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }

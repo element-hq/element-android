@@ -108,11 +108,8 @@ class CallSignalingEventsGroup(private val group: TimelineEventsGroup) {
         }
     }
 
-    /**
-     * Returns true if there are only events from one side.
-     */
-    fun callWasMissed(): Boolean {
-        return group.events.distinctBy { it.senderInfo.userId }.size == 1
+    fun callWasAnswered(): Boolean {
+        return getAnswer() != null
     }
 
     private fun getAnswer(): TimelineEvent? {

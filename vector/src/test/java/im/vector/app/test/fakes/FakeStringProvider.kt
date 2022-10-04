@@ -21,12 +21,21 @@ import io.mockk.every
 import io.mockk.mockk
 
 class FakeStringProvider {
-
     val instance = mockk<StringProvider>()
 
     init {
         every { instance.getString(any()) } answers {
             "test-${args[0]}"
         }
+
+        every { instance.getQuantityString(any(), any(), any()) } answers {
+            "test-${args[0]}-${args[1]}"
+        }
+    }
+
+    fun given(id: Int, result: String) {
+        every { instance.getString(id) } returns result
     }
 }
+
+fun Int.toTestString() = "test-$this"

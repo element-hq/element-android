@@ -18,13 +18,15 @@ package im.vector.app.features.home.room.detail.timeline.edithistory
 import android.text.Spannable
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.ui.list.genericItem
@@ -37,35 +39,37 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
-import org.matrix.android.sdk.internal.session.room.send.TextContent
+import org.matrix.android.sdk.api.util.TextContent
 import java.util.Calendar
 import javax.inject.Inject
 
 /**
- * Epoxy controller for edit history list
+ * Epoxy controller for edit history list.
  */
 class ViewEditHistoryEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val eventHtmlRenderer: EventHtmlRenderer,
-        private val dateFormatter: VectorDateFormatter
+        private val dateFormatter: VectorDateFormatter,
+        private val clock: Clock,
 ) : TypedEpoxyController<ViewEditHistoryViewState>() {
 
     override fun buildModels(state: ViewEditHistoryViewState) {
         val host = this
         when (state.editList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 genericLoaderItem {
                     id("Spinner")
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
-            is Success    -> {
+            is Success -> {
                 state.editList()?.let { renderEvents(it, state.isOriginalAReply) }
             }
         }
@@ -84,7 +88,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
 
                 val evDate = Calendar.getInstance().apply {
                     timeInMillis = timelineEvent.originServerTs
-                            ?: System.currentTimeMillis()
+                            ?: clock.epochMillis()
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
@@ -123,7 +127,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                                         textColor = colorProvider.getColor(R.color.palette_element_green)
                                     }
                                 }
-                                else                              -> {
+                                else -> {
                                     span {
                                         text = it.text
                                     }

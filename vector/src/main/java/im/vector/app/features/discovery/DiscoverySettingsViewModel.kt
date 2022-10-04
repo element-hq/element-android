@@ -27,7 +27,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.flow.launchIn
@@ -102,18 +101,18 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: DiscoverySettingsAction) {
         when (action) {
-            DiscoverySettingsAction.Refresh                   -> fetchContent()
-            DiscoverySettingsAction.RetrieveBinding           -> retrieveBinding()
-            DiscoverySettingsAction.DisconnectIdentityServer  -> disconnectIdentityServer()
+            DiscoverySettingsAction.Refresh -> fetchContent()
+            DiscoverySettingsAction.RetrieveBinding -> retrieveBinding()
+            DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
             is DiscoverySettingsAction.SetPoliciesExpandState -> updatePolicyUrlsExpandedState(action.expanded)
-            is DiscoverySettingsAction.ChangeIdentityServer   -> changeIdentityServer(action)
-            is DiscoverySettingsAction.UpdateUserConsent      -> handleUpdateUserConsent(action)
-            is DiscoverySettingsAction.RevokeThreePid         -> revokeThreePid(action)
-            is DiscoverySettingsAction.ShareThreePid          -> shareThreePid(action)
-            is DiscoverySettingsAction.FinalizeBind3pid       -> finalizeBind3pid(action, true)
-            is DiscoverySettingsAction.SubmitMsisdnToken      -> submitMsisdnToken(action)
-            is DiscoverySettingsAction.CancelBinding          -> cancelBinding(action)
-        }.exhaustive
+            is DiscoverySettingsAction.ChangeIdentityServer -> changeIdentityServer(action)
+            is DiscoverySettingsAction.UpdateUserConsent -> handleUpdateUserConsent(action)
+            is DiscoverySettingsAction.RevokeThreePid -> revokeThreePid(action)
+            is DiscoverySettingsAction.ShareThreePid -> shareThreePid(action)
+            is DiscoverySettingsAction.FinalizeBind3pid -> finalizeBind3pid(action, true)
+            is DiscoverySettingsAction.SubmitMsisdnToken -> submitMsisdnToken(action)
+            is DiscoverySettingsAction.CancelBinding -> cancelBinding(action)
+        }
     }
 
     private fun handleUpdateUserConsent(action: DiscoverySettingsAction.UpdateUserConsent) {
@@ -233,9 +232,9 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun revokeThreePid(action: DiscoverySettingsAction.RevokeThreePid) {
         when (action.threePid) {
-            is ThreePid.Email  -> revokeEmail(action.threePid)
+            is ThreePid.Email -> revokeEmail(action.threePid)
             is ThreePid.Msisdn -> revokeMsisdn(action.threePid)
-        }.exhaustive
+        }
     }
 
     private fun revokeEmail(threePid: ThreePid.Email) = withState { state ->
@@ -291,7 +290,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun retrieveBinding() {
-        retrieveBinding(session.getThreePids())
+        retrieveBinding(session.profileService().getThreePids())
     }
 
     private fun retrieveBinding(threePids: List<ThreePid>) = withState { state ->
@@ -360,7 +359,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid, fromUser: Boolean) = withState { state ->
         val threePid = when (action.threePid) {
-            is ThreePid.Email  -> {
+            is ThreePid.Email -> {
                 state.emailList()?.find { it.threePid.value == action.threePid.email }?.threePid ?: return@withState
             }
             is ThreePid.Msisdn -> {
@@ -390,7 +389,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
                 SharedState.BINDING_IN_PROGRESS -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid), false)
-                else                            -> Unit
+                else -> Unit
             }
         }
         viewModelScope.launch {

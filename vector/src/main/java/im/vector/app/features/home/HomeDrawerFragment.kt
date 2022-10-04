@@ -23,14 +23,15 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentHomeDrawerBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceListFragment
@@ -40,11 +41,14 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class HomeDrawerFragment @Inject constructor(
-        private val session: Session,
-        private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentHomeDrawerBinding>() {
+@AndroidEntryPoint
+class HomeDrawerFragment :
+        VectorBaseFragment<FragmentHomeDrawerBinding>() {
+
+    @Inject lateinit var session: Session
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var buildMeta: BuildMeta
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -60,7 +64,7 @@ class HomeDrawerFragment @Inject constructor(
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
         }
-        session.getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
+        session.userService().getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
             val user = optionalUser?.getOrNull()
             if (user != null) {
                 avatarRenderer.render(user.toMatrixItem(), views.homeDrawerHeaderAvatarView)
@@ -98,11 +102,11 @@ class HomeDrawerFragment @Inject constructor(
 
         views.homeDrawerInviteFriendButton.debouncedClicks {
             session.permalinkService().createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
-                analyticsTracker.screen(Screen(screenName = Screen.ScreenName.MobileInviteFriends))
+                analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
                 val text = getString(R.string.invite_friends_text, permalink)
 
                 startSharePlainTextIntent(
-                        fragment = this,
+                        context = requireContext(),
                         activityResultLauncher = null,
                         chooserTitle = getString(R.string.invite_friends),
                         text = text,
@@ -112,10 +116,14 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        views.homeDrawerHeaderDebugView.isVisible = BuildConfig.DEBUG && vectorPreferences.developerMode()
         views.homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        views.homeDrawerHeaderDebugView.isVisible = buildMeta.isDebug && vectorPreferences.developerMode()
     }
 }

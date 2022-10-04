@@ -19,7 +19,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 
 /**
- * Keep the latest state of a poll
+ * Keep the latest state of a poll.
  */
 internal open class PollResponseAggregatedSummaryEntity(
         // For now we persist this a JSON for greater flexibility

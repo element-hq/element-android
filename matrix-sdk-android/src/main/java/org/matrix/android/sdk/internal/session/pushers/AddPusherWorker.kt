@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
 internal class AddPusherWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<AddPusherWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<AddPusherWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -53,7 +53,7 @@ internal class AddPusherWorker(context: Context, params: WorkerParameters, sessi
         } catch (exception: Throwable) {
             when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
-                else                         -> Result.failure()
+                else -> Result.failure()
             }
         }
     }

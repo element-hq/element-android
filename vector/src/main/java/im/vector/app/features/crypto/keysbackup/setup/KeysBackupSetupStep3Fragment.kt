@@ -28,8 +28,10 @@ import androidx.lifecycle.lifecycleScope
 import arrow.core.Try
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
@@ -43,9 +45,10 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
-class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep3Binding>() {
+@AndroidEntryPoint
+class KeysBackupSetupStep3Fragment :
+        VectorBaseFragment<FragmentKeysBackupSetupStep3Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep3Binding {
         return FragmentKeysBackupSetupStep3Binding.inflate(inflater, container, false)
@@ -133,7 +136,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             selectTxtFileToWrite(
                     activity = requireActivity(),
                     activityResultLauncher = saveRecoveryActivityResultLauncher,
-                    defaultFileName = "recovery-key-$userId-$timestamp.txt",
+                    defaultFileName = "recovery-key-$userId-${timestamp}.txt",
                     chooserHint = getString(R.string.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
@@ -141,11 +144,12 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         dialog.findViewById<View>(R.id.keys_backup_setup_share)?.debouncedClicks {
             startSharePlainTextIntent(
-                    fragment = this,
+                    context = requireContext(),
                     activityResultLauncher = null,
                     chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                     text = recoveryKey,
-                    subject = context?.getString(R.string.recovery_key))
+                    subject = context?.getString(R.string.recovery_key)
+            )
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
         }
@@ -165,7 +169,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
         lifecycleScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
-                    requireContext().contentResolver.openOutputStream(uri)
+                    requireContext().safeOpenOutputStream(uri)
                             ?.use { os ->
                                 os.write(data.toByteArray())
                                 os.flush()

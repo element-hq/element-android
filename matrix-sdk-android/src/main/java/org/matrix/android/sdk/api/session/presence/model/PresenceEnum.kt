@@ -28,7 +28,10 @@ enum class PresenceEnum(val value: String) {
     OFFLINE("offline"),
 
     @Json(name = "unavailable")
-    UNAVAILABLE("unavailable");
+    UNAVAILABLE("unavailable"),
+
+    @Json(name = "org.matrix.msc3026.busy")
+    BUSY("busy");
 
     companion object {
         fun from(s: String): PresenceEnum? = values().find { it.value == s }

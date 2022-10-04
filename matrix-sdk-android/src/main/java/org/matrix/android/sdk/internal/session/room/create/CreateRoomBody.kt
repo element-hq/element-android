@@ -22,10 +22,11 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 
 /**
- * Parameter to create a room
+ * Parameter to create a room.
  */
 @JsonClass(generateAdapter = true)
 internal data class CreateRoomBody(
@@ -108,7 +109,7 @@ internal data class CreateRoomBody(
         val isDirect: Boolean?,
 
         /**
-         * The power level content to override in the default power level event
+         * The power level content to override in the default power level event.
          */
         @Json(name = "power_level_content_override")
         val powerLevelContentOverride: PowerLevelsContent?,
@@ -119,4 +120,27 @@ internal data class CreateRoomBody(
          */
         @Json(name = "room_version")
         val roomVersion: String?
-)
+) {
+    companion object {
+        fun fromJson(json: String?): CreateRoomBody? {
+            return json?.let { MoshiProvider.providesMoshi().adapter(CreateRoomBody::class.java).fromJson(it) }
+        }
+    }
+}
+
+/**
+ * Tells if the created room can be a direct chat one.
+ *
+ * @return true if it is a direct chat
+ */
+private fun CreateRoomBody.isDirect(): Boolean {
+    return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT && isDirect == true
+}
+
+internal fun CreateRoomBody.getDirectUserId(): String? {
+    return if (isDirect()) {
+        invitedUserIds?.firstOrNull()
+                ?: invite3pids?.firstOrNull()?.address
+                ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
+    } else null
+}

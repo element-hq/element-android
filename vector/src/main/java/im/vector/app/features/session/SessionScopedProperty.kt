@@ -23,9 +23,9 @@ import kotlin.reflect.KProperty
  * This is a simple hack for having some Session scope dependencies.
  * Probably a temporary solution waiting for refactoring the Dagger management of Session.
  * You should use it with an extension property :
-    val Session.myProperty: MyProperty by SessionScopedProperty {
-        init code
-    }
+val Session.myProperty: MyProperty by SessionScopedProperty {
+init code
+}
  *
  */
 class SessionScopedProperty<T : Any>(val initializer: (Session) -> T) {

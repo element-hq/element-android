@@ -36,10 +36,11 @@ internal object MatrixModule {
     @Provides
     @MatrixScope
     fun providesMatrixCoroutineDispatchers(): MatrixCoroutineDispatchers {
-        return MatrixCoroutineDispatchers(io = Dispatchers.IO,
+        return MatrixCoroutineDispatchers(
+                io = Dispatchers.IO,
                 computation = Dispatchers.Default,
                 main = Dispatchers.Main,
-                crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher(),
+                crypto = createBackgroundHandler("Matrix-Crypto_Thread").asCoroutineDispatcher(),
                 dmVerif = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
     }

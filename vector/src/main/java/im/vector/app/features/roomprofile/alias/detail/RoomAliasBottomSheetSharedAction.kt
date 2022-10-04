@@ -24,8 +24,9 @@ import im.vector.app.core.platform.VectorSharedAction
 sealed class RoomAliasBottomSheetSharedAction(
         @StringRes val titleRes: Int,
         @DrawableRes val iconResId: Int = 0,
-        val destructive: Boolean = false) :
-    VectorSharedAction {
+        val destructive: Boolean = false
+) :
+        VectorSharedAction {
 
     data class ShareAlias(val matrixTo: String) : RoomAliasBottomSheetSharedAction(
             R.string.action_share,

@@ -60,7 +60,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
             val senderId: String?,
             val reason: String,
             val spam: Boolean = false,
-            val inappropriate: Boolean = false) : RoomDetailAction()
+            val inappropriate: Boolean = false
+    ) : RoomDetailAction()
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
@@ -78,6 +79,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()
+    object StartVoiceBroadcast : RoomDetailAction()
     object OpenIntegrationManager : RoomDetailAction()
     object ManageIntegrations : RoomDetailAction()
     data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
@@ -86,12 +88,14 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object JoinJitsiCall : RoomDetailAction()
     object LeaveJitsiCall : RoomDetailAction()
 
-    data class EnsureNativeWidgetAllowed(val widget: Widget,
-                                         val userJustAccepted: Boolean,
-                                         val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+    data class EnsureNativeWidgetAllowed(
+            val widget: Widget,
+            val userJustAccepted: Boolean,
+            val grantedEvents: RoomDetailViewEvents
+    ) : RoomDetailAction()
+
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
-    data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
     object QuickActionInvitePeople : RoomDetailAction()
     object QuickActionSetAvatar : RoomDetailAction()
@@ -111,4 +115,9 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Poll
     data class EndPoll(val eventId: String) : RoomDetailAction()
+
+    // Live Location
+    object StopLiveLocationSharing : RoomDetailAction()
+
+    object OpenElementCallWidget : RoomDetailAction()
 }

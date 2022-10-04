@@ -16,22 +16,39 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
+import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+import org.matrix.android.sdk.internal.util.logLimit
+import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val crossSigningService: DefaultCrossSigningService,
+        private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
+        private val workManagerProvider: WorkManagerProvider,
+        @SessionId private val sessionId: String,
 ) {
-    suspend fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
-        cleanupEphemeralFiles(synResHaResponsePostTreatmentAggregator.ephemeralFilesToDelete)
-        updateDirectUserIds(synResHaResponsePostTreatmentAggregator.directChatsToCheck)
+    suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
+        cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
+        updateDirectUserIds(aggregator.directChatsToCheck)
+        fetchAndUpdateUsers(aggregator.userIdsToFetch)
+        handleUserIdsForCheckingTrustAndAffectedRoomShields(aggregator.userIdsForCheckingTrustAndAffectedRoomShields)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -59,13 +76,36 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                         }
 
                 // remove roomId from currentDirectUserId entry
-                hasUpdate = hasUpdate or(directChats[currentDirectUserId]?.remove(roomId) == true)
+                hasUpdate = hasUpdate or (directChats[currentDirectUserId]?.remove(roomId) == true)
                 // remove currentDirectUserId entry if there is no attached room anymore
-                hasUpdate = hasUpdate or(directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
+                hasUpdate = hasUpdate or (directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
             }
         }
         if (hasUpdate) {
             updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
         }
+    }
+
+    private fun fetchAndUpdateUsers(userIdsToFetch: Collection<String>) {
+        if (userIdsToFetch.isEmpty()) return
+        Timber.d("## Configure Worker to update users: ${userIdsToFetch.logLimit()}")
+        val workerParams = UpdateTrustWorker.Params(
+                sessionId = sessionId,
+                filename = updateTrustWorkerDataRepository.createParam(userIdsToFetch.toList())
+        )
+        val workerData = WorkerParamsFactory.toData(workerParams)
+
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<UpdateUserWorker>()
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManagerProvider.workManager
+                .beginUniqueWork("USER_UPDATE_QUEUE", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                .enqueue()
+    }
+
+    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Iterable<String>) {
+        crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
     }
 }

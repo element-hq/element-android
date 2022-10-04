@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.identity
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.RetrofitFactory
-import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 

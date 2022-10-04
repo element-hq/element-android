@@ -19,7 +19,7 @@ package im.vector.app.core.utils
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Use this container to read a value only once
+ * Use this container to read a value only once.
  */
 class ReadOnce<T>(
         private val value: T
@@ -36,7 +36,7 @@ class ReadOnce<T>(
 }
 
 /**
- * Only the first call to isTrue() will return true
+ * Only the first call to isTrue() will return true.
  */
 class ReadOnceTrue {
     private val readOnce = ReadOnce(true)

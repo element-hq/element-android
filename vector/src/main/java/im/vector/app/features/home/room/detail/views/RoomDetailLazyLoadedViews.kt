@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.views
 import android.view.View
 import android.view.ViewStub
 import im.vector.app.core.ui.views.FailedMessagesWarningView
-import im.vector.app.databinding.FragmentRoomDetailBinding
+import im.vector.app.databinding.FragmentTimelineBinding
 import im.vector.app.features.invite.VectorInviteView
 import kotlin.reflect.KMutableProperty0
 
@@ -29,12 +29,12 @@ import kotlin.reflect.KMutableProperty0
  */
 class RoomDetailLazyLoadedViews {
 
-    private var roomDetailBinding: FragmentRoomDetailBinding? = null
+    private var roomDetailBinding: FragmentTimelineBinding? = null
 
     private var failedMessagesWarningView: FailedMessagesWarningView? = null
     private var inviteView: VectorInviteView? = null
 
-    fun bind(roomDetailBinding: FragmentRoomDetailBinding) {
+    fun bind(roomDetailBinding: FragmentTimelineBinding) {
         this.roomDetailBinding = roomDetailBinding
     }
 

@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
@@ -42,18 +43,19 @@ import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
-import java.util.HashMap
 import javax.inject.Inject
 
 @SessionScope
-internal class WidgetManager @Inject constructor(private val integrationManager: IntegrationManager,
-                                                 private val userAccountDataDataSource: UserAccountDataDataSource,
-                                                 private val stateEventDataSource: StateEventDataSource,
-                                                 private val createWidgetTask: CreateWidgetTask,
-                                                 private val widgetFactory: WidgetFactory,
-                                                 @UserId private val userId: String) :
+internal class WidgetManager @Inject constructor(
+        private val integrationManager: IntegrationManager,
+        private val userAccountDataDataSource: UserAccountDataDataSource,
+        private val stateEventDataSource: StateEventDataSource,
+        private val createWidgetTask: CreateWidgetTask,
+        private val widgetFactory: WidgetFactory,
+        @UserId private val userId: String
+) :
 
-    IntegrationManagerService.Listener, SessionLifecycleObserver {
+        IntegrationManagerService.Listener, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
@@ -70,7 +72,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
 
     fun getRoomWidgetsLive(
             roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
@@ -87,7 +89,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
 
     fun getRoomWidgets(
             roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetId: QueryStateEventValue,
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): List<Widget> {
@@ -104,8 +106,10 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return widgetFactory.computeURL(widget, isLightTheme)
     }
 
-    private fun List<Event>.mapEventsToWidgets(widgetTypes: Set<String>? = null,
-                                               excludedTypes: Set<String>? = null): List<Widget> {
+    private fun List<Event>.mapEventsToWidgets(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): List<Widget> {
         val widgetEvents = this
         // Widget id -> widget
         val widgets: MutableMap<String, Widget> = HashMap()
@@ -150,8 +154,10 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return widgetsAccountData.mapToWidgets(widgetTypes, excludedTypes)
     }
 
-    private fun UserAccountDataEvent.mapToWidgets(widgetTypes: Set<String>? = null,
-                                                  excludedTypes: Set<String>? = null): List<Widget> {
+    private fun UserAccountDataEvent.mapToWidgets(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): List<Widget> {
         return extractWidgetSequence(widgetFactory)
                 .filter {
                     val widgetType = it.widgetContent.type ?: return@filter false
@@ -194,7 +200,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         val powerLevelsEvent = stateEventDataSource.getStateEvent(
                 roomId = roomId,
                 eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                stateKey = QueryStringValue.NoCondition
+                stateKey = QueryStringValue.IsEmpty
         )
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
         return PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(userId, true, EventType.STATE_ROOM_WIDGET_LEGACY)

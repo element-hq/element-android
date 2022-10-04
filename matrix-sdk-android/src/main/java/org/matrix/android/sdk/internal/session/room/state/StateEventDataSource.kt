@@ -22,6 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Optional
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
-import org.matrix.android.sdk.internal.query.process
 import javax.inject.Inject
 
 internal class StateEventDataSource @Inject constructor(
@@ -41,13 +41,13 @@ internal class StateEventDataSource @Inject constructor(
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) {
 
-    fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue): Event? {
+    fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStateEventValue): Event? {
         return realmSessionProvider.withRealm { realm ->
             buildStateEventQuery(realm, roomId, setOf(eventType), stateKey).findFirst()?.root?.asDomain()
         }
     }
 
-    fun getStateEventLive(roomId: String, eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
+    fun getStateEventLive(roomId: String, eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { realm -> buildStateEventQuery(realm, roomId, setOf(eventType), stateKey) },
                 { it.root?.asDomain() }
@@ -57,7 +57,7 @@ internal class StateEventDataSource @Inject constructor(
         }
     }
 
-    fun getStateEvents(roomId: String, eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
+    fun getStateEvents(roomId: String, eventTypes: Set<String>, stateKey: QueryStateEventValue): List<Event> {
         return realmSessionProvider.withRealm { realm ->
             buildStateEventQuery(realm, roomId, eventTypes, stateKey)
                     .findAll()
@@ -67,7 +67,7 @@ internal class StateEventDataSource @Inject constructor(
         }
     }
 
-    fun getStateEventsLive(roomId: String, eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
+    fun getStateEventsLive(roomId: String, eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { realm -> buildStateEventQuery(realm, roomId, eventTypes, stateKey) },
                 { it.root?.asDomain() }
@@ -77,10 +77,11 @@ internal class StateEventDataSource @Inject constructor(
         }
     }
 
-    private fun buildStateEventQuery(realm: Realm,
-                                     roomId: String,
-                                     eventTypes: Set<String>,
-                                     stateKey: QueryStringValue
+    private fun buildStateEventQuery(
+            realm: Realm,
+            roomId: String,
+            eventTypes: Set<String>,
+            stateKey: QueryStateEventValue
     ): RealmQuery<CurrentStateEventEntity> {
         return with(queryStringValueProcessor) {
             realm.where<CurrentStateEventEntity>()
@@ -90,7 +91,8 @@ internal class StateEventDataSource @Inject constructor(
                             `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
                         }
                     }
-                    .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
+                    // It's OK to cast stateKey as QueryStringValue
+                    .process(CurrentStateEventEntityFields.STATE_KEY, stateKey as QueryStringValue)
         }
     }
 }

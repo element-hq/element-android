@@ -94,12 +94,12 @@ internal class CleanupSession @Inject constructor(
         do {
             val sessionRealmCount = Realm.getGlobalInstanceCount(realmSessionConfiguration)
             val cryptoRealmCount = Realm.getGlobalInstanceCount(realmCryptoConfiguration)
-            Timber.d("Wait for all Realm instance to be closed ($sessionRealmCount - $cryptoRealmCount)")
             if (sessionRealmCount > 0 || cryptoRealmCount > 0) {
-                Timber.d("Waiting ${TIME_TO_WAIT_MILLIS}ms")
+                Timber.d("Waiting ${TIME_TO_WAIT_MILLIS}ms for all Realm instance to be closed ($sessionRealmCount - $cryptoRealmCount)")
                 delay(TIME_TO_WAIT_MILLIS)
                 timeToWaitMillis -= TIME_TO_WAIT_MILLIS
             } else {
+                Timber.d("Finished waiting for all Realm instance to be closed ($sessionRealmCount - $cryptoRealmCount)")
                 timeToWaitMillis = 0
             }
         } while (timeToWaitMillis > 0)

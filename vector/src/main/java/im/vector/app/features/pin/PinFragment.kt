@@ -23,11 +23,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
-import com.beautycoder.pflockscreen.PFFLockScreenConfiguration
-import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment
+import com.airbnb.mvrx.asMavericksArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,9 +34,15 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPinBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
+import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
+import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
+import im.vector.app.features.pin.lockscreen.ui.AuthMethod
+import im.vector.app.features.pin.lockscreen.ui.LockScreenFragment
+import im.vector.app.features.pin.lockscreen.ui.LockScreenListener
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -45,10 +50,13 @@ data class PinArgs(
         val pinMode: PinMode
 ) : Parcelable
 
-class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val vectorPreferences: VectorPreferences
-) : VectorBaseFragment<FragmentPinBinding>() {
+@AndroidEntryPoint
+class PinFragment :
+        VectorBaseFragment<FragmentPinBinding>() {
+
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var defaultConfiguration: LockScreenConfiguration
 
     private val fragmentArgs: PinArgs by args()
 
@@ -60,97 +68,91 @@ class PinFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
-            PinMode.AUTH   -> showAuthFragment()
+            PinMode.AUTH -> showAuthFragment()
             PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
     }
 
     private fun showCreateFragment() {
-        val createFragment = PFLockScreenFragment()
-        val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setNewCodeValidation(true)
-                .setTitle(getString(R.string.create_pin_title))
-                .setNewCodeValidationTitle(getString(R.string.create_pin_confirm_title))
-                .setMode(PFFLockScreenConfiguration.MODE_CREATE)
-
-        createFragment.setConfiguration(builder.build())
-        createFragment.setCodeCreateListener(object : PFLockScreenFragment.OnPFLockScreenCodeCreateListener {
+        val createFragment = LockScreenFragment()
+        createFragment.lockScreenListener = object : LockScreenListener {
             override fun onNewCodeValidationFailed() {
                 Toast.makeText(requireContext(), getString(R.string.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
             }
 
-            override fun onPinCodeEnteredFirst(pinCode: String?): Boolean {
-                return false
+            override fun onPinCodeCreated() {
+                vectorBaseActivity.setResult(Activity.RESULT_OK)
+                vectorBaseActivity.finish()
             }
-
-            override fun onCodeCreated(encodedCode: String) {
-                lifecycleScope.launch {
-                    pinCodeStore.storeEncodedPin(encodedCode)
-                    vectorBaseActivity.setResult(Activity.RESULT_OK)
-                    vectorBaseActivity.finish()
-                }
-            }
-        })
+        }
+        createFragment.arguments = defaultConfiguration.copy(
+                mode = LockScreenMode.CREATE,
+                title = getString(R.string.create_pin_title),
+                needsNewCodeValidation = true,
+                newCodeConfirmationTitle = getString(R.string.create_pin_confirm_title),
+        ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, createFragment)
     }
 
     private fun showAuthFragment() {
-        val encodedPin = pinCodeStore.getEncodedPin() ?: return
-        val authFragment = PFLockScreenFragment()
-        val canUseBiometrics = pinCodeStore.getRemainingBiometricsAttemptsNumber() > 0
-        val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setAutoShowBiometric(true)
-                .setUseBiometric(vectorPreferences.useBiometricsToUnlock() && canUseBiometrics)
-                .setAutoShowBiometric(canUseBiometrics)
-                .setTitle(getString(R.string.auth_pin_title))
-                .setLeftButton(getString(R.string.auth_pin_forgot))
-                .setClearCodeOnError(true)
-                .setMode(PFFLockScreenConfiguration.MODE_AUTH)
-        authFragment.setConfiguration(builder.build())
-        authFragment.setEncodedPinCode(encodedPin)
-        authFragment.setOnLeftButtonClickListener {
-            displayForgotPinWarningDialog()
-        }
-        authFragment.setLoginListener(object : PFLockScreenFragment.OnPFLockScreenLoginListener {
-            override fun onPinLoginFailed() {
-                onWrongPin()
-            }
-
-            override fun onBiometricAuthSuccessful() {
-                pinCodeStore.resetCounters()
-                vectorBaseActivity.setResult(Activity.RESULT_OK)
-                vectorBaseActivity.finish()
-            }
-
-            override fun onBiometricAuthLoginFailed() {
-                val remainingAttempts = pinCodeStore.onWrongBiometrics()
-                if (remainingAttempts <= 0) {
-                    // Disable Biometrics
-                    builder.setUseBiometric(false)
-                    authFragment.setConfiguration(builder.build())
+        val authFragment = LockScreenFragment()
+        authFragment.onLeftButtonClickedListener = View.OnClickListener { displayForgotPinWarningDialog() }
+        authFragment.lockScreenListener = object : LockScreenListener {
+            override fun onAuthenticationFailure(authMethod: AuthMethod) {
+                when (authMethod) {
+                    AuthMethod.PIN_CODE -> onWrongPin()
+                    AuthMethod.BIOMETRICS -> Unit
                 }
             }
 
-            override fun onCodeInputSuccessful() {
-                pinCodeStore.resetCounters()
+            override fun onAuthenticationSuccess(authMethod: AuthMethod) {
+                pinCodeStore.resetCounter()
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
-        })
+
+            override fun onAuthenticationError(authMethod: AuthMethod, throwable: Throwable) {
+                if (throwable is BiometricAuthError) {
+                    // System disabled biometric auth, no need to do it ourselves
+                    if (throwable.isAuthPermanentlyDisabledError) {
+                        vectorPreferences.setUseBiometricToUnlock(false)
+                    }
+                    Toast.makeText(requireContext(), throwable.localizedMessage, Toast.LENGTH_SHORT).show()
+                } else {
+                    Timber.e(throwable)
+                }
+            }
+
+            override fun onBiometricKeyInvalidated() {
+                // Disable biometric auth in settings and remove system key
+                vectorPreferences.setUseBiometricToUnlock(false)
+
+                MaterialAlertDialogBuilder(requireContext())
+                        .setMessage(R.string.auth_biometric_key_invalidated_message)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+        }
+        authFragment.arguments = defaultConfiguration.copy(
+                mode = LockScreenMode.VERIFY,
+                title = getString(R.string.auth_pin_title),
+                leftButtonTitle = getString(R.string.auth_pin_forgot),
+                clearCodeOnError = true,
+        ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, authFragment)
     }
 
     private fun onWrongPin() {
         val remainingAttempts = pinCodeStore.onWrongPin()
         when {
-            remainingAttempts > 1  ->
+            remainingAttempts > 1 ->
                 requireActivity().toast(resources.getQuantityString(R.plurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
             remainingAttempts == 1 ->
                 requireActivity().toast(R.string.wrong_pin_message_last_remaining_attempt)
-            else                   -> {
+            else -> {
                 requireActivity().toast(R.string.too_many_pin_failures)
                 // Logout
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true))
+                launchResetPinFlow()
             }
         }
     }

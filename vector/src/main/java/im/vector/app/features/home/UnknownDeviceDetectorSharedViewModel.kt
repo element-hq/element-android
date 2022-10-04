@@ -21,14 +21,18 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.time.Clock
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,14 +42,15 @@ import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 
 data class UnknownDevicesState(
-        val myMatrixItem: MatrixItem.UserItem? = null,
+        val myMatrixItem: MatrixItem.UserItem,
         val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized
 ) : MavericksState
 
@@ -55,10 +60,12 @@ data class DeviceDetectionInfo(
         val currentSessionTrust: Boolean
 )
 
-class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
-                                                                       session: Session,
-                                                                       private val vectorPreferences: VectorPreferences) :
-    VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
+        @Assisted initialState: UnknownDevicesState,
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        clock: Clock,
+) : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()
@@ -69,16 +76,23 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
         override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
     }
 
-    companion object : MavericksViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> by hiltMavericksViewModelFactory() {
+        override fun initialState(viewModelContext: ViewModelContext): UnknownDevicesState {
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
+
+            return UnknownDevicesState(
+                    myMatrixItem = session.getUserOrDefault(session.myUserId).toMatrixItem()
+            )
+        }
+    }
 
     private val ignoredDeviceList = ArrayList<String>()
 
     init {
-
         val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
                 .firstOrNull { it.deviceId == session.sessionParams.deviceId }
                 ?.firstTimeSeenLocalTs
-                ?: System.currentTimeMillis()
+                ?: clock.epochMillis()
         Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(
@@ -115,7 +129,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 .execute { async ->
                     //                    Timber.v("## Detector trigger passed distinct")
                     copy(
-                            myMatrixItem = session.getUser(session.myUserId)?.toMatrixItem(),
+                            myMatrixItem = session.getUserOrDefault(session.myUserId).toMatrixItem(),
                             unknownSessions = async
                     )
                 }

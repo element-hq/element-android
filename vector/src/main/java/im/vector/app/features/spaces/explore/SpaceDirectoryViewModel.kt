@@ -27,6 +27,9 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -35,6 +38,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -47,7 +52,8 @@ import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceDirectoryState,
-        private val session: Session
+        private val session: Session,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -105,8 +111,12 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
-                        copy(canAddRooms = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                EventType.STATE_SPACE_CHILD))
+                        copy(
+                                canAddRooms = powerLevelsHelper.isUserAllowedToSend(
+                                        session.myUserId, true,
+                                        EventType.STATE_SPACE_CHILD
+                                )
+                        )
                     }
                 }
                 .launchIn(viewModelScope)
@@ -182,40 +192,47 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceDirectoryViewAction) {
         when (action) {
-            is SpaceDirectoryViewAction.ExploreSubSpace          -> {
+            is SpaceDirectoryViewAction.ExploreSubSpace -> {
                 handleExploreSubSpace(action)
             }
-            SpaceDirectoryViewAction.HandleBack                  -> {
+            SpaceDirectoryViewAction.HandleBack -> {
                 handleBack()
             }
-            is SpaceDirectoryViewAction.JoinOrOpen               -> {
+            is SpaceDirectoryViewAction.JoinOrOpen -> {
                 handleJoinOrOpen(action.spaceChildInfo)
             }
-            is SpaceDirectoryViewAction.NavigateToRoom           -> {
+            is SpaceDirectoryViewAction.NavigateToRoom -> {
                 _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
             }
-            is SpaceDirectoryViewAction.ShowDetails              -> {
+            is SpaceDirectoryViewAction.ShowDetails -> {
                 // This is temporary for now to at least display something for the space beta
                 // It's not ideal as it's doing some peeking that is not needed.
                 session.permalinkService().createRoomPermalink(action.spaceChildInfo.childRoomId)?.let {
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToMxToBottomSheet(it))
                 }
             }
-            SpaceDirectoryViewAction.Retry                       -> {
+            SpaceDirectoryViewAction.Retry -> {
                 handleRetry()
             }
-            is SpaceDirectoryViewAction.RefreshUntilFound        -> {
+            is SpaceDirectoryViewAction.RefreshUntilFound -> {
                 handleRefreshUntilFound(action.roomIdToFind)
             }
             SpaceDirectoryViewAction.LoadAdditionalItemsIfNeeded -> {
                 loadAdditionalItemsIfNeeded()
             }
-            is SpaceDirectoryViewAction.CreateNewRoom            -> {
+            is SpaceDirectoryViewAction.CreateNewRoom -> {
                 withState { state ->
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToCreateNewRoom(state.currentRootSummary?.roomId ?: initialState.spaceId))
                 }
             }
+            is SpaceDirectoryViewAction.FilterRooms -> {
+                filter(action.query)
+            }
         }
+    }
+
+    private fun filter(query: String?) {
+        setState { copy(currentFilter = query.orEmpty()) }
     }
 
     private fun handleBack() = withState { state ->
@@ -275,9 +292,9 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 knownSummaries = (
                         knownSummaries +
                                 (paginate.children.mapNotNull {
-                            session.getRoomSummary(it.childRoomId)
-                                    ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
-                        })
+                                    session.getRoomSummary(it.childRoomId)
+                                            ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                                })
                         ).distinctBy { it.roomId }
 
                 query = query.copy(
@@ -321,10 +338,10 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         }
         val shouldLoad = when (state.apiResults[newRootId]) {
             Uninitialized -> true
-            is Loading    -> false
-            is Success    -> false
-            is Fail       -> true
-            null          -> true
+            is Loading -> false
+            is Success -> false
+            is Fail -> true
+            null -> true
         }
 
         if (shouldLoad) {
@@ -409,11 +426,14 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                     if (isSpace) {
                         session.spaceService().joinSpace(childId, null, spaceChildInfo.viaServers)
                     } else {
-                        session.joinRoom(childId, null, spaceChildInfo.viaServers)
+                        session.roomService().joinRoom(childId, null, spaceChildInfo.viaServers)
                     }
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## Space: Failed to join room or subspace")
                 }
+
+                session.getRoomSummary(childId)
+                        ?.let { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.SpaceHierarchy)) }
             }
         }
     }

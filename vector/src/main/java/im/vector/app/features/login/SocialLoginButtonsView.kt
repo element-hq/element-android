@@ -28,10 +28,10 @@ import im.vector.app.R
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    LinearLayout(context, attrs, defStyle) {
+        LinearLayout(context, attrs, defStyle) {
 
-    interface InteractionListener {
-        fun onProviderSelected(id: String?)
+    fun interface InteractionListener {
+        fun onProviderSelected(provider: SsoIdentityProvider?)
     }
 
     enum class Mode {
@@ -84,25 +84,25 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             // Use some heuristic to render buttons according to branding guidelines
             val button: MaterialButton = cachedViews[identityProvider.id]
                     ?: when (identityProvider.brand) {
-                        SsoIdentityProvider.BRAND_GOOGLE   -> {
+                        SsoIdentityProvider.BRAND_GOOGLE -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
                         }
-                        SsoIdentityProvider.BRAND_GITHUB   -> {
+                        SsoIdentityProvider.BRAND_GITHUB -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
                         }
-                        SsoIdentityProvider.BRAND_APPLE    -> {
+                        SsoIdentityProvider.BRAND_APPLE -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
                         }
                         SsoIdentityProvider.BRAND_FACEBOOK -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
                         }
-                        SsoIdentityProvider.BRAND_TWITTER  -> {
+                        SsoIdentityProvider.BRAND_TWITTER -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
                         }
-                        SsoIdentityProvider.BRAND_GITLAB  -> {
+                        SsoIdentityProvider.BRAND_GITLAB -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_gitlab_style)
                         }
-                        else                            -> {
+                        else -> {
                             // TODO Use iconUrl
                             MaterialButton(context, null, R.attr.materialButtonOutlinedStyle).apply {
                                 transformationMethod = null
@@ -113,7 +113,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             button.text = getButtonTitle(identityProvider.name)
             button.setTag(R.id.loginSignupSigninSocialLoginButtons, identityProvider.id)
             button.setOnClickListener {
-                listener?.onProviderSelected(identityProvider.id)
+                listener?.onProviderSelected(identityProvider)
             }
             addView(button)
         }
@@ -121,8 +121,8 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
 
     private fun getButtonTitle(providerName: String?): String {
         return when (mode) {
-            Mode.MODE_SIGN_IN  -> context.getString(R.string.login_social_signin_with, providerName)
-            Mode.MODE_SIGN_UP  -> context.getString(R.string.login_social_signup_with, providerName)
+            Mode.MODE_SIGN_IN -> context.getString(R.string.login_social_signin_with, providerName)
+            Mode.MODE_SIGN_UP -> context.getString(R.string.login_social_signup_with, providerName)
             Mode.MODE_CONTINUE -> context.getString(R.string.login_social_continue_with, providerName)
         }
     }
@@ -146,8 +146,8 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.SocialLoginButtonsView, 0, 0)
         val modeAttr = typedArray.getInt(R.styleable.SocialLoginButtonsView_signMode, 2)
         mode = when (modeAttr) {
-            0    -> Mode.MODE_SIGN_IN
-            1    -> Mode.MODE_SIGN_UP
+            0 -> Mode.MODE_SIGN_IN
+            1 -> Mode.MODE_SIGN_UP
             else -> Mode.MODE_CONTINUE
         }
         typedArray.recycle()
@@ -158,4 +158,13 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         val resources = context.resources
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics).toInt()
     }
+}
+
+fun SocialLoginButtonsView.render(state: SsoState, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
+    this.mode = mode
+    this.ssoIdentityProviders = when (state) {
+        SsoState.Fallback -> null
+        is SsoState.IdentityProviders -> state.providers.sorted()
+    }
+    this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
 }

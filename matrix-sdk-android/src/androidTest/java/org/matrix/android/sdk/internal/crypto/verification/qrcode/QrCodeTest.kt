@@ -37,7 +37,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value1 = "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value1 =
+            "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode2 = QrCodeData.SelfVerifyingMasterKeyTrusted(
             transactionId = "MaTransaction",
@@ -46,7 +47,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value2 = "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value2 =
+            "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode3 = QrCodeData.SelfVerifyingMasterKeyNotTrusted(
             transactionId = "MaTransaction",
@@ -55,7 +57,8 @@ class QrCodeTest : InstrumentedTest {
             sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value3 = "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
+    private val value3 =
+            "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
 
     private val sharedSecretByteArray = "12345678".toByteArray(Charsets.ISO_8859_1)
 

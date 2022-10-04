@@ -15,12 +15,13 @@
  */
 package org.matrix.android.sdk.internal.crypto.model.rest
 
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.toRest
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 
 /**
- * Helper class to build CryptoApi#uploadSignatures params
+ * Helper class to build CryptoApi#uploadSignatures params.
  */
 internal data class UploadSignatureQueryBuilder(
         private val deviceInfoList: MutableList<CryptoDeviceInfo> = mutableListOf(),

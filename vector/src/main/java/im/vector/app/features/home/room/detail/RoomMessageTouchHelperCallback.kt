@@ -33,14 +33,18 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
 import im.vector.app.R
+import im.vector.app.core.time.Clock
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
 
-class RoomMessageTouchHelperCallback(private val context: Context,
-                                     @DrawableRes actionIcon: Int,
-                                     private val handler: QuickReplayHandler) : EpoxyTouchHelperCallback() {
+class RoomMessageTouchHelperCallback(
+        private val context: Context,
+        @DrawableRes actionIcon: Int,
+        private val handler: QuickReplayHandler,
+        private val clock: Clock,
+) : EpoxyTouchHelperCallback() {
 
     interface QuickReplayHandler {
         fun performQuickReplyOnHolder(model: EpoxyModel<*>)
@@ -94,13 +98,15 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         return super.convertToAbsoluteDirection(flags, layoutDirection)
     }
 
-    override fun onChildDraw(c: Canvas,
-                             recyclerView: RecyclerView,
-                             viewHolder: EpoxyViewHolder,
-                             dX: Float,
-                             dY: Float,
-                             actionState: Int,
-                             isCurrentlyActive: Boolean) {
+    override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: EpoxyViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+    ) {
         if (actionState == ACTION_STATE_SWIPE) {
             setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
@@ -115,13 +121,15 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("ClickableViewAccessibility")
-    private fun setTouchListener(c: Canvas,
-                                 recyclerView: RecyclerView,
-                                 viewHolder: EpoxyViewHolder,
-                                 dX: Float,
-                                 dY: Float,
-                                 actionState: Int,
-                                 isCurrentlyActive: Boolean) {
+    private fun setTouchListener(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: EpoxyViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+    ) {
         // TODO can this interfere with other interactions? should i remove it
         recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
@@ -141,7 +149,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     private fun drawReplyButton(canvas: Canvas, itemView: View) {
         // Timber.v("drawReplyButton")
         val translationX = abs(itemView.translationX)
-        val newTime = System.currentTimeMillis()
+        val newTime = clock.epochMillis()
         val dt = min(17, newTime - lastReplyButtonAnimationTime)
         lastReplyButtonAnimationTime = newTime
         val showing = translationX >= minShowDistance

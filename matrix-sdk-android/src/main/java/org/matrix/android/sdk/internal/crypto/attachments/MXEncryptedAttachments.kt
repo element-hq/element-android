@@ -17,11 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.attachments
 
 import android.util.Base64
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
 import org.matrix.android.sdk.internal.util.base64ToBase64Url
 import org.matrix.android.sdk.internal.util.base64ToUnpaddedBase64
 import org.matrix.android.sdk.internal.util.base64UrlToBase64
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -39,10 +41,13 @@ internal object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    fun encrypt(clearStream: InputStream,
-                outputFile: File,
-                progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
-        val t0 = System.currentTimeMillis()
+    fun encrypt(
+            clearStream: InputStream,
+            outputFile: File,
+            clock: Clock,
+            progress: ((current: Int, total: Int) -> Unit)
+    ): EncryptedFileInfo {
+        val t0 = clock.epochMillis()
         val secureRandom = SecureRandom()
         val initVectorBytes = ByteArray(16) { 0.toByte() }
 
@@ -99,7 +104,7 @@ internal object MXEncryptedAttachments {
                 hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
                 v = "v2"
         )
-                .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
+                .also { Timber.v("Encrypt in ${clock.epochMillis() - t0}ms") }
     }
 
 //    fun cipherInputStream(attachmentStream: InputStream, mimetype: String?): Pair<DigestInputStream, EncryptedFileInfo> {
@@ -156,10 +161,11 @@ internal object MXEncryptedAttachments {
      * Encrypt an attachment stream.
      * DO NOT USE for big files, it will load all in memory
      * @param attachmentStream the attachment stream. Will be closed after this method call.
+     * @param clock a clock to retrieve current time
      * @return the encryption file info
      */
-    fun encryptAttachment(attachmentStream: InputStream): EncryptionResult {
-        val t0 = System.currentTimeMillis()
+    fun encryptAttachment(attachmentStream: InputStream, clock: Clock): EncryptionResult {
+        val t0 = clock.epochMillis()
         val secureRandom = SecureRandom()
 
         // generate a random iv key
@@ -220,27 +226,31 @@ internal object MXEncryptedAttachments {
                 ),
                 encryptedByteArray = byteArrayOutputStream.toByteArray()
         )
-                .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
+                .also { Timber.v("Encrypt in ${clock.epochMillis() - t0}ms") }
     }
 
     /**
-     * Decrypt an attachment
+     * Decrypt an attachment.
      *
      * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
-     * @param outputStream     the outputStream where the decrypted attachment will be write.
+     * @param outputStream the outputStream where the decrypted attachment will be write.
+     * @param clock a clock to retrieve current time
      * @return true in case of success, false in case of error
      */
-    fun decryptAttachment(attachmentStream: InputStream?,
-                          elementToDecrypt: ElementToDecrypt?,
-                          outputStream: OutputStream): Boolean {
+    fun decryptAttachment(
+            attachmentStream: InputStream?,
+            elementToDecrypt: ElementToDecrypt?,
+            outputStream: OutputStream,
+            clock: Clock
+    ): Boolean {
         // sanity checks
         if (null == attachmentStream || elementToDecrypt == null) {
             Timber.e("## decryptAttachment() : null stream")
             return false
         }
 
-        val t0 = System.currentTimeMillis()
+        val t0 = clock.epochMillis()
 
         try {
             val key = Base64.decode(base64UrlToBase64(elementToDecrypt.k), Base64.DEFAULT)
@@ -278,7 +288,8 @@ internal object MXEncryptedAttachments {
                 return false
             }
 
-            return true.also { Timber.v("Decrypt in ${System.currentTimeMillis() - t0}ms") }
+            Timber.v("Decrypt in ${clock.epochMillis() - t0} ms")
+            return true
         } catch (oom: OutOfMemoryError) {
             Timber.e(oom, "## decryptAttachment() failed: OOM")
         } catch (e: Exception) {

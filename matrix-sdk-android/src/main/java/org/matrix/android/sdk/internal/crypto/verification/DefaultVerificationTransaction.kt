@@ -17,27 +17,28 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import timber.log.Timber
 
 /**
- * Generic interactive key verification transaction
+ * Generic interactive key verification transaction.
  */
 internal abstract class DefaultVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val crossSigningService: CrossSigningService,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        private val secretShareManager: SecretShareManager,
         private val userId: String,
         override val transactionId: String,
         override val otherUserId: String,
         override var otherDeviceId: String? = null,
-        override val isIncoming: Boolean) : VerificationTransaction {
+        override val isIncoming: Boolean
+) : VerificationTransaction {
 
     lateinit var transport: VerificationTransport
 
@@ -55,9 +56,12 @@ internal abstract class DefaultVerificationTransaction(
         listeners.remove(listener)
     }
 
-    protected fun trust(canTrustOtherUserMasterKey: Boolean,
-                        toVerifyDeviceIds: List<String>,
-                        eventuallyMarkMyMasterKeyAsTrusted: Boolean, autoDone: Boolean = true) {
+    protected fun trust(
+            canTrustOtherUserMasterKey: Boolean,
+            toVerifyDeviceIds: List<String>,
+            eventuallyMarkMyMasterKeyAsTrusted: Boolean,
+            autoDone: Boolean = true
+    ) {
         Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds")
         Timber.d("## Verification: trust Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
 
@@ -86,7 +90,7 @@ internal abstract class DefaultVerificationTransaction(
         }
 
         if (otherUserId == userId) {
-            incomingGossipingRequestManager.onVerificationCompleteForDevice(otherDeviceId!!)
+            secretShareManager.onVerificationCompleteForDevice(otherDeviceId!!)
 
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may not be able to do it
@@ -105,8 +109,10 @@ internal abstract class DefaultVerificationTransaction(
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
         // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+        setDeviceVerificationAction.handle(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                 userId,
-                deviceId)
+                deviceId
+        )
     }
 }

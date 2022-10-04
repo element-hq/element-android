@@ -1,0 +1,2 @@
+此版本中的主要變動：首次使用畫面的第一個變化，包含了選擇加入的分析功能。新增對數學活動的支援至實驗室中。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.15

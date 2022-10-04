@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import android.util.Patterns
+import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -52,10 +53,12 @@ internal class DefaultLoginWizard(
         return getProfileTask.execute(GetProfileTask.Params(matrixId))
     }
 
-    override suspend fun login(login: String,
-                               password: String,
-                               initialDeviceName: String,
-                               deviceId: String?): Session {
+    override suspend fun login(
+            login: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String?
+    ): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(
                     medium = ThreePidMedium.EMAIL,
@@ -76,7 +79,7 @@ internal class DefaultLoginWizard(
             authAPI.login(loginParams)
         }
 
-        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.PASSWORD)
     }
 
     /**
@@ -90,7 +93,7 @@ internal class DefaultLoginWizard(
             authAPI.login(loginParams)
         }
 
-        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.SSO)
     }
 
     override suspend fun loginCustom(data: JsonDict): Session {
@@ -98,10 +101,10 @@ internal class DefaultLoginWizard(
             authAPI.login(data)
         }
 
-        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.CUSTOM)
     }
 
-    override suspend fun resetPassword(email: String, newPassword: String) {
+    override suspend fun resetPassword(email: String) {
         val param = RegisterAddThreePidTask.Params(
                 RegisterThreePid.Email(email),
                 pendingSessionData.clientSecret,
@@ -115,18 +118,17 @@ internal class DefaultLoginWizard(
             authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
-        pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(newPassword, result))
+        pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(result))
                 .also { pendingSessionStore.savePendingSessionData(it) }
     }
 
-    override suspend fun resetPasswordMailConfirmed() {
-        val safeResetPasswordData = pendingSessionData.resetPasswordData
-                ?: throw IllegalStateException("developer error, no reset password in progress")
-
+    override suspend fun resetPasswordMailConfirmed(newPassword: String, logoutAllDevices: Boolean) {
+        val resetPasswordData = pendingSessionData.resetPasswordData ?: throw IllegalStateException("Developer error - Must call resetPassword first")
         val param = ResetPasswordMailConfirmed.create(
                 pendingSessionData.clientSecret,
-                safeResetPasswordData.addThreePidRegistrationResponse.sid,
-                safeResetPasswordData.newPassword
+                resetPasswordData.addThreePidRegistrationResponse.sid,
+                newPassword,
+                logoutAllDevices
         )
 
         executeRequest(null) {

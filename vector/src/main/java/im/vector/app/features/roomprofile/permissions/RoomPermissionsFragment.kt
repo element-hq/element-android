@@ -24,13 +24,14 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import im.vector.app.features.roomprofile.RoomProfileArgs
@@ -38,12 +39,13 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomPermissionsFragment @Inject constructor(
-        private val controller: RoomPermissionsController,
-        private val avatarRenderer: AvatarRenderer
-) :
+@AndroidEntryPoint
+class RoomPermissionsFragment :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomPermissionsController.Callback {
+
+    @Inject lateinit var controller: RoomPermissionsController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomPermissionsViewModel by fragmentViewModel()
 
@@ -51,6 +53,11 @@ class RoomPermissionsFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomPermissions
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,8 +73,8 @@ class RoomPermissionsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomPermissionsViewEvents.Failure -> showFailure(it.throwable)
-                RoomPermissionsViewEvents.Success    -> showSuccess()
-            }.exhaustive
+                RoomPermissionsViewEvents.Success -> showSuccess()
+            }
         }
     }
 

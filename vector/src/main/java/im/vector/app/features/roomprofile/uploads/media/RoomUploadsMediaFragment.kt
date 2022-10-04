@@ -32,6 +32,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.trackItemsVisibilityChange
@@ -46,19 +47,21 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
-class RoomUploadsMediaFragment @Inject constructor(
-        private val controller: UploadsMediaController,
-        private val dimensionConverter: DimensionConverter
-) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
+@AndroidEntryPoint
+class RoomUploadsMediaFragment :
+        VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
         UploadsMediaController.Listener,
         StateView.EventCallback {
+
+    @Inject lateinit var controller: UploadsMediaController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
@@ -79,15 +82,18 @@ class RoomUploadsMediaFragment @Inject constructor(
         controller.listener = this
     }
 
-    @Suppress("DEPRECATION")
     private fun getNumberOfColumns(): Int {
-        val displayMetrics = DisplayMetrics()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requireContext().display?.getMetrics(displayMetrics)
+        val screenWidthInPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val a = requireActivity().windowManager.currentWindowMetrics
+            a.bounds.width()
         } else {
+            val displayMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
         }
-        return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
+        val screenWidthInDp = dimensionConverter.pxToDp(screenWidthInPx)
+        return screenWidthInDp / IMAGE_SIZE_DP
     }
 
     override fun onDestroyView() {
@@ -157,7 +163,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                             thumbnailMediaData = thumbnailData
                     )
                 }
-                else                   -> null
+                else -> null
             }
         }
     }
@@ -191,7 +197,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
@@ -205,6 +211,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                         )
                     }
                 }
+                else -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

@@ -27,7 +27,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -98,13 +97,13 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDirectoryPickerAction) {
         when (action) {
-            RoomDirectoryPickerAction.Retry           -> load()
-            RoomDirectoryPickerAction.EnterEditMode   -> handleEnterEditMode()
-            RoomDirectoryPickerAction.ExitEditMode    -> handleExitEditMode()
+            RoomDirectoryPickerAction.Retry -> load()
+            RoomDirectoryPickerAction.EnterEditMode -> handleEnterEditMode()
+            RoomDirectoryPickerAction.ExitEditMode -> handleExitEditMode()
             is RoomDirectoryPickerAction.SetServerUrl -> handleSetServerUrl(action)
-            RoomDirectoryPickerAction.Submit          -> handleSubmit()
+            RoomDirectoryPickerAction.Submit -> handleSubmit()
             is RoomDirectoryPickerAction.RemoveServer -> handleRemoveServer(action)
-        }.exhaustive
+        }
     }
 
     private fun handleEnterEditMode() {
@@ -153,7 +152,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
                 copy(addServerAsync = Loading())
             }
             try {
-                session.getPublicRooms(
+                session.roomDirectoryService().getPublicRooms(
                         server = enteredServer,
                         publicRoomsParams = PublicRoomsParams(limit = 1)
                 )

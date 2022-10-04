@@ -20,10 +20,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+/**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
  */
-
 public class MXDeviceInfo implements Serializable {
     private static final long serialVersionUID = 20129670646382964L;
 

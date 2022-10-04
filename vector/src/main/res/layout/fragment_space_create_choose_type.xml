@@ -12,26 +12,14 @@
 
         <TextView
             android:id="@+id/headerText"
-            style="@style/Widget.Vector.TextView.Subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/create_spaces_type_header"
-            android:textColor="?vctr_content_secondary"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@string/create_spaces_choose_type_label"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
-            app:layout_constraintTop_toBottomOf="@id/headerText"
-            app:layout_constraintVertical_bias="1" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/joinInfoHelpText"
@@ -42,7 +30,7 @@
             android:gravity="center"
             android:text="@string/create_spaces_join_info_help"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toTopOf="@id/publicButton" />
+            app:layout_constraintTop_toBottomOf="@id/headerText" />
 
         <im.vector.app.features.spaces.create.WizardButtonView
             android:id="@+id/publicButton"

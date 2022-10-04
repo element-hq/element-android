@@ -34,8 +34,8 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_action)
-abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetVerificationActionItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetVerificationActionItem.Holder>(R.layout.item_verification_action) {
 
     @EpoxyAttribute
     @DrawableRes

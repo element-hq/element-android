@@ -16,18 +16,21 @@
 
 package im.vector.app.features.home.room.list
 
+import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.settings.FontScalePreferences
 import javax.inject.Inject
 
 class RoomSummaryPagedControllerFactory @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+        private val roomSummaryItemFactory: RoomSummaryItemFactory,
+        private val fontScalePreferences: FontScalePreferences
 ) {
 
-    fun createRoomSummaryPagedController(): RoomSummaryPagedController {
-        return RoomSummaryPagedController(roomSummaryItemFactory)
+    fun createRoomSummaryPagedController(displayMode: RoomListDisplayMode): RoomSummaryPagedController {
+        return RoomSummaryPagedController(roomSummaryItemFactory, displayMode, fontScalePreferences)
     }
 
-    fun createRoomSummaryListController(): RoomSummaryListController {
-        return RoomSummaryListController(roomSummaryItemFactory)
+    fun createRoomSummaryListController(displayMode: RoomListDisplayMode): RoomSummaryListController {
+        return RoomSummaryListController(roomSummaryItemFactory, displayMode, fontScalePreferences)
     }
 
     fun createSuggestedRoomListController(): SuggestedRoomListController {

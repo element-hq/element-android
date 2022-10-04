@@ -29,8 +29,11 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.list.GenericHeaderItem_
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -43,7 +46,10 @@ class SearchResultController @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
-        private val dateFormatter: VectorDateFormatter
+        private val dateFormatter: VectorDateFormatter,
+        private val displayableEventFormatter: DisplayableEventFormatter,
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val clock: Clock,
 ) : TypedEpoxyController<SearchViewState>() {
 
     var listener: Listener? = null
@@ -52,6 +58,7 @@ class SearchResultController @Inject constructor(
 
     interface Listener {
         fun onItemClicked(event: Event)
+        fun onThreadSummaryClicked(event: Event)
         fun loadMore()
     }
 
@@ -105,7 +112,7 @@ class SearchResultController @Inject constructor(
             val spannable = setHighLightedText(text, data.highlights) ?: return@forEach
 
             val eventDate = Calendar.getInstance().apply {
-                timeInMillis = eventAndSender.event.originServerTs ?: System.currentTimeMillis()
+                timeInMillis = eventAndSender.event.originServerTs ?: clock.epochMillis()
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
                 GenericHeaderItem_()
@@ -120,9 +127,15 @@ class SearchResultController @Inject constructor(
                     .avatarRenderer(avatarRenderer)
                     .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
                     .spannable(spannable.toEpoxyCharSequence())
-                    .sender(eventAndSender.sender
-                            ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
+                    .sender(
+                            eventAndSender.sender
+                                    ?: eventAndSender.event.senderId?.let { session.roomService().getRoomMember(it, data.roomId) }?.toMatrixItem()
+                    )
+                    .threadDetails(event.threadDetails)
+                    .threadSummaryFormatted(displayableEventFormatter.formatThreadSummary(event.threadDetails?.threadSummaryLatestEvent).toString())
+                    .areThreadMessagesEnabled(userPreferencesProvider.areThreadMessagesEnabled())
                     .listener { listener?.onItemClicked(eventAndSender.event) }
+                    .threadSummaryListener { listener?.onThreadSummaryClicked(eventAndSender.event) }
                     .let { result.add(it) }
         }
 

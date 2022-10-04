@@ -21,7 +21,10 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.HTML
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.MARKDOWN
 import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 
@@ -41,15 +44,15 @@ internal class PermalinkFactory @Inject constructor(
 
     fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
         return when {
-            id.isEmpty()                    -> null
+            id.isEmpty() -> null
             !useClientFormat(forceMatrixTo) -> MATRIX_TO_URL_BASE + escape(id)
-            else                            -> {
+            else -> {
                 buildString {
                     append(matrixConfiguration.clientPermalinkBaseUrl)
                     when {
                         MatrixPatterns.isRoomId(id) || MatrixPatterns.isRoomAlias(id) -> append(ROOM_PATH)
-                        MatrixPatterns.isUserId(id)                                   -> append(USER_PATH)
-                        MatrixPatterns.isGroupId(id)                                  -> append(GROUP_PATH)
+                        MatrixPatterns.isUserId(id) -> append(USER_PATH)
+                        MatrixPatterns.isGroupId(id) -> append(GROUP_PATH)
                     }
                     append(escape(id))
                 }
@@ -91,22 +94,38 @@ internal class PermalinkFactory @Inject constructor(
     fun getLinkedId(url: String): String? {
         val clientBaseUrl = matrixConfiguration.clientPermalinkBaseUrl
         return when {
-            url.startsWith(MATRIX_TO_URL_BASE)                     -> url.substring(MATRIX_TO_URL_BASE.length)
+            url.startsWith(MATRIX_TO_URL_BASE) -> url.substring(MATRIX_TO_URL_BASE.length)
             clientBaseUrl != null && url.startsWith(clientBaseUrl) -> {
                 when (PermalinkParser.parse(url)) {
-                    is PermalinkData.GroupLink -> url.substring(clientBaseUrl.length + GROUP_PATH.length)
-                    is PermalinkData.RoomLink  -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
-                    is PermalinkData.UserLink  -> url.substring(clientBaseUrl.length + USER_PATH.length)
-                    else                       -> null
+                    is PermalinkData.RoomLink -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
+                    is PermalinkData.UserLink -> url.substring(clientBaseUrl.length + USER_PATH.length)
+                    else -> null
                 }
             }
-            else                                                   -> null
+            else -> null
         }
                 ?.substringBeforeLast("?")
     }
 
+    fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
+        return buildString {
+            when (type) {
+                HTML -> append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
+                MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_BEGIN)
+            }
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(USER_PATH)
+            }
+            when (type) {
+                HTML -> append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
+                MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_END)
+            }
+        }
+    }
+
     /**
-     * Escape '/' in id, because it is used as a separator
+     * Escape '/' in id, because it is used as a separator.
      *
      * @param id the id to escape
      * @return the escaped id
@@ -116,7 +135,7 @@ internal class PermalinkFactory @Inject constructor(
     }
 
     /**
-     * Unescape '/' in id
+     * Unescape '/' in id.
      *
      * @param id the id to escape
      * @return the escaped id
@@ -147,5 +166,9 @@ internal class PermalinkFactory @Inject constructor(
         private const val ROOM_PATH = "room/"
         private const val USER_PATH = "user/"
         private const val GROUP_PATH = "group/"
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN = "<a href=\""
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_END = "%1\$s\">%2\$s</a>"
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_BEGIN = "[%2\$s]("
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_END = "%1\$s)"
     }
 }

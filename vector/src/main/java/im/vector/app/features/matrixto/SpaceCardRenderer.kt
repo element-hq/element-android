@@ -38,10 +38,13 @@ class SpaceCardRenderer @Inject constructor(
         private val stringProvider: StringProvider
 ) {
 
-    fun render(spaceSummary: RoomSummary?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding) {
+    fun render(
+            spaceSummary: RoomSummary?,
+            peopleYouKnow: List<User>,
+            matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+            inCard: FragmentMatrixToRoomSpaceCardBinding,
+            showDescription: Boolean
+    ) {
         if (spaceSummary == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -70,6 +73,8 @@ class SpaceCardRenderer @Inject constructor(
                 inCard.matrixToMemberPills.isVisible = false
             }
 
+            inCard.matrixToCardDescText.isVisible = showDescription
+
             renderPeopleYouKnow(inCard, peopleYouKnow.map { it.toMatrixItem() })
         }
         inCard.matrixToCardDescText.movementMethod = createLinkMovementMethod(object : TimelineEventController.UrlClickCallback {
@@ -84,10 +89,12 @@ class SpaceCardRenderer @Inject constructor(
         })
     }
 
-    fun render(spaceChildInfo: SpaceChildInfo?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding) {
+    fun render(
+            spaceChildInfo: SpaceChildInfo?,
+            peopleYouKnow: List<User>,
+            matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+            inCard: FragmentMatrixToRoomSpaceCardBinding
+    ) {
         if (spaceChildInfo == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -137,7 +144,8 @@ class SpaceCardRenderer @Inject constructor(
                 avatarRenderer.render(item, images[index])
             }
             inCard.peopleYouMayKnowText.setTextOrHide(
-                    stringProvider.getQuantityString(R.plurals.space_people_you_know,
+                    stringProvider.getQuantityString(
+                            R.plurals.space_people_you_know,
                             peopleYouKnow.count(),
                             peopleYouKnow.count()
                     )

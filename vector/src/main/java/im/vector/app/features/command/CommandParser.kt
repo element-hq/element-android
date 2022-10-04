@@ -30,10 +30,11 @@ class CommandParser @Inject constructor() {
     /**
      * Convert the text message into a Slash command.
      *
-     * @param textMessage   the text message
+     * @param textMessage the text message
+     * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
-    fun parseSlashCommand(textMessage: CharSequence): ParsedCommand {
+    fun parseSlashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
         return if (!textMessage.startsWith("/")) {
             ParsedCommand.ErrorNotACommand
@@ -63,15 +64,19 @@ class CommandParser @Inject constructor() {
             val slashCommand = messageParts.first()
             val message = textMessage.substring(slashCommand.length).trim()
 
+            getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
+                return ParsedCommand.ErrorCommandNotSupportedInThreads(it)
+            }
+
             when {
-                Command.PLAIN.matches(slashCommand)                        -> {
+                Command.PLAIN.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendPlainText(message = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PLAIN)
                     }
                 }
-                Command.CHANGE_DISPLAY_NAME.matches(slashCommand)          -> {
+                Command.CHANGE_DISPLAY_NAME.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.ChangeDisplayName(displayName = message)
                     } else {
@@ -85,7 +90,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME_FOR_ROOM)
                     }
                 }
-                Command.ROOM_AVATAR.matches(slashCommand)                  -> {
+                Command.ROOM_AVATAR.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
@@ -98,7 +103,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.ROOM_AVATAR)
                     }
                 }
-                Command.CHANGE_AVATAR_FOR_ROOM.matches(slashCommand)       -> {
+                Command.CHANGE_AVATAR_FOR_ROOM.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
@@ -111,35 +116,35 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_AVATAR_FOR_ROOM)
                     }
                 }
-                Command.TOPIC.matches(slashCommand)                        -> {
+                Command.TOPIC.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.ChangeTopic(topic = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.TOPIC)
                     }
                 }
-                Command.EMOTE.matches(slashCommand)                        -> {
+                Command.EMOTE.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendEmote(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.EMOTE)
                     }
                 }
-                Command.RAINBOW.matches(slashCommand)                      -> {
+                Command.RAINBOW.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendRainbow(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW)
                     }
                 }
-                Command.RAINBOW_EMOTE.matches(slashCommand)                -> {
+                Command.RAINBOW_EMOTE.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendRainbowEmote(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW_EMOTE)
                     }
                 }
-                Command.JOIN_ROOM.matches(slashCommand)                    -> {
+                Command.JOIN_ROOM.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         val roomAlias = messageParts[1]
 
@@ -155,21 +160,21 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.JOIN_ROOM)
                     }
                 }
-                Command.PART.matches(slashCommand)                         -> {
+                Command.PART.matches(slashCommand) -> {
                     when (messageParts.size) {
-                        1    -> ParsedCommand.PartRoom(null)
-                        2    -> ParsedCommand.PartRoom(messageParts[1])
+                        1 -> ParsedCommand.PartRoom(null)
+                        2 -> ParsedCommand.PartRoom(messageParts[1])
                         else -> ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
-                Command.ROOM_NAME.matches(slashCommand)                    -> {
+                Command.ROOM_NAME.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.ChangeRoomName(name = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.ROOM_NAME)
                     }
                 }
-                Command.INVITE.matches(slashCommand)                       -> {
+                Command.INVITE.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -180,13 +185,13 @@ class CommandParser @Inject constructor() {
                                         trimParts(textMessage, messageParts.take(2))
                                 )
                             }
-                            userId.isEmail()                -> {
+                            userId.isEmail() -> {
                                 ParsedCommand.Invite3Pid(ThreePid.Email(userId))
                             }
-                            userId.isMsisdn()               -> {
+                            userId.isMsisdn() -> {
                                 ParsedCommand.Invite3Pid(ThreePid.Msisdn(userId))
                             }
-                            else                            -> {
+                            else -> {
                                 ParsedCommand.ErrorSyntax(Command.INVITE)
                             }
                         }
@@ -194,7 +199,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
                     }
                 }
-                Command.REMOVE_USER.matches(slashCommand)                  -> {
+                Command.REMOVE_USER.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -210,7 +215,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.REMOVE_USER)
                     }
                 }
-                Command.BAN_USER.matches(slashCommand)                     -> {
+                Command.BAN_USER.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -226,7 +231,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.BAN_USER)
                     }
                 }
-                Command.UNBAN_USER.matches(slashCommand)                   -> {
+                Command.UNBAN_USER.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
@@ -242,7 +247,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
                     }
                 }
-                Command.IGNORE_USER.matches(slashCommand)                  -> {
+                Command.IGNORE_USER.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -255,7 +260,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.IGNORE_USER)
                     }
                 }
-                Command.UNIGNORE_USER.matches(slashCommand)                -> {
+                Command.UNIGNORE_USER.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -268,7 +273,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.UNIGNORE_USER)
                     }
                 }
-                Command.SET_USER_POWER_LEVEL.matches(slashCommand)         -> {
+                Command.SET_USER_POWER_LEVEL.matches(slashCommand) -> {
                     if (messageParts.size == 3) {
                         val userId = messageParts[1]
                         if (MatrixPatterns.isUserId(userId)) {
@@ -288,7 +293,7 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
                 }
-                Command.RESET_USER_POWER_LEVEL.matches(slashCommand)       -> {
+                Command.RESET_USER_POWER_LEVEL.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -301,45 +306,55 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
                 }
-                Command.MARKDOWN.matches(slashCommand)                     -> {
+                Command.MARKDOWN.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         when {
-                            "on".equals(messageParts[1], true)  -> ParsedCommand.SetMarkdown(true)
+                            "on".equals(messageParts[1], true) -> ParsedCommand.SetMarkdown(true)
                             "off".equals(messageParts[1], true) -> ParsedCommand.SetMarkdown(false)
-                            else                                -> ParsedCommand.ErrorSyntax(Command.MARKDOWN)
+                            else -> ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                         }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                     }
                 }
-                Command.CLEAR_SCALAR_TOKEN.matches(slashCommand)           -> {
+                Command.DEVTOOLS.matches(slashCommand) -> {
+                    if (messageParts.size == 1) {
+                        ParsedCommand.DevTools
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.DEVTOOLS)
+                    }
+                }
+                Command.CLEAR_SCALAR_TOKEN.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
                         ParsedCommand.ClearScalarToken
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CLEAR_SCALAR_TOKEN)
                     }
                 }
-                Command.SPOILER.matches(slashCommand)                      -> {
+                Command.SPOILER.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendSpoiler(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.SPOILER)
                     }
                 }
-                Command.SHRUG.matches(slashCommand)                        -> {
+                Command.SHRUG.matches(slashCommand) -> {
                     ParsedCommand.SendShrug(message)
                 }
-                Command.LENNY.matches(slashCommand)                        -> {
+                Command.LENNY.matches(slashCommand) -> {
                     ParsedCommand.SendLenny(message)
                 }
-                Command.DISCARD_SESSION.matches(slashCommand)              -> {
+                Command.TABLE_FLIP.matches(slashCommand) -> {
+                    ParsedCommand.SendTableFlip(message)
+                }
+                Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
                         ParsedCommand.DiscardSession
                     } else {
                         ParsedCommand.ErrorSyntax(Command.DISCARD_SESSION)
                     }
                 }
-                Command.WHOIS.matches(slashCommand)                        -> {
+                Command.WHOIS.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
@@ -352,13 +367,13 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.WHOIS)
                     }
                 }
-                Command.CONFETTI.matches(slashCommand)                     -> {
+                Command.CONFETTI.matches(slashCommand) -> {
                     ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
                 }
-                Command.SNOWFALL.matches(slashCommand)                     -> {
+                Command.SNOWFALL.matches(slashCommand) -> {
                     ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, message)
                 }
-                Command.CREATE_SPACE.matches(slashCommand)                 -> {
+                Command.CREATE_SPACE.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
                         ParsedCommand.CreateSpace(
                                 messageParts[1],
@@ -368,35 +383,57 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.CREATE_SPACE)
                     }
                 }
-                Command.ADD_TO_SPACE.matches(slashCommand)                 -> {
-                    if (messageParts.size == 1) {
-                        ParsedCommand.AddToSpace(spaceId = message)
+                Command.ADD_TO_SPACE.matches(slashCommand) -> {
+                    if (messageParts.size == 2) {
+                        ParsedCommand.AddToSpace(spaceId = messageParts.last())
                     } else {
                         ParsedCommand.ErrorSyntax(Command.ADD_TO_SPACE)
                     }
                 }
-                Command.JOIN_SPACE.matches(slashCommand)                   -> {
-                    if (messageParts.size == 1) {
-                        ParsedCommand.JoinSpace(spaceIdOrAlias = message)
+                Command.JOIN_SPACE.matches(slashCommand) -> {
+                    if (messageParts.size == 2) {
+                        ParsedCommand.JoinSpace(spaceIdOrAlias = messageParts.last())
                     } else {
                         ParsedCommand.ErrorSyntax(Command.JOIN_SPACE)
                     }
                 }
-                Command.LEAVE_ROOM.matches(slashCommand)                   -> {
+                Command.LEAVE_ROOM.matches(slashCommand) -> {
                     ParsedCommand.LeaveRoom(roomId = message)
                 }
-                Command.UPGRADE_ROOM.matches(slashCommand)                 -> {
+                Command.UPGRADE_ROOM.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.UpgradeRoom(newVersion = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
                     }
                 }
-                else                                                       -> {
+                else -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
                 }
             }
+        }
+    }
+
+    private val notSupportedThreadsCommands: List<Command> by lazy {
+        Command.values().filter {
+            !it.isThreadCommand
+        }
+    }
+
+    /**
+     * Checks whether or not the current command is not supported by threads.
+     * @param isInThreadTimeline if its true we are in a thread timeline
+     * @param slashCommand the slash command that will be checked
+     * @return The command that is not supported
+     */
+    private fun getNotSupportedByThreads(isInThreadTimeline: Boolean, slashCommand: String): Command? {
+        return if (isInThreadTimeline) {
+            notSupportedThreadsCommands.firstOrNull {
+                it.command == slashCommand
+            }
+        } else {
+            null
         }
     }
 

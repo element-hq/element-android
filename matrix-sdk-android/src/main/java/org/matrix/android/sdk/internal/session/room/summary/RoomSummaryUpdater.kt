@@ -18,9 +18,11 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -39,11 +41,9 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -63,7 +63,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
-import org.matrix.android.sdk.internal.util.Normalizer
+import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -74,16 +74,27 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
         private val crossSigningService: DefaultCrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val normalizer: Normalizer) {
+        private val roomAccountDataDataSource: RoomAccountDataDataSource
+) {
 
-    fun update(realm: Realm,
-               roomId: String,
-               membership: Membership? = null,
-               roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null,
-               updateMembers: Boolean = false,
-               inviterId: String? = null) {
+    fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
+        val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
+        if (roomSummaryEntity != null) {
+            val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+            latestPreviewableEvent?.attemptToDecrypt()
+        }
+    }
+
+    fun update(
+            realm: Realm,
+            roomId: String,
+            membership: Membership? = null,
+            roomSummary: RoomSyncSummary? = null,
+            unreadNotifications: RoomSyncUnreadNotifications? = null,
+            updateMembers: Boolean = false,
+            inviterId: String? = null,
+            aggregator: SyncResponsePostTreatmentAggregator? = null
+    ) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -119,15 +130,15 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.roomType = roomType
         Timber.v("## Space: Updating summary room [$roomId] roomType: [$roomType]")
 
-        // Don't use current state for this one as we are only interested in having MXCRYPTO_ALGORITHM_MEGOLM event in the room
         val encryptionEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ENCRYPTION, stateKey = "")?.root
-        Timber.v("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
+        Timber.d("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
 
         val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
+            latestPreviewableEvent.attemptToDecrypt()
         }
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
@@ -161,16 +172,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.updateHasFailedSending()
 
-        val root = latestPreviewableEvent?.root
-        if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-            Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
-            // mmm i want to decrypt now or is it ok to do it async?
-            tryOrNull {
-                eventDecryptor.decryptEvent(root.asDomain(), "")
-            }
-                    ?.let { root.setDecryptionResult(it) }
-        }
-
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
                     .queryActiveRoomMembersEvent()
@@ -181,8 +182,30 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
-                // mmm maybe we could only refresh shield instead of checking trust also?
-                crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
+                if (aggregator == null) {
+                    // Do it now
+                    // mmm maybe we could only refresh shield instead of checking trust also?
+                    crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
+                } else {
+                    // Schedule it
+                    aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)
+                }
+            }
+        }
+    }
+
+    private fun TimelineEventEntity.attemptToDecrypt() {
+        when (val root = this.root) {
+            null -> {
+                Timber.v("Decryption skipped due to missing root event $eventId")
+            }
+            else -> {
+                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
+                    Timber.v("Should decrypt $eventId")
+                    tryOrNull {
+                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
+                    }?.let { root.setDecryptionResult(it) }
+                }
             }
         }
     }
@@ -198,7 +221,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     }
 
     /**
-     * Should be called at the end of the room sync, to check and validate all parent/child relations
+     * Should be called at the end of the room sync, to check and validate all parent/child relations.
      */
     fun validateSpaceRelationship(realm: Realm) {
         measureTimeMillis {
@@ -208,6 +231,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .sort(RoomSummaryEntityFields.ROOM_ID)
                     .findAll().map {
                         it.flattenParentIds = null
+                        it.directParentNames.clear()
                         it to emptyList<RoomSummaryEntity>().toMutableSet()
                     }
                     .toMap()
@@ -335,39 +359,29 @@ internal class RoomSummaryUpdater @Inject constructor(
             }
 
             val acyclicGraph = graph.withoutEdges(backEdges)
-//            Timber.v("## SPACES: acyclicGraph $acyclicGraph")
             val flattenSpaceParents = acyclicGraph.flattenDestination().map {
                 it.key.name to it.value.map { it.name }
             }.toMap()
-//            Timber.v("## SPACES: flattenSpaceParents ${flattenSpaceParents.map { it.key.name to it.value.map { it.name } }.joinToString("\n") {
-//                it.first + ": [" + it.second.joinToString(",") + "]"
-//            }}")
-
-//            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
                     .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {
-//                            Timber.v("## SPACES: check hierarchy of ${parent.name} id ${parent.roomId}")
-//                            Timber.v("## SPACES: flat known parents of ${parent.name} are ${flattenSpaceParents[parent.roomId]}")
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
-//                            Timber.v("## SPACES: flatten known parents of children of ${parent.name} are ${flattenParentsIds}")
+
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
+                                    childSum.directParentNames.add(parent.displayName())
 
-//                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
-//                                    var allParents = childSum.flattenParentIds ?: ""
-                                    if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
+                                    if (childSum.flattenParentIds == null) {
+                                        childSum.flattenParentIds = ""
+                                    }
                                     flattenParentsIds.forEach {
                                         if (childSum.flattenParentIds?.contains(it) != true) {
                                             childSum.flattenParentIds += "|$it"
                                         }
                                     }
-//                                    childSum.flattenParentIds = "$allParents|"
-
-//                                    Timber.v("## SPACES: flatten of ${childSum.name} is ${childSum.flattenParentIds}")
                                 }
                             }
                         }
@@ -412,8 +426,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                                // also we do not count DM in here, because home space will already show them
-                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount
@@ -424,38 +436,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                         space.notificationCount = notificationCount
                     }
             // xxx invites??
-
-            // LEGACY GROUPS
-            // lets mark rooms that belongs to groups
-            val existingGroups = GroupSummaryEntity.where(realm).findAll()
-
-            // For rooms
-            realm.where(RoomSummaryEntity::class.java)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                    .findAll().forEach { room ->
-                        val belongsTo = existingGroups.filter { it.roomIds.contains(room.roomId) }
-                        room.groupIds = if (belongsTo.isEmpty()) {
-                            null
-                        } else {
-                            "|${belongsTo.joinToString("|")}|"
-                        }
-                    }
-
-            // For DMS
-            realm.where(RoomSummaryEntity::class.java)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .findAll().forEach { room ->
-                        val belongsTo = existingGroups.filter {
-                            it.userIds.intersect(room.otherMemberIds).isNotEmpty()
-                        }
-                        room.groupIds = if (belongsTo.isEmpty()) {
-                            null
-                        } else {
-                            "|${belongsTo.joinToString("|")}|"
-                        }
-                    }
         }.also {
             Timber.v("## SPACES: Finish checking room hierarchy in $it ms")
         }

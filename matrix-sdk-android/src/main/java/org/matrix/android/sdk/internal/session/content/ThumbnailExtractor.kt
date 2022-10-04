@@ -66,7 +66,7 @@ internal class ThumbnailExtractor @Inject constructor(
                 thumbnail.recycle()
                 outputStream.reset()
             } ?: run {
-                Timber.e("Cannot extract video thumbnail at %s", attachment.queryUri.toString())
+                Timber.e("Cannot extract video thumbnail at ${attachment.queryUri}")
             }
         } catch (e: Exception) {
             Timber.e(e, "Cannot extract video thumbnail")

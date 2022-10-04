@@ -23,13 +23,14 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.RoomDirectoryServer
@@ -39,10 +40,13 @@ import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryPickerController: RoomDirectoryPickerController
-) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
+@AndroidEntryPoint
+class RoomDirectoryPickerFragment :
+        VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
         OnBackPressed,
         RoomDirectoryPickerController.Callback {
+
+    @Inject lateinit var roomDirectoryPickerController: RoomDirectoryPickerController
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -54,7 +58,7 @@ class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryP
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.MobileSwitchDirectory
+        analyticsScreenName = MobileScreen.ScreenName.SwitchDirectory
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

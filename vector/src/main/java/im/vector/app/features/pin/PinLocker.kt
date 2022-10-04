@@ -22,6 +22,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -59,7 +60,7 @@ class PinLocker @Inject constructor(
         return liveState
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     private fun computeState() {
         GlobalScope.launch {
             val state = if (shouldBeLocked && pinCodeStore.hasEncodedPin()) {

@@ -20,16 +20,16 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_settings_simple_item)
-abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
+@EpoxyModelClass
+abstract class SettingsItem : VectorEpoxyModel<SettingsItem.Holder>(R.layout.item_settings_simple_item) {
 
     @EpoxyAttribute
     var title: String? = null

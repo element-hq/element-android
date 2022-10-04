@@ -38,12 +38,12 @@ object MatrixToConverter {
             // URL is already a matrix.to
             uriString.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> uri
             // Web or client url
-            SUPPORTED_PATHS.any { it in uriString }                   -> {
+            SUPPORTED_PATHS.any { it in uriString } -> {
                 val path = SUPPORTED_PATHS.first { it in uriString }
                 Uri.parse(PermalinkService.MATRIX_TO_URL_BASE + uriString.substringAfter(path))
             }
             // URL is not supported
-            else                                                      -> null
+            else -> null
         }
     }
 

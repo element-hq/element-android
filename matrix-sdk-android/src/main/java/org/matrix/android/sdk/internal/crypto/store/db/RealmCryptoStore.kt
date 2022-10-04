@@ -24,37 +24,41 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
+import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
+import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
+import org.matrix.android.sdk.api.session.crypto.model.IncomingKeyRequestInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
+import org.matrix.android.sdk.api.session.crypto.model.TrailType
+import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.GossipRequestType
-import org.matrix.android.sdk.internal.crypto.GossipingRequestState
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.NewSessionListener
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
+import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMapper
@@ -63,19 +67,16 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
@@ -89,14 +90,13 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
-import org.matrix.android.sdk.internal.database.mapper.ContentMapper
-import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
@@ -104,14 +104,17 @@ import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.collections.set
+
+private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?
+        @DeviceId private val deviceId: String?,
+        private val clock: Clock,
+        private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
 ) : IMXCryptoStore {
 
     /* ==========================================================================================
@@ -123,12 +126,6 @@ internal class RealmCryptoStore @Inject constructor(
 
     // The olm account
     private var olmAccount: OlmAccount? = null
-
-    // Cache for OlmSession, to release them properly
-    private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
-
-    // Cache for InboundGroupSession, to release them properly
-    private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper2>()
 
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
@@ -213,16 +210,6 @@ internal class RealmCryptoStore @Inject constructor(
             monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
         }
 
-        olmSessionsToRelease.forEach {
-            it.value.olmSession.releaseSession()
-        }
-        olmSessionsToRelease.clear()
-
-        inboundGroupSessionToRelease.forEach {
-            it.value.olmInboundGroupSession?.releaseSession()
-        }
-        inboundGroupSessionToRelease.clear()
-
         olmAccount?.releaseAccount()
 
         realmLocker?.close()
@@ -247,10 +234,18 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOlmAccount(): OlmAccount {
-        return olmAccount!!
+    /**
+     * Olm account access should be synchronized.
+     */
+    override fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T {
+        return olmAccount!!.let { olmAccount ->
+            synchronized(olmAccount) {
+                block.invoke(olmAccount)
+            }
+        }
     }
 
+    @Synchronized
     override fun getOrCreateOlmAccount(): OlmAccount {
         doRealmTransaction(realmConfiguration) {
             val metaData = it.where<CryptoMetadataEntity>().findFirst()
@@ -280,12 +275,13 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun deviceWithIdentityKey(identityKey: String): CryptoDeviceInfo? {
-        return doWithRealm(realmConfiguration) {
-            it.where<DeviceInfoEntity>()
-                    .equalTo(DeviceInfoEntityFields.IDENTITY_KEY, identityKey)
-                    .findFirst()
-                    ?.let { deviceInfo ->
-                        CryptoMapper.mapToModel(deviceInfo)
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<DeviceInfoEntity>()
+                    .contains(DeviceInfoEntityFields.KEYS_MAP_JSON, identityKey)
+                    .findAll()
+                    .mapNotNull { CryptoMapper.mapToModel(it) }
+                    .firstOrNull {
+                        it.identityKey() == identityKey
                     }
         }
     }
@@ -316,7 +312,7 @@ internal class RealmCryptoStore @Inject constructor(
                         // Add the device
                         Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
                         val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
-                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        newEntity.firstTimeSeenLocalTs = clock.epochMillis()
                         userEntity.devices.add(newEntity)
                     } else {
                         // Update the device
@@ -328,10 +324,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeUserCrossSigningKeys(userId: String,
-                                           masterKey: CryptoCrossSigningKey?,
-                                           selfSigningKey: CryptoCrossSigningKey?,
-                                           userSigningKey: CryptoCrossSigningKey?) {
+    override fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             UserEntity.getOrCreate(realm, userId)
                     .let { userEntity ->
@@ -583,6 +581,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
+        return Transformations.map(getLiveDeviceList()) { devices ->
+            devices.firstOrNull { it.deviceId == deviceId }.toOptional()
+        }
+    }
+
     override fun getMyDevicesInfo(): List<DeviceInfo> {
         return monarchy.fetchAllCopiedSync {
             it.where<MyDeviceLastSeenInfoEntity>()
@@ -601,15 +605,22 @@ internal class RealmCryptoStore @Inject constructor(
                 { realm: Realm ->
                     realm.where<MyDeviceLastSeenInfoEntity>()
                 },
-                { entity ->
-                    DeviceInfo(
-                            deviceId = entity.deviceId,
-                            lastSeenIp = entity.lastSeenIp,
-                            lastSeenTs = entity.lastSeenTs,
-                            displayName = entity.displayName
-                    )
-                }
+                { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
         )
+    }
+
+    override fun getLiveMyDevicesInfo(deviceId: String): LiveData<Optional<DeviceInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where<MyDeviceLastSeenInfoEntity>()
+                            .equalTo(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, deviceId)
+                },
+                { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
+        )
+
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
+        }
     }
 
     override fun saveMyDevicesInfo(info: List<DeviceInfo>) {
@@ -631,13 +642,27 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeRoomAlgorithm(roomId: String, algorithm: String?) {
         doRealmTransaction(realmConfiguration) {
-            CryptoRoomEntity.getOrCreate(it, roomId).algorithm = algorithm
+            CryptoRoomEntity.getOrCreate(it, roomId).let { entity ->
+                entity.algorithm = algorithm
+                // store anyway the new algorithm, but mark the room
+                // as having been encrypted once whatever, this can never
+                // go back to false
+                if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+                    entity.wasEncryptedOnce = true
+                }
+            }
         }
     }
 
     override fun getRoomAlgorithm(roomId: String): String? {
         return doWithRealm(realmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.algorithm
+        }
+    }
+
+    override fun roomWasOnceEncrypted(roomId: String): Boolean {
+        return doWithRealm(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)?.wasEncryptedOnce ?: false
         }
     }
 
@@ -648,9 +673,25 @@ internal class RealmCryptoStore @Inject constructor(
                 ?: false
     }
 
+    override fun shouldShareHistory(roomId: String): Boolean {
+        if (!isShareKeysOnInviteEnabled()) return false
+        return doWithRealm(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)?.shouldShareHistory
+        }
+                ?: false
+    }
+
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
         doRealmTransaction(realmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
+        }
+    }
+
+    override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
+        Timber.tag(loggerTag.value)
+                .v("setShouldShareHistory for room $roomId is $shouldShareHistory")
+        doRealmTransaction(realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldShareHistory = shouldShareHistory
         }
     }
 
@@ -665,13 +706,6 @@ internal class RealmCryptoStore @Inject constructor(
 
         if (sessionIdentifier != null) {
             val key = OlmSessionEntity.createPrimaryKey(sessionIdentifier, deviceKey)
-
-            // Release memory of previously known session, if it is not the same one
-            if (olmSessionsToRelease[key]?.olmSession != olmSessionWrapper.olmSession) {
-                olmSessionsToRelease[key]?.olmSession?.releaseSession()
-            }
-
-            olmSessionsToRelease[key] = olmSessionWrapper
 
             doRealmTransaction(realmConfiguration) {
                 val realmOlmSession = OlmSessionEntity().apply {
@@ -689,23 +723,18 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper? {
         val key = OlmSessionEntity.createPrimaryKey(sessionId, deviceKey)
-
-        // If not in cache (or not found), try to read it from realm
-        if (olmSessionsToRelease[key] == null) {
-            doRealmQueryAndCopy(realmConfiguration) {
-                it.where<OlmSessionEntity>()
-                        .equalTo(OlmSessionEntityFields.PRIMARY_KEY, key)
-                        .findFirst()
-            }
-                    ?.let {
-                        val olmSession = it.getOlmSession()
-                        if (olmSession != null && it.sessionId != null) {
-                            olmSessionsToRelease[key] = OlmSessionWrapper(olmSession, it.lastReceivedMessageTs)
-                        }
-                    }
+        return doRealmQueryAndCopy(realmConfiguration) {
+            it.where<OlmSessionEntity>()
+                    .equalTo(OlmSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
         }
-
-        return olmSessionsToRelease[key]
+                ?.let {
+                    val olmSession = it.getOlmSession()
+                    if (olmSession != null && it.sessionId != null) {
+                        return@let OlmSessionWrapper(olmSession, it.lastReceivedMessageTs)
+                    }
+                    null
+                }
     }
 
     override fun getLastUsedSessionId(deviceKey: String): String? {
@@ -722,6 +751,7 @@ internal class RealmCryptoStore @Inject constructor(
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
+                    .sort(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Sort.DESCENDING)
                     .findAll()
                     .mapNotNull { sessionEntity ->
                         sessionEntity.sessionId
@@ -729,61 +759,62 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
+    override fun storeInboundGroupSessions(sessions: List<MXInboundMegolmSessionWrapper>) {
         if (sessions.isEmpty()) {
             return
         }
 
         doRealmTransaction(realmConfiguration) { realm ->
-            sessions.forEach { session ->
-                var sessionIdentifier: String? = null
+            sessions.forEach { wrapper ->
 
-                try {
-                    sessionIdentifier = session.olmInboundGroupSession?.sessionIdentifier()
+                val sessionIdentifier = try {
+                    wrapper.session.sessionIdentifier()
                 } catch (e: OlmException) {
                     Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed")
+                    return@forEach
                 }
 
-                if (sessionIdentifier != null) {
-                    val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
+//                    val shouldShareHistory = session.roomId?.let { roomId ->
+//                        CryptoRoomEntity.getById(realm, roomId)?.shouldShareHistory
+//                    } ?: false
+                val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, wrapper.sessionData.senderKey)
 
-                    // Release memory of previously known session, if it is not the same one
-                    if (inboundGroupSessionToRelease[key] != session) {
-                        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
-                    }
+                val existing = realm.where<OlmInboundGroupSessionEntity>()
+                        .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                        .findFirst()
 
-                    inboundGroupSessionToRelease[key] = session
-
-                    val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
-                        primaryKey = key
-                        sessionId = sessionIdentifier
-                        senderKey = session.senderKey
-                        putInboundGroupSession(session)
-                    }
-
-                    realm.insertOrUpdate(realmOlmInboundGroupSession)
+                val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                    primaryKey = key
+                    store(wrapper)
+                    backedUp = existing?.backedUp ?: false
                 }
+
+                Timber.v("## CRYPTO | shouldShareHistory: ${wrapper.sessionData.sharedHistory} for $key")
+                realm.insertOrUpdate(realmOlmInboundGroupSession)
             }
         }
     }
 
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
-        // If not in cache (or not found), try to read it from realm
-        if (inboundGroupSessionToRelease[key] == null) {
-            doWithRealm(realmConfiguration) {
-                it.where<OlmInboundGroupSessionEntity>()
-                        .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                        .findFirst()
-                        ?.getInboundGroupSession()
-            }
-                    ?.let {
-                        inboundGroupSessionToRelease[key] = it
-                    }
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.toModel()
         }
+    }
 
-        return inboundGroupSessionToRelease[key]
+    override fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): MXInboundMegolmSessionWrapper? {
+        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
+        return doWithRealm(realmConfiguration) {
+            it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.SHARED_HISTORY, sharedHistory)
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.toModel()
+        }
     }
 
     override fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper? {
@@ -794,7 +825,8 @@ internal class RealmCryptoStore @Inject constructor(
                         entity.getOutboundGroupSession()?.let {
                             OutboundGroupSessionWrapper(
                                     it,
-                                    entity.creationTime ?: 0
+                                    entity.creationTime ?: 0,
+                                    entity.shouldShareHistory
                             )
                         }
                     }
@@ -813,7 +845,9 @@ internal class RealmCryptoStore @Inject constructor(
 
                 if (outboundGroupSession != null) {
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
-                        creationTime = System.currentTimeMillis()
+                        creationTime = clock.epochMillis()
+                        // Store the room history visibility on the outbound session creation
+                        shouldShareHistory = entity.shouldShareHistory
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
@@ -822,26 +856,37 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+//    override fun needsRotationDueToVisibilityChange(roomId: String): Boolean {
+//        return doWithRealm(realmConfiguration) { realm ->
+//            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+//                entity.shouldShareHistory != entity.outboundSessionInfo?.shouldShareHistory
+//            }
+//        } ?: false
+//    }
+
     /**
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
-     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
+     * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management.
      */
-    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
-        return doWithRealm(realmConfiguration) {
-            it.where<OlmInboundGroupSessionEntity>()
+    override fun getInboundGroupSessions(): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
                     .findAll()
-                    .mapNotNull { inboundGroupSessionEntity ->
-                        inboundGroupSessionEntity.getInboundGroupSession()
-                    }
+                    .mapNotNull { it.toModel() }
+        }
+    }
+
+    override fun getInboundGroupSessions(roomId: String): List<MXInboundMegolmSessionWrapper> {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.ROOM_ID, roomId)
+                    .findAll()
+                    .mapNotNull { it.toModel() }
         }
     }
 
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
-
-        // Release memory of previously known session
-        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
-        inboundGroupSessionToRelease.remove(key)
 
         doRealmTransaction(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
@@ -897,22 +942,39 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>) {
+    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<MXInboundMegolmSessionWrapper>) {
         if (olmInboundGroupSessionWrappers.isEmpty()) {
             return
         }
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(realmConfiguration) { realm ->
             olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                 try {
+                    val sessionIdentifier =
+                            tryOrNull("Failed to get session identifier") {
+                                olmInboundGroupSessionWrapper.session.sessionIdentifier()
+                            } ?: return@forEach
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
-                            olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier(),
-                            olmInboundGroupSessionWrapper.senderKey)
+                            sessionIdentifier,
+                            olmInboundGroupSessionWrapper.sessionData.senderKey
+                    )
 
-                    it.where<OlmInboundGroupSessionEntity>()
+                    val existing = realm.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                             .findFirst()
-                            ?.backedUp = true
+
+                    if (existing != null) {
+                        existing.backedUp = true
+                    } else {
+                        // ... might be in cache but not yet persisted, create a record to persist backedup state
+                        val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                            primaryKey = key
+                            store(olmInboundGroupSessionWrapper)
+                            backedUp = true
+                        }
+
+                        realm.insertOrUpdate(realmOlmInboundGroupSession)
+                    }
                 } catch (e: OlmException) {
                     Timber.e(e, "OlmException")
                 }
@@ -920,15 +982,13 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2> {
+    override fun inboundGroupSessionsToBackup(limit: Int): List<MXInboundMegolmSessionWrapper> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)
                     .limit(limit.toLong())
                     .findAll()
-                    .mapNotNull { inboundGroupSession ->
-                        inboundGroupSession.getInboundGroupSession()
-                    }
+                    .mapNotNull { it.toModel() }
         }
     }
 
@@ -951,10 +1011,34 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun enableKeyGossiping(enable: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyGossiping = enable
+        }
+    }
+
+    override fun isKeyGossipingEnabled(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyGossiping
+        } ?: true
+    }
+
     override fun getGlobalBlacklistUnverifiedDevices(): Boolean {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.globalBlacklistUnverifiedDevices
         } ?: false
+    }
+
+    override fun isShareKeysOnInviteEnabled(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite
+        } ?: false
+    }
+
+    override fun enableShareKeyOnInvite(enable: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.enableKeyForwardingOnInvite = enable
+        }
     }
 
     override fun setDeviceKeysUploaded(uploaded: Boolean) {
@@ -1032,12 +1116,13 @@ internal class RealmCryptoStore @Inject constructor(
                 ?: defaultValue
     }
 
-    override fun getOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody): OutgoingRoomKeyRequest? {
+    override fun getOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody): OutgoingKeyRequest? {
         return monarchy.fetchAllCopiedSync { realm ->
-            realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-        }.mapNotNull {
-            it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, requestBody.roomId)
+                    .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, requestBody.sessionId)
+        }.map {
+            it.toOutgoingKeyRequest()
         }.firstOrNull {
             it.requestBody?.algorithm == requestBody.algorithm &&
                     it.requestBody?.roomId == requestBody.roomId &&
@@ -1046,87 +1131,120 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest? {
+    override fun getOutgoingRoomKeyRequest(requestId: String): OutgoingKeyRequest? {
         return monarchy.fetchAllCopiedSync { realm ->
-            realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
-                    .equalTo(OutgoingGossipingRequestEntityFields.REQUESTED_INFO_STR, secretName)
-        }.mapNotNull {
-            it.toOutgoingGossipingRequest() as? OutgoingSecretRequest
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.REQUEST_ID, requestId)
+        }.map {
+            it.toOutgoingKeyRequest()
         }.firstOrNull()
     }
 
-    override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
+    override fun getOutgoingRoomKeyRequest(roomId: String, sessionId: String, algorithm: String, senderKey: String): List<OutgoingKeyRequest> {
+        // TODO this annoying we have to load all
         return monarchy.fetchAllCopiedSync { realm ->
-            realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-        }.mapNotNull {
-            it.toIncomingGossipingRequest() as? IncomingRoomKeyRequest
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
+                    .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, sessionId)
+        }.map {
+            it.toOutgoingKeyRequest()
+        }.filter {
+            it.requestBody?.algorithm == algorithm &&
+                    it.requestBody?.senderKey == senderKey
         }
     }
 
-    override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
+    override fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-                    .sort(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, Sort.DESCENDING)
+            realm.where<AuditTrailEntity>().sort(AuditTrailEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
-            it.toIncomingGossipingRequest() as? IncomingRoomKeyRequest
-                    ?: IncomingRoomKeyRequest(
-                            requestBody = null,
-                            deviceId = "",
-                            userId = "",
-                            requestId = "",
-                            state = GossipingRequestState.NONE,
-                            localCreationTimestamp = 0
-                    )
+            AuditTrailMapper.map(it)
+            // mm we can't map not null...
+                    ?: createUnknownTrail()
         }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
     }
 
-    override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
+    private fun createUnknownTrail() = AuditTrail(
+            clock.epochMillis(),
+            TrailType.Unknown,
+            IncomingKeyRequestInfo(
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+            )
+    )
+
+    override fun <T> getGossipingEventsTrail(type: TrailType, mapper: ((AuditTrail) -> T)): LiveData<PagedList<T>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            realm.where<GossipingEventEntity>().sort(GossipingEventEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
+            realm.where<AuditTrailEntity>()
+                    .equalTo(AuditTrailEntityFields.TYPE, type.name)
+                    .sort(AuditTrailEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
         }
-        val dataSourceFactory = realmDataSourceFactory.map { it.toModel() }
-        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        val dataSourceFactory = realmDataSourceFactory.map { entity ->
+            (AuditTrailMapper.map(entity)
+            // mm we can't map not null...
+                    ?: createUnknownTrail()
+                    ).let { mapper.invoke(it) }
+        }
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
-        return trail
     }
 
-    override fun getGossipingEvents(): List<Event> {
+    override fun getGossipingEvents(): List<AuditTrail> {
         return monarchy.fetchAllCopiedSync { realm ->
-            realm.where<GossipingEventEntity>()
-        }.map {
-            it.toModel()
+            realm.where<AuditTrailEntity>()
+        }.mapNotNull {
+            AuditTrailMapper.map(it)
         }
     }
 
-    override fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>): OutgoingRoomKeyRequest? {
+    override fun getOrAddOutgoingRoomKeyRequest(
+            requestBody: RoomKeyRequestBody,
+            recipients: Map<String, List<String>>,
+            fromIndex: Int
+    ): OutgoingKeyRequest {
         // Insert the request and return the one passed in parameter
-        var request: OutgoingRoomKeyRequest? = null
+        lateinit var request: OutgoingKeyRequest
         doRealmTransaction(realmConfiguration) { realm ->
 
-            val existing = realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+            val existing = realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, requestBody.sessionId)
+                    .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, requestBody.roomId)
                     .findAll()
-                    .mapNotNull {
-                        it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
-                    }.firstOrNull {
+                    .map {
+                        it.toOutgoingKeyRequest()
+                    }.also {
+                        if (it.size > 1) {
+                            // there should be one or zero but not more, worth warning
+                            Timber.tag(loggerTag.value).w("There should not be more than one active key request per session")
+                        }
+                    }
+                    .firstOrNull {
                         it.requestBody?.algorithm == requestBody.algorithm &&
                                 it.requestBody?.sessionId == requestBody.sessionId &&
                                 it.requestBody?.senderKey == requestBody.senderKey &&
@@ -1134,13 +1252,14 @@ internal class RealmCryptoStore @Inject constructor(
                     }
 
             if (existing == null) {
-                request = realm.createObject(OutgoingGossipingRequestEntity::class.java).apply {
+                request = realm.createObject(OutgoingKeyRequestEntity::class.java).apply {
                     this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.setRecipients(recipients)
-                    this.requestState = OutgoingGossipingRequestState.UNSENT
-                    this.type = GossipRequestType.KEY
-                    this.requestedInfoStr = requestBody.toJson()
-                }.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+                    this.requestedIndex = fromIndex
+                    this.requestState = OutgoingRoomKeyRequestState.UNSENT
+                    this.setRequestBody(requestBody)
+                    this.creationTimeStamp = clock.epochMillis()
+                }.toOutgoingKeyRequest()
             } else {
                 request = existing
             }
@@ -1148,284 +1267,185 @@ internal class RealmCryptoStore @Inject constructor(
         return request
     }
 
-    override fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest? {
-        var request: OutgoingSecretRequest? = null
-
-        // Insert the request and return the one passed in parameter
+    override fun updateOutgoingRoomKeyRequestState(requestId: String, newState: OutgoingRoomKeyRequestState) {
         doRealmTransaction(realmConfiguration) { realm ->
-            val existing = realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
-                    .equalTo(OutgoingGossipingRequestEntityFields.REQUESTED_INFO_STR, secretName)
-                    .findAll()
-                    .mapNotNull {
-                        it.toOutgoingGossipingRequest() as? OutgoingSecretRequest
-                    }.firstOrNull()
-            if (existing == null) {
-                request = realm.createObject(OutgoingGossipingRequestEntity::class.java).apply {
-                    this.type = GossipRequestType.SECRET
-                    setRecipients(recipients)
-                    this.requestState = OutgoingGossipingRequestState.UNSENT
-                    this.requestId = RequestIdHelper.createUniqueRequestId()
-                    this.requestedInfoStr = secretName
-                }.toOutgoingGossipingRequest() as? OutgoingSecretRequest
-            } else {
-                request = existing
-            }
-        }
-
-        return request
-    }
-
-    override fun saveGossipingEvents(events: List<Event>) {
-        monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
-            events.forEach { event ->
-                val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
-                val entity = GossipingEventEntity(
-                        type = event.type,
-                        sender = event.senderId,
-                        ageLocalTs = ageLocalTs,
-                        content = ContentMapper.map(event.content)
-                ).apply {
-                    sendState = SendState.SYNCED
-                    decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
-                    decryptionErrorCode = event.mCryptoError?.name
-                }
-                realm.insertOrUpdate(entity)
-            }
-        }
-    }
-
-//    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
-//        val statesIndex = states.map { it.ordinal }.toTypedArray()
-//        return doRealmQueryAndCopy(realmConfiguration) { realm ->
-//            realm.where<GossipingEventEntity>()
-//                    .equalTo(GossipingEventEntityFields.SENDER, credentials.userId)
-//                    .findAll()
-//                    .filter {entity ->
-//                        states.any { it == entity.requestState}
-//                    }
-//        }.mapNotNull {
-//            ContentMapper.map(it.content)?.toModel<OutgoingSecretRequest>()
-//        }
-//                ?.toOutgoingRoomKeyRequest()
-//    }
-//
-//    override fun getOutgoingSecretShareRequestByState(states: Set<ShareRequestState>): OutgoingSecretRequest? {
-//        val statesIndex = states.map { it.ordinal }.toTypedArray()
-//        return doRealmQueryAndCopy(realmConfiguration) {
-//            it.where<OutgoingSecretRequestEntity>()
-//                    .`in`(OutgoingSecretRequestEntityFields.STATE, statesIndex)
-//                    .findFirst()
-//        }
-//                ?.toOutgoingSecretRequest()
-//    }
-
-//    override fun updateOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest) {
-//        doRealmTransaction(realmConfiguration) {
-//            val obj = OutgoingRoomKeyRequestEntity().apply {
-//                requestId = request.requestId
-//                cancellationTxnId = request.cancellationTxnId
-//                state = request.state.ordinal
-//                putRecipients(request.recipients)
-//                putRequestBody(request.requestBody)
-//            }
-//
-//            it.insertOrUpdate(obj)
-//        }
-//    }
-
-//    override fun deleteOutgoingRoomKeyRequest(transactionId: String) {
-//        doRealmTransaction(realmConfiguration) {
-//            it.where<OutgoingRoomKeyRequestEntity>()
-//                    .equalTo(OutgoingRoomKeyRequestEntityFields.REQUEST_ID, transactionId)
-//                    .findFirst()
-//                    ?.deleteFromRealm()
-//        }
-//    }
-
-//    override fun storeIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequest?) {
-//        if (incomingRoomKeyRequest == null) {
-//            return
-//        }
-//
-//        doRealmTransaction(realmConfiguration) {
-//            // Delete any previous store request with the same parameters
-//            it.where<IncomingRoomKeyRequestEntity>()
-//                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
-//                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
-//                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
-//                    .findAll()
-//                    .deleteAllFromRealm()
-//
-//            // Then store it
-//            it.createObject(IncomingRoomKeyRequestEntity::class.java).apply {
-//                userId = incomingRoomKeyRequest.userId
-//                deviceId = incomingRoomKeyRequest.deviceId
-//                requestId = incomingRoomKeyRequest.requestId
-//                putRequestBody(incomingRoomKeyRequest.requestBody)
-//            }
-//        }
-//    }
-
-//    override fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingShareRequestCommon) {
-//        doRealmTransaction(realmConfiguration) {
-//            it.where<GossipingEventEntity>()
-//                    .equalTo(GossipingEventEntityFields.TYPE, EventType.ROOM_KEY_REQUEST)
-//                    .notEqualTo(GossipingEventEntityFields.SENDER, credentials.userId)
-//                    .findAll()
-//                    .filter {
-//                        ContentMapper.map(it.content).toModel<IncomingRoomKeyRequest>()?.let {
-//
-//                        }
-//                    }
-// //                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
-// //                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
-// //                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
-// //                    .findAll()
-// //                    .deleteAllFromRealm()
-//        }
-//    }
-
-    override fun updateGossipingRequestState(requestUserId: String?,
-                                             requestDeviceId: String?,
-                                             requestId: String?,
-                                             state: GossipingRequestState) {
-        doRealmTransaction(realmConfiguration) { realm ->
-            realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, requestUserId)
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, requestDeviceId)
-                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_ID, requestId)
-                    .findAll().forEach {
-                        it.requestState = state
-                    }
-        }
-    }
-
-    override fun updateOutgoingGossipingRequestState(requestId: String, state: OutgoingGossipingRequestState) {
-        doRealmTransaction(realmConfiguration) { realm ->
-            realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_ID, requestId)
-                    .findAll().forEach {
-                        it.requestState = state
-                    }
-        }
-    }
-
-    override fun getIncomingRoomKeyRequest(userId: String, deviceId: String, requestId: String): IncomingRoomKeyRequest? {
-        return doWithRealm(realmConfiguration) { realm ->
-            realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, deviceId)
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, userId)
-                    .findAll()
-                    .mapNotNull { entity ->
-                        entity.toIncomingGossipingRequest() as? IncomingRoomKeyRequest
-                    }
-                    .firstOrNull()
-        }
-    }
-
-    override fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
-        return doWithRealm(realmConfiguration) {
-            it.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, GossipingRequestState.PENDING.name)
-                    .findAll()
-                    .map { entity ->
-                        IncomingRoomKeyRequest(
-                                userId = entity.otherUserId,
-                                deviceId = entity.otherDeviceId,
-                                requestId = entity.requestId,
-                                requestBody = entity.getRequestedKeyInfo(),
-                                localCreationTimestamp = entity.localCreationTimestamp
-                        )
-                    }
-        }
-    }
-
-    override fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon> {
-        return doWithRealm(realmConfiguration) {
-            it.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, GossipingRequestState.PENDING.name)
-                    .findAll()
-                    .mapNotNull { entity ->
-                        when (entity.type) {
-                            GossipRequestType.KEY    -> {
-                                IncomingRoomKeyRequest(
-                                        userId = entity.otherUserId,
-                                        deviceId = entity.otherDeviceId,
-                                        requestId = entity.requestId,
-                                        requestBody = entity.getRequestedKeyInfo(),
-                                        localCreationTimestamp = entity.localCreationTimestamp
-                                )
-                            }
-                            GossipRequestType.SECRET -> {
-                                IncomingSecretShareRequest(
-                                        userId = entity.otherUserId,
-                                        deviceId = entity.otherDeviceId,
-                                        requestId = entity.requestId,
-                                        secretName = entity.getRequestedSecretName(),
-                                        localCreationTimestamp = entity.localCreationTimestamp
-                                )
-                            }
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.REQUEST_ID, requestId)
+                    .findFirst()?.apply {
+                        this.requestState = newState
+                        if (newState == OutgoingRoomKeyRequestState.UNSENT) {
+                            // clear the old replies
+                            this.replies.deleteAllFromRealm()
                         }
                     }
         }
     }
 
-    override fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?) {
-        doRealmTransactionAsync(realmConfiguration) { realm ->
-
-            // After a clear cache, we might have a
-
-            realm.createObject(IncomingGossipingRequestEntity::class.java).let {
-                it.otherDeviceId = request.deviceId
-                it.otherUserId = request.userId
-                it.requestId = request.requestId ?: ""
-                it.requestState = GossipingRequestState.PENDING
-                it.localCreationTimestamp = ageLocalTS ?: System.currentTimeMillis()
-                if (request is IncomingSecretShareRequest) {
-                    it.type = GossipRequestType.SECRET
-                    it.requestedInfoStr = request.secretName
-                } else if (request is IncomingRoomKeyRequest) {
-                    it.type = GossipRequestType.KEY
-                    it.requestedInfoStr = request.requestBody?.toJson()
-                }
-            }
-        }
-    }
-
-    override fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>) {
-        doRealmTransactionAsync(realmConfiguration) { realm ->
-            requests.forEach { request ->
-                // After a clear cache, we might have a
-                realm.createObject(IncomingGossipingRequestEntity::class.java).let {
-                    it.otherDeviceId = request.deviceId
-                    it.otherUserId = request.userId
-                    it.requestId = request.requestId ?: ""
-                    it.requestState = GossipingRequestState.PENDING
-                    it.localCreationTimestamp = request.localCreationTimestamp ?: System.currentTimeMillis()
-                    if (request is IncomingSecretShareRequest) {
-                        it.type = GossipRequestType.SECRET
-                        it.requestedInfoStr = request.secretName
-                    } else if (request is IncomingRoomKeyRequest) {
-                        it.type = GossipRequestType.KEY
-                        it.requestedInfoStr = request.requestBody?.toJson()
+    override fun updateOutgoingRoomKeyRequiredIndex(requestId: String, newIndex: Int) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.REQUEST_ID, requestId)
+                    .findFirst()?.apply {
+                        this.requestedIndex = newIndex
                     }
+        }
+    }
+
+    override fun updateOutgoingRoomKeyReply(
+            roomId: String,
+            sessionId: String,
+            algorithm: String,
+            senderKey: String,
+            fromDevice: String?,
+            event: Event
+    ) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
+                    .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, sessionId)
+                    .findAll().firstOrNull { entity ->
+                        entity.toOutgoingKeyRequest().let {
+                            it.requestBody?.senderKey == senderKey &&
+                                    it.requestBody?.algorithm == algorithm
+                        }
+                    }?.apply {
+                        event.senderId?.let { addReply(it, fromDevice, event) }
+                    }
+        }
+    }
+
+    override fun deleteOutgoingRoomKeyRequest(requestId: String) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.REQUEST_ID, requestId)
+                    .findFirst()?.deleteOnCascade()
+        }
+    }
+
+    override fun deleteOutgoingRoomKeyRequestInState(state: OutgoingRoomKeyRequestState) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<OutgoingKeyRequestEntity>()
+                    .equalTo(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, state.name)
+                    .findAll()
+                    // I delete like this because I want to cascade delete replies?
+                    .onEach { it.deleteOnCascade() }
+        }
+    }
+
+    override fun saveIncomingKeyRequestAuditTrail(
+            requestId: String,
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            fromUser: String,
+            fromDevice: String
+    ) {
+        monarchy.writeAsync { realm ->
+            val now = clock.epochMillis()
+            realm.createObject<AuditTrailEntity>().apply {
+                this.ageLocalTs = now
+                this.type = TrailType.IncomingKeyRequest.name
+                val info = IncomingKeyRequestInfo(
+                        roomId = roomId,
+                        sessionId = sessionId,
+                        senderKey = senderKey,
+                        alg = algorithm,
+                        userId = fromUser,
+                        deviceId = fromDevice,
+                        requestId = requestId
+                )
+                MoshiProvider.providesMoshi().adapter(IncomingKeyRequestInfo::class.java).toJson(info)?.let {
+                    this.contentJson = it
                 }
             }
         }
     }
 
-//    override fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest> {
-//        return doRealmQueryAndCopyList(realmConfiguration) {
-//            it.where<GossipingEventEntity>()
-//                    .findAll()
-//        }.map {
-//            it.toIncomingSecretShareRequest()
-//        }
-//    }
+    override fun saveWithheldAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            code: WithHeldCode,
+            userId: String,
+            deviceId: String
+    ) {
+        monarchy.writeAsync { realm ->
+            val now = clock.epochMillis()
+            realm.createObject<AuditTrailEntity>().apply {
+                this.ageLocalTs = now
+                this.type = TrailType.OutgoingKeyWithheld.name
+                val info = WithheldInfo(
+                        roomId = roomId,
+                        sessionId = sessionId,
+                        senderKey = senderKey,
+                        alg = algorithm,
+                        code = code,
+                        userId = userId,
+                        deviceId = deviceId
+                )
+                MoshiProvider.providesMoshi().adapter(WithheldInfo::class.java).toJson(info)?.let {
+                    this.contentJson = it
+                }
+            }
+        }
+    }
+
+    override fun saveForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
+        saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, false)
+    }
+
+    override fun saveIncomingForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    ) {
+        saveForwardKeyTrail(roomId, sessionId, senderKey, algorithm, userId, deviceId, chainIndex, true)
+    }
+
+    private fun saveForwardKeyTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?,
+            incoming: Boolean
+    ) {
+        monarchy.writeAsync { realm ->
+            val now = clock.epochMillis()
+            realm.createObject<AuditTrailEntity>().apply {
+                this.ageLocalTs = now
+                this.type = if (incoming) TrailType.IncomingKeyForward.name else TrailType.OutgoingKeyForward.name
+                val info = ForwardInfo(
+                        roomId = roomId,
+                        sessionId = sessionId,
+                        senderKey = senderKey,
+                        alg = algorithm,
+                        userId = userId,
+                        deviceId = deviceId,
+                        chainIndex = chainIndex
+                )
+                MoshiProvider.providesMoshi().adapter(ForwardInfo::class.java).toJson(info)?.let {
+                    this.contentJson = it
+                }
+            }
+        }
+    }
 
     /* ==========================================================================================
      * Cross Signing
@@ -1529,45 +1549,45 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest> {
+    override fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest> {
         return monarchy.fetchAllMappedSync({ realm ->
             realm
-                    .where(OutgoingGossipingRequestEntity::class.java)
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .where(OutgoingKeyRequestEntity::class.java)
         }, { entity ->
-            entity.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+            entity.toOutgoingKeyRequest()
         })
                 .filterNotNull()
     }
 
-    override fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest> {
+    override fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest> {
         return monarchy.fetchAllMappedSync({ realm ->
             realm
-                    .where(OutgoingGossipingRequestEntity::class.java)
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
+                    .where(OutgoingKeyRequestEntity::class.java)
+                    .`in`(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, inStates.map { it.name }.toTypedArray())
         }, { entity ->
-            entity.toOutgoingGossipingRequest() as? OutgoingSecretRequest
+            entity.toOutgoingKeyRequest()
         })
                 .filterNotNull()
     }
 
-    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>> {
+    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             realm
-                    .where(OutgoingGossipingRequestEntity::class.java)
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .where(OutgoingKeyRequestEntity::class.java)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
-            it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
-                    ?: OutgoingRoomKeyRequest(requestBody = null, requestId = "?", recipients = emptyMap(), state = OutgoingGossipingRequestState.CANCELLED)
+            it.toOutgoingKeyRequest()
         }
-        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        val trail = monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
         return trail
     }
@@ -1591,7 +1611,8 @@ internal class RealmCryptoStore @Inject constructor(
                 userId = userId,
                 crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
                     crossSigningKeysMapper.map(userId, it)
-                }
+                },
+                wasTrustedOnce = xsignInfo.wasUserVerifiedOnce
         )
     }
 
@@ -1678,12 +1699,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?,
-                                       sessionId: String,
-                                       userId: String,
-                                       deviceId: String,
-                                       deviceIdentityKey: String,
-                                       chainIndex: Int) {
+    override fun markedSessionAsShared(
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
@@ -1728,43 +1751,30 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Some entries in the DB can get a bit out of control with time
-     * So we need to tidy up a bit
+     * Some entries in the DB can get a bit out of control with time.
+     * So we need to tidy up a bit.
      */
     override fun tidyUpDataBase() {
-        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        val prevWeekTs = clock.epochMillis() - 7 * 24 * 60 * 60 * 1_000
         doRealmTransaction(realmConfiguration) { realm ->
 
-            // Only keep one week history
-            realm.where<IncomingGossipingRequestEntity>()
-                    .lessThan(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, prevWeekTs)
+            // Clean the old ones?
+            realm.where<OutgoingKeyRequestEntity>()
+                    .lessThan(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, prevWeekTs)
                     .findAll()
-                    .also { Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity") }
+                    .also { Timber.i("## Crypto Clean up ${it.size} OutgoingKeyRequestEntity") }
                     .deleteAllFromRealm()
 
-            // Clean the cancelled ones?
-            realm.where<OutgoingGossipingRequestEntity>()
-                    .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, OutgoingGossipingRequestState.CANCELLED.name)
-                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-                    .findAll()
-                    .also { Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity") }
-                    .deleteAllFromRealm()
+            // Only keep one month history
 
-            // Only keep one week history
-            realm.where<GossipingEventEntity>()
-                    .lessThan(GossipingEventEntityFields.AGE_LOCAL_TS, prevWeekTs)
+            val prevMonthTs = clock.epochMillis() - 4 * 7 * 24 * 60 * 60 * 1_000L
+            realm.where<AuditTrailEntity>()
+                    .lessThan(AuditTrailEntityFields.AGE_LOCAL_TS, prevMonthTs)
                     .findAll()
-                    .also { Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields") }
+                    .also { Timber.i("## Crypto Clean up ${it.size} AuditTrailEntity") }
                     .deleteAllFromRealm()
 
             // Can we do something for WithHeldSessionEntity?
         }
-    }
-
-    /**
-     * Prints out database info
-     */
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

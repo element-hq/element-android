@@ -22,4 +22,10 @@ internal class SyncResponsePostTreatmentAggregator {
 
     // Map of roomId to directUserId
     val directChatsToCheck = mutableMapOf<String, String>()
+
+    // Set of userIds to fetch and update at the end of incremental syncs
+    val userIdsToFetch = mutableSetOf<String>()
+
+    // Set of users to call `crossSigningService.checkTrustAndAffectedRoomShields` once per sync
+    val userIdsForCheckingTrustAndAffectedRoomShields = mutableSetOf<String>()
 }

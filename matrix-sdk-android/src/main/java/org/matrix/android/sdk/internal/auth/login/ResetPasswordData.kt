@@ -20,10 +20,9 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
 
 /**
- * Container to store the data when a reset password is in the email validation step
+ * Container to store the data when a reset password is in the email validation step.
  */
 @JsonClass(generateAdapter = true)
 internal data class ResetPasswordData(
-        val newPassword: String,
         val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
 )

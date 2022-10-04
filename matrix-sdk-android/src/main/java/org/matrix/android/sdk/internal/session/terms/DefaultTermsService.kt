@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
+import org.matrix.android.sdk.api.session.terms.TermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -50,8 +51,10 @@ internal class DefaultTermsService @Inject constructor(
         private val updateUserAccountDataTask: UpdateUserAccountDataTask
 ) : TermsService {
 
-    override suspend fun getTerms(serviceType: TermsService.ServiceType,
-                                  baseUrl: String): GetTermsResponse {
+    override suspend fun getTerms(
+            serviceType: TermsService.ServiceType,
+            baseUrl: String
+    ): GetTermsResponse {
         val url = buildUrl(baseUrl, serviceType)
         val termsResponse = executeRequest(null) {
             termsAPI.getTerms("${url}terms")
@@ -60,7 +63,7 @@ internal class DefaultTermsService @Inject constructor(
     }
 
     /**
-     * We use a trick here to get the homeserver T&C, we use the register API
+     * We use a trick here to get the homeserver T&C, we use the register API.
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {
@@ -89,10 +92,12 @@ internal class DefaultTermsService @Inject constructor(
         }
     }
 
-    override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
-                                      baseUrl: String,
-                                      agreedUrls: List<String>,
-                                      token: String?) {
+    override suspend fun agreeToTerms(
+            serviceType: TermsService.ServiceType,
+            baseUrl: String,
+            agreedUrls: List<String>,
+            token: String?
+    ) {
         val url = buildUrl(baseUrl, serviceType)
         val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 
@@ -107,9 +112,11 @@ internal class DefaultTermsService @Inject constructor(
 
         val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.AcceptedTermsParams(
-                acceptedTermsContent = AcceptedTermsContent(newList)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.AcceptedTermsParams(
+                        acceptedTermsContent = AcceptedTermsContent(newList)
+                )
+        )
     }
 
     private suspend fun getToken(url: String): String {
@@ -125,7 +132,7 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }

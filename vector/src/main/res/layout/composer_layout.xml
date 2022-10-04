@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
-        tools:hint="@string/room_message_placeholder_not_encrypted"
+        tools:hint="@string/room_message_placeholder"
         tools:ignore="MissingConstraints" />
 
     <ImageButton

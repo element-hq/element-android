@@ -29,7 +29,6 @@
             android:text="@string/auth_recaptcha_message"
             android:textColor="?vctr_content_secondary" />
 
-        <!-- contentDescription does not work on WebView? -->
         <WebView
             android:id="@+id/loginCaptchaWevView"
             android:layout_width="match_parent"

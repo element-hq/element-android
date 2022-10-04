@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail
 
+import im.vector.app.core.time.Clock
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -45,7 +46,9 @@ fun ChatEffect.toMessageType(): String {
  * precisely an event decrypted with a few delay won't trigger an effect; it's acceptable)
  * Events that are more that 10s old won't trigger effects
  */
-class ChatEffectManager @Inject constructor() {
+class ChatEffectManager @Inject constructor(
+        private val clock: Clock,
+) {
 
     interface Delegate {
         fun stopEffects()
@@ -61,7 +64,7 @@ class ChatEffectManager @Inject constructor() {
 
     fun checkForEffect(event: TimelineEvent) {
         val age = event.root.ageLocalTs ?: 0
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
         // messages older than 10s should not trigger any effect
         if ((now - age) >= 10_000) return
         val content = event.root.getClearContent()?.toModel<MessageContent>() ?: return
@@ -114,17 +117,17 @@ class ChatEffectManager @Inject constructor() {
             MessageType.MSGTYPE_CONFETTI -> ChatEffect.CONFETTI
             MessageType.MSGTYPE_SNOWFALL -> ChatEffect.SNOWFALL
             MessageType.MSGTYPE_EMOTE,
-            MessageType.MSGTYPE_TEXT     -> {
+            MessageType.MSGTYPE_TEXT -> {
                 event.root.getClearContent().toModel<MessageContent>()?.body
                         ?.let { text ->
                             when {
                                 EMOJIS_FOR_CONFETTI.any { text.contains(it) } -> ChatEffect.CONFETTI
                                 EMOJIS_FOR_SNOWFALL.any { text.contains(it) } -> ChatEffect.SNOWFALL
-                                else                                          -> null
+                                else -> null
                             }
                         }
             }
-            else                         -> null
+            else -> null
         }
     }
 

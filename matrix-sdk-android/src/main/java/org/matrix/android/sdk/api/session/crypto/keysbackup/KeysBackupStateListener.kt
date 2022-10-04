@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.crypto.keysbackup
 interface KeysBackupStateListener {
 
     /**
-     * The keys backup state has changed
+     * The keys backup state has changed.
      * @param newState the new state
      */
     fun onStateChange(newState: KeysBackupState)

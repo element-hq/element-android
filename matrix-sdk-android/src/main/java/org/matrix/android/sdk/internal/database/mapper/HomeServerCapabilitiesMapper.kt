@@ -28,17 +28,22 @@ import org.matrix.android.sdk.internal.session.homeserver.RoomVersions
 import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
 
 /**
- * HomeServerCapabilitiesEntity -> HomeSeverCapabilities
+ * HomeServerCapabilitiesEntity -> HomeSeverCapabilities.
  */
 internal object HomeServerCapabilitiesMapper {
 
     fun map(entity: HomeServerCapabilitiesEntity): HomeServerCapabilities {
         return HomeServerCapabilities(
                 canChangePassword = entity.canChangePassword,
+                canChangeDisplayName = entity.canChangeDisplayName,
+                canChangeAvatar = entity.canChangeAvatar,
+                canChange3pid = entity.canChange3pid,
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                roomVersions = mapRoomVersion(entity.roomVersionsJson)
+                roomVersions = mapRoomVersion(entity.roomVersionsJson),
+                canUseThreading = entity.canUseThreading,
+                canControlLogoutDevices = entity.canControlLogoutDevices
         )
     }
 

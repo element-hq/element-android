@@ -21,31 +21,35 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
-import im.vector.app.features.settings.FontScale
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.FontScalePreferences
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
 
 /**
- * Handle locale configuration change, such as theme, font size and locale chosen by the user
+ * Handle locale configuration change, such as theme, font size and locale chosen by the user.
  */
-class VectorConfiguration @Inject constructor(private val context: Context) {
+class VectorConfiguration @Inject constructor(
+        private val context: Context,
+        private val fontScalePreferences: FontScalePreferences,
+        private val vectorLocale: VectorLocaleProvider,
+) {
 
     fun onConfigurationChanged() {
-        if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
+        if (Locale.getDefault().toString() != vectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
-            Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
-            Locale.setDefault(VectorLocale.applicationLocale)
+            Timber.v("## onConfigurationChanged(): restore the expected value ${vectorLocale.applicationLocale}")
+            Locale.setDefault(vectorLocale.applicationLocale)
         }
         // Night mode may have changed
         ThemeUtils.init(context)
     }
 
     fun applyToApplicationContext() {
-        val locale = VectorLocale.applicationLocale
-        val fontScale = FontScale.getFontScaleValue(context)
+        val locale = vectorLocale.applicationLocale
+        val fontScale = fontScalePreferences.getResolvedFontScaleValue()
 
         Locale.setDefault(locale)
         val config = Configuration(context.resources.configuration)
@@ -57,19 +61,19 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Compute a localised context
+     * Compute a localised context.
      *
      * @param context the context
      * @return the localised context
      */
     fun getLocalisedContext(context: Context): Context {
         try {
-            val locale = VectorLocale.applicationLocale
+            val locale = vectorLocale.applicationLocale
 
             // create new configuration passing old configuration from original Context
             val configuration = Configuration(context.resources.configuration)
 
-            configuration.fontScale = FontScale.getFontScaleValue(context).scale
+            configuration.fontScale = fontScalePreferences.getResolvedFontScaleValue().scale
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 setLocaleForApi24(configuration, locale)
@@ -100,12 +104,12 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Compute the locale status value
+     * Compute the locale status value.
      * @return the local status value
      */
     fun getHash(): String {
-        return (VectorLocale.applicationLocale.toString() +
-                "_" + FontScale.getFontScaleValue(context).preferenceValue +
+        return (vectorLocale.applicationLocale.toString() +
+                "_" + fontScalePreferences.getResolvedFontScaleValue().preferenceValue +
                 "_" + ThemeUtils.getApplicationTheme(context))
     }
 }

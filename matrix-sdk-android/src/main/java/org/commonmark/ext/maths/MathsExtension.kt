@@ -21,7 +21,7 @@ import org.commonmark.ext.maths.internal.MathsHtmlNodeRenderer
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 
-class MathsExtension private constructor() : Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
+internal class MathsExtension private constructor() : Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
     override fun extend(parserBuilder: Parser.Builder) {
         parserBuilder.customDelimiterProcessor(DollarMathsDelimiterProcessor())
     }

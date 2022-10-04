@@ -43,7 +43,7 @@ interface Timeline {
     /**
      * This must be called before any other method after creating the timeline. It ensures the underlying database is open
      */
-    fun start()
+    fun start(rootThreadEventId: String? = null)
 
     /**
      * This must be called when you don't need the timeline. It ensures the underlying database get closed.
@@ -100,23 +100,23 @@ interface Timeline {
         fun onTimelineUpdated(snapshot: List<TimelineEvent>) = Unit
 
         /**
-         * Called whenever an error we can't recover from occurred
+         * Called whenever an error we can't recover from occurred.
          */
         fun onTimelineFailure(throwable: Throwable) = Unit
 
         /**
-         * Called when new events come through the sync
+         * Called when new events come through the sync.
          */
         fun onNewTimelineEvents(eventIds: List<String>) = Unit
 
         /**
-         * Called when the pagination state has changed in one direction
+         * Called when the pagination state has changed in one direction.
          */
         fun onStateUpdated(direction: Direction, state: PaginationState) = Unit
     }
 
     /**
-     * Pagination state
+     * Pagination state.
      */
     data class PaginationState(
             val hasMoreToLoad: Boolean = true,

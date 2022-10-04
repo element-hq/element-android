@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
@@ -32,38 +34,49 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-internal class DefaultTimeline(private val roomId: String,
-                               private val initialEventId: String?,
-                               private val realmConfiguration: RealmConfiguration,
-                               private val loadRoomMembersTask: LoadRoomMembersTask,
-                               private val readReceiptHandler: ReadReceiptHandler,
-                               private val settings: TimelineSettings,
-                               private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                               paginationTask: PaginationTask,
-                               getEventTask: GetContextOfEventTask,
-                               fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                               timelineEventMapper: TimelineEventMapper,
-                               timelineInput: TimelineInput,
-                               threadsAwarenessHandler: ThreadsAwarenessHandler,
-                               eventDecryptor: TimelineEventDecryptor) : Timeline {
+internal class DefaultTimeline(
+        private val roomId: String,
+        private val initialEventId: String?,
+        private val realmConfiguration: RealmConfiguration,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val readReceiptHandler: ReadReceiptHandler,
+        private val settings: TimelineSettings,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
+        stateEventDataSource: StateEventDataSource,
+        paginationTask: PaginationTask,
+        getEventTask: GetContextOfEventTask,
+        fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+        fetchThreadTimelineTask: FetchThreadTimelineTask,
+        timelineEventMapper: TimelineEventMapper,
+        timelineInput: TimelineInput,
+        threadsAwarenessHandler: ThreadsAwarenessHandler,
+        lightweightSettingsStorage: LightweightSettingsStorage,
+        eventDecryptor: TimelineEventDecryptor,
+) : Timeline {
 
     companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("DefaultTimeline_Thread")
+        val BACKGROUND_HANDLER = createBackgroundHandler("Matrix-DefaultTimeline_Thread")
     }
 
     override val timelineID = UUID.randomUUID().toString()
@@ -79,22 +92,32 @@ internal class DefaultTimeline(private val roomId: String,
     private val sequencer = SemaphoreCoroutineSequencer()
     private val postSnapshotSignalFlow = MutableSharedFlow<Unit>(0)
 
+    private var isFromThreadTimeline = false
+    private var rootThreadEventId: String? = null
+
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
             timelineSettings = settings,
             realm = backgroundRealm,
             eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
+            realmConfiguration = realmConfiguration,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            fetchThreadTimelineTask = fetchThreadTimelineTask,
             getContextOfEventTask = getEventTask,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
             threadsAwarenessHandler = threadsAwarenessHandler,
+            lightweightSettingsStorage = lightweightSettingsStorage,
             onEventsUpdated = this::sendSignalToPostSnapshot,
+            onEventsDeleted = this::onEventsDeleted,
             onLimitedTimeline = this::onLimitedTimeline,
-            onNewTimelineEvents = this::onNewTimelineEvents
+            onNewTimelineEvents = this::onNewTimelineEvents,
+            stateEventDataSource = stateEventDataSource,
+            matrixCoroutineDispatchers = coroutineDispatchers,
     )
 
     private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Live)
+    private var startTimelineJob: Job? = null
 
     override val isLive: Boolean
         get() = !getPaginationState(Timeline.Direction.FORWARDS).hasMoreToLoad
@@ -118,18 +141,21 @@ internal class DefaultTimeline(private val roomId: String,
         listeners.clear()
     }
 
-    override fun start() {
+    override fun start(rootThreadEventId: String?) {
         timelineScope.launch {
             loadRoomMembersIfNeeded()
         }
-        timelineScope.launch {
+        startTimelineJob = timelineScope.launch {
             sequencer.post {
                 if (isStarted.compareAndSet(false, true)) {
+                    isFromThreadTimeline = rootThreadEventId != null
+                    this@DefaultTimeline.rootThreadEventId = rootThreadEventId
+                    // /
                     val realm = Realm.getInstance(realmConfiguration)
                     ensureReadReceiptAreLoaded(realm)
                     backgroundRealm.set(realm)
                     listenToPostSnapshotSignals()
-                    openAround(initialEventId)
+                    openAround(initialEventId, rootThreadEventId)
                     postSnapshot()
                 }
             }
@@ -150,8 +176,10 @@ internal class DefaultTimeline(private val roomId: String,
 
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
-            openAround(eventId)
-            postSnapshot()
+            sequencer.post {
+                openAround(eventId, rootThreadEventId)
+                postSnapshot()
+            }
         }
     }
 
@@ -161,6 +189,7 @@ internal class DefaultTimeline(private val roomId: String,
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         timelineScope.launch {
+            startTimelineJob?.join()
             val postSnapshot = loadMore(count, direction, fetchOnServerIfNeeded = true)
             if (postSnapshot) {
                 postSnapshot()
@@ -169,6 +198,7 @@ internal class DefaultTimeline(private val roomId: String,
     }
 
     override suspend fun awaitPaginate(direction: Timeline.Direction, count: Int): List<TimelineEvent> {
+        startTimelineJob?.join()
         withContext(timelineDispatcher) {
             loadMore(count, direction, fetchOnServerIfNeeded = true)
         }
@@ -210,7 +240,19 @@ internal class DefaultTimeline(private val roomId: String,
         updateState(direction) {
             it.copy(loading = true)
         }
-        val loadMoreResult = strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        val loadMoreResult = try {
+            strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        } catch (throwable: Throwable) {
+            if (throwable is CancellationException) {
+                LoadMoreResult.FAILURE
+            } else {
+                // Timeline could not be loaded with a (likely) permanent issue, such as the
+                // server now knowing the initialEventId, so we want to show an error message
+                // and possibly restart without initialEventId.
+                onTimelineFailure(throwable)
+                return false
+            }
+        }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
         updateState(direction) {
@@ -219,25 +261,31 @@ internal class DefaultTimeline(private val roomId: String,
         return true
     }
 
-    private suspend fun openAround(eventId: String?) = withContext(timelineDispatcher) {
+    private suspend fun openAround(eventId: String?, rootThreadEventId: String?) = withContext(timelineDispatcher) {
         val baseLogMessage = "openAround(eventId: $eventId)"
         Timber.v("$baseLogMessage started")
         if (!isStarted.get()) {
             throw IllegalStateException("You should call start before using timeline")
         }
         strategy.onStop()
-        strategy = if (eventId == null) {
-            buildStrategy(LoadTimelineStrategy.Mode.Live)
-        } else {
-            buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
+
+        strategy = when {
+            rootThreadEventId != null -> buildStrategy(LoadTimelineStrategy.Mode.Thread(rootThreadEventId))
+            eventId == null -> buildStrategy(LoadTimelineStrategy.Mode.Live)
+            else -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
-        initPaginationStates(eventId)
+
+        rootThreadEventId?.let {
+            initPaginationStates(null)
+        } ?: initPaginationStates(eventId)
+
         strategy.onStart()
         loadMore(
                 count = strategyDependencies.timelineSettings.initialSize,
                 direction = Timeline.Direction.BACKWARDS,
                 fetchOnServerIfNeeded = false
         )
+
         Timber.v("$baseLogMessage finished")
     }
 
@@ -260,7 +308,6 @@ internal class DefaultTimeline(private val roomId: String,
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun listenToPostSnapshotSignals() {
         postSnapshotSignalFlow
                 .sample(150)
@@ -272,10 +319,18 @@ internal class DefaultTimeline(private val roomId: String,
 
     private fun onLimitedTimeline() {
         timelineScope.launch {
-            initPaginationStates(null)
-            loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
-            postSnapshot()
+            sequencer.post {
+                initPaginationStates(null)
+                loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
+                postSnapshot()
+            }
         }
+    }
+
+    private fun onEventsDeleted() {
+        // Some event have been deleted, for instance when a user has been ignored.
+        // Restart the timeline (live)
+        restartWithEventId(null)
     }
 
     private suspend fun postSnapshot() {
@@ -283,7 +338,13 @@ internal class DefaultTimeline(private val roomId: String,
         Timber.v("Post snapshot of ${snapshot.size} events")
         withContext(coroutineDispatchers.main) {
             listeners.forEach {
-                tryOrNull { it.onTimelineUpdated(snapshot) }
+                if (initialEventId != null && isFromThreadTimeline && snapshot.firstOrNull { it.eventId == initialEventId } == null) {
+                    // We are in a thread timeline with a permalink, post update timeline only when the appropriate message have been found
+                    tryOrNull { it.onTimelineUpdated(arrayListOf()) }
+                } else {
+                    // In all the other cases update timeline as expected
+                    tryOrNull { it.onTimelineUpdated(snapshot) }
+                }
             }
         }
     }
@@ -298,7 +359,7 @@ internal class DefaultTimeline(private val roomId: String,
 
     private fun updateState(direction: Timeline.Direction, update: (Timeline.PaginationState) -> Timeline.PaginationState) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardState
+            Timeline.Direction.FORWARDS -> forwardState
             Timeline.Direction.BACKWARDS -> backwardState
         }
         val currentValue = stateReference.get()
@@ -318,17 +379,26 @@ internal class DefaultTimeline(private val roomId: String,
         }
     }
 
+    private fun onTimelineFailure(throwable: Throwable) {
+        timelineScope.launch(coroutineDispatchers.main) {
+            listeners.forEach {
+                tryOrNull { it.onTimelineFailure(throwable) }
+            }
+        }
+    }
+
     private fun buildStrategy(mode: LoadTimelineStrategy.Mode): LoadTimelineStrategy {
         return LoadTimelineStrategy(
                 roomId = roomId,
                 timelineId = timelineID,
                 mode = mode,
-                dependencies = strategyDependencies
+                dependencies = strategyDependencies,
+                clock = clock,
         )
     }
 
     private suspend fun loadRoomMembersIfNeeded() {
-        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId)
+        val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId, excludeMembership = Membership.LEAVE)
         try {
             loadRoomMembersTask.execute(loadRoomMembersParam)
         } catch (failure: Throwable) {

@@ -42,7 +42,8 @@ data class VectorCallViewState(
         val callInfo: CallInfo? = null,
         val formattedDuration: String = "",
         val canOpponentBeTransferred: Boolean = false,
-        val transferee: TransfereeState = TransfereeState.NoTransferee
+        val transferee: TransfereeState = TransfereeState.NoTransferee,
+        val isSharingScreen: Boolean = false
 ) : MavericksState {
 
     sealed class TransfereeState {

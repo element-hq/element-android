@@ -24,8 +24,8 @@ import im.vector.app.R
 import im.vector.app.databinding.ViewPasswordStrengthBarBinding
 
 /**
- * A password strength bar custom widget
- *  Strength is an Integer
+ * A password strength bar custom widget.
+ * Strength is an Integer
  *  -> 0 No strength
  *  -> 1 Weak
  *  -> 2 Fair
@@ -35,8 +35,9 @@ import im.vector.app.databinding.ViewPasswordStrengthBarBinding
 class PasswordStrengthBar @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr) {
+        defStyleAttr: Int = 0
+) :
+        LinearLayout(context, attrs, defStyleAttr) {
 
     private val views: ViewPasswordStrengthBarBinding
 

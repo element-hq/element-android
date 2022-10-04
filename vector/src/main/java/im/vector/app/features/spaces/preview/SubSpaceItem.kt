@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_space_subspace)
-abstract class SubSpaceItem : VectorEpoxyModel<SubSpaceItem.Holder>() {
+@EpoxyModelClass
+abstract class SubSpaceItem : VectorEpoxyModel<SubSpaceItem.Holder>(R.layout.item_space_subspace) {
 
     @EpoxyAttribute
     lateinit var roomId: String

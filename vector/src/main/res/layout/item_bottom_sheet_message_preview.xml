@@ -35,6 +35,7 @@
         android:singleLine="true"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
@@ -78,6 +79,7 @@
         android:maxLines="3"
         android:textColor="?vctr_content_secondary"
         android:textIsSelectable="false"
+        android:textAlignment="viewStart"
         app:layout_constraintBottom_toTopOf="@id/bottom_sheet_message_preview_body_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
@@ -96,11 +98,42 @@
         android:textColor="?vctr_content_tertiary"
         android:textIsSelectable="false"
         android:visibility="gone"
+        android:textAlignment="viewStart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_body"
         app:layout_constraintStart_toStartOf="@id/bottom_sheet_message_preview_body"
         app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_body"
         tools:text="1080 x 1024 - 43s - 12kB"
         tools:visibility="visible" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mapViewContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:visibility="gone"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_timestamp"
+        app:layout_constraintStart_toStartOf="@id/bottom_sheet_message_preview_sender"
+        app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_sender"
+        tools:alpha="0.3"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/staticMapImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@string/a11y_static_map_image" />
+
+        <ImageView
+            android:id="@+id/staticMapPinImageView"
+            android:layout_width="51dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="28dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/bg_map_user_pin" />
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

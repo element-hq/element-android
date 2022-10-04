@@ -19,10 +19,9 @@ package im.vector.app.core.utils
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -43,21 +42,32 @@ import im.vector.app.features.notifications.NotificationUtils
  * This user option appears on Android M but Android O enforces its usage and kills apps not
  * authorised by the user to run in background.
  *
- * @param context the context
  * @return true if battery optimisations are ignored
  */
-fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+fun Context.isIgnoringBatteryOptimizations(): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-            context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
+            getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(packageName) == true
 }
 
-fun isAirplaneModeOn(context: Context): Boolean {
-    return Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+fun Context.isAirplaneModeOn(): Boolean {
+    return Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
 }
 
-fun isAnimationDisabled(context: Context): Boolean {
-    return Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+fun Context.isAnimationEnabled(): Boolean {
+    return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f
+}
+
+/**
+ * Return the application label of the provided package. If not found, the package is returned.
+ */
+fun Context.getApplicationLabel(packageName: String): String {
+    return try {
+        val ai = packageManager.getApplicationInfo(packageName, 0)
+        packageManager.getApplicationLabel(ai).toString()
+    } catch (e: PackageManager.NameNotFoundException) {
+        packageName
+    }
 }
 
 /**
@@ -80,14 +90,15 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
 // ==============================================================================================================
 
 /**
- * Copy a text to the clipboard, and display a Toast when done
+ * Copy a text to the clipboard, and display a Toast when done.
  *
  * @param context the context
- * @param text    the text to copy
+ * @param text the text to copy
+ * @param showToast true to also show a Toast to the user
+ * @param toastMessage content of the toast message as a String resource
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
-    val clipboard = context.getSystemService<ClipboardManager>()!!
-    clipboard.setPrimaryClip(ClipData.newPlainText("", text))
+    CopyToClipboardUseCase(context).execute(text)
     if (showToast) {
         context.toast(toastMessage)
     }
@@ -144,12 +155,14 @@ fun startInstallFromSourceIntent(context: Context, activityResultLauncher: Activ
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment,
-                              activityResultLauncher: ActivityResultLauncher<Intent>?,
-                              chooserTitle: String?,
-                              text: String,
-                              subject: String? = null,
-                              extraTitle: String? = null) {
+fun startSharePlainTextIntent(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        chooserTitle: String?,
+        text: String,
+        subject: String? = null,
+        extraTitle: String? = null
+) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
@@ -166,10 +179,10 @@ fun startSharePlainTextIntent(fragment: Fragment,
         if (activityResultLauncher != null) {
             activityResultLauncher.launch(intent)
         } else {
-            fragment.startActivity(intent)
+            context.startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        fragment.activity?.toast(R.string.error_no_external_application_found)
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

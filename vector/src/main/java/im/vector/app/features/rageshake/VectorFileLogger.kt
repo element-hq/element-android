@@ -19,6 +19,7 @@ package im.vector.app.features.rageshake
 import android.content.Context
 import android.util.Log
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -73,7 +74,7 @@ class VectorFileLogger @Inject constructor(
         }
 
         for (i in 0..15) {
-            val file = File(cacheDirectory, "elementLogs.$i.txt")
+            val file = File(cacheDirectory, "elementLogs.${i}.txt")
             tryOrNull { file.delete() }
         }
 
@@ -88,7 +89,7 @@ class VectorFileLogger @Inject constructor(
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         fileHandler ?: return
         GlobalScope.launch(Dispatchers.IO) {
@@ -120,7 +121,7 @@ class VectorFileLogger @Inject constructor(
                     ?.flush()
                     ?.let { 0 until logRotationCount }
                     ?.mapNotNull { index ->
-                        File(cacheDirectory, "$fileNamePrefix.$index.txt")
+                        File(cacheDirectory, "$fileNamePrefix.${index}.txt")
                                 .takeIf { it.exists() }
                     }
         }
@@ -128,7 +129,7 @@ class VectorFileLogger @Inject constructor(
     }
 
     /**
-     * Log an Throwable
+     * Log an Throwable.
      *
      * @param throwable the throwable to log
      */

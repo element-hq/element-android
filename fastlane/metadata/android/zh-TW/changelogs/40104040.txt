@@ -1,0 +1,2 @@
+此版本中的主要變動：輸入指示器使用者介面更新。許多臭蟲修復與穩定性改善。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.4.4

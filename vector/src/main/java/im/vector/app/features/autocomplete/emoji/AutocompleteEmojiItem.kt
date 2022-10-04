@@ -28,8 +28,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.reactions.data.EmojiItem
 
-@EpoxyModelClass(layout = R.layout.item_autocomplete_emoji)
-abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Holder>() {
+@EpoxyModelClass
+abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Holder>(R.layout.item_autocomplete_emoji) {
 
     @EpoxyAttribute
     lateinit var emojiItem: EmojiItem

@@ -16,4 +16,10 @@
 /fastlane/private
 /fastlane/report.xml
 
-/library/build
+/**/build
+
+# Added by yarn
+/package.json
+/yarn.lock
+/node_modules
+**/out/failures

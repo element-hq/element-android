@@ -20,42 +20,42 @@ import kotlinx.coroutines.flow.Flow
 
 interface VectorAnalytics : AnalyticsTracker {
     /**
-     * Return a Flow of Boolean, true if the user has given their consent
+     * Return a Flow of Boolean, true if the user has given their consent.
      */
     fun getUserConsent(): Flow<Boolean>
 
     /**
-     * Update the user consent value
+     * Update the user consent value.
      */
     suspend fun setUserConsent(userConsent: Boolean)
 
     /**
-     * Return a Flow of Boolean, true if the user has been asked for their consent
+     * Return a Flow of Boolean, true if the user has been asked for their consent.
      */
     fun didAskUserConsent(): Flow<Boolean>
 
     /**
-     * Store the fact that the user has been asked for their consent
+     * Store the fact that the user has been asked for their consent.
      */
     suspend fun setDidAskUserConsent()
 
     /**
-     * Return a Flow of String, used for analytics Id
+     * Return a Flow of String, used for analytics Id.
      */
     fun getAnalyticsId(): Flow<String>
 
     /**
-     * Update analyticsId from the AccountData
+     * Update analyticsId from the AccountData.
      */
     suspend fun setAnalyticsId(analyticsId: String)
 
     /**
-     * To be called when a session is destroyed
+     * To be called when a session is destroyed.
      */
     suspend fun onSignOut()
 
     /**
-     * To be called when application is started
+     * To be called when application is started.
      */
     fun init()
 }

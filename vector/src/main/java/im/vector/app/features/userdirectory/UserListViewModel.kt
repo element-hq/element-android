@@ -26,7 +26,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -46,9 +45,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
+import kotlin.random.Random
 
 data class ThreePidUser(
         val email: String,
@@ -105,15 +104,15 @@ class UserListViewModel @AssistedInject constructor(
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers                -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers           -> handleClearSearchUsers()
-            is UserListAction.AddPendingSelection        -> handleSelectUser(action)
-            is UserListAction.RemovePendingSelection     -> handleRemoveSelectedUser(action)
+            is UserListAction.SearchUsers -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers -> handleClearSearchUsers()
+            is UserListAction.AddPendingSelection -> handleSelectUser(action)
+            is UserListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
-            UserListAction.UserConsentRequest            -> handleUserConsentRequest()
-            is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
-            UserListAction.Resumed                       -> handleResumed()
-        }.exhaustive
+            UserListAction.UserConsentRequest -> handleUserConsentRequest()
+            is UserListAction.UpdateUserConsent -> handleISUpdateConsent(action)
+            UserListAction.Resumed -> handleResumed()
+        }
     }
 
     private fun handleUserConsentRequest() {
@@ -144,7 +143,7 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     private fun retryUserSearch(state: UserListViewState) {
-        identityServerUsersSearch.tryEmit(UserSearch(state.searchTerm, cacheBuster = System.currentTimeMillis()))
+        identityServerUsersSearch.tryEmit(UserSearch(state.searchTerm, cacheBuster = Random.nextLong()))
     }
 
     private fun handleSearchUsers(searchTerm: String) {
@@ -193,7 +192,7 @@ class UserListViewModel @AssistedInject constructor(
         knownUsersSearch
                 .sample(300)
                 .flatMapLatest { search ->
-                    session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
+                    session.userService().getPagedUsersLive(search, state.excludedUserIds).asFlow()
                 }
                 .execute {
                     copy(knownUsers = it)
@@ -214,14 +213,10 @@ class UserListViewModel @AssistedInject constructor(
                 ThreePidUser(email = search, user = null)
             } else {
                 try {
-                    val json = session.getProfile(foundThreePid.matrixId)
+                    val user = tryOrNull { session.profileService().getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
-                            user = User(
-                                    userId = foundThreePid.matrixId,
-                                    displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                    avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                            )
+                            user = user
                     )
                 } catch (failure: Throwable) {
                     ThreePidUser(email = search, user = User(foundThreePid.matrixId))
@@ -238,14 +233,15 @@ class UserListViewModel @AssistedInject constructor(
                 emptyList()
             } else {
                 val searchResult = session
+                        .userService()
                         .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
-                    val json = tryOrNull { session.getProfile(search) }
+                    val user = tryOrNull { session.profileService().getProfileAsUser(search) }
                     User(
                             userId = search,
-                            displayName = json?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
-                            avatarUrl = json?.get(ProfileService.AVATAR_URL_KEY) as? String
+                            displayName = user?.displayName,
+                            avatarUrl = user?.avatarUrl
                     )
                 } else {
                     null
@@ -275,6 +271,6 @@ class UserListViewModel @AssistedInject constructor(
 private fun UserListViewState.hasNoIdentityServerConfigured() = matchingEmail is Fail && matchingEmail.error == IdentityServiceError.NoIdentityServerConfigured
 
 /**
- * Wrapper class to allow identical search terms to be re-emitted
+ * Wrapper class to allow identical search terms to be re-emitted.
  */
 private data class UserSearch(val searchTerm: String, val cacheBuster: Long = 0)

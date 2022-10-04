@@ -41,10 +41,12 @@ class SummaryGroupMessageCreator @Inject constructor(
         private val notificationUtils: NotificationUtils
 ) {
 
-    fun createSummaryNotification(roomNotifications: List<RoomNotification.Message.Meta>,
-                                  invitationNotifications: List<OneShotNotification.Append.Meta>,
-                                  simpleNotifications: List<OneShotNotification.Append.Meta>,
-                                  useCompleteNotificationFormat: Boolean): Notification {
+    fun createSummaryNotification(
+            roomNotifications: List<RoomNotification.Message.Meta>,
+            invitationNotifications: List<OneShotNotification.Append.Meta>,
+            simpleNotifications: List<OneShotNotification.Append.Meta>,
+            useCompleteNotificationFormat: Boolean
+    ): Notification {
         val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
             roomNotifications.forEach { style.addLine(it.summaryLine) }
             invitationNotifications.forEach { style.addLine(it.summaryLine) }
@@ -86,12 +88,14 @@ class SummaryGroupMessageCreator @Inject constructor(
         }
     }
 
-    private fun processSimpleGroupSummary(summaryIsNoisy: Boolean,
-                                          messageEventsCount: Int,
-                                          simpleEventsCount: Int,
-                                          invitationEventsCount: Int,
-                                          roomCount: Int,
-                                          lastMessageTimestamp: Long): Notification {
+    private fun processSimpleGroupSummary(
+            summaryIsNoisy: Boolean,
+            messageEventsCount: Int,
+            simpleEventsCount: Int,
+            invitationEventsCount: Int,
+            roomCount: Int,
+            lastMessageTimestamp: Long
+    ): Notification {
         // Add the simple events as message (?)
         val messageNotificationCount = messageEventsCount + simpleEventsCount
 
@@ -99,12 +103,16 @@ class SummaryGroupMessageCreator @Inject constructor(
             val invitationsStr = stringProvider.getQuantityString(R.plurals.notification_invitations, invitationEventsCount, invitationEventsCount)
             if (messageNotificationCount > 0) {
                 // Invitation and message
-                val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                        messageNotificationCount, messageNotificationCount)
+                val messageStr = stringProvider.getQuantityString(
+                        R.plurals.room_new_messages_notification,
+                        messageNotificationCount, messageNotificationCount
+                )
                 if (roomCount > 1) {
                     // In several rooms
-                    val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms,
-                            roomCount, roomCount)
+                    val roomStr = stringProvider.getQuantityString(
+                            R.plurals.notification_unread_notified_messages_in_room_rooms,
+                            roomCount, roomCount
+                    )
                     stringProvider.getString(
                             R.string.notification_unread_notified_messages_in_room_and_invitation,
                             messageStr,
@@ -125,8 +133,10 @@ class SummaryGroupMessageCreator @Inject constructor(
             }
         } else {
             // No invitation, only messages
-            val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                    messageNotificationCount, messageNotificationCount)
+            val messageStr = stringProvider.getQuantityString(
+                    R.plurals.room_new_messages_notification,
+                    messageNotificationCount, messageNotificationCount
+            )
             if (roomCount > 1) {
                 // In several rooms
                 val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, roomCount, roomCount)

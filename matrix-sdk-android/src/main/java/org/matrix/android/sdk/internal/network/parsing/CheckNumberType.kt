@@ -28,12 +28,12 @@ import java.math.BigDecimal
 /**
  * This is used to check if NUMBER in json is integer or double, so we can preserve typing when serializing/deserializing in a row.
  */
-interface CheckNumberType {
+internal interface CheckNumberType {
 
     companion object {
         val JSON_ADAPTER_FACTORY = object : JsonAdapter.Factory {
             @Nullable
-            override fun create(type: Type, annotations: Set<Annotation?>?, moshi: Moshi): JsonAdapter<*>? {
+            override fun create(type: Type, annotations: Set<Annotation>, moshi: Moshi): JsonAdapter<*>? {
                 if (type !== Any::class.java) {
                     return null
                 }

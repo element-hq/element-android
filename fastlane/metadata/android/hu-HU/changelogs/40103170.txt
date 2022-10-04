@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: földrajzi helyzet elküldése bármelyik szobába. Szavazás szerkesztése.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.17

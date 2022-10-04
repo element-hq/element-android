@@ -17,27 +17,44 @@
 package org.matrix.android.sdk.api.session.room.send
 
 enum class SendState {
+    /**
+     * The state is unknown.
+     */
     UNKNOWN,
 
-    // the event has not been sent
+    /**
+     * The event has not been sent.
+     */
     UNSENT,
 
-    // the event is encrypting
+    /**
+     * The event is encrypting.
+     */
     ENCRYPTING,
 
-    // the event is currently sending
+    /**
+     * The event is currently sending.
+     */
     SENDING,
 
-    // the event has been sent
+    /**
+     * The event has been sent.
+     */
     SENT,
 
-    // the event has been received from server
+    /**
+     * The event has been received from server.
+     */
     SYNCED,
 
-    // The event failed to be sent
+    /**
+     * The event failed to be sent.
+     */
     UNDELIVERED,
 
-    // the event failed to be sent because some unknown devices have been found while encrypting it
+    /**
+     * The event failed to be sent because some unknown devices have been found while encrypting it.
+     */
     FAILED_UNKNOWN_DEVICES;
 
     internal companion object {

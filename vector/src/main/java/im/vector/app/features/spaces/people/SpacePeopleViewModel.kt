@@ -25,12 +25,14 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -38,7 +40,8 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class SpacePeopleViewModel @AssistedInject constructor(
         @Assisted val initialState: SpacePeopleViewState,
         private val rawService: RawService,
-        private val session: Session
+        private val session: Session,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpacePeopleViewState, SpacePeopleViewAction, SpacePeopleViewEvents>(initialState) {
 
     @AssistedFactory
@@ -50,9 +53,9 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePeopleViewAction) {
         when (action) {
-            is SpacePeopleViewAction.ChatWith   -> handleChatWith(action)
+            is SpacePeopleViewAction.ChatWith -> handleChatWith(action)
             SpacePeopleViewAction.InviteToSpace -> handleInviteToSpace()
-        }.exhaustive
+        }
     }
 
     private fun handleInviteToSpace() {
@@ -62,7 +65,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
     private fun handleChatWith(action: SpacePeopleViewAction.ChatWith) {
         val otherUserId = action.member.userId
         if (otherUserId == session.myUserId) return
-        val existingRoomId = session.getExistingDirectRoomWithUser(otherUserId)
+        val existingRoomId = session.roomService().getExistingDirectRoomWithUser(otherUserId)
         if (existingRoomId != null) {
             // just open it
             _viewEvents.post(SpacePeopleViewEvents.OpenRoom(existingRoomId))
@@ -83,7 +86,8 @@ class SpacePeopleViewModel @AssistedInject constructor(
                     }
 
             try {
-                val roomId = session.createRoom(roomParams)
+                val roomId = session.roomService().createRoom(roomParams)
+                analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
                 _viewEvents.post(SpacePeopleViewEvents.OpenRoom(roomId))
                 setState { copy(createAndInviteState = Success(roomId)) }
             } catch (failure: Throwable) {

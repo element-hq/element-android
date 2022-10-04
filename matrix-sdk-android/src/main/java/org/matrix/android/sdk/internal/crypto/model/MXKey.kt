@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-data class MXKey(
+internal data class MXKey(
         /**
          * The type of the key (in the example: "signed_curve25519").
          */
@@ -36,13 +36,13 @@ data class MXKey(
         val value: String,
 
         /**
-         * signature user Id to [deviceid][signature]
+         * signature user Id to [deviceid][signature].
          */
         private val signatures: Map<String, Map<String, String>>,
 
         /**
          * We have to store the original json because it can contain other fields
-         * that we don't support yet but they would be needed to check signatures
+         * that we don't support yet but they would be needed to check signatures.
          */
         private val rawMap: JsonDict
 ) {
@@ -57,9 +57,9 @@ data class MXKey(
     }
 
     /**
-     * Returns a signature for an user Id and a signkey
+     * Returns a signature for an user Id and a signkey.
      *
-     * @param userId  the user id
+     * @param userId the user id
      * @param signkey the sign key
      * @return the signature
      */
@@ -81,7 +81,7 @@ data class MXKey(
         // const val KEY_ED_25519_TYPE = "ed25519"
 
         /**
-         * Convert a map to a MXKey
+         * Convert a map to a MXKey.
          *
          * @param map the map to convert
          *

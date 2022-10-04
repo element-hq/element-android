@@ -16,10 +16,10 @@
 
 package im.vector.app.features.rageshake
 
-import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.content.edit
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.VersionCodeProvider
 import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
@@ -30,9 +30,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter: BugReporter,
-                                                         private val versionProvider: VersionProvider,
-                                                         private val versionCodeProvider: VersionCodeProvider) : Thread.UncaughtExceptionHandler {
+class VectorUncaughtExceptionHandler @Inject constructor(
+        @DefaultPreferences
+        private val preferences: SharedPreferences,
+        private val bugReporter: BugReporter,
+        private val versionProvider: VersionProvider,
+        private val versionCodeProvider: VersionCodeProvider,
+) : Thread.UncaughtExceptionHandler {
 
     // key to save the crash status
     companion object {
@@ -41,27 +45,25 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
 
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
-    private lateinit var context: Context
-
     /**
-     * Activate this handler
+     * Activate this handler.
      */
-    fun activate(context: Context) {
-        this.context = context
+    fun activate() {
         previousHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(this)
     }
 
     /**
-     * An uncaught exception has been triggered
+     * An uncaught exception has been triggered.
      *
-     * @param thread    the thread
+     * @param thread the thread
      * @param throwable the throwable
      * @return the exception description
      */
+    @Suppress("PrintStackTrace")
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.v("Uncaught exception: $throwable")
-        DefaultSharedPreferences.getInstance(context).edit {
+        preferences.edit(commit = true) {
             putBoolean(PREFS_CRASH_KEY, true)
         }
         val b = StringBuilder()
@@ -103,27 +105,26 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
         val bugDescription = b.toString()
         Timber.e("FATAL EXCEPTION $bugDescription")
 
-        bugReporter.saveCrashReport(context, bugDescription)
+        bugReporter.saveCrashReport(bugDescription)
 
         // Show the classical system popup
         previousHandler?.uncaughtException(thread, throwable)
     }
 
     /**
-     * Tells if the application crashed
+     * Tells if the application crashed.
      *
      * @return true if the application crashed
      */
-    fun didAppCrash(context: Context): Boolean {
-        return DefaultSharedPreferences.getInstance(context)
-                .getBoolean(PREFS_CRASH_KEY, false)
+    fun didAppCrash(): Boolean {
+        return preferences.getBoolean(PREFS_CRASH_KEY, false)
     }
 
     /**
-     * Clear the crash status
+     * Clear the crash status.
      */
-    fun clearAppCrashStatus(context: Context) {
-        DefaultSharedPreferences.getInstance(context).edit {
+    fun clearAppCrashStatus() {
+        preferences.edit {
             remove(PREFS_CRASH_KEY)
         }
     }

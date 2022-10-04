@@ -24,10 +24,10 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.search.SearchResult
-import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CryptoTestData
-import org.matrix.android.sdk.common.CryptoTestHelper
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -59,9 +59,10 @@ class SearchMessagesTest : InstrumentedTest {
     fun sendTextMessageAndSearchPartOfItUsingRoom() {
         doTest { cryptoTestData ->
             cryptoTestData.firstSession
-                    .getRoom(cryptoTestData.roomId)!!
+                    .searchService()
                     .search(
                             searchTerm = "lore",
+                            roomId = cryptoTestData.roomId,
                             limit = 10,
                             includeProfile = true,
                             afterLimit = 0,
@@ -72,9 +73,7 @@ class SearchMessagesTest : InstrumentedTest {
         }
     }
 
-    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) {
-        val commonTestHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -83,11 +82,10 @@ class SearchMessagesTest : InstrumentedTest {
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
-                2)
+                2
+        )
 
-        val data = commonTestHelper.runBlockingTest {
-            block.invoke(cryptoTestData)
-        }
+        val data = block.invoke(cryptoTestData)
 
         assertTrue(data.results?.size == 2)
         assertTrue(
@@ -96,7 +94,5 @@ class SearchMessagesTest : InstrumentedTest {
                             (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
                         }.orFalse()
         )
-
-        cryptoTestData.cleanUp(commonTestHelper)
     }
 }

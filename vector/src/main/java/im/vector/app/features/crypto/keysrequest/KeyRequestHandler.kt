@@ -22,20 +22,21 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.internal.crypto.IncomingRequestCancellation
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -60,6 +61,9 @@ class KeyRequestHandler @Inject constructor(
 
     var session: Session? = null
 
+    // This functionality is disabled in element for now. As it could be prone to social attacks
+    var enablePromptingForRequest = false
+
     fun start(session: Session) {
         this.session = session
         session.cryptoService().verificationService().addListener(this)
@@ -72,10 +76,9 @@ class KeyRequestHandler @Inject constructor(
         session = null
     }
 
-    override fun onSecretShareRequest(request: IncomingSecretShareRequest): Boolean {
+    override fun onSecretShareRequest(request: SecretShareRequest): Boolean {
         // By default Element will not prompt if the SDK has decided that the request should not be fulfilled
         Timber.v("## onSecretShareRequest() : Ignoring $request")
-        request.ignore?.run()
         return true
     }
 
@@ -85,6 +88,8 @@ class KeyRequestHandler @Inject constructor(
      * @param request the key request.
      */
     override fun onRoomKeyRequest(request: IncomingRoomKeyRequest) {
+        if (!enablePromptingForRequest) return
+
         val userId = request.userId
         val deviceId = request.deviceId
         val requestId = request.requestId
@@ -138,12 +143,14 @@ class KeyRequestHandler @Inject constructor(
         })
     }
 
-    private fun postAlert(context: Context,
-                          userId: String,
-                          deviceId: String,
-                          wasNewDevice: Boolean,
-                          deviceInfo: CryptoDeviceInfo?,
-                          moreInfo: DeviceInfo? = null) {
+    private fun postAlert(
+            context: Context,
+            userId: String,
+            deviceId: String,
+            wasNewDevice: Boolean,
+            deviceInfo: CryptoDeviceInfo?,
+            moreInfo: DeviceInfo? = null
+    ) {
         val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
 
@@ -195,15 +202,14 @@ class KeyRequestHandler @Inject constructor(
     }
 
     private fun denyAllRequests(mappingKey: String) {
-        alertsToRequests[mappingKey]?.forEach {
-            it.ignore?.run()
-        }
         alertsToRequests.remove(mappingKey)
     }
 
     private fun shareAllSessions(mappingKey: String) {
         alertsToRequests[mappingKey]?.forEach {
-            it.share?.run()
+            session?.coroutineScope?.launch {
+                session?.cryptoService()?.manuallyAcceptRoomKeyRequest(it)
+            }
         }
         alertsToRequests.remove(mappingKey)
     }
@@ -213,7 +219,7 @@ class KeyRequestHandler @Inject constructor(
      *
      * @param request the cancellation request.
      */
-    override fun onRoomKeyRequestCancellation(request: IncomingRequestCancellation) {
+    override fun onRequestCancelled(request: IncomingRoomKeyRequest) {
         // see if we can find the request in the queue
         val userId = request.userId
         val deviceId = request.deviceId

@@ -29,13 +29,16 @@ import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
+/**
+ * Also accessed via reflection by the instrumentation tests @see [im.vector.app.ClearCurrentSessionRule].
+ */
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_analytics")
 
 /**
  * Local storage for:
- * - user consent (Boolean)
- * - did ask user consent (Boolean)
- * - analytics Id (String)
+ * - user consent (Boolean);
+ * - did ask user consent (Boolean);
+ * - analytics Id (String).
  */
 class AnalyticsStore @Inject constructor(
         private val context: Context

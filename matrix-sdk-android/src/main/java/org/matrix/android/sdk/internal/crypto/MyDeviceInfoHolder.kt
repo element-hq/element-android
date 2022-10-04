@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.crypto
 
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
@@ -34,7 +34,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
 ) {
     // Our device keys
     /**
-     * my device info
+     * my device info.
      */
     val myDevice: CryptoDeviceInfo
 

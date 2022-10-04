@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Premier changement dans l’écran de bienvenue, y compris l’adhésion aux données d’analyses. Support des événements avec opération mathématiques ajoutées dans les labs.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.15

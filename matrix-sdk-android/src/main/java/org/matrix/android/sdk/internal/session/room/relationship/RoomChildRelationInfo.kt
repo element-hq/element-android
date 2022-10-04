@@ -43,7 +43,6 @@ internal class RoomChildRelationInfo(
     data class SpaceChildInfo(
             val roomId: String,
             val order: String?,
-//            val autoJoin: Boolean,
             val viaServers: List<String>
     )
 
@@ -60,18 +59,13 @@ internal class RoomChildRelationInfo(
     fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
                 .findAll()
-//                .also {
-//                    Timber.v("## Space: Found ${it.count()} m.space.child state events for $roomId")
-//                }
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
-//                        Timber.v("## Space child desc state event $scc")
                         // Children where via is not present are ignored.
                         scc.via?.let { via ->
                             SpaceChildInfo(
                                     roomId = it.stateKey,
                                     order = scc.validOrder(),
-//                                    autoJoin = scc.autoJoin ?: false,
                                     viaServers = via
                             )
                         }
@@ -83,17 +77,13 @@ internal class RoomChildRelationInfo(
     fun getParentDescriptions(): List<SpaceParentInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_PARENT)
                 .findAll()
-//                .also {
-//                    Timber.v("## Space: Found ${it.count()} m.space.parent state events for $roomId")
-//                }
                 .mapNotNull {
-                    ContentMapper.map(it.root?.content).toModel<SpaceParentContent>()?.let { scc ->
-//                        Timber.v("## Space parent desc state event $scc")
+                    ContentMapper.map(it.root?.content).toModel<SpaceParentContent>()?.let { spaceParentContent ->
                         // Parent where via is not present are ignored.
-                        scc.via?.let { via ->
+                        spaceParentContent.via?.let { via ->
                             SpaceParentInfo(
                                     roomId = it.stateKey,
-                                    canonical = scc.canonical ?: false,
+                                    canonical = spaceParentContent.canonical ?: false,
                                     viaServers = via,
                                     stateEventSender = it.root?.sender ?: ""
                             )

@@ -21,5 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PollQuestion(
-        @Json(name = "org.matrix.msc1767.text") val question: String? = null
-)
+        @Json(name = "org.matrix.msc1767.text") val unstableQuestion: String? = null,
+        @Json(name = "m.text") val question: String? = null
+) {
+
+    fun getBestQuestion() = question ?: unstableQuestion
+}

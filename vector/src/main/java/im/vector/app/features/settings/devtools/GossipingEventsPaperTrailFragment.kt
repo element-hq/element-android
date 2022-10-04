@@ -22,22 +22,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import org.billcarsonfr.jsonviewer.JSonViewerDialog
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import javax.inject.Inject
 
-class GossipingEventsPaperTrailFragment @Inject constructor(
-        private val epoxyController: GossipingTrailPagedEpoxyController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class GossipingEventsPaperTrailFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         GossipingTrailPagedEpoxyController.InteractionListener {
+
+    @Inject lateinit var epoxyController: GossipingTrailPagedEpoxyController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -64,17 +63,17 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun didTap(event: Event) {
-        if (event.isEncrypted()) {
-            event.toClearContentStringWithIndent()
-        } else {
-            event.toContentStringWithIndent()
-        }?.let {
-            JSonViewerDialog.newInstance(
-                    it,
-                    -1,
-                    createJSonViewerStyleProvider(colorProvider)
-            ).show(childFragmentManager, "JSON_VIEWER")
-        }
+    override fun didTap(event: AuditTrail) {
+//        if (event.isEncrypted()) {
+//            event.toClearContentStringWithIndent()
+//        } else {
+//            event.toContentStringWithIndent()
+//        }?.let {
+//            JSonViewerDialog.newInstance(
+//                    it,
+//                    -1,
+//                    createJSonViewerStyleProvider(colorProvider)
+//            ).show(childFragmentManager, "JSON_VIEWER")
+//        }
     }
 }

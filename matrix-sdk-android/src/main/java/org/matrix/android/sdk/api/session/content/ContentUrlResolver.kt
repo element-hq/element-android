@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.content
 
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
 /**
  * This interface defines methods for accessing content from the current session.
@@ -29,22 +29,22 @@ interface ContentUrlResolver {
     }
 
     /**
-     * URL to use to upload content
+     * URL to use to upload content.
      */
     val uploadUrl: String
 
     /**
      * Get the actual URL for accessing the full-size image of a Matrix media content URI.
      *
-     * @param contentUrl  the Matrix media content URI (in the form of "mxc://...").
+     * @param contentUrl the Matrix media content URI (in the form of "mxc://...").
      * @return the URL to access the described resource, or null if the url is invalid.
      */
     fun resolveFullSize(contentUrl: String?): String?
 
     /**
-     * Get the ResolvedMethod to download a URL
+     * Get the ResolvedMethod to download a URL.
      *
-     * @param contentUrl  the Matrix media content URI (in the form of "mxc://...").
+     * @param contentUrl the Matrix media content URI (in the form of "mxc://...").
      * @param elementToDecrypt Encryption data may be required if you use a content scanner
      * @return the Method to access resource, or null if invalid
      */
@@ -54,9 +54,9 @@ interface ContentUrlResolver {
      * Get the actual URL for accessing the thumbnail image of a given Matrix media content URI.
      *
      * @param contentUrl the Matrix media content URI (in the form of "mxc://...").
-     * @param width      the desired width
-     * @param height     the desired height
-     * @param method     the desired method (METHOD_CROP or METHOD_SCALE)
+     * @param width the desired width
+     * @param height the desired height
+     * @param method the desired method (METHOD_CROP or METHOD_SCALE)
      * @return the URL to access the described resource, or null if the url is invalid.
      */
     fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ThumbnailMethod): String?

@@ -23,7 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.settings.VectorLocale
@@ -31,7 +30,8 @@ import kotlinx.coroutines.launch
 
 class LocalePickerViewModel @AssistedInject constructor(
         @Assisted initialState: LocalePickerViewState,
-        private val vectorConfiguration: VectorConfiguration
+        private val vectorConfiguration: VectorConfiguration,
+        private val vectorLocale: VectorLocale,
 ) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
 
     @AssistedFactory
@@ -40,8 +40,13 @@ class LocalePickerViewModel @AssistedInject constructor(
     }
 
     init {
+        setState {
+            copy(
+                    currentLocale = vectorLocale.applicationLocale
+            )
+        }
         viewModelScope.launch {
-            val result = VectorLocale.getSupportedLocales()
+            val result = vectorLocale.getSupportedLocales()
 
             setState {
                 copy(
@@ -56,11 +61,11 @@ class LocalePickerViewModel @AssistedInject constructor(
     override fun handle(action: LocalePickerAction) {
         when (action) {
             is LocalePickerAction.SelectLocale -> handleSelectLocale(action)
-        }.exhaustive
+        }
     }
 
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {
-        VectorLocale.saveApplicationLocale(action.locale)
+        vectorLocale.saveApplicationLocale(action.locale)
         vectorConfiguration.applyToApplicationContext()
         _viewEvents.post(LocalePickerViewEvents.RestartActivity)
     }

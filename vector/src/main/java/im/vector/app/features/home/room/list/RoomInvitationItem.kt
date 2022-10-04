@@ -34,8 +34,8 @@ import im.vector.app.features.invite.InviteButtonStateBinder
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_room_invitation)
-abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(R.layout.item_room_invitation) {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem

@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 
 /**
- * Add a three Pid during authentication
+ * Add a three Pid during authentication.
  */
 @JsonClass(generateAdapter = true)
 internal data class AddThreePidRegistrationParams(
@@ -84,7 +84,7 @@ internal data class AddThreePidRegistrationParams(
     companion object {
         fun from(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationParams {
             return when (params.threePid) {
-                is RegisterThreePid.Email  -> AddThreePidRegistrationParams(
+                is RegisterThreePid.Email -> AddThreePidRegistrationParams(
                         email = params.threePid.email,
                         clientSecret = params.clientSecret,
                         sendAttempt = params.sendAttempt

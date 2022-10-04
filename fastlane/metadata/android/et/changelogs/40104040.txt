@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: kirjutusteatiste liidese uuendused ning pisiparandused ja stabiilsust parandavad kohendused.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.4.4

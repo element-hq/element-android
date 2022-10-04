@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MimeTypes
 import java.io.File
@@ -74,14 +75,14 @@ class DataAttachmentRoomProvider(
                             )
                     )
                 }
-                else                         -> throw IllegalArgumentException()
+                else -> throw IllegalArgumentException()
             }
         }
     }
 
     override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
         val item = getItem(position)
-        return room?.getTimeLineEvent(item.eventId)
+        return room?.getTimelineEvent(item.eventId)
     }
 
     override suspend fun getFileForSharing(position: Int): File? {

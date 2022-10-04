@@ -23,15 +23,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
 
     @EpoxyAttribute
@@ -54,7 +59,14 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        imageContentRenderer.render(mediaData, mode, holder.imageView)
+        val messageLayout = baseAttributes.informationData.messageLayout
+        val dimensionConverter = DimensionConverter(holder.view.resources)
+        val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
+            messageLayout.cornersRadius.granularRoundedCorners()
+        } else {
+            RoundedCorners(dimensionConverter.dpToPx(8))
+        }
+        imageContentRenderer.render(mediaData, mode, holder.imageView, imageCornerTransformation)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
                     attributes.informationData.eventId,
@@ -69,7 +81,17 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.onClick(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
+
+        val isImageMessage = attributes.informationData.messageType in listOf(MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_STICKER_LOCAL)
+        val autoplayAnimatedImages = attributes.autoplayAnimatedImages
+
+        holder.playContentView.visibility = if (playable && isImageMessage && autoplayAnimatedImages) {
+            View.GONE
+        } else if (playable) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     override fun unbind(holder: Holder) {
@@ -81,7 +103,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.unbind(holder)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
@@ -91,6 +113,6 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMediaStub
+        private val STUB_ID = R.id.messageContentMediaStub
     }
 }

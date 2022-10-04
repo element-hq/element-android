@@ -36,8 +36,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_space)
-abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
+@EpoxyModelClass
+abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>(R.layout.item_space) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
@@ -48,7 +48,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
     @EpoxyAttribute var description: String? = null
     @EpoxyAttribute var showSeparator: Boolean = false
     @EpoxyAttribute var canDrag: Boolean = true
@@ -65,7 +65,8 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         if (hasChildren) {
             holder.collapseIndicator.isVisible = true
             holder.collapseIndicator.setImageDrawable(
-                    ContextCompat.getDrawable(holder.view.context,
+                    ContextCompat.getDrawable(
+                            holder.view.context,
                             if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
                     )
             )

@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * The type of object we use for importing and exporting megolm session data.
  */
 @JsonClass(generateAdapter = true)
-data class MegolmSessionData(
+internal data class MegolmSessionData(
         /**
          * The algorithm used.
          */
@@ -69,5 +69,13 @@ data class MegolmSessionData(
          * Devices which forwarded this session to us (normally empty).
          */
         @Json(name = "forwarding_curve25519_key_chain")
-        val forwardingCurve25519KeyChain: List<String>? = null
+        val forwardingCurve25519KeyChain: List<String>? = null,
+
+        /**
+         * Flag that indicates whether or not the current inboundSession will be shared to
+         * invited users to decrypt past messages.
+         */
+        // When this feature lands in spec name = shared_history should be used
+        @Json(name = "org.matrix.msc3061.shared_history")
+        val sharedHistory: Boolean = false,
 )

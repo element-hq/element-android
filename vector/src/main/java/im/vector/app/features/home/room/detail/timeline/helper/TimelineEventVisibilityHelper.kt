@@ -18,26 +18,52 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.UserPreferencesProvider
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
-class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
+class TimelineEventVisibilityHelper @Inject constructor(
+        private val userPreferencesProvider: UserPreferencesProvider,
+) {
+
+    private interface PredicateToStopSearch {
+        /**
+         * Indicate whether a search on events should stop by comparing 2 given successive events.
+         * @param oldEvent the oldest event between the 2 events to compare
+         * @param newEvent the more recent event between the 2 events to compare
+         */
+        fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean
+    }
 
     /**
-     * @param timelineEvents the events to search in
+     * @param timelineEvents the events to search in, sorted from oldest event to newer event
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread event id if in a thread timeline
+     * @param isFromThreadTimeline true if the timeline is a thread
+     * @param predicateToStop events are taken until this condition is met
      *
-     * @return a list of timeline events which have sequentially the same type following the next direction.
+     * @return a list of timeline events which meet sequentially the same criteria following the next direction.
      */
-    fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    private fun nextEventsUntil(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean,
+            predicateToStop: PredicateToStopSearch
+    ): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -53,44 +79,103 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSubList.subList(0, indexOfNextDay)
         }
-        val indexOfFirstDifferentEventType = nextSameDayEvents.indexOfFirst { it.root.getClearType() != timelineEvent.root.getClearType() }
-        val sameTypeEvents = if (indexOfFirstDifferentEventType == -1) {
+        val indexOfFirstDifferentEvent = nextSameDayEvents.indexOfFirst {
+            predicateToStop.shouldStopSearch(oldEvent = timelineEvent.root, newEvent = it.root)
+        }
+        val similarEvents = if (indexOfFirstDifferentEvent == -1) {
             nextSameDayEvents
         } else {
-            nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
+            nextSameDayEvents.subList(0, indexOfFirstDifferentEvent)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight) }
-        if (filteredSameTypeEvents.size < minSize) {
-            return emptyList()
+        val filteredSimilarEvents = similarEvents.filter {
+            shouldShowEvent(
+                    timelineEvent = it,
+                    highlightedEventId = eventIdToHighlight,
+                    isFromThreadTimeline = isFromThreadTimeline,
+                    rootThreadEventId = rootThreadEventId
+            )
         }
-        return  filteredSameTypeEvents
+        return if (filteredSimilarEvents.size < minSize) emptyList() else filteredSimilarEvents
     }
 
     /**
-     * @param timelineEvents the events to search in
+     * @param timelineEvents the events to search in, sorted from newer event to oldest event
      * @param index the index to start computing (inclusive)
      * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
      * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread eventId
+     * @param isFromThreadTimeline true if the timeline is a thread
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    fun prevSameTypeEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight)
+                    nextEventsUntil(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline, object : PredicateToStopSearch {
+                        override fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean {
+                            return oldEvent.getClearType() != newEvent.getClearType()
+                        }
+                    })
+                }
+    }
+
+    /**
+     * @param timelineEvents the events to search in, sorted from newer event to oldest event
+     * @param index the index to start computing (inclusive)
+     * @param minSize the minimum number of same type events to have sequentially, otherwise will return an empty list
+     * @param eventIdToHighlight used to compute visibility
+     * @param rootThreadEventId the root thread eventId
+     * @param isFromThreadTimeline true if the timeline is a thread
+     *
+     * @return a list of timeline events which are all redacted following the prev direction.
+     */
+    fun prevRedactedEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
+        val prevSub = timelineEvents
+                .subList(0, index + 1)
+                // Ensure to not take the REDACTION events into account
+                .filter { it.root.getClearType() != EventType.REDACTION }
+        return prevSub
+                .reversed()
+                .let {
+                    nextEventsUntil(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline, object : PredicateToStopSearch {
+                        override fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean {
+                            return oldEvent.isRedacted() && !newEvent.isRedacted()
+                        }
+                    })
                 }
     }
 
     /**
      * @param timelineEvent the event to check for visibility
      * @param highlightedEventId can be checked to force visibility to true
+     * @param isFromThreadTimeline true if the timeline is a thread
+     * @param rootThreadEventId if this param is null it means we are in the original timeline
      * @return true if the event should be shown in the timeline.
      */
-    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?): Boolean {
+    fun shouldShowEvent(
+            timelineEvent: TimelineEvent,
+            highlightedEventId: String?,
+            isFromThreadTimeline: Boolean,
+            rootThreadEventId: String?
+    ): Boolean {
         // If show hidden events is true we should always display something
-        if (userPreferencesProvider.shouldShowHiddenEvents()) {
+        if (userPreferencesProvider.shouldShowHiddenEvents() && !isFromThreadTimeline) {
             return true
         }
         // We always show highlighted event
@@ -100,18 +185,35 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         if (!timelineEvent.isDisplayable()) {
             return false
         }
+
         // Check for special case where we should hide the event, like redacted, relation, memberships... according to user preferences.
-        return !timelineEvent.shouldBeHidden()
+        return !timelineEvent.shouldBeHidden(rootThreadEventId, isFromThreadTimeline)
     }
 
     private fun TimelineEvent.isDisplayable(): Boolean {
         return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.getClearType())
     }
 
-    private fun TimelineEvent.shouldBeHidden(): Boolean {
-        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages()) {
+    private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?, isFromThreadTimeline: Boolean): Boolean {
+        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages() && root.threadDetails?.isRootThread == false) {
             return true
         }
+
+        // We should not display deleted thread messages within the normal timeline
+        if (root.isRedacted() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                !isFromThreadTimeline &&
+                (root.isThread() || root.threadDetails?.isThread == true)) {
+            return true
+        }
+        if (root.isRedacted() &&
+                !userPreferencesProvider.shouldShowRedactedMessages() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                isFromThreadTimeline &&
+                root.isThread()) {
+            return true
+        }
+
         if (root.getRelationContent()?.type == RelationType.REPLACE) {
             return true
         }
@@ -119,9 +221,31 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             val diff = computeMembershipDiff()
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
-        } else if (root.getClearType() == EventType.POLL_START && !userPreferencesProvider.shouldShowPolls()) {
+        }
+
+        if (userPreferencesProvider.areThreadMessagesEnabled() && !isFromThreadTimeline && root.isThread()) {
             return true
         }
+
+        // Hide fake events for local rooms
+        if (RoomLocalEcho.isLocalEchoId(roomId) &&
+                (root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+                        root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY ||
+                        root.getClearType() == EventType.STATE_ROOM_THIRD_PARTY_INVITE)) {
+            return true
+        }
+
+        // Allow only the the threads within the rootThreadEventId along with the root event
+        if (userPreferencesProvider.areThreadMessagesEnabled() && isFromThreadTimeline) {
+            return if (root.getRootThreadEventId() == rootThreadEventId) {
+                false
+            } else root.eventId != rootThreadEventId
+        }
+
+        if (root.getClearType() in EventType.BEACON_LOCATION_DATA) {
+            return !root.isRedacted()
+        }
+
         return false
     }
 

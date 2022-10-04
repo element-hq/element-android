@@ -46,13 +46,13 @@ data class ThirdPartyProtocolInstance(
         val networkId: String? = null,
 
         /**
-         * FIXDOC Not documented on matrix.org doc
+         * FIXDOC Not documented on matrix.org doc.
          */
         @Json(name = "instance_id")
         val instanceId: String? = null,
 
         /**
-         * FIXDOC Not documented on matrix.org doc
+         * FIXDOC Not documented on matrix.org doc.
          */
         @Json(name = "bot_user_id")
         val botUserId: String? = null

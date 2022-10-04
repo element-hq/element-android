@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: liitumisvaate täiendused, võimalus saata meile analüütikat. Katsete alla on lisandunud üritused ning matemaatiliste valemite kirjutamise võimalus.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.3.14

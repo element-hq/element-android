@@ -19,16 +19,16 @@ package im.vector.app.features.home.room.detail.timeline.item
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
+@EpoxyModelClass
 abstract class RedactedMessageItem : AbsMessageItem<RedactedMessageItem.Holder>() {
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     override fun shouldShowReactionAtBottom() = false
 
     class Holder : AbsMessageItem.Holder(STUB_ID)
 
     companion object {
-        private const val STUB_ID = R.id.messageContentRedactedStub
+        private val STUB_ID = R.id.messageContentRedactedStub
     }
 }

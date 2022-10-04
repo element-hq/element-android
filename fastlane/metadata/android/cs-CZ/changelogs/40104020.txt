@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: přidána podpora pro @room a tajné hlasování a mnoho dalších drobných změn 
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.4.2

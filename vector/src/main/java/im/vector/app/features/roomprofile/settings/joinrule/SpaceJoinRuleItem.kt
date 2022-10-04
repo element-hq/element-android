@@ -33,8 +33,8 @@ import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_joinrule_restricted)
-abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>() {
+@EpoxyModelClass
+abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>(R.layout.item_bottom_sheet_joinrule_restricted) {
 
     @EpoxyAttribute
     var selected: Boolean = false

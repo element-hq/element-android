@@ -21,11 +21,11 @@ import androidx.preference.Preference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
-    VectorSettingsBaseFragment() {
+        VectorSettingsBaseFragment() {
 
     abstract val prefKeyToPushRuleId: Map<String, String>
 
@@ -33,7 +33,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
             preference.isIconSpaceReserved = false
-            val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+            val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
             if (ruleAndKind == null) {
                 // The rule is not defined, hide the preference
                 preference.isVisible = false
@@ -58,10 +58,12 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
 
         lifecycleScope.launch {
             val result = runCatching {
-                session.updatePushRuleActions(kind,
+                session.pushRuleService().updatePushRuleActions(
+                        kind,
                         ruleId,
                         enabled,
-                        newActions)
+                        newActions
+                )
             }
             hideLoadingView()
             if (!isAdded) {

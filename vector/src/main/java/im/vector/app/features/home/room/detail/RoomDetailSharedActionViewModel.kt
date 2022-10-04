@@ -19,6 +19,6 @@ import im.vector.app.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
 /**
- * Activity shared view model
+ * Activity shared view model.
  */
 class RoomDetailSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<RoomDetailSharedAction>()

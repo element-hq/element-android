@@ -21,8 +21,8 @@ import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncEphemeral
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
-import org.matrix.android.sdk.internal.util.md5
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -48,7 +48,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
     private val roomSyncEphemeralAdapter = moshi.adapter(RoomSyncEphemeral::class.java)
 
     /**
-     * Write RoomSyncEphemeral to a file
+     * Write RoomSyncEphemeral to a file.
      */
     override fun write(roomId: String, roomSyncEphemeralJson: String) {
         Timber.w("INIT_SYNC Store ephemeral events for room $roomId")
@@ -56,7 +56,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
     }
 
     /**
-     * Read RoomSyncEphemeral from a file, or null if there is no file to read
+     * Read RoomSyncEphemeral from a file, or null if there is no file to read.
      */
     override fun read(roomId: String): RoomSyncEphemeral? {
         return getFile(roomId)

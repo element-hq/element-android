@@ -31,6 +31,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
@@ -42,10 +44,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
@@ -53,12 +52,11 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 class SASTest : InstrumentedTest {
 
     @Test
-    fun test_aliceStartThenAliceCancel() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceStartThenAliceCancel() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -75,10 +73,12 @@ class SASTest : InstrumentedTest {
         }
         bobVerificationService.addListener(bobListener)
 
-        val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS,
+        val txID = aliceVerificationService.beginKeyVerification(
+                VerificationMethod.SAS,
                 bobSession.myUserId,
                 bobSession.cryptoService().getMyDevice().deviceId,
-                null)
+                null
+        )
         assertNotNull("Alice should have a started transaction", txID)
 
         val aliceKeyTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID!!)
@@ -133,15 +133,11 @@ class SASTest : InstrumentedTest {
 
         assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
         assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_protocols_must_include_curve25519() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_protocols_must_include_curve25519() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -193,15 +189,11 @@ class SASTest : InstrumentedTest {
         testHelper.await(cancelLatch)
 
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod, cancelReason)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_macs_Must_include_hmac_sha256() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_macs_Must_include_hmac_sha256() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -234,15 +226,11 @@ class SASTest : InstrumentedTest {
 
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_key_agreement_short_code_include_decimal() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_key_agreement_short_code_include_decimal() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         fail("Not passing for the moment")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -275,18 +263,18 @@ class SASTest : InstrumentedTest {
 
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
-    private fun fakeBobStart(bobSession: Session,
-                             aliceUserID: String?,
-                             aliceDevice: String?,
-                             tid: String,
-                             protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
-                             hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
-                             mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
-                             codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES) {
+    private fun fakeBobStart(
+            bobSession: Session,
+            aliceUserID: String?,
+            aliceDevice: String?,
+            tid: String,
+            protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
+            hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
+            mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
+            codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES
+    ) {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.cryptoService().getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),
@@ -312,9 +300,7 @@ class SASTest : InstrumentedTest {
     // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
-    fun test_aliceStartTwoRequests() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceStartTwoRequests() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -355,9 +341,7 @@ class SASTest : InstrumentedTest {
      */
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun test_aliceAndBobAgreement() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceAndBobAgreement() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -411,14 +395,10 @@ class SASTest : InstrumentedTest {
         accepted!!.shortAuthenticationStrings.forEach {
             assertTrue("all agreed Short Code should be known by alice", startReq!!.shortAuthenticationStrings.contains(it))
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_aliceAndBobSASCode() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_aliceAndBobSASCode() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -435,7 +415,7 @@ class SASTest : InstrumentedTest {
                     OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         aliceSASLatch.countDown()
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -449,7 +429,7 @@ class SASTest : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
                 if (uxState === IncomingSasVerificationTransaction.UxState.SHOW_SAS) {
                     bobSASLatch.countDown()
@@ -467,16 +447,14 @@ class SASTest : InstrumentedTest {
         val aliceTx = aliceVerificationService.getExistingTransaction(bobUserId, verificationSAS!!) as SASDefaultVerificationTransaction
         val bobTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASDefaultVerificationTransaction
 
-        assertEquals("Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
-                bobTx.getShortCodeRepresentation(SasMode.DECIMAL))
-
-        cryptoTestData.cleanUp(testHelper)
+        assertEquals(
+                "Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
+                bobTx.getShortCodeRepresentation(SasMode.DECIMAL)
+        )
     }
 
     @Test
-    fun test_happyPath() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_happyPath() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -501,7 +479,7 @@ class SASTest : InstrumentedTest {
                             aliceSASLatch.countDown()
                         }
                     }
-                    else                                                -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -521,16 +499,16 @@ class SASTest : InstrumentedTest {
                             tx.performAccept()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
+                    IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         if (matchOnce) {
                             matchOnce = false
                             tx.userHasVerifiedShortCode()
                         }
                     }
-                    IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
+                    IncomingSasVerificationTransaction.UxState.VERIFIED -> {
                         bobSASLatch.countDown()
                     }
-                    else                                                   -> Unit
+                    else -> Unit
                 }
             }
         }
@@ -543,18 +521,16 @@ class SASTest : InstrumentedTest {
         testHelper.await(bobSASLatch)
 
         // Assert that devices are verified
-        val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(bobUserId, bobDeviceId)
-        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
+        val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.cryptoService().getCryptoDeviceInfo(bobUserId, bobDeviceId)
+        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? =
+                bobSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
 
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
-        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
-    fun test_ConcurrentStart() {
-        val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
+    fun test_ConcurrentStart() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -571,23 +547,19 @@ class SASTest : InstrumentedTest {
 
         var requestID: String? = null
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
-                requestID = prAlicePOV?.transactionId
-                Log.v("TEST", "== alicePOV is $prAlicePOV")
-                prAlicePOV?.transactionId != null && prAlicePOV.localId == req.localId
-            }
+        testHelper.retryPeriodically {
+            val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
+            requestID = prAlicePOV?.transactionId
+            Log.v("TEST", "== alicePOV is $prAlicePOV")
+            prAlicePOV?.transactionId != null && prAlicePOV.localId == req.localId
         }
 
         Log.v("TEST", "== requestID is $requestID")
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val prBobPOV = bobVerificationService.getExistingVerificationRequests(aliceSession.myUserId).firstOrNull()
-                Log.v("TEST", "== prBobPOV is $prBobPOV")
-                prBobPOV?.transactionId == requestID
-            }
+        testHelper.retryPeriodically {
+            val prBobPOV = bobVerificationService.getExistingVerificationRequests(aliceSession.myUserId).firstOrNull()
+            Log.v("TEST", "== prBobPOV is $prBobPOV")
+            prBobPOV?.transactionId == requestID
         }
 
         bobVerificationService.readyPendingVerification(
@@ -597,12 +569,10 @@ class SASTest : InstrumentedTest {
         )
 
         // wait for alice to get the ready
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
-                Log.v("TEST", "== prAlicePOV is $prAlicePOV")
-                prAlicePOV?.transactionId == requestID && prAlicePOV?.isReady != null
-            }
+        testHelper.retryPeriodically {
+            val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
+            Log.v("TEST", "== prAlicePOV is $prAlicePOV")
+            prAlicePOV?.transactionId == requestID && prAlicePOV?.isReady != null
         }
 
         // Start concurrent!
@@ -611,35 +581,31 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.deviceId!!)
+                bobSession.sessionParams.deviceId!!
+        )
 
         bobVerificationService.beginKeyVerificationInDMs(
                 VerificationMethod.SAS,
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.deviceId!!)
+                aliceSession.sessionParams.deviceId!!
+        )
 
         // we should reach SHOW SAS on both
         var alicePovTx: SasVerificationTransaction?
         var bobPovTx: SasVerificationTransaction?
 
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                alicePovTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, requestID!!) as? SasVerificationTransaction
-                Log.v("TEST", "== alicePovTx is $alicePovTx")
-                alicePovTx?.state == VerificationTxState.ShortCodeReady
-            }
+        testHelper.retryPeriodically {
+            alicePovTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, requestID!!) as? SasVerificationTransaction
+            Log.v("TEST", "== alicePovTx is $alicePovTx")
+            alicePovTx?.state == VerificationTxState.ShortCodeReady
         }
         // wait for alice to get the ready
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                bobPovTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, requestID!!) as? SasVerificationTransaction
-                Log.v("TEST", "== bobPovTx is $bobPovTx")
-                bobPovTx?.state == VerificationTxState.ShortCodeReady
-            }
+        testHelper.retryPeriodically {
+            bobPovTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, requestID!!) as? SasVerificationTransaction
+            Log.v("TEST", "== bobPovTx is $bobPovTx")
+            bobPovTx?.state == VerificationTxState.ShortCodeReady
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 }

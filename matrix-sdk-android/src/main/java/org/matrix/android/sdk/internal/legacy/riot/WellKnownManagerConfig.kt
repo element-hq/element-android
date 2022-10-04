@@ -15,10 +15,9 @@
  */
 package org.matrix.android.sdk.internal.legacy.riot
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+/**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
  */
-
 data class WellKnownManagerConfig(
         val apiUrl: String,
         val uiUrl: String

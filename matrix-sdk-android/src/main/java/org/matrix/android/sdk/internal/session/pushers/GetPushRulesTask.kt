@@ -25,7 +25,7 @@ internal interface GetPushRulesTask : Task<GetPushRulesTask.Params, Unit> {
 }
 
 /**
- * We keep this task, but it should not be used anymore, the push rules comes from the sync response
+ * We keep this task, but it should not be used anymore, the push rules comes from the sync response.
  */
 internal class DefaultGetPushRulesTask @Inject constructor(
         private val pushRulesApi: PushRulesApi,

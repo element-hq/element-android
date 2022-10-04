@@ -24,7 +24,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationB
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationQRWaitingController @Inject constructor(

@@ -19,13 +19,12 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 internal fun <T> CoroutineScope.asyncTransaction(monarchy: Monarchy, transaction: suspend (realm: Realm) -> T) {
     asyncTransaction(monarchy.realmConfiguration, transaction)
@@ -37,30 +36,26 @@ internal fun <T> CoroutineScope.asyncTransaction(realmConfiguration: RealmConfig
     }
 }
 
-private val realmSemaphore = Semaphore(1)
-
-suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T): T {
-    return realmSemaphore.withPermit {
-        withContext(Dispatchers.IO) {
-            Realm.getInstance(config).use { bgRealm ->
-                bgRealm.beginTransaction()
-                val result: T
-                try {
-                    val start = System.currentTimeMillis()
+internal suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T): T {
+    return withContext(Realm.WRITE_EXECUTOR.asCoroutineDispatcher()) {
+        Realm.getInstance(config).use { bgRealm ->
+            bgRealm.beginTransaction()
+            val result: T
+            try {
+                measureTimeMillis {
                     result = transaction(bgRealm)
                     if (isActive) {
                         bgRealm.commitTransaction()
-                        val end = System.currentTimeMillis()
-                        val time = end - start
-                        Timber.v("Execute transaction in $time millis")
                     }
-                } finally {
-                    if (bgRealm.isInTransaction) {
-                        bgRealm.cancelTransaction()
-                    }
+                }.also {
+                    Timber.v("Execute transaction in $it millis")
                 }
-                result
+            } finally {
+                if (bgRealm.isInTransaction) {
+                    bgRealm.cancelTransaction()
+                }
             }
+            result
         }
     }
 }

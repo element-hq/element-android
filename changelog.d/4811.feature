@@ -1,1 +1,0 @@
-Enabling native support for window resizing

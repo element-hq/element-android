@@ -21,7 +21,7 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -36,13 +36,12 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
-import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
-internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val stateEventDataSource: StateEventDataSource,
-                                                               private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader,
-                                                               private val viaParameterFinder: ViaParameterFinder
+internal class DefaultStateService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stateEventDataSource: StateEventDataSource,
+        private val sendStateTask: SendStateTask,
+        private val fileUploader: FileUploader,
 ) : StateService {
 
     @AssistedFactory
@@ -50,19 +49,19 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         fun create(roomId: String): DefaultStateService
     }
 
-    override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
+    override fun getStateEvent(eventType: String, stateKey: QueryStateEventValue): Event? {
         return stateEventDataSource.getStateEvent(roomId, eventType, stateKey)
     }
 
-    override fun getStateEventLive(eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
+    override fun getStateEventLive(eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>> {
         return stateEventDataSource.getStateEventLive(roomId, eventType, stateKey)
     }
 
-    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
+    override fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStateEventValue): List<Event> {
         return stateEventDataSource.getStateEvents(roomId, eventTypes, stateKey)
     }
 
-    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
+    override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>> {
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 
@@ -70,21 +69,21 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             eventType: String,
             stateKey: String,
             body: JsonDict
-    ) {
+    ): String {
         val params = SendStateTask.Params(
                 roomId = roomId,
                 stateKey = stateKey,
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.executeRetry(params, 3)
+        return sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {
         // Safe treatment for PowerLevelContent
         return when (eventType) {
             EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
-            else                              -> this
+            else -> this
         }
     }
 
@@ -133,7 +132,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             val body = if (joinRules == RoomJoinRules.RESTRICTED) {
                 RoomJoinRulesContent(
-                        _joinRules = RoomJoinRules.RESTRICTED.value,
+                        joinRulesStr = RoomJoinRules.RESTRICTED.value,
                         allowList = allowList
                 ).toContent()
             } else {

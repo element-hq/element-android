@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemRoomLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
+
+    <FrameLayout
+        android:id="@+id/roomAvatarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/roomAvatarImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:importantForAccessibility="no"
+            tools:src="@sample/room_round_avatars" />
+
+        <ImageView
+            android:id="@+id/roomAvatarCheckedImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@string/a11y_checked"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_material_done"
+            app:tint="@android:color/white"
+            tools:ignore="MissingPrefix" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/roomAvatarFailSendingImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:contentDescription="@string/a11y_error_some_message_not_sent"
+        android:src="@drawable/ic_warning_badge"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="30dp"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Note: this is always gone now -->
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/roomAvatarDecorationImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/roomAvatarPublicDecorationImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/background_circle"
+        android:contentDescription="@string/a11y_public_room"
+        android:padding="2dp"
+        android:src="@drawable/ic_public_room"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <im.vector.app.core.ui.views.PresenceStateImageView
+        android:id="@+id/roomAvatarPresenceImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/background_circle"
+        android:importantForAccessibility="no"
+        android:padding="2dp"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_constraintCircleRadius="8dp"
+        tools:src="@drawable/ic_presence_offline"
+        tools:visibility="visible" />
+
+    <!-- Margin bottom does not work, so I use space -->
+    <Space
+        android:id="@+id/roomAvatarBottomSpace"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
+        tools:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/roomNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="8dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
+        app:layout_constraintTop_toTopOf="@id/roomAvatarContainer"
+        app:layout_constraintBottom_toBottomOf="@id/roomAvatarContainer"
+        tools:text="@sample/users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/roomTypingView"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAlignment="viewStart"
+        android:textColor="?colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomNameView"
+        tools:text="Alice is typing…"
+        tools:visibility="gone" />
+
+    <!-- We use vctr_list_separator_system here for a better rendering -->
+    <View
+        android:id="@+id/roomDividerView"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_list_separator_system"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

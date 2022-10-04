@@ -75,19 +75,23 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             val identityLookUpResponse: IdentityLookUpResponse
     )
 
-    private suspend fun lookUpInternal(identityAPI: IdentityAPI,
-                                       threePids: List<ThreePid>,
-                                       hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): LookUpData {
+    private suspend fun lookUpInternal(
+            identityAPI: IdentityAPI,
+            threePids: List<ThreePid>,
+            hashDetailResponse: IdentityHashDetailResponse,
+            canRetry: Boolean
+    ): LookUpData {
         val hashedAddresses = getHashedAddresses(threePids, hashDetailResponse.pepper)
         return try {
             LookUpData(hashedAddresses,
                     executeRequest(null) {
-                        identityAPI.lookup(IdentityLookUpParams(
-                                hashedAddresses,
-                                IdentityHashDetailResponse.ALGORITHM_SHA256,
-                                hashDetailResponse.pepper
-                        ))
+                        identityAPI.lookup(
+                                IdentityLookUpParams(
+                                        hashedAddresses,
+                                        IdentityHashDetailResponse.ALGORITHM_SHA256,
+                                        hashDetailResponse.pepper
+                                )
+                        )
                     })
         } catch (failure: Throwable) {
             // Catch invalid hash pepper and retry
@@ -117,8 +121,10 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         return withOlmUtility { olmUtility ->
             threePids.map { threePid ->
                 base64ToBase64Url(
-                        olmUtility.sha256(threePid.value.lowercase(Locale.ROOT) +
-                                " " + threePid.toMedium() + " " + pepper)
+                        olmUtility.sha256(
+                                threePid.value.lowercase(Locale.ROOT) +
+                                        " " + threePid.toMedium() + " " + pepper
+                        )
                 )
             }
         }

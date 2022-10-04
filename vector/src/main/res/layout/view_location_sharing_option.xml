@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/shareLocationOptionContainer"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:background="?selectableItemBackground"
+        android:duplicateParentState="true"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
+        app:constraint_referenced_ids="shareLocationOptionIcon,shareLocationOptionTitle"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="8dp"
+        app:flow_horizontalStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/shareLocationOptionIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/a11y_location_share_option_pinned_icon"
+        tools:background="@drawable/circle"
+        tools:backgroundTint="?colorPrimary"
+        tools:padding="11dp"
+        tools:src="@drawable/ic_attachment_location_white" />
+
+    <TextView
+        android:id="@+id/shareLocationOptionTitle"
+        style="@style/TextAppearance.Vector.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?vctr_content_primary"
+        tools:text="@string/location_share_option_pinned" />
+
+</merge>

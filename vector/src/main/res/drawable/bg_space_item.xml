@@ -8,11 +8,12 @@
                     <solid android:color="@android:color/transparent" />
                 </shape>
             </item>
-            <item android:gravity="center_vertical|start" >
+            <item android:gravity="center_vertical|start"
+                android:left="8dp"
+                android:right="11dp">
                 <shape>
-                    <size android:width="4dp" android:height="40dp" />
-                    <solid android:color="?colorSecondary" />
-                    <corners android:bottomRightRadius="8dp" android:topRightRadius="8dp" />
+                    <solid android:color="?vctr_content_quinary" />
+                    <corners android:radius="8dp"/>
                 </shape>
             </item>
         </layer-list>

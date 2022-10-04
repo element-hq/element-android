@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorSurface"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/liveLocShareChooseDurationTitle"
+        style="@style/Widget.Vector.TextView.Subtitle.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="24dp"
+        android:text="@string/location_share_live_select_duration_title"
+        android:textColor="?vctr_content_primary" />
+
+    <RadioGroup
+        android:id="@+id/liveLocShareChooseDurationOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/divider_horizontal"
+        android:showDividers="beginning">
+
+        <RadioButton
+            android:id="@+id/liveLocShareChooseDurationOption1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:checked="true"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
+            android:text="@string/location_share_live_select_duration_option_1" />
+
+        <RadioButton
+            android:id="@+id/liveLocShareChooseDurationOption2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
+            android:text="@string/location_share_live_select_duration_option_2" />
+
+        <RadioButton
+            android:id="@+id/liveLocShareChooseDurationOption3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
+            android:text="@string/location_share_live_select_duration_option_3" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/liveLocShareChooseDurationConfirm"
+        style="@style/Widget.Vector.Button.CallToAction"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="12dp"
+        android:text="@string/action_share" />
+
+</LinearLayout>

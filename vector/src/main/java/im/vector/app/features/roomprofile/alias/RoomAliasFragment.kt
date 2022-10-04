@@ -26,14 +26,15 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
@@ -46,12 +47,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomAliasFragment @Inject constructor(
-        private val controller: RoomAliasController,
-        private val avatarRenderer: AvatarRenderer
-) :
+@AndroidEntryPoint
+class RoomAliasFragment :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomAliasController.Callback {
+
+    @Inject lateinit var controller: RoomAliasController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomAliasViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
@@ -60,6 +62,11 @@ class RoomAliasFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomAddresses
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,8 +83,8 @@ class RoomAliasFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
-                RoomAliasViewEvents.Success    -> showSuccess()
-            }.exhaustive
+                RoomAliasViewEvents.Success -> showSuccess()
+            }
         }
 
         sharedActionViewModel
@@ -88,13 +95,13 @@ class RoomAliasFragment @Inject constructor(
 
     private fun handleAliasAction(action: RoomAliasBottomSheetSharedAction?) {
         when (action) {
-            is RoomAliasBottomSheetSharedAction.ShareAlias     -> shareAlias(action.matrixTo)
-            is RoomAliasBottomSheetSharedAction.PublishAlias   -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
+            is RoomAliasBottomSheetSharedAction.ShareAlias -> shareAlias(action.matrixTo)
+            is RoomAliasBottomSheetSharedAction.PublishAlias -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
             is RoomAliasBottomSheetSharedAction.UnPublishAlias -> unpublishAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.DeleteAlias    -> removeLocalAlias(action.alias)
-            is RoomAliasBottomSheetSharedAction.SetMainAlias   -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
-            RoomAliasBottomSheetSharedAction.UnsetMainAlias    -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
-            null                                               -> Unit
+            is RoomAliasBottomSheetSharedAction.DeleteAlias -> removeLocalAlias(action.alias)
+            is RoomAliasBottomSheetSharedAction.SetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
+            RoomAliasBottomSheetSharedAction.UnsetMainAlias -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
+            null -> Unit
         }
     }
 

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Optional
@@ -27,26 +26,22 @@ import org.matrix.android.sdk.internal.session.user.accountdata.UpdateIgnoredUse
 import org.matrix.android.sdk.internal.session.user.model.SearchUserTask
 import javax.inject.Inject
 
-internal class DefaultUserService @Inject constructor(private val userDataSource: UserDataSource,
-                                                      private val searchUserTask: SearchUserTask,
-                                                      private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
-                                                      private val getProfileInfoTask: GetProfileInfoTask) : UserService {
+internal class DefaultUserService @Inject constructor(
+        private val userDataSource: UserDataSource,
+        private val searchUserTask: SearchUserTask,
+        private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
+        private val getProfileInfoTask: GetProfileInfoTask
+) : UserService {
 
     override fun getUser(userId: String): User? {
         return userDataSource.getUser(userId)
     }
 
     override suspend fun resolveUser(userId: String): User {
-        val known = getUser(userId)
-        if (known != null) {
-            return known
-        } else {
+        return getUser(userId) ?: run {
             val params = GetProfileInfoTask.Params(userId)
-            val data = getProfileInfoTask.execute(params)
-            return User(
-                    userId,
-                    data[ProfileService.DISPLAY_NAME_KEY] as? String,
-                    data[ProfileService.AVATAR_URL_KEY] as? String)
+            val json = getProfileInfoTask.execute(params)
+            User.fromJson(userId, json)
         }
     }
 
@@ -66,9 +61,11 @@ internal class DefaultUserService @Inject constructor(private val userDataSource
         return userDataSource.getIgnoredUsersLive()
     }
 
-    override suspend fun searchUsersDirectory(search: String,
-                                              limit: Int,
-                                              excludedUserIds: Set<String>): List<User> {
+    override suspend fun searchUsersDirectory(
+            search: String,
+            limit: Int,
+            excludedUserIds: Set<String>
+    ): List<User> {
         val params = SearchUserTask.Params(limit, search, excludedUserIds)
         return searchUserTask.execute(params)
     }

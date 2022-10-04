@@ -16,10 +16,12 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.create.CreateRoomFromLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
@@ -37,16 +39,28 @@ internal class DefaultSendEventTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
         private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val createRoomFromLocalRoomTask: CreateRoomFromLocalRoomTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
+            if (params.event.isLocalRoomEvent) {
+                return createRoomAndSendEvent(params)
+            }
+
             // Make sure to load all members in the room before sending the event.
             params.event.roomId
                     ?.takeIf { params.encrypt }
                     ?.let { roomId ->
-                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        try {
+                            loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        } catch (failure: Throwable) {
+                            // send any way?
+                            // the result is that some users won't probably be able to decrypt :/
+                            Timber.w(failure, "SendEvent: failed to load members in room ${params.event.roomId}")
+                        }
                     }
 
             val event = handleEncryption(params)
@@ -66,19 +80,31 @@ internal class DefaultSendEventTask @Inject constructor(
             }
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
+            Timber.w(e, "Unable to send the Event")
             throw e
         }
+    }
+
+    private suspend fun createRoomAndSendEvent(params: SendEventTask.Params): String {
+        val roomId = createRoomFromLocalRoomTask.execute(CreateRoomFromLocalRoomTask.Params(params.event.roomId.orEmpty()))
+        Timber.d("State event: convert local room (${params.event.roomId}) to existing room ($roomId) before sending the event.")
+        return execute(params.copy(event = params.event.copy(roomId = roomId)))
     }
 
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(EncryptEventTask.Params(
-                    params.event.roomId ?: "",
-                    params.event,
-                    listOf("m.relates_to")
-            ))
+            return encryptEventTask.execute(
+                    EncryptEventTask.Params(
+                            params.event.roomId ?: "",
+                            params.event,
+                            listOf("m.relates_to")
+                    )
+            )
         }
         return params.event
     }
+
+    private val Event.isLocalRoomEvent
+        get() = RoomLocalEcho.isLocalEchoId(roomId.orEmpty())
 }

@@ -18,16 +18,16 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import java.util.LinkedList
 
-data class GraphNode(
+internal data class GraphNode(
         val name: String
 )
 
-data class GraphEdge(
+internal data class GraphEdge(
         val source: GraphNode,
         val destination: GraphNode
 )
 
-class Graph {
+internal class Graph {
 
     private val adjacencyList: HashMap<GraphNode, ArrayList<GraphEdge>> = HashMap()
 
@@ -71,7 +71,7 @@ class Graph {
     }
 
     /**
-     * Depending on the chosen starting point the background edge might change
+     * Depending on the chosen starting point the background edge might change.
      */
     fun findBackwardEdges(startFrom: GraphNode? = null): List<GraphEdge> {
         val backwardEdges = mutableSetOf<GraphEdge>()

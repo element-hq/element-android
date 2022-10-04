@@ -26,7 +26,7 @@ class SystemLocaleProvider @Inject constructor(
 ) {
 
     /**
-     * Provides the device locale
+     * Provides the device locale.
      *
      * @return the device locale, or null in case of error
      */

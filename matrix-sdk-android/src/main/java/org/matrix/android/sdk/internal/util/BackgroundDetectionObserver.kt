@@ -19,8 +19,9 @@ package org.matrix.android.sdk.internal.util
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArraySet
 
-interface BackgroundDetectionObserver : DefaultLifecycleObserver {
+internal interface BackgroundDetectionObserver : DefaultLifecycleObserver {
     val isInBackground: Boolean
 
     fun register(listener: Listener)
@@ -37,7 +38,7 @@ internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver 
     override var isInBackground: Boolean = true
         private set
 
-    private val listeners = LinkedHashSet<BackgroundDetectionObserver.Listener>()
+    private val listeners = CopyOnWriteArraySet<BackgroundDetectionObserver.Listener>()
 
     override fun register(listener: BackgroundDetectionObserver.Listener) {
         listeners.add(listener)
@@ -48,13 +49,13 @@ internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver 
     }
 
     override fun onStart(owner: LifecycleOwner) {
-        Timber.v("App returning to foreground…")
+        Timber.d("App returning to foreground…")
         isInBackground = false
         listeners.forEach { it.onMoveToForeground() }
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        Timber.v("App going to background…")
+        Timber.d("App going to background…")
         isInBackground = true
         listeners.forEach { it.onMoveToBackground() }
     }

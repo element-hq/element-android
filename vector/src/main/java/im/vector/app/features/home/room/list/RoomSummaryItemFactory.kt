@@ -26,6 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
@@ -36,29 +37,39 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
-                                                 private val dateFormatter: VectorDateFormatter,
-                                                 private val stringProvider: StringProvider,
-                                                 private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer,
-                                                 private val errorFormatter: ErrorFormatter) {
+class RoomSummaryItemFactory @Inject constructor(
+        private val displayableEventFormatter: DisplayableEventFormatter,
+        private val dateFormatter: VectorDateFormatter,
+        private val stringProvider: StringProvider,
+        private val typingHelper: TypingHelper,
+        private val avatarRenderer: AvatarRenderer,
+        private val errorFormatter: ErrorFormatter
+) {
 
-    fun create(roomSummary: RoomSummary,
-               roomChangeMembershipStates: Map<String, ChangeMembershipState>,
-               selectedRoomIds: Set<String>,
-               listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun create(
+            roomSummary: RoomSummary,
+            roomChangeMembershipStates: Map<String, ChangeMembershipState>,
+            selectedRoomIds: Set<String>,
+            displayMode: RoomListDisplayMode,
+            listener: RoomListListener?,
+            singleLineLastEvent: Boolean = false
+    ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else -> createRoomItem(
+                    roomSummary, selectedRoomIds, displayMode, singleLineLastEvent, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
+            )
         }
     }
 
-    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
-                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun createSuggestion(
+            spaceChildInfo: SpaceChildInfo,
+            suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
@@ -80,9 +91,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary,
-                                     changeMembershipState: ChangeMembershipState,
-                                     listener: RoomListListener?): VectorEpoxyModel<*> {
+    private fun createInvitationItem(
+            roomSummary: RoomSummary,
+            changeMembershipState: ChangeMembershipState,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -105,9 +118,12 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun createRoomItem(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
+            displayMode: RoomListDisplayMode,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
-            onLongClick: ((RoomSummary) -> Boolean)?
+            onLongClick: ((RoomSummary) -> Boolean)?,
     ): VectorEpoxyModel<*> {
+        val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
@@ -118,28 +134,95 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
+
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
-        return RoomSummaryItem_()
-                .id(roomSummary.roomId)
-                .avatarRenderer(avatarRenderer)
-                // We do not display shield in the room list anymore
-                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
-                .izPublic(roomSummary.isPublic)
-                .showPresence(roomSummary.isDirect)
-                .userPresence(roomSummary.directUserPresence)
-                .matrixItem(roomSummary.toMatrixItem())
-                .lastEventTime(latestEventTime)
-                .typingMessage(typingMessage)
-                .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
-                .showHighlighted(showHighlighted)
-                .showSelected(showSelected)
-                .hasFailedSending(roomSummary.hasFailedSending)
-                .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.hasUnreadMessages)
-                .hasDraft(roomSummary.userDrafts.isNotEmpty())
-                .itemLongClickListener { _ ->
-                    onLongClick?.invoke(roomSummary) ?: false
-                }
-                .itemClickListener { onClick?.invoke(roomSummary) }
+
+        return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
+            createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
+        } else {
+            createRoomSummaryItem(
+                    roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, singleLineLastEvent, onClick, onLongClick
+            )
+        }
+    }
+
+    private fun createRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            subtitle: String,
+            latestEventTime: String,
+            typingMessage: String,
+            latestFormattedEvent: CharSequence,
+            showHighlighted: Boolean,
+            showSelected: Boolean,
+            unreadCount: Int,
+            singleLineLastEvent: Boolean,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItem_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .subtitle(subtitle)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .lastEventTime(latestEventTime)
+            .typingMessage(typingMessage)
+            .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
+            .showHighlighted(showHighlighted)
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .useSingleLineForLastEvent(singleLineLastEvent)
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
+
+    private fun createCenteredRoomSummaryItem(
+            roomSummary: RoomSummary,
+            displayMode: RoomListDisplayMode,
+            showSelected: Boolean,
+            unreadCount: Int,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ) = RoomSummaryItemCentered_()
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .displayMode(displayMode)
+            .isPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
+            .itemClickListener { onClick?.invoke(roomSummary) }
+
+    private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
+        val userId = roomSummary.directUserId
+        val directParent = joinParentNames(roomSummary)
+        val canonicalAlias = roomSummary.canonicalAlias
+
+        return (userId ?: directParent ?: canonicalAlias).orEmpty()
+    }
+
+    private fun joinParentNames(roomSummary: RoomSummary) = with(roomSummary) {
+        when (val size = directParentNames.size) {
+            0 -> null
+            1 -> directParentNames.first()
+            2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
+            else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
+        }
     }
 }

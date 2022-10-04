@@ -33,11 +33,12 @@ import android.webkit.WebViewClient
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import java.util.Formatter
@@ -49,11 +50,13 @@ data class LoginCaptchaFragmentArgument(
 ) : Parcelable
 
 /**
- * In this screen, the user is asked to confirm he is not a robot
+ * In this screen, the user is asked to confirm he is not a robot.
  */
-class LoginCaptchaFragment @Inject constructor(
-        private val assetReader: AssetReader
-) : AbstractLoginFragment<FragmentLoginCaptchaBinding>() {
+@AndroidEntryPoint
+class LoginCaptchaFragment :
+        AbstractLoginFragment<FragmentLoginCaptchaBinding>() {
+
+    @Inject lateinit var assetReader: AssetReader
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginCaptchaBinding {
         return FragmentLoginCaptchaBinding.inflate(inflater, container, false)
@@ -141,7 +144,6 @@ class LoginCaptchaFragment @Inject constructor(
                 // runOnUiThread(Runnable { finish() })
             }
 
-            @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
 
@@ -157,12 +159,14 @@ class LoginCaptchaFragment @Inject constructor(
                 }
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 @Suppress("DEPRECATION")
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(description)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     var json = url.substring(3)
@@ -171,7 +175,7 @@ class LoginCaptchaFragment @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        javascriptResponse = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
+                        javascriptResponse = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading(): failed")
                     }

@@ -20,7 +20,7 @@ sealed class JoinSpaceResult {
     object Success : JoinSpaceResult()
     data class Fail(val error: Throwable) : JoinSpaceResult()
 
-    /** Success fully joined the space, but failed to join all or some of it's rooms */
+    /** Success fully joined the space, but failed to join all or some of it's rooms. */
     data class PartialSuccess(val failedRooms: Map<String, Throwable>) : JoinSpaceResult()
 
     fun isSuccess() = this is Success || this is PartialSuccess

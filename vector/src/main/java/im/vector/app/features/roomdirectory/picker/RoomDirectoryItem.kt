@@ -32,8 +32,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.glide.GlideApp
 
-@EpoxyModelClass(layout = R.layout.item_room_directory)
-abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>(R.layout.item_room_directory) {
 
     @EpoxyAttribute
     var directoryAvatarUrl: String? = null

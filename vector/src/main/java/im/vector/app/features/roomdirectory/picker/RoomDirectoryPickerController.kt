@@ -22,7 +22,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -60,7 +59,7 @@ class RoomDirectoryPickerController @Inject constructor(
         val host = this
 
         when (val asyncThirdPartyProtocol = data.asyncThirdPartyRequest) {
-            is Success    -> {
+            is Success -> {
                 data.directories.join(
                         each = { _, roomDirectoryServer -> buildDirectory(roomDirectoryServer) },
                         between = { idx, _ -> buildDivider(idx) }
@@ -71,12 +70,13 @@ class RoomDirectoryPickerController @Inject constructor(
                     heightInPx(host.dimensionConverter.dpToPx(16))
                 }
             }
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
@@ -125,9 +125,9 @@ class RoomDirectoryPickerController @Inject constructor(
                 }
                 when (data.addServerAsync) {
                     Uninitialized -> enabled(true)
-                    is Loading    -> enabled(false)
-                    is Success    -> enabled(false)
-                    is Fail       -> {
+                    is Loading -> enabled(false)
+                    is Success -> enabled(false)
+                    is Fail -> {
                         enabled(true)
                         errorMessage(host.getErrorMessage(data.addServerAsync.error))
                     }
@@ -135,7 +135,7 @@ class RoomDirectoryPickerController @Inject constructor(
             }
             when (data.addServerAsync) {
                 Uninitialized,
-                is Fail    -> settingsContinueCancelItem {
+                is Fail -> settingsContinueCancelItem {
                     id("continueCancel")
                     continueText(host.stringProvider.getString(R.string.ok))
                     canContinue(data.enteredServer.isNotEmpty())

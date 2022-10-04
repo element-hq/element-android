@@ -18,15 +18,21 @@ package im.vector.app.features.analytics
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.UserProperties
 
 interface AnalyticsTracker {
     /**
-     * Capture an Event
+     * Capture an Event.
      */
     fun capture(event: VectorAnalyticsEvent)
 
     /**
-     * Track a displayed screen
+     * Track a displayed screen.
      */
     fun screen(screen: VectorAnalyticsScreen)
+
+    /**
+     * Update user specific properties.
+     */
+    fun updateUserProperties(userProperties: UserProperties)
 }

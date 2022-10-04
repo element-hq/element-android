@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 
 @JsonClass(generateAdapter = true)
-data class GetPresenceResponse(
+internal data class GetPresenceResponse(
         @Json(name = "presence")
         val presence: PresenceEnum,
         @Json(name = "last_active_ago")

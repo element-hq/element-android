@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification.request
 
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -51,7 +52,6 @@ class VerificationRequestController @Inject constructor(
 
     override fun buildModels() {
         val state = viewState ?: return
-        val matrixItem = viewState?.otherUserMxItem ?: return
         val host = this
 
         if (state.selfVerificationMode) {
@@ -87,28 +87,28 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            bottomSheetDividerItem {
-                id("sep1")
-            }
+            if (!state.isVerificationRequired) {
+                bottomSheetDividerItem {
+                    id("sep1")
+                }
 
-            bottomSheetVerificationActionItem {
-                id("skip")
-                title(host.stringProvider.getString(R.string.action_skip))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                listener { host.listener?.onClickSkip() }
+                bottomSheetVerificationActionItem {
+                    id("skip")
+                    title(host.stringProvider.getString(R.string.action_skip))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    listener { host.listener?.onClickSkip() }
+                }
             }
         } else {
             val styledText =
                     if (state.isMe) {
                         stringProvider.getString(R.string.verify_new_session_notice)
                     } else {
-                        matrixItem.let {
-                            stringProvider.getString(R.string.verification_request_notice, it.id)
-                                    .toSpannable()
-                                    .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-                        }
+                        stringProvider.getString(R.string.verification_request_notice, state.otherUserId)
+                                .toSpannable()
+                                .colorizeMatchingText(state.otherUserId, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
                     }
 
             bottomSheetVerificationNoticeItem {
@@ -132,13 +132,13 @@ class VerificationRequestController @Inject constructor(
                         listener { host.listener?.onClickOnVerificationStart() }
                     }
                 }
-                is Loading       -> {
+                is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
-                        title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                        title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                     }
                 }
-                is Success       -> {
+                is Success -> {
                     if (!pr.invoke().isReady) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {
@@ -148,11 +148,12 @@ class VerificationRequestController @Inject constructor(
                         } else {
                             bottomSheetVerificationWaitingItem {
                                 id("waiting")
-                                title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                                title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                             }
                         }
                     }
                 }
+                is Fail -> Unit
             }
         }
 

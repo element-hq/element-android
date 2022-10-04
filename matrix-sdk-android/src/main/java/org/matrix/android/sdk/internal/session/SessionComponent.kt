@@ -20,13 +20,10 @@ import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.securestorage.SecureStorageModule
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.CryptoModule
-import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
-import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
-import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -38,8 +35,6 @@ import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
@@ -50,6 +45,7 @@ import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -59,6 +55,7 @@ import org.matrix.android.sdk.internal.session.space.SpaceModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
+import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
 import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
@@ -68,17 +65,16 @@ import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
-@Component(dependencies = [MatrixComponent::class],
+@Component(
+        dependencies = [MatrixComponent::class],
         modules = [
             SessionModule::class,
             RoomModule::class,
             SyncModule::class,
             HomeServerCapabilitiesModule::class,
             SignOutModule::class,
-            GroupModule::class,
             UserModule::class,
             FilterModule::class,
-            GroupModule::class,
             ContentModule::class,
             CacheModule::class,
             MediaModule::class,
@@ -100,7 +96,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             ThirdPartyModule::class,
             SpaceModule::class,
             PresenceModule::class,
-            RequestModule::class
+            RequestModule::class,
+            SecureStorageModule::class,
         ]
 )
 @SessionScope
@@ -124,28 +121,23 @@ internal interface SessionComponent {
 
     fun inject(worker: RedactEventWorker)
 
-    fun inject(worker: GetGroupDataWorker)
-
     fun inject(worker: UploadContentWorker)
 
     fun inject(worker: SyncWorker)
 
     fun inject(worker: AddPusherWorker)
 
-    fun inject(worker: SendVerificationMessageWorker)
-
-    fun inject(worker: SendGossipRequestWorker)
-
-    fun inject(worker: CancelGossipRequestWorker)
-
-    fun inject(worker: SendGossipWorker)
-
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: UpdateUserWorker)
+
+    fun inject(worker: DeactivateLiveLocationShareWorker)
 
     @Component.Factory
     interface Factory {
         fun create(
                 matrixComponent: MatrixComponent,
-                @BindsInstance sessionParams: SessionParams): SessionComponent
+                @BindsInstance sessionParams: SessionParams
+        ): SessionComponent
     }
 }

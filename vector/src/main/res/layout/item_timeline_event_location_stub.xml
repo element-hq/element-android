@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Size will be overrode -->
+    <ImageView
+        android:id="@+id/staticMapImageView"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/a11y_static_map_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/staticMapPinImageView"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:src="@drawable/bg_map_user_pin"
+        app:layout_constraintBottom_toTopOf="@id/staticMapVerticalCenter"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        app:layout_constraintTop_toTopOf="@id/staticMapImageView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <im.vector.app.features.location.MapLoadingErrorView
+        android:id="@+id/staticMapLoadingError"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationRunningBanner"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        app:layout_constraintTop_toTopOf="@id/staticMapImageView"
+        app:mapErrorDescription="@string/location_timeline_failed_to_load_map" />
+
+    <im.vector.app.features.location.live.LiveLocationRunningBannerView
+        android:id="@+id/liveLocationRunningBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/staticMapVerticalCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/staticMapCopyrightTextView"
+        style="@style/Widget.Vector.TextView.Nano.Copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/location_map_view_copyright"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

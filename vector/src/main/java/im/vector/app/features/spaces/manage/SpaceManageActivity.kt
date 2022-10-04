@@ -85,6 +85,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
                         is RoomDirectorySharedAction.Close -> finish()
+                        else -> Unit
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -105,7 +106,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                             )
                         }
                     }
-                    ManageType.Settings           -> {
+                    ManageType.Settings -> {
                         val simpleName = SpaceSettingsFragment::class.java.simpleName
                         if (supportFragmentManager.findFragmentByTag(simpleName) == null && args?.spaceId != null) {
                             replaceFragment(
@@ -116,7 +117,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                             )
                         }
                     }
-                    ManageType.ManageRooms        -> {
+                    ManageType.ManageRooms -> {
                         // no direct access for now
                     }
                 }
@@ -125,30 +126,30 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceManagedSharedViewEvents.Finish                       -> {
+                SpaceManagedSharedViewEvents.Finish -> {
                     finish()
                 }
-                SpaceManagedSharedViewEvents.HideLoading                  -> {
+                SpaceManagedSharedViewEvents.HideLoading -> {
                     hideWaitingView()
                 }
-                SpaceManagedSharedViewEvents.ShowLoading                  -> {
+                SpaceManagedSharedViewEvents.ShowLoading -> {
                     showWaitingView()
                 }
-                SpaceManagedSharedViewEvents.NavigateToCreateRoom         -> {
+                SpaceManagedSharedViewEvents.NavigateToCreateRoom -> {
                     addFragmentToBackstack(
                             views.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
                             CreateRoomArgs("", parentSpaceId = args?.spaceId)
                     )
                 }
-                SpaceManagedSharedViewEvents.NavigateToCreateSpace        -> {
+                SpaceManagedSharedViewEvents.NavigateToCreateSpace -> {
                     addFragmentToBackstack(
                             views.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
                             CreateRoomArgs("", parentSpaceId = args?.spaceId, isSpace = true)
                     )
                 }
-                SpaceManagedSharedViewEvents.NavigateToManageRooms        -> {
+                SpaceManagedSharedViewEvents.NavigateToManageRooms -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
                                 views.simpleFragmentContainer,
@@ -157,7 +158,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                         )
                     }
                 }
-                SpaceManagedSharedViewEvents.NavigateToAliasSettings      -> {
+                SpaceManagedSharedViewEvents.NavigateToAliasSettings -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
                                 views.simpleFragmentContainer,

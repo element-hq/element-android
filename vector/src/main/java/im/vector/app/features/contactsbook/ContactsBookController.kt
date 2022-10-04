@@ -35,7 +35,8 @@ import javax.inject.Inject
 class ContactsBookController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter) : EpoxyController() {
+        private val errorFormatter: ErrorFormatter
+) : EpoxyController() {
 
     private var state: ContactsBookViewState? = null
 
@@ -50,9 +51,9 @@ class ContactsBookController @Inject constructor(
         val currentState = state ?: return
         when (val asyncMappedContacts = currentState.mappedContacts) {
             is Uninitialized -> renderEmptyState(false)
-            is Loading       -> renderLoading()
-            is Success       -> renderSuccess(currentState)
-            is Fail          -> renderFailure(asyncMappedContacts.error)
+            is Loading -> renderLoading()
+            is Success -> renderSuccess(currentState)
+            is Fail -> renderFailure(asyncMappedContacts.error)
         }
     }
 

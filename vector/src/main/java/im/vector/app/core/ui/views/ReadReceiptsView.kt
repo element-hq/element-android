@@ -28,8 +28,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
 
-private const val MAX_RECEIPT_DISPLAYED = 5
-private const val MAX_RECEIPT_DESCRIBED = 3
+private const val MAX_RECEIPT_DISPLAYED = 3
 
 class ReadReceiptsView @JvmOverloads constructor(
         context: Context,
@@ -45,13 +44,7 @@ class ReadReceiptsView @JvmOverloads constructor(
     }
 
     private val receiptAvatars: List<ImageView> by lazy {
-        listOf(
-                views.receiptAvatar1,
-                views.receiptAvatar2,
-                views.receiptAvatar3,
-                views.receiptAvatar4,
-                views.receiptAvatar5
-        )
+        listOf(views.receiptAvatar1, views.receiptAvatar2, views.receiptAvatar3)
     }
 
     private fun setupView() {
@@ -60,64 +53,58 @@ class ReadReceiptsView @JvmOverloads constructor(
     }
 
     fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer) {
-        if (readReceipts.isNotEmpty()) {
-            isVisible = true
-            for (index in 0 until MAX_RECEIPT_DISPLAYED) {
-                val receiptData = readReceipts.getOrNull(index)
-                if (receiptData == null) {
-                    receiptAvatars[index].visibility = View.INVISIBLE
-                } else {
-                    receiptAvatars[index].visibility = View.VISIBLE
-                    avatarRenderer.render(receiptData.toMatrixItem(), receiptAvatars[index])
-                }
-            }
+        receiptAvatars.forEach { it.isVisible = false }
 
-            val displayNames = readReceipts
-                    .mapNotNull { it.displayName }
-                    .filter { it.isNotBlank() }
-                    .take(MAX_RECEIPT_DESCRIBED)
+        readReceipts.take(MAX_RECEIPT_DISPLAYED).forEachIndexed { index, receiptData ->
+            receiptAvatars[index].isVisible = true
+            avatarRenderer.render(receiptData.toMatrixItem(), receiptAvatars[index])
+        }
 
-            if (readReceipts.size > MAX_RECEIPT_DISPLAYED) {
-                views.receiptMore.visibility = View.VISIBLE
-                views.receiptMore.text = context.getString(
-                        R.string.x_plus, readReceipts.size - MAX_RECEIPT_DISPLAYED
-                )
-            } else {
-                views.receiptMore.visibility = View.GONE
-            }
-            contentDescription = when (readReceipts.size) {
-                1    ->
-                    if (displayNames.size == 1) {
-                        context.getString(R.string.one_user_read, displayNames[0])
-                    } else {
-                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
-                    }
-                2    ->
-                    if (displayNames.size == 2) {
-                        context.getString(R.string.two_users_read, displayNames[0], displayNames[1])
-                    } else {
-                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
-                    }
-                3    ->
-                    if (displayNames.size == 3) {
-                        context.getString(R.string.three_users_read, displayNames[0], displayNames[1], displayNames[2])
-                    } else {
-                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
-                    }
-                else ->
-                    if (displayNames.size >= 2) {
-                        val qty = readReceipts.size - 2
-                        context.resources.getQuantityString(R.plurals.two_and_some_others_read,
-                                qty,
-                                displayNames[0],
-                                displayNames[1],
-                                qty)
-                    } else {
-                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
-                    }
-            }
+        val displayNames = readReceipts
+                .mapNotNull { it.displayName }
+                .filter { it.isNotBlank() }
+                .take(MAX_RECEIPT_DISPLAYED)
+
+        if (readReceipts.size > MAX_RECEIPT_DISPLAYED) {
+            views.receiptMore.visibility = View.VISIBLE
+            views.receiptMore.text = context.getString(
+                    R.string.x_plus, readReceipts.size - MAX_RECEIPT_DISPLAYED
+            )
         } else {
-            isVisible = false
+            views.receiptMore.visibility = View.GONE
+        }
+        contentDescription = when (readReceipts.size) {
+            1 ->
+                if (displayNames.size == 1) {
+                    context.getString(R.string.one_user_read, displayNames[0])
+                } else {
+                    context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                }
+            2 ->
+                if (displayNames.size == 2) {
+                    context.getString(R.string.two_users_read, displayNames[0], displayNames[1])
+                } else {
+                    context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                }
+            3 ->
+                if (displayNames.size == 3) {
+                    context.getString(R.string.three_users_read, displayNames[0], displayNames[1], displayNames[2])
+                } else {
+                    context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                }
+            else ->
+                if (displayNames.size >= 2) {
+                    val qty = readReceipts.size - 2
+                    context.resources.getQuantityString(
+                            R.plurals.two_and_some_others_read,
+                            qty,
+                            displayNames[0],
+                            displayNames[1],
+                            qty
+                    )
+                } else {
+                    context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                }
         }
     }
 

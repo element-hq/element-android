@@ -29,11 +29,12 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 import kotlin.experimental.xor
 import kotlin.math.min
+import kotlin.system.measureTimeMillis
 
 /**
- * Utility class to import/export the crypto data
+ * Utility class to import/export the crypto data.
  */
-object MXMegolmExportEncryption {
+internal object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
     private const val TRAILER_LINE = "-----END MEGOLM SESSION DATA-----"
 
@@ -65,9 +66,9 @@ object MXMegolmExportEncryption {
     }
 
     /**
-     * Decrypt a megolm key file
+     * Decrypt a megolm key file.
      *
-     * @param data     the data to decrypt
+     * @param data the data to decrypt
      * @param password the password.
      * @return the decrypted output.
      * @throws Exception the failure reason
@@ -137,9 +138,9 @@ object MXMegolmExportEncryption {
     /**
      * Encrypt a string into the megolm export format.
      *
-     * @param data       the data to encrypt.
-     * @param password   the password
-     * @param kdf_rounds the iteration count
+     * @param data the data to encrypt.
+     * @param password the password
+     * @param kdfRounds the iteration count
      * @return the encrypted data
      * @throws Exception the failure reason
      */
@@ -208,8 +209,8 @@ object MXMegolmExportEncryption {
     }
 
     /**
-     * Unbase64 an ascii-armoured megolm key file
-     * Strips the header and trailer lines, and unbase64s the content
+     * Unbase64 an ascii-armoured megolm key file.
+     * Strips the header and trailer lines, and unbase64s the content.
      *
      * @param data the input data
      * @return unbase64ed content
@@ -301,49 +302,49 @@ object MXMegolmExportEncryption {
     }
 
     /**
-     * Derive the AES and HMAC-SHA-256 keys for the file
+     * Derive the AES and HMAC-SHA-256 keys for the file.
      *
-     * @param salt       salt for pbkdf
+     * @param salt salt for pbkdf
      * @param iterations number of pbkdf iterations
-     * @param password   password
+     * @param password password
      * @return the derived keys
      */
     @Throws(Exception::class)
     private fun deriveKeys(salt: ByteArray, iterations: Int, password: String): ByteArray {
-        val t0 = System.currentTimeMillis()
-
-        // based on https://en.wikipedia.org/wiki/PBKDF2 algorithm
-        // it is simpler than the generic algorithm because the expected key length is equal to the mac key length.
-        // noticed as dklen/hlen
-        val prf = Mac.getInstance("HmacSHA512")
-        prf.init(SecretKeySpec(password.toByteArray(Charsets.UTF_8), "HmacSHA512"))
-
-        // 512 bits key length
         val key = ByteArray(64)
-        val uc = ByteArray(64)
+        measureTimeMillis {
+            // based on https://en.wikipedia.org/wiki/PBKDF2 algorithm
+            // it is simpler than the generic algorithm because the expected key length is equal to the mac key length.
+            // noticed as dklen/hlen
+            val prf = Mac.getInstance("HmacSHA512")
+            prf.init(SecretKeySpec(password.toByteArray(Charsets.UTF_8), "HmacSHA512"))
 
-        // U1 = PRF(Password, Salt || INT_32_BE(i))
-        prf.update(salt)
-        val int32BE = ByteArray(4) { 0.toByte() }
-        int32BE[3] = 1.toByte()
-        prf.update(int32BE)
-        prf.doFinal(uc, 0)
+            // 512 bits key length
+            val uc = ByteArray(64)
 
-        // copy to the key
-        System.arraycopy(uc, 0, key, 0, uc.size)
-
-        for (index in 2..iterations) {
-            // Uc = PRF(Password, Uc-1)
-            prf.update(uc)
+            // U1 = PRF(Password, Salt || INT_32_BE(i))
+            prf.update(salt)
+            val int32BE = ByteArray(4) { 0.toByte() }
+            int32BE[3] = 1.toByte()
+            prf.update(int32BE)
             prf.doFinal(uc, 0)
 
-            // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
-            for (byteIndex in uc.indices) {
-                key[byteIndex] = key[byteIndex] xor uc[byteIndex]
-            }
-        }
+            // copy to the key
+            System.arraycopy(uc, 0, key, 0, uc.size)
 
-        Timber.v("## deriveKeys() : $iterations in ${System.currentTimeMillis() - t0} ms")
+            for (index in 2..iterations) {
+                // Uc = PRF(Password, Uc-1)
+                prf.update(uc)
+                prf.doFinal(uc, 0)
+
+                // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
+                for (byteIndex in uc.indices) {
+                    key[byteIndex] = key[byteIndex] xor uc[byteIndex]
+                }
+            }
+        }.also {
+            Timber.v("## deriveKeys() : $iterations in $it ms")
+        }
 
         return key
     }

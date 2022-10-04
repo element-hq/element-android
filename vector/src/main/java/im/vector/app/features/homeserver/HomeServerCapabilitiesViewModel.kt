@@ -53,7 +53,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState {
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
-                    capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
+                    capabilities = session?.homeServerCapabilitiesService()?.getHomeServerCapabilities() ?: HomeServerCapabilities()
             )
         }
     }

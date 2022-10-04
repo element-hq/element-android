@@ -32,14 +32,16 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.di.MoshiProvider
 
 class RoomDevToolViewModel @AssistedInject constructor(
         @Assisted val initialState: RoomDevToolViewState,
@@ -58,7 +60,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
     init {
         session.getRoom(initialState.roomId)
                 ?.flow()
-                ?.liveStateEvents(emptySet())
+                ?.liveStateEvents(emptySet(), QueryStringValue.IsNotNull)
                 ?.execute { async ->
                     copy(stateEvents = async)
                 }
@@ -66,7 +68,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDevToolAction) {
         when (action) {
-            RoomDevToolAction.ExploreRoomState             -> {
+            RoomDevToolAction.ExploreRoomState -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventList,
@@ -74,8 +76,8 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolAction.ShowStateEvent            -> {
-                val jsonString = MoshiProvider.providesMoshi()
+            is RoomDevToolAction.ShowStateEvent -> {
+                val jsonString = MatrixJsonParser.getMoshi()
                         .adapter(Event::class.java)
                         .toJson(action.event)
 
@@ -87,10 +89,10 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolAction.OnBackPressed                -> {
+            RoomDevToolAction.OnBackPressed -> {
                 handleBack()
             }
-            RoomDevToolAction.MenuEdit                     -> {
+            RoomDevToolAction.MenuEdit -> {
                 withState {
                     if (it.displayMode == RoomDevToolViewState.Mode.StateEventDetail) {
                         // we want to edit it
@@ -104,7 +106,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is RoomDevToolAction.ShowStateEventType        -> {
+            is RoomDevToolAction.ShowStateEventType -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventListByType,
@@ -112,15 +114,15 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolAction.MenuItemSend                 -> {
+            RoomDevToolAction.MenuItemSend -> {
                 handleMenuItemSend()
             }
-            is RoomDevToolAction.UpdateContentText         -> {
+            is RoomDevToolAction.UpdateContentText -> {
                 setState {
                     copy(editedContent = action.contentJson)
                 }
             }
-            is RoomDevToolAction.SendCustomEvent           -> {
+            is RoomDevToolAction.SendCustomEvent -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.SendEventForm(action.isStateEvent),
@@ -128,7 +130,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolAction.CustomEventTypeChange     -> {
+            is RoomDevToolAction.CustomEventTypeChange -> {
                 setState {
                     copy(
                             sendEventDraft = sendEventDraft?.copy(type = action.type)
@@ -142,7 +144,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolAction.CustomEventContentChange  -> {
+            is RoomDevToolAction.CustomEventContentChange -> {
                 setState {
                     copy(
                             sendEventDraft = sendEventDraft?.copy(content = action.content)
@@ -156,7 +158,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
         when (state.displayMode) {
             RoomDevToolViewState.Mode.EditEventContent -> editEventContent(state)
             is RoomDevToolViewState.Mode.SendEventForm -> sendEventContent(state, state.displayMode.isState)
-            else                                       -> Unit
+            else -> Unit
         }
     }
 
@@ -168,16 +170,15 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 val room = session.getRoom(initialState.roomId)
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                val adapter = MoshiProvider.providesMoshi()
+                val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.editedContent ?: "")
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
 
-                room.sendStateEvent(
+                room.stateService().sendStateEvent(
                         state.selectedEvent?.type.orEmpty(),
                         state.selectedEvent?.stateKey.orEmpty(),
                         json
-
                 )
                 _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(R.string.dev_tools_success_state_event)))
                 setState {
@@ -202,7 +203,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 val room = session.getRoom(initialState.roomId)
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                val adapter = MoshiProvider.providesMoshi()
+                val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.sendEventDraft?.content ?: "")
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
@@ -211,7 +212,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_message_type))
 
                 if (isState) {
-                    room.sendStateEvent(
+                    room.stateService().sendStateEvent(
                             eventType,
                             state.sendEventDraft.stateKey.orEmpty(),
                             json
@@ -221,7 +222,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     // val validParse = MoshiProvider.providesMoshi().adapter(MessageContent::class.java).fromJson(it.sendEventDraft.content ?: "")
                     json.toModel<MessageContent>(catchError = false)
                             ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_malformed_event))
-                    room.sendEvent(
+                    room.sendService().sendEvent(
                             eventType,
                             json
                     )
@@ -244,10 +245,10 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     private fun handleBack() = withState {
         when (it.displayMode) {
-            RoomDevToolViewState.Mode.Root                 -> {
+            RoomDevToolViewState.Mode.Root -> {
                 _viewEvents.post(DevToolsViewEvents.Dismiss)
             }
-            RoomDevToolViewState.Mode.StateEventList       -> {
+            RoomDevToolViewState.Mode.StateEventList -> {
                 setState {
                     copy(
                             selectedEvent = null,
@@ -256,7 +257,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolViewState.Mode.StateEventDetail     -> {
+            RoomDevToolViewState.Mode.StateEventDetail -> {
                 setState {
                     copy(
                             selectedEvent = null,
@@ -265,7 +266,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolViewState.Mode.EditEventContent     -> {
+            RoomDevToolViewState.Mode.EditEventContent -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventDetail
@@ -280,7 +281,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolViewState.Mode.SendEventForm     -> {
+            is RoomDevToolViewState.Mode.SendEventForm -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.Root

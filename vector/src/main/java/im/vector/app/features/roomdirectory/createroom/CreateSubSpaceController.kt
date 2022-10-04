@@ -86,7 +86,8 @@ class CreateSubSpaceController @Inject constructor(
                 maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
-                                (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                                (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
+                        )
                 )
                 onTextChange { value ->
                     host.listener?.setAliasLocalPart(value)
@@ -111,7 +112,7 @@ class CreateSubSpaceController @Inject constructor(
         }
 
         when (data.roomJoinRules) {
-            RoomJoinRules.INVITE     -> {
+            RoomJoinRules.INVITE -> {
                 buildProfileAction(
                         id = "joinRule",
                         title = stringProvider.getString(R.string.room_settings_room_access_private_title),
@@ -121,7 +122,7 @@ class CreateSubSpaceController @Inject constructor(
                         action = { host.listener?.selectVisibility() }
                 )
             }
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
                         id = "joinRule",
                         title = stringProvider.getString(R.string.room_settings_room_access_public_title),
@@ -141,7 +142,7 @@ class CreateSubSpaceController @Inject constructor(
                         action = { host.listener?.selectVisibility() }
                 )
             }
-            else                     -> {
+            else -> {
                 // not yet supported
             }
         }

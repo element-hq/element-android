@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 /**
- * Epoxy controller for room list actions
+ * Epoxy controller for room list actions.
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
@@ -83,9 +83,9 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
     @StringRes
     private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
         RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
-        RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
-        RoomNotificationState.MUTE               -> R.string.room_settings_none
-        else                                     -> null
+        RoomNotificationState.MENTIONS_ONLY -> R.string.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE -> R.string.room_settings_none
+        else -> null
     }
 
     private fun RoomListQuickActionsSharedAction.Leave.toBottomSheetItem() {

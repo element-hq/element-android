@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.RelativeLayout">
+
+    <im.vector.app.core.platform.CheckableView
+        android:id="@+id/messageSelectedBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/informationBottom"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/highlighted_message_background" />
+
+    <ImageView
+        android:id="@+id/messageAvatarImageView"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_avatar_border"
+        android:contentDescription="@string/avatar"
+        android:elevation="2dp"
+        android:padding="2dp"
+        tools:src="@sample/user_round_avatars" />
+
+    <View
+        android:id="@+id/additionalTopSpace"
+        android:layout_height="12dp"
+        android:layout_width="0dp"
+        android:layout_toEndOf="@id/messageStartGuideline" />
+
+    <TextView
+        android:id="@+id/messageMemberNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/additionalTopSpace"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="viewStart"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        tools:text="@sample/users.json/data/displayName" />
+
+    <View
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_marginStart="52dp" />
+
+    <View
+        android:id="@+id/messageEndGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="64dp" />
+
+    <Space
+        android:id="@+id/decorationSpace"
+        android:layout_width="4dp"
+        android:layout_height="8dp"
+        android:layout_toEndOf="@id/messageStartGuideline" />
+
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignTop="@id/bubbleWrapper"
+        android:layout_alignEnd="@id/decorationSpace"
+        android:layout_marginTop="7dp"
+        android:elevation="2dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/bubbleWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/messageMemberNameView"
+        android:layout_toStartOf="@id/messageEndGuideline"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:addStatesFromChildren="true"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <im.vector.app.features.home.room.detail.timeline.view.MessageBubbleContentLayout
+            android:id="@+id/bubbleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:addStatesFromChildren="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/viewStubContainer"
+                layout="@layout/item_timeline_event_view_stubs_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:addStatesFromChildren="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="@dimen/chat_bubble_fixed_size" />
+
+            <View
+                android:id="@+id/messageOverlayView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/overlay_bubble_media"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"
+                app:layout_constraintEnd_toEndOf="@id/viewStubContainer"
+                app:layout_constraintStart_toStartOf="@id/viewStubContainer"
+                app:layout_constraintTop_toTopOf="@id/viewStubContainer"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/messageTimeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="?vctr_content_tertiary"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="@tools:sample/date/hhmm" />
+
+        </im.vector.app.features.home.room.detail.timeline.view.MessageBubbleContentLayout>
+    </FrameLayout>
+
+    <im.vector.app.core.ui.views.SendStateImageView
+        android:id="@+id/messageSendStateImageView"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@id/bubbleWrapper"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="@string/event_status_a11y_sending"
+        android:src="@drawable/ic_sending_message"
+        android:visibility="invisible"
+        tools:tint="?vctr_content_tertiary"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/eventSendingIndicator"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@id/bubbleWrapper"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:indeterminateTint="?vctr_content_secondary"
+        android:visibility="gone"
+        app:tint="?vctr_content_tertiary"
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/informationBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bubbleWrapper"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toStartOf="@id/messageEndGuideline"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:addStatesFromChildren="true"
+        android:orientation="vertical">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/reactionsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:dividerDrawable="@drawable/reaction_divider"
+            app:flexWrap="wrap"
+            app:showDivider="middle"
+            tools:background="#F0E0F0"
+            tools:layout_height="40dp">
+
+            <!-- ReactionButtons will be added here in the code -->
+            <!--im.vector.app.features.reactions.widget.ReactionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" /-->
+
+        </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/messageThreadSummaryContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/informationBottom"
+        android:layout_toStartOf="@id/messageEndGuideline"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:contentDescription="@string/room_threads_filter">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/messageThreadSummaryConstraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/rounded_rect_shape_8"
+            android:contentDescription="@string/room_threads_filter"
+            android:layoutDirection="locale"
+            android:maxWidth="496dp"
+            android:minWidth="144dp"
+            android:paddingStart="13dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="13dp"
+            android:paddingBottom="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <include layout="@layout/view_thread_room_summary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</merge>

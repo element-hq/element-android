@@ -16,22 +16,17 @@
 
 package im.vector.app.features.onboarding
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
+import android.net.Uri
+import android.os.Parcelable
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
-        val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
-        val asyncResetPassword: Async<Unit> = Uninitialized,
-        val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
-        val asyncRegistration: Async<Unit> = Uninitialized,
+        val isLoading: Boolean = false,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -40,46 +35,73 @@ data class OnboardingViewState(
         @PersistState
         val serverType: ServerType = ServerType.Unknown,
         @PersistState
+        val useCase: FtueUseCase? = null,
+        @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
-        val resetPasswordEmail: String? = null,
-        @PersistState
-        val homeServerUrlFromUser: String? = null,
-
-        // Can be modified after a Wellknown request
-        @PersistState
-        val homeServerUrl: String? = null,
+        val resetState: ResetState = ResetState(),
 
         // For SSO session recovery
         @PersistState
         val deviceId: String? = null,
 
-        // Network result
-        @PersistState
-        val loginMode: LoginMode = LoginMode.Unknown,
-        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        @PersistState
-        val loginModeSupportedTypes: List<String> = emptyList(),
-        val knownCustomHomeServersUrls: List<String> = emptyList()
-) : MavericksState {
+        val knownCustomHomeServersUrls: List<String> = emptyList(),
+        val isForceLoginFallbackEnabled: Boolean = false,
 
-    fun isLoading(): Boolean {
-        return asyncLoginAction is Loading ||
-                asyncHomeServerLoginFlowRequest is Loading ||
-                asyncResetPassword is Loading ||
-                asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading ||
-                // Keep loading when it is success because of the delay to switch to the next Activity
-                asyncLoginAction is Success
-    }
+        @PersistState
+        val registrationState: RegistrationState = RegistrationState(),
 
-    fun isUserLogged(): Boolean {
-        return asyncLoginAction is Success
-    }
-}
+        @PersistState
+        val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
+
+        @PersistState
+        val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
+
+        @PersistState
+        val personalizationState: PersonalizationState = PersonalizationState()
+) : MavericksState
 
 enum class OnboardingFlow {
     SignIn,
     SignUp,
     SignInSignUp
 }
+
+@Parcelize
+data class SelectedHomeserverState(
+        val userFacingUrl: String? = null,
+        val upstreamUrl: String? = null,
+        val preferredLoginMode: LoginMode = LoginMode.Unknown,
+        val supportedLoginTypes: List<String> = emptyList(),
+        val isLogoutDevicesSupported: Boolean = false,
+) : Parcelable
+
+@Parcelize
+data class PersonalizationState(
+        val supportsChangingDisplayName: Boolean = false,
+        val supportsChangingProfilePicture: Boolean = false,
+        val displayName: String? = null,
+        val selectedPictureUri: Uri? = null
+) : Parcelable {
+
+    fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
+}
+
+@Parcelize
+data class ResetState(
+        val email: String? = null,
+        val newPassword: String? = null,
+        val supportsLogoutAllDevices: Boolean = false
+) : Parcelable
+
+@Parcelize
+data class SelectedAuthenticationState(
+        val description: AuthenticationDescription? = null,
+) : Parcelable
+
+@Parcelize
+data class RegistrationState(
+        val email: String? = null,
+        val isUserNameAvailable: Boolean = false,
+        val selectedMatrixId: String? = null,
+) : Parcelable

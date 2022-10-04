@@ -28,13 +28,14 @@ import im.vector.app.core.ui.views.toDrawableRes
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider) :
+        private val colorProvider: ColorProvider
+) :
         TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
@@ -42,7 +43,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
     override fun buildModels(data: DeviceVerificationInfoBottomSheetViewState?) {
         val cryptoDeviceInfo = data?.cryptoDeviceInfo?.invoke()
         when {
-            cryptoDeviceInfo != null           -> {
+            cryptoDeviceInfo != null -> {
                 // It's a E2E capable device
                 handleE2ECapableDevice(data, cryptoDeviceInfo)
             }
@@ -50,7 +51,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 // It's a non E2E capable device
                 handleNonE2EDevice(data)
             }
-            else                               -> {
+            else -> {
                 loadingItem {
                     id("loading")
                 }
@@ -99,9 +100,22 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(host.stringProvider.getString(R.string.crosssigning_verify_this_session).toEpoxyCharSequence())
-                    description(host.stringProvider
-                            .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
-                            .toEpoxyCharSequence()
+                    description(
+                            host.stringProvider
+                                    .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
+                                    .toEpoxyCharSequence()
+                    )
+                }
+            } else {
+                genericItem {
+                    id("reset${cryptoDeviceInfo.deviceId}")
+                    style(ItemStyle.BIG_TEXT)
+                    titleIconResourceId(shield)
+                    title(host.stringProvider.getString(R.string.crosssigning_cannot_verify_this_session).toEpoxyCharSequence())
+                    description(
+                            host.stringProvider
+                                    .getString(R.string.crosssigning_cannot_verify_this_session_desc)
+                                    .toEpoxyCharSequence()
                     )
                 }
             }
@@ -139,22 +153,42 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
         }
 
-        if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
-            // Add complete security
-            bottomSheetDividerItem {
-                id("completeSecurityDiv")
-            }
-            bottomSheetVerificationActionItem {
-                id("completeSecurity")
-                title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                listener {
-                    host.callback?.onAction(DevicesAction.CompleteSecurity)
+        if (isMine) {
+            if (!currentSessionIsTrusted) {
+                if (data.canVerifySession) {
+                    // Add complete security
+                    bottomSheetDividerItem {
+                        id("completeSecurityDiv")
+                    }
+                    bottomSheetVerificationActionItem {
+                        id("completeSecurity")
+                        title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
+                        titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        listener {
+                            host.callback?.onAction(DevicesAction.CompleteSecurity)
+                        }
+                    }
+                } else {
+                    bottomSheetDividerItem {
+                        id("resetSecurityDiv")
+                    }
+                    bottomSheetVerificationActionItem {
+                        id("resetSecurity")
+                        title(host.stringProvider.getString(R.string.secure_backup_reset_all))
+                        titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        listener {
+                            host.callback?.onAction(DevicesAction.ResetSecurity)
+                        }
+                    }
                 }
             }
-        } else if (!isMine) {
+        } else
+        /** if (!isMine) **/
+        {
             if (currentSessionIsTrusted) {
                 // we can propose to verify it
                 val isVerified = cryptoDeviceInfo.trustLevel?.crossSigningVerified.orFalse()

@@ -16,7 +16,9 @@
 
 package im.vector.app.features
 
-import im.vector.app.BuildConfig
+import im.vector.app.config.Config
+import im.vector.app.config.OnboardingVariant
+import im.vector.app.features.settings.VectorPreferences
 
 interface VectorFeatures {
 
@@ -24,17 +26,37 @@ interface VectorFeatures {
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
     fun isOnboardingUseCaseEnabled(): Boolean
+    fun isOnboardingPersonalizeEnabled(): Boolean
+    fun isOnboardingCombinedRegisterEnabled(): Boolean
+    fun isOnboardingCombinedLoginEnabled(): Boolean
+    fun allowExternalUnifiedPushDistributors(): Boolean
+    fun isScreenSharingEnabled(): Boolean
+    fun isLocationSharingEnabled(): Boolean
+    fun forceUsageOfOpusEncoder(): Boolean
 
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
-    }
+    /**
+     * This is only to enable if the labs flag should be visible and effective.
+     * If on the client-side you want functionality that should be enabled with the new layout,
+     * use [VectorPreferences.isNewAppLayoutEnabled] instead.
+     */
+    fun isNewAppLayoutFeatureEnabled(): Boolean
+    fun isNewDeviceManagementEnabled(): Boolean
+    fun isVoiceBroadcastEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+    override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
-    override fun isOnboardingUseCaseEnabled() = false
+    override fun isOnboardingUseCaseEnabled() = true
+    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingCombinedRegisterEnabled() = true
+    override fun isOnboardingCombinedLoginEnabled() = true
+    override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
+    override fun isScreenSharingEnabled(): Boolean = true
+    override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
+    override fun forceUsageOfOpusEncoder(): Boolean = false
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = true
+    override fun isNewDeviceManagementEnabled(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = false
 }

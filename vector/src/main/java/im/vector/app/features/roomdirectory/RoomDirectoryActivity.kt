@@ -28,7 +28,8 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
@@ -51,7 +52,7 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.RoomDirectory
+        analyticsScreenName = MobileScreen.ScreenName.RoomDirectory
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
@@ -62,8 +63,8 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        is RoomDirectorySharedAction.Back           -> popBackstack()
-                        is RoomDirectorySharedAction.CreateRoom     -> {
+                        is RoomDirectorySharedAction.Back -> popBackstack()
+                        is RoomDirectorySharedAction.CreateRoom -> {
                             // Transmit the filter to the CreateRoomFragment
                             withState(roomDirectoryViewModel) {
                                 addFragmentToBackstack(
@@ -75,7 +76,8 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
                         }
                         is RoomDirectorySharedAction.ChangeProtocol ->
                             addFragmentToBackstack(views.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
-                        is RoomDirectorySharedAction.Close          -> finish()
+                        is RoomDirectorySharedAction.Close -> finish()
+                        is RoomDirectorySharedAction.CreateRoomSuccess -> Unit
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -87,8 +89,8 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

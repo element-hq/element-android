@@ -22,19 +22,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.BottomSheetGenericListBinding
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
-class DeviceListFragment @Inject constructor(
-        val dimensionConverter: DimensionConverter,
-        val epoxyController: DeviceListEpoxyController
-) : VectorBaseFragment<BottomSheetGenericListBinding>(),
+@AndroidEntryPoint
+class DeviceListFragment :
+        VectorBaseFragment<BottomSheetGenericListBinding>(),
         DeviceListEpoxyController.InteractionListener {
+
+    @Inject lateinit var dimensionConverter: DimensionConverter
+    @Inject lateinit var epoxyController: DeviceListEpoxyController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
         return BottomSheetGenericListBinding.inflate(inflater, container, false)

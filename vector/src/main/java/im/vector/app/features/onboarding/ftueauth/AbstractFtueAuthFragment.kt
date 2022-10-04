@@ -26,7 +26,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.onboarding.OnboardingAction
@@ -34,12 +33,9 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.CancellationException
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
-import javax.net.ssl.HttpsURLConnection
 
 /**
- * Parent Fragment for all the login/registration screens
+ * Parent Fragment for all the login/registration screens.
  */
 abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 
@@ -49,6 +45,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     // Due to async, we keep a boolean to avoid displaying twice the cancellation dialog
     private var displayCancelDialog = true
+    protected open fun backIsHardExit() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,10 +67,11 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
-            else                            ->
+            is OnboardingViewEvents.UnrecognisedCertificateFailure -> showUnrecognizedCertificateFailure(viewEvents)
+            else ->
                 // This is handled by the Activity
                 Unit
-        }.exhaustive
+        }
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -83,36 +81,23 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError                    ->
-                if (throwable.error.code == MatrixError.M_FORBIDDEN &&
-                        throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
-                    MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(getString(R.string.login_registration_disabled))
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
-                } else {
-                    onError(throwable)
-                }
-            is Failure.UnrecognizedCertificateFailure ->
-                showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
-                onError(throwable)
+            else -> onError(throwable)
         }
     }
 
-    private fun showUnrecognizedCertificateFailure(failure: Failure.UnrecognizedCertificateFailure) {
+    private fun showUnrecognizedCertificateFailure(event: OnboardingViewEvents.UnrecognisedCertificateFailure) {
         // Ask the user to accept the certificate
+        val cause = event.cause
         unrecognizedCertificateDialog.show(requireActivity(),
-                failure.fingerprint,
-                failure.url,
+                cause.fingerprint,
+                cause.url,
                 object : UnrecognizedCertificateDialog.Callback {
                     override fun onAccept() {
                         // User accept the certificate
-                        viewModel.handle(OnboardingAction.UserAcceptCertificate(failure.fingerprint))
+                        viewModel.handle(OnboardingAction.UserAcceptCertificate(cause.fingerprint, event.retryAction))
                     }
 
                     override fun onIgnore() {
@@ -131,7 +116,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            displayCancelDialog && viewModel.isRegistrationStarted -> {
+            displayCancelDialog && viewModel.isRegistrationStarted && backIsHardExit() -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)
@@ -145,7 +130,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted          -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -159,7 +144,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
                 true
             }
-            else                                                   -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false
@@ -169,7 +154,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
 
     final override fun invalidate() = withState(viewModel) { state ->
         // True when email is sent with success to the homeserver
-        isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
+        isResetPasswordStarted = state.resetState.email.isNullOrBlank().not()
 
         updateWithState(state)
     }

@@ -40,12 +40,14 @@ internal data class MessageVerificationAcceptContent(
 
     companion object : VerificationInfoAcceptFactory {
 
-        override fun create(tid: String,
-                            keyAgreementProtocol: String,
-                            hash: String,
-                            commitment: String,
-                            messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
+        override fun create(
+                tid: String,
+                keyAgreementProtocol: String,
+                hash: String,
+                commitment: String,
+                messageAuthenticationCode: String,
+                shortAuthenticationStrings: List<String>
+        ): VerificationInfoAccept {
             return MessageVerificationAcceptContent(
                     hash,
                     keyAgreementProtocol,

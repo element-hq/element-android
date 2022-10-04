@@ -44,7 +44,8 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
-        context: Context) {
+        context: Context
+) {
 
     // Keep legacy preferences name for compatibility reason
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
@@ -63,7 +64,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         }
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch()
+                .compactOnLaunch(RealmCompactOnLaunch())
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
@@ -71,7 +72,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 }
                 .allowWritesOnUiThread(true)
                 .modules(SessionRealmModule())
-                .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
+                .schemaVersion(realmSessionStoreMigration.schemaVersion)
                 .migration(realmSessionStoreMigration)
                 .build()
 
@@ -92,7 +93,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
             return
         }
 
-        listOf(REALM_NAME, "$REALM_NAME.lock", "$REALM_NAME.note", "$REALM_NAME.management").forEach { file ->
+        listOf(REALM_NAME, "${REALM_NAME}.lock", "${REALM_NAME}.note", "${REALM_NAME}.management").forEach { file ->
             try {
                 File(directory, file).deleteRecursively()
             } catch (e: Exception) {

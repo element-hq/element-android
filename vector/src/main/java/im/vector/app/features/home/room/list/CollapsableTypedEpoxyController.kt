@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.list
 import com.airbnb.epoxy.EpoxyController
 
 abstract class CollapsableTypedEpoxyController<T> :
-    EpoxyController(), CollapsableControllerExtension {
+        EpoxyController(), CollapsableControllerExtension {
 
     private var currentData: T? = null
     private var allowModelBuildRequests = false
@@ -68,7 +68,7 @@ abstract class CollapsableTypedEpoxyController<T> :
     }
 
     override fun buildModels() {
-        check(isBuildingModels()) {
+        check(isBuildingModels) {
             ("You cannot call `buildModels` directly. Call `setData` instead to trigger a model " +
                     "refresh with new data.")
         }

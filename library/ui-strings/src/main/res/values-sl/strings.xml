@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_room_name_hint">Ime</string>
+    <string name="send_bug_report">Prijava hrošča</string>
+    <string name="send_bug_report_include_screenshot">Pošlji ekransko sliko</string>
+    <string name="action_send">Pošlji</string>
+    <string name="notice_room_join_by_you">Pridružil si se v sobi</string>
+    <string name="notice_room_invite_you">%1$s te je povabil</string>
+    <string name="notice_answered_call_by_you">Odgovoril si na klic.</string>
+    <string name="notice_answered_call">%s je odgovoril na klic.</string>
+    <string name="notice_room_name_changed_by_you">Spremenil si ime sobe v: %1$s</string>
+    <string name="notice_room_name_changed">%1$s je spremenil ime sobe v: %2$s</string>
+    <string name="notice_room_reject_by_you">Zavrnil si povabilo</string>
+    <string name="notice_room_reject">%1$s je zavrnil povabilo</string>
+    <string name="notice_direct_room_leave_by_you">Zapustil si sobo</string>
+    <string name="notice_direct_room_leave">%1$s je zapustil sobo</string>
+    <string name="notice_room_leave_by_you">Zapustil si sobo</string>
+    <string name="notice_room_leave">%1$s je zapustil sobo</string>
+    <string name="notice_direct_room_join">%1$s se je pridružil</string>
+    <string name="notice_room_join">%1$s se je pridružil v sobi</string>
+    <string name="notice_room_created_by_you">Ustvaril si sobo</string>
+    <string name="notice_room_created">%1$s je ustvaril sobo</string>
+    <string name="error_no_network">Ni omrežja. Preveri internetno povezavo.</string>
+    <string name="create_new_room">Ustvari novo sobo</string>
+</resources>

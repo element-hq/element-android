@@ -30,12 +30,17 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
+import im.vector.app.features.qrcode.QrCodeScannerEvents
+import im.vector.app.features.qrcode.QrCodeScannerFragment
+import im.vector.app.features.qrcode.QrCodeScannerViewModel
+import im.vector.app.features.qrcode.QrScannerArgs
 import kotlinx.parcelize.Parcelize
 import kotlin.reflect.KClass
 
@@ -44,6 +49,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         MatrixToBottomSheet.InteractionListener {
 
     val sharedViewModel: UserCodeSharedViewModel by viewModel()
+    private val qrViewModel: QrCodeScannerViewModel by viewModel()
 
     @Parcelize
     data class Args(
@@ -81,28 +87,46 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
         sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
-                UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
+                UserCodeState.Mode.SHOW -> showFragment(ShowUserCodeFragment::class)
+                UserCodeState.Mode.SCAN -> {
+                    val args = QrScannerArgs(showExtraButtons = true, R.string.user_code_scan)
+                    showFragment(QrCodeScannerFragment::class, args)
+                }
                 is UserCodeState.Mode.RESULT -> {
-                    showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
+                    showFragment(ShowUserCodeFragment::class)
+                    MatrixToBottomSheet.withLink(mode.rawLink, OriginOfMatrixTo.USER_CODE).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                UserCodeShareViewEvents.Dismiss                       -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen             -> views.simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen             -> views.simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage               -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                is UserCodeShareViewEvents.NavigateToRoom             -> navigator.openRoom(this, it.roomId)
+                UserCodeShareViewEvents.Dismiss -> ActivityCompat.finishAfterTransition(this)
+                UserCodeShareViewEvents.ShowWaitingScreen -> views.simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen -> views.simpleActivityWaitingView.isVisible = false
+                is UserCodeShareViewEvents.ToastMessage -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.NavigateToRoom -> navigator.openRoom(this, it.roomId)
                 is UserCodeShareViewEvents.CameraPermissionNotGranted -> {
                     if (it.deniedPermanently) {
                         onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
                     }
                 }
-                else                                                  -> {
+                else -> {
+                }
+            }
+        }
+
+        qrViewModel.observeViewEvents {
+            when (it) {
+                is QrCodeScannerEvents.CodeParsed -> {
+                    sharedViewModel.handle(UserCodeActions.DecodedQRCode(it.result))
+                }
+                QrCodeScannerEvents.SwitchMode -> {
+                    sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
+                }
+                is QrCodeScannerEvents.ParseFailed -> {
+                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
         }
@@ -113,21 +137,14 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         super.onDestroy()
     }
 
-    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+    private fun showFragment(fragmentClass: KClass<out Fragment>, params: Parcelable? = null) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
-            supportFragmentManager.commitTransaction {
-                setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                replace(views.simpleFragmentContainer.id,
-                        fragmentClass.java,
-                        bundle,
-                        fragmentClass.simpleName
-                )
-            }
+            replaceFragment(views.simpleFragmentContainer, fragmentClass.java, params, fragmentClass.simpleName, useCustomAnimation = true)
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}
@@ -137,7 +154,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             UserCodeState.Mode.SHOW -> super.onBackPressed()
             is UserCodeState.Mode.RESULT,
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
-        }.exhaustive
+        }
     }
 
     companion object {

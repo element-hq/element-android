@@ -16,8 +16,8 @@
 package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import android.util.Base64
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
@@ -27,14 +27,6 @@ internal fun CryptoDeviceInfo.canonicalSignable(): String {
 
 internal fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
-}
-
-fun ByteArray.toBase64NoPadding(): String {
-    return Base64.encodeToString(this, Base64.NO_PADDING or Base64.NO_WRAP)
-}
-
-fun String.fromBase64(): ByteArray {
-    return Base64.decode(this, Base64.DEFAULT)
 }
 
 /**

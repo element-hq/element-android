@@ -24,10 +24,11 @@ import okio.ForwardingSource
 import okio.Source
 import okio.buffer
 
-class ProgressResponseBody(
+internal class ProgressResponseBody(
         private val responseBody: ResponseBody,
         private val chainUrl: String,
-        private val progressListener: ProgressListener) : ResponseBody() {
+        private val progressListener: ProgressListener
+) : ResponseBody() {
 
     private var bufferedSource: BufferedSource? = null
 
@@ -56,7 +57,7 @@ class ProgressResponseBody(
     }
 }
 
-interface ProgressListener {
+internal interface ProgressListener {
     fun update(url: String, bytesRead: Long, contentLength: Long, done: Boolean)
     fun error(url: String, errorCode: Int)
 }

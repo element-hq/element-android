@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -33,14 +34,16 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import javax.inject.Inject
 
-class AccountDataFragment @Inject constructor(
-        private val epoxyController: AccountDataEpoxyController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class AccountDataFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         AccountDataEpoxyController.InteractionListener {
+
+    @Inject lateinit var epoxyController: AccountDataEpoxyController
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -70,7 +73,7 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun didTap(data: UserAccountDataEvent) {
-        val jsonString = MoshiProvider.providesMoshi()
+        val jsonString = MatrixJsonParser.getMoshi()
                 .adapter(UserAccountDataEvent::class.java)
                 .toJson(data)
         JSonViewerDialog.newInstance(

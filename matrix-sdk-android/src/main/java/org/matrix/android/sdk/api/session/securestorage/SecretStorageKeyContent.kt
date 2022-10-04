@@ -51,7 +51,7 @@ data class KeyInfo(
 
 @JsonClass(generateAdapter = true)
 data class SecretStorageKeyContent(
-        /** Currently support m.secret_storage.v1.curve25519-aes-sha2 */
+        /** Currently support m.secret_storage.v1.curve25519-aes-sha2. */
         @Json(name = "algorithm") val algorithm: String? = null,
         @Json(name = "name") val name: String? = null,
         @Json(name = "passphrase") val passphrase: SsssPassphrase? = null,

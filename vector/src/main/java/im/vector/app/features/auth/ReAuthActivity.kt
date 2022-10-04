@@ -196,11 +196,13 @@ class ReAuthActivity : SimpleFragmentActivity() {
         const val RESULT_VALUE = "RESULT_VALUE"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "ReAuthActivity"
 
-        fun newIntent(context: Context,
-                      fromError: RegistrationFlowResponse,
-                      lastErrorCode: String?,
-                      reasonTitle: String?,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newIntent(
+                context: Context,
+                fromError: RegistrationFlowResponse,
+                lastErrorCode: String?,
+                reasonTitle: String?,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             val authType = when (fromError.nextUncompletedStage()) {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
@@ -208,7 +210,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 LoginFlowTypes.SSO -> {
                     LoginFlowTypes.SSO
                 }
-                else                    -> {
+                else -> {
                     // TODO, support more auth type?
                     null
                 }

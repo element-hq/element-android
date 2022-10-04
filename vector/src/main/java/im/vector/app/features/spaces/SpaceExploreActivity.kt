@@ -30,7 +30,9 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
@@ -88,21 +90,27 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceDirectoryViewEvents.Dismiss                      -> {
+                SpaceDirectoryViewEvents.Dismiss -> {
                     finish()
                 }
-                is SpaceDirectoryViewEvents.NavigateToRoom            -> {
-                    navigator.openRoom(this, it.roomId)
+                is SpaceDirectoryViewEvents.NavigateToRoom -> {
+                    navigator.openRoom(
+                            context = this,
+                            roomId = it.roomId,
+                            trigger = ViewRoom.Trigger.SpaceHierarchy
+                    )
                 }
                 is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
-                    MatrixToBottomSheet.withLink(it.link).show(supportFragmentManager, "ShowChild")
+                    MatrixToBottomSheet.withLink(it.link, OriginOfMatrixTo.SPACE_EXPLORE).show(supportFragmentManager, "ShowChild")
                 }
-                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom   -> {
-                    createRoomResultLauncher.launch(CreateRoomActivity.getIntent(
-                            this,
-                            openAfterCreate = false,
-                            currentSpaceId = it.currentSpaceId
-                    ))
+                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom -> {
+                    createRoomResultLauncher.launch(
+                            CreateRoomActivity.getIntent(
+                                    this,
+                                    openAfterCreate = false,
+                                    currentSpaceId = it.currentSpaceId
+                            )
+                    )
                 }
             }
         }
@@ -121,8 +129,8 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

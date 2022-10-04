@@ -18,7 +18,11 @@ package org.matrix.android.sdk.internal.crypto.model
 
 import org.matrix.olm.OlmOutboundGroupSession
 
-data class OutboundGroupSessionWrapper(
+internal data class OutboundGroupSessionWrapper(
         val outboundGroupSession: OlmOutboundGroupSession,
-        val creationTime: Long
+        val creationTime: Long,
+        /**
+         * As per MSC 3061, declares if this key could be shared when inviting a new user to the room.
+         */
+        val sharedHistory: Boolean = false
 )

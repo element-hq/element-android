@@ -29,7 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ViewButtonStateBinding
 
 class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    FrameLayout(context, attrs, defStyle) {
+        FrameLayout(context, attrs, defStyle) {
 
     sealed class State {
         object Button : State()
@@ -62,7 +62,8 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         context.theme.obtainStyledAttributes(
                 attrs,
                 R.styleable.ButtonStateView,
-                0, 0)
+                0, 0
+        )
                 .apply {
                     try {
                         if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {

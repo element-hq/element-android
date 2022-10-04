@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntity
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 
 /**
- * Get the current PreviewUrlCacheEntity, return null if it does not exist
+ * Get the current PreviewUrlCacheEntity, return null if it does not exist.
  */
 internal fun PreviewUrlCacheEntity.Companion.get(realm: Realm, url: String): PreviewUrlCacheEntity? {
     return realm.where<PreviewUrlCacheEntity>()
@@ -32,7 +32,7 @@ internal fun PreviewUrlCacheEntity.Companion.get(realm: Realm, url: String): Pre
 }
 
 /**
- * Get the current PreviewUrlCacheEntity, create one if it does not exist
+ * Get the current PreviewUrlCacheEntity, create one if it does not exist.
  */
 internal fun PreviewUrlCacheEntity.Companion.getOrCreate(realm: Realm, url: String): PreviewUrlCacheEntity {
     return get(realm, url) ?: realm.createObject(url)

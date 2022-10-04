@@ -30,7 +30,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewSpaceTypeButtonBinding
 
 class WizardButtonView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    ConstraintLayout(context, attrs, defStyle) {
+        ConstraintLayout(context, attrs, defStyle) {
 
     private val views: ViewSpaceTypeButtonBinding
 

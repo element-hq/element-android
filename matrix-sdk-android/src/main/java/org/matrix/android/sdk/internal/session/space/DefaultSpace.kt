@@ -40,19 +40,17 @@ internal class DefaultSpace(
 
     override val spaceId = room.roomId
 
-    override suspend fun leave(reason: String?) {
-        return room.leave(reason)
-    }
-
     override fun spaceSummary(): RoomSummary? {
         return spaceSummaryDataSource.getSpaceSummary(room.roomId)
     }
 
-    override suspend fun addChildren(roomId: String,
-                                     viaServers: List<String>?,
-                                     order: String?,
+    override suspend fun addChildren(
+            roomId: String,
+            viaServers: List<String>?,
+            order: String?,
 //                                     autoJoin: Boolean,
-                                     suggested: Boolean?) {
+            suggested: Boolean?
+    ) {
         // Find best via
         val bestVia = viaServers
                 ?: (spaceSummaryDataSource.getRoomSummary(roomId)
@@ -64,7 +62,7 @@ internal class DefaultSpace(
                         }
                         ?: viaParameterFinder.computeViaParams(roomId, 3))
 
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
@@ -83,7 +81,7 @@ internal class DefaultSpace(
 //                return
 
         // edit state event and set via to null
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
@@ -95,19 +93,19 @@ internal class DefaultSpace(
     }
 
     override fun getChildInfo(roomId: String): SpaceChildContent? {
-        return room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+        return room.stateService().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
                 .firstOrNull()
                 ?.content.toModel<SpaceChildContent>()
     }
 
     override suspend fun setChildrenOrder(roomId: String, order: String?) {
-        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+        val existing = room.stateService().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
                 .firstOrNull()
                 ?.content.toModel<SpaceChildContent>()
                 ?: throw IllegalArgumentException("$roomId is not a child of this space")
 
         // edit state event and set via to null
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
@@ -144,7 +142,7 @@ internal class DefaultSpace(
 //    }
 
     override suspend fun setChildrenSuggested(roomId: String, suggested: Boolean) {
-        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+        val existing = room.stateService().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
                 .firstOrNull()
                 ?.content.toModel<SpaceChildContent>()
                 ?: throw IllegalArgumentException("$roomId is not a child of this space")
@@ -154,7 +152,7 @@ internal class DefaultSpace(
             return
         }
         // edit state event and set via to null
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(

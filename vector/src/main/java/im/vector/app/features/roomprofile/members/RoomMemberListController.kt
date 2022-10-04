@@ -117,21 +117,25 @@ class RoomMemberListController @Inject constructor(
         }
     }
 
-    private fun buildRoomMember(roomMember: RoomMemberSummary,
-                                powerLevelCategory: RoomMemberListCategories,
-                                host: RoomMemberListController,
-                                data: RoomMemberListViewState) {
+    private fun buildRoomMember(
+            roomMember: RoomMemberSummary,
+            powerLevelCategory: RoomMemberListCategories,
+            host: RoomMemberListController,
+            data: RoomMemberListViewState
+    ) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
 
         profileMatrixItemWithPowerLevelWithPresence {
             id(roomMember.userId)
             matrixItem(roomMember.toMatrixItem())
             avatarRenderer(host.avatarRenderer)
-            userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+            userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }
+            showPresence(true)
             userPresence(roomMember.userPresence)
+            ignoredUser(roomMember.userId in data.ignoredUserIds)
             powerLevelLabel(
                     span {
                         span(powerLabel) {

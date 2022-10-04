@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_room_to_add_in_space_placeholder)
-abstract class RoomSelectionPlaceHolderItem : VectorEpoxyModel<RoomSelectionPlaceHolderItem.Holder>() {
+@EpoxyModelClass
+abstract class RoomSelectionPlaceHolderItem : VectorEpoxyModel<RoomSelectionPlaceHolderItem.Holder>(R.layout.item_room_to_add_in_space_placeholder) {
     class Holder : VectorEpoxyHolder()
 }

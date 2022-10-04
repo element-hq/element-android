@@ -7,7 +7,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
 <#if createViewEvents>
@@ -42,6 +41,6 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
     override fun handle(action: ${actionClass}) {
         when (action) {
 
-        }.exhaustive
+        }
     }
 }

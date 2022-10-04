@@ -29,10 +29,12 @@ private const val RIOT_BOT_ID = "@riot-bot:matrix.org"
  * This class is the Consent implementation of WebViewEventListener.
  * It is used to manage the consent agreement flow.
  */
-class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
-                                  private val session: Session,
-                                  private val delegate: WebViewEventListener) :
-    WebViewEventListener by delegate {
+class ConsentWebViewEventListener(
+        activity: VectorBaseActivity<*>,
+        private val session: Session,
+        private val delegate: WebViewEventListener
+) :
+        WebViewEventListener by delegate {
 
     private val safeActivity: VectorBaseActivity<*>? by weak(activity)
 
@@ -44,7 +46,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
     }
 
     /**
-     * This methods try to create the RiotBot room when the user gives his agreement
+     * This methods try to create the RiotBot room when the user gives his agreement.
      */
     private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
@@ -72,7 +74,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
     }
 
     /**
-     * APICallback instance
+     * APICallback instance.
      */
     private val createRiotBotRoomCallback = object : MatrixCallback<String> {
         override fun onSuccess(data: String) {

@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerific
 import org.matrix.android.sdk.api.session.crypto.verification.SasMode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
@@ -35,8 +35,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         override val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        secretShareManager: SecretShareManager,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String,
@@ -47,38 +47,39 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
+        outgoingKeyRequestManager,
+        secretShareManager,
         deviceFingerprint,
         transactionId,
         otherUserID,
         null,
-        isIncoming = true),
+        isIncoming = true
+),
         IncomingSasVerificationTransaction {
 
     override val uxState: IncomingSasVerificationTransaction.UxState
         get() {
             return when (val immutableState = state) {
-                is VerificationTxState.OnStarted      -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
+                is VerificationTxState.OnStarted -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
                 is VerificationTxState.SendingAccept,
                 is VerificationTxState.Accepted,
                 is VerificationTxState.OnKeyReceived,
                 is VerificationTxState.SendingKey,
-                is VerificationTxState.KeySent        -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                is VerificationTxState.KeySent -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
                 is VerificationTxState.ShortCodeReady -> IncomingSasVerificationTransaction.UxState.SHOW_SAS
                 is VerificationTxState.ShortCodeAccepted,
                 is VerificationTxState.SendingMac,
                 is VerificationTxState.MacSent,
-                is VerificationTxState.Verifying      -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
-                is VerificationTxState.Verified       -> IncomingSasVerificationTransaction.UxState.VERIFIED
-                is VerificationTxState.Cancelled      -> {
+                is VerificationTxState.Verifying -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                is VerificationTxState.Verified -> IncomingSasVerificationTransaction.UxState.VERIFIED
+                is VerificationTxState.Cancelled -> {
                     if (immutableState.byMe) {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME
                     } else {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
                     }
                 }
-                else                                  -> IncomingSasVerificationTransaction.UxState.UNKNOWN
+                else -> IncomingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 
@@ -231,7 +232,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
                 val sasInfo = "MATRIX_KEY_VERIFICATION_SAS|$otherUserId|$otherDeviceId|$otherKey|$userId|$deviceId|${getSAS().publicKey}|$transactionId"
                 return getSAS().generateShortCode(sasInfo, 6)
             }
-            else             -> {
+            else -> {
                 // Protocol has been checked earlier
                 throw IllegalArgumentException()
             }

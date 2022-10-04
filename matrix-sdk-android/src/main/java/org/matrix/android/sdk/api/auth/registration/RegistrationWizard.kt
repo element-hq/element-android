@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.auth.registration
 
+import org.matrix.android.sdk.api.util.JsonDict
+
 /**
  * Set of methods to be able to create an account on a homeserver.
  *
@@ -52,9 +54,11 @@ interface RegistrationWizard {
      * @param password the desired password
      * @param initialDeviceDisplayName the device display name
      */
-    suspend fun createAccount(userName: String?,
-                              password: String?,
-                              initialDeviceDisplayName: String?): RegistrationResult
+    suspend fun createAccount(
+            userName: String?,
+            password: String?,
+            initialDeviceDisplayName: String?
+    ): RegistrationResult
 
     /**
      * Perform the "m.login.recaptcha" stage.
@@ -72,6 +76,13 @@ interface RegistrationWizard {
      * Perform the "m.login.dummy" stage.
      */
     suspend fun dummy(): RegistrationResult
+
+    /**
+     * Perform custom registration stage by sending a custom JsonDict.
+     * Current registration "session" param will be included into authParams by default.
+     * The authParams should contain at least one entry "type" with a String value.
+     */
+    suspend fun registrationCustom(authParams: JsonDict): RegistrationResult
 
     /**
      * Perform the "m.login.email.identity" or "m.login.msisdn" stage.
@@ -100,14 +111,14 @@ interface RegistrationWizard {
     suspend fun checkIfEmailHasBeenValidated(delayMillis: Long): RegistrationResult
 
     /**
-     * This is the current ThreePid, waiting for validation. The SDK will store it in database, so it can be
+     * Returns the current ThreePid, waiting for validation. The SDK will store it in database, so it can be
      * restored even if the app has been killed during the registration
      */
-    val currentThreePid: String?
+    fun getCurrentThreePid(): String?
 
     /**
-     * True when login and password have been sent with success to the homeserver, i.e. [createAccount] has been
+     * Return true when login and password have been sent with success to the homeserver, i.e. [createAccount] has been
      * called successfully.
      */
-    val isRegistrationStarted: Boolean
+    fun isRegistrationStarted(): Boolean
 }

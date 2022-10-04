@@ -25,21 +25,23 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
-import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
 import javax.inject.Inject
 
 /**
- * Can creates verification conclusion items
+ * Can creates verification conclusion items.
  * Notice that not all KEY_VERIFICATION_DONE will be displayed in timeline,
- * several checks are made to see if this conclusion is attached to a known request
+ * several checks are made to see if this conclusion is attached to a known request.
  */
 class VerificationItemFactory @Inject constructor(
         private val messageColorProvider: MessageColorProvider,
@@ -65,16 +67,16 @@ class VerificationItemFactory @Inject constructor(
                 ?: return ignoredConclusion(params)
 
         // If we cannot find the referenced request we do not display the done event
-        val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimeLineEvent(refEventId)
+        val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimelineEvent(refEventId)
                 ?: return ignoredConclusion(params)
 
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
+        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(event = refEvent))
 
         val informationData = messageInformationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, params.reactionsSummaryEvents)
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
@@ -100,16 +102,17 @@ class VerificationItemFactory @Inject constructor(
                                                 itemClickListener = attributes.itemClickListener,
                                                 itemLongClickListener = attributes.itemLongClickListener,
                                                 reactionPillCallback = attributes.reactionPillCallback,
-                                                readReceiptsCallback = attributes.readReceiptsCallback
+                                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                         )
                                 )
                                 .highlighted(params.isHighlighted)
                                 .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else                     -> return ignoredConclusion(params)
+                    else -> return ignoredConclusion(params)
                 }
             }
-            EventType.KEY_VERIFICATION_DONE   -> {
+            EventType.KEY_VERIFICATION_DONE -> {
                 // Is the request referenced is actually really completed?
                 if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) {
                     return ignoredConclusion(params)
@@ -133,7 +136,8 @@ class VerificationItemFactory @Inject constructor(
                                         itemClickListener = attributes.itemClickListener,
                                         itemLongClickListener = attributes.itemLongClickListener,
                                         reactionPillCallback = attributes.reactionPillCallback,
-                                        readReceiptsCallback = attributes.readReceiptsCallback
+                                        readReceiptsCallback = attributes.readReceiptsCallback,
+                                        reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                 )
                         )
                         .highlighted(params.isHighlighted)

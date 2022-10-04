@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_settings">සැකසුම්</string>
+    <string name="dark_theme">අඳුරු තේමාව</string>
+    <string name="notice_room_invite_no_invitee_by_you">ඔබගේ ආරාධනය</string>
+</resources>

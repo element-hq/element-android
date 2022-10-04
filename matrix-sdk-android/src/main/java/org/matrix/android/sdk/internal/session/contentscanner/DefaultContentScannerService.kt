@@ -23,8 +23,8 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.session.contentscanner.tasks.GetServerPub
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanEncryptedTask
 import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanMediaTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,7 +47,8 @@ internal class DefaultContentScannerService @Inject constructor(
         private val getServerPublicKeyTask: GetServerPublicKeyTask,
         private val scanEncryptedTask: ScanEncryptedTask,
         private val scanMediaTask: ScanMediaTask,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val clock: Clock,
 ) : ContentScannerService {
 
     // Cache public key in memory
@@ -71,11 +73,13 @@ internal class DefaultContentScannerService @Inject constructor(
 
     override suspend fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt?): ScanStatusInfo {
         val result = if (fileInfo != null) {
-            scanEncryptedTask.execute(ScanEncryptedTask.Params(
-                    mxcUrl = mxcUrl,
-                    publicServerKey = getServerPublicKey(false),
-                    encryptedInfo = fileInfo
-            ))
+            scanEncryptedTask.execute(
+                    ScanEncryptedTask.Params(
+                            mxcUrl = mxcUrl,
+                            publicServerKey = getServerPublicKey(false),
+                            encryptedInfo = fileInfo
+                    )
+            )
         } else {
             scanMediaTask.execute(ScanMediaTask.Params(mxcUrl))
         }
@@ -83,7 +87,7 @@ internal class DefaultContentScannerService @Inject constructor(
         return ScanStatusInfo(
                 state = if (result.clean) ScanState.TRUSTED else ScanState.INFECTED,
                 humanReadableMessage = result.info,
-                scanDateTimestamp = System.currentTimeMillis()
+                scanDateTimestamp = clock.epochMillis()
         )
     }
 

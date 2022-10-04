@@ -33,8 +33,8 @@ import im.vector.app.core.extensions.setTextOrHide
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_radio)
-abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioActionItem.Holder>() {
+@EpoxyModelClass
+abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioActionItem.Holder>(R.layout.item_bottom_sheet_radio) {
 
     @EpoxyAttribute
     var title: String? = null

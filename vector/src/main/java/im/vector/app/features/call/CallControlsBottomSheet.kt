@@ -27,12 +27,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
+import im.vector.app.features.VectorFeatures
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
         return BottomSheetCallControlsBinding.inflate(inflater, container, false)
     }
+
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
 
@@ -66,6 +70,12 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()
         }
+
+        views.callControlsShareScreen.isVisible = vectorFeatures.isScreenSharingEnabled()
+        views.callControlsShareScreen.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleScreenSharing)
+            dismiss()
+        }
     }
 
     private fun renderState(state: VectorCallViewState) {
@@ -95,5 +105,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
         views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
+        views.callControlsShareScreen.title = getString(if (state.isSharingScreen) R.string.call_stop_screen_sharing else R.string.call_start_screen_sharing)
     }
 }

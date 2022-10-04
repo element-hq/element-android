@@ -28,7 +28,8 @@ internal open class PreviewUrlCacheEntity(
         var title: String? = null,
         var description: String? = null,
         var mxcUrl: String? = null,
-
+        var imageWidth: Int? = null,
+        var imageHeight: Int? = null,
         var lastUpdatedTimestamp: Long = 0L
 ) : RealmObject() {
 

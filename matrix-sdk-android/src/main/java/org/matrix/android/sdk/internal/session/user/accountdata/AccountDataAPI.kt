@@ -21,17 +21,19 @@ import retrofit2.http.Body
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface AccountDataAPI {
+internal interface AccountDataAPI {
 
     /**
      * Set some account_data for the client.
      *
      * @param userId the user id
-     * @param type   the type
+     * @param type the type
      * @param params the put params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/account_data/{type}")
-    suspend fun setAccountData(@Path("userId") userId: String,
-                               @Path("type") type: String,
-                               @Body params: Any)
+    suspend fun setAccountData(
+            @Path("userId") userId: String,
+            @Path("type") type: String,
+            @Body params: Any
+    )
 }

@@ -16,8 +16,6 @@
 
 package im.vector.app.features.analytics.accountdata
 
-import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,6 +24,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.log.analyticsTag
@@ -37,29 +36,25 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.util.UUID
 
-data class DummyState(
-        val dummy: Boolean = false
-) : MavericksState
-
 class AnalyticsAccountDataViewModel @AssistedInject constructor(
-        @Assisted initialState: DummyState,
+        @Assisted initialState: VectorDummyViewState,
         private val session: Session,
         private val analytics: VectorAnalytics
-) : VectorViewModel<DummyState, EmptyAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<VectorDummyViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private var checkDone: Boolean = false
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<AnalyticsAccountDataViewModel, DummyState> {
-        override fun create(initialState: DummyState): AnalyticsAccountDataViewModel
+    interface Factory : MavericksAssistedViewModelFactory<AnalyticsAccountDataViewModel, VectorDummyViewState> {
+        override fun create(initialState: VectorDummyViewState): AnalyticsAccountDataViewModel
     }
 
-    companion object : MavericksViewModelFactory<AnalyticsAccountDataViewModel, DummyState> by hiltMavericksViewModelFactory() {
+    companion object : MavericksViewModelFactory<AnalyticsAccountDataViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory() {
         private const val ANALYTICS_EVENT_TYPE = "im.vector.analytics"
     }
 
@@ -70,11 +65,11 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun observeInitSync() {
         combine(
-                session.getSyncStatusLive().asFlow(),
+                session.syncService().getSyncRequestStateFlow(),
                 analytics.getUserConsent(),
                 analytics.getAnalyticsId()
         ) { status, userConsent, analyticsId ->
-            if (status is SyncStatusService.Status.IncrementalSyncIdle &&
+            if (status is SyncRequestState.IncrementalSyncIdle &&
                     userConsent &&
                     analyticsId.isEmpty() &&
                     !checkDone) {

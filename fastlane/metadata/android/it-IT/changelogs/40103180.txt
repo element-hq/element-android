@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: invia la tua posizione in qualsiasi stanza. Modifica dei sondaggi.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.18

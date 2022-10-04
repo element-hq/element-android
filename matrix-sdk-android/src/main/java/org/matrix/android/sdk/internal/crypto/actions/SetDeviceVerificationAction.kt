@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.actions
 
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.UserId
@@ -26,7 +26,8 @@ import javax.inject.Inject
 internal class SetDeviceVerificationAction @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         @UserId private val userId: String,
-        private val defaultKeysBackupService: DefaultKeysBackupService) {
+        private val defaultKeysBackupService: DefaultKeysBackupService
+) {
 
     fun handle(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
         val device = cryptoStore.getUserDevice(userId, deviceId)

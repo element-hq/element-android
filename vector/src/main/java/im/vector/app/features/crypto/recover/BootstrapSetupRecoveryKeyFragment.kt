@@ -23,13 +23,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapSetupRecoveryBinding
-import javax.inject.Inject
+import im.vector.app.features.raw.wellknown.SecureBackupMethod
 
-class BootstrapSetupRecoveryKeyFragment @Inject constructor() :
-    VectorBaseFragment<FragmentBootstrapSetupRecoveryBinding>() {
+@AndroidEntryPoint
+class BootstrapSetupRecoveryKeyFragment :
+        VectorBaseFragment<FragmentBootstrapSetupRecoveryBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSetupRecoveryBinding {
         return FragmentBootstrapSetupRecoveryBinding.inflate(inflater, container, false)
@@ -55,27 +57,40 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() :
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        if (state.step is BootstrapStep.FirstForm) {
-            if (state.step.keyBackUpExist) {
-                // Display the set up action
-                views.bootstrapSetupSecureSubmit.isVisible = true
-                views.bootstrapSetupSecureUseSecurityKey.isVisible = false
-                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
-                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
-            } else {
-                if (state.step.reset) {
-                    views.bootstrapSetupSecureText.text = getString(R.string.reset_secure_backup_title)
-                    views.bootstrapSetupWarningTextView.isVisible = true
-                } else {
-                    views.bootstrapSetupSecureText.text = getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
-                    views.bootstrapSetupWarningTextView.isVisible = false
-                }
-                // Choose between create a passphrase or use a recovery key
-                views.bootstrapSetupSecureSubmit.isVisible = false
-                views.bootstrapSetupSecureUseSecurityKey.isVisible = true
-                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
-                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
-            }
+        val firstFormStep = state.step as? BootstrapStep.FirstForm ?: return@withState
+
+        if (firstFormStep.keyBackUpExist) {
+            renderStateWithExistingKeyBackup()
+        } else {
+            renderSetupHeader(needsReset = firstFormStep.reset)
+            views.bootstrapSetupSecureSubmit.isVisible = false
+
+            // Choose between create a passphrase or use a recovery key
+            renderBackupMethodActions(firstFormStep.methods)
         }
+    }
+
+    private fun renderStateWithExistingKeyBackup() = with(views) {
+        // Display the set up action
+        bootstrapSetupSecureSubmit.isVisible = true
+        // Disable creating backup / passphrase options
+        bootstrapSetupSecureUseSecurityKey.isVisible = false
+        bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
+        bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
+    }
+
+    private fun renderSetupHeader(needsReset: Boolean) = with(views) {
+        bootstrapSetupSecureText.text = if (needsReset) {
+            getString(R.string.reset_secure_backup_title)
+        } else {
+            getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
+        }
+        bootstrapSetupWarningTextView.isVisible = needsReset
+    }
+
+    private fun renderBackupMethodActions(method: SecureBackupMethod) = with(views) {
+        bootstrapSetupSecureUseSecurityKey.isVisible = method.isKeyAvailable
+        bootstrapSetupSecureUseSecurityPassphrase.isVisible = method.isPassphraseAvailable
+        bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = method.isPassphraseAvailable
     }
 }

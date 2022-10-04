@@ -21,7 +21,7 @@ import org.commonmark.node.Text
 import org.commonmark.parser.delimiter.DelimiterProcessor
 import org.commonmark.parser.delimiter.DelimiterRun
 
-class DollarMathsDelimiterProcessor : DelimiterProcessor {
+internal class DollarMathsDelimiterProcessor : DelimiterProcessor {
     override fun getOpeningCharacter() = '$'
 
     override fun getClosingCharacter() = '$'

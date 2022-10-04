@@ -43,14 +43,36 @@ import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomLocalAli
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomLocalAliasesTask
+import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomStateEventsTask
+import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomTask
+import org.matrix.android.sdk.internal.session.room.create.CreateRoomFromLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
+import org.matrix.android.sdk.internal.session.room.create.DefaultCreateLocalRoomStateEventsTask
+import org.matrix.android.sdk.internal.session.room.create.DefaultCreateLocalRoomTask
+import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomFromLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomTask
+import org.matrix.android.sdk.internal.session.room.delete.DefaultDeleteLocalRoomTask
+import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
+import org.matrix.android.sdk.internal.session.room.location.CheckIfExistingActiveLiveTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultCheckIfExistingActiveLiveTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultGetActiveBeaconInfoForUserTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultRedactLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultSendLiveLocationTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultSendStaticLocationTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultStartLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.DefaultStopLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.GetActiveBeaconInfoForUserTask
+import org.matrix.android.sdk.internal.session.room.location.RedactLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.SendLiveLocationTask
+import org.matrix.android.sdk.internal.session.room.location.SendStaticLocationTask
+import org.matrix.android.sdk.internal.session.room.location.StartLiveLocationShareTask
+import org.matrix.android.sdk.internal.session.room.location.StopLiveLocationShareTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.DefaultMembershipAdminTask
@@ -77,6 +99,10 @@ import org.matrix.android.sdk.internal.session.room.relation.DefaultUpdateQuickR
 import org.matrix.android.sdk.internal.session.room.relation.FetchEditHistoryTask
 import org.matrix.android.sdk.internal.session.room.relation.FindReactionEventForUndoTask
 import org.matrix.android.sdk.internal.session.room.relation.UpdateQuickReactionTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadSummariesTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadSummariesTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportContentTask
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentTask
 import org.matrix.android.sdk.internal.session.room.state.DefaultSendStateTask
@@ -104,14 +130,14 @@ import retrofit2.Retrofit
 import javax.inject.Qualifier
 
 /**
- * Used to inject the simple commonmark Parser
+ * Used to inject the simple commonmark Parser.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class SimpleCommonmarkParser
 
 /**
- * Used to inject the advanced commonmark Parser
+ * Used to inject the advanced commonmark Parser.
  */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
@@ -187,6 +213,18 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
+
+    @Binds
+    abstract fun bindCreateLocalRoomTask(task: DefaultCreateLocalRoomTask): CreateLocalRoomTask
+
+    @Binds
+    abstract fun bindCreateLocalRoomStateEventsTask(task: DefaultCreateLocalRoomStateEventsTask): CreateLocalRoomStateEventsTask
+
+    @Binds
+    abstract fun bindCreateRoomFromLocalRoomTask(task: DefaultCreateRoomFromLocalRoomTask): CreateRoomFromLocalRoomTask
+
+    @Binds
+    abstract fun bindDeleteLocalRoomTask(task: DefaultDeleteLocalRoomTask): DeleteLocalRoomTask
 
     @Binds
     abstract fun bindGetPublicRoomTask(task: DefaultGetPublicRoomTask): GetPublicRoomTask
@@ -289,4 +327,31 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetRoomSummaryTask(task: DefaultGetRoomSummaryTask): GetRoomSummaryTask
+
+    @Binds
+    abstract fun bindFetchThreadTimelineTask(task: DefaultFetchThreadTimelineTask): FetchThreadTimelineTask
+
+    @Binds
+    abstract fun bindFetchThreadSummariesTask(task: DefaultFetchThreadSummariesTask): FetchThreadSummariesTask
+
+    @Binds
+    abstract fun bindStartLiveLocationShareTask(task: DefaultStartLiveLocationShareTask): StartLiveLocationShareTask
+
+    @Binds
+    abstract fun bindStopLiveLocationShareTask(task: DefaultStopLiveLocationShareTask): StopLiveLocationShareTask
+
+    @Binds
+    abstract fun bindSendStaticLocationTask(task: DefaultSendStaticLocationTask): SendStaticLocationTask
+
+    @Binds
+    abstract fun bindSendLiveLocationTask(task: DefaultSendLiveLocationTask): SendLiveLocationTask
+
+    @Binds
+    abstract fun bindGetActiveBeaconInfoForUserTask(task: DefaultGetActiveBeaconInfoForUserTask): GetActiveBeaconInfoForUserTask
+
+    @Binds
+    abstract fun bindCheckIfExistingActiveLiveTask(task: DefaultCheckIfExistingActiveLiveTask): CheckIfExistingActiveLiveTask
+
+    @Binds
+    abstract fun bindRedactLiveLocationShareTask(task: DefaultRedactLiveLocationShareTask): RedactLiveLocationShareTask
 }

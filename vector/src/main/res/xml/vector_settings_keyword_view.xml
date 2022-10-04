@@ -1,6 +1,0 @@
-<chip
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:chipBackgroundColor="@color/keyword_background_selector"
-    app:closeIconTint="@color/keyword_foreground_selector"
-    />

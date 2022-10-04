@@ -2,22 +2,22 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    tools:parentTag="android.widget.RelativeLayout">
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    tools:parentTag="android.widget.FrameLayout">
 
     <ProgressBar
         android:id="@+id/messageFileProgressbar"
         style="@style/Widget.Vector.ProgressBar.Horizontal.File"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:progress="40" />
+        tools:progress="40" />
 
     <ImageView
         android:id="@+id/messageFileIconView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_centerInParent="true"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
         android:contentDescription="@string/attachment_type_file"
         android:src="@drawable/ic_download"
         app:tint="?vctr_notice_secondary"

@@ -39,8 +39,8 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>() {
+@EpoxyModelClass
+abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>(R.layout.item_timeline_event_base_state) {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes
@@ -50,7 +50,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -60,11 +60,11 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         holder.creatorNameView.text = attributes.userOfInterest.getBestName()
         attributes.avatarRenderer.render(attributes.userOfInterest, holder.creatorAvatarView)
         when (attributes.callStatus) {
-            CallStatus.INVITED  -> renderInvitedStatus(holder)
-            CallStatus.IN_CALL  -> renderInCallStatus(holder)
+            CallStatus.INVITED -> renderInvitedStatus(holder)
+            CallStatus.IN_CALL -> renderInCallStatus(holder)
             CallStatus.REJECTED -> renderRejectedStatus(holder)
-            CallStatus.ENDED    -> renderEndedStatus(holder)
-            CallStatus.MISSED   -> renderMissedStatus(holder)
+            CallStatus.ENDED -> renderEndedStatus(holder)
+            CallStatus.MISSED -> renderMissedStatus(holder)
         }
         renderSendState(holder.view, null, holder.failedToSendIndicator)
     }
@@ -97,11 +97,11 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     private fun renderEndedStatus(holder: Holder) {
         holder.acceptRejectViewGroup.isVisible = false
         when (attributes.callKind) {
-            CallKind.VIDEO      -> {
+            CallKind.VIDEO -> {
                 val endCallStatus = holder.resources.getString(R.string.call_tile_video_call_has_ended, attributes.formattedDuration)
                 holder.statusView.setStatus(endCallStatus)
             }
-            CallKind.AUDIO      -> {
+            CallKind.AUDIO -> {
                 val endCallStatus = holder.resources.getString(R.string.call_tile_voice_call_has_ended, attributes.formattedDuration)
                 holder.statusView.setStatus(endCallStatus)
             }
@@ -148,7 +148,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.LeaveJitsiCall)
                 }
             }
-            attributes.isStillActive                   -> {
+            attributes.isStillActive -> {
                 holder.rejectView.isVisible = true
                 holder.rejectView.setText(R.string.call_notification_hangup)
                 holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
@@ -156,7 +156,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
                 }
             }
-            else                                       -> {
+            else -> {
                 holder.acceptRejectViewGroup.isVisible = false
             }
         }
@@ -169,7 +169,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
 
     private fun renderInvitedStatus(holder: Holder) {
         when {
-            attributes.callKind == CallKind.CONFERENCE                       -> {
+            attributes.callKind == CallKind.CONFERENCE -> {
                 holder.acceptRejectViewGroup.isVisible = true
                 holder.acceptView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.JoinJitsiCall)
@@ -200,7 +200,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
                 }
             }
-            else                                                             -> {
+            else -> {
                 holder.acceptRejectViewGroup.isVisible = false
             }
         }
@@ -212,10 +212,10 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             attributes.informationData.sentByMe -> {
                 holder.statusView.setStatus(R.string.call_ringing)
             }
-            attributes.callKind.isVoiceCall     -> {
+            attributes.callKind.isVoiceCall -> {
                 holder.statusView.setStatus(R.string.call_tile_voice_incoming)
             }
-            else                                -> {
+            else -> {
                 holder.statusView.setStatus(R.string.call_tile_video_incoming)
             }
         }
@@ -246,7 +246,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageCallStub
+        private val STUB_ID = R.id.messageCallStub
     }
 
     data class Attributes(
@@ -263,7 +263,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             override val itemLongClickListener: View.OnLongClickListener? = null,
             override val itemClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
     ) : AbsBaseMessageItem.Attributes
 
     enum class CallKind(@DrawableRes val icon: Int, @StringRes val title: Int) {

@@ -21,7 +21,7 @@ package org.matrix.android.sdk.api.session.room.send
  * REGULAR: draft of a classical message
  * QUOTE: draft of a message which quotes another message
  * EDIT: draft of an edition of a message
- * REPLY: draft of a reply of another message
+ * REPLY: draft of a reply of another message.
  */
 sealed interface UserDraft {
     data class Regular(val content: String) : UserDraft
@@ -33,7 +33,7 @@ sealed interface UserDraft {
     fun isValid(): Boolean {
         return when (this) {
             is Regular -> content.isNotBlank()
-            else       -> true
+            else -> true
         }
     }
 }

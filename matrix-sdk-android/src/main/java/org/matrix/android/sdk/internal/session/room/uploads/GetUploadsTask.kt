@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.uploads
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Sort
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -75,6 +76,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
             monarchy.doWithRealm { realm ->
                 eventsFromRealm = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
                         .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
+                        .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
                         .findAll()
                         .map { it.asDomain() }
                         // Exclude stickers

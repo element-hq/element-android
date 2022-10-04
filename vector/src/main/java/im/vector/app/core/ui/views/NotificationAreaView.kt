@@ -27,7 +27,6 @@ import androidx.core.text.italic
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.error.ResourceLimitErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -38,8 +37,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 
 /**
- * The view used to show some information about the room
- * It does have a unique render method
+ * The view used to show some information about the room.
+ * It does have a unique render method.
  */
 class NotificationAreaView @JvmOverloads constructor(
         context: Context,
@@ -57,7 +56,7 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     /**
-     * This methods is responsible for rendering the view according to the newState
+     * This methods is responsible for rendering the view according to the newState.
      *
      * @param newState the newState representing the view
      */
@@ -70,14 +69,14 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
-            State.Initial                       -> Unit
-            is State.Default                    -> renderDefault()
-            is State.Hidden                     -> renderHidden()
-            is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
-            is State.Tombstone                  -> renderTombstone()
+            State.Initial -> Unit
+            is State.Default -> renderDefault()
+            is State.Hidden -> renderHidden()
+            is State.NoPermissionToPost -> renderNoPermissionToPost()
+            is State.UnsupportedAlgorithm -> renderUnsupportedAlgorithm(newState)
+            is State.Tombstone -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-        }.exhaustive
+        }
     }
 
     // PRIVATE METHODS ****************************************************************************************************************************************
@@ -170,8 +169,8 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     /**
-     * The state representing the view
-     * It can take one state at a time
+     * The state representing the view.
+     * It can take one state at a time.
      */
     sealed class State {
 
@@ -196,7 +195,7 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     /**
-     * An interface to delegate some actions to another object
+     * An interface to delegate some actions to another object.
      */
     interface Delegate {
         fun onTombstoneEventClicked()

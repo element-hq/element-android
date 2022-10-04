@@ -27,10 +27,10 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
+import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -39,11 +39,11 @@ private const val DEFAULT_LONG_POOL_TIMEOUT_SECONDS = 6L
 private const val DEFAULT_DELAY_MILLIS = 30_000L
 
 /**
- * Possible previous worker: None
- * Possible next worker    : None
+ * Possible previous worker: None.
+ * Possible next worker    : None.
  */
 internal class SyncWorker(context: Context, workerParameters: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -58,7 +58,6 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
     ) : SessionWorkerParams
 
     @Inject lateinit var syncTask: SyncTask
-    @Inject lateinit var taskExecutor: TaskExecutor
     @Inject lateinit var workManagerProvider: WorkManagerProvider
 
     override fun injectWith(injector: SessionComponent) {
@@ -113,7 +112,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
      * Will return true if the sync response contains some toDevice events.
      */
     private suspend fun doSync(timeout: Long): Boolean {
-        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline)
+        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline, afterPause = false)
         val syncResponse = syncTask.execute(taskParams)
         return syncResponse.toDevice?.events?.isNotEmpty().orFalse()
     }
@@ -121,9 +120,11 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
     companion object {
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
-        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                  sessionId: String,
-                                  serverTimeoutInSeconds: Long = 0) {
+        fun requireBackgroundSync(
+                workManagerProvider: WorkManagerProvider,
+                sessionId: String,
+                serverTimeoutInSeconds: Long = 0
+        ) {
             val data = WorkerParamsFactory.toData(
                     Params(
                             sessionId = sessionId,
@@ -136,16 +137,19 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInputData(data)
+                    .startChain(true)
                     .build()
             workManagerProvider.workManager
                     .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                        sessionId: String,
-                                        serverTimeoutInSeconds: Long = 0,
-                                        delayInSeconds: Long = 30,
-                                        forceImmediate: Boolean = false) {
+        fun automaticallyBackgroundSync(
+                workManagerProvider: WorkManagerProvider,
+                sessionId: String,
+                serverTimeoutInSeconds: Long = 0,
+                delayInSeconds: Long = 30,
+                forceImmediate: Boolean = false
+        ) {
             val data = WorkerParamsFactory.toData(
                     Params(
                             sessionId = sessionId,

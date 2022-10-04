@@ -26,9 +26,9 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.CoroutineSequencer
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
@@ -54,7 +54,7 @@ private const val MAX_RETRY_COUNT = 3
  */
 @SessionScope
 internal class EventSenderProcessorCoroutine @Inject constructor(
-        private val cryptoService: CryptoService,
+        private val cryptoStore: IMXCryptoStore,
         private val sessionParams: SessionParams,
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
@@ -64,12 +64,12 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     private val waitForNetworkSequencer = SemaphoreCoroutineSequencer()
 
     /**
-     * sequencers use QueuedTask.queueIdentifier as key
+     * sequencers use QueuedTask.queueIdentifier as key.
      */
     private val sequencers = ConcurrentHashMap<String, CoroutineSequencer>()
 
     /**
-     * cancelableBag use QueuedTask.taskIdentifier as key
+     * cancelableBag use QueuedTask.taskIdentifier as key.
      */
     private val cancelableBag = ConcurrentHashMap<String, Cancelable>()
 
@@ -92,7 +92,8 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     }
 
     override fun postEvent(event: Event): Cancelable {
-        return postEvent(event, event.roomId?.let { cryptoService.isRoomEncrypted(it) } ?: false)
+        val shouldEncrypt = event.roomId?.let { cryptoStore.roomWasOnceEncrypted(it) } ?: false
+        return postEvent(event, shouldEncrypt)
     }
 
     override fun postEvent(event: Event, encrypt: Boolean): Cancelable {
@@ -149,13 +150,13 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     canReachServer.set(false)
                     task.markAsFailedOrRetry(exception, 0)
                 }
-                (exception.isLimitExceededError())                                 -> {
+                (exception.isLimitExceededError()) -> {
                     task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
                 }
-                exception is CancellationException                                 -> {
+                exception is CancellationException -> {
                     Timber.v("## $task has been cancelled, try next task")
                 }
-                else                                                               -> {
+                else -> {
                     Timber.v("## un-retryable error for $task, try next task")
                     // this task is in error, check next one?
                     task.onTaskFailed()
@@ -190,7 +191,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
 
     private suspend fun QueuedTask.waitForNetwork() = waitForNetworkSequencer.post {
         while (!canReachServer.get()) {
-            Timber.v("## $this cannot reach server wait ts:${System.currentTimeMillis()}")
+            Timber.v("## $this cannot reach server wait for $$RETRY_WAIT_TIME_MS ms")
             delay(RETRY_WAIT_TIME_MS)
             withContext(Dispatchers.IO) {
                 val hostAvailable = HomeServerAvailabilityChecker(sessionParams).check()

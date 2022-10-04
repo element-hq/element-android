@@ -25,9 +25,9 @@ import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
-interface NetworkConnectivityChecker {
+internal interface NetworkConnectivityChecker {
     /**
-     * Returns true when internet is available
+     * Returns true when internet is available.
      */
     @WorkerThread
     fun hasInternetAccess(forcePing: Boolean): Boolean
@@ -41,10 +41,12 @@ interface NetworkConnectivityChecker {
 }
 
 @SessionScope
-internal class DefaultNetworkConnectivityChecker @Inject constructor(private val homeServerPinger: HomeServerPinger,
-                                                                     private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                                                     private val networkCallbackStrategy: NetworkCallbackStrategy) :
-    NetworkConnectivityChecker {
+internal class DefaultNetworkConnectivityChecker @Inject constructor(
+        private val homeServerPinger: HomeServerPinger,
+        private val backgroundDetectionObserver: BackgroundDetectionObserver,
+        private val networkCallbackStrategy: NetworkCallbackStrategy
+) :
+        NetworkConnectivityChecker {
 
     private val hasInternetAccess = AtomicBoolean(true)
     private val listeners = Collections.synchronizedSet(LinkedHashSet<NetworkConnectivityChecker.Listener>())
@@ -59,7 +61,7 @@ internal class DefaultNetworkConnectivityChecker @Inject constructor(private val
     }
 
     /**
-     * Returns true when internet is available
+     * Returns true when internet is available.
      */
     @WorkerThread
     override fun hasInternetAccess(forcePing: Boolean): Boolean {

@@ -16,13 +16,11 @@
 package org.matrix.android.sdk.api.session.room.model
 
 data class PollResponseAggregatedSummary(
-
-        var aggregatedContent: PollSummaryContent? = null,
-
+        val aggregatedContent: PollSummaryContent? = null,
         // If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
-        var closedTime: Long? = null,
+        val closedTime: Long? = null,
         // Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
-        var nbOptions: Int = 0,
+        val nbOptions: Int = 0,
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         val sourceEvents: List<String>,
         val localEchos: List<String>

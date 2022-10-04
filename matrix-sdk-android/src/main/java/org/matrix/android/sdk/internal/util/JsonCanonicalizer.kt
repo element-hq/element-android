@@ -28,7 +28,7 @@ import java.util.TreeSet
  * Build canonical Json
  * Doc: https://matrix.org/docs/spec/appendices.html#canonical-json
  */
-object JsonCanonicalizer {
+internal object JsonCanonicalizer {
 
     fun <T> getCanonicalJson(type: Class<T>, o: T): String {
         val adapter = MoshiProvider.providesMoshi().adapter<T>(type)
@@ -51,14 +51,14 @@ object JsonCanonicalizer {
     }
 
     /**
-     * Canonicalize a JSON element
+     * Canonicalize a JSON element.
      *
-     * @param src the src
+     * @param any the src
      * @return the canonicalize element
      */
     private fun canonicalizeRecursive(any: Any): String {
         when (any) {
-            is JSONArray  -> {
+            is JSONArray -> {
                 // Canonicalize each element of the array
                 return (0 until any.length()).joinToString(separator = ",", prefix = "[", postfix = "]") {
                     canonicalizeRecursive(any.get(it))
@@ -88,8 +88,8 @@ object JsonCanonicalizer {
                     append("}")
                 }
             }
-            is String     -> return JSONObject.quote(any)
-            else          -> return any.toString()
+            is String -> return JSONObject.quote(any)
+            else -> return any.toString()
         }
     }
 }

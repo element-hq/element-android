@@ -22,7 +22,6 @@ import java.security.InvalidParameterException
 
 /**
  * Example:
- *
  * <code>
  *     {
  *      "pushers": [
@@ -40,6 +39,7 @@ import java.security.InvalidParameterException
  *      }]
  *  }
  * </code>
+ * .
  */
 @JsonClass(generateAdapter = true)
 internal data class JsonPusher(

@@ -29,14 +29,15 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
@@ -47,7 +48,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val createSpaceViewModelTask: CreateSpaceViewModelTask,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<CreateSpaceState, CreateSpaceAction, CreateSpaceEvents>(initialState) {
 
     private val identityService = session.identityService()
@@ -67,7 +69,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
         val identityServerUrl = identityService.getCurrentIdentityServerUrl()
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain(),
+                    homeServerName = session.myUserId.getServerName(),
                     canInviteByMail = identityServerUrl != null
             )
         }
@@ -106,7 +108,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateSpaceAction) {
         when (action) {
-            is CreateSpaceAction.SetRoomType              -> {
+            is CreateSpaceAction.SetRoomType -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.SetDetails,
@@ -115,7 +117,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
             }
-            is CreateSpaceAction.NameChanged              -> {
+            is CreateSpaceAction.NameChanged -> {
                 setState {
                     if (aliasManuallyModified) {
                         copy(
@@ -135,14 +137,14 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is CreateSpaceAction.TopicChanged             -> {
+            is CreateSpaceAction.TopicChanged -> {
                 setState {
                     copy(
                             topic = action.topic
                     )
                 }
             }
-            is CreateSpaceAction.SpaceAliasChanged        -> {
+            is CreateSpaceAction.SpaceAliasChanged -> {
                 // This called only when the alias is change manually
                 // not when programmatically changed via a change on name
                 setState {
@@ -153,19 +155,19 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     )
                 }
             }
-            CreateSpaceAction.OnBackPressed               -> {
+            CreateSpaceAction.OnBackPressed -> {
                 handleBackNavigation()
             }
-            CreateSpaceAction.NextFromDetails             -> {
+            CreateSpaceAction.NextFromDetails -> {
                 handleNextFromDetails()
             }
-            CreateSpaceAction.NextFromDefaultRooms        -> {
+            CreateSpaceAction.NextFromDefaultRooms -> {
                 handleNextFromDefaultRooms()
             }
-            CreateSpaceAction.NextFromAdd3pid             -> {
+            CreateSpaceAction.NextFromAdd3pid -> {
                 handleNextFrom3pid()
             }
-            is CreateSpaceAction.DefaultRoomNameChanged   -> {
+            is CreateSpaceAction.DefaultRoomNameChanged -> {
                 setState {
                     copy(
                             defaultRooms = defaultRooms.orEmpty().toMutableMap().apply {
@@ -186,18 +188,18 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is CreateSpaceAction.SetAvatar                -> {
+            is CreateSpaceAction.SetAvatar -> {
                 setState { copy(avatarUri = action.uri) }
             }
-            is CreateSpaceAction.SetSpaceTopology         -> {
+            is CreateSpaceAction.SetSpaceTopology -> {
                 handleSetTopology(action)
             }
-        }.exhaustive
+        }
     }
 
     private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {
         when (action.topology) {
-            SpaceTopology.JustMe         -> {
+            SpaceTopology.JustMe -> {
                 setState {
                     copy(
                             spaceTopology = SpaceTopology.JustMe,
@@ -220,10 +222,10 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private fun handleBackNavigation() = withState { state ->
         when (state.step) {
-            CreateSpaceState.Step.ChooseType         -> {
+            CreateSpaceState.Step.ChooseType -> {
                 _viewEvents.post(CreateSpaceEvents.Dismiss)
             }
-            CreateSpaceState.Step.SetDetails         -> {
+            CreateSpaceState.Step.SetDetails -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.ChooseType,
@@ -233,7 +235,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChooseType)
             }
-            CreateSpaceState.Step.AddRooms           -> {
+            CreateSpaceState.Step.AddRooms -> {
                 if (state.spaceType == SpaceType.Private && state.spaceTopology == SpaceTopology.MeAndTeammates) {
                     setState {
                         copy(
@@ -251,7 +253,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
                 }
             }
-            CreateSpaceState.Step.ChoosePrivateType  -> {
+            CreateSpaceState.Step.ChoosePrivateType -> {
                 setState {
                     copy(
                             step = CreateSpaceState.Step.SetDetails
@@ -316,8 +318,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 viewModelScope.launch {
                     try {
-                        when (val result = session.checkAliasAvailability(aliasLocalPart)) {
-                            AliasAvailabilityResult.Available       -> {
+                        when (val result = session.roomDirectoryService().checkAliasAvailability(aliasLocalPart)) {
+                            AliasAvailabilityResult.Available -> {
                                 setState {
                                     copy(
                                             step = CreateSpaceState.Step.AddRooms
@@ -351,6 +353,13 @@ class CreateSpaceViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                analyticsTracker.capture(
+                        Interaction(
+                                index = null,
+                                interactionType = null,
+                                name = Interaction.Name.MobileSpaceCreationValidated
+                        )
+                )
                 val alias = if (state.spaceType == SpaceType.Public) {
                     state.aliasLocalPart
                 } else null
@@ -374,7 +383,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                 )
                 when (result) {
-                    is  CreateSpaceTaskResult.Success             -> {
+                    is CreateSpaceTaskResult.Success -> {
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
@@ -386,7 +395,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                                 )
                         )
                     }
-                    is CreateSpaceTaskResult.PartialSuccess      -> {
+                    is CreateSpaceTaskResult.PartialSuccess -> {
                         // XXX what can we do here?
                         setState {
                             copy(creationResult = Success(result.spaceId))

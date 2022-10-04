@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="light_theme">Thema Golau</string>
+    <string name="dark_theme">Thema Tywyll</string>
+    <string name="black_theme">Thema Du</string>
+
+</resources>

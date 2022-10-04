@@ -28,28 +28,31 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 /**
- * Display the list of the user's device
+ * Display the list of the user's device.
  */
-class VectorSettingsDevicesFragment @Inject constructor(
-        private val devicesController: DevicesController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class VectorSettingsDevicesFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DevicesController.Callback {
+
+    @Inject lateinit var devicesController: DevicesController
 
     // used to avoid requesting to enter the password for each deletion
     // Note: Sonar does not like to use password for member name.
@@ -70,27 +73,29 @@ class VectorSettingsDevicesFragment @Inject constructor(
         views.genericRecyclerView.configureWith(devicesController, dividerDrawable = R.drawable.divider_horizontal)
         viewModel.observeViewEvents {
             when (it) {
-                is DevicesViewEvents.Loading            -> showLoading(it.message)
-                is DevicesViewEvents.Failure            -> showFailure(it.throwable)
-                is DevicesViewEvents.RequestReAuth      -> askForReAuthentication(it)
+                is DevicesViewEvents.Loading -> showLoading(it.message)
+                is DevicesViewEvents.Failure -> showFailure(it.throwable)
+                is DevicesViewEvents.RequestReAuth -> askForReAuthentication(it)
                 is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
-                is DevicesViewEvents.ShowVerifyDevice   -> {
+                is DevicesViewEvents.ShowVerifyDevice -> {
                     VerificationBottomSheet.withArgs(
                             roomId = null,
                             otherUserId = it.userId,
                             transactionId = it.transactionId
                     ).show(childFragmentManager, "REQPOP")
                 }
-                is DevicesViewEvents.SelfVerification   -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                is DevicesViewEvents.SelfVerification -> {
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvents.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
                         viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
                     }
                 }
-            }.exhaustive
+                is DevicesViewEvents.PromptResetSecrets -> {
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                }
+            }
         }
     }
 
@@ -118,7 +123,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Display an alert dialog to rename a device
+     * Display an alert dialog to rename a device.
      *
      * @param deviceInfo device info
      */
@@ -143,14 +148,14 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO      -> {
+                LoginFlowTypes.SSO -> {
                     viewModel.handle(DevicesAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(DevicesAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(DevicesAction.ReAuthCancelled)
                 }
             }
@@ -160,13 +165,15 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Launch the re auth activity to get credentials
+     * Launch the re auth activity to get credentials.
      */
     private fun askForReAuthentication(reAuthReq: DevicesViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
+        ReAuthActivity.newIntent(
+                requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)).let { intent ->
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }
@@ -180,7 +187,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
         views.waitingView.root.isVisible = when (unIgnoreRequest) {
             is Loading -> true
-            else       -> false
+            else -> false
         }
     }
 }

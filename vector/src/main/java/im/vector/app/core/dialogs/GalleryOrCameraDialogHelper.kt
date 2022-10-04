@@ -27,6 +27,7 @@ import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper.Listener
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
@@ -45,7 +46,8 @@ import java.io.File
 class GalleryOrCameraDialogHelper(
         // must implement GalleryOrCameraDialogHelper.Listener
         private val fragment: Fragment,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val clock: Clock,
 ) {
     interface Listener {
         fun onImageReady(uri: Uri?)
@@ -91,7 +93,7 @@ class GalleryOrCameraDialogHelper(
     }
 
     private fun startUCrop(image: MultiPickerImageType) {
-        val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${System.currentTimeMillis()}"))
+        val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${clock.epochMillis()}"))
         val uri = image.contentUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(R.string.rotate_and_crop_screen_title))
                 .withAspectRatio(1f, 1f)
@@ -107,10 +109,12 @@ class GalleryOrCameraDialogHelper(
     fun show() {
         MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.attachment_type_dialog_title)
-                .setItems(arrayOf(
-                        fragment.getString(R.string.attachment_type_camera),
-                        fragment.getString(R.string.attachment_type_gallery)
-                )) { _, which ->
+                .setItems(
+                        arrayOf(
+                                fragment.getString(R.string.attachment_type_camera),
+                                fragment.getString(R.string.attachment_type_gallery)
+                        )
+                ) { _, which ->
                     onAvatarTypeSelected(if (which == 0) Type.Camera else Type.Gallery)
                 }
                 .setPositiveButton(R.string.action_cancel, null)
@@ -119,7 +123,7 @@ class GalleryOrCameraDialogHelper(
 
     private fun onAvatarTypeSelected(type: Type) {
         when (type) {
-            Type.Camera  ->
+            Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
                     doOpenCamera()
                 }

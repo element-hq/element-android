@@ -76,7 +76,7 @@ object StringOrderUtils {
     }
 
     fun stringToBase(x: String, alphabet: CharArray): BigInteger {
-        if (x.isEmpty()) throw IllegalArgumentException()
+        require(x.isNotEmpty())
         val len = alphabet.size.toBigInteger()
         var result = BigInteger("0")
         x.reversed().forEachIndexed { index, c ->

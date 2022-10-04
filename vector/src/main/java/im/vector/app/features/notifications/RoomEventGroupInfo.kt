@@ -17,7 +17,7 @@
 package im.vector.app.features.notifications
 
 /**
- * Data class to hold information about a group of notifications for a room
+ * Data class to hold information about a group of notifications for a room.
  */
 data class RoomEventGroupInfo(
         val roomId: String,
@@ -31,4 +31,5 @@ data class RoomEventGroupInfo(
     var shouldBing: Boolean = false
     var customSound: String? = null
     var hasSmartReplyError: Boolean = false
+    var isUpdated: Boolean = false
 }

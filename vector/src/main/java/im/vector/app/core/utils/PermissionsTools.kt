@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 
 // Permissions sets
+val PERMISSIONS_EMPTY = emptyList<String>()
 val PERMISSIONS_FOR_AUDIO_IP_CALL = listOf(Manifest.permission.RECORD_AUDIO)
 val PERMISSIONS_FOR_VIDEO_IP_CALL = listOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
 val PERMISSIONS_FOR_VOICE_MESSAGE = listOf(Manifest.permission.RECORD_AUDIO)
@@ -40,8 +41,8 @@ val PERMISSIONS_FOR_MEMBERS_SEARCH = listOf(Manifest.permission.READ_CONTACTS)
 val PERMISSIONS_FOR_ROOM_AVATAR = listOf(Manifest.permission.CAMERA)
 val PERMISSIONS_FOR_WRITING_FILES = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
-
-val PERMISSIONS_EMPTY = emptyList<String>()
+val PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+val PERMISSIONS_FOR_VOICE_BROADCAST = listOf(Manifest.permission.RECORD_AUDIO)
 
 // This is not ideal to store the value like that, but it works
 private var permissionDialogDisplayed = false
@@ -95,15 +96,17 @@ private fun onPermissionResult(result: Map<String, Boolean>, lambda: (allGranted
  * explain why vector needs the corresponding permission.
  *
  * @param permissionsToBeGranted the permissions to be granted
- * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
+ * @param activity the calling Activity that is requesting the permissions (or fragment parent)
  * @param activityResultLauncher from the calling fragment/Activity that is requesting the permissions
- * @param rationaleMessage       message to be displayed BEFORE requesting for the permission
+ * @param rationaleMessage message to be displayed BEFORE requesting for the permission
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
-fun checkPermissions(permissionsToBeGranted: List<String>,
-                     activity: Activity,
-                     activityResultLauncher: ActivityResultLauncher<Array<String>>,
-                     @StringRes rationaleMessage: Int = 0): Boolean {
+fun checkPermissions(
+        permissionsToBeGranted: List<String>,
+        activity: Activity,
+        activityResultLauncher: ActivityResultLauncher<Array<String>>,
+        @StringRes rationaleMessage: Int = 0
+): Boolean {
     // retrieve the permissions to be granted according to the permission list
     val missingPermissions = permissionsToBeGranted.filter { permission ->
         ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED
@@ -122,6 +125,7 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
                     .setPositiveButton(R.string.ok) { _, _ ->
                         activityResultLauncher.launch(missingPermissions.toTypedArray())
                     }
+                    .setNegativeButton(R.string.action_not_now, null)
                     .show()
         } else {
             // some permissions are not granted, ask permissions
@@ -135,15 +139,17 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
 }
 
 /**
- * To be call after the permission request
+ * To be call after the permission request.
  *
  * @param permissionsToBeGranted the permissions to be granted
- * @param activity               the calling Activity that is requesting the permissions (or fragment parent)
+ * @param activity the calling Activity that is requesting the permissions (or fragment parent)
  *
  * @return true if one of the permission has been denied and the user check the do not ask again checkbox
  */
-private fun permissionsDeniedPermanently(permissionsToBeGranted: List<String>,
-                                         activity: Activity): Boolean {
+private fun permissionsDeniedPermanently(
+        permissionsToBeGranted: List<String>,
+        activity: Activity
+): Boolean {
     return permissionsToBeGranted
             .filter { permission ->
                 ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_DENIED

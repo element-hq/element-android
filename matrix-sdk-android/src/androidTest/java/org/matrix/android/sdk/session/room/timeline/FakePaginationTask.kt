@@ -25,7 +25,7 @@ internal class FakePaginationTask @Inject constructor(private val tokenChunkEven
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
         val fakeEvents = RoomDataHelper.createFakeListOfEvents(30)
-        val tokenChunkEvent = FakeTokenChunkEvent(params.from, Random.nextLong(System.currentTimeMillis()).toString(), fakeEvents)
+        val tokenChunkEvent = FakeTokenChunkEvent(params.from, Random.nextLong().toString(), fakeEvents)
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, params.direction)
     }
 }

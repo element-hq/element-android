@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.homeserver
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.JsonDict
 
 /**
@@ -37,22 +36,48 @@ internal data class GetCapabilitiesResult(
 internal data class Capabilities(
         /**
          * Capability to indicate if the user can change their password.
+         * True if the user can change their password, false otherwise.
          */
         @Json(name = "m.change_password")
-        val changePassword: ChangePassword? = null,
+        val changePassword: BooleanCapability? = null,
 
+        /**
+         * Capability to indicate if the user can change their display name.
+         * True if the user can change their display name, false otherwise.
+         */
+        @Json(name = "m.set_displayname")
+        val changeDisplayName: BooleanCapability? = null,
+
+        /**
+         * Capability to indicate if the user can change their avatar.
+         * True if the user can change their avatar, false otherwise.
+         */
+        @Json(name = "m.set_avatar_url")
+        val changeAvatar: BooleanCapability? = null,
+        /**
+         * Capability to indicate if the user can change add, remove or change 3PID associations.
+         * True if the user can change their 3PID associations, false otherwise.
+         */
+        @Json(name = "m.3pid_changes")
+        val change3pid: BooleanCapability? = null,
         /**
          * This capability describes the default and available room versions a server supports, and at what level of stability.
          * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
          */
         @Json(name = "m.room_versions")
-        val roomVersions: RoomVersions? = null
+        val roomVersions: RoomVersions? = null,
+        /**
+         * Capability to indicate if the server supports MSC3440 Threading.
+         * True if the user can use m.thread relation, false otherwise.
+         */
+        @Json(name = "m.thread")
+        val threads: BooleanCapability? = null
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ChangePassword(
+internal data class BooleanCapability(
         /**
-         * Required. True if the user can change their password, false otherwise.
+         * Required.
          */
         @Json(name = "enabled")
         val enabled: Boolean?
@@ -73,6 +98,8 @@ internal data class RoomVersions(
         val available: JsonDict? = null,
 
         /**
+         * Example:
+         * <pre>
          *  "room_capabilities": {
          *      "knock" : {
          *              "preferred": "7",
@@ -83,12 +110,8 @@ internal data class RoomVersions(
          *              "support" : ["8", "9"]
          *      }
          * }
+         * </pre>.
          */
         @Json(name = "org.matrix.msc3244.room_capabilities")
         val roomCapabilities: JsonDict? = null
 )
-
-// The spec says: If not present, the client should assume that password changes are possible via the API
-internal fun GetCapabilitiesResult.canChangePassword(): Boolean {
-    return capabilities?.changePassword?.enabled.orTrue()
-}

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="200dp"
-        android:padding="16dp"
+        android:padding="@dimen/layout_horizontal_margin"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -19,11 +19,9 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:importantForAccessibility="no"
             android:elevation="4dp"
+            android:importantForAccessibility="no"
             android:transitionName="profile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@sample/room_round_avatars" />
@@ -31,21 +29,23 @@
         <TextView
             android:id="@+id/matrixToCardNameText"
             style="@style/Widget.Vector.TextView.Subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/matrixToCardAvatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/matrixToCardAvatar"
+            app:layout_constraintTop_toTopOf="@id/matrixToCardAvatar"
             tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/matrixToCardAliasText"
             style="@style/Widget.Vector.TextView.Body"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:maxLines="1"
@@ -53,6 +53,8 @@
             android:textAlignment="textStart"
             android:textColor="?vctr_content_secondary"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/matrixToCardNameText"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
             app:layout_goneMarginTop="0dp"
             tools:text="@sample/rooms.json/data/alias"
@@ -65,7 +67,7 @@
             android:importantForAccessibility="no"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/matrixToAccessText"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/matrixToCardNameText"
             app:layout_constraintTop_toTopOf="@id/matrixToAccessText"
             app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix"
@@ -75,7 +77,7 @@
         <TextView
             android:id="@+id/matrixToAccessText"
             style="@style/Widget.Vector.TextView.Body"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -88,6 +90,13 @@
             app:layout_goneMarginTop="0dp"
             tools:text="Public Space"
             tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/matrixToHeaderBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="matrixToAccessText, matrixToCardAvatar" />
 
         <LinearLayout
             android:id="@+id/matrixToMemberPills"
@@ -105,7 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/matrixToAccessText">
+            app:layout_constraintTop_toBottomOf="@id/matrixToHeaderBarrier">
 
             <ImageView
                 android:id="@+id/spaceChildMemberCountIcon"

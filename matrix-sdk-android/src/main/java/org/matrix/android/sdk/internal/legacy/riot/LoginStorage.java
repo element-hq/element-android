@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.legacy.riot;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -28,11 +29,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * Stores login credentials in SharedPreferences.
  */
 public class LoginStorage {
@@ -196,6 +195,7 @@ public class LoginStorage {
     /**
      * Clear the stored values
      */
+    @SuppressLint("ApplySharedPref")
     public void clear() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

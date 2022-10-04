@@ -25,9 +25,9 @@ interface LiveEventListener {
 
     fun onPaginatedEvent(roomId: String, event: Event)
 
-    fun onEventDecrypted(eventId: String, roomId: String, clearEvent: JsonDict)
+    fun onEventDecrypted(event: Event, clearEvent: JsonDict)
 
-    fun onEventDecryptionError(eventId: String, roomId: String, throwable: Throwable)
+    fun onEventDecryptionError(event: Event, throwable: Throwable)
 
     fun onLiveToDeviceEvent(event: Event)
 

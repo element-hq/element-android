@@ -25,21 +25,23 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentReviewTermsBinding
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
-class ReviewTermsFragment @Inject constructor(
-        private val termsController: TermsController
-) : VectorBaseFragment<FragmentReviewTermsBinding>(),
+@AndroidEntryPoint
+class ReviewTermsFragment :
+        VectorBaseFragment<FragmentReviewTermsBinding>(),
         TermsController.Listener {
+
+    @Inject lateinit var termsController: TermsController
 
     private val reviewTermsViewModel: ReviewTermsViewModel by activityViewModel()
 
@@ -51,7 +53,7 @@ class ReviewTermsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         termsController.description = when (reviewTermsViewModel.termsArgs.type) {
-            TermsService.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsService.ServiceType.IdentityService -> getString(R.string.terms_description_for_identity_server)
             TermsService.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
         }
 
@@ -67,10 +69,10 @@ class ReviewTermsFragment @Inject constructor(
                 is ReviewTermsViewEvents.Failure -> {
                     // Dialog is displayed by the Activity
                 }
-                ReviewTermsViewEvents.Success    -> {
+                ReviewTermsViewEvents.Success -> {
                     // Handled by the Activity
                 }
-            }.exhaustive
+            }
         }
 
         reviewTermsViewModel.handle(ReviewTermsAction.LoadTerms(getString(R.string.resources_language)))
@@ -98,7 +100,7 @@ class ReviewTermsFragment @Inject constructor(
                 views.reviewTermsBottomBar.isVisible = true
                 views.reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 

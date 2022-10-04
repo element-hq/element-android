@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.MatrixUrls.removeMxcPrefix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
 import org.matrix.android.sdk.internal.session.contentscanner.model.toJson
@@ -80,9 +80,11 @@ internal class DefaultContentUrlResolver @Inject constructor(
                 }
     }
 
-    private fun resolve(contentUrl: String,
-                        toThumbnail: Boolean,
-                        params: String = ""): String {
+    private fun resolve(
+            contentUrl: String,
+            toThumbnail: Boolean,
+            params: String = ""
+    ): String {
         var serverAndMediaId = contentUrl.removeMxcPrefix()
 
         val apiPath = if (scannerService.isScannerEnabled()) {

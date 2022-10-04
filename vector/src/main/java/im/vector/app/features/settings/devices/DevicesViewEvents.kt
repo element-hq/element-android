@@ -20,16 +20,16 @@ package im.vector.app.features.settings.devices
 import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 /**
- * Transient events for Ignored users screen
+ * Transient events for Ignored users screen.
  */
 sealed class DevicesViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : DevicesViewEvents()
 
-//    object HideLoading : DevicesViewEvents()
+    //    object HideLoading : DevicesViewEvents()
     data class Failure(val throwable: Throwable) : DevicesViewEvents()
 
 //    object RequestPassword : DevicesViewEvents()
@@ -48,4 +48,6 @@ sealed class DevicesViewEvents : VectorViewEvents {
     ) : DevicesViewEvents()
 
     data class ShowManuallyVerify(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesViewEvents()
+
+    object PromptResetSecrets : DevicesViewEvents()
 }

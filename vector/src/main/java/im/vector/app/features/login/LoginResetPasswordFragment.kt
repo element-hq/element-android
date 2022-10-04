@@ -23,32 +23,33 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for email and new password to reset his password
+ * In this screen, the user is asked for email and new password to reset his password.
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
+@AndroidEntryPoint
+class LoginResetPasswordFragment :
+        AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     // Show warning only once
     private var showWarning = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        analyticsScreenName = Screen.ScreenName.ForgotPassword
+        analyticsScreenName = MobileScreen.ScreenName.ForgotPassword
         super.onCreate(savedInstanceState)
     }
 
@@ -126,10 +127,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 // Ensure new password is hidden
                 views.passwordField.hidePassword()
             }
-            is Fail    -> {
+            is Fail -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            is Success -> Unit
+            else -> Unit
         }
     }
 }

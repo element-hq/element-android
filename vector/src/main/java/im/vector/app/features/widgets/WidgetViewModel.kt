@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -47,11 +48,13 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
-class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
-                                                  widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
-                                                  private val stringProvider: StringProvider,
-                                                  private val session: Session) :
-    VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+class WidgetViewModel @AssistedInject constructor(
+        @Assisted val initialState: WidgetViewState,
+        widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) :
+        VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 
@@ -108,7 +111,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         if (room == null) {
             return
         }
-        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
@@ -137,14 +140,19 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingError -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
-            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.DeleteWidget               -> handleDeleteWidget()
-            WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.OnWebViewStartedToLoad -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.DeleteWidget -> handleDeleteWidget()
+            WidgetAction.RevokeWidget -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.CloseWidget -> handleCloseWidget()
         }
+    }
+
+    private fun handleCloseWidget() {
+        _viewEvents.post(WidgetViewEvents.Close())
     }
 
     private fun handleRevokeWidget() {

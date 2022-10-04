@@ -25,8 +25,10 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class IgnoredUsersController @Inject constructor(private val stringProvider: StringProvider,
-                                                 private val avatarRenderer: AvatarRenderer) : EpoxyController() {
+class IgnoredUsersController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer
+) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: IgnoredUsersViewState? = null

@@ -32,6 +32,15 @@ mv ./fastlane/metadata/android/nb  ./fastlane_tmp
 # Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default
 # one for languages where they are missing
 echo "Copying default description when missing"
+if [[ -f "./fastlane/metadata/android/nl-NL/full_description.txt" ]]; then
+  echo "It appears that file ./fastlane/metadata/android/nl-NL/full_description.txt now exists. This can be removed."
+  removeFullDes_nl=0
+else
+  echo "Copy default full description to ./fastlane/metadata/android/nl-NL"
+  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/nl-NL
+  removeFullDes_nl=1
+fi
+
 if [[ -f "./fastlane/metadata/android/ro/full_description.txt" ]]; then
   echo "It appears that file ./fastlane/metadata/android/ro/full_description.txt now exists. This can be removed."
   removeFullDes_ro=0
@@ -77,6 +86,10 @@ mv ./fastlane_tmp/* ./fastlane/metadata/android/
 
 # Delete the tmp folder (should be empty)
 rmdir ./fastlane_tmp
+
+if [[ ${removeFullDes_nl} -eq 1 ]]; then
+  rm ./fastlane/metadata/android/nl-NL/full_description.txt
+fi
 
 if [[ ${removeFullDes_ro} -eq 1 ]]; then
   rm ./fastlane/metadata/android/ro/full_description.txt

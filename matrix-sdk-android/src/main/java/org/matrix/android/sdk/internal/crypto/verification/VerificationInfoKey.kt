@@ -20,7 +20,7 @@ package org.matrix.android.sdk.internal.crypto.verification
  */
 internal interface VerificationInfoKey : VerificationInfo<ValidVerificationInfoKey> {
     /**
-     * The device’s ephemeral public key, as an unpadded base64 string
+     * The device’s ephemeral public key, as an unpadded base64 string.
      */
     val key: String?
 

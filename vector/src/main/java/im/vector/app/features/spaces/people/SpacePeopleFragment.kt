@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -27,13 +28,12 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
@@ -44,12 +44,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpacePeopleFragment @Inject constructor(
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider,
-        private val epoxyController: SpacePeopleListController
-) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        OnBackPressed, SpacePeopleListController.InteractionListener {
+@AndroidEntryPoint
+class SpacePeopleFragment :
+        VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
+        OnBackPressed,
+        SpacePeopleListController.InteractionListener {
+
+    @Inject lateinit var epoxyController: SpacePeopleListController
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
     private val membersViewModel by fragmentViewModel(RoomMemberListViewModel::class)
@@ -64,6 +65,7 @@ class SpacePeopleFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->
+        views.progressBar.isGone = memberListState.areAllMembersLoaded
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
 
         toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
@@ -92,7 +94,7 @@ class SpacePeopleFragment @Inject constructor(
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,
-                is Fail    -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
+                is Fail -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
                 is Success -> {
                     // don't hide on success, it will navigate out. If not the loading goes out before navigation
                 }
@@ -123,7 +125,7 @@ class SpacePeopleFragment @Inject constructor(
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {
         when (events) {
-            is SpacePeopleViewEvents.OpenRoom      -> {
+            is SpacePeopleViewEvents.OpenRoom -> {
                 sharedActionViewModel.post(SpacePeopleSharedAction.NavigateToRoom(events.roomId))
             }
             is SpacePeopleViewEvents.InviteToSpace -> {

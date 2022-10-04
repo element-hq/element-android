@@ -57,8 +57,9 @@ body:
     id: homeserver
     attributes:
       label: Homeserver
-      description: Which server is your account registered on?
-      placeholder: e.g. matrix.org
+      description: |
+        Which server is your account registered on? If it is a local or non-public homeserver, please tell us what is the homeserver implementation (ex: Synapse/Dendrite/etc.) and the version.
+      placeholder: e.g. matrix.org or Synapse 1.50.0rc1
     validations:
       required: false
   - type: dropdown
@@ -67,6 +68,17 @@ body:
       label: Will you send logs?
       description:  |
         Did you know that you can shake your phone to submit logs for this issue? Trigger the defect, then shake your phone and you will see a popup asking if you would like to open the bug report screen. Click YES, and describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Are you willing to provide a PR?
+      description:  |
+        Providing a PR can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
       options:
         - 'Yes'
         - 'No'

@@ -35,7 +35,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/encryption_information_device_id"
+            android:title="@string/device_manager_session_details_session_id"
             tools:summary="VZRHETBEER" />
 
         <im.vector.app.core.preference.VectorPreference
@@ -61,6 +61,11 @@
             android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
             android:title="@string/settings_active_sessions_show_all"
             app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
+            android:title="@string/settings_active_sessions_show_all"
+            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -98,6 +103,19 @@
             android:key="SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
             android:summary="@string/encryption_import_room_keys_summary"
             android:title="@string/encryption_import_e2e_room_keys" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_IGNORED_USERS_PREFERENCE_CATEGORY_KEY"
+        android:title="@string/settings_ignored_users"
+        app:isPreferenceVisible="@bool/settings_ignored_users_visible">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:icon="@drawable/ic_settings_root_ignored_users"
+            android:key="SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
+            android:title="@string/settings_ignored_users"
+            app:fragment="im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

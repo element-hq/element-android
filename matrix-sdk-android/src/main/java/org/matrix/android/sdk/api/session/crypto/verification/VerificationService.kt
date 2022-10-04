@@ -34,7 +34,7 @@ interface VerificationService {
     fun removeListener(listener: Listener)
 
     /**
-     * Mark this device as verified manually
+     * Mark this device as verified manually.
      */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
@@ -46,54 +46,68 @@ interface VerificationService {
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-    fun beginKeyVerification(method: VerificationMethod,
-                             otherUserId: String,
-                             otherDeviceId: String,
-                             transactionId: String?): String?
+    fun beginKeyVerification(
+            method: VerificationMethod,
+            otherUserId: String,
+            otherDeviceId: String,
+            transactionId: String?
+    ): String?
 
     /**
-     * Request key verification with another user via room events (instead of the to-device API)
+     * Request key verification with another user via room events (instead of the to-device API).
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
-                                    otherUserId: String,
-                                    roomId: String,
-                                    localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            roomId: String,
+            localId: String? = LocalEcho.createLocalEchoId()
+    ): PendingVerificationRequest
 
     fun cancelVerificationRequest(request: PendingVerificationRequest)
 
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerification(methods: List<VerificationMethod>,
-                               otherUserId: String,
-                               otherDevices: List<String>?): PendingVerificationRequest
+    fun requestKeyVerification(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            otherDevices: List<String>?
+    ): PendingVerificationRequest
 
-    fun declineVerificationRequestInDMs(otherUserId: String,
-                                        transactionId: String,
-                                        roomId: String)
+    fun declineVerificationRequestInDMs(
+            otherUserId: String,
+            transactionId: String,
+            roomId: String
+    )
 
     // Only SAS method is supported for the moment
     // TODO Parameter otherDeviceId should be removed in this case
-    fun beginKeyVerificationInDMs(method: VerificationMethod,
-                                  transactionId: String,
-                                  roomId: String,
-                                  otherUserId: String,
-                                  otherDeviceId: String): String
+    fun beginKeyVerificationInDMs(
+            method: VerificationMethod,
+            transactionId: String,
+            roomId: String,
+            otherUserId: String,
+            otherDeviceId: String
+    ): String
 
     /**
-     * Returns false if the request is unknown
+     * Returns false if the request is unknown.
      */
-    fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
-                                      otherUserId: String,
-                                      roomId: String,
-                                      transactionId: String): Boolean
+    fun readyPendingVerificationInDMs(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            roomId: String,
+            transactionId: String
+    ): Boolean
 
     /**
-     * Returns false if the request is unknown
+     * Returns false if the request is unknown.
      */
-    fun readyPendingVerification(methods: List<VerificationMethod>,
-                                 otherUserId: String,
-                                 transactionId: String): Boolean
+    fun readyPendingVerification(
+            methods: List<VerificationMethod>,
+            otherUserId: String,
+            transactionId: String
+    ): Boolean
 
     interface Listener {
         /**
@@ -129,11 +143,10 @@ interface VerificationService {
         private const val TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000
         private const val FIVE_MINUTES_IN_MILLIS = 5 * 60 * 1000
 
-        fun isValidRequest(age: Long?): Boolean {
+        fun isValidRequest(age: Long?, currentTimeMillis: Long): Boolean {
             if (age == null) return false
-            val now = System.currentTimeMillis()
-            val tooInThePast = now - TEN_MINUTES_IN_MILLIS
-            val tooInTheFuture = now + FIVE_MINUTES_IN_MILLIS
+            val tooInThePast = currentTimeMillis - TEN_MINUTES_IN_MILLIS
+            val tooInTheFuture = currentTimeMillis + FIVE_MINUTES_IN_MILLIS
             return age in tooInThePast..tooInTheFuture
         }
     }

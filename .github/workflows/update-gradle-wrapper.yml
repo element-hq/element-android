@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
+        # Skip in forks
+        if: github.repository == 'vector-im/element-android'
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: develop

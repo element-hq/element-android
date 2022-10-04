@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -45,7 +46,8 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.NoOpCancellable
-import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.api.util.TextContent
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -65,7 +67,7 @@ internal class DefaultSendService @AssistedInject constructor(
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val cryptoStore: IMXCryptoStore,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository,
         private val eventSenderProcessor: EventSenderProcessor,
@@ -97,14 +99,20 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean): Cancelable {
-        return localEchoEventFactory.createQuotedTextEvent(roomId, quotedEvent, text, autoMarkdown)
+    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String?): Cancelable {
+        return localEchoEventFactory.createQuotedTextEvent(
+                roomId = roomId,
+                quotedEvent = quotedEvent,
+                text = text,
+                autoMarkdown = autoMarkdown,
+                rootThreadEventId = rootThreadEventId
+        )
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendPoll(question: String, options: List<String>): Cancelable {
-        return localEchoEventFactory.createPollEvent(roomId, question, options)
+    override fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable {
+        return localEchoEventFactory.createPollEvent(roomId, pollType, question, options)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
@@ -178,7 +186,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                is MessageFileContent  -> {
+                is MessageFileContent -> {
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.mimeType,
@@ -202,7 +210,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                else                   -> NoOpCancellable
+                else -> NoOpCancellable
             }
         }
         return NoOpCancellable
@@ -245,24 +253,43 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>,
-                            compressBeforeSending: Boolean,
-                            roomIds: Set<String>): Cancelable {
+    override fun sendMedias(
+            attachments: List<ContentAttachmentData>,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String?
+    ): Cancelable {
         return attachments.mapTo(CancelableBag()) {
-            sendMedia(it, compressBeforeSending, roomIds)
+            sendMedia(
+                    attachment = it,
+                    compressBeforeSending = compressBeforeSending,
+                    roomIds = roomIds,
+                    rootThreadEventId = rootThreadEventId
+            )
         }
     }
 
-    override fun sendMedia(attachment: ContentAttachmentData,
-                           compressBeforeSending: Boolean,
-                           roomIds: Set<String>): Cancelable {
+    override fun sendMedia(
+            attachment: ContentAttachmentData,
+            compressBeforeSending: Boolean,
+            roomIds: Set<String>,
+            rootThreadEventId: String?
+    ): Cancelable {
+        // Ensure that the event will not be send in a thread if we are a different flow.
+        // Like sending files to multiple rooms
+        val rootThreadId = if (roomIds.isNotEmpty()) null else rootThreadEventId
+
         // Create an event with the media file path
         // Ensure current roomId is included in the set
         val allRoomIds = (roomIds + roomId).toList()
 
         // Create local echo for each room
         val allLocalEchoes = allRoomIds.map {
-            localEchoEventFactory.createMediaEvent(it, attachment).also { event ->
+            localEchoEventFactory.createMediaEvent(
+                    roomId = it,
+                    attachment = attachment,
+                    rootThreadEventId = rootThreadId
+            ).also { event ->
                 createLocalEcho(event)
             }
         }
@@ -270,12 +297,12 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     /**
-     * We use the roomId of the local echo event
+     * We use the roomId of the local echo event.
      */
     private fun internalSendMedia(allLocalEchoes: List<Event>, attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
         val cancelableBag = CancelableBag()
 
-        allLocalEchoes.groupBy { cryptoSessionInfoProvider.isRoomEncrypted(it.roomId!!) }
+        allLocalEchoes.groupBy { cryptoStore.roomWasOnceEncrypted(it.roomId!!) }
                 .apply {
                     keys.forEach { isRoomEncrypted ->
                         // Should never be empty
@@ -306,7 +333,7 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     private fun sendEvent(event: Event): Cancelable {
-        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(event.roomId!!))
+        return eventSenderProcessor.postEvent(event)
     }
 
     private fun createLocalEcho(event: Event) {
@@ -317,10 +344,12 @@ internal class DefaultSendService @AssistedInject constructor(
         return "${roomId}_$identifier"
     }
 
-    private fun createUploadMediaWork(allLocalEchos: List<Event>,
-                                      attachment: ContentAttachmentData,
-                                      isRoomEncrypted: Boolean,
-                                      compressBeforeSending: Boolean): OneTimeWorkRequest {
+    private fun createUploadMediaWork(
+            allLocalEchos: List<Event>,
+            attachment: ContentAttachmentData,
+            isRoomEncrypted: Boolean,
+            compressBeforeSending: Boolean
+    ): OneTimeWorkRequest {
         val localEchoIds = allLocalEchos.map {
             LocalEchoIdentifiers(it.roomId!!, it.eventId!!)
         }

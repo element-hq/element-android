@@ -1,0 +1,2 @@
+此版本中的主要變動：訊息討論串的初始實作。訊息泡泡。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.4.0

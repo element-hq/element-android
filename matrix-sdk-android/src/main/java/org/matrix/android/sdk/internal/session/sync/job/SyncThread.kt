@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
@@ -39,8 +40,8 @@ import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
-import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
+import org.matrix.android.sdk.internal.settings.DefaultLightweightSettingsStorage
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createUIHandler
@@ -52,15 +53,17 @@ import javax.inject.Inject
 import kotlin.concurrent.schedule
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
-private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 private val loggerTag = LoggerTag("SyncThread", LoggerTag.SYNC)
 
-internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
-                                              private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val activeCallHandler: ActiveCallHandler
-) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
+internal class SyncThread @Inject constructor(
+        private val syncTask: SyncTask,
+        private val networkConnectivityChecker: NetworkConnectivityChecker,
+        private val backgroundDetectionObserver: BackgroundDetectionObserver,
+        private val activeCallHandler: ActiveCallHandler,
+        private val lightweightSettingsStorage: DefaultLightweightSettingsStorage,
+        private val matrixConfiguration: MatrixConfiguration,
+) : Thread("Matrix-SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
     private var liveState = MutableLiveData(state)
@@ -104,10 +107,12 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     fun pause() = synchronized(lock) {
         if (isStarted) {
-            Timber.tag(loggerTag.value).d("Pause sync...")
+            Timber.tag(loggerTag.value).d("Pause sync... Not cancelling incremental sync")
             isStarted = false
             retryNoNetworkTask?.cancel()
-            syncScope.coroutineContext.cancelChildren()
+            // Do not cancel the current incremental sync.
+            // Incremental sync can be long and it requires the user to wait for the treatment to end,
+            // else all is restarted from the beginning each time the user moves the app to foreground.
         }
     }
 
@@ -173,13 +178,15 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 if (state !is SyncState.Running) {
                     updateStateTo(SyncState.Running(afterPause = true))
                 }
+                val afterPause = state.let { it is SyncState.Running && it.afterPause }
                 val timeout = when {
-                    previousSyncResponseHasToDevice                        -> 0L /* Force timeout to 0 */
-                    state.let { it is SyncState.Running && it.afterPause } -> 0L /* No timeout after a pause */
-                    else                                                   -> DEFAULT_LONG_POOL_TIMEOUT
+                    previousSyncResponseHasToDevice -> 0L /* Force timeout to 0 */
+                    afterPause -> 0L /* No timeout after a pause */
+                    else -> matrixConfiguration.syncConfig.longPollTimeout
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
-                val params = SyncTask.Params(timeout, SyncPresence.Online)
+                val presence = lightweightSettingsStorage.getSyncPresenceStatus()
+                val params = SyncTask.Params(timeout, presence, afterPause = afterPause)
                 val sync = syncScope.launch {
                     previousSyncResponseHasToDevice = doSync(params)
                 }

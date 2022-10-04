@@ -1,0 +1,2 @@
+Principaux changements pour cette version : envoi de votre position dans n’importe quelle salon. Édition des sondage.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.16

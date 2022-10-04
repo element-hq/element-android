@@ -16,9 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.api.session.user.model.User
-
 data class ReadReceipt(
-        val user: User,
+        val roomMember: RoomMemberSummary,
         val originServerTs: Long
 )

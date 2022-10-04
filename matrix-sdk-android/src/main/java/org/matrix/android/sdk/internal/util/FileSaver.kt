@@ -21,10 +21,10 @@ import java.io.File
 import java.io.InputStream
 
 /**
- * Save an input stream to a file with Okio
+ * Save an input stream to a file with Okio.
  */
 @WorkerThread
-fun writeToFile(inputStream: InputStream, outputFile: File) {
+internal fun writeToFile(inputStream: InputStream, outputFile: File) {
     // Ensure the parent folder exists, else it will crash
     outputFile.parentFile?.mkdirs()
 

@@ -32,8 +32,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 /**
  * A list item for User.
  */
-@EpoxyModelClass(layout = R.layout.item_user)
-abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
+@EpoxyModelClass
+abstract class UserItem : VectorEpoxyModel<UserItem.Holder>(R.layout.item_user) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer

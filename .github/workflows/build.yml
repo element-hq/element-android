@@ -7,9 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
-    -Porg.gradle.parallel=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   debug:
@@ -20,9 +19,13 @@ jobs:
       fail-fast: false
       matrix:
         target: [ Gplay, Fdroid ]
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -31,21 +34,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
+        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vector-${{ matrix.target }}-debug
           path: |
-            vector/build/outputs/apk/*/debug/*.apk
+            vector-app/build/outputs/apk/*/debug/*.apk
 
   release:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    concurrency:
+      group: ${{ github.ref == 'refs/head/main' && format('build-release-apk-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('build-release-apk-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      cancel-in-progress: ${{ github.ref != 'refs/head/main' }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -54,12 +59,34 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES  --stacktrace
+        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload Gplay unsigned APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vector-gplay-release-unsigned
           path: |
-            vector/build/outputs/apk/*/release/*.apk
+            vector-app/build/outputs/apk/*/release/*.apk
 
-# TODO: add exodus checks
+  exodus:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - name: Obtain apk from artifact
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: vector-gplay-release-unsigned
+      - name: Show apks in artifact
+        run: ls -R ${{steps.download.outputs.download-path}}
+      - name: Execute exodus-standalone
+        uses: docker://exodusprivacy/exodus-standalone:latest
+        with:
+          args: /github/workspace/gplay/release/vector-gplay-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
+      - name: Upload exodus json report
+        uses: actions/upload-artifact@v3
+        with:
+          name: exodus.json
+          path: |
+            exodus.json
+      - name: Check for trackers
+        run: "jq -e '.trackers == []' exodus.json > /dev/null || { echo '::error static analysis identified user tracking library' ; exit 1; }"

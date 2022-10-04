@@ -1,0 +1,2 @@
+Ndryshime kryesore në këtë version: Sendërtimi fillestar i mesazheve në rrjedha. Flluska mesazhesh.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.4.0

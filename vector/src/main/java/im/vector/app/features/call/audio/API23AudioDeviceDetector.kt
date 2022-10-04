@@ -21,11 +21,11 @@ import android.media.AudioManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import timber.log.Timber
-import java.util.HashSet
 
 @RequiresApi(Build.VERSION_CODES.M)
-internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
-                                        private val callAudioManager: CallAudioManager
+internal class API23AudioDeviceDetector(
+        private val audioManager: AudioManager,
+        private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceDetector {
 
     private val onAudioDeviceChangeRunner = Runnable {
@@ -36,7 +36,8 @@ internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
                 AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> devices.add(CallAudioManager.Device.WirelessHeadset(info.productName.toString()))
                 AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> devices.add(CallAudioManager.Device.Phone)
                 AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> devices.add(CallAudioManager.Device.Speaker)
-                AudioDeviceInfo.TYPE_WIRED_HEADPHONES, AudioDeviceInfo.TYPE_WIRED_HEADSET, TYPE_USB_HEADSET -> devices.add(CallAudioManager.Device.Headset)
+                AudioDeviceInfo.TYPE_WIRED_HEADPHONES,
+                AudioDeviceInfo.TYPE_WIRED_HEADSET, TYPE_USB_HEADSET -> devices.add(CallAudioManager.Device.Headset)
             }
         }
         callAudioManager.replaceDevices(devices)
@@ -45,13 +46,15 @@ internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
     }
     private val audioDeviceCallback: AudioDeviceCallback = object : AudioDeviceCallback() {
         override fun onAudioDevicesAdded(
-                addedDevices: Array<AudioDeviceInfo>) {
+                addedDevices: Array<AudioDeviceInfo>
+        ) {
             Timber.d(" Audio devices added")
             onAudioDeviceChange()
         }
 
         override fun onAudioDevicesRemoved(
-                removedDevices: Array<AudioDeviceInfo>) {
+                removedDevices: Array<AudioDeviceInfo>
+        ) {
             Timber.d(" Audio devices removed")
             onAudioDeviceChange()
         }

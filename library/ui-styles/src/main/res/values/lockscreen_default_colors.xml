@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lockscreen_code">#ffffff</color>
+    <color name="lockscreen_white_selector">#66ffffff</color>
+    <color name="lockscreen_hint_color">#42000000</color>
+    <color name="lockscreen_warning_color">#f4511e</color>
+    <color name="lockscreen_success_color">#009688</color>
+</resources>

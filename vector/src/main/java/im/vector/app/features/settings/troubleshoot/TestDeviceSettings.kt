@@ -25,9 +25,11 @@ import javax.inject.Inject
 /**
  * Checks if notifications are enable in the system settings for this app.
  */
-class TestDeviceSettings @Inject constructor(private val vectorPreferences: VectorPreferences,
-                                             private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
+class TestDeviceSettings @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider
+) :
+        TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (vectorPreferences.areNotificationEnabledForDevice()) {

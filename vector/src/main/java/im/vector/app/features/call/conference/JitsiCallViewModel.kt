@@ -17,7 +17,6 @@
 package im.vector.app.features.call.conference
 
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -27,7 +26,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -101,9 +99,9 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     override fun handle(action: JitsiCallViewActions) {
         when (action) {
-            is JitsiCallViewActions.SwitchTo      -> handleSwitchTo(action)
+            is JitsiCallViewActions.SwitchTo -> handleSwitchTo(action)
             JitsiCallViewActions.OnConferenceLeft -> handleOnConferenceLeft()
-        }.exhaustive
+        }
     }
 
     private fun handleSwitchTo(action: JitsiCallViewActions.SwitchTo) = withState { state ->

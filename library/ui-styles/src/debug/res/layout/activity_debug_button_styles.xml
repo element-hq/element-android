@@ -72,19 +72,6 @@
             android:text="Destructive disabled" />
 
         <Button
-            style="@style/Widget.Vector.Button.Unelevated.Bot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bot" />
-
-        <Button
-            style="@style/Widget.Vector.Button.Unelevated.Bot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Bot disabled" />
-
-        <Button
             style="@style/Widget.Vector.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,19 +84,6 @@
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Outline disabled" />
-
-        <Button
-            style="@style/Widget.Vector.Button.Outlined.Poll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Poll " />
-
-        <Button
-            style="@style/Widget.Vector.Button.Outlined.Poll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Poll disabled" />
 
         <LinearLayout
             android:layout_width="wrap_content"

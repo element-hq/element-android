@@ -1,0 +1,2 @@
+此版本中的主要變動：將您的位置傳送給任何聊天室。編輯投票。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.17

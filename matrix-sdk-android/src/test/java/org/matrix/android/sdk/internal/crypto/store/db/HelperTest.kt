@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.matrix.android.sdk.MatrixTest
-import org.matrix.android.sdk.internal.util.md5
+import org.matrix.android.sdk.api.util.md5
 
 class HelperTest : MatrixTest {
 

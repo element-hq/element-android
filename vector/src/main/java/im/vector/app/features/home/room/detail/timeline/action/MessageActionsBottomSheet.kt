@@ -30,7 +30,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import javax.inject.Inject
 
 /**
- * Bottom sheet fragment that shows a message preview with list of contextual actions
+ * Bottom sheet fragment that shows a message preview with list of contextual actions.
  */
 @AndroidEntryPoint
 class MessageActionsBottomSheet :
@@ -93,13 +93,14 @@ class MessageActionsBottomSheet :
     }
 
     companion object {
-        fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {
+        fun newInstance(roomId: String, informationData: MessageInformationData, isFromThreadTimeline: Boolean): MessageActionsBottomSheet {
             return MessageActionsBottomSheet().apply {
                 setArguments(
                         TimelineEventFragmentArgs(
                                 informationData.eventId,
                                 roomId,
-                                informationData
+                                informationData,
+                                isFromThreadTimeline
                         )
                 )
             }

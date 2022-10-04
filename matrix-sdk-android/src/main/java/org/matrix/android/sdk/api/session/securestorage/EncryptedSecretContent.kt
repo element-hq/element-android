@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataConte
  */
 @JsonClass(generateAdapter = true)
 data class EncryptedSecretContent(
-        /** unpadded base64-encoded ciphertext */
+        /** unpadded base64-encoded ciphertext. */
         @Json(name = "ciphertext") val ciphertext: String? = null,
         @Json(name = "mac") val mac: String? = null,
         @Json(name = "ephemeral") val ephemeral: String? = null,
