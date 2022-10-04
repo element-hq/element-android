@@ -17,6 +17,9 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.utils.TextUtils
+import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -54,12 +57,18 @@ class TimelineEventsGroups {
     private fun TimelineEvent.getGroupIdOrNull(): String? {
         val type = root.getClearType()
         val content = root.getClearContent()
-        return if (EventType.isCallEvent(type)) {
-            (content?.get("call_id") as? String)
-        } else if (type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY) {
-            root.stateKey
-        } else {
-            null
+        return when {
+            EventType.isCallEvent(type) -> (content?.get("call_id") as? String)
+            type == STATE_ROOM_VOICE_BROADCAST_INFO -> {
+                root.content.toModel<MessageVoiceBroadcastInfoContent>()
+                        ?.takeUnless { it.voiceBroadcastState == VoiceBroadcastState.STARTED }
+                        ?.relatesTo?.eventId
+                        ?: eventId
+            }
+            type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY -> root.stateKey
+            else -> {
+                null
+            }
         }
     }
 
@@ -126,5 +135,13 @@ class CallSignalingEventsGroup(private val group: TimelineEventsGroup) {
 
     private fun getReject(): TimelineEvent? {
         return group.events.firstOrNull { it.root.getClearType() == EventType.CALL_REJECT }
+    }
+}
+
+class VoiceBroadcastEventsGroup(private val group: TimelineEventsGroup) {
+    fun getLastEvent(): TimelineEvent {
+        return group.events
+                .find { it.root.getClearContent().toModel<MessageVoiceBroadcastInfoContent>()?.voiceBroadcastState == VoiceBroadcastState.STOPPED }
+                ?: group.events.maxBy { it.root.originServerTs ?: 0L }
     }
 }

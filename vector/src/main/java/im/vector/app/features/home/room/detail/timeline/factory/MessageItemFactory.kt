@@ -43,7 +43,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
@@ -81,6 +83,7 @@ import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -200,7 +203,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
-            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, highlight, callback, attributes)
+            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, params.eventsGroup, highlight, callback, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -712,14 +715,19 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildVoiceBroadcastItem(
             messageContent: MessageVoiceBroadcastInfoContent,
+            eventsGroup: TimelineEventsGroup?,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): MessageVoiceBroadcastItem? {
+        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
+        val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
+        val mostRecentEvent = voiceBroadcastEventsGroup.getLastEvent()
+        val mostRecentMessageContent = (mostRecentEvent.getVectorLastMessageContent() as? MessageVoiceBroadcastInfoContent) ?: return null
         return MessageVoiceBroadcastItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
-                .voiceBroadcastState(messageContent.voiceBroadcastState)
+                .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }
