@@ -290,7 +290,6 @@ dependencies {
     testImplementation libs.tests.kluent
     testImplementation libs.mockk.mockk
     testImplementation libs.androidx.coreTesting
-    testImplementation libs.tests.robolectric
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting

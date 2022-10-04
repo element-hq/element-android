@@ -210,7 +210,6 @@ ext.groups = [
                         'org.ow2.asm',
                         'org.ow2.asm',
                         'org.reactivestreams',
-                        'org.robolectric',
                         'org.slf4j',
                         'org.sonatype.oss',
                         'org.testng',
