@@ -25,7 +25,6 @@ import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
-import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 @EpoxyModelClass
 abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastItem.Holder>() {
@@ -34,7 +33,7 @@ abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastI
     var callback: TimelineEventController.Callback? = null
 
     @EpoxyAttribute
-    var playingState: EpoxyCharSequence? = null
+    var voiceBroadcastState: VoiceBroadcastState? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -44,8 +43,7 @@ abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastI
     @SuppressLint("SetTextI18n") // Temporary text
     private fun bindVoiceBroadcastItem(holder: Holder) {
         with(holder) {
-            currentStateText.text = "Voice Broadcast state: ${playingState?.charSequence ?: "None"}"
-            val voiceBroadcastState = VoiceBroadcastState.values().find { it.value == playingState?.charSequence }
+            currentStateText.text = "Voice Broadcast state: ${voiceBroadcastState?.value ?: "None"}"
             playButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.PAUSED
             pauseButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.STARTED || voiceBroadcastState == VoiceBroadcastState.RESUMED
             stopButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.STARTED ||

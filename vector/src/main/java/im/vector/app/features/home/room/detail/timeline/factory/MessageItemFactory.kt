@@ -719,7 +719,7 @@ class MessageItemFactory @Inject constructor(
         return MessageVoiceBroadcastItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
-                .playingState(messageContent.voiceBroadcastStateStr.toEpoxyCharSequence())
+                .voiceBroadcastState(messageContent.voiceBroadcastState)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }
