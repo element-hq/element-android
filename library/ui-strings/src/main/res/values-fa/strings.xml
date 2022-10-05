@@ -2700,4 +2700,9 @@
     <string name="labs_enable_deferred_dm_summary">ایجاد پیام خصوصی فقط در نخستین پیام</string>
     <string name="labs_enable_new_app_layout_summary">المنتی ساده شده با زبانه‌های انتخابی</string>
     <string name="labs_enable_new_app_layout_title">به کار انداختن چینش جدید</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">تأیید نشست‌هایتان برای پیام‌رسانی امن بهبود یافته یا خروج از آن‌هایی که تشخیصشان نداده یا دیگر استفاده نمی‌کنید.</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">غیرفعّال برای ۱ روز یا بیش‌تر</item>
+        <item quantity="other">غیرفعّال برای %1$d روز یا بیش‌تر</item>
+    </plurals>
 </resources>

@@ -1,3 +1,59 @@
+Changes in Element v1.5.2 (2022-10-05)
+======================================
+
+Features ✨
+----------
+ - New App Layout is now enabled by default! Go to the Settings > Labs to toggle this ([#7166](https://github.com/vector-im/element-android/issues/7166))
+ - Render inline images in the timeline ([#351](https://github.com/vector-im/element-android/issues/351))
+ - Add privacy setting to disable personalized learning by the keyboard ([#6633](https://github.com/vector-im/element-android/issues/6633))
+
+Bugfixes 🐛
+----------
+ - Disable emoji keyboard not applies in reply ([#5029](https://github.com/vector-im/element-android/issues/5029))
+ - Fix animated images not autoplaying sometimes if only a thumbnail was fetched from the server ([#6215](https://github.com/vector-im/element-android/issues/6215))
+ - Add Warning shield when a user previously verified rotated their cross signing keys ([#6702](https://github.com/vector-im/element-android/issues/6702))
+ - Can't verify user when option to send keys to verified devices only is selected ([#6723](https://github.com/vector-im/element-android/issues/6723))
+ - Add option to only send to verified devices per room (web parity) ([#6725](https://github.com/vector-im/element-android/issues/6725))
+ - Delete pin code key and the key used for biometrics authentication on logout ([#6906](https://github.com/vector-im/element-android/issues/6906))
+ - Fix crash on previewing images to upload on Android Pie. ([#7184](https://github.com/vector-im/element-android/issues/7184))
+ - Fix app restarts in loop on Android 13 on the first run of the app. ([#7224](https://github.com/vector-im/element-android/issues/7224))
+
+In development 🚧
+----------------
+ - [Device Management] Learn more bottom sheets ([#7100](https://github.com/vector-im/element-android/issues/7100))
+ - [Device management] Verify current session ([#7114](https://github.com/vector-im/element-android/issues/7114))
+ - [Device management] Verify another session ([#7143](https://github.com/vector-im/element-android/issues/7143))
+ - [Device management] Rename a session ([#7158](https://github.com/vector-im/element-android/issues/7158))
+ - [Device Manager] Unverified and inactive sessions list ([#7170](https://github.com/vector-im/element-android/issues/7170))
+ - [Device management] Sign out a session ([#7190](https://github.com/vector-im/element-android/issues/7190))
+ - [Device Manager] Parse user agents ([#7247](https://github.com/vector-im/element-android/issues/7247))
+ - [Voice Broadcast] Add a feature flag with the composer action ([#7258](https://github.com/vector-im/element-android/issues/7258))
+
+Improved Documentation 📚
+------------------------
+ - Draft onboarding documentation of the project at `./docs/_developer_onboarding.md` ([#7126](https://github.com/vector-im/element-android/issues/7126))
+
+SDK API changes ⚠️
+------------------
+ - Allow the sync timeout to be configured (mainly useful for testing) ([#7198](https://github.com/vector-im/element-android/issues/7198))
+ - Ports SDK instrumentation tests to use suspending functions instead of countdown latches ([#7207](https://github.com/vector-im/element-android/issues/7207))
+ - [Device Manager] Extend user agent to include device information ([#7209](https://github.com/vector-im/element-android/issues/7209))
+
+Other changes
+-------------
+ - Add support for `/tableflip` command ([#12](https://github.com/vector-im/element-android/issues/12))
+ - Decreases the size of rounded corners and increases the maximum width of message bubbles to help avoid unnecessary unused space on screen ([#5712](https://github.com/vector-im/element-android/issues/5712))
+ - Adds screenshot testing tooling ([#5798](https://github.com/vector-im/element-android/issues/5798))
+ - [AppLayout]: added tracking of new analytics events ([#6508](https://github.com/vector-im/element-android/issues/6508))
+ - Target API 12 and compile with Android SDK 32. ([#6929](https://github.com/vector-im/element-android/issues/6929))
+ - Add basic integration of Sentry to capture errors and crashes if user has given consent. ([#7076](https://github.com/vector-im/element-android/issues/7076))
+ - Add support to `/devtools` command. ([#7126](https://github.com/vector-im/element-android/issues/7126))
+ - Fix lint warning, and cleanup the code ([#7159](https://github.com/vector-im/element-android/issues/7159))
+ - Mutualize the pending auth handling ([#7193](https://github.com/vector-im/element-android/issues/7193))
+ - CI: Prevent modification of translations by developer. ([#7211](https://github.com/vector-im/element-android/issues/7211))
+ - Fix typo in strings.xml and make sure this is American English. ([#7287](https://github.com/vector-im/element-android/issues/7287))
+
+
 Changes in Element v1.5.1 (2022-09-28)
 ======================================
 
