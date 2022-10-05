@@ -41,7 +41,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.existingViewModel
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
@@ -156,8 +156,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
-    private val timelineViewModel: TimelineViewModel by existingViewModel()
-    private val messageComposerViewModel: MessageComposerViewModel by existingViewModel()
+    private val timelineViewModel: TimelineViewModel by activityViewModel()
+    private val messageComposerViewModel: MessageComposerViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentComposerBinding {

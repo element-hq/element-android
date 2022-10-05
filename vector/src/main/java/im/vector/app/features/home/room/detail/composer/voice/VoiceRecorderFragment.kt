@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.existingViewModel
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -46,8 +46,8 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
     @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
     @Inject lateinit var clock: Clock
 
-    private val timelineViewModel: TimelineViewModel by existingViewModel()
-    private val messageComposerViewModel: MessageComposerViewModel by existingViewModel()
+    private val timelineViewModel: TimelineViewModel by activityViewModel()
+    private val messageComposerViewModel: MessageComposerViewModel by activityViewModel()
 
     private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
