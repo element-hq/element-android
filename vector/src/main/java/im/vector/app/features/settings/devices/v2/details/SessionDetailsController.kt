@@ -23,17 +23,20 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 class SessionDetailsController @Inject constructor(
         private val checkIfSectionSessionIsVisibleUseCase: CheckIfSectionSessionIsVisibleUseCase,
         private val checkIfSectionDeviceIsVisibleUseCase: CheckIfSectionDeviceIsVisibleUseCase,
+        private val checkIfSectionApplicationIsVisibleUseCase: CheckIfSectionApplicationIsVisibleUseCase,
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
         private val dimensionConverter: DimensionConverter,
-) : TypedEpoxyController<DeviceInfo>() {
+) : TypedEpoxyController<DeviceFullInfo>() {
 
     var callback: Callback? = null
 
@@ -41,15 +44,22 @@ class SessionDetailsController @Inject constructor(
         fun onItemLongClicked(content: String)
     }
 
-    override fun buildModels(data: DeviceInfo?) {
-        data?.let { info ->
-            val hasSectionSession = hasSectionSession(data)
+    override fun buildModels(data: DeviceFullInfo?) {
+        data?.let { fullInfo ->
+            val deviceInfo = fullInfo.deviceInfo
+            val matrixClientInfo = fullInfo.matrixClientInfo
+            val hasSectionSession = hasSectionSession(deviceInfo)
             if (hasSectionSession) {
-                buildSectionSession(info)
+                buildSectionSession(deviceInfo)
             }
 
-            if (hasSectionDevice(data)) {
-                buildSectionDevice(info, addExtraTopMargin = hasSectionSession)
+            val hasApplicationSection = hasSectionApplication(matrixClientInfo)
+            if (hasApplicationSection && matrixClientInfo != null) {
+                buildSectionApplication(matrixClientInfo, addExtraTopMargin = hasSectionSession)
+            }
+
+            if (hasSectionDevice(deviceInfo)) {
+                buildSectionDevice(deviceInfo, addExtraTopMargin = hasSectionSession || hasApplicationSection)
             }
         }
     }
@@ -83,24 +93,49 @@ class SessionDetailsController @Inject constructor(
     }
 
     private fun buildSectionSession(data: DeviceInfo) {
-        val sessionName = data.displayName
-        val sessionId = data.deviceId
-        val sessionLastSeenTs = data.lastSeenTs
+        val sessionName = data.displayName.orEmpty()
+        val sessionId = data.deviceId.orEmpty()
+        val sessionLastSeenTs = data.lastSeenTs ?: -1
 
         buildHeaderItem(R.string.device_manager_session_title)
 
-        sessionName?.let {
-            val hasDivider = sessionId != null || sessionLastSeenTs != null
-            buildContentItem(R.string.device_manager_session_details_session_name, it, hasDivider)
+        if (sessionName.isNotEmpty()) {
+            val hasDivider = sessionId.isNotEmpty() || sessionLastSeenTs > 0
+            buildContentItem(R.string.device_manager_session_details_session_name, sessionName, hasDivider)
         }
-        sessionId?.let {
-            val hasDivider = sessionLastSeenTs != null
-            buildContentItem(R.string.device_manager_session_details_session_id, it, hasDivider)
+        if (sessionId.isNotEmpty()) {
+            val hasDivider = sessionLastSeenTs > 0
+            buildContentItem(R.string.device_manager_session_details_session_id, sessionId, hasDivider)
         }
-        sessionLastSeenTs?.let {
-            val formattedDate = dateFormatter.format(it, DateFormatKind.MESSAGE_DETAIL)
+        if (sessionLastSeenTs > 0) {
+            val formattedDate = dateFormatter.format(sessionLastSeenTs, DateFormatKind.MESSAGE_DETAIL)
             val hasDivider = false
             buildContentItem(R.string.device_manager_session_details_session_last_activity, formattedDate, hasDivider)
+        }
+    }
+
+    private fun hasSectionApplication(matrixClientInfoContent: MatrixClientInfoContent?): Boolean {
+        return checkIfSectionApplicationIsVisibleUseCase.execute(matrixClientInfoContent)
+    }
+
+    private fun buildSectionApplication(matrixClientInfoContent: MatrixClientInfoContent, addExtraTopMargin: Boolean) {
+        val name = matrixClientInfoContent.name.orEmpty()
+        val version = matrixClientInfoContent.version.orEmpty()
+        val url = matrixClientInfoContent.url.orEmpty()
+
+        buildHeaderItem(R.string.device_manager_session_details_application, addExtraTopMargin)
+
+        if (name.isNotEmpty()) {
+            val hasDivider = version.isNotEmpty() || url.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_application_name, name, hasDivider)
+        }
+        if (version.isNotEmpty()) {
+            val hasDivider = url.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_application_version, version, hasDivider)
+        }
+        if (url.isNotEmpty()) {
+            val hasDivider = false
+            buildContentItem(R.string.device_manager_session_details_application_url, url, hasDivider)
         }
     }
 
@@ -109,13 +144,13 @@ class SessionDetailsController @Inject constructor(
     }
 
     private fun buildSectionDevice(data: DeviceInfo, addExtraTopMargin: Boolean) {
-        val lastSeenIp = data.lastSeenIp
+        val lastSeenIp = data.lastSeenIp.orEmpty()
 
         buildHeaderItem(R.string.device_manager_device_title, addExtraTopMargin)
 
-        lastSeenIp?.let {
+        if (lastSeenIp.isNotEmpty()) {
             val hasDivider = false
-            buildContentItem(R.string.device_manager_session_details_device_ip_address, it, hasDivider)
+            buildContentItem(R.string.device_manager_session_details_device_ip_address, lastSeenIp, hasDivider)
         }
     }
 }

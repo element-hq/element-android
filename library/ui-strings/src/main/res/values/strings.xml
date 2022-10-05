@@ -3305,6 +3305,10 @@
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_url">URL</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
     <string name="device_manager_session_rename_edit_hint">Session name</string>
