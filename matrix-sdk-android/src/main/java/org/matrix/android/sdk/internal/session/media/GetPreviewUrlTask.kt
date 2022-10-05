@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.media
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -27,7 +27,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.unescapeHtml
 import java.util.Date
 import javax.inject.Inject
@@ -43,7 +42,7 @@ internal interface GetPreviewUrlTask : Task<GetPreviewUrlTask.Params, PreviewUrl
 internal class DefaultGetPreviewUrlTask @Inject constructor(
         private val mediaAPI: MediaAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : GetPreviewUrlTask {
 
     override suspend fun execute(params: GetPreviewUrlTask.Params): PreviewUrlData {
@@ -87,11 +86,10 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
         // Get data from cache
         var dataFromCache: PreviewUrlData? = null
         var isCacheValid = false
-        monarchy.doWithRealm { realm ->
-            val entity = PreviewUrlCacheEntity.get(realm, url)
-            dataFromCache = entity?.toDomain()
-            isCacheValid = entity != null && Date().time < entity.lastUpdatedTimestamp + validityDurationInMillis
-        }
+        val realm = realmInstance.getRealm()
+        val entity = PreviewUrlCacheEntity.get(realm, url)
+        dataFromCache = entity?.toDomain()
+        isCacheValid = entity != null && Date().time < entity.lastUpdatedTimestamp + validityDurationInMillis
 
         val finalDataFromCache = dataFromCache
         if (finalDataFromCache != null && isCacheValid) {
@@ -109,8 +107,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
         }
 
         // Store cache
-        monarchy.awaitTransaction { realm ->
-            val previewUrlCacheEntity = PreviewUrlCacheEntity.getOrCreate(realm, url)
+        realmInstance.write {
+            val previewUrlCacheEntity = PreviewUrlCacheEntity.getOrCreate(this, url)
             previewUrlCacheEntity.urlFromServer = data.url
             previewUrlCacheEntity.siteName = data.siteName
             previewUrlCacheEntity.title = data.title

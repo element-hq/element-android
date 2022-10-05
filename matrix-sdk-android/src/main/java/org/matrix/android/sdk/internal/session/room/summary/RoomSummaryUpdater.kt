@@ -44,6 +44,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.database.clearWith
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -89,7 +90,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     }
 
     fun update(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             membership: Membership? = null,
             roomSummary: RoomSyncSummary? = null,
@@ -145,7 +146,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
                 // avoid this call if we are sure there are unread events
-                latestPreviewableEvent?.let { !isEventRead(realm.configuration, userId, roomId, it.eventId) } ?: false
+                latestPreviewableEvent?.let { !isEventRead(realm, userId, roomId, it.eventId) } ?: false
 
         roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
@@ -172,13 +173,13 @@ internal class RoomSummaryUpdater @Inject constructor(
         } else if (roomSummaryEntity.membership != Membership.INVITE) {
             roomSummaryEntity.inviterId = null
         }
-        roomSummaryEntity.updateHasFailedSending()
+        roomSummaryEntity.updateHasFailedSending(realm)
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
                     .queryActiveRoomMembersEvent()
-                    .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-                    .findAll()
+                    .query("userId != $0", userId)
+                    .find()
                     .map { it.userId }
 
             roomSummaryEntity.otherMemberIds.clear()
@@ -227,7 +228,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .sort("roomId")
                     .find()
                     .map {
-                        it.flattenParentIds = null
+                        it.flattenParentIds.clear()
                         it.directParentNames.clear()
                         it to emptyList<RoomSummaryEntity>().toMutableSet()
                     }
@@ -239,23 +240,26 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .forEach { lookedUp ->
                         // get childrens
 
-                        lookedUp.children.clearWith { it.deleteFromRealm() }
+                        lookedUp.children.clearWith {
+                            realm.delete(it)
+                        }
 
                         RoomChildRelationInfo(realm, lookedUp.roomId).getDirectChildrenDescriptions().forEach { child ->
-
                             lookedUp.children.add(
-                                    realm.createObject<SpaceChildSummaryEntity>().apply {
+                                    realm.copyToRealm(SpaceChildSummaryEntity().apply {
                                         this.childRoomId = child.roomId
-                                        this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).findFirst()
+                                        this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).first().find()
                                         this.order = child.order
 //                                    this.autoJoin = child.autoJoin
                                         this.viaServers.addAll(child.viaServers)
                                     }
+                                    )
                             )
 
                             RoomSummaryEntity.where(realm, child.roomId)
                                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                                    .findFirst()
+                                    .first()
+                                    .find()
                                     ?.let { childSum ->
                                         lookupMap.entries.firstOrNull { it.key.roomId == lookedUp.roomId }?.let { entry ->
                                             if (entry.value.none { it.roomId == childSum.roomId }) {
@@ -271,7 +275,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             lookupMap.keys
                     .forEach { lookedUp ->
-                        lookedUp.parents.clearWith { it.deleteFromRealm() }
+                        lookedUp.parents.clearWith { realm.delete(it) }
                         // can we check parent relations here??
                         /**
                          * rooms can claim parents via the m.space.parent state event.
@@ -309,17 +313,19 @@ internal class RoomSummaryUpdater @Inject constructor(
 
                                     if (isValidRelation) {
                                         lookedUp.parents.add(
-                                                realm.createObject<SpaceParentSummaryEntity>().apply {
+                                                realm.copyToRealm(SpaceParentSummaryEntity().apply {
                                                     this.parentRoomId = parentInfo.roomId
-                                                    this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
+                                                    this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).first().find()
                                                     this.canonical = parentInfo.canonical
                                                     this.viaServers.addAll(parentInfo.viaServers)
                                                 }
+                                                )
                                         )
 
                                         RoomSummaryEntity.where(realm, parentInfo.roomId)
                                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                                                .findFirst()
+                                                .first()
+                                                .find()
                                                 ?.let { parentSum ->
                                                     if (lookupMap[parentSum]?.none { it.roomId == lookedUp.roomId }.orFalse()) {
                                                         // add lookedup as a parent
@@ -363,12 +369,12 @@ internal class RoomSummaryUpdater @Inject constructor(
             lookupMap.entries
                     .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { entry ->
-                        val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
+                        val parent = RoomSummaryEntity.where(realm, entry.key.roomId).first().find()
                         if (parent != null) {
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
 
                             entry.value.forEach { child ->
-                                RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
+                                RoomSummaryEntity.where(realm, child.roomId).first().find()?.let { childSum ->
                                     childSum.directParentNames.add(parent.displayName())
 
                                     if (childSum.flattenParentIds == null) {
@@ -387,9 +393,9 @@ internal class RoomSummaryUpdater @Inject constructor(
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
             RoomSummaryEntity.where(realm)
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .query("isDirect == true")
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                    .findAll()
+                    .find()
                     .forEach { dmRoom ->
                         val relatedSpaces = lookupMap.keys
                                 .filter { it.roomType == RoomType.SPACE }
@@ -413,18 +419,18 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // Maybe a good place to count the number of notifications for spaces?
 
-            realm.where(RoomSummaryEntity::class.java)
+            realm.query(RoomSummaryEntity::class)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                    .equalTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                    .findAll().forEach { space ->
+                    .query("roomType == $0", RoomType.SPACE)
+                    .find().forEach { space ->
                         // get all children
                         var highlightCount = 0
                         var notificationCount = 0
-                        realm.where(RoomSummaryEntity::class.java)
+                        realm.query(RoomSummaryEntity::class)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
-                                .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                                .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
-                                .findAll().forEach {
+                                .query("roomType != $0", RoomType.SPACE)
+                                .query("flattenParentIds CONTAINS $0", space.roomId)
+                                .find().forEach {
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount
                                 }

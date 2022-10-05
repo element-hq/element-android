@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.pushers.PusherState
 
@@ -54,10 +55,8 @@ internal class PusherEntity : RealmObject {
     companion object
 }
 
-/*
-internal fun PusherEntity.deleteOnCascade() {
-    data?.deleteFromRealm()
-    deleteFromRealm()
+internal fun MutableRealm.deleteOnCascade(pusherEntity: PusherEntity){
+    pusherEntity.data?.also { delete(it) }
+    delete(pusherEntity)
 }
 
- */

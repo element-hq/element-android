@@ -16,10 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.kotlin.createObject
+import io.realm.kotlin.MutableRealm
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -41,6 +38,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -51,10 +49,10 @@ import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
@@ -62,7 +60,6 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHa
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -71,10 +68,9 @@ internal interface CreateLocalRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateLocalRoomTask @Inject constructor(
         @UserId private val userId: String,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
-        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val userService: UserService,
         private val clock: Clock,
@@ -82,23 +78,24 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
 
     override suspend fun execute(params: CreateRoomParams): String {
         val createRoomBody = createRoomBodyBuilder.build(params.withDefault())
+        val invitedUsers = createRoomBody.invitedUserIds.orEmpty()
+                .mapNotNull { tryOrNull { userService.resolveUser(it) } }
+
         val roomId = RoomLocalEcho.createLocalEchoId()
-        monarchy.awaitTransaction { realm ->
-            createLocalRoomEntity(realm, roomId, createRoomBody)
-            createLocalRoomSummaryEntity(realm, roomId, createRoomBody)
+        realmInstance.write {
+            createLocalRoomEntity(this, roomId, createRoomBody, invitedUsers)
+            createLocalRoomSummaryEntity(this, roomId, createRoomBody)
         }
 
         // Wait for room to be created in DB
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                RoomSummaryEntity.where(realm, roomId = roomId)
+                        .query("membershipStr == $0", Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout(roomId)
         }
-
         return roomId
     }
 
@@ -106,15 +103,15 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      * Create a local room entity from the given room creation params.
      * This will also generate and store in database the chunk and the events related to the room params in order to retrieve and display the local room.
      */
-    private suspend fun createLocalRoomEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody) {
+    private fun createLocalRoomEntity(realm: MutableRealm, roomId: String, createRoomBody: CreateRoomBody, invitedUsers: List<User>) {
         RoomEntity.getOrCreate(realm, roomId).apply {
             membership = Membership.JOIN
-            chunks.add(createLocalRoomChunk(realm, roomId, createRoomBody))
+            chunks.add(createLocalRoomChunk(realm, roomId, createRoomBody, invitedUsers))
             membersLoadStatus = RoomMembersLoadStatusType.LOADED
         }
     }
 
-    private fun createLocalRoomSummaryEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody) {
+    private fun createLocalRoomSummaryEntity(realm: MutableRealm, roomId: String, createRoomBody: CreateRoomBody) {
         val otherUserId = createRoomBody.getDirectUserId()
         if (otherUserId != null) {
             RoomSummaryEntity.getOrCreate(realm, roomId).apply {
@@ -144,13 +141,13 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      *
      * @return a chunk entity
      */
-    private suspend fun createLocalRoomChunk(realm: Realm, roomId: String, createRoomBody: CreateRoomBody): ChunkEntity {
-        val chunkEntity = realm.createObject<ChunkEntity>().apply {
+    private fun createLocalRoomChunk(realm: MutableRealm, roomId: String, createRoomBody: CreateRoomBody, invitedUsers: List<User>): ChunkEntity {
+        val chunkEntity = ChunkEntity().apply {
             isLastBackward = true
             isLastForward = true
         }
 
-        val eventList = createLocalRoomEvents(createRoomBody)
+        val eventList = createLocalRoomEvents(createRoomBody, invitedUsers)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {
@@ -195,10 +192,8 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      *
      * @return the list of events
      */
-    private suspend fun createLocalRoomEvents(createRoomBody: CreateRoomBody): List<Event> {
+    private fun createLocalRoomEvents(createRoomBody: CreateRoomBody, invitedUsers: List<User>): List<Event> {
         val myUser = userService.getUser(userId) ?: User(userId)
-        val invitedUsers = createRoomBody.invitedUserIds.orEmpty()
-                .mapNotNull { tryOrNull { userService.resolveUser(it) } }
 
         val createRoomEvent = createLocalEvent(
                 type = EventType.STATE_ROOM_CREATE,

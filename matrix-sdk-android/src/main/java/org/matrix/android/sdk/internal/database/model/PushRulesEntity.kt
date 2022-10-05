@@ -15,10 +15,12 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.internal.database.clearWith
 
 internal class PushRulesEntity : RealmObject {
     var scope: String = ""
@@ -36,10 +38,8 @@ internal class PushRulesEntity : RealmObject {
     companion object
 }
 
-/*
-internal fun PushRulesEntity.deleteOnCascade() {
-    pushRules.clearWith { it.deleteOnCascade() }
-    deleteFromRealm()
+internal fun MutableRealm.deleteOnCascade(pushRulesEntity: PushRulesEntity) {
+    pushRulesEntity.pushRules.clearWith { deleteOnCascade(it) }
+    delete(pushRulesEntity)
 }
 
- */

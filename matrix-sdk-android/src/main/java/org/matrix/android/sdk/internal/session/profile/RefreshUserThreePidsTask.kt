@@ -16,13 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
-import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.UserThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,7 +29,7 @@ internal abstract class RefreshUserThreePidsTask : Task<Unit, Unit>
 
 internal class DefaultRefreshUserThreePidsTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : RefreshUserThreePidsTask() {
 
@@ -41,15 +40,17 @@ internal class DefaultRefreshUserThreePidsTask @Inject constructor(
 
         Timber.d("Get ${accountThreePidsResponse.threePids?.size} threePids")
         // Store the list in DB
-        monarchy.awaitTransaction { realm ->
-            realm.where(UserThreePidEntity::class.java).findAll().deleteAllFromRealm()
+        realmInstance.write {
+            val userThreePidEntities = query(UserThreePidEntity::class).find()
+            delete(userThreePidEntities)
             accountThreePidsResponse.threePids?.forEach {
-                val entity = UserThreePidEntity(
-                        it.medium?.takeIf { med -> med in ThirdPartyIdentifier.SUPPORTED_MEDIUM } ?: return@forEach,
-                        it.address ?: return@forEach,
-                        it.validatedAt.toLong(),
-                        it.addedAt.toLong())
-                realm.insertOrUpdate(entity)
+                val entity = UserThreePidEntity().apply {
+                    medium = it.medium?.takeIf { med -> med in ThirdPartyIdentifier.SUPPORTED_MEDIUM } ?: return@forEach
+                    address = it.address ?: return@forEach
+                    validatedAt = it.validatedAt.toLong()
+                    addedAt = it.addedAt.toLong()
+                }
+                copyToRealm(entity)
             }
         }
     }

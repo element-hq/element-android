@@ -19,8 +19,7 @@ package org.matrix.android.sdk.internal.session.profile
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
-import io.realm.kotlin.where
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -29,6 +28,7 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.UserThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 internal class DefaultProfileService @Inject constructor(
         private val taskExecutor: TaskExecutor,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val refreshUserThreePidsTask: RefreshUserThreePidsTask,
         private val getProfileInfoTask: GetProfileInfoTask,
@@ -88,10 +88,10 @@ internal class DefaultProfileService @Inject constructor(
     }
 
     override fun getThreePids(): List<ThreePid> {
-        return monarchy.fetchAllMappedSync(
-                { it.where<UserThreePidEntity>() },
-                { it.asDomain() }
-        )
+        val realm = realmInstance.getBlockingRealm()
+        return realm.query(UserThreePidEntity::class)
+                .find()
+                .map(this::mapUserThreePid)
     }
 
     override fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>> {
@@ -99,11 +99,9 @@ internal class DefaultProfileService @Inject constructor(
             // Force a refresh of the values
             refreshThreePids()
         }
-
-        return monarchy.findAllMappedWithChanges(
-                { it.where<UserThreePidEntity>() },
-                { it.asDomain() }
-        )
+        return realmInstance.queryList(this::mapUserThreePid) {
+            it.query(UserThreePidEntity::class)
+        }.asLiveData()
     }
 
     private fun refreshThreePids() {
@@ -113,17 +111,16 @@ internal class DefaultProfileService @Inject constructor(
     }
 
     override fun getPendingThreePids(): List<ThreePid> {
-        return monarchy.fetchAllMappedSync(
-                { it.where<PendingThreePidEntity>() },
-                { pendingThreePidMapper.map(it).threePid }
-        )
+        val realm = realmInstance.getBlockingRealm()
+        return realm.query(PendingThreePidEntity::class)
+                .find()
+                .map(this::mapPendingThreePid)
     }
 
     override fun getPendingThreePidsLive(): LiveData<List<ThreePid>> {
-        return monarchy.findAllMappedWithChanges(
-                { it.where<PendingThreePidEntity>() },
-                { pendingThreePidMapper.map(it).threePid }
-        )
+        return realmInstance.queryList(this::mapPendingThreePid) {
+            it.query(PendingThreePidEntity::class)
+        }.asLiveData()
     }
 
     override suspend fun addThreePid(threePid: ThreePid) {
@@ -165,12 +162,16 @@ internal class DefaultProfileService @Inject constructor(
         deleteThreePidTask.execute(DeleteThreePidTask.Params(threePid))
         refreshThreePids()
     }
-}
 
-private fun UserThreePidEntity.asDomain(): ThreePid {
-    return when (medium) {
-        ThirdPartyIdentifier.MEDIUM_EMAIL -> ThreePid.Email(address)
-        ThirdPartyIdentifier.MEDIUM_MSISDN -> ThreePid.Msisdn(address)
-        else -> error("Invalid medium type")
+    private fun mapUserThreePid(entity: UserThreePidEntity): ThreePid {
+        return when (entity.medium) {
+            ThirdPartyIdentifier.MEDIUM_EMAIL -> ThreePid.Email(entity.address)
+            ThirdPartyIdentifier.MEDIUM_MSISDN -> ThreePid.Msisdn(entity.address)
+            else -> error("Invalid medium type")
+        }
+    }
+
+    private fun mapPendingThreePid(entity: PendingThreePidEntity): ThreePid {
+        return pendingThreePidMapper.map(entity).threePid
     }
 }

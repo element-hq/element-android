@@ -35,13 +35,13 @@ internal class PendingThreePidMapper @Inject constructor() {
     }
 
     fun map(domain: PendingThreePid): PendingThreePidEntity {
-        return PendingThreePidEntity(
-                email = domain.threePid.takeIf { it is ThreePid.Email }?.value,
-                msisdn = domain.threePid.takeIf { it is ThreePid.Msisdn }?.value,
-                clientSecret = domain.clientSecret,
-                sendAttempt = domain.sendAttempt,
-                sid = domain.sid,
-                submitUrl = domain.submitUrl
-        )
+        return PendingThreePidEntity().apply {
+            email = domain.threePid.takeIf { it is ThreePid.Email }?.value
+            msisdn = domain.threePid.takeIf { it is ThreePid.Msisdn }?.value
+            clientSecret = domain.clientSecret
+            sendAttempt = domain.sendAttempt
+            sid = domain.sid
+            submitUrl = domain.submitUrl
+        }
     }
 }

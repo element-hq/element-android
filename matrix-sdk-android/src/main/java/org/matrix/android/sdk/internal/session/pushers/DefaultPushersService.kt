@@ -16,14 +16,14 @@
 package org.matrix.android.sdk.internal.session.pushers
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.work.BackoffPolicy
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.PusherEntity
-import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 internal class DefaultPushersService @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
         private val pushGatewayNotifyTask: PushGatewayNotifyTask,
@@ -135,14 +135,20 @@ internal class DefaultPushersService @Inject constructor(
     }
 
     override fun getPushersLive(): LiveData<List<Pusher>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm -> PusherEntity.where(realm) },
-                { it.asDomain() }
-        )
+        return realmInstance.queryList(this::mapPusher) {
+            it.query(PusherEntity::class)
+        }.asLiveData()
     }
 
     override fun getPushers(): List<Pusher> {
-        return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
+        val realm = realmInstance.getBlockingRealm()
+        return realm.query(PusherEntity::class)
+                .find()
+                .map(this::mapPusher)
+    }
+
+    private fun mapPusher(entity: PusherEntity): Pusher {
+        return entity.asDomain()
     }
 
     companion object {

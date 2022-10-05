@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.pushers
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.pushers.PusherState
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.RequestExecutor
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface AddPusherTask : Task<AddPusherTask.Params, Unit> {
@@ -34,7 +33,7 @@ internal interface AddPusherTask : Task<AddPusherTask.Params, Unit> {
 
 internal class DefaultAddPusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val requestExecutor: RequestExecutor,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPusherTask {
@@ -43,8 +42,8 @@ internal class DefaultAddPusherTask @Inject constructor(
         try {
             setPusher(pusher)
         } catch (error: Throwable) {
-            monarchy.awaitTransaction { realm ->
-                PusherEntity.where(realm, pusher.pushKey).findFirst()?.let {
+            realmInstance.write {
+                PusherEntity.where(this, pusher.pushKey).first().find()?.let {
                     it.state = PusherState.FAILED_TO_REGISTER
                 }
             }
@@ -56,12 +55,12 @@ internal class DefaultAddPusherTask @Inject constructor(
         requestExecutor.executeRequest(globalErrorReceiver) {
             pushersAPI.setPusher(pusher)
         }
-        monarchy.awaitTransaction { realm ->
-            val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
+        realmInstance.write {
+            val echo = PusherEntity.where(this, pusher.pushKey).first().find()
             if (echo == null) {
                 pusher.toEntity().also {
                     it.state = PusherState.REGISTERED
-                    realm.insertOrUpdate(it)
+                    copyToRealm(it)
                 }
             } else {
                 echo.appDisplayName = pusher.appDisplayName

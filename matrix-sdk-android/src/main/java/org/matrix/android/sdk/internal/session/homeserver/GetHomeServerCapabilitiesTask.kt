@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.homeserver
 
-import com.zhuinden.monarchy.Monarchy
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreads
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -38,7 +39,6 @@ import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationMan
 import org.matrix.android.sdk.internal.session.media.GetMediaConfigResult
 import org.matrix.android.sdk.internal.session.media.MediaAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.wellknown.GetWellknownTask
 import timber.log.Timber
 import java.util.Date
@@ -53,7 +53,7 @@ internal interface GetHomeServerCapabilitiesTask : Task<GetHomeServerCapabilitie
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
         private val mediaAPI: MediaAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val getWellknownTask: GetWellknownTask,
         private val configExtractor: IntegrationManagerConfigExtractor,
@@ -65,9 +65,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
     override suspend fun execute(params: GetHomeServerCapabilitiesTask.Params) {
         var doRequest = params.forceRefresh
         if (!doRequest) {
-            monarchy.awaitTransaction { realm ->
-                val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
-
+            realmInstance.write {
+                val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(this)
                 doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
             }
         }
@@ -116,8 +115,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             getVersionResult: Versions?,
             getWellknownResult: WellknownResult?
     ) {
-        monarchy.awaitTransaction { realm ->
-            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
+        realmInstance.write {
+            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(this)
 
             if (getCapabilitiesResult != null) {
                 val capabilities = getCapabilitiesResult.capabilities
@@ -152,7 +151,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 val config = configExtractor.extract(getWellknownResult.wellKnown)
                 if (config != null) {
                     Timber.v("Extracted integration config : $config")
-                    realm.insertOrUpdate(config)
+                    copyToRealm(config, updatePolicy = UpdatePolicy.ALL)
                 }
             }
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time

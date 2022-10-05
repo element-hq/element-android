@@ -16,11 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -38,15 +37,14 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
 }
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val directoryAPI: DirectoryAPI,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRoomIdByAliasTask {
 
     override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<RoomAliasDescription> {
-        val roomId = Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomSummaryEntity.findByAlias(it, params.roomAlias)?.roomId
-        }
+        val realm = realmInstance.getRealm()
+        val roomId = RoomSummaryEntity.findByAlias(realm, params.roomAlias)?.roomId
         return if (roomId != null) {
             Optional.from(RoomAliasDescription(roomId))
         } else if (!params.searchOnServer) {

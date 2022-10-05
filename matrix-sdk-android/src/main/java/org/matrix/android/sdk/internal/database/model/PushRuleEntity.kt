@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
@@ -41,10 +42,7 @@ internal class PushRuleEntity : RealmObject {
     companion object
 }
 
-/*
-internal fun PushRuleEntity.deleteOnCascade() {
-    conditions?.deleteAllFromRealm()
-    deleteFromRealm()
+internal fun MutableRealm.deleteOnCascade(pushRuleEntity: PushRuleEntity) {
+    pushRuleEntity.conditions?.also { delete(it) }
+    delete(pushRuleEntity)
 }
-
- */

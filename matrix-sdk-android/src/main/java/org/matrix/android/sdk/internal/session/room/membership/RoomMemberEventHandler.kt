@@ -16,7 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -35,7 +36,7 @@ internal class RoomMemberEventHandler @Inject constructor(
 ) {
 
     fun handle(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             event: Event,
             isInitialSync: Boolean,
@@ -62,7 +63,7 @@ internal class RoomMemberEventHandler @Inject constructor(
     }
 
     private fun handleInitialSync(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             currentUserId: String,
             eventUserId: String,
@@ -78,30 +79,30 @@ internal class RoomMemberEventHandler @Inject constructor(
     }
 
     private fun saveRoomMemberEntityLocally(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             userId: String,
             roomMember: RoomMemberContent
     ) {
-        val existingRoomMemberSummary = RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()
+        val existingRoomMemberSummary = RoomMemberSummaryEntity.where(realm, roomId, userId).first().find()
         if (existingRoomMemberSummary != null) {
             existingRoomMemberSummary.displayName = roomMember.displayName
             existingRoomMemberSummary.avatarUrl = roomMember.avatarUrl
             existingRoomMemberSummary.membership = roomMember.membership
         } else {
-            val presenceEntity = UserPresenceEntity.where(realm, userId).findFirst()
+            val presenceEntity = UserPresenceEntity.where(realm, userId).first().find()
             val roomMemberEntity = RoomMemberEntityFactory.create(
                     roomId,
                     userId,
                     roomMember,
                     presenceEntity
             )
-            realm.insert(roomMemberEntity)
+            realm.copyToRealm(roomMemberEntity, updatePolicy = UpdatePolicy.ALL)
         }
     }
 
     private fun saveUserEntityLocallyIfNecessary(
-            realm: Realm,
+            realm: MutableRealm,
             userId: String,
             roomMember: RoomMemberContent
     ) {
@@ -110,9 +111,9 @@ internal class RoomMemberEventHandler @Inject constructor(
         }
     }
 
-    private fun saveUserLocally(realm: Realm, userId: String, roomMember: RoomMemberContent) {
+    private fun saveUserLocally(realm: MutableRealm, userId: String, roomMember: RoomMemberContent) {
         val userEntity = UserEntityFactory.create(userId, roomMember)
-        realm.insertOrUpdate(userEntity)
+        realm.copyToRealm(userEntity, updatePolicy = UpdatePolicy.ALL)
     }
 
     private fun updateDirectChatsIfNecessary(
@@ -129,7 +130,7 @@ internal class RoomMemberEventHandler @Inject constructor(
     }
 
     private fun handleIncrementalSync(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             eventUserId: String,
             roomMember: RoomMemberContent,

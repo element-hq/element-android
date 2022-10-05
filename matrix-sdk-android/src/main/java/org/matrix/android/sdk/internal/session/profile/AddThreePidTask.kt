@@ -17,13 +17,12 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import java.util.UUID
 import javax.inject.Inject
 
@@ -35,7 +34,7 @@ internal abstract class AddThreePidTask : Task<AddThreePidTask.Params, Unit> {
 
 internal class DefaultAddThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val pendingThreePidMapper: PendingThreePidMapper,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddThreePidTask() {
@@ -62,8 +61,8 @@ internal class DefaultAddThreePidTask @Inject constructor(
         }
 
         // Store as a pending three pid
-        monarchy.awaitTransaction { realm ->
-            PendingThreePid(
+        realmInstance.write {
+            val pendingBindingEntity = PendingThreePid(
                     threePid = threePid,
                     clientSecret = clientSecret,
                     sendAttempt = sendAttempt,
@@ -71,7 +70,8 @@ internal class DefaultAddThreePidTask @Inject constructor(
                     submitUrl = null
             )
                     .let { pendingThreePidMapper.map(it) }
-                    .let { realm.copyToRealm(it) }
+
+            copyToRealm(pendingBindingEntity)
         }
     }
 
@@ -98,8 +98,8 @@ internal class DefaultAddThreePidTask @Inject constructor(
         }
 
         // Store as a pending three pid
-        monarchy.awaitTransaction { realm ->
-            PendingThreePid(
+        realmInstance.write {
+            val pendingBindingEntity = PendingThreePid(
                     threePid = threePid,
                     clientSecret = clientSecret,
                     sendAttempt = sendAttempt,
@@ -107,7 +107,7 @@ internal class DefaultAddThreePidTask @Inject constructor(
                     submitUrl = result.submitUrl
             )
                     .let { pendingThreePidMapper.map(it) }
-                    .let { realm.copyToRealm(it) }
+            copyToRealm(pendingBindingEntity)
         }
     }
 }

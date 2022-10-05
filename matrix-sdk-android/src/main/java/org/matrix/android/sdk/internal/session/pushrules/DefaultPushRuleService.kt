@@ -16,8 +16,8 @@
 package org.matrix.android.sdk.internal.session.pushrules
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.pushrules.Action
 import org.matrix.android.sdk.api.session.pushrules.ConditionResolver
@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermission
 import org.matrix.android.sdk.api.session.pushrules.getActions
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.pushrules.rest.RuleSet
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
@@ -56,7 +57,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val pushRuleFinder: PushRuleFinder,
         private val taskExecutor: TaskExecutor,
         private val conditionResolver: ConditionResolver,
-        @SessionDatabase private val monarchy: Monarchy
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : PushRuleService {
 
     private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()
@@ -74,33 +75,37 @@ internal class DefaultPushRuleService @Inject constructor(
         var senderRules: List<PushRule> = emptyList()
         var underrideRules: List<PushRule> = emptyList()
 
-        monarchy.doWithRealm { realm ->
-            PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.OVERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.ROOM)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.SENDER)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.UNDERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
-        }
+        val realm = realmInstance.getBlockingRealm()
+        PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
+                .first()
+                .find()
+                ?.let { pushRulesEntity ->
+                    contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
+                }
+        PushRulesEntity.where(realm, scope, RuleSetKey.OVERRIDE)
+                .first()
+                .find()
+                ?.let { pushRulesEntity ->
+                    overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                }
+        PushRulesEntity.where(realm, scope, RuleSetKey.ROOM)
+                .first()
+                .find()
+                ?.let { pushRulesEntity ->
+                    roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
+                }
+        PushRulesEntity.where(realm, scope, RuleSetKey.SENDER)
+                .first()
+                .find()
+                ?.let { pushRulesEntity ->
+                    senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
+                }
+        PushRulesEntity.where(realm, scope, RuleSetKey.UNDERRIDE)
+                .first()
+                .find()
+                ?.let { pushRulesEntity ->
+                    underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                }
 
         return RuleSet(
                 content = contentRules,
@@ -151,18 +156,19 @@ internal class DefaultPushRuleService @Inject constructor(
     }
 
     override fun getKeywords(): LiveData<Set<String>> {
-        // Keywords are all content rules that don't start with '.'
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
-                },
-                { result ->
-                    result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
-                }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().orEmpty().toSet()
+
+        fun map(pushRulesEntity: PushRulesEntity): List<String> {
+            return pushRulesEntity.pushRules
+                    .map(PushRuleEntity::ruleId)
+                    .filter { !it.startsWith(".") }
         }
+
+        // Keywords are all content rules that don't start with '.'
+        return realmInstance.queryList(::map) {
+            PushRulesEntity.where(it, RuleScope.GLOBAL, RuleSetKey.CONTENT)
+        }.map {
+            it.firstOrNull().orEmpty().toSet()
+        }.asLiveData()
     }
 
     fun dispatchEvents(pushEvents: PushEvents) {

@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -36,18 +36,17 @@ internal interface ValidateSmsCodeTask : Task<ValidateSmsCodeTask.Params, Unit> 
 
 internal class DefaultValidateSmsCodeTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        @SessionDatabase
-        private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val pendingThreePidMapper: PendingThreePidMapper,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ValidateSmsCodeTask {
 
     override suspend fun execute(params: ValidateSmsCodeTask.Params) {
         // Search the pending ThreePid
-        val pendingThreePids = monarchy.fetchAllMappedSync(
-                { it.where(PendingThreePidEntity::class.java) },
-                { pendingThreePidMapper.map(it) }
-        )
+        val realm = realmInstance.getRealm()
+        val pendingThreePids = realm.query(PendingThreePidEntity::class)
+                .find()
+                .map(pendingThreePidMapper::map)
                 .firstOrNull { it.threePid == params.threePid }
                 ?: throw IllegalArgumentException("unknown threepid")
 

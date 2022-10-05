@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.relationship
 
-import io.realm.Realm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
@@ -36,7 +36,7 @@ import org.matrix.android.sdk.internal.database.query.whereType
  *  - Separately, rooms can claim parents via the m.room.parent state event.
  */
 internal class RoomChildRelationInfo(
-        private val realm: Realm,
+        private val realm: TypedRealm,
         private val roomId: String
 ) {
 
@@ -58,7 +58,7 @@ internal class RoomChildRelationInfo(
      */
     fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
-                .findAll()
+                .find()
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
                         // Children where via is not present are ignored.
@@ -76,7 +76,7 @@ internal class RoomChildRelationInfo(
 
     fun getParentDescriptions(): List<SpaceParentInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_PARENT)
-                .findAll()
+                .find()
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceParentContent>()?.let { spaceParentContent ->
                         // Parent where via is not present are ignored.

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.integrationmanager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerC
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.WellknownIntegrationManagerConfigEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.extensions.observeNotNull
@@ -56,7 +57,7 @@ import javax.inject.Inject
 @SessionScope
 internal class IntegrationManager @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val accountDataDataSource: UserAccountDataDataSource,
         private val widgetFactory: WidgetFactory
@@ -251,10 +252,14 @@ internal class IntegrationManager @Inject constructor(
     }
 
     private fun observeWellknownConfig() {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { it.where(WellknownIntegrationManagerConfigEntity::class.java) },
-                { IntegrationManagerConfig(it.uiUrl, it.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER) }
-        )
+
+        fun mapConfig(entity: WellknownIntegrationManagerConfigEntity): IntegrationManagerConfig {
+            return IntegrationManagerConfig(entity.uiUrl, entity.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER)
+        }
+
+        val liveData = realmInstance.queryList(::mapConfig) {
+            it.query(WellknownIntegrationManagerConfigEntity::class)
+        }.asLiveData()
         liveData.observeNotNull(lifecycleOwner) {
             val config = it.firstOrNull()
             updateCurrentConfigs(IntegrationManagerConfig.Kind.HOMESERVER, config)

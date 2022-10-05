@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.pushers
 
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.pushers.PusherState
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
@@ -31,7 +32,7 @@ internal interface GetPushersTask : Task<Unit, Unit>
 
 internal class DefaultGetPushersTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPushersTask {
 
@@ -39,15 +40,17 @@ internal class DefaultGetPushersTask @Inject constructor(
         val response = executeRequest(globalErrorReceiver) {
             pushersAPI.getPushers()
         }
-        monarchy.awaitTransaction { realm ->
+        realmInstance.write {
             // clear existings?
-            realm.where(PusherEntity::class.java)
-                    .findAll()
-                    .forEach { it.deleteOnCascade() }
+            query(PusherEntity::class)
+                    .find()
+                    .forEach {
+                        deleteOnCascade(it)
+                    }
             response.pushers?.forEach { jsonPusher ->
                 jsonPusher.toEntity().also {
                     it.state = PusherState.REGISTERED
-                    realm.insertOrUpdate(it)
+                    copyToRealm(it)
                 }
             }
         }

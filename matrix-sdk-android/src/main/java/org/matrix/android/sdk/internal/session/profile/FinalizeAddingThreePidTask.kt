@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
@@ -24,13 +23,12 @@ import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
-import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,7 +43,7 @@ internal abstract class FinalizeAddingThreePidTask : Task<FinalizeAddingThreePid
 
 internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val pendingThreePidMapper: PendingThreePidMapper,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : FinalizeAddingThreePidTask() {
@@ -55,10 +53,10 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
             true
         } else {
             // Get the required pending data
-            val pendingThreePids = monarchy.fetchAllMappedSync(
-                    { it.where(PendingThreePidEntity::class.java) },
-                    { pendingThreePidMapper.map(it) }
-            )
+            val realm = realmInstance.getRealm()
+            val pendingThreePids = realm.query(PendingThreePidEntity::class)
+                    .find()
+                    .map(pendingThreePidMapper::map)
                     .firstOrNull { it.threePid == params.threePid }
                     ?: throw IllegalArgumentException("unknown threepid")
 
@@ -99,13 +97,11 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
 
     private suspend fun cleanupDatabase(params: Params) {
         // Delete the pending three pid
-        monarchy.awaitTransaction { realm ->
-            realm.where(PendingThreePidEntity::class.java)
-                    .equalTo(PendingThreePidEntityFields.EMAIL, params.threePid.value)
-                    .or()
-                    .equalTo(PendingThreePidEntityFields.MSISDN, params.threePid.value)
-                    .findAll()
-                    .deleteAllFromRealm()
+        realmInstance.write {
+            val pendingThreePidEntities = query(PendingThreePidEntity::class)
+                    .query("email == $0 OR msisdn == $1", params.threePid.value, params.threePid.value)
+                    .find()
+            delete(pendingThreePidEntities)
         }
     }
 }
