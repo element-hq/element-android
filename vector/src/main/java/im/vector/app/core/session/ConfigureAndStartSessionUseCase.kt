@@ -32,7 +32,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val updateMatrixClientInfoUseCase: UpdateMatrixClientInfoUseCase,
 ) {
 
-    fun execute(session: Session, startSyncing: Boolean = true) {
+    suspend fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
         session.filterService().setFilter(FilterService.FilterPreset.ElementFilter)

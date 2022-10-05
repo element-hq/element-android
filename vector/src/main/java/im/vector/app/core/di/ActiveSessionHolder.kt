@@ -110,7 +110,9 @@ class ActiveSessionHolder @Inject constructor(
                 }
                 ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
                     setActiveSession(session)
-                    configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
+                    runBlocking {
+                        configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
+                    }
                 }
     }
 
