@@ -114,7 +114,9 @@ abstract class VerificationTestBase {
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        GlobalScope.launch(Dispatchers.Main) { session.open() }
+        runBlocking(Dispatchers.Main) {
+            session.open()
+        }
 
         session.syncService().startSync(true)
 
