@@ -3,6 +3,7 @@ Changes in Element v1.5.2 (2022-10-05)
 
 Features ✨
 ----------
+ - New App Layout is now enabled by default! Go to the Settings > Labs to toggle this ([#7166](https://github.com/vector-im/element-android/issues/7166))
  - Render inline images in the timeline ([#351](https://github.com/vector-im/element-android/issues/351))
  - Add privacy setting to disable personalized learning by the keyboard ([#6633](https://github.com/vector-im/element-android/issues/6633))
 
@@ -48,7 +49,6 @@ Other changes
  - Add basic integration of Sentry to capture errors and crashes if user has given consent. ([#7076](https://github.com/vector-im/element-android/issues/7076))
  - Add support to `/devtools` command. ([#7126](https://github.com/vector-im/element-android/issues/7126))
  - Fix lint warning, and cleanup the code ([#7159](https://github.com/vector-im/element-android/issues/7159))
- - New App Layout is now enabled by default! Go to the Settings > Labs to toggle this ([#7166](https://github.com/vector-im/element-android/issues/7166))
  - Mutualize the pending auth handling ([#7193](https://github.com/vector-im/element-android/issues/7193))
  - CI: Prevent modification of translations by developer. ([#7211](https://github.com/vector-im/element-android/issues/7211))
  - Fix typo in strings.xml and make sure this is American English. ([#7287](https://github.com/vector-im/element-android/issues/7287))
