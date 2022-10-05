@@ -24,7 +24,7 @@ import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
-import im.vector.app.features.home.room.list.RoomSummaryItemPlaceHolder_
+import im.vector.app.features.home.room.list.RoomSummaryPlaceHolderItem_
 import im.vector.app.features.settings.FontScalePreferences
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -83,7 +83,7 @@ class HomeFilteredRoomsController @Inject constructor(
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         return if (item == null) {
             val host = this
-            RoomSummaryItemPlaceHolder_().apply {
+            RoomSummaryPlaceHolderItem_().apply {
                 id(currentPosition)
                 useSingleLineForLastEvent(host.shouldUseSingleLine)
             }

@@ -1436,8 +1436,8 @@ class TimelineFragment :
         timelineEventController.timeline = timelineViewModel.timeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
-        layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
-            override fun onLayoutCompleted(state: RecyclerView.State?) {
+        layoutManager = object : LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true) {
+            override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()

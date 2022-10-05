@@ -41,7 +41,7 @@ import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
-abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentered.Holder>(R.layout.item_room_centered) {
+abstract class RoomSummaryCenteredItem : VectorEpoxyModel<RoomSummaryCenteredItem.Holder>(R.layout.item_room_centered) {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
@@ -61,8 +61,8 @@ abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentere
     @EpoxyAttribute
     var showPresence: Boolean = false
 
-    @EpoxyAttribute @JvmField
-    var isPublic: Boolean = false
+    @EpoxyAttribute
+    var izPublic: Boolean = false
 
     @EpoxyAttribute
     var unreadNotificationCount: Int = 0
@@ -96,7 +96,7 @@ abstract class RoomSummaryItemCentered : VectorEpoxyModel<RoomSummaryItemCentere
         holder.titleView.text = matrixItem.getBestName()
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
-        holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
+        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
