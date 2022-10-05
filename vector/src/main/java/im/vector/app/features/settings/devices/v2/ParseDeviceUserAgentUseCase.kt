@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
