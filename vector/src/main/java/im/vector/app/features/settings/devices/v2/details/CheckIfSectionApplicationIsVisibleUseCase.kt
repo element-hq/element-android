@@ -16,16 +16,16 @@
 
 package im.vector.app.features.settings.devices.v2.details
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import org.matrix.android.sdk.api.extensions.orFalse
+import javax.inject.Inject
 
-data class SessionDetailsViewState(
-        val deviceId: String,
-        val deviceFullInfo: Async<DeviceFullInfo> = Uninitialized,
-) : MavericksState {
-    constructor(args: SessionDetailsArgs) : this(
-            deviceId = args.deviceId
-    )
+class CheckIfSectionApplicationIsVisibleUseCase @Inject constructor() {
+
+    // TODO add unit tests
+    fun execute(matrixClientInfoContent: MatrixClientInfoContent?): Boolean {
+        return matrixClientInfoContent?.name?.isNotEmpty().orFalse() ||
+                matrixClientInfoContent?.version?.isNotEmpty().orFalse() ||
+                matrixClientInfoContent?.url?.isNotEmpty().orFalse()
+    }
 }

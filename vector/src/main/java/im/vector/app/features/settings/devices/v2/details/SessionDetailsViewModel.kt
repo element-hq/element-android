@@ -48,7 +48,7 @@ class SessionDetailsViewModel @AssistedInject constructor(
 
     private fun observeSessionInfo(deviceId: String) {
         getDeviceFullInfoUseCase.execute(deviceId)
-                .onEach { setState { copy(deviceInfo = Success(it.deviceInfo)) } }
+                .onEach { setState { copy(deviceFullInfo = Success(it)) } }
                 .launchIn(viewModelScope)
     }
 
