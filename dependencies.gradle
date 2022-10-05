@@ -29,6 +29,8 @@ def jjwt = "0.11.5"
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
 
+def sentry = "6.4.1"
+
 def fragment = "1.5.3"
 
 // Testing
@@ -164,6 +166,9 @@ ext.libs = [
         ],
         apache      : [
                 'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
+        ],
+        sentry: [
+                'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",
