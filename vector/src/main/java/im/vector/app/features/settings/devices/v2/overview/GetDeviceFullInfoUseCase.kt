@@ -19,9 +19,10 @@ package im.vector.app.features.settings.devices.v2.overview
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
+import im.vector.app.features.settings.devices.v2.ParseDeviceUserAgentUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
@@ -34,6 +35,7 @@ class GetDeviceFullInfoUseCase @Inject constructor(
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
+        private val parseDeviceUserAgentUseCase: ParseDeviceUserAgentUseCase,
 ) {
 
     fun execute(deviceId: String): Flow<DeviceFullInfo> {
@@ -48,11 +50,15 @@ class GetDeviceFullInfoUseCase @Inject constructor(
                 val fullInfo = if (info != null && cryptoInfo != null) {
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoInfo)
                     val isInactive = checkIfSessionIsInactiveUseCase.execute(info.lastSeenTs ?: 0)
+                    val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoInfo.deviceId
+                    val deviceUserAgent = parseDeviceUserAgentUseCase.execute(info.getBestLastSeenUserAgent())
                     DeviceFullInfo(
                             deviceInfo = info,
                             cryptoDeviceInfo = cryptoInfo,
                             roomEncryptionTrustLevel = roomEncryptionTrustLevel,
-                            isInactive = isInactive
+                            isInactive = isInactive,
+                            isCurrentDevice = isCurrentDevice,
+                            deviceExtendedInfo = deviceUserAgent,
                     )
                 } else {
                     null

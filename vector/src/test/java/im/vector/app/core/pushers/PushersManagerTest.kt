@@ -16,14 +16,15 @@
 
 package im.vector.app.core.pushers
 
-import im.vector.app.AppBuildConfig
 import im.vector.app.R
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAppNameProvider
+import im.vector.app.test.fakes.FakeGetDeviceInfoUseCase
 import im.vector.app.test.fakes.FakeLocaleProvider
 import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.CredentialsFixture
 import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.fixtures.SessionParamsFixture
@@ -32,8 +33,9 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.junit.Before
 import org.junit.Test
+import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
+import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import java.util.Locale
 import kotlin.math.abs
 
@@ -45,6 +47,7 @@ class PushersManagerTest {
     private val stringProvider = FakeStringProvider()
     private val localeProvider = FakeLocaleProvider()
     private val appNameProvider = FakeAppNameProvider()
+    private val getDeviceInfoUseCase = FakeGetDeviceInfoUseCase()
 
     private val pushersManager = PushersManager(
             mockk(),
@@ -52,12 +55,8 @@ class PushersManagerTest {
             localeProvider,
             stringProvider.instance,
             appNameProvider,
+            getDeviceInfoUseCase,
     )
-
-    @Before
-    fun setUp() {
-        mockkObject(AppBuildConfig)
-    }
 
     @Test
     fun `when enqueueRegisterPusher, then HttpPusher created and enqueued`() {
@@ -69,22 +68,25 @@ class PushersManagerTest {
         stringProvider.given(R.string.pusher_app_id, pusherAppId)
         localeProvider.givenCurrent(Locale.UK)
         appNameProvider.givenAppName(appName)
-        every { AppBuildConfig.getModel() } returns deviceDisplayName
+        getDeviceInfoUseCase.givenDeviceInfo(aCryptoDeviceInfo(unsigned = UnsignedDeviceInfo(deviceDisplayName)))
+        val expectedHttpPusher = HttpPusher(
+                pushkey = pushKey,
+                appId = pusherAppId,
+                profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(session.myUserId.hashCode()),
+                lang = Locale.UK.language,
+                appDisplayName = appName,
+                deviceDisplayName = deviceDisplayName,
+                url = gateway,
+                enabled = true,
+                deviceId = session.sessionParams.deviceId!!,
+                append = false,
+                withEventIdOnly = true,
+        )
 
         pushersManager.enqueueRegisterPusher(pushKey, gateway)
 
         val httpPusher = pushersService.verifyEnqueueAddHttpPusher()
-        httpPusher.pushkey shouldBeEqualTo pushKey
-        httpPusher.appId shouldBeEqualTo pusherAppId
-        httpPusher.profileTag shouldBeEqualTo DEFAULT_PUSHER_FILE_TAG + "_" + abs(session.myUserId.hashCode())
-        httpPusher.lang shouldBeEqualTo Locale.UK.language
-        httpPusher.appDisplayName shouldBeEqualTo appName
-        httpPusher.deviceDisplayName shouldBeEqualTo deviceDisplayName
-        httpPusher.enabled shouldBeEqualTo true
-        httpPusher.deviceId shouldBeEqualTo session.sessionParams.deviceId
-        httpPusher.append shouldBeEqualTo false
-        httpPusher.withEventIdOnly shouldBeEqualTo true
-        httpPusher.url shouldBeEqualTo gateway
+        httpPusher shouldBeEqualTo expectedHttpPusher
     }
 
     @Test

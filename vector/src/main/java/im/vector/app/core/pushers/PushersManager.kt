@@ -16,8 +16,8 @@
 
 package im.vector.app.core.pushers
 
-import im.vector.app.AppBuildConfig
 import im.vector.app.R
+import im.vector.app.core.device.GetDeviceInfoUseCase
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
@@ -36,6 +36,7 @@ class PushersManager @Inject constructor(
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider,
+        private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
 ) {
     suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
@@ -65,12 +66,12 @@ class PushersManager @Inject constructor(
             pushKey: String,
             gateway: String
     ) = HttpPusher(
-            pushKey,
+            pushkey = pushKey,
             appId = stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
             lang = localeProvider.current().language,
             appDisplayName = appNameProvider.getAppName(),
-            deviceDisplayName = AppBuildConfig.getModel(),
+            deviceDisplayName = getDeviceInfoUseCase.execute().displayName().orEmpty(),
             url = gateway,
             enabled = true,
             deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",

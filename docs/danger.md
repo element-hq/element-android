@@ -28,6 +28,7 @@ Here are the checks that Danger does so far:
 - PR with change on layout should include screenshot in the description
 - PR which adds png file warn about the usage of vector drawables
 - non draft PR should have a reviewer
+- files containing translations are not modified by developers
 
 ### Quality check
 

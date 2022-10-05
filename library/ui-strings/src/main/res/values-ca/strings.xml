@@ -1470,7 +1470,7 @@
         <item quantity="one">%d sessió activa</item>
         <item quantity="other">%d sessions actives</item>
     </plurals>
-    <string name="settings_active_sessions_verified_device_desc">Aquesta sessió és de confiança per a xats segurs ja que l\'has verificada tu:</string>
+    <string name="settings_active_sessions_verified_device_desc">Aquesta sessió és de confiança per a missatges segurs ja que l\'has verificada tu:</string>
     <string name="settings_active_sessions_signout_device">Desconnecta aquesta sessió</string>
     <string name="settings_active_sessions_manage">Gestió de sessions</string>
     <string name="settings_active_sessions_show_all">Veure totes les sessions</string>
@@ -1844,7 +1844,7 @@
     <string name="choose_locale_other_locales_title">Altres idiomes disponibles</string>
     <string name="choose_locale_current_locale_title">Idioma actual</string>
     <string name="delete_event_dialog_reason_hint">Motiu de l\'eliminació</string>
-    <string name="verification_profile_device_verified_because">Aquesta sessió és de confiança per a xats segurs ja que %1$s (%2$s) l\'ha verificat:</string>
+    <string name="verification_profile_device_verified_because">Aquesta sessió és de confiança per a missatges segurs ja que %1$s (%2$s) l\'ha verificat:</string>
     <string name="bootstrap_progress_compute_curve_key">Obtenint clau de corba</string>
     <string name="create_room_dm_failure">No s\'ha pogut crear el xat. Comprova els usuaris que vols convidar i torna-ho a provar.</string>
     <string name="cross_signing_verify_by_text">Verifica manualment mitjançant text</string>
@@ -2225,7 +2225,7 @@
     <string name="ftue_auth_carousel_control_body">Tria on es desen les teves converses, et dona control i independència. Connectat a través de Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Comunicació segura i independent que t\'ofereix el mateix nivell de privadesa que una conversa cara a cara a casa teva.</string>
     <string name="ftue_auth_carousel_workplace_title">Missatgeria pel teu equip.</string>
-    <string name="ftue_auth_carousel_encrypted_title">Missatgeria segura.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Missatges segurs.</string>
     <string name="ftue_auth_carousel_secure_title">Ets propietari de les teves converses.</string>
     <string name="ftue_auth_carousel_control_title">Tu tens el control.</string>
     <string name="call_tile_voice_call_has_ended">Trucada finalitzada • %1$s</string>
@@ -2668,4 +2668,10 @@
     <string name="a11y_collapse_space_children">Amaga els continguts de %s</string>
     <string name="a11y_expand_space_children">Mostra el contingut de %s</string>
     <string name="change_space">Canvia espai</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifica les teves sessions per obtenir missatges segurs millorats o tanca les sessions que no reconeguis o ja no utilitzis.</string>
+    <string name="device_manager_filter_option_unverified_description">No llest per a missatges segurs</string>
+    <string name="device_manager_filter_option_verified_description">Llest per a missatges segurs</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Aquesta sessió està llesta per a missatges segurs.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">La teva sessió actual està llesta per a missatges segurs.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifica la teva sessió actual obtenir missatges segurs millorats.</string>
 </resources>

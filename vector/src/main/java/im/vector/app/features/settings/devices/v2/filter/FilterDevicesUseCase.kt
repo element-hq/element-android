@@ -31,8 +31,8 @@ class FilterDevicesUseCase @Inject constructor() {
                 .filter {
                     when (filterType) {
                         DeviceManagerFilterType.ALL_SESSIONS -> true
-                        DeviceManagerFilterType.VERIFIED -> it.cryptoDeviceInfo?.isVerified.orFalse()
-                        DeviceManagerFilterType.UNVERIFIED -> !it.cryptoDeviceInfo?.isVerified.orFalse()
+                        DeviceManagerFilterType.VERIFIED -> it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
+                        DeviceManagerFilterType.UNVERIFIED -> !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
                         DeviceManagerFilterType.INACTIVE -> it.isInactive
                     }
                 }

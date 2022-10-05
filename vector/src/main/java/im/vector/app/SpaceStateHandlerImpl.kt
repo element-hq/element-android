@@ -22,6 +22,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.UserProperties
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
@@ -81,6 +82,13 @@ class SpaceStateHandlerImpl @Inject constructor(
         if (sameSpaceSelected) {
             return
         }
+
+        analyticsTracker.capture(
+                ViewRoom(
+                        isDM = false,
+                        isSpace = true,
+                )
+        )
 
         if (isForwardNavigation) {
             addToBackstack(spaceToLeave, spaceToSet)

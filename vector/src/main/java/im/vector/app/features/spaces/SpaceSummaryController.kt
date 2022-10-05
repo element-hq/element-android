@@ -88,7 +88,7 @@ class SpaceSummaryController @Inject constructor(
             id("space_home")
             selected(selectedSpace == null)
             countState(UnreadCounterBadgeView.State.Count(homeCount.totalCount, homeCount.isHighlight))
-            listener { host.callback?.onSpaceSelected(null) }
+            listener { host.callback?.onSpaceSelected(null, isSubSpace = false) }
         }
 
         rootSpaces
@@ -114,7 +114,7 @@ class SpaceSummaryController @Inject constructor(
                         selected(isSelected)
                         canDrag(true)
                         onMore { host.callback?.onSpaceSettings(roomSummary) }
-                        listener { host.callback?.onSpaceSelected(roomSummary) }
+                        listener { host.callback?.onSpaceSelected(roomSummary, isSubSpace = false) }
                         toggleExpand { host.callback?.onToggleExpand(roomSummary) }
                         countState(
                                 UnreadCounterBadgeView.State.Count(
@@ -165,7 +165,7 @@ class SpaceSummaryController @Inject constructor(
             expanded(expanded)
             onMore { host.callback?.onSpaceSettings(childSummary) }
             matrixItem(childSummary.toMatrixItem())
-            listener { host.callback?.onSpaceSelected(childSummary) }
+            listener { host.callback?.onSpaceSelected(childSummary, isSubSpace = true) }
             toggleExpand { host.callback?.onToggleExpand(childSummary) }
             indent(currentDepth)
             countState(
@@ -184,7 +184,7 @@ class SpaceSummaryController @Inject constructor(
     }
 
     interface Callback {
-        fun onSpaceSelected(spaceSummary: RoomSummary?)
+        fun onSpaceSelected(spaceSummary: RoomSummary?, isSubSpace: Boolean)
         fun onSpaceInviteSelected(spaceSummary: RoomSummary)
         fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onToggleExpand(spaceSummary: RoomSummary)

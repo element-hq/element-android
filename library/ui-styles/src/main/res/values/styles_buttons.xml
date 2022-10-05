@@ -41,6 +41,10 @@
         <item name="lineHeight">24sp</item>
     </style>
 
+    <style name="Widget.Vector.Button.Text.Destructive">
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
+    </style>
+
     <style name="Widget.Vector.Button.Text.OnPrimary">
         <item name="colorControlHighlight">?colorOnPrimary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayOnPrimary</item>

@@ -255,6 +255,10 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.SetUserPowerLevel -> {
                             handleSetUserPowerLevel(parsedCommand)
                         }
+                        is ParsedCommand.DevTools -> {
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
+                        }
                         is ParsedCommand.ClearScalarToken -> {
                             // TODO
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandNotImplemented)
@@ -359,6 +363,11 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SendLenny -> {
                             sendPrefixedMessage("( ͡° ͜ʖ ͡°)", parsedCommand.message, state.rootThreadEventId)
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
+                        }
+                        is ParsedCommand.SendTableFlip -> {
+                            sendPrefixedMessage("(╯°□°）╯︵ ┻━┻", parsedCommand.message, state.rootThreadEventId)
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }

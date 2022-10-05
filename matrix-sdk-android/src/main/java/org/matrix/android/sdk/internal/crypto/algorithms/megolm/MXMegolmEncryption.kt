@@ -162,7 +162,8 @@ internal class MXMegolmEncryption(
                 forwardingCurve25519KeyChain = emptyList(),
                 keysClaimed = keysClaimedMap,
                 exportFormat = false,
-                sharedHistory = sharedHistory
+                sharedHistory = sharedHistory,
+                trusted = true
         )
 
         defaultKeysBackupService.maybeBackupKeys()

@@ -32,10 +32,10 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.PublishDataSource
-import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.login.ReAuthHelper
-import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -45,7 +45,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -67,13 +66,11 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.api.util.awaitCallback
-import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 data class DevicesViewState(
         val myDeviceId: String = "",
@@ -100,14 +97,11 @@ class DevicesViewModel @AssistedInject constructor(
         private val session: Session,
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
-        private val matrix: Matrix,
+        private val pendingAuthHandler: PendingAuthHandler,
         private val checkIfSessionIsInactiveUseCase: CheckIfSessionIsInactiveUseCase,
         getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
-
-    var uiaContinuation: Continuation<UIABaseAuth>? = null
-    var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
@@ -232,37 +226,9 @@ class DevicesViewModel @AssistedInject constructor(
             is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone -> {
-                // we should use token based auth
-                // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
-                // will release the interactive auth interceptor
-                Timber.d("## UIA - FallBack success $pendingAuth , continuation: $uiaContinuation")
-                if (pendingAuth != null) {
-                    uiaContinuation?.resume(pendingAuth!!)
-                } else {
-                    uiaContinuation?.resumeWithException(IllegalArgumentException())
-                }
-                Unit
-            }
-            is DevicesAction.PasswordAuthDone -> {
-                val decryptedPass = matrix.secureStorageService()
-                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
-                uiaContinuation?.resume(
-                        UserPasswordAuth(
-                                session = pendingAuth?.session,
-                                password = decryptedPass,
-                                user = session.myUserId
-                        )
-                )
-                Unit
-            }
-            DevicesAction.ReAuthCancelled -> {
-                Timber.d("## UIA - Reauth cancelled")
-//                _viewEvents.post(DevicesViewEvents.Loading)
-                uiaContinuation?.resumeWithException(Exception())
-                uiaContinuation = null
-                pendingAuth = null
-            }
+            is DevicesAction.SsoAuthDone -> pendingAuthHandler.ssoAuthDone()
+            is DevicesAction.PasswordAuthDone -> pendingAuthHandler.passwordAuthDone(action.password)
+            DevicesAction.ReAuthCancelled -> pendingAuthHandler.reAuthCancelled()
             DevicesAction.ResetSecurity -> _viewEvents.post(DevicesViewEvents.PromptResetSecrets)
         }
     }
@@ -371,8 +337,8 @@ class DevicesViewModel @AssistedInject constructor(
                             } else {
                                 Timber.d("## UIA : deleteDevice UIA > start reauth activity")
                                 _viewEvents.post(DevicesViewEvents.RequestReAuth(flowResponse, errCode))
-                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
-                                uiaContinuation = promise
+                                pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+                                pendingAuthHandler.uiaContinuation = promise
                             }
                         }
                     }, it)

@@ -40,6 +40,7 @@ import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.PERMISSIONS_FOR_VOICE_BROADCAST
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
@@ -75,6 +76,7 @@ class AttachmentTypeSelectorView(
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
         views.attachmentLocationButton.configure(Type.LOCATION)
+        views.attachmentVoiceBroadcast.configure(Type.VOICE_BROADCAST)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -134,6 +136,7 @@ class AttachmentTypeSelectorView(
             Type.CONTACT -> views.attachmentContactButton
             Type.POLL -> views.attachmentPollButton
             Type.LOCATION -> views.attachmentLocationButton
+            Type.VOICE_BROADCAST -> views.attachmentVoiceBroadcast
         }.let {
             it.isVisible = isVisible
         }
@@ -221,6 +224,7 @@ class AttachmentTypeSelectorView(
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
         POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll),
-        LOCATION(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, R.string.tooltip_attachment_location)
+        LOCATION(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, R.string.tooltip_attachment_location),
+        VOICE_BROADCAST(PERMISSIONS_FOR_VOICE_BROADCAST, R.string.tooltip_attachment_voice_broadcast),
     }
 }

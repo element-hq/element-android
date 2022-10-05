@@ -24,8 +24,9 @@ import org.matrix.android.sdk.api.session.pushers.Pusher
 
 data class SessionOverviewViewState(
         val deviceId: String,
-        val isCurrentSession: Boolean = false,
+        val isCurrentSessionTrusted: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
+        val isLoading: Boolean = false,
         val pushers: Async<List<Pusher>> = Uninitialized,
 ) : MavericksState {
     constructor(args: SessionOverviewArgs) : this(

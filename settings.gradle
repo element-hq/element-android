@@ -1,12 +1,16 @@
 include ':vector-app'
 include ':vector'
 include ':vector-config'
-include ':matrix-sdk-android'
+
 include ':library:core-utils'
 include ':library:ui-strings'
 include ':library:ui-styles'
-include ':library:jsonviewer'
 include ':library:attachment-viewer'
-include ':library:diff-match-patch'
 include ':library:multipicker'
+
+include ':library:external:jsonviewer'
+include ':library:external:diff-match-patch'
+include ':library:external:dialpad'
+
+include ':matrix-sdk-android'
 include ':matrix-sdk-android-flow'
