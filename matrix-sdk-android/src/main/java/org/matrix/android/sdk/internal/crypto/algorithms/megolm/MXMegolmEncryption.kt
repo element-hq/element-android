@@ -434,6 +434,8 @@ internal class MXMegolmEncryption(
      * This method must be called in getDecryptingThreadHandler() thread.
      *
      * @param userIds the user ids whose devices must be checked.
+     * @param forceDistributeToUnverified If true the unverified devices will be included in valid recipients even if
+     * such devices are blocked in crypto settings
      */
     private suspend fun getDevicesInRoom(userIds: List<String>, forceDistributeToUnverified: Boolean = false): DeviceInRoomInfo {
         // We are happy to use a cached version here: we assume that if we already
