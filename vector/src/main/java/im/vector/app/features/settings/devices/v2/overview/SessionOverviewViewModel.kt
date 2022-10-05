@@ -43,14 +43,13 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.flow.flow
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
@@ -102,7 +101,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     private fun observePushers(deviceId: String) {
         session.flow()
                 .livePushers()
-                .map { it.filter { pusher -> pusher.deviceId == deviceId }}
+                .map { it.filter { pusher -> pusher.deviceId == deviceId } }
                 .execute { copy(pushers = it) }
     }
 
@@ -113,6 +112,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
             SessionOverviewAction.SsoAuthDone -> handleSsoAuthDone()
             is SessionOverviewAction.PasswordAuthDone -> handlePasswordAuthDone(action)
             SessionOverviewAction.ReAuthCancelled -> handleReAuthCancelled()
+            is SessionOverviewAction.TogglePushNotifications -> handleTogglePusherAction(action)
         }
     }
 
@@ -209,9 +209,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun handleReAuthCancelled() {
         pendingAuthHandler.reAuthCancelled()
-        when (action) {
-            is SessionOverviewAction.TogglePushNotifications -> handleTogglePusherAction(action)
-        }
     }
 
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {

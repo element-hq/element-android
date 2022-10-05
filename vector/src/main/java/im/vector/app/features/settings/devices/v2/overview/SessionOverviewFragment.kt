@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -40,6 +41,7 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -172,12 +174,11 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state)
-        updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
         updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
         if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSession, state.deviceInfo.invoke())
+            renderSessionInfo(state.isCurrentSessionTrusted, state.deviceInfo.invoke())
         } else {
             hideSessionInfo()
         }
@@ -301,5 +302,9 @@ class SessionOverviewFragment :
                 description = getString(descriptionResId),
         )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
+    }
+
+    private fun hideSessionInfo() {
+        views.sessionOverviewInfo.isGone = true
     }
 }
