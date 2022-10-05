@@ -3336,5 +3336,8 @@
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
     <string name="qr_code_login_new_device_instruction_3">Select \'Link a device\'</string>
     <string name="qr_code_login_new_device_instruction_4">Select \'Show QR code on this device\'</string>
+    <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
+    <string name="qr_code_login_need_an_alternative_method">Need an alternative method?</string>
+    <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
 
 </resources>
