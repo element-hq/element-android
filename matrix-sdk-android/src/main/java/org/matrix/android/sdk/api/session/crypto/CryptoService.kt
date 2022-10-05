@@ -61,6 +61,8 @@ interface CryptoService {
 
     fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean
 
+    fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean>
+
     fun setWarnOnUnknownDevices(warn: Boolean)
 
     fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String)
@@ -76,6 +78,8 @@ interface CryptoService {
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
+
+    fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>
 
     /**
      * Enable or disable key gossiping.
@@ -100,7 +104,7 @@ interface CryptoService {
      */
     fun isShareKeysOnInviteEnabled(): Boolean
 
-    fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
+    fun setRoomUnBlockUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int
 
@@ -112,7 +116,7 @@ interface CryptoService {
 
     suspend fun exportRoomKeys(password: String): ByteArray
 
-    fun setRoomBlacklistUnverifiedDevices(roomId: String)
+    fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean)
 
     fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 

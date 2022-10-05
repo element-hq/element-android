@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
@@ -1163,6 +1164,10 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getGlobalBlacklistUnverifiedDevices()
     }
 
+    override fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig> {
+        return cryptoStore.getLiveGlobalCryptoConfig()
+    }
+
     /**
      * Tells whether the client should encrypt messages only for the verified devices
      * in this room.
@@ -1171,39 +1176,28 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room id
      * @return true if the client should encrypt messages only for the verified devices.
      */
-// TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
-        return roomId?.let { cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(it) }
+        return roomId?.let { cryptoStore.getBlockUnverifiedDevices(roomId) }
                 ?: false
     }
 
     /**
-     * Manages the room black-listing for unverified devices.
+     * A live status regarding sharing keys for unverified devices in this room.
      *
-     * @param roomId the room id
-     * @param add true to add the room id to the list, false to remove it.
+     * @return Live status
      */
-    private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
-        val roomIds = cryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
-
-        if (add) {
-            if (roomId !in roomIds) {
-                roomIds.add(roomId)
-            }
-        } else {
-            roomIds.remove(roomId)
-        }
-
-        cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
+    override fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean> {
+        return cryptoStore.getLiveBlockUnverifiedDevices(roomId)
     }
 
     /**
      * Add this room to the ones which don't encrypt messages to unverified devices.
      *
      * @param roomId the room id
+     * @param block if true will block sending keys to unverified devices
      */
-    override fun setRoomBlacklistUnverifiedDevices(roomId: String) {
-        setRoomBlacklistUnverifiedDevices(roomId, true)
+    override fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean) {
+        cryptoStore.blockUnverifiedDevicesInRoom(roomId, block)
     }
 
     /**
@@ -1211,8 +1205,8 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param roomId the room id
      */
-    override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
-        setRoomBlacklistUnverifiedDevices(roomId, false)
+    override fun setRoomUnBlockUnverifiedDevices(roomId: String) {
+        setRoomBlockUnverifiedDevices(roomId, false)
     }
 
     /**

@@ -7,6 +7,8 @@
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/item_form_min_height"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
     tools:viewBindingIgnore="true">
 
     <TextView
