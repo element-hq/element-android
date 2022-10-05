@@ -53,7 +53,7 @@ class DevicesViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
     private val getDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
-    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
+    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
 
