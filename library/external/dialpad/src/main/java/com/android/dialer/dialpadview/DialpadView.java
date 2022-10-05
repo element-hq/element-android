@@ -103,6 +103,7 @@ public class DialpadView extends LinearLayout {
 
   @Override
   protected void onFinishInflate() {
+    super.onFinishInflate();
     setupKeypad();
     mDigits = (EditText) findViewById(R.id.digits);
     mDelete = (ImageButton) findViewById(R.id.deleteButton);
