@@ -18,7 +18,7 @@ package im.vector.app.features
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
@@ -52,7 +52,7 @@ import org.matrix.android.sdk.api.util.Optional
 class MemberListViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
