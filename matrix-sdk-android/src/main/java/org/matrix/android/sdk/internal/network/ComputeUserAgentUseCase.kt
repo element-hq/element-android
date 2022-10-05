@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.getApplicationInfoCompat
 import org.matrix.android.sdk.api.util.getPackageInfoCompat
 import javax.inject.Inject
 
@@ -37,7 +38,7 @@ class ComputeUserAgentUseCase @Inject constructor(
         val appPackageName = context.applicationContext.packageName
         val pm = context.packageManager
 
-        val appName = tryOrNull { pm.getApplicationLabel(pm.getApplicationInfo(appPackageName, 0)).toString() }
+        val appName = tryOrNull { pm.getApplicationLabel(pm.getApplicationInfoCompat(appPackageName, 0)).toString() }
                 ?.takeIf {
                     it.matches("\\A\\p{ASCII}*\\z".toRegex())
                 }
