@@ -16,7 +16,19 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 
-class FakeVerificationService : VerificationService by mockk()
+class FakeVerificationService : VerificationService by mockk() {
+
+    fun givenAddListenerSucceeds() {
+        every { addListener(any()) } just runs
+    }
+
+    fun givenRemoveListenerSucceeds() {
+        every { removeListener(any()) } just runs
+    }
+}

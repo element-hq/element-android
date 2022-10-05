@@ -155,13 +155,15 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/attachmentButton"
         app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
         app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toTopOf="@id/attachmentButton"
         app:layout_goneMarginEnd="8dp"
         app:tint="?vctr_content_quaternary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/sendButton"

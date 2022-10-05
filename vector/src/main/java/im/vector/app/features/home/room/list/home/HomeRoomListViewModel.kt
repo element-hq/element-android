@@ -21,7 +21,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
-import arrow.core.Option
 import arrow.core.toOption
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -35,17 +34,16 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toTrackingValue
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -79,6 +77,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         private val preferencesStore: HomeLayoutPreferencesStore,
         private val stringProvider: StringProvider,
         private val drawableProvider: DrawableProvider,
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -88,7 +87,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
-    private var roomsFlow: Flow<Option<RoomSummary>>? = null
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
             .setInitialLoadSizeHint(20)
@@ -102,10 +100,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         _roomsLivePagedList.postValue(it)
     }
 
-    private var currentFilter: HomeRoomFilter = HomeRoomFilter.ALL
-    private val _emptyStateFlow = MutableSharedFlow<Optional<StateView.State.Empty>>(replay = 1)
-    val emptyStateFlow = _emptyStateFlow.asSharedFlow()
-
     private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
     init {
@@ -113,7 +107,25 @@ class HomeRoomListViewModel @AssistedInject constructor(
         observeInvites()
         observeRecents()
         observeFilterTabs()
-        observeRooms()
+        observeSpaceChanges()
+    }
+
+    private fun observeSpaceChanges() {
+        spaceStateHandler.getSelectedSpaceFlow()
+                .distinctUntilChanged()
+                .onStart {
+                    emit(spaceStateHandler.getCurrentSpace().toOption())
+                }
+                .onEach { selectedSpaceOption ->
+                    val selectedSpace = selectedSpaceOption.orNull()
+                    updateEmptyState()
+                    filteredPagedRoomSummariesLive?.let { liveResults ->
+                        liveResults.queryParams = liveResults.queryParams.copy(
+                                spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                        )
+                    }
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun observeInvites() {
@@ -139,7 +151,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
                                 })
                                 .map { Optional.from(it) }
                     } else {
-                        flow { emit(Optional.empty()) }
+                        flowOf(Optional.empty())
                     }.onEach { listOptional ->
                         setState { copy(headersData = headersData.copy(recents = listOptional.getOrNull())) }
                     }
@@ -150,31 +162,30 @@ class HomeRoomListViewModel @AssistedInject constructor(
         preferencesStore.areFiltersEnabledFlow
                 .distinctUntilChanged()
                 .flatMapLatest { areEnabled ->
-                    if (areEnabled) {
-                        getFilterTabsFlow()
-                    } else {
-                        flow { emit(Optional.empty()) }
-                    }.onEach { filtersOptional ->
-                        setState {
-                            validateCurrentFilter(filtersOptional.getOrNull())
-                            copy(
-                                    headersData = headersData.copy(
-                                            filtersList = filtersOptional.getOrNull(),
-                                            currentFilter = currentFilter
-                                    )
-                            )
-                        }
+                    getFilterTabsFlow(areEnabled)
+                }.onEach { filtersOptional ->
+                    val filters = filtersOptional.getOrNull()
+                    if (!isCurrentFilterStillValid(filters)) {
+                        changeRoomFilter(HomeRoomFilter.ALL)
+                    }
+                    setState {
+                        copy(
+                                headersData = headersData.copy(
+                                        filtersList = filters,
+                                )
+                        )
                     }
                 }.launchIn(viewModelScope)
     }
 
-    private fun validateCurrentFilter(filtersList: List<HomeRoomFilter>?) {
-        if (filtersList?.contains(currentFilter) != true) {
-            handleChangeRoomFilter(HomeRoomFilter.ALL)
-        }
+    private suspend fun isCurrentFilterStillValid(filtersList: List<HomeRoomFilter>?): Boolean {
+        if (filtersList.isNullOrEmpty()) return false
+        val currentFilter = awaitState().headersData.currentFilter
+        return filtersList.contains(currentFilter)
     }
 
-    private fun getFilterTabsFlow(): Flow<Optional<MutableList<HomeRoomFilter>>> {
+    private fun getFilterTabsFlow(isEnabled: Boolean): Flow<Optional<MutableList<HomeRoomFilter>>> {
+        if (!isEnabled) return flowOf(Optional.empty())
         val spaceFLow = spaceStateHandler.getSelectedSpaceFlow()
                 .distinctUntilChanged()
                 .onStart {
@@ -228,15 +239,14 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observeRooms() = viewModelScope.launch {
+    private fun observeRooms(currentFilter: HomeRoomFilter, isAZOrdering: Boolean) {
         filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
-
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
+            it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
         }
-
         val params = getFilteredQueryParams(currentFilter, builder.build())
-        val sortOrder = if (preferencesStore.isAZOrderingEnabledFlow.first()) {
+        val sortOrder = if (isAZOrdering) {
             RoomSortOrder.NAME
         } else {
             RoomSortOrder.ACTIVITY
@@ -248,36 +258,21 @@ class HomeRoomListViewModel @AssistedInject constructor(
         ).also {
             filteredPagedRoomSummariesLive = it
         }
-
-        spaceStateHandler.getSelectedSpaceFlow()
-                .distinctUntilChanged()
-                .onStart {
-                    emit(spaceStateHandler.getCurrentSpace().toOption())
-                }
-                .onEach { selectedSpaceOption ->
-                    val selectedSpace = selectedSpaceOption.orNull()
-                    filteredPagedRoomSummariesLive?.queryParams = liveResults.queryParams.copy(
-                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
-                    )
-                    emitEmptyState()
-                }
-                .also { roomsFlow = it }
-                .launchIn(viewModelScope)
-
         liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
     private fun observeOrderPreferences() {
-        preferencesStore.isAZOrderingEnabledFlow.onEach {
-            observeRooms()
-        }.launchIn(viewModelScope)
+        preferencesStore.isAZOrderingEnabledFlow
+                .onEach { isAZOrdering ->
+                    val currentFilter = awaitState().headersData.currentFilter
+                    observeRooms(currentFilter, isAZOrdering)
+                }.launchIn(viewModelScope)
     }
 
-    private fun emitEmptyState() {
-        viewModelScope.launch {
-            val emptyState = getEmptyStateData(currentFilter, spaceStateHandler.getCurrentSpace())
-            _emptyStateFlow.emit(Optional.from(emptyState))
-        }
+    private suspend fun updateEmptyState() {
+        val currentFilter = awaitState().headersData.currentFilter
+        val emptyState = getEmptyStateData(currentFilter, spaceStateHandler.getCurrentSpace())
+        setState { copy(emptyState = emptyState) }
     }
 
     private fun getFilteredQueryParams(filter: HomeRoomFilter, currentParams: RoomSummaryQueryParams): RoomSummaryQueryParams {
@@ -346,21 +341,27 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
+        super.onCleared()
     }
 
     private fun handleChangeRoomFilter(newFilter: HomeRoomFilter) {
+        viewModelScope.launch {
+            changeRoomFilter(newFilter)
+        }
+    }
+
+    private suspend fun changeRoomFilter(newFilter: HomeRoomFilter) {
+        val currentFilter = awaitState().headersData.currentFilter
         if (currentFilter == newFilter) {
             return
         }
-        currentFilter = newFilter
+        setState { copy(headersData = headersData.copy(currentFilter = newFilter)) }
+        updateEmptyState()
+        analyticsTracker.updateUserProperties(UserProperties(allChatsActiveFilter = newFilter.toTrackingValue()))
         filteredPagedRoomSummariesLive?.let { liveResults ->
-            liveResults.queryParams = getFilteredQueryParams(currentFilter, liveResults.queryParams)
+            liveResults.queryParams = getFilteredQueryParams(newFilter, liveResults.queryParams)
         }
-
-        setState { copy(headersData = headersData.copy(currentFilter = currentFilter)) }
-        emitEmptyState()
     }
 
     fun isPublicRoom(roomId: String): Boolean {
@@ -381,9 +382,9 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeNotificationMode(action: HomeRoomListAction.ChangeRoomNotificationState) {
-        val room = session.getRoom(action.roomId)
-        if (room != null) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            val room = session.getRoom(action.roomId)
+            if (room != null) {
                 try {
                     room.roomPushRuleService().setRoomNotificationState(action.notificationState)
                 } catch (failure: Throwable) {
@@ -394,8 +395,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleToggleTag(action: HomeRoomListAction.ToggleTag) {
-        session.getRoom(action.roomId)?.let { room ->
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            session.getRoom(action.roomId)?.let { room ->
                 try {
                     if (room.roomSummary()?.hasTag(action.tag) == false) {
                         // Favorite and low priority tags are exclusive, so maybe delete the other tag first
@@ -418,11 +419,11 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleDeleteLocalRooms() = withState {
-        val localRoomIds = session.roomService()
-                .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
-                .map { it.roomId }
-
         viewModelScope.launch {
+            val localRoomIds = session.roomService()
+                    .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
+                    .map { it.roomId }
+
             localRoomIds.forEach {
                 session.roomService().deleteLocalRoom(it)
             }

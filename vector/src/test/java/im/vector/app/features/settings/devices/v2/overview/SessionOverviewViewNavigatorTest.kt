@@ -17,12 +17,15 @@
 package im.vector.app.features.settings.devices.v2.overview
 
 import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.features.settings.devices.v2.details.SessionDetailsActivity
 import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import im.vector.app.test.fakes.FakeContext
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.runs
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -74,6 +77,21 @@ class SessionOverviewViewNavigatorTest {
         // Then
         verify {
             context.instance.startActivity(intent)
+        }
+    }
+
+    @Test
+    fun `given an activity when going back then the activity is finished`() {
+        // Given
+        val fragmentActivity = mockk<FragmentActivity>()
+        every { fragmentActivity.finish() } just runs
+
+        // When
+        sessionOverviewViewNavigator.goBack(fragmentActivity)
+
+        // Then
+        verify {
+            fragmentActivity.finish()
         }
     }
 

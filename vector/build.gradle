@@ -183,6 +183,7 @@ dependencies {
     }
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
+    implementation libs.markwon.imageGlide
     implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
@@ -230,6 +231,7 @@ dependencies {
     implementation('com.posthog.android:posthog:1.1.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
     implementation 'com.github.UnifiedPush:android-connector:2.1.0'
@@ -289,6 +291,7 @@ dependencies {
     testImplementation libs.tests.junit
     testImplementation libs.tests.kluent
     testImplementation libs.mockk.mockk
+    testImplementation libs.androidx.coreTesting
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
@@ -317,5 +320,5 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
 }

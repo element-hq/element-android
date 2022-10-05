@@ -79,6 +79,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()
+    object StartVoiceBroadcast : RoomDetailAction()
     object OpenIntegrationManager : RoomDetailAction()
     object ManageIntegrations : RoomDetailAction()
     data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()

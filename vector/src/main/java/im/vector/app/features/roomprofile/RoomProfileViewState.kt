@@ -20,6 +20,7 @@ package im.vector.app.features.roomprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
@@ -35,7 +36,10 @@ data class RoomProfileViewState(
         val recommendedRoomVersion: String? = null,
         val canUpgradeRoom: Boolean = false,
         val isTombstoned: Boolean = false,
-        val canUpdateRoomState: Boolean = false
+        val canUpdateRoomState: Boolean = false,
+        val encryptToVerifiedDeviceOnly: Async<Boolean> = Uninitialized,
+        val globalCryptoConfig: Async<GlobalCryptoConfig> = Uninitialized,
+        val unverifiedDevicesInTheRoom: Async<Boolean> = Uninitialized,
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

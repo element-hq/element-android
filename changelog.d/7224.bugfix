@@ -1,0 +1,1 @@
+Fix app restarts in loop on Android 13 on the first run of the app.

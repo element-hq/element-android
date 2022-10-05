@@ -58,18 +58,16 @@ class ReplayAttackTest : InstrumentedTest {
         val fakeEventWithTheSameIndex =
                 sentEvents[0].copy(eventId = fakeEventId, root = sentEvents[0].root.copy(eventId = fakeEventId))
 
-        testHelper.runBlockingTest {
-            // Lets assume we are from the main timelineId
-            val timelineId = "timelineId"
-            // Lets decrypt the original event
-            aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            // Lets decrypt the fake event that will have the same message index
-            val exception = assertFailsWith<MXCryptoError.Base> {
-                // An exception should be thrown while the same index would have been used for the previous decryption
-                aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId)
-            }
-            assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, exception.errorType)
+        // Lets assume we are from the main timelineId
+        val timelineId = "timelineId"
+        // Lets decrypt the original event
+        aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+        // Lets decrypt the fake event that will have the same message index
+        val exception = assertFailsWith<MXCryptoError.Base> {
+            // An exception should be thrown while the same index would have been used for the previous decryption
+            aliceSession.cryptoService().decryptEvent(fakeEventWithTheSameIndex.root, timelineId)
         }
+        assertEquals(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, exception.errorType)
         cryptoTestData.cleanUp(testHelper)
     }
 
@@ -93,17 +91,15 @@ class ReplayAttackTest : InstrumentedTest {
         Assert.assertTrue("Message should be sent", sentEvents.size == 1)
         assertEquals(sentEvents.size, 1)
 
-        testHelper.runBlockingTest {
-            // Lets assume we are from the main timelineId
-            val timelineId = "timelineId"
-            // Lets decrypt the original event
+        // Lets assume we are from the main timelineId
+        val timelineId = "timelineId"
+        // Lets decrypt the original event
+        aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
+        try {
+            // Lets try to decrypt the same event
             aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            try {
-                // Lets try to decrypt the same event
-                aliceSession.cryptoService().decryptEvent(sentEvents[0].root, timelineId)
-            } catch (ex: Throwable) {
-                fail("Shouldn't throw a decryption error for same event")
-            }
+        } catch (ex: Throwable) {
+            fail("Shouldn't throw a decryption error for same event")
         }
     }
 }

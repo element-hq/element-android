@@ -53,11 +53,12 @@
         android:id="@+id/deviceListHeaderOtherSessions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
-        app:sessionsListHeaderTitle=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+        app:sessionsListHeaderHasLearnMoreLink="false"
+        app:sessionsListHeaderTitle="" />
 
     <im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsSecurityRecommendationView
         android:id="@+id/otherSessionsSecurityRecommendationView"

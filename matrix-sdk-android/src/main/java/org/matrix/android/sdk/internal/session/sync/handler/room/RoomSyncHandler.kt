@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
@@ -99,6 +100,7 @@ internal class RoomSyncHandler @Inject constructor(
         private val timelineInput: TimelineInput,
         private val liveEventService: Lazy<StreamEventsManager>,
         private val clock: Clock,
+        private val unRequestedForwardManager: UnRequestedForwardManager,
 ) {
 
     sealed class HandlingStrategy {
@@ -322,6 +324,7 @@ internal class RoomSyncHandler @Inject constructor(
         }
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.INVITE)
         roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId, aggregator = aggregator)
+        unRequestedForwardManager.onInviteReceived(roomId, inviterEvent?.senderId.orEmpty(), clock.epochMillis())
         return roomEntity
     }
 
@@ -551,7 +554,8 @@ internal class RoomSyncHandler @Inject constructor(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    isSafe = result.isSafe
             )
         } catch (e: MXCryptoError) {
             if (e is MXCryptoError.Base) {
