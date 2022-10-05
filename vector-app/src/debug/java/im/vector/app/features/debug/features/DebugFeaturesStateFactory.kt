@@ -81,11 +81,6 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::forceUsageOfOpusEncoder
                         ),
                         createBooleanFeature(
-                                label = "Start DM on first message",
-                                key = DebugFeatureKeys.startDmOnFirstMsg,
-                                factory = VectorFeatures::shouldStartDmOnFirstMessage
-                        ),
-                        createBooleanFeature(
                                 label = "Enable New App Layout",
                                 key = DebugFeatureKeys.newAppLayoutEnabled,
                                 factory = VectorFeatures::isNewAppLayoutFeatureEnabled
@@ -94,6 +89,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 label = "Enable New Device Management",
                                 key = DebugFeatureKeys.newDeviceManagementEnabled,
                                 factory = VectorFeatures::isNewDeviceManagementEnabled
+                        ),
+                        createBooleanFeature(
+                                label = "Enable Voice Broadcast",
+                                key = DebugFeatureKeys.voiceBroadcastEnabled,
+                                factory = VectorFeatures::isVoiceBroadcastEnabled
                         ),
                 )
         )

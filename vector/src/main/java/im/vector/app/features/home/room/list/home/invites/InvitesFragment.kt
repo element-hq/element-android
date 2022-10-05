@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentInvitesBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -46,6 +47,11 @@ class InvitesFragment : VectorBaseFragment<FragmentInvitesBinding>(), RoomListLi
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentInvitesBinding {
         return FragmentInvitesBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.Invites
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

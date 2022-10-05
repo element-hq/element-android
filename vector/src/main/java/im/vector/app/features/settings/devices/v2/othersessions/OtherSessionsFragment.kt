@@ -20,8 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +38,7 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBott
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
@@ -46,6 +49,7 @@ class OtherSessionsFragment :
         OtherSessionsView.Callback {
 
     private val viewModel: OtherSessionsViewModel by fragmentViewModel()
+    private val args: OtherSessionsArgs by args()
 
     @Inject lateinit var colorProvider: ColorProvider
 
@@ -57,7 +61,7 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.otherSessionsToolbar).allowBack()
+        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
         observeViewEvents()
         initFilterView()
     }
@@ -85,6 +89,10 @@ class OtherSessionsFragment :
         }
 
         views.deviceListOtherSessions.callback = this
+
+        if (args.defaultFilter != DeviceManagerFilterType.ALL_SESSIONS) {
+            viewModel.handle(OtherSessionsAction.FilterDevices(args.defaultFilter))
+        }
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
@@ -115,6 +123,7 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_verified_sessions_found)
+                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_verified_title, R.string.device_manager_learn_more_sessions_verified)
             }
             DeviceManagerFilterType.UNVERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(
@@ -126,6 +135,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_unverified_sessions_found)
+                updateSecurityLearnMoreButton(
+                        R.string.device_manager_learn_more_sessions_unverified_title,
+                        R.string.device_manager_learn_more_sessions_unverified
+                )
             }
             DeviceManagerFilterType.INACTIVE -> {
                 views.otherSessionsSecurityRecommendationView.render(
@@ -141,8 +154,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_inactive_sessions_found)
+                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_inactive_title, R.string.device_manager_learn_more_sessions_inactive)
             }
-            DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */ }
+            DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */
+            }
         }
 
         if (devices.isNullOrEmpty()) {
@@ -153,6 +168,26 @@ class OtherSessionsFragment :
             views.otherSessionsNotFoundLayout.isVisible = false
             views.deviceListOtherSessions.render(devices = devices, totalNumberOfDevices = devices.size, showViewAll = false)
         }
+    }
+
+    private fun updateSecurityLearnMoreButton(
+            @StringRes titleResId: Int,
+            @StringRes descriptionResId: Int,
+    ) {
+        views.otherSessionsSecurityRecommendationView.onLearnMoreClickListener = {
+            showLearnMoreInfo(titleResId, getString(descriptionResId))
+        }
+    }
+
+    private fun showLearnMoreInfo(
+            @StringRes titleResId: Int,
+            description: String,
+    ) {
+        val args = SessionLearnMoreBottomSheet.Args(
+                title = getString(titleResId),
+                description = description,
+        )
+        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 
     override fun onOtherSessionClicked(deviceId: String) {

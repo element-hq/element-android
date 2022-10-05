@@ -19,6 +19,10 @@ package im.vector.app.features.settings.devices.v2
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.filter.FilterDevicesUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.list.DeviceType
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -50,6 +54,7 @@ class GetDeviceFullInfoListUseCaseTest {
     private val getEncryptionTrustLevelForDeviceUseCase = mockk<GetEncryptionTrustLevelForDeviceUseCase>()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
     private val filterDevicesUseCase = mockk<FilterDevicesUseCase>()
+    private val parseDeviceUserAgentUseCase = mockk<ParseDeviceUserAgentUseCase>()
 
     private val getDeviceFullInfoListUseCase = GetDeviceFullInfoListUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
@@ -57,6 +62,7 @@ class GetDeviceFullInfoListUseCaseTest {
             getEncryptionTrustLevelForDeviceUseCase = getEncryptionTrustLevelForDeviceUseCase,
             getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
             filterDevicesUseCase = filterDevicesUseCase,
+            parseDeviceUserAgentUseCase = parseDeviceUserAgentUseCase,
     )
 
     @Before
@@ -84,21 +90,21 @@ class GetDeviceFullInfoListUseCaseTest {
                 lastSeenTs = A_TIMESTAMP_1,
                 isInactive = true,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                cryptoDeviceInfo = cryptoDeviceInfo1
+                cryptoDeviceInfo = cryptoDeviceInfo1,
         )
         val deviceInfo2 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_2,
                 lastSeenTs = A_TIMESTAMP_2,
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                cryptoDeviceInfo = cryptoDeviceInfo2
+                cryptoDeviceInfo = cryptoDeviceInfo2,
         )
         val deviceInfo3 = givenADevicesInfo(
                 deviceId = A_DEVICE_ID_3,
                 lastSeenTs = A_TIMESTAMP_3,
                 isInactive = false,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                cryptoDeviceInfo = cryptoDeviceInfo3
+                cryptoDeviceInfo = cryptoDeviceInfo3,
         )
         val deviceInfoList = listOf(deviceInfo1, deviceInfo2, deviceInfo3)
         every { fakeFlowSession.liveMyDevicesInfo() } returns flowOf(deviceInfoList)
@@ -106,19 +112,25 @@ class GetDeviceFullInfoListUseCaseTest {
                 deviceInfo = deviceInfo1,
                 cryptoDeviceInfo = cryptoDeviceInfo1,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = true
+                isInactive = true,
+                isCurrentDevice = true,
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult2 = DeviceFullInfo(
                 deviceInfo = deviceInfo2,
                 cryptoDeviceInfo = cryptoDeviceInfo2,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false,
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult3 = DeviceFullInfo(
                 deviceInfo = deviceInfo3,
                 cryptoDeviceInfo = cryptoDeviceInfo3,
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
-                isInactive = false
+                isInactive = false,
+                isCurrentDevice = false,
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
         every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
@@ -160,6 +172,7 @@ class GetDeviceFullInfoListUseCaseTest {
     private fun givenCurrentSessionCrossSigningInfo(): CurrentSessionCrossSigningInfo {
         val currentSessionCrossSigningInfo = mockk<CurrentSessionCrossSigningInfo>()
         every { getCurrentSessionCrossSigningInfoUseCase.execute() } returns flowOf(currentSessionCrossSigningInfo)
+        every { currentSessionCrossSigningInfo.deviceId } returns A_DEVICE_ID_1
         return currentSessionCrossSigningInfo
     }
 
@@ -179,8 +192,12 @@ class GetDeviceFullInfoListUseCaseTest {
         val deviceInfo = mockk<DeviceInfo>()
         every { deviceInfo.deviceId } returns deviceId
         every { deviceInfo.lastSeenTs } returns lastSeenTs
+        every { deviceInfo.getBestLastSeenUserAgent() } returns ""
         every { getEncryptionTrustLevelForDeviceUseCase.execute(any(), cryptoDeviceInfo) } returns roomEncryptionTrustLevel
         every { checkIfSessionIsInactiveUseCase.execute(lastSeenTs) } returns isInactive
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceExtendedInfo(
+                DeviceType.MOBILE,
+        )
 
         return deviceInfo
     }

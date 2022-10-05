@@ -56,7 +56,7 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.disclaimer.DisclaimerDialog
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
@@ -84,6 +84,7 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -140,6 +141,7 @@ class HomeActivity :
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
+    @Inject lateinit var disclaimerDialog: DisclaimerDialog
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
@@ -569,7 +571,7 @@ class HomeActivity :
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
-            showDisclaimerDialog(this)
+            disclaimerDialog.showDisclaimerDialog(this)
         }
 
         // Force remote backup state update to update the banner if needed
@@ -634,8 +636,16 @@ class HomeActivity :
                 launchInviteFriends()
                 true
             }
+            R.id.menu_home_qr -> {
+                launchQrCode()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun launchQrCode() {
+        startActivity(UserCodeActivity.newIntent(this, sharedActionViewModel.session.myUserId))
     }
 
     private fun launchInviteFriends() {

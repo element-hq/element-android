@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -83,6 +82,13 @@ class HomeRoomListFragment :
         setupRecyclerView()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(HomeRoomListAction.DeleteAllLocalRoom)
+    }
+
     private fun setupObservers() {
         sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
         sharedQuickActionsViewModel
@@ -130,6 +136,7 @@ class HomeRoomListFragment :
     }
 
     private fun setupRecyclerView() {
+        views.stateView.state = StateView.State.Content
         val layoutManager = LinearLayoutManager(context)
         firstItemObserver = FirstItemUpdatedObserver(layoutManager) {
             layoutManager.scrollToPosition(0)
@@ -144,19 +151,12 @@ class HomeRoomListFragment :
         roomListViewModel.onEach(HomeRoomListViewState::headersData) {
             headersController.submitData(it)
         }
-
-        roomListViewModel.onEach(HomeRoomListViewState::roomsLivePagedList) { roomsListLive ->
-            roomsListLive?.observe(viewLifecycleOwner) { roomsList ->
-                roomsController.submitList(roomsList)
-                if (roomsList.isEmpty()) {
-                    roomsController.requestForcedModelBuild()
-                }
-            }
+        roomListViewModel.roomsLivePagedList.observe(viewLifecycleOwner) { roomsList ->
+            roomsController.submitRoomsList(roomsList)
         }
-
-        roomListViewModel.emptyStateFlow.onEach { emptyStateOptional ->
-            roomsController.submitEmptyStateData(emptyStateOptional.getOrNull())
-        }.launchIn(lifecycleScope)
+        roomListViewModel.onEach(HomeRoomListViewState::emptyState) { emptyState ->
+            roomsController.submitEmptyStateData(emptyState)
+        }
 
         setUpAdapters()
 
@@ -165,9 +165,7 @@ class HomeRoomListFragment :
         concatAdapter.registerAdapterDataObserver(firstItemObserver)
     }
 
-    override fun invalidate() = withState(roomListViewModel) { state ->
-        views.stateView.state = state.state
-    }
+    override fun invalidate() = Unit
 
     private fun setUpAdapters() {
         val headersAdapter = headersController.also { controller ->

@@ -16,13 +16,10 @@
 
 package im.vector.app.features.settings.devices
 
-import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.test.fakes.FakeActiveSessionHolder
-import io.mockk.every
-import io.mockk.mockk
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.data.SessionParams
 
 private const val A_DEVICE_ID = "device-id"
 
@@ -36,9 +33,7 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
 
     @Test
     fun `given the active session when getting cross signing info then the result is correct`() {
-        val sessionParams = mockk<SessionParams>()
-        every { sessionParams.deviceId } returns A_DEVICE_ID
-        fakeActiveSessionHolder.fakeSession.givenSessionParams(sessionParams)
+        fakeActiveSessionHolder.fakeSession.givenSessionId(A_DEVICE_ID)
         val isCrossSigningInitialized = true
         fakeActiveSessionHolder.fakeSession
                 .fakeCryptoService

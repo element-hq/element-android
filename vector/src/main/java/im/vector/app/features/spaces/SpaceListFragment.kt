@@ -176,8 +176,8 @@ class SpaceListFragment :
         }
     }
 
-    override fun onSpaceSelected(spaceSummary: RoomSummary?) {
-        viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
+    override fun onSpaceSelected(spaceSummary: RoomSummary?, isSubSpace: Boolean) {
+        viewModel.handle(SpaceListAction.SelectSpace(spaceSummary, isSubSpace = isSubSpace))
         roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
     }
 

@@ -20,9 +20,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
+import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 
 @AndroidEntryPoint
 class OtherSessionsActivity : SimpleFragmentActivity() {
@@ -35,14 +38,23 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
         if (isFirstCreation()) {
             addFragment(
                     container = views.container,
-                    fragmentClass = OtherSessionsFragment::class.java
+                    fragmentClass = OtherSessionsFragment::class.java,
+                    params = intent.getParcelableExtra(Mavericks.KEY_ARG)
             )
         }
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, OtherSessionsActivity::class.java)
+        fun newIntent(
+                context: Context,
+                @StringRes
+                titleResourceId: Int,
+                defaultFilter: DeviceManagerFilterType,
+                excludeCurrentDevice: Boolean,
+        ): Intent {
+            return Intent(context, OtherSessionsActivity::class.java).apply {
+                putExtra(Mavericks.KEY_ARG, OtherSessionsArgs(titleResourceId, defaultFilter, excludeCurrentDevice))
+            }
         }
     }
 }

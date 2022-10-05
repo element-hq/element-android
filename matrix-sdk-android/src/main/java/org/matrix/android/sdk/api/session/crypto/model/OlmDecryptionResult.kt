@@ -44,5 +44,10 @@ data class OlmDecryptionResult(
         /**
          * Devices which forwarded this session to us (normally empty).
          */
-        @Json(name = "forwardingCurve25519KeyChain") val forwardingCurve25519KeyChain: List<String>? = null
+        @Json(name = "forwardingCurve25519KeyChain") val forwardingCurve25519KeyChain: List<String>? = null,
+
+        /**
+         * True if the key used to decrypt is considered safe (trusted).
+         */
+        @Json(name = "key_safety") val isSafe: Boolean? = null,
 )

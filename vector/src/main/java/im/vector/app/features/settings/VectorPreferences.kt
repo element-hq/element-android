@@ -24,8 +24,9 @@ import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
@@ -41,6 +42,9 @@ class VectorPreferences @Inject constructor(
         private val clock: Clock,
         private val buildMeta: BuildMeta,
         private val vectorFeatures: VectorFeatures,
+        @DefaultPreferences
+        private val defaultPrefs: SharedPreferences,
+        private val stringProvider: StringProvider,
 ) {
 
     companion object {
@@ -66,6 +70,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
         const val SETTINGS_LABS_NEW_APP_LAYOUT_KEY = "SETTINGS_LABS_NEW_APP_LAYOUT_KEY"
+        const val SETTINGS_LABS_DEFERRED_DM_KEY = "SETTINGS_LABS_DEFERRED_DM_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -82,6 +87,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY = "SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
         const val SETTINGS_PERSISTED_SPACE_BACKSTACK = "SETTINGS_PERSISTED_SPACE_BACKSTACK"
+        const val SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY = "SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY"
 
         const val SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT = "SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
 //        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
@@ -283,12 +289,11 @@ class VectorPreferences @Inject constructor(
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE,
+                SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY,
 
                 ShortcutsHandler.SHARED_PREF_KEY,
         )
     }
-
-    private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
      * Allow subscribing and unsubscribing to configuration changes. This is
@@ -715,10 +720,10 @@ class VectorPreferences @Inject constructor(
      */
     fun getSelectedMediasSavingPeriodString(): String {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS -> context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK -> context.getString(R.string.media_saving_period_1_week)
-            MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
-            MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
+            MEDIA_SAVING_3_DAYS -> stringProvider.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK -> stringProvider.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_1_MONTH -> stringProvider.getString(R.string.media_saving_period_1_month)
+            MEDIA_SAVING_FOREVER -> stringProvider.getString(R.string.media_saving_period_forever)
             else -> "?"
         }
     }
@@ -966,6 +971,11 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
     }
 
+    /** Whether the keyboard should disable personalized learning. */
+    fun useIncognitoKeyboard(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY, false)
+    }
+
     /**
      * The user enable protecting app access with pin code.
      * Currently we use the pin code store to know if the pin is enabled, so this is not used
@@ -1160,6 +1170,13 @@ class VectorPreferences @Inject constructor(
     fun isNewAppLayoutEnabled(): Boolean {
         return vectorFeatures.isNewAppLayoutFeatureEnabled() &&
                 defaultPrefs.getBoolean(SETTINGS_LABS_NEW_APP_LAYOUT_KEY, getDefault(R.bool.settings_labs_new_app_layout_default))
+    }
+
+    /**
+     * Indicates whether or not deferred DMs are enabled.
+     */
+    fun isDeferredDmEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_DEFERRED_DM_KEY, getDefault(R.bool.settings_labs_deferred_dm_default))
     }
 
     fun showLiveSenderInfo(): Boolean {

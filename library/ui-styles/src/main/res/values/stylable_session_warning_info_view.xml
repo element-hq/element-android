@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SessionWarningInfoView">
+        <attr name="sessionsWarningInfoDescription" format="string" />
+        <attr name="sessionsWarningInfoHasLearnMore" format="boolean" />
+    </declare-styleable>
+
+</resources>

@@ -52,15 +52,13 @@ class PreShareKeysTest : InstrumentedTest {
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
-        testHelper.doSync<Unit> {
+        testHelper.waitForCallback<Unit> {
             aliceSession.cryptoService().prepareToEncrypt(e2eRoomID, it)
         }
 
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
-                newKeysCount > preShareCount
-            }
+        testHelper.retryPeriodically {
+            val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
+            newKeysCount > preShareCount
         }
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
@@ -85,10 +83,8 @@ class PreShareKeysTest : InstrumentedTest {
         val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
 
         assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
-        testHelper.waitWithLatch { latch ->
-            testHelper.retryPeriodicallyWithLatch(latch) {
-                bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
-            }
+        testHelper.retryPeriodically {
+            bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
         }
     }
 }

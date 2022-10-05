@@ -17,10 +17,10 @@
 
 package im.vector.app.features.settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -161,6 +161,10 @@ class VectorSettingsSecurityPrivacyFragment :
         findPreference<VectorSwitchPreference>("SETTINGS_USER_ANALYTICS_CONSENT_KEY")!!
     }
 
+    private val incognitoKeyboardPref by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY)!!
+    }
+
     override fun onCreateRecyclerView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): RecyclerView {
         return super.onCreateRecyclerView(inflater, parent, savedInstanceState).also {
             // Insert animation are really annoying the first time the list is shown
@@ -276,6 +280,9 @@ class VectorSettingsSecurityPrivacyFragment :
         // Analytics
         setUpAnalytics()
 
+        // Incognito Keyboard
+        setUpIncognitoKeyboard()
+
         // Pin code
         openPinCodeSettingsPref.setOnPreferenceClickListener {
             openPinCodePreferenceScreen()
@@ -336,6 +343,10 @@ class VectorSettingsSecurityPrivacyFragment :
             }
             true
         }
+    }
+
+    private fun setUpIncognitoKeyboard() {
+        incognitoKeyboardPref.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
 
     // Todo this should be refactored and use same state as 4S section
@@ -448,7 +459,6 @@ class VectorSettingsSecurityPrivacyFragment :
     /**
      * Manage the e2e keys import.
      */
-    @SuppressLint("NewApi")
     private fun importKeys() {
         openFileSelection(
                 requireActivity(),
