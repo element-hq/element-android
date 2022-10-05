@@ -1994,8 +1994,8 @@
     <string name="your_public_space">Dein öffentlicher Space</string>
     <string name="command_description_join_space">Betrete einen Space mit der angegebenen ID</string>
     <string name="create_space_topic_hint">Beschreibung</string>
-    <string name="create_spaces_loading_message">Erzeuge Space…</string>
-    <string name="create_spaces_default_public_random_room_name">Irgendetwas</string>
+    <string name="create_spaces_loading_message">Erzeuge Space …</string>
+    <string name="create_spaces_default_public_random_room_name">Ohne Thema</string>
     <string name="create_spaces_default_public_room_name">Allgemein</string>
     <string name="activity_create_space_title">Einen Space erstellen</string>
     <string name="create_spaces_just_me">Nur für mich</string>
@@ -2621,7 +2621,7 @@
     <string name="invites_title">Einladungen</string>
     <string name="device_manager_other_sessions_description_unverified">Nicht verifiziert · Neueste Aktivität %1$s</string>
     <string name="device_manager_verification_status_unverified">Nicht verifizierte Sitzung</string>
-    <string name="device_manager_unverified_sessions_title">Nicht verifizierte Sitzung</string>
+    <string name="device_manager_unverified_sessions_title">Nicht verifizierte Sitzungen</string>
     <string name="device_manager_header_section_security_recommendations_description">Verbessere deine Kontosicherheit, indem du diese Empfehlungen beherzigst.</string>
     <string name="device_manager_header_section_security_recommendations_title">Sicherheitsempfehlungen</string>
     <plurals name="device_manager_other_sessions_description_inactive">
@@ -2669,8 +2669,8 @@
     <string name="device_manager_other_sessions_no_unverified_sessions_found">Keine nicht verifizierten Sitzungen gefunden.</string>
     <string name="device_manager_other_sessions_no_verified_sessions_found">Keine verifizierten Sitzungen gefunden.</string>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="one">Erwäge, dich aus alten Sitzungen (%1$d Tag oder mehr) abzumelden, die du nicht mehr benutzt.</item>
-        <item quantity="other">Erwäge, dich aus alten Sitzungen (%1$d Tage oder mehr) abzumelden, die du nicht mehr benutzt.</item>
+        <item quantity="one">Erwäge, dich aus alten (ein Tag oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
+        <item quantity="other">Erwäge, dich aus alten (%1$d Tage oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
     </plurals>
     <string name="device_manager_other_sessions_recommendation_title_inactive">Inaktiv</string>
     <string name="device_manager_other_sessions_recommendation_description_unverified">Für besonders sichere Kommunikation verifiziere deine Sitzungen oder melde dich von ihnen ab, falls du sie nicht mehr identifizieren kannst.</string>
@@ -2690,7 +2690,7 @@
     <string name="device_manager_session_title">Sitzung</string>
     <string name="device_manager_current_session_title">Aktuelle Sitzung</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="one">Erwäge, dich aus alten (%1$d Tag oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
+        <item quantity="one">Erwäge, dich aus alten (ein Tag oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
         <item quantity="other">Erwäge, dich aus alten (%1$d Tage oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
     </plurals>
     <string name="device_manager_inactive_sessions_title">Inaktive Sitzungen</string>
@@ -2708,5 +2708,5 @@
     <string name="device_manager_verification_status_detail_current_session_verified">Deine aktuelle Sitzung ist für sichere Kommunikation bereit.</string>
     <string name="device_manager_view_details">Details anzeigen</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Für bestmögliche Sicherheit und Zuverlässigkeit verifiziere diese Sitzungen oder melde dich von ihr ab.</string>
-    <string name="device_manager_other_sessions_recommendation_description_verified">Für bestmögliche Sicherheit melde dich von allen Sitzungen ab, die du nicht erkennst oder nutzt.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Für die bestmögliche Sicherheit, melde dich von allen Sitzungen ab, die du nicht erkennst oder nicht mehr benutzt.</string>
 </resources>
