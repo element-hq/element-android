@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.rename
 
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
 import im.vector.app.test.test
@@ -36,7 +36,7 @@ private const val AN_EDITED_SESSION_NAME = "edited-session-name"
 class RenameSessionViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val args = RenameSessionArgs(
             deviceId = A_SESSION_ID

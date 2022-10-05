@@ -17,7 +17,7 @@
 package im.vector.app.features.settings.devices.v2.details
 
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.core.utils.CopyToClipboardUseCase
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.overview.GetDeviceFullInfoUseCase
@@ -39,7 +39,7 @@ private const val A_TEXT = "text"
 class SessionDetailsViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val args = SessionDetailsArgs(
             deviceId = A_SESSION_ID

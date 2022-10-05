@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
@@ -67,7 +67,7 @@ private const val A_PASSWORD = "password"
 class SessionOverviewViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID_1
