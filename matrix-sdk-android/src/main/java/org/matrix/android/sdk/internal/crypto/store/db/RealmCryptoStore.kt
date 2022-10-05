@@ -29,6 +29,7 @@ import io.realm.kotlin.where
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
@@ -442,6 +443,38 @@ internal class RealmCryptoStore @Inject constructor(
         )
         return Transformations.map(liveData) {
             it.firstOrNull().toOptional()
+        }
+    }
+
+    override fun getGlobalCryptoConfig(): GlobalCryptoConfig {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()
+                    ?.let {
+                        GlobalCryptoConfig(
+                                globalBlockUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
+                                globalEnableKeyGossiping = it.globalEnableKeyGossiping,
+                                enableKeyForwardingOnInvite = it.enableKeyForwardingOnInvite
+                        )
+                    } ?: GlobalCryptoConfig(false, false, false)
+        }
+    }
+
+    override fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm
+                            .where<CryptoMetadataEntity>()
+                },
+                {
+                    GlobalCryptoConfig(
+                            globalBlockUnverifiedDevices = it.globalBlacklistUnverifiedDevices,
+                            globalEnableKeyGossiping = it.globalEnableKeyGossiping,
+                            enableKeyForwardingOnInvite = it.enableKeyForwardingOnInvite
+                    )
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull() ?: GlobalCryptoConfig(false, false, false)
         }
     }
 
@@ -1053,25 +1086,6 @@ internal class RealmCryptoStore @Inject constructor(
         } ?: false
     }
 
-    override fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>) {
-        doRealmTransaction(realmConfiguration) {
-            // Reset all
-            it.where<CryptoRoomEntity>()
-                    .findAll()
-                    .forEach { room ->
-                        room.blacklistUnverifiedDevices = false
-                    }
-
-            // Enable those in the list
-            it.where<CryptoRoomEntity>()
-                    .`in`(CryptoRoomEntityFields.ROOM_ID, roomIds.toTypedArray())
-                    .findAll()
-                    .forEach { room ->
-                        room.blacklistUnverifiedDevices = true
-                    }
-        }
-    }
-
     override fun getRoomsListBlacklistUnverifiedDevices(): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoRoomEntity>()
@@ -1080,6 +1094,37 @@ internal class RealmCryptoStore @Inject constructor(
                     .mapNotNull { cryptoRoom ->
                         cryptoRoom.roomId
                     }
+        }
+    }
+
+    override fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where<CryptoRoomEntity>()
+                            .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+                },
+                {
+                    it.blacklistUnverifiedDevices
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull() ?: false
+        }
+    }
+
+    override fun getBlockUnverifiedDevices(roomId: String): Boolean {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<CryptoRoomEntity>()
+                    .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+                    .findFirst()
+                    ?.blacklistUnverifiedDevices ?: false
+        }
+    }
+
+    override fun blockUnverifiedDevicesInRoom(roomId: String, block: Boolean) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)
+                    ?.blacklistUnverifiedDevices = block
         }
     }
 
@@ -1611,7 +1656,8 @@ internal class RealmCryptoStore @Inject constructor(
                 userId = userId,
                 crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
                     crossSigningKeysMapper.map(userId, it)
-                }
+                },
+                wasTrustedOnce = xsignInfo.wasUserVerifiedOnce
         )
     }
 

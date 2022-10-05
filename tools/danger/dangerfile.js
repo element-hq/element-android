@@ -70,6 +70,7 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
+    "amitkma",
     "aringenbach",
     "BillCarsonFr",
     "bmarty",

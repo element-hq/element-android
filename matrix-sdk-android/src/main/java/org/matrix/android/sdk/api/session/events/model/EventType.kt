@@ -128,4 +128,17 @@ object EventType {
                 type == CALL_REJECT ||
                 type == CALL_REPLACES
     }
+
+    fun isVerificationEvent(type: String): Boolean {
+        return when (type) {
+            KEY_VERIFICATION_START,
+            KEY_VERIFICATION_ACCEPT,
+            KEY_VERIFICATION_KEY,
+            KEY_VERIFICATION_MAC,
+            KEY_VERIFICATION_CANCEL,
+            KEY_VERIFICATION_DONE,
+            KEY_VERIFICATION_READY -> true
+            else -> false
+        }
+    }
 }

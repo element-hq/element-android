@@ -143,6 +143,12 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
+            android:key="SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY"
+            android:summary="@string/settings_security_incognito_keyboard_summary"
+            android:title="@string/settings_security_incognito_keyboard_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
             android:key="SETTINGS_SECURITY_USE_FLAG_SECURE"
             android:summary="@string/settings_security_prevent_screenshots_summary"
             android:title="@string/settings_security_prevent_screenshots_title" />

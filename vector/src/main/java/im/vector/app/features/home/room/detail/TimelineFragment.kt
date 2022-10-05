@@ -359,6 +359,8 @@ class TimelineFragment :
 
     private var lockSendButton = false
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
+    private val isEmojiKeyboardVisible: Boolean
+        get() = vectorPreferences.showEmojiKeyboard()
 
     private val lazyLoadedViews = RoomDetailLazyLoadedViews()
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
@@ -1536,11 +1538,10 @@ class TimelineFragment :
 
         observerUserTyping()
 
-        if (vectorPreferences.sendMessageWithEnter()) {
-            // imeOptions="actionSend" only works with single line, so we remove multiline inputType
-            composerEditText.inputType = composerEditText.inputType and EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE.inv()
-            composerEditText.imeOptions = EditorInfo.IME_ACTION_SEND
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            composerEditText.setUseIncognitoKeyboard(vectorPreferences.useIncognitoKeyboard())
         }
+        composerEditText.setSendMessageWithEnter(vectorPreferences.sendMessageWithEnter())
 
         composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
             val imeActionId = actionId and EditorInfo.IME_MASK_ACTION
@@ -1575,8 +1576,16 @@ class TimelineFragment :
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
                     )
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
+                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
+                    )
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
+            }
+
+            override fun onExpandOrCompactChange() {
+                views.composerLayout.views.composerEmojiButton.isVisible = isEmojiKeyboardVisible
             }
 
             override fun onSendMessage(text: CharSequence) {
@@ -2668,6 +2677,7 @@ class TimelineFragment :
                                 locationOwnerId = session.myUserId
                         )
             }
+            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(RoomDetailAction.StartVoiceBroadcast)
         }
     }
 
