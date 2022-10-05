@@ -30,7 +30,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
  * mark existing keys as safe.
  * This migration can take long depending on the account
  */
-internal class MigrateCryptoTo019(realm: DynamicRealm) : RealmMigrator(realm, 18) {
+internal class MigrateCryptoTo019(realm: DynamicRealm) : RealmMigrator(realm, 19) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CrossSigningInfoEntity")

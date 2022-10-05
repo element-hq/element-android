@@ -657,14 +657,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun saveMyDevicesInfo(info: List<DeviceInfo>) {
-        val entities = info.map {
-            MyDeviceLastSeenInfoEntity(
-                    lastSeenTs = it.lastSeenTs,
-                    lastSeenIp = it.lastSeenIp,
-                    displayName = it.displayName,
-                    deviceId = it.deviceId
-            )
-        }
+        val entities = info.map { myDeviceLastSeenInfoEntityMapper.map(it) }
         doRealmTransactionAsync(realmConfiguration) { realm ->
             realm.where<MyDeviceLastSeenInfoEntity>().findAll().deleteAllFromRealm()
             entities.forEach {
