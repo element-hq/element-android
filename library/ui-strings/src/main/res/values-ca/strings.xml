@@ -2674,4 +2674,40 @@
     <string name="device_manager_verification_status_detail_other_session_verified">Aquesta sessió està llesta per a missatges segurs.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">La teva sessió actual està llesta per a missatges segurs.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verifica la teva sessió actual obtenir missatges segurs millorats.</string>
+    <string name="labs_enable_deferred_dm_summary">Crea missatge directe només al primer missatge</string>
+    <string name="labs_enable_deferred_dm_title">Activa missatges directes programats</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifica o tanca aquesta sessió per estar més segur.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Per estar més segur, tanca qualsevol sessió que no reconeguis o ja no utilitzis.</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">No s\'han trobat sessions inactives.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">No s\'han trobat sessions no verificades.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">No s\'han trobat sessions verificades.</string>
+    <string name="device_manager_session_details_title">Detalls de sessió</string>
+    <string name="device_manager_other_sessions_clear_filter">Esborra filtre</string>
+    <string name="device_manager_session_details_session_last_activity">Última activitat</string>
+    <string name="device_manager_session_details_session_name">Nom de la sessió</string>
+    <string name="device_manager_session_details_description">Informació d\'aplicació, dispositiu i activitat.</string>
+    <string name="device_manager_session_details_device_ip_address">Adreça IP</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Pensa en tancar sessió de les sessions antigues (%1$d dia o més) que ja no utilitzis.</item>
+        <item quantity="other">Pensa en tancar sessió de les sessions antigues (%1$d dies o més) que ja no utilitzis.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inactiu</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">No verificat</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verificat</string>
+    <string name="a11y_device_manager_filter">Filtra</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inactiu durant %1$d dia o més</item>
+        <item quantity="other">Inactiu durant %1$d dies o més</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inactiu</string>
+    <string name="device_manager_filter_option_unverified">No verificat</string>
+    <string name="device_manager_filter_option_verified">Verificat</string>
+    <string name="device_manager_filter_option_all_sessions">Totes les sessions</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtre</string>
+    <string name="device_manager_session_last_activity">Última activitat %1$s</string>
+    <string name="device_manager_device_title">Dispositiu</string>
+    <string name="device_manager_session_title">Sessió</string>
+    <string name="device_manager_current_session_title">Sessió actual</string>
+    <string name="labs_enable_new_app_layout_summary">Element simplificat amb pestanyes opcionals</string>
+    <string name="labs_enable_new_app_layout_title">Activa la nova visualització</string>
 </resources>
