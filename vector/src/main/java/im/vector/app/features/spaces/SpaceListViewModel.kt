@@ -216,10 +216,6 @@ class SpaceListViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSelectSpaceInvite(action: SpaceListAction.OpenSpaceInvite) {
-        _viewEvents.post(SpaceListViewEvents.OpenSpaceInvite(action.spaceSummary.roomId))
-    }
-
     private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
         viewModelScope.launch {
             tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
