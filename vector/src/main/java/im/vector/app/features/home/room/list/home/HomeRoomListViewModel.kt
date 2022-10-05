@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import arrow.core.toOption
@@ -34,6 +34,9 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toTrackingValue
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import kotlinx.coroutines.flow.Flow
@@ -74,6 +77,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         private val preferencesStore: HomeLayoutPreferencesStore,
         private val stringProvider: StringProvider,
         private val drawableProvider: DrawableProvider,
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<HomeRoomListViewState, HomeRoomListAction, HomeRoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -89,7 +93,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
             .setEnablePlaceholders(true)
             .build()
 
-    private val _roomsLivePagedList = MediatorLiveData<PagedList<RoomSummary>>()
+    private val _roomsLivePagedList = MutableLiveData<PagedList<RoomSummary>>()
     val roomsLivePagedList: LiveData<PagedList<RoomSummary>> = _roomsLivePagedList
 
     private val internalPagedListObserver = Observer<PagedList<RoomSummary>> {
@@ -236,9 +240,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     private fun observeRooms(currentFilter: HomeRoomFilter, isAZOrdering: Boolean) {
-        filteredPagedRoomSummariesLive?.livePagedList?.let { livePagedList ->
-            _roomsLivePagedList.removeSource(livePagedList)
-        }
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
         val builder = RoomSummaryQueryParams.Builder().also {
             it.memberships = listOf(Membership.JOIN)
             it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
@@ -256,7 +258,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         ).also {
             filteredPagedRoomSummariesLive = it
         }
-        _roomsLivePagedList.addSource(liveResults.livePagedList, internalPagedListObserver)
+        liveResults.livePagedList.observeForever(internalPagedListObserver)
     }
 
     private fun observeOrderPreferences() {
@@ -339,9 +341,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        filteredPagedRoomSummariesLive?.livePagedList?.let { livePagedList ->
-            _roomsLivePagedList.removeSource(livePagedList)
-        }
+        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
         super.onCleared()
     }
 
@@ -358,6 +358,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
         setState { copy(headersData = headersData.copy(currentFilter = newFilter)) }
         updateEmptyState()
+        analyticsTracker.updateUserProperties(UserProperties(allChatsActiveFilter = newFilter.toTrackingValue()))
         filteredPagedRoomSummariesLive?.let { liveResults ->
             liveResults.queryParams = getFilteredQueryParams(newFilter, liveResults.queryParams)
         }

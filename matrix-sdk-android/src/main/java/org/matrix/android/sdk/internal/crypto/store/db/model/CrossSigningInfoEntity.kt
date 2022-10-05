@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.extensions.clearWith
 internal open class CrossSigningInfoEntity(
         @PrimaryKey
         var userId: String? = null,
+        var wasUserVerifiedOnce: Boolean = false,
         var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
 ) : RealmObject() {
 

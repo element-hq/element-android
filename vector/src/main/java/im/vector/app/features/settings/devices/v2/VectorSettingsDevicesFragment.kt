@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -82,7 +81,6 @@ class VectorSettingsDevicesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -153,12 +151,6 @@ class VectorSettingsDevicesFragment :
     override fun onDestroyView() {
         cleanUpLearnMoreButtonsListeners()
         super.onDestroyView()
-    }
-
-    private fun initLearnMoreButtons() {
-        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
-        }
     }
 
     private fun cleanUpLearnMoreButtonsListeners() {

@@ -42,9 +42,10 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
+import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
@@ -134,10 +135,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var uiStateRepository: UiStateRepository
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
-    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var pinCodeHelper: PinCodeHelper
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var lockScreenKeyRepository: LockScreenKeyRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -284,9 +286,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             vectorPreferences.clearPreferences()
             uiStateRepository.reset()
             pinLocker.unlock()
-            pinCodeStore.deletePinCode()
+            pinCodeHelper.deletePinCode()
             vectorAnalytics.onSignOut()
             vectorSessionStore.clear()
+            lockScreenKeyRepository.deleteSystemKey()
         }
         withContext(Dispatchers.IO) {
             // On BG thread

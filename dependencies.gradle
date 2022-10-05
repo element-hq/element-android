@@ -9,9 +9,9 @@ ext.versions = [
 
 def gradle = "7.2.2"
 // Ref: https://kotlinlang.org/releases.html
-def kotlin = "1.7.10"
+def kotlin = "1.7.20"
 def kotlinCoroutines = "1.6.4"
-def dagger = "2.43.2"
+def dagger = "2.44"
 def appDistribution = "16.0.0-beta04"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
@@ -22,12 +22,14 @@ def flowBinding = "1.2.0"
 def flipper = "0.164.0"
 def epoxy = "4.6.2"
 def mavericks = "2.7.0"
-def glide = "4.13.2"
+def glide = "4.14.1"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
+
+def sentry = "6.4.1"
 
 def fragment = "1.5.3"
 
@@ -119,6 +121,7 @@ ext.libs = [
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",
                 'extLatex'               : "io.noties.markwon:ext-latex:$markwon",
+                'imageGlide'             : "io.noties.markwon:image-glide:$markwon",
                 'inlineParser'           : "io.noties.markwon:inline-parser:$markwon",
                 'html'                   : "io.noties.markwon:html:$markwon"
         ],
@@ -164,10 +167,13 @@ ext.libs = [
         apache      : [
                 'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
         ],
+        sentry: [
+                'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
+        ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",
                 'timberJunitRule'        : "net.lachlanmckee:timber-junit-rule:1.0.1",
-                'junit'                  : "junit:junit:4.13.2"
+                'junit'                  : "junit:junit:4.13.2",
         ]
 ]
 

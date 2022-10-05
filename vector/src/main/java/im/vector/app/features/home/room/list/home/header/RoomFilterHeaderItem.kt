@@ -22,6 +22,8 @@ import com.google.android.material.tabs.TabLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 
 @EpoxyModelClass
 abstract class RoomFilterHeaderItem : VectorEpoxyModel<RoomFilterHeaderItem.Holder>(R.layout.item_home_filter_tabs) {
@@ -34,6 +36,9 @@ abstract class RoomFilterHeaderItem : VectorEpoxyModel<RoomFilterHeaderItem.Hold
 
     @EpoxyAttribute
     var selectedFilter: HomeRoomFilter? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var analyticsTracker: AnalyticsTracker? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -51,6 +56,7 @@ abstract class RoomFilterHeaderItem : VectorEpoxyModel<RoomFilterHeaderItem.Hold
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     (tab?.tag as? HomeRoomFilter)?.let { filter ->
+                        trackFilterChangeEvent(filter)
                         onFilterChangedListener?.invoke(filter)
                     }
                 }
@@ -59,6 +65,23 @@ abstract class RoomFilterHeaderItem : VectorEpoxyModel<RoomFilterHeaderItem.Hold
                 override fun onTabReselected(tab: TabLayout.Tab?) = Unit
             })
         }
+    }
+
+    private fun trackFilterChangeEvent(filter: HomeRoomFilter) {
+        val interactionName = when (filter) {
+            HomeRoomFilter.ALL -> Interaction.Name.MobileAllChatsFilterAll
+            HomeRoomFilter.UNREADS -> Interaction.Name.MobileAllChatsFilterUnreads
+            HomeRoomFilter.FAVOURITES -> Interaction.Name.MobileAllChatsFilterFavourites
+            HomeRoomFilter.PEOPlE -> Interaction.Name.MobileAllChatsFilterPeople
+        }
+
+        analyticsTracker?.capture(
+                Interaction(
+                        index = null,
+                        interactionType = null,
+                        name = interactionName
+                )
+        )
     }
 
     override fun unbind(holder: Holder) {
