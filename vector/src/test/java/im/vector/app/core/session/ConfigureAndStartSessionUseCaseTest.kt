@@ -21,6 +21,8 @@ import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeWebRtcCallManager
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,6 +30,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -56,11 +59,11 @@ class ConfigureAndStartSessionUseCaseTest {
     }
 
     @Test
-    fun `given a session and start sync needed when configuring and starting the session then it should be configured properly`() {
+    fun `given a session and start sync needed when configuring and starting the session then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
-        every { fakeUpdateMatrixClientInfoUseCase.execute(any()) } just runs
+        coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
 
         // When
         configureAndStartSessionUseCase.execute(fakeSession, startSyncing = true)
@@ -70,15 +73,15 @@ class ConfigureAndStartSessionUseCaseTest {
         fakeSession.fakeFilterService.verifySetFilter(FilterService.FilterPreset.ElementFilter)
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
-        verify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
+        coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
     }
 
     @Test
-    fun `given a session and no start sync needed when configuring and starting the session then it should be configured properly`() {
+    fun `given a session and no start sync needed when configuring and starting the session then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
-        every { fakeUpdateMatrixClientInfoUseCase.execute(any()) } just runs
+        coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
 
         // When
         configureAndStartSessionUseCase.execute(fakeSession, startSyncing = false)
@@ -88,7 +91,7 @@ class ConfigureAndStartSessionUseCaseTest {
         fakeSession.fakeFilterService.verifySetFilter(FilterService.FilterPreset.ElementFilter)
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
-        verify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
+        coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
     }
 
     private fun givenASession(): FakeSession {
