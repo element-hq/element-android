@@ -16,7 +16,8 @@
 
 package im.vector.app.features.settings.devices.v2.filter
 
-import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
@@ -37,7 +38,8 @@ private val activeVerifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = false,
         isCurrentDevice = true,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val inactiveVerifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_VERIFIED_DEVICE"),
@@ -49,7 +51,8 @@ private val inactiveVerifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = true,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val activeUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "ACTIVE_UNVERIFIED_DEVICE"),
@@ -61,7 +64,8 @@ private val activeUnverifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = false,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val inactiveUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_UNVERIFIED_DEVICE"),
@@ -73,7 +77,8 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = true,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 
 private val devices = listOf(
