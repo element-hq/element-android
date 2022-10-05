@@ -3323,9 +3323,18 @@
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
-    
+
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+   
     <!-- QR Code Login -->
     <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
     <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
+    <string name="qr_code_login_new_device_instruction_1">Open Element on your other device</string>
+    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Link a device\'</string>
+    <string name="qr_code_login_new_device_instruction_4">Select \'Show QR code on this device\'</string>
 
 </resources>

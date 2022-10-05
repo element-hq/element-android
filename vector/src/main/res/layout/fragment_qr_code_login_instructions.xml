@@ -17,4 +17,18 @@
         app:qrCodeLoginHeaderImageResource="@drawable/ic_camera"
         app:qrCodeLoginHeaderTitle="@string/qr_code_login_header_scan_qr_code_title" />
 
+    <im.vector.app.features.login.qr.QrCodeLoginInstructionsView
+        android:id="@+id/qrCodeLoginInstructionsView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeLoginInstructionsHeaderView"
+        app:qrCodeLoginInstruction1="@string/qr_code_login_new_device_instruction_1"
+        app:qrCodeLoginInstruction2="@string/qr_code_login_new_device_instruction_2"
+        app:qrCodeLoginInstruction3="@string/qr_code_login_new_device_instruction_3"
+        app:qrCodeLoginInstruction4="@string/qr_code_login_new_device_instruction_4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
