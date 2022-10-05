@@ -35,6 +35,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
