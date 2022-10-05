@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -45,6 +46,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
@@ -57,9 +59,11 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -69,6 +73,7 @@ import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.internal.session.sync.model.accountdata.LocalNotificationSettingsContent
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -115,6 +120,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeCrossSigningReset()
         observeAnalytics()
         observeReleaseNotes()
+        observeLocalNotificationsSilenced()
         initThreadsMigration()
     }
 
@@ -133,6 +139,17 @@ class HomeActivityViewModel @AssistedInject constructor(
                     releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
                 }
             }
+        }
+    }
+
+    fun observeLocalNotificationsSilenced() {
+        val currentSession = activeSessionHolder.getActiveSession()
+        viewModelScope.launch {
+            currentSession.accountDataService()
+                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS)
+                    .asFlow()
+                    .map { it.getOrNull()?.content?.toModel<LocalNotificationSettingsContent>()?.isSilenced ?: false }
+                    .onEach { setState { copy(areNotificationsSilenced = it) } }
         }
     }
 

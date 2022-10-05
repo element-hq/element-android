@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package org.matrix.android.sdk.internal.session.sync.model.accountdata
 
-import com.airbnb.mvrx.MavericksState
-import im.vector.app.features.onboarding.AuthenticationDescription
-import org.matrix.android.sdk.api.session.sync.SyncRequestState
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-data class HomeActivityViewState(
-        val syncRequestState: SyncRequestState = SyncRequestState.Idle,
-        val authenticationDescription: AuthenticationDescription? = null,
-        val areNotificationsSilenced: Boolean = false,
-) : MavericksState
+@JsonClass(generateAdapter = true)
+data class LocalNotificationSettingsContent(
+        @Json(name = "is_silenced") val isSilenced: Boolean = false
+)
