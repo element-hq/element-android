@@ -46,30 +46,26 @@ class DecryptRedactedEventTest : InstrumentedTest {
         roomALicePOV.sendService().redactEvent(timelineEvent.root, redactionReason)
 
         // get the event from bob
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)?.root?.isRedacted() == true
-            }
+        testHelper.retryPeriodically {
+            bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)?.root?.isRedacted() == true
         }
 
         val eventBobPov = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)!!
 
-        testHelper.runBlockingTest {
-            try {
-                val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
-                Assert.assertEquals(
-                        "Unexpected redacted reason",
-                        redactionReason,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
-                )
-                Assert.assertEquals(
-                        "Unexpected Redacted event id",
-                        timelineEvent.eventId,
-                        result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
-                )
-            } catch (failure: Throwable) {
-                Assert.fail("Should not throw when decrypting a redacted event")
-            }
+        try {
+            val result = bobSession.cryptoService().decryptEvent(eventBobPov.root, "")
+            Assert.assertEquals(
+                    "Unexpected redacted reason",
+                    redactionReason,
+                    result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.content?.get("reason")
+            )
+            Assert.assertEquals(
+                    "Unexpected Redacted event id",
+                    timelineEvent.eventId,
+                    result.clearEvent.toModel<Event>()?.unsignedData?.redactedEvent?.redacts
+            )
+        } catch (failure: Throwable) {
+            Assert.fail("Should not throw when decrypting a redacted event")
         }
     }
 }

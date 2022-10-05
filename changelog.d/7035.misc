@@ -1,1 +1,0 @@
-Ensure that we do not expect all the Event fields when requesting `rooms/{roomId}/hierarchy` endpoint.

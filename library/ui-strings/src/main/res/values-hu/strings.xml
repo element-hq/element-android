@@ -2654,7 +2654,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_header_section_security_recommendations_title">Biztonsági javaslatok</string>
     <string name="invites_empty_title">Semmi új.</string>
     <string name="space_list_empty_message">Terekkel lehet szobákat és személyeket csoportokba rendezni. Készíts egyet indulásnak.</string>
-    <string name="space_list_empty_title">Nincsenek terek egyenlőre.</string>
+    <string name="space_list_empty_title">Nincsenek terek egyelőre.</string>
     <string name="a11y_collapse_space_children">%s összezárása</string>
     <string name="a11y_expand_space_children">%s kinyitása</string>
     <string name="change_space">Tér cseréje</string>

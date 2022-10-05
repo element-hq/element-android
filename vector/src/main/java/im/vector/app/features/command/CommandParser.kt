@@ -317,6 +317,13 @@ class CommandParser @Inject constructor() {
                         ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                     }
                 }
+                Command.DEVTOOLS.matches(slashCommand) -> {
+                    if (messageParts.size == 1) {
+                        ParsedCommand.DevTools
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.DEVTOOLS)
+                    }
+                }
                 Command.CLEAR_SCALAR_TOKEN.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
                         ParsedCommand.ClearScalarToken
@@ -336,6 +343,9 @@ class CommandParser @Inject constructor() {
                 }
                 Command.LENNY.matches(slashCommand) -> {
                     ParsedCommand.SendLenny(message)
+                }
+                Command.TABLE_FLIP.matches(slashCommand) -> {
+                    ParsedCommand.SendTableFlip(message)
                 }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {

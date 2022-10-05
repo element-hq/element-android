@@ -25,4 +25,6 @@ data class DeviceFullInfo(
         val cryptoDeviceInfo: CryptoDeviceInfo?,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
         val isInactive: Boolean,
+        val isCurrentDevice: Boolean,
+        val deviceExtendedInfo: DeviceExtendedInfo,
 )

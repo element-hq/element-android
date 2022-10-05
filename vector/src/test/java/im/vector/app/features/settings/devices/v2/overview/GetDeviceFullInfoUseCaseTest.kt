@@ -18,11 +18,14 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import im.vector.app.features.settings.devices.v2.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import im.vector.app.features.settings.devices.v2.GetCurrentSessionCrossSigningInfoUseCase
-import im.vector.app.features.settings.devices.v2.GetEncryptionTrustLevelForDeviceUseCase
+import im.vector.app.features.settings.devices.v2.ParseDeviceUserAgentUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.list.DeviceType
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.givenAsFlow
@@ -53,12 +56,14 @@ class GetDeviceFullInfoUseCaseTest {
     private val getEncryptionTrustLevelForDeviceUseCase = mockk<GetEncryptionTrustLevelForDeviceUseCase>()
     private val checkIfSessionIsInactiveUseCase = mockk<CheckIfSessionIsInactiveUseCase>()
     private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
+    private val parseDeviceUserAgentUseCase = mockk<ParseDeviceUserAgentUseCase>()
 
     private val getDeviceFullInfoUseCase = GetDeviceFullInfoUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
             getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
             getEncryptionTrustLevelForDeviceUseCase = getEncryptionTrustLevelForDeviceUseCase,
             checkIfSessionIsInactiveUseCase = checkIfSessionIsInactiveUseCase,
+            parseDeviceUserAgentUseCase = parseDeviceUserAgentUseCase,
     )
 
     @Before
@@ -76,7 +81,7 @@ class GetDeviceFullInfoUseCaseTest {
         // Given
         val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
         val deviceInfo = DeviceInfo(
-                lastSeenTs = A_TIMESTAMP
+                lastSeenTs = A_TIMESTAMP,
         )
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData = MutableLiveData(Optional(deviceInfo))
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.myDevicesInfoWithIdLiveData.givenAsFlow()
@@ -85,7 +90,9 @@ class GetDeviceFullInfoUseCaseTest {
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData.givenAsFlow()
         val trustLevel = givenTrustLevel(currentSessionCrossSigningInfo, cryptoDeviceInfo)
         val isInactive = false
+        val isCurrentDevice = true
         every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceExtendedInfo(DeviceType.MOBILE)
 
         // When
         val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
@@ -96,6 +103,8 @@ class GetDeviceFullInfoUseCaseTest {
                 cryptoDeviceInfo = cryptoDeviceInfo,
                 roomEncryptionTrustLevel = trustLevel,
                 isInactive = isInactive,
+                isCurrentDevice = isCurrentDevice,
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
         )
         verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
         verify { getCurrentSessionCrossSigningInfoUseCase.execute() }

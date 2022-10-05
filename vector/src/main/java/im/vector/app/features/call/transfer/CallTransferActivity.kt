@@ -59,7 +59,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
             }
         }
 
-        sectionsPagerAdapter = CallTransferPagerAdapter(this)
+        sectionsPagerAdapter = CallTransferPagerAdapter(this, vectorLocale)
         views.callTransferViewPager.adapter = sectionsPagerAdapter
 
         TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->

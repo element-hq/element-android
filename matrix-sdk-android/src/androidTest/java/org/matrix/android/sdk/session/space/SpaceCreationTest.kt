@@ -55,15 +55,11 @@ class SpaceCreationTest : InstrumentedTest {
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
-        var spaceId: String = ""
-        commonTestHelper.runBlockingTest {
-            spaceId = session.spaceService().createSpace(roomName, topic, null, true)
-        }
+        val spaceId = session.spaceService().createSpace(roomName, topic, null, true)
 
-        commonTestHelper.waitWithLatch {
-            commonTestHelper.retryPeriodicallyWithLatch(it) {
-                session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()?.name != null
-            }
+        commonTestHelper.retryPeriodically {
+            val roomSummary = session.spaceService().getSpace(spaceId)?.asRoom()?.roomSummary()
+            roomSummary?.name == roomName && roomSummary.topic == topic
         }
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
@@ -79,14 +75,12 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals("Room type should be space", RoomType.SPACE, createContent?.type)
 
         var powerLevelsContent: PowerLevelsContent? = null
-        commonTestHelper.waitWithLatch { latch ->
-            commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                powerLevelsContent = syncedSpace.asRoom()
-                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                        ?.content
-                        ?.toModel<PowerLevelsContent>()
-                powerLevelsContent != null
-            }
+        commonTestHelper.retryPeriodically {
+            powerLevelsContent = syncedSpace.asRoom()
+                    .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+                    ?.content
+                    ?.toModel<PowerLevelsContent>()
+            powerLevelsContent != null
         }
         assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
@@ -116,19 +110,13 @@ class SpaceCreationTest : InstrumentedTest {
 
         val roomName = "My Space"
         val topic = "A public space for test"
-        val spaceId: String
-        runBlocking {
-            spaceId = aliceSession.spaceService().createSpace(roomName, topic, null, true)
-            // wait a bit to let the summary update it self :/
-            delay(400)
-        }
+        val spaceId = aliceSession.spaceService().createSpace(roomName, topic, null, true)
+        // wait a bit to let the summary update it self :/
+        delay(400)
 
         // Try to join from bob, it's a public space no need to invite
 
-        val joinResult: JoinSpaceResult
-        runBlocking {
-            joinResult = bobSession.spaceService().joinSpace(spaceId)
-        }
+        val joinResult = bobSession.spaceService().joinSpace(spaceId)
 
         assertEquals(JoinSpaceResult.Success, joinResult)
 
@@ -152,43 +140,24 @@ class SpaceCreationTest : InstrumentedTest {
         val syncedSpace = aliceSession.spaceService().getSpace(spaceId)
 
         // create a room
-        var firstChild: String? = null
-        commonTestHelper.waitWithLatch {
-            firstChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
-                this.name = "FirstRoom"
-                this.topic = "Description of first room"
-                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-            })
-            it.countDown()
-        }
+        val firstChild: String = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+            this.name = "FirstRoom"
+            this.topic = "Description of first room"
+            this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+        })
 
-        commonTestHelper.waitWithLatch {
-            syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
-            it.countDown()
-        }
+        syncedSpace?.addChildren(firstChild, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
 
-        var secondChild: String? = null
-        commonTestHelper.waitWithLatch {
-            secondChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
-                this.name = "SecondRoom"
-                this.topic = "Description of second room"
-                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-            })
-            it.countDown()
-        }
+        val secondChild = aliceSession.roomService().createRoom(CreateRoomParams().apply {
+            this.name = "SecondRoom"
+            this.topic = "Description of second room"
+            this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+        })
 
-        commonTestHelper.waitWithLatch {
-            syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
-            it.countDown()
-        }
+        syncedSpace?.addChildren(secondChild, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
 
         // Try to join from bob, it's a public space no need to invite
-        var joinResult: JoinSpaceResult? = null
-        commonTestHelper.waitWithLatch {
-            joinResult = bobSession.spaceService().joinSpace(spaceId)
-            // wait a bit to let the summary update it self :/
-            it.countDown()
-        }
+        val joinResult = bobSession.spaceService().joinSpace(spaceId)
 
         assertEquals(JoinSpaceResult.Success, joinResult)
 

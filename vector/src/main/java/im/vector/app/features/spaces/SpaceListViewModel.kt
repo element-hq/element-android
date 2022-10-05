@@ -215,7 +215,18 @@ class SpaceListViewModel @AssistedInject constructor(
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         if (state.selectedSpace?.roomId != action.spaceSummary?.roomId) {
-            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
+            val interactionName = if (action.isSubSpace) {
+                Interaction.Name.SpacePanelSwitchSubSpace
+            } else {
+                Interaction.Name.SpacePanelSwitchSpace
+            }
+            analyticsTracker.capture(
+                    Interaction(
+                            index = null,
+                            interactionType = null,
+                            name = interactionName
+                    )
+            )
             setState { copy(selectedSpace = action.spaceSummary) }
             spaceStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
             _viewEvents.post(SpaceListViewEvents.CloseDrawer)

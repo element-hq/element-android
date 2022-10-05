@@ -48,7 +48,6 @@ class HomeFilteredRoomsController @Inject constructor(
     var listener: RoomListListener? = null
 
     private var emptyStateData: StateView.State.Empty? = null
-    private var currentState: StateView.State = StateView.State.Content
 
     private val shouldUseSingleLine: Boolean
 
@@ -57,30 +56,28 @@ class HomeFilteredRoomsController @Inject constructor(
         shouldUseSingleLine = fontScale.scale > FontScalePreferences.SCALE_LARGE
     }
 
+    fun submitRoomsList(roomsList: PagedList<RoomSummary>) {
+        submitList(roomsList)
+        // If room is empty we may have a new EmptyState to display
+        if (roomsList.isEmpty()) {
+            requestForcedModelBuild()
+        }
+    }
+
     override fun addModels(models: List<EpoxyModel<*>>) {
+        val emptyStateData = this.emptyStateData
         if (models.isEmpty() && emptyStateData != null) {
-            emptyStateData?.let { emptyState ->
-                roomListEmptyItem {
-                    id("state_item")
-                    emptyData(emptyState)
-                }
-                currentState = emptyState
+            roomListEmptyItem {
+                id("state_item")
+                emptyData(emptyStateData)
             }
         } else {
-            currentState = StateView.State.Content
             super.addModels(models)
         }
     }
 
     fun submitEmptyStateData(state: StateView.State.Empty?) {
         this.emptyStateData = state
-    }
-
-    fun submitPagedList(newList: PagedList<RoomSummary>) {
-        submitList(newList)
-        if (newList.isEmpty()) {
-            requestForcedModelBuild()
-        }
     }
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
@@ -91,7 +88,14 @@ class HomeFilteredRoomsController @Inject constructor(
                 useSingleLineForLastEvent(host.shouldUseSingleLine)
             }
         } else {
-            roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), RoomListDisplayMode.ROOMS, listener, shouldUseSingleLine)
+            roomSummaryItemFactory.create(
+                    roomSummary = item,
+                    roomChangeMembershipStates = roomChangeMembershipStates.orEmpty(),
+                    selectedRoomIds = emptySet(),
+                    displayMode = RoomListDisplayMode.ROOMS,
+                    listener = listener,
+                    singleLineLastEvent = shouldUseSingleLine
+            )
         }
     }
 }

@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2
 
 import android.content.Context
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsActivity
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
 import javax.inject.Inject
@@ -27,7 +28,14 @@ class VectorSettingsDevicesViewNavigator @Inject constructor() {
         context.startActivity(SessionOverviewActivity.newIntent(context, deviceId))
     }
 
-    fun navigateToOtherSessions(context: Context) {
-        context.startActivity(OtherSessionsActivity.newIntent(context))
+    fun navigateToOtherSessions(
+            context: Context,
+            titleResourceId: Int,
+            defaultFilter: DeviceManagerFilterType,
+            excludeCurrentDevice: Boolean,
+    ) {
+        context.startActivity(
+                OtherSessionsActivity.newIntent(context, titleResourceId, defaultFilter, excludeCurrentDevice)
+        )
     }
 }

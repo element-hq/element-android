@@ -17,16 +17,17 @@
 package im.vector.app.core.pushers
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.core.content.edit
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import javax.inject.Inject
 
 class UnifiedPushStore @Inject constructor(
         val context: Context,
-        val fcmHelper: FcmHelper
+        val fcmHelper: FcmHelper,
+        @DefaultPreferences
+        private val defaultPrefs: SharedPreferences,
 ) {
-    private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
-
     /**
      * Retrieves the UnifiedPush Endpoint.
      *
