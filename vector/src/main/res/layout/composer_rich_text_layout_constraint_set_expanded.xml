@@ -182,11 +182,12 @@
         app:layout_constraintTop_toTopOf="@id/sendButton"
         app:layout_constraintStart_toEndOf="@id/attachmentButton"
         app:layout_constraintEnd_toStartOf="@id/sendButton"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/richTextMenu"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 

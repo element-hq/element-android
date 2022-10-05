@@ -3,6 +3,8 @@
     android:layout_width="48dp"
     android:layout_height="48dp"
     android:layout_marginHorizontal="2dp"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:contentDescription="@string/app_name">
+    <!-- The contentDescription attr is populated programmatically. This is just to fix lint issues. -->
 
 </ImageButton>
