@@ -19,4 +19,4 @@ package im.vector.app.core.session.clientinfo
 /**
  * Prefix for the key account data event which holds client info.
  */
-const val MATRIX_CLIENT_INFO_KEY_PREFIX = "io.element.matrix_client_information."
+internal const val MATRIX_CLIENT_INFO_KEY_PREFIX = "io.element.matrix_client_information."
