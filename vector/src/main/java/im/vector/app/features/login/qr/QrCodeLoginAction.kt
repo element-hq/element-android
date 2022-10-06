@@ -16,8 +16,8 @@
 
 package im.vector.app.features.login.qr
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class QrCodeLoginViewEvents : VectorViewEvents {
-    object NavigateToStatusScreen : QrCodeLoginViewEvents()
+sealed class QrCodeLoginAction : VectorViewModelAction {
+    data class OnQrCodeScanned(val qrCode: String) : QrCodeLoginAction()
 }

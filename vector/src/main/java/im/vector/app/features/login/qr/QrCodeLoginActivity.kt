@@ -20,6 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
@@ -27,11 +29,13 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 @AndroidEntryPoint
 class QrCodeLoginActivity : SimpleFragmentActivity() {
 
+    private val viewModel: QrCodeLoginViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
-        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(EXTRA_QR_CODE_LOGIN_ARGS)
+        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             if (qrCodeLoginArgs?.loginType == QrCodeLoginType.LOGIN) {
                 addFragment(
@@ -41,14 +45,30 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
                 )
             }
         }
+
+        observeViewEvents()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                QrCodeLoginViewEvents.NavigateToStatusScreen -> handleNavigateToStatusScreen()
+            }
+        }
+    }
+
+    private fun handleNavigateToStatusScreen() {
+        addFragment(
+                views.container,
+                QrCodeLoginStatusFragment::class.java
+        )
     }
 
     companion object {
-        private const val EXTRA_QR_CODE_LOGIN_ARGS = "EXTRA_QR_CODE_LOGIN_ARGS"
 
         fun getIntent(context: Context, qrCodeLoginArgs: QrCodeLoginArgs): Intent {
             return Intent(context, QrCodeLoginActivity::class.java).apply {
-                putExtra(EXTRA_QR_CODE_LOGIN_ARGS, qrCodeLoginArgs)
+                putExtra(Mavericks.KEY_ARG, qrCodeLoginArgs)
             }
         }
     }

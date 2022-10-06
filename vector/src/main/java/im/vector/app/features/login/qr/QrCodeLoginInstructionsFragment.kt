@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginInstructionsBinding
@@ -28,6 +30,8 @@ import im.vector.app.features.qrcode.QrCodeScannerActivity
 import timber.log.Timber
 
 class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginInstructionsBinding>() {
+
+    private val viewModel: QrCodeLoginViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +62,7 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
     }
 
     private fun onQrCodeScanned(scannedQrCode: String) {
-        Timber.d("QrCodeLoginInstructionsFragment.onQrCodeScanned $scannedQrCode")
+        viewModel.handle(QrCodeLoginAction.OnQrCodeScanned(scannedQrCode))
     }
 
     private fun onQrCodeScannerFailed() {

@@ -66,4 +66,17 @@ class QrCodeLoginHeaderView @JvmOverloads constructor(
         binding.qrCodeLoginHeaderImageView.setImageResource(imageResource)
         binding.qrCodeLoginHeaderImageView.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
+
+    fun setTitle(title: String) {
+        binding.qrCodeLoginHeaderTitleTextView.text = title
+    }
+
+    fun setDescription(description: String) {
+        binding.qrCodeLoginHeaderDescriptionTextView.text = description
+    }
+
+    fun setImage(imageResource: Int, backgroundTintColor: Int) {
+        binding.qrCodeLoginHeaderImageView.setImageResource(imageResource)
+        binding.qrCodeLoginHeaderImageView.backgroundTintList = ColorStateList.valueOf(backgroundTintColor)
+    }
 }
