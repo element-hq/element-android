@@ -3333,6 +3333,8 @@
     <!-- QR Code Login -->
     <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
     <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
+    <string name="qr_code_login_header_connected_title">Secure connection established</string>
+    <string name="qr_code_login_header_connected_description">Check your signed in device, the code below should be displayed. Confirm that the code below matches with that device:</string>
     <string name="qr_code_login_new_device_instruction_1">Open Element on your other device</string>
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
     <string name="qr_code_login_new_device_instruction_3">Select \'Link a device\'</string>
@@ -3340,5 +3342,8 @@
     <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
     <string name="qr_code_login_need_an_alternative_method">Need an alternative method?</string>
     <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
+    <string name="qr_code_login_connecting_to_device">Connecting to device</string>
+    <string name="qr_code_login_signing_in">Signing you in</string>
+    <string name="qr_code_login_status_no_match">No match?</string>
 
 </resources>
