@@ -26,6 +26,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
@@ -58,8 +59,8 @@ class SessionDetailsController @Inject constructor(
                 buildSectionApplication(matrixClientInfo, addExtraTopMargin = hasSectionSession)
             }
 
-            if (hasSectionDevice(deviceInfo)) {
-                buildSectionDevice(deviceInfo, addExtraTopMargin = hasSectionSession || hasApplicationSection)
+            if (hasSectionDevice(fullInfo)) {
+                buildSectionDevice(fullInfo, addExtraTopMargin = hasSectionSession || hasApplicationSection)
             }
         }
     }
@@ -139,15 +140,77 @@ class SessionDetailsController @Inject constructor(
         }
     }
 
-    private fun hasSectionDevice(data: DeviceInfo): Boolean {
+    private fun hasSectionDevice(data: DeviceFullInfo): Boolean {
         return checkIfSectionDeviceIsVisibleUseCase.execute(data)
     }
 
-    private fun buildSectionDevice(data: DeviceInfo, addExtraTopMargin: Boolean) {
-        val lastSeenIp = data.lastSeenIp.orEmpty()
-
+    private fun buildSectionDevice(data: DeviceFullInfo, addExtraTopMargin: Boolean) {
         buildHeaderItem(R.string.device_manager_device_title, addExtraTopMargin)
 
+        when (data.deviceExtendedInfo.deviceType) {
+            DeviceType.MOBILE -> buildSectionDeviceMobile(data)
+            DeviceType.WEB -> buildSectionDeviceWeb(data)
+            DeviceType.DESKTOP -> buildSectionDeviceDesktop(data)
+            DeviceType.UNKNOWN -> buildSectionDeviceUnknown(data)
+        }
+    }
+
+    private fun buildSectionDeviceWeb(data: DeviceFullInfo) {
+        val browserName = data.deviceExtendedInfo.clientName.orEmpty()
+        val browserVersion = data.deviceExtendedInfo.clientVersion.orEmpty()
+        val browser = "$browserName $browserVersion"
+        val operatingSystem = data.deviceExtendedInfo.deviceOperatingSystem.orEmpty()
+        val lastSeenIp = data.deviceInfo.lastSeenIp.orEmpty()
+
+        if (browser.isNotEmpty()) {
+            val hasDivider = operatingSystem.isNotEmpty() || lastSeenIp.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_device_browser, browser, hasDivider)
+        }
+
+        if (operatingSystem.isNotEmpty()) {
+            val hasDivider = lastSeenIp.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+        }
+
+        buildIpAddressContentItem(lastSeenIp)
+    }
+
+    private fun buildSectionDeviceDesktop(data: DeviceFullInfo) {
+        val operatingSystem = data.deviceExtendedInfo.deviceOperatingSystem.orEmpty()
+        val lastSeenIp = data.deviceInfo.lastSeenIp.orEmpty()
+
+        if (operatingSystem.isNotEmpty()) {
+            val hasDivider = lastSeenIp.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+        }
+
+        buildIpAddressContentItem(lastSeenIp)
+    }
+
+    private fun buildSectionDeviceMobile(data: DeviceFullInfo) {
+        val model = data.deviceExtendedInfo.deviceModel.orEmpty()
+        val operatingSystem = data.deviceExtendedInfo.deviceOperatingSystem.orEmpty()
+        val lastSeenIp = data.deviceInfo.lastSeenIp.orEmpty()
+
+        if (model.isNotEmpty()) {
+            val hasDivider = operatingSystem.isNotEmpty() || lastSeenIp.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_device_model, model, hasDivider)
+        }
+
+        if (operatingSystem.isNotEmpty()) {
+            val hasDivider = lastSeenIp.isNotEmpty()
+            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+        }
+
+        buildIpAddressContentItem(lastSeenIp)
+    }
+
+    private fun buildSectionDeviceUnknown(data: DeviceFullInfo) {
+        val lastSeenIp = data.deviceInfo.lastSeenIp.orEmpty()
+        buildIpAddressContentItem(lastSeenIp)
+    }
+
+    private fun buildIpAddressContentItem(lastSeenIp: String) {
         if (lastSeenIp.isNotEmpty()) {
             val hasDivider = false
             buildContentItem(R.string.device_manager_session_details_device_ip_address, lastSeenIp, hasDivider)
