@@ -213,7 +213,7 @@ class SessionDetailsController @Inject constructor(
     private fun buildIpAddressContentItem(lastSeenIp: String) {
         if (lastSeenIp.isNotEmpty()) {
             val hasDivider = false
-            buildContentItem(R.string.device_manager_session_details_device_ip_address, lastSeenIp, hasDivider)
+            buildContentItem(R.string.device_manager_session_details_device_ip_address, lastSeenIp.replace(lastSeenIp, "XX.XXX.XXX.XX"), hasDivider)
         }
     }
 }
