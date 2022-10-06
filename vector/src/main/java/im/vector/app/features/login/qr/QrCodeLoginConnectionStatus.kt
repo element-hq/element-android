@@ -16,14 +16,8 @@
 
 package im.vector.app.features.login.qr
 
-import com.airbnb.mvrx.MavericksState
-
-data class QrCodeLoginViewState(
-    val loginType: QrCodeLoginType,
-    val connectionStatus: QrCodeLoginConnectionStatus? = null,
-) : MavericksState {
-
-    constructor(args: QrCodeLoginArgs) : this(
-            loginType = args.loginType,
-    )
+sealed class QrCodeLoginConnectionStatus {
+    object ConnectingToDevice : QrCodeLoginConnectionStatus()
+    data class Connected(val securityCode: String) : QrCodeLoginConnectionStatus()
+    object SigningIn : QrCodeLoginConnectionStatus()
 }
