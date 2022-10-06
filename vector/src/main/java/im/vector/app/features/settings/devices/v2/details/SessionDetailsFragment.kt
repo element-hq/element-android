@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.FragmentSessionDetailsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 /**

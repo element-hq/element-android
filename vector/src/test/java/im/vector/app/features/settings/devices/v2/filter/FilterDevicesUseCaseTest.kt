@@ -17,8 +17,8 @@
 package im.vector.app.features.settings.devices.v2.filter
 
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
-import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
