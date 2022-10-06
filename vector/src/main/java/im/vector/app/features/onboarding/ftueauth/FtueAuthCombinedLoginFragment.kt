@@ -40,6 +40,8 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.SsoState
+import im.vector.app.features.login.qr.QrCodeLoginArgs
+import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -70,6 +72,7 @@ class FtueAuthCombinedLoginFragment :
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
         }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
+        views.loginWithQrCode.debouncedClicks { navigator.openLoginWithQrCode(requireActivity(), QrCodeLoginArgs(loginType = QrCodeLoginType.LOGIN)) }
     }
 
     private fun setupSubmitButton() {

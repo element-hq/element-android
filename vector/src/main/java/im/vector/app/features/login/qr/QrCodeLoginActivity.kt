@@ -18,11 +18,30 @@ package im.vector.app.features.login.qr
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 
 @AndroidEntryPoint
 class QrCodeLoginActivity : SimpleFragmentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        views.toolbar.visibility = View.GONE
+
+        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(EXTRA_QR_CODE_LOGIN_ARGS)
+        if (isFirstCreation()) {
+            if (qrCodeLoginArgs?.loginType == QrCodeLoginType.LOGIN) {
+                addFragment(
+                        views.container,
+                        QrCodeLoginInstructionsFragment::class.java,
+                        qrCodeLoginArgs
+                )
+            }
+        }
+    }
 
     companion object {
         private const val EXTRA_QR_CODE_LOGIN_ARGS = "EXTRA_QR_CODE_LOGIN_ARGS"

@@ -2168,6 +2168,7 @@
     <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
+    <string name="login_signin_with_qr_code">Sign in with QR code</string>
 
     <string name="seen_by">Seen by</string>
 

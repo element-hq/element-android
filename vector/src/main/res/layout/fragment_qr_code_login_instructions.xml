@@ -33,7 +33,7 @@
 
     <Button
         android:id="@+id/qrCodeLoginInstructionsShowQrCodeButton"
-        style="@style/Widget.Vector.Button.Outlined"
+        style="@style/Widget.Vector.Button.Outlined.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
@@ -71,6 +71,7 @@
 
     <Button
         android:id="@+id/qrCodeLoginInstructionsScanQrCodeButton"
+        style="@style/Widget.Vector.Button.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
