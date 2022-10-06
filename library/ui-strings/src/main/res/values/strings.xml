@@ -635,6 +635,8 @@
     <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_notification">${app_name} needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
 
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
     <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
@@ -854,7 +856,9 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} needs the permission to show notifications.\nPlease grant the permission.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="grant_permission">Grant Permission</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>

@@ -16,8 +16,6 @@
 
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
@@ -28,7 +26,7 @@ class TestCurrentUnifiedPushDistributor @Inject constructor(
         private val stringProvider: StringProvider,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_current_distributor_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         description = stringProvider.getString(
                 R.string.settings_troubleshoot_test_current_distributor,
                 unifiedPushHelper.getCurrentDistributorName()

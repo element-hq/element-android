@@ -48,6 +48,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
@@ -143,6 +144,7 @@ class HomeActivity :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
     @Inject lateinit var disclaimerDialog: DisclaimerDialog
+    @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
@@ -170,6 +172,10 @@ class HomeActivity :
                 roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
+    }
+
+    private val postPermissionLauncher = registerForPermissionsResult { _, _ ->
+        // Nothing to do with the result.
     }
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -273,6 +279,7 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowNotificationDialog -> handleShowNotificationDialog()
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
@@ -286,6 +293,10 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowNotificationDialog() {
+        notificationPermissionManager.eventuallyRequestPermission(this, postPermissionLauncher)
     }
 
     private fun handleShowReleaseNotes() {

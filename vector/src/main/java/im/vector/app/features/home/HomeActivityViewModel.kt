@@ -143,6 +143,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     .onEach { didAskUser ->
                         if (!didAskUser) {
                             _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        } else {
+                            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
                         }
                     }
                     .launchIn(viewModelScope)
@@ -162,6 +164,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // do nothing
                 }
             }
+        } else {
+            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
         }
     }
 

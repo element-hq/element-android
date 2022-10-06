@@ -43,9 +43,12 @@ import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.core.utils.startNotificationSettingsIntent
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.home.NotificationPermissionManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
@@ -76,11 +79,23 @@ class VectorSettingsNotificationPreferenceFragment :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
+
+    private val notificationStartForActivityResult = registerStartForActivityResult { _ ->
+        // No op
+    }
+
+    private val postPermissionLauncher = registerForPermissionsResult { _, deniedPermanently ->
+        if (deniedPermanently) {
+            // Open System setting, to give a chance to the user to enable notification. Sometimes the permission dialog is not displayed
+            startNotificationSettingsIntent(requireContext(), notificationStartForActivityResult)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,6 +133,12 @@ class VectorSettingsNotificationPreferenceFragment :
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
                     }
+                    notificationPermissionManager.eventuallyRequestPermission(
+                            requireActivity(),
+                            postPermissionLauncher,
+                            showRationale = false,
+                            ignorePreference = true
+                    )
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
                     session.pushersService().refreshPushers()
