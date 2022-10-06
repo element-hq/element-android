@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 class CheckIfSectionApplicationIsVisibleUseCase @Inject constructor() {
 
-    // TODO add unit tests
     fun execute(matrixClientInfoContent: MatrixClientInfoContent?): Boolean {
         return matrixClientInfoContent?.name?.isNotEmpty().orFalse() ||
                 matrixClientInfoContent?.version?.isNotEmpty().orFalse() ||
