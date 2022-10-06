@@ -19,10 +19,11 @@ package im.vector.app.features.login
 import im.vector.app.core.utils.TemporaryStore
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 /**
  * Will store the account password for 3 minutes.
  */
 @Singleton
-class ReAuthHelper @Inject constructor() : TemporaryStore<String>(3.minutes)
+class ReAuthHelper @Inject constructor() : TemporaryStore<String>(3.hours)
