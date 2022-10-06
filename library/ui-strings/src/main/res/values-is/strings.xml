@@ -152,7 +152,7 @@
     <string name="settings_version">Útgáfa</string>
     <string name="settings_olm_version">Útgáfa olm</string>
     <string name="settings_app_term_conditions">Skilmálar og kvaðir</string>
-    <string name="settings_third_party_notices">Athugasemdir frá þriðja aðila</string>
+    <string name="settings_third_party_notices">Tilkynningar frá utanaðkomandi aðilum</string>
     <string name="settings_copyright">Höfundarréttur</string>
     <string name="settings_privacy_policy">Meðferð persónuupplýsinga</string>
     <string name="settings_clear_cache">Hreinsa skyndiminni</string>
@@ -1218,7 +1218,7 @@
     <string name="room_list_quick_actions_notifications_all_noisy">Öll skilaboð (hávært)</string>
     <string name="content_reported_as_inappropriate_title">Tilkynnt sem óviðeigandi</string>
     <string name="content_reported_as_spam_title">Tilkynnt sem ruslpóstur</string>
-    <string name="content_reported_title">Efni tilkynnt</string>
+    <string name="content_reported_title">Efni kært</string>
     <string name="report_content_custom_submit">KÆRA</string>
     <string name="report_content_custom_hint">Ástæður fyrir kæru á þessu efni</string>
     <string name="report_content_custom_title">Kæra þetta efni</string>
@@ -1990,7 +1990,7 @@
     <string name="seen_by">Séð af</string>
     <string name="ftue_personalize_skip_this_step">Sleppa þessu skrefi</string>
     <string name="ftue_personalize_submit">Vista og halda áfram</string>
-    <string name="ftue_personalize_complete_subtitle">Farðu hvenær sem er í stillingarnar til að breyta notandasniðinu þínu.</string>
+    <string name="ftue_personalize_complete_subtitle">Farðu hvenær sem er í stillingarnar til að breyta notandasniðinu þínu</string>
     <string name="ftue_personalize_complete_title">Nú ertu tilbúin(n)!</string>
     <string name="ftue_personalize_lets_go">Hefjumst handa</string>
     <string name="ftue_profile_picture_subtitle">Þú getur breytt þessu hvenær sem er</string>
@@ -2214,4 +2214,53 @@
     <string name="explore_rooms">Kanna spjallrásir</string>
     <string name="create_room">Búa til spjallrás</string>
     <string name="start_chat">Hefja spjall</string>
+    <string name="settings_discovery_no_terms">Auðkennisþjónninn sem þú valdir er ekki með neina þjónustuskilmála. Ekki halda áfram nema þú treystir eiganda netþjónsins</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Mistókst að skrá FCM-teikn á heimaþjóninn:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Það tókst að skrá FCM-teikn á heimaþjóninn.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ein eða fleiri prófanir mistókust, prófaðu tillögur að lagfæringum.</string>
+    <string name="error_threepid_auth_failed">Gakktu úr skugga um að þú hafir smellt á tengilinn í tölvupóstinum sem við sendum þér.</string>
+    <string name="space_permissions_notice_read_only">Þú hefur ekki heimild til að uppfæra þau hlutverk sem krafist er til að breyta ýmsum þáttum svæðisins</string>
+    <string name="room_permissions_notice_read_only">Þú hefur ekki heimild til að uppfæra þau hlutverk sem krafist er til að breyta ýmsum þáttum spjallrásarinnar</string>
+    <string name="space_permissions_notice">Veldu þau hlutverk sem krafist er til að breyta ýmsum þáttum svæðisins</string>
+    <string name="room_permissions_notice">Veldu þau hlutverk sem krafist er til að breyta ýmsum þáttum spjallrásarinnar</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Dulritun er rangt stillt þannig að þú getur ekki sent skilaboð. Smelltu til að opna stillingar.</string>
+    <string name="room_unsupported_e2e_algorithm">Dulritun er rangt stillt þannig að þú getur ekki sent skilaboð. Hafðu samband við einhvern stjórnanda til að koma dulritun í lag.</string>
+    <string name="space_participants_unban_prompt_msg">Afbönnun á þessum notanda mun gera viðkomandi kleift að taka þátt aftur í svæðinu.</string>
+    <string name="room_participants_unban_prompt_msg">Afbönnun á þessum notanda mun gera viðkomandi kleift að taka þátt aftur í spjallrásinni.</string>
+    <string name="space_participants_ban_prompt_msg">Bann á notanda mun henda honum út af þessu svæði og koma í veg fyrir að viðkomandi komi aftur.</string>
+    <string name="space_participants_remove_prompt_msg">Notandinn verður fjarlægður af þessu svæði.
+\n
+\nTil koma í veg fyrir að viðkomandi komi aftur, ætti frekar að banna hann.</string>
+    <string name="room_participants_remove_prompt_msg">Notandinn verður fjarlægður af þessari spjallrás.
+\n
+\nTil koma í veg fyrir að viðkomandi komi aftur, ætti frekar að banna hann.</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Ertu viss um að þú viljir hætta við boðið til þessa notanda\?</string>
+    <string name="room_participants_action_unignore_prompt_msg">Afhunsun á þessum notanda mun sýna öll skilaboð frá viðkomandi aftur.</string>
+    <string name="room_participants_action_ignore_prompt_msg">Að hunsa þennan notanda mun fjarlægja skilaboð frá viðkomandi í þeim spjallrásum sem þið eigið sameiginlegar.
+\n
+\nÞú getur afturkallað þessa aðgerð hvenær sem er í almennu stillingunum.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að lækka sjálfa/n þig í tign, og ef þú ert síðasti notandinn með nógu mikil völd á þessari spjallrás, verður ómögulegt að ná aftur stjórn á henni.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Ræstu ${app_name} á öðru tæki sem getur afkóðað skilaboðin og síðan sent dulritunarlyklana yfir í þessa setu.</string>
+    <string name="e2e_re_request_encryption_key">Biðja aftur um dulritunarlykla frá hinum setunum þínum.</string>
+    <string name="invites_empty_message">Þetta er þar sem nýjar beiðnir og boðsgestir birtast.</string>
+    <string name="space_list_empty_message">Svæði eru ný leið til að hópa fólk og spjallrásir. Útbúðu svæði til að komast í gang.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Öryggisafritun dulritunarlykla ætti að vera virk í öllum setunum þínum til að koma í veg fyrir að þú getir tapað aðgangi að dulrituðu skilaboðunum þínum.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Sumir tengiliðir hafa verið afhunsaðir</string>
+    <string name="initial_sync_request_content">${app_name} þarf að hreinsa skyndiminnið til að haldast uppfært, af eftirfarandi ástæðu:
+\n%s\?
+\n
+\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.</string>
+    <string name="a11y_collapse_space_children">Fella saman undirsvæði %s</string>
+    <string name="a11y_expand_space_children">Fella út undirsvæði %s</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Farðu eftir leiðbeiningunum sem sendar voru á %s</string>
+    <string name="ftue_auth_email_verification_footer">Fékkstu ekki tölvupóst\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Farðu eftir leiðbeiningunum sem sendar voru á %s</string>
+    <string name="ftue_auth_new_password_subtitle">Hafðu það að minnsta kosti 8 stafa langt.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s mun senda þér staðfestingartengil</string>
+    <string name="ftue_auth_phone_subtitle">%s þarf að sannreyna notandaaðganginn þinn</string>
+    <string name="ftue_auth_email_subtitle">%s þarf að sannreyna notandaaðganginn þinn</string>
+    <string name="ftue_auth_terms_subtitle">Endilega lestu í gegnum stefnur og skilmála fyrir %s</string>
+    <string name="ftue_auth_terms_title">Stefnur netþjónsins</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) er afkastamikil og áreiðanleg hýsingarþjónusta fyrir hraðvirk og örugg samskipti í rauntíma. Skoðaðu hvernig við förum að því á <a href="${ftue_ems_url}">element.io/ems</a></string>
 </resources>
