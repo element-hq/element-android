@@ -16,14 +16,52 @@
 
 package im.vector.app.features.login.qr
 
+import android.app.Activity
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginInstructionsBinding
+import im.vector.app.features.qrcode.QrCodeScannerActivity
+import timber.log.Timber
 
 class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginInstructionsBinding>() {
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initScanQrCodeButton()
+    }
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeLoginInstructionsBinding {
         return FragmentQrCodeLoginInstructionsBinding.inflate(inflater, container, false)
+    }
+
+    private fun initScanQrCodeButton() {
+        views.qrCodeLoginInstructionsScanQrCodeButton.debouncedClicks {
+            QrCodeScannerActivity.startForResult(requireActivity(), scanActivityResultLauncher)
+        }
+    }
+
+    private val scanActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val scannedQrCode = QrCodeScannerActivity.getResultText(activityResult.data)
+            val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
+
+            if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
+                onQrCodeScanned(scannedQrCode)
+            } else {
+                onQrCodeScannerFailed()
+            }
+        }
+    }
+
+    private fun onQrCodeScanned(scannedQrCode: String) {
+        Timber.d("QrCodeLoginInstructionsFragment.onQrCodeScanned $scannedQrCode")
+    }
+
+    private fun onQrCodeScannerFailed() {
+        Timber.d("QrCodeLoginInstructionsFragment.onQrCodeScannerFailed")
     }
 }
