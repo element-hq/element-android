@@ -22,6 +22,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
+import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewQrCodeLoginInstructionsBinding
@@ -53,9 +54,13 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
         val instruction2 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction2)
         val instruction3 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction3)
         val instruction4 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction4)
-        binding.instruction1TextView.setTextOrHide(instruction1)
-        binding.instruction2TextView.setTextOrHide(instruction2)
-        binding.instruction3TextView.setTextOrHide(instruction3)
-        binding.instruction4TextView.setTextOrHide(instruction4)
+        binding.instructions1Layout.isVisible = instruction1 != null
+        binding.instructions2Layout.isVisible = instruction2 != null
+        binding.instructions3Layout.isVisible = instruction3 != null
+        binding.instructions4Layout.isVisible = instruction4 != null
+        binding.instruction1TextView.text = instruction1
+        binding.instruction2TextView.text = instruction2
+        binding.instruction3TextView.text = instruction3
+        binding.instruction4TextView.text = instruction4
     }
 }
