@@ -16,79 +16,80 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
-        realm: Realm,
+        realm: TypedRealm,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
-    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+    return realm.query(LiveLocationShareAggregatedSummaryEntity::class)
+            .query("eventId == $0", eventId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         eventId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
+            .query("eventId == $0", eventId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.whereRoomId(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
-    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
+    return realm.query(LiveLocationShareAggregatedSummaryEntity::class)
+            .query("roomId == $0", roomId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.create(
-        realm: Realm,
+        realm: MutableRealm,
         roomId: String,
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity {
-    val obj = realm.createObject(LiveLocationShareAggregatedSummaryEntity::class.java, eventId).apply {
-        this.roomId = roomId
-    }
+    val entity = realm.copyToRealm(
+            LiveLocationShareAggregatedSummaryEntity().apply {
+                this.eventId = eventId
+                this.roomId = roomId
+            }
+    )
     val annotationSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId = roomId, eventId = eventId)
-    annotationSummary.liveLocationShareAggregatedSummary = obj
-
-    return obj
+    annotationSummary.liveLocationShareAggregatedSummary = entity
+    return entity
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.getOrCreate(
-        realm: Realm,
+        realm: MutableRealm,
         roomId: String,
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity {
-    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).first().find()
             ?: LiveLocationShareAggregatedSummaryEntity.create(realm, roomId, eventId)
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity? {
-    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).first().find()
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.get(
-        realm: Realm,
+        realm: TypedRealm,
         eventId: String,
 ): LiveLocationShareAggregatedSummaryEntity? {
-    return LiveLocationShareAggregatedSummaryEntity.where(realm, eventId).findFirst()
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, eventId).first().find()
 }
 
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveInRoomForUser(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         userId: String,
         ignoredEventId: String,
@@ -96,11 +97,11 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveIn
 ): List<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.USER_ID, userId)
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
-            .notEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, ignoredEventId)
-            .lessThan(LiveLocationShareAggregatedSummaryEntityFields.START_OF_LIVE_TIMESTAMP_MILLIS, startOfLiveTimestampThreshold)
-            .findAll()
+            .query("userId == $0", userId)
+            .query("isActive == true")
+            .query("eventId != $0", ignoredEventId)
+            .query("startOfLiveTimestampMillis < $0", startOfLiveTimestampThreshold)
+            .find()
             .toList()
 }
 
@@ -108,12 +109,12 @@ internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findActiveLiveIn
  * A live is considered as running when active and with at least a last known location.
  */
 internal fun LiveLocationShareAggregatedSummaryEntity.Companion.findRunningLiveInRoom(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
 ): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
     return LiveLocationShareAggregatedSummaryEntity
             .whereRoomId(realm, roomId = roomId)
-            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
-            .isNotEmpty(LiveLocationShareAggregatedSummaryEntityFields.USER_ID)
-            .isNotNull(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT)
+            .query("isActive == true")
+            .query("userId != ''")
+            .query("lastLocationContent != ''")
 }

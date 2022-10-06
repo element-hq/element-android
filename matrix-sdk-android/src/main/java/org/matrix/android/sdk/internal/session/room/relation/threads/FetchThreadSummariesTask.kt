@@ -15,10 +15,10 @@
  */
 package org.matrix.android.sdk.internal.session.room.relation.threads
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,7 +52,7 @@ internal interface FetchThreadSummariesTask : Task<FetchThreadSummariesTask.Para
 internal class DefaultFetchThreadSummariesTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val cryptoService: DefaultCryptoService,
         @UserId private val userId: String,
         private val clock: Clock,
@@ -82,8 +81,8 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
             params: FetchThreadSummariesTask.Params
     ): Result {
         val rootThreadList = response.events
-        monarchy.awaitTransaction { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = params.roomId).findFirst() ?: return@awaitTransaction
+        realmInstance.write {
+            val roomEntity = RoomEntity.where(this, roomId = params.roomId).first().find() ?: return@write
 
             val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
             for (rootThreadEvent in rootThreadList) {
@@ -93,7 +92,7 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
 
                 ThreadSummaryEntity.createOrUpdate(
                         threadSummaryType = ThreadSummaryUpdateType.REPLACE,
-                        realm = realm,
+                        realm = this,
                         roomId = params.roomId,
                         rootThreadEvent = rootThreadEvent,
                         roomMemberContentsByUser = roomMemberContentsByUser,

@@ -133,9 +133,7 @@ internal fun RealmQuery<TimelineEventEntity>.filterTypes(filterTypes: List<Strin
 }
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
-    return where()
-            .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
-            .findFirst()
+    return firstOrNull { it.eventId == eventId }
 }
 
 internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(

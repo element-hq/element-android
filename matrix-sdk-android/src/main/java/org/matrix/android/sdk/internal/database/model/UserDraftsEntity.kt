@@ -25,6 +25,6 @@ import io.realm.kotlin.types.RealmObject
  */
 internal class UserDraftsEntity : RealmObject {
     var userDrafts: RealmList<DraftEntity> = realmListOf()
-
+    var roomId: String = ""
     companion object
 }

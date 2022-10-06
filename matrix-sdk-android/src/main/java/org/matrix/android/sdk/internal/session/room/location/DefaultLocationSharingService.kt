@@ -17,8 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.location
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -27,16 +26,17 @@ import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareR
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.util.mapOptional
 
 internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val sendStaticLocationTask: SendStaticLocationTask,
         private val sendLiveLocationTask: SendLiveLocationTask,
         private val startLiveLocationShareTask: StartLiveLocationShareTask,
@@ -113,20 +113,16 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     }
 
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId) },
-                liveLocationShareAggregatedSummaryMapper
-        )
+        return realmInstance.queryList(liveLocationShareAggregatedSummaryMapper) {
+            LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId)
+        }.asLiveData()
     }
 
     override fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>> {
-        return Transformations.map(
-                monarchy.findAllMappedWithChanges(
-                        { LiveLocationShareAggregatedSummaryEntity.where(it, roomId = roomId, eventId = beaconInfoEventId) },
-                        liveLocationShareAggregatedSummaryMapper
-                )
-        ) {
-            it.firstOrNull().toOptional()
+        return realmInstance.queryFirst {
+            LiveLocationShareAggregatedSummaryEntity.where(it, roomId = roomId, eventId = beaconInfoEventId).first()
         }
+                .mapOptional(liveLocationShareAggregatedSummaryMapper::map)
+                .asLiveData()
     }
 }

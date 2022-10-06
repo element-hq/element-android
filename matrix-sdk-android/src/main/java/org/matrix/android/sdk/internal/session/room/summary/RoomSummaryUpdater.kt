@@ -16,11 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
-import io.realm.Realm
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.deleteFromRealm
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -48,7 +45,6 @@ import org.matrix.android.sdk.internal.database.clearWith
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntity
@@ -60,8 +56,6 @@ import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.clearWith
-import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataDataSource
@@ -372,17 +366,14 @@ internal class RoomSummaryUpdater @Inject constructor(
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).first().find()
                         if (parent != null) {
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
-
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).first().find()?.let { childSum ->
-                                    childSum.directParentNames.add(parent.displayName())
-
-                                    if (childSum.flattenParentIds == null) {
-                                        childSum.flattenParentIds = ""
+                                    parent.displayName()?.also { directParentName ->
+                                        childSum.directParentNames.add(directParentName)
                                     }
                                     flattenParentsIds.forEach {
-                                        if (childSum.flattenParentIds?.contains(it) != true) {
-                                            childSum.flattenParentIds += "|$it"
+                                        if (!childSum.flattenParentIds.contains(it)) {
+                                            childSum.flattenParentIds.add(it)
                                         }
                                     }
                                 }
@@ -400,7 +391,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         val relatedSpaces = lookupMap.keys
                                 .filter { it.roomType == RoomType.SPACE }
                                 .filter {
-                                    dmRoom.otherMemberIds.toList().intersect(it.otherMemberIds.toList()).isNotEmpty()
+                                    dmRoom.otherMemberIds.toSet().intersect(it.otherMemberIds.toSet()).isNotEmpty()
                                 }
                                 .map { it.roomId }
                                 .distinct()
@@ -412,7 +403,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         }.distinct()
                         if (flattenRelated.isNotEmpty()) {
                             // we keep real m.child/m.parent relations and add the one for common memberships
-                            dmRoom.flattenParentIds += "|${flattenRelated.joinToString("|")}|"
+                            dmRoom.flattenParentIds += flattenRelated
                         }
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
@@ -429,7 +420,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.query(RoomSummaryEntity::class)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .query("roomType != $0", RoomType.SPACE)
-                                .query("flattenParentIds CONTAINS $0", space.roomId)
+                                .query("ANY flattenParentIds == $0", space.roomId)
                                 .find().forEach {
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount

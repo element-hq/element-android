@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import dagger.Lazy
 import io.realm.kotlin.MutableRealm
-import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -40,6 +39,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.clearWith
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
@@ -65,7 +65,6 @@ import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
@@ -233,7 +232,7 @@ internal class RoomSyncHandler @Inject constructor(
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
-            roomEntity.chunks.deleteAllFromRealm()
+            realm.delete(roomEntity.chunks)
         }
         roomEntity.membership = Membership.JOIN
 
@@ -359,10 +358,10 @@ internal class RoomSyncHandler @Inject constructor(
                 }
             }
         }
-        val leftMember = RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()
+        val leftMember = RoomMemberSummaryEntity.where(realm, roomId, userId).first().find()
         val membership = leftMember?.membership ?: Membership.LEAVE
         roomEntity.membership = membership
-        roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
+        roomEntity.chunks.clearWith { realm.deleteOnCascade(it, deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
         roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
@@ -386,12 +385,14 @@ internal class RoomSyncHandler @Inject constructor(
         } else {
             // Delete all chunks of the room in case of gap.
             ChunkEntity.findAll(realm, roomId).forEach {
-                it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
+                realm.deleteOnCascade(it, deleteStateEvents = false, canDeleteRoot = true)
             }
-            realm.createObject<ChunkEntity>().apply {
-                this.prevToken = prevToken
-                this.isLastForward = true
-            }
+            realm.copyToRealm(
+                    ChunkEntity().apply {
+                        this.prevToken = prevToken
+                        this.isLastForward = true
+                    }
+            )
         }
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
@@ -444,6 +445,7 @@ internal class RoomSyncHandler @Inject constructor(
             }
 
             val timelineEventAdded = chunkEntity.addTimelineEvent(
+                    realm = realm,
                     roomId = roomId,
                     eventEntity = eventEntity,
                     direction = PaginationDirection.FORWARDS,
@@ -491,14 +493,14 @@ internal class RoomSyncHandler @Inject constructor(
                         }
                     }
                     // Finally delete the local echo
-                    sendingEventEntity.deleteOnCascade(true)
+                    realm.deleteOnCascade(sendingEventEntity, true)
                 } else {
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
             }
         }
         // Handle deletion of [stuck] local echos if needed
-        deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
+        deleteLocalEchosIfNeeded(realm, insertType, roomEntity, eventList)
         if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
                     roomId = roomId,
@@ -625,7 +627,7 @@ internal class RoomSyncHandler @Inject constructor(
      * While we cannot know when a specific event arrived from the pagination (no transactionId included), after each room /sync
      * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
      */
-    private fun deleteLocalEchosIfNeeded(insertType: EventInsertType, roomEntity: RoomEntity, eventList: List<Event>) {
+    private fun deleteLocalEchosIfNeeded(realm: MutableRealm, insertType: EventInsertType, roomEntity: RoomEntity, eventList: List<Event>) {
         // Skip deletion if we are on initial sync
         if (insertType == EventInsertType.INITIAL_SYNC) return
         // Skip deletion if there are no timeline events or there is no event received from the current user
@@ -634,7 +636,7 @@ internal class RoomSyncHandler @Inject constructor(
             timelineEvent.root?.sendState == SendState.SENT
         }.forEach {
             roomEntity.sendingTimelineEvents.remove(it)
-            it.deleteOnCascade(true)
+            realm.deleteOnCascade(it, true)
         }
     }
 }

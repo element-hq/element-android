@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -63,7 +64,7 @@ import javax.inject.Inject
  */
 internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val getEventTask: GetEventTask,
         private val clock: Clock,
@@ -98,21 +99,20 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @param eventList a list with the events to examine
      */
     suspend fun fetchRootThreadEventsIfNeeded(eventList: List<Event>) {
-        if (eventList.isNullOrEmpty()) return
+        if (eventList.isEmpty()) return
 
         val threadsToFetch = emptyMap<String, String>().toMutableMap()
-        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            eventList.asSequence()
-                    .filter {
-                        isThreadEvent(it) && it.roomId != null
-                    }.mapNotNull { event ->
-                        getRootThreadEventId(event)?.let {
-                            Pair(it, event.roomId!!)
-                        }
-                    }.forEach { (rootThreadEventId, roomId) ->
-                        EventEntity.where(realm, rootThreadEventId).findFirst() ?: run { threadsToFetch[rootThreadEventId] = roomId }
+        val realm = realmInstance.getRealm()
+        eventList.asSequence()
+                .filter {
+                    isThreadEvent(it) && it.roomId != null
+                }.mapNotNull { event ->
+                    getRootThreadEventId(event)?.let {
+                        Pair(it, event.roomId!!)
                     }
-        }
+                }.forEach { (rootThreadEventId, roomId) ->
+                    EventEntity.where(realm, rootThreadEventId).first().find() ?: run { threadsToFetch[rootThreadEventId] = roomId }
+                }
         fetchThreadsEvents(threadsToFetch)
     }
 
@@ -126,12 +126,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
             }
         }
 
-        if (eventEntityList.isNullOrEmpty()) return
+        if (eventEntityList.isEmpty()) return
 
         // Transaction should be done on its own thread, like below
-        monarchy.awaitTransaction { realm ->
+        realmInstance.write {
             eventEntityList.forEach {
-                it.copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+                it.copyToRealmOrIgnore(this, EventInsertType.INCREMENTAL_SYNC)
             }
         }
     }
@@ -159,7 +159,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @return The content to inject in the roomSyncHandler live events
      */
     fun makeEventThreadAware(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String?,
             event: Event?,
             eventEntity: EventEntity? = null
@@ -217,7 +217,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @return The content to inject in the roomSyncHandler live events
      */
     private fun handleRootThreadEventsIfNeeded(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             eventEntity: EventEntity?,
             event: Event
@@ -244,7 +244,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @return The content to inject in the roomSyncHandler live events
      */
     private fun handleEventsThatRelatesTo(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             event: Event,
             eventBody: String,
@@ -364,7 +364,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         return updateEventEntity(event, eventEntity, eventPayload, messageTextContent)
     }
 
-    private fun eventThatRelatesTo(realm: Realm, currentEventId: String, rootThreadEventId: String): List<EventEntity>? {
+    private fun eventThatRelatesTo(realm: TypedRealm, currentEventId: String, rootThreadEventId: String): List<EventEntity>? {
         val threadList = realm.where<EventEntity>()
                 .beginGroup()
                 .equalTo(EventEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
@@ -383,8 +383,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * Try to get the event form the local DB, if the event does not exist null
      * will be returned.
      */
-    private fun getEventFromDB(realm: Realm, eventId: String): Event? {
-        val eventEntity = EventEntity.where(realm, eventId = eventId).findFirst() ?: return null
+    private fun getEventFromDB(realm: TypedRealm, eventId: String): Event? {
+        val eventEntity = EventEntity.where(realm, eventId = eventId).first().find() ?: return null
         return EventMapper.map(eventEntity)
     }
 

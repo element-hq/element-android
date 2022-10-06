@@ -15,11 +15,13 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import timber.log.Timber
 
 internal class EventAnnotationsSummaryEntity : RealmObject {
     @PrimaryKey
@@ -50,6 +52,18 @@ internal class EventAnnotationsSummaryEntity : RealmObject {
      */
 
     companion object
+}
+
+internal fun MutableRealm.cleanUp(entity: EventAnnotationsSummaryEntity, originalEventSenderId: String?) {
+    originalEventSenderId ?: return
+
+    entity.editSummary?.editions?.filter {
+        it.senderId != originalEventSenderId
+    }
+            ?.forEach {
+                Timber.w("Deleting an edition from ${it.senderId} of event sent by $originalEventSenderId")
+                delete(it)
+            }
 }
 
 /*

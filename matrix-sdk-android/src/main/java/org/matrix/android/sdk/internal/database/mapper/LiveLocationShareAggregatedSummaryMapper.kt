@@ -16,22 +16,22 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import javax.inject.Inject
 
 internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() :
-        Monarchy.Mapper<LiveLocationShareAggregatedSummary, LiveLocationShareAggregatedSummaryEntity> {
+        RealmObjectMapper<LiveLocationShareAggregatedSummaryEntity, LiveLocationShareAggregatedSummary> {
 
-    override fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
+    override fun map(realmObject: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
         return LiveLocationShareAggregatedSummary(
-                userId = entity.userId,
-                isActive = entity.isActive,
-                endOfLiveTimestampMillis = entity.endOfLiveTimestampMillis,
-                lastLocationDataContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
+                userId = realmObject.userId,
+                isActive = realmObject.isActive,
+                endOfLiveTimestampMillis = realmObject.endOfLiveTimestampMillis,
+                lastLocationDataContent = ContentMapper.map(realmObject.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
         )
     }
 }

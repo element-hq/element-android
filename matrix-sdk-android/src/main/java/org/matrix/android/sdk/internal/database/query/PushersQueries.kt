@@ -19,10 +19,7 @@ import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.internal.database.andIf
-import org.matrix.android.sdk.internal.database.model.PushRuleEntity
-import org.matrix.android.sdk.internal.database.model.PushRuleEntityFields
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
-import org.matrix.android.sdk.internal.database.model.PushRulesEntityFields
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 
 internal fun PusherEntity.Companion.where(
@@ -45,15 +42,3 @@ internal fun PushRulesEntity.Companion.where(
             .query("kindStr == $0", kind.name)
 }
 
-/*
-internal fun PushRuleEntity.Companion.where(
-        realm: TypedRealm,
-        scope: String,
-        ruleId: String
-): RealmQuery<PushRuleEntity> {
-    return realm.query(PushRuleEntity::class)
-            .equalTo(PushRuleEntityFields.PARENT.SCOPE, scope)
-            .equalTo(PushRuleEntityFields.RULE_ID, ruleId)
-}
-
- */

@@ -16,13 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.notification
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
-import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import org.matrix.android.sdk.internal.database.model.PushRuleEntity
-import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.pushers.AddPushRuleTask
 import org.matrix.android.sdk.internal.session.pushers.RemovePushRuleTask
 import org.matrix.android.sdk.internal.task.Task
@@ -36,16 +30,14 @@ internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateT
 }
 
 internal class DefaultSetRoomNotificationStateTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        private val roomPushRuleDataSource: RoomPushRuleDataSource,
         private val removePushRuleTask: RemovePushRuleTask,
         private val addPushRuleTask: AddPushRuleTask
 ) :
         SetRoomNotificationStateTask {
 
     override suspend fun execute(params: SetRoomNotificationStateTask.Params) {
-        val currentRoomPushRule = Realm.getInstance(monarchy.realmConfiguration).use {
-            PushRuleEntity.where(it, scope = RuleScope.GLOBAL, ruleId = params.roomId).findFirst()?.toRoomPushRule()
-        }
+        val currentRoomPushRule = roomPushRuleDataSource.getCurrentRoomPushRule(params.roomId)
         if (currentRoomPushRule != null) {
             removePushRuleTask.execute(RemovePushRuleTask.Params(currentRoomPushRule.kind, currentRoomPushRule.rule.ruleId))
         }

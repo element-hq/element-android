@@ -20,6 +20,8 @@ import com.squareup.moshi.JsonDataException
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.isRedacted
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -48,13 +50,13 @@ private typealias Summary = Pair<Int, TimelineEventEntity>?
  */
 internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
-        realm: Realm,
+        realm: MutableRealm,
         currentUserId: String,
         chunkEntity: ChunkEntity? = null,
         shouldUpdateNotifications: Boolean = true
 ) {
     for ((rootThreadEventId, eventEntity) in this) {
-        eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
+        eventEntity.threadSummaryInThread(realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
 
             val inThreadMessages = threadSummary.first
             val latestEventInThread = threadSummary.second
@@ -105,7 +107,7 @@ internal fun EventEntity.markEventAsRoot(
  * @param chunkEntity the chunk entity
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
-internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
+internal fun EventEntity.threadSummaryInThread(realm: TypedRealm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
     val inThreadMessages = countInThreadMessages(
             realm = realm,
             roomId = roomId,
@@ -141,12 +143,12 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
  * Counts the number of thread replies in the main timeline thread summary,
  * with respect to redactions.
  */
-internal fun countInThreadMessages(realm: Realm, roomId: String, rootThreadEventId: String): Int =
+internal fun countInThreadMessages(realm: TypedRealm, roomId: String, rootThreadEventId: String): Int =
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
-                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
-                .findAll()
+                .query("root.rootThreadEventId == $0", rootThreadEventId)
+                .distinct("root.eventId")
+                .find()
                 .filterNot { timelineEvent ->
                     timelineEvent.root
                             ?.unsignedData

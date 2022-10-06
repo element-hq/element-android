@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.database.helper
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
-import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -32,14 +31,13 @@ import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.cleanUp
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
 
@@ -63,6 +61,7 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
 }
 
 internal fun ChunkEntity.addTimelineEvent(
+        realm: MutableRealm,
         roomId: String,
         eventEntity: EventEntity,
         direction: PaginationDirection,
@@ -79,32 +78,33 @@ internal fun ChunkEntity.addTimelineEvent(
 
     // Update RR for the sender of a new message with a dummy one
     val readReceiptsSummaryEntity = if (!ownedByThreadChunk) handleReadReceipts(realm, roomId, eventEntity, senderId) else null
-    val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
-        this.localId = localId
-        this.root = eventEntity
-        this.eventId = eventId
-        this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
-                ?.also { it.cleanUp(eventEntity.sender) }
-        this.readReceipts = readReceiptsSummaryEntity
-        this.displayIndex = displayIndex
-        this.ownedByThreadChunk = ownedByThreadChunk
-        val roomMemberContent = roomMemberContentsByUser?.get(senderId)
-        this.senderAvatar = roomMemberContent?.avatarUrl
-        this.senderName = roomMemberContent?.displayName
-        isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
-            computeIsUnique(realm, roomId, isLastForward, roomMemberContent, roomMemberContentsByUser)
-        } else {
-            true
-        }
-    }
-    // numberOfTimelineEvents++
+    val timelineEventEntity = realm.copyToRealm(
+            TimelineEventEntity().apply {
+                this.localId = localId
+                this.root = eventEntity
+                this.eventId = eventId
+                this.roomId = roomId
+                this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).first().find()
+                        ?.also { realm.cleanUp(it, eventEntity.sender) }
+                this.readReceipts = readReceiptsSummaryEntity
+                this.displayIndex = displayIndex
+                this.ownedByThreadChunk = ownedByThreadChunk
+                val roomMemberContent = roomMemberContentsByUser?.get(senderId)
+                this.senderAvatar = roomMemberContent?.avatarUrl
+                this.senderName = roomMemberContent?.displayName
+                isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
+                    computeIsUnique(realm, roomId, isLastForward, roomMemberContent, roomMemberContentsByUser)
+                } else {
+                    true
+                }
+            }
+    )
     timelineEvents.add(timelineEventEntity)
     return timelineEventEntity
 }
 
 internal fun computeIsUnique(
-        realm: Realm,
+        realm: TypedRealm,
         roomId: String,
         isLastForward: Boolean,
         senderRoomMemberContent: RoomMemberContent,
@@ -116,8 +116,8 @@ internal fun computeIsUnique(
     return if (isLastForward) {
         val isLiveUnique = RoomMemberSummaryEntity
                 .where(realm, roomId)
-                .equalTo(RoomMemberSummaryEntityFields.DISPLAY_NAME, senderRoomMemberContent.displayName)
-                .findAll()
+                .query("displayName == $0", senderRoomMemberContent.displayName)
+                .find()
                 .none {
                     !roomMemberContentsByUser.containsKey(it.userId)
                 }
@@ -127,18 +127,19 @@ internal fun computeIsUnique(
     }
 }
 
-private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
-    val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventEntity.eventId).findFirst()
-            ?: realm.createObject<ReadReceiptsSummaryEntity>(eventEntity.eventId).apply {
+private fun handleReadReceipts(realm: MutableRealm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
+    val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventEntity.eventId).find()
+            ?: realm.copyToRealm(ReadReceiptsSummaryEntity().apply {
+                this.eventId = eventEntity.eventId
                 this.roomId = roomId
-            }
+            })
     val originServerTs = eventEntity.originServerTs
     if (originServerTs != null) {
         val timestampOfEvent = originServerTs.toDouble()
         val readReceiptOfSender = ReadReceiptEntity.getOrCreate(realm, roomId = roomId, userId = senderId)
         // If the synced RR is older, update
         if (timestampOfEvent > readReceiptOfSender.originServerTs) {
-            val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = readReceiptOfSender.eventId).findFirst()
+            val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = readReceiptOfSender.eventId).find()
             readReceiptOfSender.eventId = eventEntity.eventId
             readReceiptOfSender.originServerTs = timestampOfEvent
             previousReceiptsSummary?.readReceipts?.remove(readReceiptOfSender)

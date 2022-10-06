@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 internal class RoomFullyReadHandler @Inject constructor() {
 
-    fun handle(realm: Realm, roomId: String, content: FullyReadContent?) {
+    fun handle(realm: MutableRealm, roomId: String, content: FullyReadContent?) {
         if (content == null) {
             return
         }

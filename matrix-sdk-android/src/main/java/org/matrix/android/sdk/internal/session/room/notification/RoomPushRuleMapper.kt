@@ -25,20 +25,20 @@ import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.pushrules.toJson
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
-import org.matrix.android.sdk.internal.database.model.PushRuleEntity
+import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 
-internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
-    val kind = parent?.firstOrNull()?.kind
+internal fun PushRulesEntity.toRoomPushRule(ruleId: String): RoomPushRule? {
+    val pushRuleEntity = pushRules.firstOrNull { it.ruleId == ruleId } ?: return null
     val pushRule = when (kind) {
         RuleSetKey.OVERRIDE -> {
-            PushRulesMapper.map(this)
+            PushRulesMapper.map(pushRuleEntity)
         }
         RuleSetKey.ROOM -> {
-            PushRulesMapper.mapRoomRule(this)
+            PushRulesMapper.mapRoomRule(pushRuleEntity)
         }
         else -> null
     }
-    return if (pushRule == null || kind == null) {
+    return if (pushRule == null) {
         null
     } else {
         RoomPushRule(kind, pushRule)

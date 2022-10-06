@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
@@ -29,7 +29,7 @@ internal class RoomTypingUsersHandler @Inject constructor(
 ) {
 
     // TODO This could be handled outside of the Realm transaction. Use the new aggregator?
-    fun handle(realm: Realm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
+    fun handle(realm: MutableRealm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
         val roomMemberHelper = RoomMemberHelper(realm, roomId)
         val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId }.orEmpty()
         val senderInfo = typingIds.map { userId ->

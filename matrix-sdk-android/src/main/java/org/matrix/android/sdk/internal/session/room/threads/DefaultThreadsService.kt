@@ -17,30 +17,26 @@
 package org.matrix.android.sdk.internal.session.room.threads
 
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
+import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.realm.Realm
 import org.matrix.android.sdk.api.session.room.threads.ThreadsService
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.helper.enhanceWithEditions
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
 import org.matrix.android.sdk.internal.database.mapper.ThreadSummaryMapper
-import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadSummariesTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 
 internal class DefaultThreadsService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @UserId private val userId: String,
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val fetchThreadSummariesTask: FetchThreadSummariesTask,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val timelineEventMapper: TimelineEventMapper,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val threadSummaryMapper: ThreadSummaryMapper
 ) : ThreadsService {
 
@@ -50,25 +46,22 @@ internal class DefaultThreadsService @AssistedInject constructor(
     }
 
     override fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                {
-                    threadSummaryMapper.map(roomId, it)
-                }
-        )
+        return realmInstance.queryList({ threadSummaryMapper.map(roomId, it) }) {
+            ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId)
+        }.asLiveData()
     }
 
     override fun getAllThreadSummaries(): List<ThreadSummary> {
-        return monarchy.fetchAllMappedSync(
-                { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { threadSummaryMapper.map(roomId, it) }
-        )
+        val realm = realmInstance.getBlockingRealm()
+        return ThreadSummaryEntity.findAllThreadsForRoomId(realm, roomId = roomId).find()
+                .map {
+                    threadSummaryMapper.map(roomId, it)
+                }
     }
 
     override fun enhanceThreadWithEditions(threads: List<ThreadSummary>): List<ThreadSummary> {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            threads.enhanceWithEditions(it, roomId)
-        }
+        val realm = realmInstance.getBlockingRealm()
+        return threads.enhanceWithEditions(realm, roomId)
     }
 
     override suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int) {
