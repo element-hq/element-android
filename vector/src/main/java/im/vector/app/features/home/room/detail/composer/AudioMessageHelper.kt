@@ -114,8 +114,13 @@ class AudioMessageHelper @Inject constructor(
      * When entering in playback mode actually.
      */
     fun pauseRecording() {
-        voiceRecorder.stopRecord()
-        stopRecordingAmplitudes()
+        voiceRecorder.pauseRecord()
+        pauseRecordingAmplitudes()
+    }
+
+    fun resumeRecording() {
+        voiceRecorder.resumeRecord()
+        resumeRecordingAmplitudes()
     }
 
     fun deleteRecording() {
@@ -219,6 +224,14 @@ class AudioMessageHelper @Inject constructor(
             Timber.e(e, "Cannot get max amplitude (native error). Amplitude recording timer will be stopped.")
             stopRecordingAmplitudes()
         }
+    }
+
+    private fun pauseRecordingAmplitudes() {
+        amplitudeTicker?.pause()
+    }
+
+    private fun resumeRecordingAmplitudes() {
+        amplitudeTicker?.resume()
     }
 
     private fun stopRecordingAmplitudes() {

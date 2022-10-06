@@ -35,6 +35,16 @@ interface VoiceRecorder {
     fun startRecord(roomId: String)
 
     /**
+     * Pause the recording.
+     */
+    fun pauseRecord()
+
+    /**
+     * Resume the recording.
+     */
+    fun resumeRecord()
+
+    /**
      * Stop the recording.
      */
     fun stopRecord()

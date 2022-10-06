@@ -23,6 +23,7 @@ import android.media.MediaRecorder
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
 import android.os.Build
+import android.widget.Toast
 import io.element.android.opusencoder.OggOpusEncoder
 import io.element.android.opusencoder.configuration.SampleRate
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +41,7 @@ import kotlin.coroutines.CoroutineContext
  * VoiceRecorder to be used on Android versions < [Build.VERSION_CODES.Q]. It uses libopus to record ogg files.
  */
 class VoiceRecorderL(
-        context: Context,
+        private val context: Context,
         coroutineContext: CoroutineContext,
         private val codec: OggOpusEncoder,
 ) : VoiceRecorder {
@@ -110,6 +111,14 @@ class VoiceRecorderL(
                 codec.encode(buffer, read)
             }
         }
+    }
+
+    override fun pauseRecord() {
+        Toast.makeText(context, "Not implemented for this Android version", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun resumeRecord() {
+        Toast.makeText(context, "Not implemented for this Android version", Toast.LENGTH_SHORT).show()
     }
 
     override fun stopRecord() {

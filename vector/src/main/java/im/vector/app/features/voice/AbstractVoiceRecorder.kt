@@ -32,7 +32,7 @@ abstract class AbstractVoiceRecorder(
 ) : VoiceRecorder {
     private val outputDirectory: File by lazy { ensureAudioDirectory(context) }
 
-    private var mediaRecorder: MediaRecorder? = null
+    protected var mediaRecorder: MediaRecorder? = null
     private var outputFile: File? = null
 
     abstract fun setOutputFormat(mediaRecorder: MediaRecorder)
@@ -79,8 +79,8 @@ abstract class AbstractVoiceRecorder(
     }
 
     override fun stopRecord() {
-        // Can throw when the record is less than 1 second.
         mediaRecorder?.let {
+            // Can throw when the record is less than 1 second.
             tryOrNull { it.stop() }
             it.reset()
             it.release()

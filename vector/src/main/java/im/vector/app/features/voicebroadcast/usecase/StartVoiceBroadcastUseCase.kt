@@ -16,6 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
+import im.vector.app.features.home.room.detail.composer.AudioMessageHelper
 import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
@@ -30,6 +31,7 @@ import javax.inject.Inject
 
 class StartVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
+        private val audioMessageHelper: AudioMessageHelper,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -62,6 +64,10 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 ).toContent()
         )
 
-        // TODO start recording audio files
+        startRecording(room)
+    }
+
+    private fun startRecording(room: Room) {
+        audioMessageHelper.startRecording(room.roomId)
     }
 }
