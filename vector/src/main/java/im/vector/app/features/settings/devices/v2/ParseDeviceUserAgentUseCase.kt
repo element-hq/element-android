@@ -75,7 +75,6 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
         val browserSegments = userAgent.split(" ")
-        // TODO parse the whole version of browser
         val (browserName, browserVersion) = when {
             isFirefox(browserSegments) -> {
                 Pair("Firefox", getBrowserVersion(browserSegments, "Firefox"))
