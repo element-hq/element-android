@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.filter
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
@@ -76,7 +77,11 @@ internal data class RoomEventFilter(
         /**
          * If true, enables lazy-loading of membership events. See Lazy-loading room members for more information. Defaults to false.
          */
-        @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null
+        @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null,
+        /**
+         * If true, this will opt-in for the server to return unread threads notifications in [RoomSync]
+         */
+        @Json(name = "org.matrix.msc3773.unread_thread_notifications") val enableUnreadThreadNotifications: Boolean? = null,
 ) {
 
     fun toJSONString(): String {
@@ -92,6 +97,7 @@ internal data class RoomEventFilter(
                 rooms != null ||
                 notRooms != null ||
                 containsUrl != null ||
-                lazyLoadMembers != null)
+                lazyLoadMembers != null ||
+                enableUnreadThreadNotifications != null)
     }
 }

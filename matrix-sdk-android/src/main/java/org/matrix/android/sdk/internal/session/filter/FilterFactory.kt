@@ -28,7 +28,8 @@ internal object FilterFactory {
                 limit = numberOfEvents,
 //                senders = listOf(userId),
 //                relationSenders = userId?.let { listOf(it) },
-                relationTypes = listOf(RelationType.THREAD)
+                relationTypes = listOf(RelationType.THREAD),
+                enableUnreadThreadNotifications = true,
         )
     }
 
@@ -37,7 +38,8 @@ internal object FilterFactory {
                 limit = numberOfEvents,
                 containsUrl = true,
                 types = listOf(EventType.MESSAGE),
-                lazyLoadMembers = true
+                lazyLoadMembers = true,
+                enableUnreadThreadNotifications = true,
         )
     }
 
@@ -62,7 +64,8 @@ internal object FilterFactory {
 
     fun createElementRoomFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
+                lazyLoadMembers = true,
+                enableUnreadThreadNotifications = true,
                 // TODO Enable this for optimization
                 // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
         )
@@ -77,7 +80,8 @@ internal object FilterFactory {
 
     private fun createElementStateFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
+                lazyLoadMembers = true,
+                enableUnreadThreadNotifications = true,
         )
     }
 
