@@ -37,8 +37,8 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
-import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.permalink.PermalinkFactory
+import im.vector.app.features.permalink.PermalinkHandler
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
