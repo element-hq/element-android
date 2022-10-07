@@ -1011,7 +1011,7 @@
     <string name="settings_discovery_no_msisdn">Volby pro nalezení se ukážou, jakmile doplníte telefonní číslo.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Odpojení od serveru identit bude znamenat, že Vás jiní uživatelé nebudou moci najít a Vy nebudete moci pozvat druhé pomocí emailu nebo telefonního čísla.</string>
     <string name="settings_discovery_msisdn_title">Telefonní čísla pro nalezení</string>
-    <string name="settings_discovery_confirm_mail">Poslali jsme Vám potvrzovací email na %s, podívejte se do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_discovery_confirm_mail">Poslali jsme vám email na %s, podívejte se do něj a klikněte na protvrzovací odkaz</string>
     <string name="settings_discovery_enter_identity_server">Zadejte URL serveru pro identity</string>
     <string name="settings_discovery_bad_identity_server">Nemohl jsem se spojit se serverem pro identity</string>
     <string name="settings_discovery_please_enter_server">Prosím, zadejte url serveru pro identity</string>
@@ -1084,7 +1084,7 @@
     <string name="login_splash_title">Je to Vaše konverzace. Vlastněte ji.</string>
     <string name="login_splash_text1">Chatujte s lidmi přímo nebo ve skupinách</string>
     <string name="login_splash_text2">Udržujte konverzace soukromé pomocí šifrování</string>
-    <string name="login_splash_text3">Rozšiřte a upravte si svůj zážitek</string>
+    <string name="login_splash_text3">Rozšiřte a upravte si možnosti</string>
     <string name="login_splash_submit">Můžeme začít</string>
     <string name="login_server_title">Vybrat server</string>
     <string name="login_server_text">Jako email, účty mají jeden domov, ačkoli můžete mluvit s kýmkoli</string>
@@ -1136,7 +1136,7 @@
 \n
 \nZastavit proces změny hesla\?</string>
     <string name="login_set_email_title">Nastavit emailovou adresu</string>
-    <string name="login_set_email_notice">Nastavte emailovou adresu pro obnově svého účtu. Později můžete volitelně dovolit lidem, které znáte, aby Vás podle emailu nalezli.</string>
+    <string name="login_set_email_notice">Nastavte emailovou adresu pro obnovu svého účtu. Později můžete volitelně dovolit lidem, které znáte, aby Vás podle emailu nalezli.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (volitelné)</string>
     <string name="login_set_email_submit">Dále</string>
@@ -1440,7 +1440,7 @@
     <string name="event_redacted">Zpráva smazána</string>
     <string name="settings_show_redacted">Ukázat odstraněné zprávy</string>
     <string name="settings_show_redacted_summary">Zobrazit zástupný symbol za odstraněné zprávy</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Poslali jsme Vám potvrzovací email na %s, podívejte se nejdříve do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Poslali jsme vám email na %s, podívejte se nejdříve do emailu a klikněte na protvrzovací odkaz</string>
     <string name="settings_text_message_sent_wrong_code">Ověřovací kód není správný.</string>
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_media_no_result">V této místnosti nejsou žádná média</string>
@@ -2025,7 +2025,7 @@
     <string name="space_type_public">Veřejný</string>
     <string name="create_spaces_private_teammates">Privátní prostor pro Vás a Vaše kolegy</string>
     <string name="create_spaces_me_and_teammates">Já a kolegové</string>
-    <string name="create_spaces_organise_rooms">Privátní prostor k organizaci Vašich místností</string>
+    <string name="create_spaces_organise_rooms">Soukromý prostor pro uspořádání vašich místností</string>
     <string name="create_spaces_just_me">Jen já</string>
     <string name="create_spaces_make_sure_access">Ujistěte se, že ti správní lidé mají přístup do %s.</string>
     <string name="create_spaces_who_are_you_working_with">S kým pracujete\?</string>
@@ -2764,4 +2764,37 @@
     <string name="labs_enable_deferred_dm_title">Povolit odložené přímé zprávy</string>
     <string name="labs_enable_new_app_layout_summary">Zjednodušený Element s volitelnými kartami</string>
     <string name="labs_enable_new_app_layout_title">Povolit nový vzhled</string>
+    <string name="device_manager_learn_more_session_rename">Ostatní uživatelé v přímých zprávách a místnostech, ke kterým se připojíte, si mohou prohlédnout úplný seznam vašich relací.
+\n
+\nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
+    <string name="device_manager_learn_more_session_rename_title">Přejmenování relací</string>
+    <string name="device_manager_learn_more_sessions_verified">Ověřené relace se přihlásily pomocí vašich přihlašovacích údajů a poté byly ověřeny buď pomocí vaší zabezpečené přístupové fráze, nebo křížovým ověřením.
+\n
+\nTo znamená, že uchovávají šifrovací klíče pro vaše předchozí zprávy a potvrzují ostatním uživatelům, se kterými komunikujete, že tyto relace jste skutečně vy.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Ověřené relace</string>
+    <string name="device_manager_learn_more_sessions_unverified">Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.
+\n
+\nMěli byste si být obzvláště jisti, že tyto relace rozpoznáte, protože by mohly představovat neoprávněné použití vašeho účtu.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Neověřené relace</string>
+    <string name="device_manager_learn_more_sessions_inactive">Neaktivní relace jsou relace, které jste po určitou dobu nepoužili, ale nadále dostávají šifrovací klíče.
+\n
+\nOdstranění neaktivních relací zvyšuje zabezpečení a výkon a usnadňuje identifikaci podezřelé nové relace.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Neaktivní relace</string>
+    <string name="device_manager_session_rename_warning">Uvědomte si, že jména relací jsou viditelná i pro osoby, se kterými komunikujete.</string>
+    <string name="device_manager_session_rename_description">Vlastní názvy relací vám pomohou snadněji rozpoznat vaše zařízení.</string>
+    <string name="device_manager_session_rename_edit_hint">Název relace</string>
+    <string name="device_manager_session_rename">Přejmenovat relaci</string>
+    <string name="device_manager_session_overview_signout">Odhlásit se z této relace</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Neověřeno · Vaše aktuální relace</string>
+    <string name="tooltip_attachment_voice_broadcast">Zahájit hlasové vysílání</string>
+    <string name="key_authenticity_not_guaranteed">Pravost této šifrované zprávy nelze v tomto zařízení zaručit.</string>
+    <string name="settings_security_incognito_keyboard_summary">Požadujte, aby klávesnice neaktualizovala žádné personalizované údaje, jako je historie psaní a slovník, na základě toho, co jste napsali v konverzacích. Upozorňujeme, že některé klávesnice nemusí toto nastavení respektovat.</string>
+    <string name="settings_security_incognito_keyboard_title">Inkognito klávesnice</string>
+    <string name="command_description_table_flip">Přidá znaky (╯°□°）╯︵ ┻━┻ před zprávy ve formátu obyčejného textu</string>
+    <string name="attachment_type_voice_broadcast">Hlasové vysílání</string>
+    <string name="command_description_devtools">Otevřít nástroje pro vývojáře</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 V nastavení zabezpečení jste povolili šifrování pouze do ověřených relací pro všechny místnosti.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ V této místnosti jsou neověřená zařízení, která nebudou schopna dešifrovat odeslané zprávy.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nikdy neodesílat šifrované zprávy do neověřených relací v této místnosti.</string>
+    <string name="action_got_it">Rozumím</string>
 </resources>
