@@ -202,14 +202,6 @@ public class DialpadView extends LinearLayout {
     zero.setLongHoverContentDescription(resources.getText(R.string.description_image_button_plus));
   }
 
-  private Drawable getDrawableCompat(Context context, int id) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      return context.getDrawable(id);
-    } else {
-      return context.getResources().getDrawable(id);
-    }
-  }
-
   public void setShowVoicemailButton(boolean show) {
     View view = findViewById(R.id.dialpad_key_voicemail);
     if (view != null) {
