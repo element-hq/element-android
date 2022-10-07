@@ -49,7 +49,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersio
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction

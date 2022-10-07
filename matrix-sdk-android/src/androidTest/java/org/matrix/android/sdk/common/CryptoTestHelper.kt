@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType

@@ -45,8 +45,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -726,7 +726,7 @@ class E2eeSanityTests : InstrumentedTest {
                                 // we can release this latch?
                                 continuation.resume(oldCode!!)
                             }
-                            else -> Unit
+                            else                                                -> Unit
                         }
                     }
                 }
@@ -761,18 +761,18 @@ class E2eeSanityTests : InstrumentedTest {
                             IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                                 // no need to accept as there was a request first it will auto accept
                             }
-                            IncomingSasVerificationTransaction.UxState.SHOW_SAS -> {
+                            IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
                                 if (matchOnce) {
                                     sasTx.userHasVerifiedShortCode()
                                     newCode = sasTx.getDecimalCodeRepresentation()
                                     matchOnce = false
                                 }
                             }
-                            IncomingSasVerificationTransaction.UxState.VERIFIED -> {
+                            IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
                                 removeListener(this)
                                 continuation.resume(newCode!!)
                             }
-                            else -> Unit
+                            else                                                   -> Unit
                         }
                     }
                 }

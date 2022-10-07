@@ -124,6 +124,8 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
+apply from: '../flavor.gradle'
+
 android {
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
@@ -298,7 +300,7 @@ android {
         }
     }
 
-    flavorDimensions "store"
+    flavorDimensions "store", "crypto"
 
     productFlavors {
         gplay {
@@ -319,6 +321,20 @@ android {
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+
+        kotlinCrypto {
+            dimension "crypto"
+            isDefault = true
+            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
+            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"olm-crypto\""
+//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"KotlinCrypto\""
+        }
+        rustCrypto {
+            dimension "crypto"
+//            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
+            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"rust-crypto\""
+//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"RustCrypto\""
         }
     }
 

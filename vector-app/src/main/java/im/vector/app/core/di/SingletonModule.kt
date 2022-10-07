@@ -141,6 +141,7 @@ object VectorStaticModule {
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                cryptoFlavor = BuildConfig.CRYPTO_FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
