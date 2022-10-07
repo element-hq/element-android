@@ -23,23 +23,32 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginInstructionsBinding
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import timber.log.Timber
 
+@AndroidEntryPoint
 class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginInstructionsBinding>() {
 
     private val viewModel: QrCodeLoginViewModel by activityViewModel()
 
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeLoginInstructionsBinding {
+        return FragmentQrCodeLoginInstructionsBinding.inflate(inflater, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initScanQrCodeButton()
+        initShowQrCodeButton()
     }
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeLoginInstructionsBinding {
-        return FragmentQrCodeLoginInstructionsBinding.inflate(inflater, container, false)
+    private fun initShowQrCodeButton() {
+        views.qrCodeLoginInstructionsShowQrCodeButton.debouncedClicks {
+            viewModel.handle(QrCodeLoginAction.ShowQrCode)
+        }
     }
 
     private fun initScanQrCodeButton() {

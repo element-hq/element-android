@@ -22,11 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginStatusBinding
 import im.vector.app.features.themes.ThemeUtils
 
+@AndroidEntryPoint
 class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBinding>() {
 
     private val viewModel: QrCodeLoginViewModel by activityViewModel()
@@ -46,7 +48,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
                 is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(it.connectionStatus)
                 QrCodeLoginConnectionStatus.ConnectingToDevice -> handleConnectingToDevice()
                 QrCodeLoginConnectionStatus.SigningIn -> handleSigningIn()
-                null -> TODO()
+                null -> { /* NOOP */ }
             }
         }
     }

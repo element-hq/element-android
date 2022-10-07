@@ -23,7 +23,7 @@ import android.view.View
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
 
 @AndroidEntryPoint
@@ -38,10 +38,11 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
         val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             if (qrCodeLoginArgs?.loginType == QrCodeLoginType.LOGIN) {
-                addFragment(
+                addFragmentToBackstack(
                         views.container,
                         QrCodeLoginInstructionsFragment::class.java,
-                        qrCodeLoginArgs
+                        qrCodeLoginArgs,
+                        tag = FRAGMENT_QR_CODE_INSTRUCTIONS_TAG
                 )
             }
         }
@@ -53,18 +54,32 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
         viewModel.observeViewEvents {
             when (it) {
                 QrCodeLoginViewEvents.NavigateToStatusScreen -> handleNavigateToStatusScreen()
+                QrCodeLoginViewEvents.NavigateToShowQrCodeScreen -> handleNavigateToShowQrCodeScreen()
             }
         }
     }
 
-    private fun handleNavigateToStatusScreen() {
-        addFragment(
+    private fun handleNavigateToShowQrCodeScreen() {
+        addFragmentToBackstack(
                 views.container,
-                QrCodeLoginStatusFragment::class.java
+                QrCodeLoginShowQrCodeFragment::class.java,
+                tag = FRAGMENT_SHOW_QR_CODE_TAG
+        )
+    }
+
+    private fun handleNavigateToStatusScreen() {
+        addFragmentToBackstack(
+                views.container,
+                QrCodeLoginStatusFragment::class.java,
+                tag = FRAGMENT_QR_CODE_STATUS_TAG
         )
     }
 
     companion object {
+
+        private const val FRAGMENT_QR_CODE_INSTRUCTIONS_TAG = "FRAGMENT_QR_CODE_INSTRUCTIONS_TAG"
+        private const val FRAGMENT_SHOW_QR_CODE_TAG = "FRAGMENT_SHOW_QR_CODE_TAG"
+        private const val FRAGMENT_QR_CODE_STATUS_TAG = "FRAGMENT_QR_CODE_STATUS_TAG"
 
         fun getIntent(context: Context, qrCodeLoginArgs: QrCodeLoginArgs): Intent {
             return Intent(context, QrCodeLoginActivity::class.java).apply {

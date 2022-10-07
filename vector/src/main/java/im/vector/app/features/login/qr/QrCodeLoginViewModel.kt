@@ -40,6 +40,21 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     override fun handle(action: QrCodeLoginAction) {
         when (action) {
             is QrCodeLoginAction.OnQrCodeScanned -> handleOnQrCodeScanned(action)
+            QrCodeLoginAction.QrCodeViewStarted -> handleQrCodeViewStarted()
+            QrCodeLoginAction.ShowQrCode -> handleShowQrCode()
+        }
+    }
+
+    private fun handleShowQrCode() {
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToShowQrCodeScreen)
+    }
+
+    private fun handleQrCodeViewStarted() {
+        val qrCodeData = generateQrCodeData()
+        setState {
+            copy(
+                    generatedQrCodeData = qrCodeData
+            )
         }
     }
 
@@ -83,5 +98,12 @@ class QrCodeLoginViewModel @AssistedInject constructor(
      */
     private fun isValidQrCode(qrCode: String): Boolean {
         return qrCode.startsWith("http")
+    }
+
+    /**
+     * TODO. UI test purpose. Fixme accordingly.
+     */
+    private fun generateQrCodeData(): String {
+        return "https://element.io"
     }
 }

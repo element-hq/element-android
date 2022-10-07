@@ -21,6 +21,7 @@ import com.airbnb.mvrx.MavericksState
 data class QrCodeLoginViewState(
     val loginType: QrCodeLoginType,
     val connectionStatus: QrCodeLoginConnectionStatus? = null,
+    val generatedQrCodeData: String? = null,
 ) : MavericksState {
 
     constructor(args: QrCodeLoginArgs) : this(
