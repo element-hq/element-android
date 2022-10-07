@@ -24,13 +24,11 @@ import im.vector.app.test.fakes.FakeLocaleProvider
 import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
-import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.CredentialsFixture
+import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.fixtures.SessionParamsFixture
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
