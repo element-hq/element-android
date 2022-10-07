@@ -35,6 +35,8 @@ abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastI
     @EpoxyAttribute
     var voiceBroadcastState: VoiceBroadcastState? = null
 
+    override fun isCacheable(): Boolean = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         bindVoiceBroadcastItem(holder)
