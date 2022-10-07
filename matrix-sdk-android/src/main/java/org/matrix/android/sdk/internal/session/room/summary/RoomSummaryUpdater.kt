@@ -114,12 +114,12 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
 
         roomSummaryEntity.threadHighlightCount = unreadThreadNotifications
-                ?.mapNotNull { it.value.highlightCount }
-                ?.sum()
+                ?.map { it.value.highlightCount.takeIf { count -> (count ?: 0) > 0 } }
+                ?.size
                 ?: 0
         roomSummaryEntity.threadNotificationCount = unreadThreadNotifications
-                ?.mapNotNull { it.value.notificationCount }
-                ?.sum()
+                ?.map { it.value.notificationCount.takeIf { count -> (count ?: 0) > 0 } }
+                ?.size
                 ?: 0
 
 
