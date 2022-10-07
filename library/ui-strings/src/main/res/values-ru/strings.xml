@@ -446,8 +446,8 @@
     <string name="encryption_import_import">Импорт</string>
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
-    <string name="encryption_information_not_verified">Не проверено</string>
-    <string name="encryption_information_verified">Проверено</string>
+    <string name="encryption_information_not_verified">Не заверено</string>
+    <string name="encryption_information_verified">Заверено</string>
     <string name="encryption_information_verify">Подтвердить</string>
     <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к ее владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
     <string name="encryption_information_verify_device_warning2">Если они не совпадают, безопасность вашего общения может быть поставлена под угрозу.</string>
@@ -1430,7 +1430,7 @@
     <string name="verification_code_notice">Сравните код с тем, который отображается на экране другого пользователя.</string>
     <string name="verification_conclusion_ok_notice">Сообщения от этого пользователя зашифрованы сквозным шифрованием и не смогут быть прочитаны третьими лицами.</string>
     <string name="verification_conclusion_ok_self_notice">Ваша новая сессия подтверждена. У нее есть доступ к вашим зашифрованным сообщениям, а другие пользователи увидят его как доверенное.</string>
-    <string name="encryption_information_cross_signing_state">Перекрестная подпись</string>
+    <string name="encryption_information_cross_signing_state">Перекрёстная подпись</string>
     <string name="encryption_information_dg_xsigning_complete">Перекрестная подпись включена
 \nЛичные ключи хранятся на устройстве.</string>
     <string name="encryption_information_dg_xsigning_trusted">Перекрестная подпись включена
@@ -2721,7 +2721,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nвыглядит слегка пустовато.</string>
     <string name="onboarding_new_app_layout_button_try">Попробовать</string>
-    <string name="device_manager_session_details_description">Сведения о приложении, устройстве и активности.</string>
+    <string name="device_manager_session_details_description">Информация о приложении, устройстве и активности.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Подтвердите текущую сессию для более безопасного обмена сообщениями.</string>
     <string name="space_list_empty_title">Пока нет пространств.</string>
     <string name="device_manager_other_sessions_recommendation_description_unverified">Подтвердите свои сессии для более безопасного обмена сообщениями или выйдите из тех, которые более не признаёте или не используете.</string>
@@ -2742,4 +2742,15 @@
     </plurals>
     <string name="device_manager_filter_option_unverified">Незаверенные</string>
     <string name="device_manager_filter_bottom_sheet_title">Фильтр</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Незаверенная · Текущая сессия</string>
+    <string name="device_manager_session_rename">Переименовать сессию</string>
+    <string name="device_manager_session_rename_edit_hint">Название сессии</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Заверенные</string>
+    <string name="device_manager_session_overview_signout">Выйти из этой сессии</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Неактивные</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Незаверенные</string>
+    <string name="device_manager_session_rename_warning">Пожалуйста, имейте в виду, что названия сессий также видны людям, с которыми вы общаетесь.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Заверенные сессии</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Незаверенные сессии</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Неактивные сессии</string>
 </resources>
