@@ -20,6 +20,9 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.filter.FilterDevicesUseCase
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
+import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,6 +38,7 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
         private val getEncryptionTrustLevelForDeviceUseCase: GetEncryptionTrustLevelForDeviceUseCase,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val filterDevicesUseCase: FilterDevicesUseCase,
+        private val parseDeviceUserAgentUseCase: ParseDeviceUserAgentUseCase,
 ) {
 
     fun execute(filterType: DeviceManagerFilterType, excludeCurrentDevice: Boolean = false): Flow<List<DeviceFullInfo>> {
@@ -68,7 +72,9 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
                     val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
                     val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
-                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, roomEncryptionTrustLevel, isInactive)
+                    val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoDeviceInfo?.deviceId
+                    val deviceUserAgent = parseDeviceUserAgentUseCase.execute(deviceInfo.getBestLastSeenUserAgent())
+                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo, roomEncryptionTrustLevel, isInactive, isCurrentDevice, deviceUserAgent)
                 }
     }
 }

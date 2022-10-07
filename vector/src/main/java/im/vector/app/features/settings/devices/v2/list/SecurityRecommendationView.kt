@@ -31,7 +31,12 @@ class SecurityRecommendationView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    interface Callback {
+        fun onViewAllClicked()
+    }
+
     private val views: ViewSecurityRecommendationBinding
+    var callback: Callback? = null
 
     init {
         inflate(context, R.layout.view_security_recommendation, this)
@@ -46,6 +51,10 @@ class SecurityRecommendationView @JvmOverloads constructor(
             setTitle(it)
             setDescription(it)
             setImage(it)
+        }
+
+        views.recommendationViewAllButton.setOnClickListener {
+            callback?.onViewAllClicked()
         }
     }
 
@@ -77,5 +86,10 @@ class SecurityRecommendationView @JvmOverloads constructor(
     fun render(viewState: SecurityRecommendationViewState) {
         setDescription(viewState.description)
         setCount(viewState.sessionsCount)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        callback = null
     }
 }

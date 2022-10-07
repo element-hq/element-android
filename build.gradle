@@ -25,14 +25,15 @@ buildscript {
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.3'
-        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.gms:google-services:4.3.14'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.2.2"
-        classpath 'org.owasp:dependency-check-gradle:7.2.0'
+        classpath 'org.owasp:dependency-check-gradle:7.2.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
+        classpath 'app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -46,6 +47,8 @@ plugins {
 
     // Dependency Analysis
     id 'com.autonomousapps.dependency-analysis' version "1.13.1"
+    // Gradle doctor
+    id "com.osacky.doctor" version "0.8.1"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -58,6 +61,9 @@ dependencyCheck {
     ]
 }
 
+// Gradle doctor configuration
+apply from: './tools/gradle/doctor.gradle'
+
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
     apply plugin: "io.gitlab.arturbosch.detekt"
@@ -69,6 +75,14 @@ allprojects {
             content {
                 groups.mavenCentral.regex.each { includeGroupByRegex it }
                 groups.mavenCentral.group.each { includeGroup it }
+            }
+        }
+        // snapshots repository
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+            content {
+                groups.snapshot.regex.each { includeGroupByRegex it }
+                groups.snapshot.group.each { includeGroup it }
             }
         }
         maven {
@@ -216,7 +230,7 @@ project(":vector") {
     }
 }
 
-project(":library:diff-match-patch") {
+project(":library:external:diff-match-patch") {
     sonarqube {
         skipProject = true
     }
@@ -284,6 +298,32 @@ dependencyAnalysis {
                         "org.maplibre.gl:android-sdk",
                 )
             }
+        }
+    }
+}
+
+tasks.register("recordScreenshots", GradleBuild) {
+    startParameter.projectProperties.screenshot = ""
+    tasks = [':vector:recordPaparazziDebug']
+}
+
+tasks.register("verifyScreenshots", GradleBuild) {
+    startParameter.projectProperties.screenshot = ""
+    tasks = [':vector:verifyPaparazziDebug']
+}
+
+ext.initScreenshotTests = { project ->
+    def hasScreenshots = project.hasProperty("screenshot")
+    if (hasScreenshots) {
+        project.apply plugin: 'app.cash.paparazzi'
+    }
+    project.dependencies { testCompileOnly "app.cash.paparazzi:paparazzi:1.0.0" }
+    project.android.testOptions.unitTests.all {
+        def screenshotTestCapture = "**/*ScreenshotTest*"
+        if (hasScreenshots) {
+            include screenshotTestCapture
+        } else {
+            exclude screenshotTestCapture
         }
     }
 }

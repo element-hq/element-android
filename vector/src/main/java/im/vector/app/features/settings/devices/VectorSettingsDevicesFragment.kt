@@ -85,8 +85,7 @@ class VectorSettingsDevicesFragment :
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvents.SelfVerification -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvents.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {

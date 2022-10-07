@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
@@ -52,7 +53,6 @@ import javax.inject.Inject
 import kotlin.concurrent.schedule
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
-private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 private val loggerTag = LoggerTag("SyncThread", LoggerTag.SYNC)
 
@@ -61,7 +61,8 @@ internal class SyncThread @Inject constructor(
         private val networkConnectivityChecker: NetworkConnectivityChecker,
         private val backgroundDetectionObserver: BackgroundDetectionObserver,
         private val activeCallHandler: ActiveCallHandler,
-        private val lightweightSettingsStorage: DefaultLightweightSettingsStorage
+        private val lightweightSettingsStorage: DefaultLightweightSettingsStorage,
+        private val matrixConfiguration: MatrixConfiguration,
 ) : Thread("Matrix-SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
@@ -181,7 +182,7 @@ internal class SyncThread @Inject constructor(
                 val timeout = when {
                     previousSyncResponseHasToDevice -> 0L /* Force timeout to 0 */
                     afterPause -> 0L /* No timeout after a pause */
-                    else -> DEFAULT_LONG_POOL_TIMEOUT
+                    else -> matrixConfiguration.syncConfig.longPollTimeout
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
                 val presence = lightweightSettingsStorage.getSyncPresenceStatus()

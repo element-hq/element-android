@@ -59,4 +59,10 @@ abstract class FlavorModule {
 
     @Binds
     abstract fun bindsFcmHelper(fcmHelper: FdroidFcmHelper): FcmHelper
+
+    @Binds
+    abstract fun bindsLocaleProvider(localeProvider: DefaultLocaleProvider): LocaleProvider
+
+    @Binds
+    abstract fun bindsAppNameProvider(appNameProvider: DefaultAppNameProvider): AppNameProvider
 }

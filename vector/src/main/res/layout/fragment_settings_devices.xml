@@ -12,11 +12,12 @@
             android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
-            app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
             android:id="@+id/deviceListUnverifiedSessionsRecommendation"
@@ -24,13 +25,13 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
-            app:recommendationTitle="@string/device_manager_unverified_sessions_title"
-            app:recommendationDescription="@string/device_manager_unverified_sessions_description"
-            app:recommendationImageResource="@drawable/ic_shield_warning_no_border"
-            app:recommendationImageBackgroundTint="@color/shield_color_warning_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionSecurityRecommendations"/>
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionSecurityRecommendations"
+            app:recommendationDescription="@string/device_manager_unverified_sessions_description"
+            app:recommendationImageBackgroundTint="@color/shield_color_warning_background"
+            app:recommendationImageResource="@drawable/ic_shield_warning_no_border"
+            app:recommendationTitle="@string/device_manager_unverified_sessions_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
             android:id="@+id/deviceListInactiveSessionsRecommendation"
@@ -38,13 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="16dp"
-            app:recommendationTitle="@string/device_manager_inactive_sessions_title"
-            app:recommendationDescription="@plurals/device_manager_inactive_sessions_description"
-            app:recommendationImageResource="@drawable/ic_inactive_sessions"
-            app:recommendationImageBackgroundTint="?vctr_system"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListUnverifiedSessionsRecommendation"/>
+            app:layout_constraintTop_toBottomOf="@id/deviceListUnverifiedSessionsRecommendation"
+            app:recommendationDescription="@plurals/device_manager_inactive_sessions_description"
+            app:recommendationImageBackgroundTint="?vctr_system"
+            app:recommendationImageResource="@drawable/ic_inactive_sessions"
+            app:recommendationTitle="@string/device_manager_inactive_sessions_title" />
 
         <View
             android:id="@+id/deviceListSecurityRecommendationsDivider"
@@ -60,11 +61,12 @@
             android:id="@+id/deviceListHeaderCurrentSession"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:sessionsListHeaderDescription=""
-            app:sessionsListHeaderTitle="@string/device_manager_current_session_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider"
+            app:sessionsListHeaderDescription=""
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderTitle="@string/device_manager_current_session_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SessionInfoView
             android:id="@+id/deviceListCurrentSession"
@@ -90,11 +92,12 @@
             android:id="@+id/deviceListHeaderOtherSessions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
-            app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession" />
+            app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession"
+            app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title" />
 
         <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
             android:id="@+id/deviceListOtherSessions"

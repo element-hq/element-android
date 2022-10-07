@@ -27,8 +27,8 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.preference.PreferenceManager
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
@@ -84,7 +84,7 @@ object ThemeUtils {
     fun getApplicationTheme(context: Context): String {
         val currentTheme = this.currentTheme.get()
         return if (currentTheme == null) {
-            val prefs = DefaultSharedPreferences.getInstance(context)
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, DEFAULT_THEME) ?: DEFAULT_THEME
             if (themeFromPref == "status") {
                 // Migrate to the default theme

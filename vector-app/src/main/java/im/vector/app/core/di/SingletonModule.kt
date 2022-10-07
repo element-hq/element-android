@@ -34,6 +34,8 @@ import im.vector.app.SpaceStateHandler
 import im.vector.app.SpaceStateHandlerImpl
 import im.vector.app.config.Config
 import im.vector.app.core.debug.FlipperProxy
+import im.vector.app.core.device.DefaultGetDeviceInfoUseCase
+import im.vector.app.core.device.GetDeviceInfoUseCase
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -112,6 +114,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindSpaceStateHandler(spaceStateHandlerImpl: SpaceStateHandlerImpl): SpaceStateHandler
+
+    @Binds
+    abstract fun bindGetDeviceInfoUseCase(getDeviceInfoUseCase: DefaultGetDeviceInfoUseCase): GetDeviceInfoUseCase
 }
 
 @InstallIn(SingletonComponent::class)
