@@ -53,8 +53,8 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -256,8 +256,8 @@ class TimelineFragment :
 
     private val timelineArgs: TimelineArgs by args()
 
-    private val timelineViewModel: TimelineViewModel by activityViewModel()
-    private val messageComposerViewModel: MessageComposerViewModel by activityViewModel()
+    private val timelineViewModel: TimelineViewModel by fragmentViewModel()
+    private val messageComposerViewModel: MessageComposerViewModel by fragmentViewModel()
     private val debouncer = Debouncer(createUIHandler())
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
