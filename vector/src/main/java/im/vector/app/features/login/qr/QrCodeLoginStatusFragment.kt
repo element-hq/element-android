@@ -39,7 +39,14 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initCancelButton()
         observeViewState()
+    }
+
+    private fun initCancelButton() {
+        views.qrCodeLoginStatusCancelButton.debouncedClicks {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun observeViewState() {
