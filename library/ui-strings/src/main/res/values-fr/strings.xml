@@ -934,11 +934,11 @@
     <string name="settings_discovery_identity_server_info">Vous utilisez actuellement %1$s pour découvrir et être découvrable par les contacts existants que vous connaissez.</string>
     <string name="settings_discovery_identity_server_info_none">Vous n’utilisez actuellement aucun serveur d’identité. Pour découvrir et être découvrable par les contacts existants que vous connaissez, configurez-en un ci-dessous.</string>
     <string name="settings_discovery_emails_title">Adresses électronique découvrables</string>
-    <string name="settings_discovery_no_mails">Les options de découverte apparaîtront quand vous aurez ajouté un courriel.</string>
+    <string name="settings_discovery_no_mails">Les options de découverte apparaîtront quand vous aurez ajouté une adresse courriel.</string>
     <string name="settings_discovery_no_msisdn">Les options de découverte apparaîtront quand vous aurez ajouté un numéro de téléphone.</string>
     <string name="settings_discovery_disconnect_identity_server_info">La déconnexion du serveur d’identité signifie que vous ne pourrez plus être découvrable par les autres utilisateurs et que vous ne pourrez plus inviter d’autres personnes par courriel ou par téléphone.</string>
     <string name="settings_discovery_msisdn_title">Numéros de téléphone découvrables</string>
-    <string name="settings_discovery_confirm_mail">Nous vous avons envoyé un courriel de confirmation à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
+    <string name="settings_discovery_confirm_mail">Nous vous avons envoyé un courriel à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
     <string name="settings_discovery_enter_identity_server">Renseignez l’URL d’un serveur d’identité</string>
     <string name="settings_discovery_bad_identity_server">Impossible de se connecter au serveur d’identité</string>
     <string name="settings_discovery_please_enter_server">Veuillez renseigner l’URL du serveur d’identité</string>
@@ -1066,7 +1066,7 @@
     <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.
 \n
 \nVoulez-vous vous inscrire en utilisant un client web \?</string>
-    <string name="login_login_with_email_error">Ce courriel n’est associé à aucun compte.</string>
+    <string name="login_login_with_email_error">Cette adresse de courriel n’est associée à aucun compte.</string>
     <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
     <string name="login_reset_password_notice">Un courriel de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
     <string name="login_reset_password_submit">Suivant</string>
@@ -1075,7 +1075,7 @@
     <string name="login_reset_password_warning_title">Attention !</string>
     <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Configurez la sauvegarde de clés ou exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string>
     <string name="login_reset_password_warning_submit">Poursuivre</string>
-    <string name="login_reset_password_error_not_found">Ce courriel n’est lié à aucun compte</string>
+    <string name="login_reset_password_error_not_found">Ce adresse de courriel n’est liée à aucun compte</string>
     <string name="login_reset_password_mail_confirmation_title">Vérifiez votre boîte de réception</string>
     <string name="login_reset_password_mail_confirmation_notice">Un courriel de vérification a été envoyé à %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Touchez le lien pour confirmer votre nouveau mot de passe. Après avoir suivi le lien qu’il contient, cliquez ci-dessous.</string>
@@ -1089,7 +1089,7 @@
 \n
 \nArrêter le processus de changement \?</string>
     <string name="login_set_email_title">Définir l’adresse électronique</string>
-    <string name="login_set_email_notice">Définir une adresse électronique pour récupérer votre compte. Plus tard, vous pourrez éventuellement autoriser des personnes à vous retrouver avec votre adresse électronique.</string>
+    <string name="login_set_email_notice">Définir une adresse de courriel pour récupérer votre compte. Plus tard, vous pourrez éventuellement autoriser des personnes à vous retrouver avec cette adresse.</string>
     <string name="login_set_email_mandatory_hint">Courriel</string>
     <string name="login_set_email_optional_hint">Courriel (facultatif)</string>
     <string name="login_set_email_submit">Suivant</string>
@@ -1432,7 +1432,7 @@
     <string name="event_redacted">Message supprimé</string>
     <string name="settings_show_redacted">Afficher les messages supprimés</string>
     <string name="settings_show_redacted_summary">Afficher un remplaçant pour les messages supprimés</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un courriel de confirmation à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un courriel à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
     <string name="settings_text_message_sent_wrong_code">Le code de vérification n’est pas correct.</string>
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_media_no_result">Il n’y a aucun média dans ce salon</string>
@@ -1455,7 +1455,7 @@
     <string name="identity_server_error_outdated_home_server">Cette opération n’est pas possible. Le serveur d’accueil est obsolète.</string>
     <string name="identity_server_error_no_identity_server_configured">Veuillez d’abord configurer un serveur d’identité.</string>
     <string name="identity_server_error_terms_not_signed">Veuillez d’abord accepter les termes du serveur d’identité dans les paramètres.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, ${app_name} prend uniquement en charge l’envoi des adresses électronique et des numéros de téléphone hachés.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, ${app_name} prend uniquement en charge l’envoi des adresses de courriel et des numéros de téléphone hachés.</string>
     <string name="identity_server_error_binding_error">L’association a échoué.</string>
     <string name="identity_server_error_no_current_binding_error">Il n’y a actuellement aucune association avec cet identifiant.</string>
     <string name="identity_server_set_default_notice">Votre serveur d’accueil (%1$s) propose d’utiliser %2$s comme serveur d’identité</string>
@@ -1669,7 +1669,7 @@
     <string name="error_threepid_auth_failed">Assurez-vous d\'avoir cliqué sur le lien envoyé par courriel.</string>
     <string name="settings_remove_three_pid_confirmation_content">Supprimer %s \?</string>
     <string name="settings_phone_numbers">Numéros de téléphone</string>
-    <string name="settings_emails_empty">Aucune adresse électronique n’a été ajoutée à votre compte</string>
+    <string name="settings_emails_empty">Aucune adresse de courriel n’a été ajoutée à votre compte</string>
     <string name="settings_emails">Adresses électroniques</string>
     <string name="settings_phone_number_empty">Aucun numéro de téléphone n’a été ajouté à votre compte</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
@@ -1734,7 +1734,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
     <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
-    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des courriels et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des adresses de courriel et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
     <string name="settings_discovery_consent_title">Envoyer des courriels et des numéros de téléphone</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
     <string name="direct_room_user_list_known_title">Utilisateurs connus</string>
@@ -2142,7 +2142,7 @@
     <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
     <string name="settings_notification_default">Notifications par défaut</string>
     <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans ${app_name}.</string>
-    <string name="link_this_email_settings_link">Lier ce courriel à votre compte</string>
+    <string name="link_this_email_settings_link">Lier cette adresse de courriel à votre compte</string>
     <string name="this_invite_to_this_space_was_sent">Cette invitation à cette espace a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="this_invite_to_this_room_was_sent">Cette invitation à ce salon a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Tous les salons dans lesquels vous vous trouvez seront affichés sur l’Accueil.</string>
@@ -2258,7 +2258,7 @@
     <string name="create_poll_question_title">Question ou sujet du sondage</string>
     <string name="create_poll_title">Créer un sondage</string>
     <string name="attachment_type_poll">Sondage</string>
-    <string name="identity_server_consent_dialog_title_2">Envoyer des courriels et des numéros de téléphone à %s</string>
+    <string name="identity_server_consent_dialog_title_2">Envoyer des adresses de courriel et des numéros de téléphone à %s</string>
     <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
     <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
     <string name="shortcut_disabled_reason_room_left">Le salon a été quitté !</string>
@@ -2710,4 +2710,37 @@
     <string name="labs_enable_deferred_dm_title">Activer les conversations privées différées</string>
     <string name="labs_enable_new_app_layout_summary">Un Element simplifié avec des onglets optionnels</string>
     <string name="labs_enable_new_app_layout_title">Activer la nouvelle présentation</string>
+    <string name="device_manager_learn_more_session_rename">Les autres utilisateurs en conversations privées ou salons qui peuvent vous parler sont capables de voir la liste complète de vos sessions.
+\n
+\nCela leur fournit une preuve de confiance que c’est bien avec vous qu\'ils communiquent, mais cela veut également dire qu’ils peuvent voir le nom de la session que vous saisissez ici.</string>
+    <string name="device_manager_learn_more_session_rename_title">Renommer les sessions</string>
+    <string name="device_manager_learn_more_sessions_verified">Les sessions vérifiées sont celles qui sont identifiées avec votre mot de passe puis vérifiée, soit à l’aide de votre phrase de sécurité, ou bien par la vérification croisée.
+\n
+\nCela signifie qu’elles possèdent les clés de chiffrement de vos messages passés, et certifient aux autres utilisateurs avec qui vous communiquez que ces sessions viennent vraiment de vous.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Sessions vérifiées</string>
+    <string name="device_manager_learn_more_sessions_unverified">Les sessions non vérifiées sont celles qui sont identifiées avec votre mot de passe sans avoir fait de vérification croisée.
+\n
+\nVous devriez tout particulièrement vous assurer de reconnaître ces sessions, car elles pourraient être la preuve d’un usage non autorisé de votre compte.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Sessions non vérifiées</string>
+    <string name="device_manager_learn_more_sessions_inactive">Les sessions inactives sont celles que vous n’avez pas utilisées depuis un certain temps, mais qui continue de recevoir les clés de chiffrements.
+\n
+\nLa suppression des sessions inactives améliore la sécurité et la performance, et vous aide à identifier si une nouvelle session est douteuse.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Sessions inactives</string>
+    <string name="device_manager_session_rename_warning">Soyez conscient que les noms de sessions sont également visibles pour les personnes avec lesquelles vous communiquez.</string>
+    <string name="device_manager_session_rename_description">Les noms de sessions personnalisés peuvent vous aider à reconnaître vos appareils plus facilement.</string>
+    <string name="device_manager_session_rename_edit_hint">Nom de la session</string>
+    <string name="device_manager_session_rename">Renommer la session</string>
+    <string name="device_manager_session_overview_signout">Se déconnecter de cette session</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Non vérifiée · Votre session actuelle</string>
+    <string name="tooltip_attachment_voice_broadcast">Démarrer une diffusion audio</string>
+    <string name="key_authenticity_not_guaranteed">L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.</string>
+    <string name="settings_security_incognito_keyboard_summary">Demande au clavier de ne pas mettre à jour les données personnalisées, comme l’historique de la frappe et le dictionnaire composé de ce que vous avez tapé dans vos conversations. Il est possible que certains claviers ne respectent pas ce paramètre.</string>
+    <string name="settings_security_incognito_keyboard_title">Clavier incognito</string>
+    <string name="command_description_table_flip">Préfixe le message par (╯°□°）╯︵ ┻━┻</string>
+    <string name="attachment_type_voice_broadcast">Diffusion audio</string>
+    <string name="command_description_devtools">Ouvrir l’écran des outils développeurs</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Vous avez activé le chiffrement vers les sessions vérifiées uniquement, pour tous les salons, dans les paramètres Sécurité.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Il y a des appareils non vérifiés dans ce salon, ils ne pourront pas déchiffrer vos messages envoyés.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées dans ce salon.</string>
+    <string name="action_got_it">Compris</string>
 </resources>
