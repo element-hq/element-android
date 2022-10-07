@@ -2581,4 +2581,39 @@
     <string name="font_size_section_manually">Välj manuellt</string>
     <string name="font_size_section_auto">Ställ in automatiskt</string>
     <string name="font_size_title">Välj teckenstorlek</string>
+    <string name="command_description_devtools">Öppna utvecklingsverktygsskärmen</string>
+    <string name="timeline_error_room_not_found">Tyvärr hittades inte det här rummet.
+\nVänligen pröva igen senare.%s</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Du har aktiverat kryptering endast till verifierade sessioner för alla rum i säkerhetsinställningarna.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Det finns overifierade enheter i det här rummet, de kommer inte kunna avkryptera meddelanden du skickar.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Skicka aldrig krypterade meddelanden till overifierade sessioner i det här rummet.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s och %2$d till</item>
+        <item quantity="other">%1$s och %2$d till</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s och %2$s</string>
+    <string name="auth_reset_password_error_unverified">E-post inte verifierad, kolla din inkorg</string>
+    <string name="invites_empty_message">Det här är var dina nya förfrågningar och inbjudningar kommer att vara.</string>
+    <string name="invites_empty_title">Inget nytt.</string>
+    <string name="invites_title">Inbjudningar</string>
+    <string name="space_list_empty_message">Utrymmen är ett nytt sätt att gruppera rum och personer. Skapa ett utrymme för att komma igång.</string>
+    <string name="space_list_empty_title">Inga utrymmen än.</string>
+    <string name="labs_enable_deferred_dm_summary">Skapa DM först när du skickar första meddelandet</string>
+    <string name="labs_enable_deferred_dm_title">Aktivera avvaktade DM:er</string>
+    <string name="labs_enable_new_app_layout_summary">En förenklad Element med valfria flikar</string>
+    <string name="labs_enable_new_app_layout_title">Aktivera ny layout</string>
+    <string name="home_layout_preferences_sort_name">A - Ö</string>
+    <string name="home_layout_preferences_sort_activity">Aktivitet</string>
+    <string name="home_layout_preferences_sort_by">Sortera efter</string>
+    <string name="home_layout_preferences_recents">Visa nyliga</string>
+    <string name="home_layout_preferences_filters">Visa filter</string>
+    <string name="home_layout_preferences">Gränssnittsinställningar</string>
+    <string name="action_got_it">Förstått</string>
+    <string name="a11y_collapse_space_children">Kollapsa underutrymmen för %s</string>
+    <string name="a11y_expand_space_children">Expandera underutrymmen för %s</string>
+    <string name="explore_rooms">Utforska rum</string>
+    <string name="change_space">Byt utrymme</string>
+    <string name="create_room">Skapa rum</string>
+    <string name="start_chat">Starta chatt</string>
+    <string name="all_chats">Alla chattar</string>
 </resources>
