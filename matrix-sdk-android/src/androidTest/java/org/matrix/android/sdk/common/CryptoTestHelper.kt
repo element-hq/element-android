@@ -20,6 +20,7 @@ import android.util.Log
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -43,7 +44,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerific
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -53,6 +56,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
@@ -300,10 +304,10 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
 
         // set up megolm backup
-        val creationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null, it)
         }
-        val version = testHelper.waitForCallback<KeysVersion> {
+        val version = awaitCallback<KeysVersion> {
             session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
         }
         // Save it for gossiping
@@ -315,24 +319,6 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                     secret,
                     listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
-
-            // set up megolm backup
-            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null,  it)
-            }
-            val version = awaitCallback<KeysVersion> {
-                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
-            }
-            // Save it for gossiping
-            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
-
-            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
-                ssssService.storeSecret(
-                        KEYBACKUP_SECRET_SSSS_NAME,
-                        secret,
-                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
-                )
-            }
         }
     }
 
