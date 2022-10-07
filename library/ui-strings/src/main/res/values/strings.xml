@@ -3337,6 +3337,10 @@
     <string name="qr_code_login_header_show_qr_code_description">Use your signed in device to scan the QR code below:</string>
     <string name="qr_code_login_header_connected_title">Secure connection established</string>
     <string name="qr_code_login_header_connected_description">Check your signed in device, the code below should be displayed. Confirm that the code below matches with that device:</string>
+    <string name="qr_code_login_header_failed_title">Unsuccessful connection</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
+    <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
+    <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
     <string name="qr_code_login_new_device_instruction_1">Open Element on your other device</string>
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
     <string name="qr_code_login_new_device_instruction_3">Select \'Link a device\'</string>
@@ -3347,5 +3351,6 @@
     <string name="qr_code_login_connecting_to_device">Connecting to device</string>
     <string name="qr_code_login_signing_in">Signing you in</string>
     <string name="qr_code_login_status_no_match">No match?</string>
+    <string name="qr_code_login_try_again">Try again</string>
 
 </resources>

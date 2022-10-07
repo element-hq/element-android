@@ -55,8 +55,32 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
                 is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(it.connectionStatus)
                 QrCodeLoginConnectionStatus.ConnectingToDevice -> handleConnectingToDevice()
                 QrCodeLoginConnectionStatus.SigningIn -> handleSigningIn()
+                is QrCodeLoginConnectionStatus.Failed -> handleFailed(it.connectionStatus)
                 null -> { /* NOOP */ }
             }
+        }
+    }
+
+    private fun handleFailed(connectionStatus: QrCodeLoginConnectionStatus.Failed) {
+        views.qrCodeLoginStatusLoadingLayout.isVisible = false
+        views.qrCodeLoginStatusHeaderView.isVisible = true
+        views.qrCodeLoginStatusSecurityCode.isVisible = false
+        views.qrCodeLoginStatusNoMatchLayout.isVisible = false
+        views.qrCodeLoginStatusCancelButton.isVisible = true
+        views.qrCodeLoginStatusTryAgainButton.isVisible = connectionStatus.canTryAgain
+        views.qrCodeLoginStatusHeaderView.setTitle(getString(R.string.qr_code_login_header_failed_title))
+        views.qrCodeLoginStatusHeaderView.setDescription(getErrorCode(connectionStatus.errorType))
+        views.qrCodeLoginStatusHeaderView.setImage(
+                imageResource = R.drawable.ic_qr_code_login_failed,
+                backgroundTintColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
+        )
+    }
+
+    private fun getErrorCode(errorType: QrCodeLoginErrorType): String {
+        return when (errorType) {
+            QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
+            QrCodeLoginErrorType.TIMEOUT -> getString(R.string.qr_code_login_header_failed_timeout_description)
+            QrCodeLoginErrorType.REQUEST_WAS_DENIED -> getString(R.string.qr_code_login_header_failed_denied_description)
         }
     }
 
@@ -66,6 +90,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusSecurityCode.isVisible = false
         views.qrCodeLoginStatusNoMatchLayout.isVisible = false
         views.qrCodeLoginStatusCancelButton.isVisible = true
+        views.qrCodeLoginStatusTryAgainButton.isVisible = false
         views.qrCodeLoginStatusLoadingTextView.setText(R.string.qr_code_login_connecting_to_device)
     }
 
@@ -75,6 +100,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusSecurityCode.isVisible = false
         views.qrCodeLoginStatusNoMatchLayout.isVisible = false
         views.qrCodeLoginStatusCancelButton.isVisible = false
+        views.qrCodeLoginStatusTryAgainButton.isVisible = false
         views.qrCodeLoginStatusLoadingTextView.setText(R.string.qr_code_login_signing_in)
     }
 
@@ -84,6 +110,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusSecurityCode.isVisible = true
         views.qrCodeLoginStatusNoMatchLayout.isVisible = true
         views.qrCodeLoginStatusCancelButton.isVisible = true
+        views.qrCodeLoginStatusTryAgainButton.isVisible = false
         views.qrCodeLoginStatusSecurityCode.text = connectionStatus.securityCode
         views.qrCodeLoginStatusHeaderView.setTitle(getString(R.string.qr_code_login_header_connected_title))
         views.qrCodeLoginStatusHeaderView.setDescription(getString(R.string.qr_code_login_header_connected_description))

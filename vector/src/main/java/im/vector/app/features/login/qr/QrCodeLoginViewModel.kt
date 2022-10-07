@@ -71,9 +71,21 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         // TODO. UI test purpose. Fixme remove!
         viewModelScope.launch {
             delay(3000)
+            onFailed(QrCodeLoginErrorType.TIMEOUT, false)
+            delay(3000)
             onConnectionEstablished("1234-ABCD-5678-EFGH")
             delay(3000)
             onSigningIn()
+            delay(3000)
+            onFailed(QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED, true)
+        }
+    }
+
+    private fun onFailed(errorType: QrCodeLoginErrorType, canTryAgain: Boolean) {
+        setState {
+            copy(
+                    connectionStatus = QrCodeLoginConnectionStatus.Failed(errorType, canTryAgain)
+            )
         }
     }
 
