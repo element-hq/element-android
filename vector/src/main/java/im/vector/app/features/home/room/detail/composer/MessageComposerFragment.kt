@@ -48,6 +48,7 @@ import com.vanniktech.emoji.EmojiPopup
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.fatalError
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.glide.GlideApp
@@ -73,6 +74,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.home.room.detail.RoomDetailAction
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
@@ -102,7 +104,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import reactivecircus.flowbinding.android.view.focusChanges
@@ -355,7 +356,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
         }
 
-        val messageContent: MessageContent? = event.getLastMessageContent()
+        val messageContent: MessageContent? = event.getVectorLastMessageContent()
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
@@ -653,7 +654,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 locationOwnerId = session.myUserId
                         )
             }
-            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(RoomDetailAction.StartVoiceBroadcast)
+            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(VoiceBroadcastAction.Start)
         }
     }
 
