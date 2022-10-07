@@ -282,8 +282,6 @@ class TimelineFragment :
     private lateinit var callActionsHandler: StartCallActionsHandler
 
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
-    private val isEmojiKeyboardVisible: Boolean
-        get() = vectorPreferences.showEmojiKeyboard()
 
     private val lazyLoadedViews = RoomDetailLazyLoadedViews()
 
