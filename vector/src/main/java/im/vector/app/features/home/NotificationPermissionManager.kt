@@ -68,4 +68,11 @@ class NotificationPermissionManager @Inject constructor(
                 arrayOf(Manifest.permission.POST_NOTIFICATIONS)
         )
     }
+
+    fun eventuallyRevokePermission(
+            activity: Activity,
+    ) {
+        if (!sdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) return
+        activity.revokeSelfPermissionOnKill(Manifest.permission.POST_NOTIFICATIONS)
+    }
 }

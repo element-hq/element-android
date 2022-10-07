@@ -142,6 +142,7 @@ class VectorSettingsNotificationPreferenceFragment :
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
                     session.pushersService().refreshPushers()
+                    notificationPermissionManager.eventuallyRevokePermission(requireActivity())
                 }
             }
         }
