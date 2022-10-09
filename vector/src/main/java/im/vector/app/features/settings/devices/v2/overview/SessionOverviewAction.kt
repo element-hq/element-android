@@ -30,4 +30,3 @@ sealed class SessionOverviewAction : VectorViewModelAction {
             val enabled: Boolean,
     ) : SessionOverviewAction()
 }
-
