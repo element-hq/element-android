@@ -83,7 +83,6 @@ class SessionOverviewViewModelTest {
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
-    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val signoutSessionUseCase = mockk<SignoutSessionUseCase>()
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
