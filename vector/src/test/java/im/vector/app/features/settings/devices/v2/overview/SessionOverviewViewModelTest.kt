@@ -30,9 +30,9 @@ import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
-import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fixtures.PusherFixture.aPusher
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
