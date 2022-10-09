@@ -31,7 +31,6 @@ interface LocaleProvider {
 class DefaultLocaleProvider @Inject constructor(private val resources: Resources) : LocaleProvider {
 
     override fun current(): Locale {
-        ""
         return ConfigurationCompat.getLocales(resources.configuration).get(0) ?: Locale.getDefault()
     }
 }
