@@ -17,7 +17,7 @@
 package im.vector.app.features.crypto.quads
 
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.test
@@ -42,7 +42,7 @@ private val KEY_INFO_WITHOUT_PASSPHRASE = KeyInfo(id = "id", content = SecretSto
 class SharedSecureStorageViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val stringProvider = FakeStringProvider()
     private val fakeSession = FakeSession()

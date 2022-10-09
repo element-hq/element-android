@@ -313,7 +313,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val incomingRequest = bobVerificationService.getExistingVerificationRequests(alice.myUserId).first {
             it.requestInfo?.fromDevice == alice.sessionParams.deviceId
         }
-        bobVerificationService.readyPendingVerification(listOf(VerificationMethod.SAS), alice.myUserId, incomingRequest.transactionId!!)
+        bobVerificationService.readyPendingVerificationInDMs(listOf(VerificationMethod.SAS), alice.myUserId, roomId, incomingRequest.transactionId!!)
 
         var requestID: String? = null
         // wait for it to be readied

@@ -314,7 +314,7 @@ class ViewModelTest {
     private var initialState = ViewState.Empty
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
+    val mavericksTestRule = MavericksTestRule(testDispatcher = UnconfinedTestDispatcher())
 
     @Test
     fun `when handling MyAction, then emits Loading and Content states`() {

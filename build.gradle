@@ -44,6 +44,8 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
     // Detekt
     id "io.gitlab.arturbosch.detekt" version "1.21.0"
+    // Ksp
+    id "com.google.devtools.ksp" version "1.7.20-1.0.6"
 
     // Dependency Analysis
     id 'com.autonomousapps.dependency-analysis' version "1.13.1"
@@ -324,6 +326,34 @@ ext.initScreenshotTests = { project ->
             include screenshotTestCapture
         } else {
             exclude screenshotTestCapture
+        }
+    }
+}
+
+// Workaround to have KSP generated Kotlin code available in the IDE (for code completion)
+// Ref: https://github.com/airbnb/epoxy/releases/tag/5.0.0beta02
+subprojects { project ->
+    afterEvaluate {
+        if (project.hasProperty("android")) {
+            android {
+                if (it instanceof com.android.build.gradle.LibraryExtension) {
+                    libraryVariants.all { variant ->
+                        def outputFolder = new File("build/generated/ksp/${variant.name}/kotlin")
+                        variant.addJavaSourceFoldersToModel(outputFolder)
+                        android.sourceSets.getAt(variant.name).java {
+                            srcDir(outputFolder)
+                        }
+                    }
+                } else if (it instanceof com.android.build.gradle.AppExtension) {
+                    applicationVariants.all { variant ->
+                        def outputFolder = new File("build/generated/ksp/${variant.name}/kotlin")
+                        variant.addJavaSourceFoldersToModel(outputFolder)
+                        android.sourceSets.getAt(variant.name).java {
+                            srcDir(outputFolder)
+                        }
+                    }
+                }
+            }
         }
     }
 }

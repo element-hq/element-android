@@ -2659,4 +2659,46 @@
     <string name="a11y_collapse_space_children">Riduci contenuto di %s</string>
     <string name="a11y_expand_space_children">Espandi contenuto di %s</string>
     <string name="change_space">Cambia spazio</string>
+    <string name="device_manager_session_details_device_ip_address">Indirizzo IP</string>
+    <string name="device_manager_session_details_session_last_activity">Ultima attività</string>
+    <string name="device_manager_session_details_session_name">Nome sessione</string>
+    <string name="device_manager_session_details_description">Applicazione, dispositivo e informazioni di attività.</string>
+    <string name="device_manager_session_details_title">Dettagli sessione</string>
+    <string name="device_manager_other_sessions_clear_filter">Annulla filtro</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Nessuna sessione inattiva trovata.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Nessuna sessione non verificata trovata.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Nessuna sessione verificata trovata.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Considera di disconnettere le sessioni vecchie (%1$d giorno o più) che non usi più.</item>
+        <item quantity="other">Considera di disconnettere le sessioni vecchie (%1$d giorni o più) che non usi più.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inattivo</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifica le tue sessioni per avere conversazioni più sicure o disconnetti quelle che non riconosci o che non usi più.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Non verificato</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Per una maggiore sicurezza, disconnetti tutte le sessioni che non riconosci o che non usi più.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verificato</string>
+    <string name="a11y_device_manager_filter">Filtra</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inattivo da %1$d giorno o più</item>
+        <item quantity="other">Inattivo da %1$d giorni o più</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inattivo</string>
+    <string name="device_manager_filter_option_unverified_description">Non pronto per messaggi sicuri</string>
+    <string name="device_manager_filter_option_unverified">Non verificato</string>
+    <string name="device_manager_filter_option_verified_description">Pronto per messaggi sicuri</string>
+    <string name="device_manager_filter_option_verified">Verificato</string>
+    <string name="device_manager_filter_option_all_sessions">Tutte le sessioni</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtra</string>
+    <string name="device_manager_session_last_activity">Ultima attività %1$s</string>
+    <string name="device_manager_device_title">Dispositivo</string>
+    <string name="device_manager_session_title">Sessione</string>
+    <string name="device_manager_current_session_title">Sessione attuale</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifica o disconnetti questa sessione per una migliore sicurezza e affidabilità.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifica la tua sessione attuale per messaggi più sicuri.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Questa sessione è pronta per i messaggi sicuri.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">La tua sessione attuale è pronta per i messaggi sicuri.</string>
+    <string name="labs_enable_deferred_dm_title">Attiva messaggi diretti differiti</string>
+    <string name="labs_enable_deferred_dm_summary">Crea messaggio diretto solo al primo messaggio</string>
+    <string name="labs_enable_new_app_layout_summary">Un Element semplificato con schede opzionali</string>
+    <string name="labs_enable_new_app_layout_title">Attiva nuova disposizione</string>
 </resources>

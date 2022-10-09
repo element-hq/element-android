@@ -32,7 +32,6 @@ class DefaultGetDeviceInfoUseCaseTest {
 
     @Test
     fun `when execute, then get crypto device info`() {
-
         val result = getDeviceInfoUseCase.execute()
 
         result shouldBeEqualTo cryptoService.cryptoDeviceInfo

@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.ViewSessionInfoBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -51,13 +52,20 @@ class SessionInfoView @JvmOverloads constructor(
     val viewDetailsButton = views.sessionInfoViewDetailsButton
     val viewVerifyButton = views.sessionInfoVerifySessionButton
 
+    private val setDeviceTypeIconUseCase = SetDeviceTypeIconUseCase()
+
     fun render(
             sessionInfoViewState: SessionInfoViewState,
             dateFormatter: VectorDateFormatter,
             drawableProvider: DrawableProvider,
             colorProvider: ColorProvider,
+            stringProvider: StringProvider,
     ) {
-        renderDeviceInfo(sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty())
+        renderDeviceInfo(
+                sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty(),
+                sessionInfoViewState.deviceFullInfo.deviceExtendedInfo.deviceType,
+                stringProvider,
+        )
         renderVerificationStatus(
                 sessionInfoViewState.deviceFullInfo.roomEncryptionTrustLevel,
                 sessionInfoViewState.isCurrentSession,
@@ -134,10 +142,8 @@ class SessionInfoView @JvmOverloads constructor(
         views.sessionInfoVerifySessionButton.isVisible = isVerifyButtonVisible
     }
 
-    // TODO. We don't have this info yet. Update later accordingly.
-    private fun renderDeviceInfo(sessionName: String) {
-        views.sessionInfoDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
-        views.sessionInfoDeviceTypeImageView.contentDescription = context.getString(R.string.a11y_device_manager_device_type_mobile)
+    private fun renderDeviceInfo(sessionName: String, deviceType: DeviceType, stringProvider: StringProvider) {
+        setDeviceTypeIconUseCase.execute(deviceType, views.sessionInfoDeviceTypeImageView, stringProvider)
         views.sessionInfoNameTextView.text = sessionName
     }
 

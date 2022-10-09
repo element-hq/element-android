@@ -62,7 +62,7 @@ class JSonViewerFragment : Fragment(), MavericksView {
                 }
         recyclerView = inflate.findViewById(R.id.jvRecyclerView)
         recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.setController(epoxyController)
         epoxyController.setStyle(args?.styleProvider)
         registerForContextMenu(recyclerView)

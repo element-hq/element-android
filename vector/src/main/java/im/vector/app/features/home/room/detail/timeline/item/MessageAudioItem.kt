@@ -53,8 +53,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     var fileSize: Long = 0
 
     @EpoxyAttribute
-    @JvmField
-    var isLocalFile = false
+    var izLocalFile = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onSeek: ((percentage: Float) -> Unit)? = null
@@ -91,7 +90,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
                     holder.view.context.getString(R.string.error_audio_message_unable_to_play, filename)
             holder.progressLayout.isVisible = false
         } else {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
         }
     }
 

@@ -22,7 +22,7 @@ import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
-import im.vector.app.features.home.room.list.RoomSummaryItemPlaceHolder_
+import im.vector.app.features.home.room.list.RoomSummaryPlaceHolderItem_
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -43,7 +43,7 @@ class InvitesController @Inject constructor(
     var listener: RoomListListener? = null
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
-        item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
+        item ?: return RoomSummaryPlaceHolderItem_().apply { id(currentPosition) }
         return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), RoomListDisplayMode.ROOMS, listener)
     }
 }
