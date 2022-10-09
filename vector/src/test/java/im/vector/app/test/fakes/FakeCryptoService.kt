@@ -17,8 +17,8 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.MutableLiveData
-import io.mockk.every
 import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import org.matrix.android.sdk.api.MatrixCallback
