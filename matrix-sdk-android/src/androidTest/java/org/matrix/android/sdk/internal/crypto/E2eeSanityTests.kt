@@ -33,6 +33,10 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -61,7 +65,10 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runSessionTest
 import org.matrix.android.sdk.common.SessionTestParams
+import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.mustFail
+import timber.log.Timber
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 // @Ignore("This test fails with an unhandled exception thrown from a coroutine which terminates the entire test run.")
@@ -605,6 +612,85 @@ class E2eeSanityTests : InstrumentedTest {
                 aliceSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()!!.version,
                 aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()!!.version
         )
+    }
+
+    @Test
+    fun test_EncryptionDoesNotHinderVerification() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+
+        val aliceSession = cryptoTestData.firstSession
+        val bobSession = cryptoTestData.secondSession
+
+        val aliceAuthParams = UserPasswordAuth(
+                user = aliceSession.myUserId,
+                password = TestConstants.PASSWORD
+        )
+        val bobAuthParams = UserPasswordAuth(
+                user = bobSession!!.myUserId,
+                password = TestConstants.PASSWORD
+        )
+
+        testHelper.waitForCallback {
+            aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                    promise.resume(aliceAuthParams)
+                }
+            }, it)
+        }
+
+        testHelper.waitForCallback {
+            bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                    promise.resume(bobAuthParams)
+                }
+            }, it)
+        }
+
+        // add a second session for bob but not cross signed
+
+        val secondBobSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
+
+        aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(true)
+
+        // The two bob session should not be able to decrypt any message
+
+        val roomFromAlicePOV = aliceSession.getRoom(cryptoTestData.roomId)!!
+        Timber.v("#TEST: Send a first message that should be withheld")
+        val sentEvent = sendMessageInRoom(testHelper, roomFromAlicePOV, "Hello")!!
+
+        // wait for it to be synced back the other side
+        Timber.v("#TEST: Wait for message to be synced back")
+        testHelper.retryPeriodically {
+            bobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(sentEvent) != null
+        }
+
+        testHelper.retryPeriodically {
+            secondBobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(sentEvent) != null
+        }
+
+        // bob should not be able to decrypt
+        Timber.v("#TEST: Ensure cannot be decrytped")
+        cryptoTestHelper.ensureCannotDecrypt(listOf(sentEvent), bobSession, cryptoTestData.roomId)
+        cryptoTestHelper.ensureCannotDecrypt(listOf(sentEvent), secondBobSession, cryptoTestData.roomId)
+
+        // let's try to verify, it should work even if bob devices are untrusted
+        Timber.v("#TEST: Do the verification")
+        cryptoTestHelper.verifySASCrossSign(aliceSession, bobSession, cryptoTestData.roomId)
+
+        Timber.v("#TEST: Send a second message, outbound session should have rotated and only bob 1rst session should decrypt")
+
+        val secondEvent = sendMessageInRoom(testHelper, roomFromAlicePOV, "World")!!
+        Timber.v("#TEST: Wait for message to be synced back")
+        testHelper.retryPeriodically {
+            bobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(secondEvent) != null
+        }
+
+        testHelper.retryPeriodically {
+            secondBobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(secondEvent) != null
+        }
+
+        cryptoTestHelper.ensureCanDecrypt(listOf(secondEvent), bobSession, cryptoTestData.roomId, listOf("World"))
+        cryptoTestHelper.ensureCannotDecrypt(listOf(secondEvent), secondBobSession, cryptoTestData.roomId)
     }
 
     private suspend fun VerificationService.readOldVerificationCodeAsync(scope: CoroutineScope, userId: String): Deferred<String> {

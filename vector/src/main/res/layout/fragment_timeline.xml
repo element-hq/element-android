@@ -119,33 +119,26 @@
         android:layout_height="wrap_content"
         android:inflatedId="@+id/failedMessagesWarningStub"
         android:layout="@layout/view_stub_failed_message_warning_layout"
-        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintBottom_toTopOf="@id/composerContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_height="300dp" />
 
-    <im.vector.app.features.home.room.detail.composer.MessageComposerView
-        android:id="@+id/composerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
-        android:minHeight="56dp"
-        android:transitionName="composer"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
-
-    <im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
-        android:id="@+id/voiceMessageRecorderView"
+    <FrameLayout
+        android:id="@+id/composerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/voiceMessageRecorderContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ViewStub
         android:id="@+id/inviteViewStub"
@@ -163,7 +156,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningStub" />
+        app:constraint_referenced_ids="composerContainer,notificationAreaView,failedMessagesWarningStub" />
 
     <im.vector.app.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"

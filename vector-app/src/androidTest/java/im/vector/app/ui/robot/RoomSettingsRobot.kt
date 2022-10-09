@@ -34,18 +34,18 @@ class RoomSettingsRobot {
 
     fun crawl() {
         // Room settings
-        clickListItem(R.id.matrixProfileRecyclerView, 3)
+        clickListItem(R.id.matrixProfileRecyclerView, 4)
         navigateToRoomParameters()
         pressBack()
 
         // Notifications
-        clickListItem(R.id.matrixProfileRecyclerView, 5)
+        clickListItem(R.id.matrixProfileRecyclerView, 6)
         pressBack()
 
         assertDisplayed(R.id.roomProfileAvatarView)
 
         // People
-        clickListItem(R.id.matrixProfileRecyclerView, 7)
+        clickListItem(R.id.matrixProfileRecyclerView, 8)
         assertDisplayed(R.id.inviteUsersButton)
         navigateToRoomPeople()
         // Fab
@@ -56,7 +56,7 @@ class RoomSettingsRobot {
         assertDisplayed(R.id.roomProfileAvatarView)
 
         // Uploads
-        clickListItem(R.id.matrixProfileRecyclerView, 9)
+        clickListItem(R.id.matrixProfileRecyclerView, 10)
         // File tab
         clickOn(R.string.uploads_files_title)
         waitUntilViewVisible(withText(R.string.uploads_media_title))
@@ -73,12 +73,12 @@ class RoomSettingsRobot {
         // Advanced
         // Room addresses
 
-        clickListItem(R.id.matrixProfileRecyclerView, 15)
+        clickListItem(R.id.matrixProfileRecyclerView, 16)
         waitUntilViewVisible(withText(R.string.room_alias_published_alias_title))
         pressBack()
 
         // Room permissions
-        clickListItem(R.id.matrixProfileRecyclerView, 17)
+        clickListItem(R.id.matrixProfileRecyclerView, 18)
         waitUntilViewVisible(withText(R.string.room_permissions_change_room_avatar))
         clickOn(R.string.room_permissions_change_room_avatar)
         waitUntilDialogVisible(withId(android.R.id.button2))
@@ -95,7 +95,7 @@ class RoomSettingsRobot {
     }
 
     private fun leaveRoom(block: DialogRobot.() -> Unit) {
-        clickListItem(R.id.matrixProfileRecyclerView, 13)
+        clickListItem(R.id.matrixProfileRecyclerView, 14)
         waitUntilDialogVisible(withId(android.R.id.button2))
         val dialogRobot = DialogRobot()
         block(dialogRobot)

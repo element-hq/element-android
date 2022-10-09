@@ -137,7 +137,7 @@ class HomeRoomListFragment :
 
     private fun setupRecyclerView() {
         views.stateView.state = StateView.State.Content
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(requireContext())
         firstItemObserver = FirstItemUpdatedObserver(layoutManager) {
             layoutManager.scrollToPosition(0)
         }

@@ -48,12 +48,10 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     var iconRes: Int = 0
 
     @EpoxyAttribute
-    @JvmField
-    var isLocalFile = false
+    var izLocalFile = false
 
     @EpoxyAttribute
-    @JvmField
-    var isDownloaded = false
+    var izDownloaded = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -66,7 +64,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         renderSendState(holder.fileLayout, holder.filenameView)
 
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
         } else {
             holder.fileImageView.setImageResource(R.drawable.ic_cross)
             holder.progressLayout.isVisible = false
@@ -77,7 +75,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         if (attributes.informationData.sendState.isSending()) {
             holder.fileImageView.setImageResource(iconRes)
         } else {
-            if (isDownloaded) {
+            if (izDownloaded) {
                 holder.fileImageView.setImageResource(iconRes)
                 holder.fileDownloadProgress.progress = 0
             } else {

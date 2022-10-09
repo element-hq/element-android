@@ -68,25 +68,29 @@ object Config {
      * The analytics configuration to use for the Debug build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val DEBUG_ANALYTICS_CONFIG = Analytics.PostHog(
+    val DEBUG_ANALYTICS_CONFIG = Analytics.Enabled(
             postHogHost = "https://posthog.element.dev",
             postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
             policyLink = "https://element.io/cookie-policy",
+            sentryDSN = "https://f6acc9cfc2024641b28c87ad95e73e66@sentry.tools.element.io/49",
+            sentryEnvironment = "DEBUG"
     )
 
     /**
      * The analytics configuration to use for the Release build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val RELEASE_ANALYTICS_CONFIG = Analytics.PostHog(
+    val RELEASE_ANALYTICS_CONFIG = Analytics.Enabled(
             postHogHost = "https://posthog.hss.element.io",
             postHogApiKey = "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
             policyLink = "https://element.io/cookie-policy",
+            sentryDSN = "https://f6acc9cfc2024641b28c87ad95e73e66@sentry.tools.element.io/49",
+            sentryEnvironment = "RELEASE"
     )
 
     /**
      * The analytics configuration to use for the Nightly build type.
      * Can be disabled by providing Analytics.Disabled
      */
-    val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG
+    val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "NIGHTLY")
 }

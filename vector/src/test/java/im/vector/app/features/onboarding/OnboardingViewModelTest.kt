@@ -18,7 +18,7 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import android.os.Build
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -96,7 +96,7 @@ private val SSO_REGISTRATION_DESCRIPTION = AuthenticationDescription.Register(Au
 class OnboardingViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val fakeUri = FakeUri()
     private val fakeContext = FakeContext()

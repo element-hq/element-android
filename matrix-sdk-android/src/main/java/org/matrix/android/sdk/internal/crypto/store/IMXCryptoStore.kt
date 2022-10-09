@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
@@ -120,11 +121,26 @@ internal interface IMXCryptoStore {
     fun getRoomsListBlacklistUnverifiedDevices(): List<String>
 
     /**
-     * Updates the rooms ids list in which the messages are not encrypted for the unverified devices.
+     * A live status regarding sharing keys for unverified devices in this room.
      *
-     * @param roomIds the room ids list
+     * @return Live status
      */
-    fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>)
+    fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean>
+
+    /**
+     * Tell if unverified devices should be blacklisted when sending keys.
+     *
+     * @return true if should not send keys to unverified devices
+     */
+    fun getBlockUnverifiedDevices(roomId: String): Boolean
+
+    /**
+     * Define if encryption keys should be sent to unverified devices in this room.
+     *
+     * @param roomId the roomId
+     * @param block if true will not send keys to unverified devices
+     */
+    fun blockUnverifiedDevicesInRoom(roomId: String, block: Boolean)
 
     /**
      * Get the current keys backup version.
@@ -515,6 +531,9 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
+
+    fun getGlobalCryptoConfig(): GlobalCryptoConfig
+    fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>
 
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
