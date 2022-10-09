@@ -128,7 +128,7 @@ class VectorSettingsNotificationPreferenceFragment :
                             }
 
                             result.exceptionOrNull()?.let { _ ->
-                                Toast.makeText(context, R.string.settings_error_toggle_pusher, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, R.string.error_check_network, Toast.LENGTH_SHORT).show()
                                 it.isChecked = false
                             }
                         }
