@@ -64,7 +64,7 @@ class OtherSessionsController @Inject constructor(
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
-                    deviceType(DeviceType.UNKNOWN) // TODO. We don't have this info yet. Update accordingly.
+                    deviceType(device.deviceExtendedInfo.deviceType)
                     roomEncryptionTrustLevel(device.roomEncryptionTrustLevel)
                     sessionName(device.deviceInfo.displayName)
                     sessionDescription(description)

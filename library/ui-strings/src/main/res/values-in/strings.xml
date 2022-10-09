@@ -2617,5 +2617,45 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_list_empty_title">Belum ada space.</string>
     <string name="a11y_collapse_space_children">Tutup %s anak</string>
     <string name="a11y_expand_space_children">Buka %s anak</string>
-    <string name="change_space">Buat Space</string>
+    <string name="change_space">Ubah Space</string>
+    <string name="device_manager_session_details_device_ip_address">Alamat IP</string>
+    <string name="device_manager_session_details_session_last_activity">Aktivitas terakhir</string>
+    <string name="device_manager_session_details_session_name">Nama sesi</string>
+    <string name="device_manager_session_details_description">Informasi aplikasi, perangkat, dan aktivitas.</string>
+    <string name="device_manager_session_details_title">Detail sesi</string>
+    <string name="device_manager_other_sessions_clear_filter">Hapus Saringan</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Tidak ditemukan sesi yang tidak aktif.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Tidak ditemukan sesi yang belum diverifikasi.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Tidak ditemukan sesi yang terverifikasi.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="other">Pertimbangkan untuk mengeluarkan sesi lawas (%1$d hari atau lebih) yang Anda tidak gunakan lagi.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Tidak aktif</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifikasi sesi Anda untuk perpesanan aman yang terbaik atau keluarkan sesi yang Anda tidak kenal atau gunakan lagi.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Belum diverifikasi</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Untuk keamanan yang terbaik, keluarkan sesi yang Anda tidak kenal atau gunakan lagi.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Terverifikasi</string>
+    <string name="a11y_device_manager_filter">Saring</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="other">Tidak aktif selama %1$d hari atau lebih</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Tidak aktif</string>
+    <string name="device_manager_filter_option_unverified_description">Belum siap untuk perpesanan aman</string>
+    <string name="device_manager_filter_option_unverified">Belum diverifikasi</string>
+    <string name="device_manager_filter_option_verified_description">Siap untuk perpesanan aman</string>
+    <string name="device_manager_filter_option_verified">Terverifikasi</string>
+    <string name="device_manager_filter_option_all_sessions">Semua sesi</string>
+    <string name="device_manager_filter_bottom_sheet_title">Saring</string>
+    <string name="device_manager_session_last_activity">Aktivitas terakhir %1$s</string>
+    <string name="device_manager_device_title">Perangkat</string>
+    <string name="device_manager_session_title">Sesi</string>
+    <string name="device_manager_current_session_title">Sesi Saat Ini</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifikasi atau keluarkan sesi ini untuk keamanan dan keandalan yang terbaik.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifikasi sesi Anda saat ini untuk perpesanan aman yang baik.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Sesi ini siap untuk perpesanan aman.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Sesi Anda saat ini siap untuk perpesanan aman.</string>
+    <string name="labs_enable_deferred_dm_summary">Buat pesan langsung hanya pada pesan pertama</string>
+    <string name="labs_enable_deferred_dm_title">Aktifkan pesan langsung tangguhan</string>
+    <string name="labs_enable_new_app_layout_summary">Sebuah Element yang sederhana dengan fitur tab opsional</string>
+    <string name="labs_enable_new_app_layout_title">Aktifkan tata letak baru</string>
 </resources>

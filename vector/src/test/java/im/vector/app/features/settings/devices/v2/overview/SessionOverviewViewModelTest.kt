@@ -20,7 +20,7 @@ import android.os.SystemClock
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
@@ -71,7 +71,7 @@ private const val A_PASSWORD = "password"
 class SessionOverviewViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -83,7 +83,6 @@ class SessionOverviewViewModelTest {
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
-    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val signoutSessionUseCase = mockk<SignoutSessionUseCase>()
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()

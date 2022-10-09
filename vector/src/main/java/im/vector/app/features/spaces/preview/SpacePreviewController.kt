@@ -65,7 +65,7 @@ class SpacePreviewController @Inject constructor(
                 subSpaceItem {
                     id(child.roomId)
                     roomId(child.roomId)
-                    title(child.name)
+                    title(child.name ?: "")
                     depth(depth)
                     avatarUrl(child.avatarUrl)
                     avatarRenderer(host.avatarRenderer)

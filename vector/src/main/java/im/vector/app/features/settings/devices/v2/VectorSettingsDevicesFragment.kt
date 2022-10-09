@@ -33,6 +33,7 @@ import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -60,6 +61,8 @@ class VectorSettingsDevicesFragment :
     @Inject lateinit var drawableProvider: DrawableProvider
 
     @Inject lateinit var colorProvider: ColorProvider
+
+    @Inject lateinit var stringProvider: StringProvider
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -237,7 +240,7 @@ class VectorSettingsDevicesFragment :
                     isCurrentSession = true,
                     deviceFullInfo = it
             )
-            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider)
+            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.deviceListCurrentSession.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }
