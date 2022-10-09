@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model.accountdata
+package org.matrix.android.sdk.api.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
