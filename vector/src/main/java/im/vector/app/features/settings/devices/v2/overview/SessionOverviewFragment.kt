@@ -245,7 +245,7 @@ class SessionOverviewFragment :
                 isLearnMoreLinkVisible = true,
                 isLastSeenDetailsVisible = true,
         )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider)
+        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
     }
 
     private fun updateLoading(isLoading: Boolean) {

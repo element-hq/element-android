@@ -91,6 +91,7 @@ class SessionOverviewViewModelTest {
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
+            session = fakeSession,
             stringProvider = fakeStringProvider.instance,
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
@@ -117,13 +118,11 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `given the viewModel has been initialized then viewState is updated with session info`() {
-        val sessionParams = givenIdForSession(A_SESSION_ID)
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         givenCurrentSessionIsTrusted()
         val expectedState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID,
-                isCurrentSession = true,
+                deviceId = A_SESSION_ID_1,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
                 pushers = Loading(),
@@ -204,110 +203,6 @@ class SessionOverviewViewModelTest {
         // Then
         viewModelTest
                 .assertEvent { it is SessionOverviewViewEvent.ShowVerifyOtherSession }
-                .finish()
-    }
-
-    @Test
-    fun `given another session and no reAuth is needed when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        givenSignoutSuccess(A_SESSION_ID_1)
-        every { refreshDevicesUseCase.execute() } just runs
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutSuccess }
-                .finish()
-        verify {
-            refreshDevicesUseCase.execute()
-        }
-    }
-
-    @Test
-    fun `given another session and server error during signout when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
-        givenSignoutError(A_SESSION_ID_1, serverError)
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
-                .finish()
-    }
-
-    @Test
-    fun `given another session and unexpected error during signout when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val error = Exception()
-        givenSignoutError(A_SESSION_ID_1, error)
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
                 .finish()
     }
 
@@ -458,7 +353,7 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `when viewModel init, then observe pushers and emit to state`() {
-        val pushers = listOf(aPusher(deviceId = A_SESSION_ID))
+        val pushers = listOf(aPusher(deviceId = A_SESSION_ID_1))
         fakeSession.pushersService().givenPushersLive(pushers)
 
         val viewModel = createViewModel()
@@ -471,13 +366,13 @@ class SessionOverviewViewModelTest {
     @Test
     fun `when handle TogglePushNotifications, then toggle enabled for device pushers`() {
         val pushers = listOf(
-                aPusher(deviceId = A_SESSION_ID, enabled = false),
+                aPusher(deviceId = A_SESSION_ID_1, enabled = false),
                 aPusher(deviceId = "another id", enabled = false)
         )
         fakeSession.pushersService().givenPushersLive(pushers)
 
         val viewModel = createViewModel()
-        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID, true))
+        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
         fakeSession.pushersService().verifyOnlyGetPushersLiveAndTogglePusherCalled(pushers.first(), true)
     }
