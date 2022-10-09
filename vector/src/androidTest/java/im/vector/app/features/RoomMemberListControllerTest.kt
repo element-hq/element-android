@@ -18,7 +18,6 @@ package im.vector.app.features
 
 import com.airbnb.mvrx.Success
 import im.vector.app.core.epoxy.profiles.ProfileMatrixItemWithPowerLevelWithPresence
-import im.vector.app.core.utils.waitUntil
 import im.vector.app.features.roomprofile.members.RoomMemberListCategories
 import im.vector.app.features.roomprofile.members.RoomMemberListController
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
@@ -31,6 +30,8 @@ import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class RoomMemberListControllerTest {
 
@@ -97,9 +98,12 @@ class RoomMemberListControllerTest {
                 )
         )
 
-        roomListController.setData(state)
-
-        waitUntil { !roomListController.hasPendingModelBuild() }
+        suspendCoroutine { continuation ->
+            roomListController.setData(state)
+            roomListController.addModelBuildListener {
+                continuation.resume(it)
+            }
+        }
 
         val models = roomListController.adapter.copyOfModels
 

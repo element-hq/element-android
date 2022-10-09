@@ -2594,7 +2594,7 @@
     <string name="device_manager_settings_active_sessions_show_all">Näita kõiki sessioone (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
     <string name="device_manager_sessions_other_title">Muud sessioonid</string>
-    <string name="settings_sessions_list">Sessionid</string>
+    <string name="settings_sessions_list">Sessioonid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
     <string name="a11y_create_message">Alusta uut vestlust või loo uus jututuba</string>
     <string name="room_list_filter_people">Inimesed</string>
@@ -2659,4 +2659,46 @@
     <string name="invites_empty_message">Siin saavad olema sinu tulevased päringud ja kutsed.</string>
     <string name="a11y_collapse_space_children">Ahenda %s alamkogukonnad</string>
     <string name="a11y_expand_space_children">Näita %s alamkogukondi</string>
+    <string name="device_manager_session_details_device_ip_address">IP-aadress</string>
+    <string name="device_manager_session_details_session_last_activity">Viimati kasutusel</string>
+    <string name="device_manager_session_details_session_name">Sessiooni nimi</string>
+    <string name="device_manager_session_details_description">Rakendus, seade ja kasutamise teave.</string>
+    <string name="device_manager_session_details_title">Sessiooni teave</string>
+    <string name="device_manager_other_sessions_clear_filter">Eemalda filter</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Ei leidu sessioone, mis pole aktiivses kasutuses.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Verifitseerimata sessioone ei leidu.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Verifitseeritud sessioone ei leidu.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Kaalu vanadest ja kasutamata sessioonidest väljalogimist (vanemad kui %1$d või enam päeva).</item>
+        <item quantity="other">Kaalu vanadest ja kasutamata sessioonidest väljalogimist (vanemad kui %1$d või enam päeva).</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Pole pidevas kasutuses</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Turvalise sõnumvahetuse nimel verifitseeri kõik oma sessioonid ning logi neist välja, mida sa enam ei kasuta või ei tunne enam ära.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Verifitseerimata</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Parima turvalisuse nimel logi välja neist sessioonidest, mida sa enam ei kasuta või ei tunne ära.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verifitseeritud</string>
+    <string name="a11y_device_manager_filter">Filtreeri</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Pole olnud kasutusel %1$d või enam päeva</item>
+        <item quantity="other">Pole olnud kasutusel %1$d või enam päeva</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Pole pidevas kasutuses</string>
+    <string name="device_manager_filter_option_unverified_description">Pole valmis turvaliseks sõnumivahetuseks</string>
+    <string name="device_manager_filter_option_unverified">Verifitseerimata</string>
+    <string name="device_manager_filter_option_verified_description">Valmis turvaliseks sõnumivahetuseks</string>
+    <string name="device_manager_filter_option_verified">Verifitseeritud</string>
+    <string name="device_manager_filter_option_all_sessions">Kõik sessioonid</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtreeri</string>
+    <string name="device_manager_session_last_activity">Viimati kasutusel %1$s</string>
+    <string name="device_manager_device_title">Seade</string>
+    <string name="device_manager_session_title">Sessioonid</string>
+    <string name="device_manager_current_session_title">Praegune sessioon</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Parima turvalisuse ja töökindluse nimel verifitseeri see sessioon või logi ta võrgust välja.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Turvalise sõnumivahetuse nimel palun verifitseeri oma praegune sessioon.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">See sessioon on valmis turvaliseks sõnumivahetuseks.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Sinu praegune sessioon on valmis turvaliseks sõnumivahetuseks.</string>
+    <string name="labs_enable_deferred_dm_summary">Alusta otsevestlust esimese sõnumiga</string>
+    <string name="labs_enable_deferred_dm_title">Võta kasutusele viivitusega otsevestlused</string>
+    <string name="labs_enable_new_app_layout_summary">Lihtsustatud Element valikuliste kaartidega</string>
+    <string name="labs_enable_new_app_layout_title">Võta kasutusele rakenduse uus välimus</string>
 </resources>

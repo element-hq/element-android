@@ -38,6 +38,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
@@ -66,6 +67,8 @@ class SessionOverviewFragment :
     @Inject lateinit var drawableProvider: DrawableProvider
 
     @Inject lateinit var colorProvider: ColorProvider
+
+    @Inject lateinit var stringProvider: StringProvider
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
@@ -207,7 +210,7 @@ class SessionOverviewFragment :
                     isLearnMoreLinkVisible = true,
                     isLastSeenDetailsVisible = true,
             )
-            views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider)
+            views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
                 showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted)
             }
@@ -242,7 +245,7 @@ class SessionOverviewFragment :
                 isLearnMoreLinkVisible = true,
                 isLastSeenDetailsVisible = true,
         )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider)
+        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
     }
 
     private fun updateLoading(isLoading: Boolean) {

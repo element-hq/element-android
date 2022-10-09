@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.navigation.SettingsActivityPayload
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -344,6 +345,14 @@ class RoomProfileFragment :
                 chooserTitle = null,
                 text = permalink
         )
+    }
+
+    override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
+        roomProfileViewModel.handle(RoomProfileAction.SetEncryptToVerifiedDeviceOnly(enabled))
+    }
+
+    override fun openGlobalBlockSettings() {
+        navigator.openSettings(requireContext(), SettingsActivityPayload.SecurityPrivacy)
     }
 
     private fun onAvatarClicked(view: View) = withState(roomProfileViewModel) { state ->

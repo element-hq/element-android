@@ -2604,4 +2604,24 @@
     <string name="onboarding_new_app_layout_feedback_title">提供反馈</string>
     <string name="onboarding_new_app_layout_feedback_message">点击右上角查看反馈选项。</string>
     <string name="onboarding_new_app_layout_button_try">试用</string>
+    <string name="space_list_empty_message">空间是对房间和人进行分组的新方式。创建一个空间来开始吧。</string>
+    <string name="labs_enable_new_app_layout_title">启用新布局</string>
+    <string name="device_manager_session_details_device_ip_address">IP地址</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">验证你的会话以增强消息传输的安全性，或从那些你不认识或不再使用的会话登出。</string>
+    <string name="device_manager_filter_option_unverified_description">尚未准备好安全收发消息</string>
+    <string name="device_manager_filter_option_verified_description">准备好安全收发消息</string>
+    <string name="device_manager_filter_option_verified">已验证</string>
+    <string name="device_manager_filter_option_all_sessions">全部会话</string>
+    <string name="device_manager_filter_bottom_sheet_title">筛选</string>
+    <string name="device_manager_session_last_activity">上次活跃%1$s</string>
+    <string name="device_manager_device_title">设备</string>
+    <string name="device_manager_session_title">会话</string>
+    <string name="device_manager_current_session_title">当前会话</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">验证你的会话以增强消息传输的安全性。</string>
+    <string name="onboarding_new_app_layout_spaces_message">访问你的空间（右下角）比以前更快、更容易。</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">此会话已准备好安全地收发消息。</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">你当前的会话已准备好安全地收发消息。</string>
+    <string name="labs_enable_deferred_dm_summary">仅在首条消息创建私聊消息</string>
+    <string name="labs_enable_deferred_dm_title">启用延迟的私聊消息</string>
+    <string name="labs_enable_new_app_layout_summary">简化的Element，带有可选的标签</string>
 </resources>

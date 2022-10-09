@@ -149,12 +149,4 @@ class MessageComposerView @JvmOverloads constructor(
         }
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
-
-    fun setRoomEncrypted(isEncrypted: Boolean) {
-        if (isEncrypted) {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
-        } else {
-            views.composerEditText.setHint(R.string.room_message_placeholder)
-        }
-    }
 }

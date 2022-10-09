@@ -18,7 +18,7 @@ package im.vector.app.features.settings.devices.v2
 
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
@@ -48,7 +48,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 class DevicesViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()

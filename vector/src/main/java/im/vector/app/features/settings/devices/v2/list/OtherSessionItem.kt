@@ -59,6 +59,8 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
+    private val setDeviceTypeIconUseCase = SetDeviceTypeIconUseCase()
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.onClick(clickListener)
@@ -66,24 +68,7 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
             holder.view.isClickable = false
         }
 
-        when (deviceType) {
-            DeviceType.MOBILE -> {
-                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_mobile)
-                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_mobile)
-            }
-            DeviceType.WEB -> {
-                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_web)
-                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_web)
-            }
-            DeviceType.DESKTOP -> {
-                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_desktop)
-                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_desktop)
-            }
-            DeviceType.UNKNOWN -> {
-                holder.otherSessionDeviceTypeImageView.setImageResource(R.drawable.ic_device_type_unknown)
-                holder.otherSessionDeviceTypeImageView.contentDescription = stringProvider.getString(R.string.a11y_device_manager_device_type_unknown)
-            }
-        }
+        setDeviceTypeIconUseCase.execute(deviceType, holder.otherSessionDeviceTypeImageView, stringProvider)
         holder.otherSessionVerificationStatusImageView.render(roomEncryptionTrustLevel)
         holder.otherSessionNameTextView.text = sessionName
         holder.otherSessionDescriptionTextView.text = sessionDescription

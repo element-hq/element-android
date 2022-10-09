@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.style
 
 import android.content.res.Resources
 import im.vector.app.R
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.isRTL
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
@@ -126,7 +126,7 @@ class TimelineMessageLayoutFactory @Inject constructor(
                             isLastFromThisSender = isLastFromThisSender
                     )
 
-                    val messageContent = event.getLastMessageContent()
+                    val messageContent = event.getVectorLastMessageContent()
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
@@ -167,7 +167,7 @@ class TimelineMessageLayoutFactory @Inject constructor(
     private fun TimelineEvent.shouldBuildBubbleLayout(): Boolean {
         val type = root.getClearType()
         if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
-            val messageContent = getLastMessageContent()
+            val messageContent = getVectorLastMessageContent()
             return messageContent?.msgType !in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT
         }
         return false
@@ -212,7 +212,7 @@ class TimelineMessageLayoutFactory @Inject constructor(
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
             EventType.MESSAGE -> {
-                event.getLastMessageContent() is MessageVerificationRequestContent
+                event.getVectorLastMessageContent() is MessageVerificationRequestContent
             }
             else -> false
         }

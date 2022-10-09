@@ -41,6 +41,7 @@ private val IGNORED_OPTIONS: Options? = null
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
         postHogFactory: PostHogFactory,
+        private val sentryFactory: SentryFactory,
         analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
@@ -94,6 +95,9 @@ class DefaultVectorAnalytics @Inject constructor(
     override suspend fun onSignOut() {
         // reset the analyticsId
         setAnalyticsId("")
+
+        // Close Sentry SDK.
+        sentryFactory.stopSentry()
     }
 
     private fun observeAnalyticsId() {
@@ -123,8 +127,18 @@ class DefaultVectorAnalytics @Inject constructor(
                     Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
                     optOutPostHog()
+                    initOrStopSentry()
                 }
                 .launchIn(globalScope)
+    }
+
+    private fun initOrStopSentry() {
+        userConsent?.let {
+            when (it) {
+                true -> sentryFactory.initSentry()
+                false -> sentryFactory.stopSentry()
+            }
+        }
     }
 
     private fun optOutPostHog() {

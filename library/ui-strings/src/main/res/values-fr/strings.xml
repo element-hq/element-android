@@ -2668,4 +2668,46 @@
     <string name="a11y_collapse_space_children">Réduire %s enfants</string>
     <string name="a11y_expand_space_children">Développer %s enfants</string>
     <string name="change_space">Changer d’espace</string>
+    <string name="device_manager_session_details_device_ip_address">Adresse IP</string>
+    <string name="device_manager_session_details_session_last_activity">Dernière activité</string>
+    <string name="device_manager_session_details_session_name">Nom de la session</string>
+    <string name="device_manager_session_details_description">Application, appareil et information sur l’activité.</string>
+    <string name="device_manager_session_details_title">Détails de session</string>
+    <string name="device_manager_other_sessions_clear_filter">Supprimer les filtres</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aucune session inactive n’a été trouvée.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Aucune session non vérifiée n’a été trouvée.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Aucune session vérifiée n’a été trouvée.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Pensez à vous déconnecter des anciennes sessions (%1$d jour ou plus) que vous n’utilisez plus.</item>
+        <item quantity="other">Pensez à vous déconnecter des anciennes sessions (%1$d jours ou plus) que vous n’utilisez plus.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inactif</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Vérifiez vos sessions pour améliorer la sécurité de votre messagerie, ou déconnectez celles que vous ne connaissez pas ou n’utilisez plus.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Non vérifié</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Pour une meilleure sécurité, déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Vérifié</string>
+    <string name="a11y_device_manager_filter">Filtrer</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inactif depuis %1$d jour ou plus</item>
+        <item quantity="other">Inactif depuis %1$d jours ou plus</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inactif</string>
+    <string name="device_manager_filter_option_unverified_description">Pas prêt pour une messagerie sécurisée</string>
+    <string name="device_manager_filter_option_unverified">Non vérifié</string>
+    <string name="device_manager_filter_option_verified_description">Prêt pour une messagerie sécurisée</string>
+    <string name="device_manager_filter_option_verified">Vérifié</string>
+    <string name="device_manager_filter_option_all_sessions">Toutes les sessions</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtrer</string>
+    <string name="device_manager_session_last_activity">Dernière activité %1$s</string>
+    <string name="device_manager_device_title">Appareil</string>
+    <string name="device_manager_session_title">Session</string>
+    <string name="device_manager_current_session_title">Cette session</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Vérifiez ou déconnectez cette session pour une meilleure sécurité et fiabilité.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Vérifiez votre session pour une sécurité accrue de votre messagerie.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Cette session est prête pour l’envoi de messages sécurisés.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Votre session est prête pour l’envoi de messages sécurisés.</string>
+    <string name="labs_enable_deferred_dm_summary">Créer la conversation seulement lors du premier message</string>
+    <string name="labs_enable_deferred_dm_title">Activer les conversations privées différées</string>
+    <string name="labs_enable_new_app_layout_summary">Un Element simplifié avec des onglets optionnels</string>
+    <string name="labs_enable_new_app_layout_title">Activer la nouvelle présentation</string>
 </resources>

@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -62,7 +63,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.UserDraft
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
@@ -113,6 +113,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.VoiceWaveformMovedTo -> handleVoiceWaveformMovedTo(action)
             is MessageComposerAction.AudioSeekBarMovedTo -> handleAudioSeekBarMovedTo(action)
             is MessageComposerAction.SlashCommandConfirmed -> handleSlashCommandConfirmed(action)
+            is MessageComposerAction.InsertUserDisplayName -> handleInsertUserDisplayName(action)
         }
     }
 
@@ -144,7 +145,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEnterRegularMode(action: MessageComposerAction.EnterRegularMode) = setState {
-        copy(sendMode = SendMode.Regular(action.text, action.fromSharing))
+        copy(sendMode = SendMode.Regular(currentComposerText, action.fromSharing))
     }
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
@@ -181,13 +182,13 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Quote(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Quote(timelineEvent, currentComposerText)) }
         }
     }
 
     private fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Reply(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Reply(timelineEvent, currentComposerText)) }
         }
     }
 
@@ -512,7 +513,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString())
                         }
                     } else {
-                        val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
+                        val messageContent = state.sendMode.timelineEvent.getVectorLastMessageContent()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.relationService().editTextMessage(
@@ -875,7 +876,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
             }
         }
-        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
+        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(fromSharing = false))
     }
 
     private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
@@ -941,6 +942,10 @@ class MessageComposerViewModel @AssistedInject constructor(
         } else {
             handleSaveTextDraft(draft = composerText)
         }
+    }
+
+    private fun handleInsertUserDisplayName(action: MessageComposerAction.InsertUserDisplayName) {
+        _viewEvents.post(MessageComposerViewEvents.InsertUserDisplayName(action.userId))
     }
 
     private fun launchSlashCommandFlowSuspendable(parsedCommand: ParsedCommand, block: suspend () -> Unit) {

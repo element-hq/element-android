@@ -65,7 +65,7 @@ class VectorSettingsNotificationsTroubleshootFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(requireContext())
         views.troubleshootTestRecyclerView.layoutManager = layoutManager
 
         val dividerItemDecoration = DividerItemDecoration(view.context, layoutManager.orientation)
