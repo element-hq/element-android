@@ -68,7 +68,7 @@ interface PushersService {
     )
 
     /**
-     * Enables or disables a registered pusher
+     * Enables or disables a registered pusher.
      *
      * @param pusher The pusher being toggled
      * @param enable Whether the pusher should be enabled or disabled
