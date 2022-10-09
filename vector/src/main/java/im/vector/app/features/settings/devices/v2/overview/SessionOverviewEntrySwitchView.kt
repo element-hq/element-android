@@ -25,7 +25,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeBackground
-import im.vector.app.databinding.ViewSessionOverviewEntryBinding
 import im.vector.app.databinding.ViewSessionOverviewEntrySwitchBinding
 
 class SessionOverviewEntrySwitchView @JvmOverloads constructor(
