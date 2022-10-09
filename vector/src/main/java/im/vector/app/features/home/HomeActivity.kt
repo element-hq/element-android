@@ -216,9 +216,6 @@ class HomeActivity :
             }
         }
 
-        // toggle push from account here
-
-
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
