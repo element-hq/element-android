@@ -147,13 +147,19 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         onView(withId(R.id.bottomSheetFragmentContainer))
                 .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
 
-        val request = existingSession!!.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                existingSession!!.myUserId,
-                listOf(uiSession.sessionParams.deviceId!!)
+        val incomingRequest = existingSession!!.cryptoService().verificationService().getExistingVerificationRequests(existingSession!!.myUserId).first {
+            it.requestInfo?.fromDevice == uiSession.sessionParams.deviceId
+        }
+
+        existingSession!!.cryptoService().verificationService().readyPendingVerification(
+                listOf(
+                        VerificationMethod.SAS,
+                        VerificationMethod.QR_CODE_SCAN,
+                        VerificationMethod.QR_CODE_SHOW
+                ), existingSession!!.myUserId, incomingRequest.transactionId!!
         )
 
-        val transactionId = request.transactionId!!
+        val transactionId = incomingRequest.transactionId!!
         val sasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, uiSession)
         val otherSessionSasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, existingSession!!)
 
@@ -161,7 +167,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         // Assert QR code option is there and available
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches(hasDescendant(withText(R.string.verification_scan_their_code))))
+                .check(matches(hasDescendant(withText(R.string.verification_scan_with_this_device))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
                 .check(matches(hasDescendant(withId(R.id.itemVerificationQrCodeImage))))
@@ -181,7 +187,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         IdlingRegistry.getInstance().register(sasReadyIdle)
         IdlingRegistry.getInstance().register(otherSessionSasReadyIdle)
-        onView(isRoot()).perform(SleepViewAction.sleep(300))
+        onView(isRoot()).perform(SleepViewAction.sleep(1000))
         // will only execute when Idle is ready
         val expectedEmojis = firstSessionTr.getEmojiCodeRepresentation()
         val targets = listOf(R.id.emoji0, R.id.emoji1, R.id.emoji2, R.id.emoji3, R.id.emoji4, R.id.emoji5, R.id.emoji6)
