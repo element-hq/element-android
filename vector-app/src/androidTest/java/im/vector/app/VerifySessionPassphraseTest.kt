@@ -17,7 +17,6 @@
 package im.vector.app
 
 import android.view.View
-import androidx.datastore.preferences.core.edit
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -35,8 +34,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
-import dagger.hilt.EntryPoints
-import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
@@ -47,7 +44,6 @@ import im.vector.app.features.crypto.recover.Params
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
