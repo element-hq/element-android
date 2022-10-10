@@ -766,7 +766,7 @@
     <string name="are_you_sure">Sicher\?</string>
     <string name="backup">Sicherung</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich abmeldest ohne die Schlüssel gesichert zu haben.</string>
-    <string name="action_sign_out_confirmation_simple">Wirklich abmelden\?</string>
+    <string name="action_sign_out_confirmation_simple">Bist du sicher, dass du dich abmelden möchtest\?</string>
     <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
     <string name="error_empty_field_enter_user_name">Bitte gib einen Benutzernamen ein.</string>
     <string name="keys_backup_setup">Richte Schlüsselsicherung ein</string>
@@ -1777,7 +1777,7 @@
     <string name="user_code_info_text">Teile diesen Code, damit andere ihn einlesen und mit dir schreiben können.</string>
     <string name="user_code_share">Meinen Code teilen</string>
     <string name="user_code_my_code">Mein Code</string>
-    <string name="user_code_scan">Scanne einen QR-Code</string>
+    <string name="user_code_scan">QR-Code einlesen</string>
     <string name="not_a_valid_qr_code">Das ist kein korrekter QR-Code von Matrix</string>
     <string name="invite_friends_rich_title">🔐️ Komm mit zu ${app_name}</string>
     <string name="invite_friends_text">Hey, schreibe mit mir auf ${app_name}: %s</string>
