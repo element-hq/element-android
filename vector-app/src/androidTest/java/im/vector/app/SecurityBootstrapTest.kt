@@ -40,6 +40,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import org.hamcrest.CoreMatchers.not
@@ -53,7 +54,6 @@ import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore
 class SecurityBootstrapTest : VerificationTestBase() {
 
     var existingSession: Session? = null
@@ -81,6 +81,12 @@ class SecurityBootstrapTest : VerificationTestBase() {
         val userId: String = existingSession!!.myUserId
 
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
+
+        withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
+            onView(withId(R.id.later))
+                    .check(matches(isDisplayed()))
+                    .perform(click())
+        }
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {

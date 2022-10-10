@@ -36,6 +36,7 @@ import kotlin.reflect.KClass
  * The VectorPreferences and AnalyticsDatastore are also cleared in an attempt to recreate a fresh base.
  */
 class ClearCurrentSessionRule : TestWatcher() {
+
     override fun apply(base: Statement, description: Description): Statement {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         runBlocking {
@@ -59,7 +60,7 @@ private fun KClass<*>.asTopLevel() = Class.forName("${qualifiedName}Kt")
  * via reflection to avoid exposing property to all callers.
  */
 @Suppress("UNCHECKED_CAST")
-private fun reflectAnalyticDatastore(context: Context): DataStore<Preferences> {
+fun reflectAnalyticDatastore(context: Context): DataStore<Preferences> {
     val klass = AnalyticsStore::class.asTopLevel()
     val method = klass.getMethod("access\$getDataStore", Context::class.java)
     return method.invoke(klass, context) as DataStore<Preferences>

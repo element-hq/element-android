@@ -17,15 +17,21 @@
 package im.vector.app
 
 import android.view.View
+import androidx.datastore.preferences.core.edit
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
+import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -39,7 +45,6 @@ class CantVerifyTest {
     @get:Rule
     val testRule = RuleChain
             .outerRule(ActivityScenarioRule(MainActivity::class.java))
-            .around(ClearCurrentSessionRule())
 
     private val elementRobot = ElementRobot()
     var userName: String = "loginTest_${UUID.randomUUID()}"
@@ -75,5 +80,20 @@ class CantVerifyTest {
 
         Espresso.onView(ViewMatchers.withText(R.string.bottom_sheet_setup_secure_backup_title))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    @After
+    fun tearDown() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        runBlocking {
+            reflectAnalyticDatastore(context).edit { it.clear() }
+            runCatching {
+                val entryPoint = EntryPoints.get(context.applicationContext, SingletonEntryPoint::class.java)
+                val sessionHolder = entryPoint.activeSessionHolder()
+                sessionHolder.getSafeActiveSession()?.signOutService()?.signOut(true)
+                entryPoint.vectorPreferences().clearPreferences()
+                sessionHolder.clearActiveSession()
+            }
+        }
     }
 }
