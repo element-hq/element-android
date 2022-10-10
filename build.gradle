@@ -148,6 +148,9 @@ allprojects {
             // To have XML report for Danger
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
+        filter {
+            exclude { element -> element.file.path.contains("$buildDir/generated/") }
+        }
         disabledRules = [
                 // TODO Re-enable these 4 rules after reformatting project
                 "indent",
