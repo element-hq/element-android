@@ -135,38 +135,14 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
         val secondSegment = deviceOperatingSystemSegments.getOrNull(1).orEmpty()
 
         return when {
-            firstSegment.startsWith(OPERATING_SYSTEM_MAC_KEYWORD) -> {
-                // e.g. (Macintosh; Intel Mac OS X 10_15_7) => macOS 10.15.7
-                val version = secondSegment
-                        .substringAfterLast(" ")
-                        .replace("_", ".")
-                if (version.isEmpty()) {
-                    OPERATING_SYSTEM_MAC
-                } else {
-                    "$OPERATING_SYSTEM_MAC $version"
-                }
-            }
-            firstSegment.startsWith(OPERATING_SYSTEM_WINDOWS_KEYWORD) -> {
-                // e.g. (Windows NT 10.0; Win64; x64) => Windows 10.0
-                firstSegment.replace("NT ", "")
-            }
-            firstSegment.startsWith(DEVICE_IPAD_KEYWORD) || firstSegment.startsWith(DEVICE_IPHONE_KEYWORD) -> {
-                // e.g. (iPad; CPU OS 8_4_1 like Mac OS X) => macOS 8.4.1
-                val version = secondSegment
-                        .split(" ")
-                        .find { it.contains("_") }
-                        ?.replace("_", ".")
-                        .orEmpty()
-                if (version.isEmpty()) {
-                    OPERATING_SYSTEM_IOS
-                } else {
-                    "$OPERATING_SYSTEM_IOS $version"
-                }
-            }
-            secondSegment.startsWith(OPERATING_SYSTEM_ANDROID_KEYWORD) -> {
-                // e.g. (Linux; Android 9; SM-G973U Build/PPR1.180610.011) => Android 9
-                secondSegment
-            }
+            // e.g. (Macintosh; Intel Mac OS X 10_15_7) => macOS
+            firstSegment.startsWith(OPERATING_SYSTEM_MAC_KEYWORD) -> OPERATING_SYSTEM_MAC
+            // e.g. (Windows NT 10.0; Win64; x64) => Windows
+            firstSegment.startsWith(OPERATING_SYSTEM_WINDOWS_KEYWORD) -> OPERATING_SYSTEM_WINDOWS_KEYWORD
+            // e.g. (iPad; CPU OS 8_4_1 like Mac OS X) => iOS
+            firstSegment.startsWith(DEVICE_IPAD_KEYWORD) || firstSegment.startsWith(DEVICE_IPHONE_KEYWORD) -> OPERATING_SYSTEM_IOS
+            // e.g. (Linux; Android 9; SM-G973U Build/PPR1.180610.011) => Android
+            secondSegment.startsWith(OPERATING_SYSTEM_ANDROID_KEYWORD) -> OPERATING_SYSTEM_ANDROID_KEYWORD
             else -> null
         }
     }
