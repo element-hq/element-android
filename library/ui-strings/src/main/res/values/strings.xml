@@ -2115,7 +2115,7 @@
     <string name="login_reset_password_cancel_confirmation_content">Your password is not yet changed.\n\nStop the password change process?</string>
 
     <string name="login_set_email_title">Set email address</string>
-    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by your this address.</string>
+    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by this address.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (optional)</string>
     <string name="login_set_email_submit">Next</string>
