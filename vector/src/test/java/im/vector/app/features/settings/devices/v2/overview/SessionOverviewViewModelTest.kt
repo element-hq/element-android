@@ -21,7 +21,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
@@ -56,10 +55,8 @@ import org.junit.Test
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
-import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 
 private const val A_SESSION_ID_1 = "session-id-1"
@@ -203,110 +200,6 @@ class SessionOverviewViewModelTest {
         // Then
         viewModelTest
                 .assertEvent { it is SessionOverviewViewEvent.ShowVerifyOtherSession }
-                .finish()
-    }
-
-    @Test
-    fun `given another session and no reAuth is needed when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        givenSignoutSuccess(A_SESSION_ID_1)
-        every { refreshDevicesUseCase.execute() } just runs
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutSuccess }
-                .finish()
-        verify {
-            refreshDevicesUseCase.execute()
-        }
-    }
-
-    @Test
-    fun `given another session and server error during signout when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
-        givenSignoutError(A_SESSION_ID_1, serverError)
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
-                .finish()
-    }
-
-    @Test
-    fun `given another session and unexpected error during signout when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val error = Exception()
-        givenSignoutError(A_SESSION_ID_1, error)
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-        )
-        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
                 .finish()
     }
 
