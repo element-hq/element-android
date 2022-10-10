@@ -127,11 +127,47 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun parseOperatingSystemFromDesktopUserAgent(userAgent: String): String? {
-        val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        return if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
-            deviceOperatingSystemSegments.getOrNull(1)
-        } else {
-            deviceOperatingSystemSegments.getOrNull(0)
+        val deviceOperatingSystemSegments = userAgent
+                .substringAfter("(")
+                .substringBefore(")")
+                .split("; ")
+        val firstSegment = deviceOperatingSystemSegments.getOrNull(0).orEmpty()
+        val secondSegment = deviceOperatingSystemSegments.getOrNull(1).orEmpty()
+
+        return when {
+            firstSegment.startsWith(OPERATING_SYSTEM_MAC_KEYWORD) -> {
+                // e.g. (Macintosh; Intel Mac OS X 10_15_7) => macOS 10.15.7
+                val version = secondSegment
+                        .substringAfterLast(" ")
+                        .replace("_", ".")
+                if (version.isEmpty()) {
+                    OPERATING_SYSTEM_MAC
+                } else {
+                    "$OPERATING_SYSTEM_MAC $version"
+                }
+            }
+            firstSegment.startsWith(OPERATING_SYSTEM_WINDOWS_KEYWORD) -> {
+                // e.g. (Windows NT 10.0; Win64; x64) => Windows 10.0
+                firstSegment.replace("NT ", "")
+            }
+            firstSegment.startsWith(DEVICE_IPAD_KEYWORD) || firstSegment.startsWith(DEVICE_IPHONE_KEYWORD) -> {
+                // e.g. (iPad; CPU OS 8_4_1 like Mac OS X) => macOS 8.4.1
+                val version = secondSegment
+                        .split(" ")
+                        .find { it.contains("_") }
+                        ?.replace("_", ".")
+                        .orEmpty()
+                if (version.isEmpty()) {
+                    OPERATING_SYSTEM_IOS
+                } else {
+                    "$OPERATING_SYSTEM_IOS $version"
+                }
+            }
+            secondSegment.startsWith(OPERATING_SYSTEM_ANDROID_KEYWORD) -> {
+                // e.g. (Linux; Android 9; SM-G973U Build/PPR1.180610.011) => Android 9
+                secondSegment
+            }
+            else -> null
         }
     }
 
@@ -197,5 +233,13 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
         // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
         private const val WEB_KEYWORD = "Mozilla/"
+
+        private const val OPERATING_SYSTEM_MAC_KEYWORD = "Macintosh"
+        private const val OPERATING_SYSTEM_MAC = "macOS"
+        private const val OPERATING_SYSTEM_IOS = "iOS"
+        private const val OPERATING_SYSTEM_WINDOWS_KEYWORD = "Windows"
+        private const val OPERATING_SYSTEM_ANDROID_KEYWORD = "Android"
+        private const val DEVICE_IPAD_KEYWORD = "iPad"
+        private const val DEVICE_IPHONE_KEYWORD = "iPhone"
     }
 }
