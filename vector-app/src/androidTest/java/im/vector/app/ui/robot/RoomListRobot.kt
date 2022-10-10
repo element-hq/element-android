@@ -21,9 +21,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
@@ -38,7 +36,6 @@ import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.waitForView
-import kotlinx.coroutines.delay
 
 class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
 
@@ -83,7 +80,7 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
         }
     }
 
-    fun crawlTabs(){
+    fun crawlTabs() {
         waitUntilActivityVisible<HomeActivity> {
             waitUntilViewVisible(withId(R.id.roomListContainer))
         }
@@ -94,9 +91,7 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
         waitForView(withId(R.id.roomNameView))
     }
 
-
     fun selectFilterTab(filter: HomeRoomFilter) {
         onView(withId(R.id.home_filter_tabs_tabs)).perform(selectTabAtPosition(filter.ordinal))
     }
-
 }
