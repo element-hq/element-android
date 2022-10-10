@@ -38,6 +38,7 @@ internal class DefaultAddPusherTask @Inject constructor(
         private val requestExecutor: RequestExecutor,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPusherTask {
+
     override suspend fun execute(params: AddPusherTask.Params) {
         val pusher = params.pusher
         try {
@@ -71,6 +72,8 @@ internal class DefaultAddPusherTask @Inject constructor(
                 echo.profileTag = pusher.profileTag
                 echo.data?.format = pusher.data?.format
                 echo.data?.url = pusher.data?.url
+                echo.enabled = pusher.enabled
+                echo.deviceId = pusher.deviceId
                 echo.state = PusherState.REGISTERED
             }
         }

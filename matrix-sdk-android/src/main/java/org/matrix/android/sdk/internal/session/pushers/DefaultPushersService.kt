@@ -78,7 +78,9 @@ internal class DefaultPushersService @Inject constructor(
             appDisplayName = appDisplayName,
             deviceDisplayName = deviceDisplayName,
             data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-            append = append
+            append = append,
+            enabled = enabled,
+            deviceId = deviceId,
     )
 
     override suspend fun addEmailPusher(
