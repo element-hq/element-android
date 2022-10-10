@@ -105,21 +105,21 @@ internal class DefaultRelationService @AssistedInject constructor(
             targetEvent: TimelineEvent,
             msgType: String,
             newBodyText: CharSequence,
-            newBodyTextFormatted: CharSequence?,
+            newFormattedBodyText: CharSequence?,
             newBodyAutoMarkdown: Boolean,
             compatibilityBodyText: String
     ): Cancelable {
-        return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newBodyTextFormatted, newBodyAutoMarkdown, compatibilityBodyText)
+        return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newFormattedBodyText, newBodyAutoMarkdown, compatibilityBodyText)
     }
 
     override fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
             newBodyText: String,
-            newBodyTextFormatted: String?,
+            newFormattedBodyText: String?,
             compatibilityBodyText: String
     ): Cancelable {
-        return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, newBodyTextFormatted, compatibilityBodyText)
+        return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, newFormattedBodyText, compatibilityBodyText)
     }
 
     override suspend fun fetchEditHistory(eventId: String): List<Event> {
@@ -129,7 +129,7 @@ internal class DefaultRelationService @AssistedInject constructor(
     override fun replyToMessage(
             eventReplied: TimelineEvent,
             replyText: CharSequence,
-            replyTextFormatted: CharSequence?,
+            replyFormattedText: CharSequence?,
             autoMarkdown: Boolean,
             showInThread: Boolean,
             rootThreadEventId: String?
@@ -138,7 +138,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                 roomId = roomId,
                 eventReplied = eventReplied,
                 replyText = replyText,
-                replyTextFormatted = replyTextFormatted,
+                replyTextFormatted = replyFormattedText,
                 autoMarkdown = autoMarkdown,
                 rootThreadEventId = rootThreadEventId,
                 showInThread = showInThread

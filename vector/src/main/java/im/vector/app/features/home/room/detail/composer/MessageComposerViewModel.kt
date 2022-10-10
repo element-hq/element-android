@@ -589,7 +589,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     } ?: room.relationService().replyToMessage(
                             eventReplied = timelineEvent,
                             replyText = action.text.toString(),
-                            replyTextFormatted = action.formattedText,
+                            replyFormattedText = action.formattedText,
                             autoMarkdown = action.autoMarkdown,
                             showInThread = showInThread,
                             rootThreadEventId = rootThreadEventId

@@ -36,6 +36,7 @@ class CommandParser @Inject constructor() {
      * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
+    @Suppress("NAME_SHADOWING")
     fun parseSlashCommand(textMessage: CharSequence, formattedMessage: String?, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
         val message = formattedMessage ?: textMessage
@@ -52,7 +53,7 @@ class CommandParser @Inject constructor() {
                 return ParsedCommand.ErrorNotACommand
             }
 
-            val (messageParts, trimmedMessage) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
+            val (messageParts, message) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
             val slashCommand = messageParts.first()
 
             getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
@@ -61,27 +62,27 @@ class CommandParser @Inject constructor() {
 
             when {
                 Command.PLAIN.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
+                    if (message.isNotEmpty()) {
                         if (formattedMessage != null) {
                             val trimmedPlainTextMessage = extractMessage(textMessage.toString())?.second.orEmpty()
-                            ParsedCommand.SendFormattedText(message = trimmedPlainTextMessage, formattedMessage = trimmedMessage)
+                            ParsedCommand.SendFormattedText(message = trimmedPlainTextMessage, formattedMessage = message)
                         } else {
-                            ParsedCommand.SendPlainText(message = trimmedMessage)
+                            ParsedCommand.SendPlainText(message = message)
                         }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PLAIN)
                     }
                 }
                 Command.CHANGE_DISPLAY_NAME.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.ChangeDisplayName(displayName = trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayName(displayName = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME)
                     }
                 }
                 Command.CHANGE_DISPLAY_NAME_FOR_ROOM.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.ChangeDisplayNameForRoom(displayName = trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.ChangeDisplayNameForRoom(displayName = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME_FOR_ROOM)
                     }
@@ -113,29 +114,29 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.TOPIC.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.ChangeTopic(topic = trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.ChangeTopic(topic = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.TOPIC)
                     }
                 }
                 Command.EMOTE.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.SendEmote(trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.SendEmote(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.EMOTE)
                     }
                 }
                 Command.RAINBOW.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.SendRainbow(trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.SendRainbow(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW)
                     }
                 }
                 Command.RAINBOW_EMOTE.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.SendRainbowEmote(trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.SendRainbowEmote(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.RAINBOW_EMOTE)
                     }
@@ -164,8 +165,8 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.ROOM_NAME.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.ChangeRoomName(name = trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.ChangeRoomName(name = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.ROOM_NAME)
                     }
@@ -328,20 +329,20 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.SPOILER.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.SendSpoiler(trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.SendSpoiler(message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.SPOILER)
                     }
                 }
                 Command.SHRUG.matches(slashCommand) -> {
-                    ParsedCommand.SendShrug(trimmedMessage)
+                    ParsedCommand.SendShrug(message)
                 }
                 Command.LENNY.matches(slashCommand) -> {
-                    ParsedCommand.SendLenny(trimmedMessage)
+                    ParsedCommand.SendLenny(message)
                 }
                 Command.TABLE_FLIP.matches(slashCommand) -> {
-                    ParsedCommand.SendTableFlip(trimmedMessage)
+                    ParsedCommand.SendTableFlip(message)
                 }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
@@ -364,10 +365,10 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.CONFETTI.matches(slashCommand) -> {
-                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, trimmedMessage)
+                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
                 }
                 Command.SNOWFALL.matches(slashCommand) -> {
-                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, trimmedMessage)
+                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, message)
                 }
                 Command.CREATE_SPACE.matches(slashCommand) -> {
                     if (messageParts.size >= 2) {
@@ -394,11 +395,11 @@ class CommandParser @Inject constructor() {
                     }
                 }
                 Command.LEAVE_ROOM.matches(slashCommand) -> {
-                    ParsedCommand.LeaveRoom(roomId = trimmedMessage)
+                    ParsedCommand.LeaveRoom(roomId = message)
                 }
                 Command.UPGRADE_ROOM.matches(slashCommand) -> {
-                    if (trimmedMessage.isNotEmpty()) {
-                        ParsedCommand.UpgradeRoom(newVersion = trimmedMessage)
+                    if (message.isNotEmpty()) {
+                        ParsedCommand.UpgradeRoom(newVersion = message)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
                     }

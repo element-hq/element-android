@@ -38,20 +38,21 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
+import im.vector.app.core.animations.SimpleTransitionListener
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.InlineFormat
 
-class RichTextComposerView @JvmOverloads constructor(
+class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), MessageComposer {
+) : ConstraintLayout(context, attrs, defStyleAttr), MessageComposerView {
 
-    val views: ComposerRichTextLayoutBinding
+    private val views: ComposerRichTextLayoutBinding
 
-    override var callback: MessageComposerView.Callback? = null
+    override var callback: PlainTextComposerLayout.Callback? = null
 
     private var currentConstraintSetId: Int = -1
 
@@ -186,18 +187,10 @@ class RichTextComposerView @JvmOverloads constructor(
             addTransition(ChangeBounds())
             addTransition(Fade(Fade.IN))
             duration = animationDuration
-            addListener(object : Transition.TransitionListener {
+            addListener(object : SimpleTransitionListener() {
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }
-
-                override fun onTransitionResume(transition: Transition) {}
-
-                override fun onTransitionPause(transition: Transition) {}
-
-                override fun onTransitionCancel(transition: Transition) {}
-
-                override fun onTransitionStart(transition: Transition) {}
             })
         }
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)

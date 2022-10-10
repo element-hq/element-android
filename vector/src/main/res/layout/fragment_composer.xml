@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <im.vector.app.features.home.room.detail.composer.MessageComposerView
+    <im.vector.app.features.home.room.detail.composer.PlainTextComposerLayout
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:visibility="gone"
         tools:visibility="gone" />
 
-    <im.vector.app.features.home.room.detail.composer.RichTextComposerView
+    <im.vector.app.features.home.room.detail.composer.RichTextComposerLayout
         android:id="@+id/richTextComposerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

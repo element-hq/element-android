@@ -183,11 +183,7 @@ fun TimelineEvent.isRootThread(): Boolean {
  */
 fun TimelineEvent.getTextEditableContent(): String {
     val lastMessageContent = getLastMessageContent()
-    val lastContentBody = if (lastMessageContent is MessageContentWithFormattedBody) {
-        lastMessageContent.formattedBody
-    } else {
-        lastMessageContent?.body
-    } ?: return ""
+    val lastContentBody = lastMessageContent.getFormattedBody() ?: return ""
     return if (isReply()) {
         extractUsefulTextFromReply(lastContentBody)
     } else {
@@ -204,4 +200,12 @@ fun MessageContent.getTextDisplayableContent(): String {
             ?: newContent?.toModel<MessageContent>()?.body
             ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
             ?: body
+}
+
+fun MessageContent?.getFormattedBody(): String? {
+    return if (this is MessageContentWithFormattedBody) {
+        formattedBody
+    } else {
+        this?.body
+    }
 }

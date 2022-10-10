@@ -162,7 +162,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private val messageComposerViewModel: MessageComposerViewModel by parentFragmentViewModel()
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
-    private val composer: MessageComposer get() {
+    private val composer: MessageComposerView get() {
         return if (vectorPreferences.isRichTextEditorEnabled()) {
             views.richTextComposerLayout
         } else {
@@ -288,7 +288,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             // Show keyboard when the user started a thread
             composerEditText.showKeyboard(andRequestFocus = true)
         }
-        composer.callback = object : MessageComposerView.Callback {
+        composer.callback = object : PlainTextComposerLayout.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@MessageComposerFragment)

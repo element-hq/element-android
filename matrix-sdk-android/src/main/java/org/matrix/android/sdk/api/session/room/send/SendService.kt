@@ -69,7 +69,7 @@ interface SendService {
     fun sendQuotedTextMessage(
             quotedEvent: TimelineEvent,
             text: String,
-            formattedText: String?,
+            formattedText: String? = null,
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null
     ): Cancelable
