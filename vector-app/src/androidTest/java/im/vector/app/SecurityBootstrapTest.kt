@@ -47,6 +47,7 @@ import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.session.Session
 import kotlin.random.Random
@@ -58,7 +59,9 @@ class SecurityBootstrapTest : VerificationTestBase() {
     var existingSession: Session? = null
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ClearCurrentSessionRule())
 
     @Before
     fun createSessionWithCrossSigning() {
