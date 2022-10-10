@@ -359,7 +359,7 @@ dependencies {
     debugImplementation project(':library:ui-styles')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
+    implementation "androidx.sharetarget:sharetarget:1.2.0"
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {
