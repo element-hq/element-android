@@ -75,17 +75,12 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
         val browserInfo = parseBrowserInfoFromDesktopUserAgent(userAgent)
+        val operatingSystem = parseOperatingSystemFromDesktopUserAgent(userAgent)
 
-        val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceOperatingSystem = if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
-            deviceOperatingSystemSegments.getOrNull(1)
-        } else {
-            deviceOperatingSystemSegments.getOrNull(0)
-        }
         return DeviceExtendedInfo(
                 deviceType = DeviceType.DESKTOP,
                 deviceModel = null,
-                deviceOperatingSystem = deviceOperatingSystem,
+                deviceOperatingSystem = operatingSystem,
                 clientName = browserInfo.name,
                 clientVersion = browserInfo.version,
         )
@@ -128,6 +123,15 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
                     }
                 }
             }
+        }
+    }
+
+    private fun parseOperatingSystemFromDesktopUserAgent(userAgent: String): String? {
+        val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
+        return if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
+            deviceOperatingSystemSegments.getOrNull(1)
+        } else {
+            deviceOperatingSystemSegments.getOrNull(0)
         }
     }
 
