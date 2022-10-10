@@ -74,41 +74,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
-        val browserSegments = userAgent.split(" ")
-        val (browserName, browserVersion) = when {
-            isFirefox(browserSegments) -> {
-                Pair("Firefox", getBrowserVersion(browserSegments, "Firefox"))
-            }
-            isEdge(browserSegments) -> {
-                Pair("Edge", getBrowserVersion(browserSegments, "Edge"))
-            }
-            isMobile(browserSegments) -> {
-                when (val name = getMobileBrowserName(browserSegments)) {
-                    null -> {
-                        Pair(null, null)
-                    }
-                    "Safari" -> {
-                        Pair(name, getBrowserVersion(browserSegments, "Version"))
-                    }
-                    else -> {
-                        Pair(name, getBrowserVersion(browserSegments, name))
-                    }
-                }
-            }
-            isSafari(browserSegments) -> {
-                Pair("Safari", getBrowserVersion(browserSegments, "Version"))
-            }
-            else -> {
-                when (val name = getRegularBrowserName(browserSegments)) {
-                    null -> {
-                        Pair(null, null)
-                    }
-                    else -> {
-                        Pair(name, getBrowserVersion(browserSegments, name))
-                    }
-                }
-            }
-        }
+        val browserInfo = parseBrowserInfoFromDesktopUserAgent(userAgent)
 
         val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
         val deviceOperatingSystem = if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
@@ -120,9 +86,49 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
                 deviceType = DeviceType.DESKTOP,
                 deviceModel = null,
                 deviceOperatingSystem = deviceOperatingSystem,
-                clientName = browserName,
-                clientVersion = browserVersion,
+                clientName = browserInfo.name,
+                clientVersion = browserInfo.version,
         )
+    }
+
+    private data class BrowserInfo(val name: String? = null, val version: String? = null)
+
+    private fun parseBrowserInfoFromDesktopUserAgent(userAgent: String): BrowserInfo {
+        val browserSegments = userAgent.split(" ")
+        return when {
+            isFirefox(browserSegments) -> {
+                BrowserInfo("Firefox", getBrowserVersion(browserSegments, "Firefox"))
+            }
+            isEdge(browserSegments) -> {
+                BrowserInfo("Edge", getBrowserVersion(browserSegments, "Edge"))
+            }
+            isMobile(browserSegments) -> {
+                when (val name = getMobileBrowserName(browserSegments)) {
+                    null -> {
+                        BrowserInfo()
+                    }
+                    "Safari" -> {
+                        BrowserInfo(name, getBrowserVersion(browserSegments, "Version"))
+                    }
+                    else -> {
+                        BrowserInfo(name, getBrowserVersion(browserSegments, name))
+                    }
+                }
+            }
+            isSafari(browserSegments) -> {
+                BrowserInfo("Safari", getBrowserVersion(browserSegments, "Version"))
+            }
+            else -> {
+                when (val name = getRegularBrowserName(browserSegments)) {
+                    null -> {
+                        BrowserInfo()
+                    }
+                    else -> {
+                        BrowserInfo(name, getBrowserVersion(browserSegments, name))
+                    }
+                }
+            }
+        }
     }
 
     private fun parseWebUserAgent(userAgent: String): DeviceExtendedInfo {
