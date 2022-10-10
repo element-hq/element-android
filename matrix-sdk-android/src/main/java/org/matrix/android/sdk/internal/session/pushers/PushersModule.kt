@@ -69,6 +69,9 @@ internal abstract class PushersModule {
     abstract fun bindAddPusherTask(task: DefaultAddPusherTask): AddPusherTask
 
     @Binds
+    abstract fun bindTogglePusherTask(task: DefaultTogglePusherTask): TogglePusherTask
+
+    @Binds
     abstract fun bindRemovePusherTask(task: DefaultRemovePusherTask): RemovePusherTask
 
     @Binds
