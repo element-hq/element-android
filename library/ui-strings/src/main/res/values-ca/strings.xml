@@ -2738,4 +2738,9 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Hi ha dispositius no verificats en aquesta sala, no podran desxifrat els missatges que enviïs.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">No enviïs mai missatges xifrats a sessions no verificades d\'aquesta sala.</string>
     <string name="action_got_it">D\'acord</string>
+    <string name="attachment_type_voice_broadcast">Transmissió de veu</string>
+    <string name="tooltip_attachment_voice_broadcast">Inicia una transmissió de veu</string>
+    <string name="settings_security_incognito_keyboard_summary">Sol·licita que no es desi cap dada personalitzada del teclat en funció del que escrius a les converses (per exemple l\'historial d\'escriptura o el diccionari). Tingues en compte que alguns teclats poden no respectar aquesta configuració.</string>
+    <string name="settings_security_incognito_keyboard_title">Teclat incògnit</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Has activat el xifrat a només en sessions verificades a totes les sales, a Configuració &gt; Seguretat.</string>
 </resources>
