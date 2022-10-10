@@ -1,4 +1,4 @@
-Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas yang ideal untuk obrolan grup saat bekerja jarak jauh. Aplikasi perpesanan ini menggunakan enkripsi ujung-ke-ujung untuk menyediakan konferensi video, pembagian berkas, dan panggilan suara yang aman.
+Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas yang ideal untuk obrolan grup saat bekerja jarak jauh. Aplikasi perpesanan ini menggunakan enkripsi ujung ke ujung untuk menyediakan konferensi video, pembagian berkas, dan panggilan suara yang aman.
 
 <b>Fitur Element termasuk:</b>
 - Alat komunikasi daring yang canggih
@@ -11,7 +11,7 @@ Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas ya
 Element benar-benar berbeda dari aplikasi perpesanan dan aplikasi kolaborasi lainnya. Element beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi yang terdesentralisasi.
 
 <b>Perpesanan dengan privasi dan enkripsi</b>
-Element melindungi Anda dari iklan yang tidak diinginkan, penambangan data, dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu dengan enkripsi ujung-ke-ujung, dan verifikasi perangkat menggunakan penandatanganan silang.
+Element melindungi Anda dari iklan yang tidak diinginkan, penambangan data, dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu dengan enkripsi ujung ke ujung, dan verifikasi perangkat menggunakan penandatanganan silang.
 
 Element memberikan Anda kendali atas privasi Anda sambil memungkinkan Anda untuk berkomunikasi dengan siapa saja secara aman di jaringan Matrix, atau alat kolaborasi bisnis lainnya dengan mengintegrasikan aplikasi seperti Slack.
 
@@ -30,7 +30,7 @@ Element menempatkan Anda dalam kendali dengan cara yang berbeda:
 Anda dapat mengobrol dengan siapa saja di jaringan Matrix, jika mereka menggunakan Element, aplikasi Matrix lain, atau bahkan menggunakan aplikasi perpesanan yang berbeda.
 
 <b>Sangat aman</b>
-Enkripsi ujung-ke-ujung yang nyata (hanya mereka yang di dalam obrolan dapat mendekripsikan pesan), dan verifikasi perangkat menggunakan penandatanganan silang.
+Enkripsi ujung ke ujung yang nyata (hanya mereka yang di dalam obrolan dapat mendekripsikan pesan), dan verifikasi perangkat menggunakan penandatanganan silang.
 
 <b>Komunikasi dan integrasi lengkap</b>
 Perpesanan, panggilan suara dan video, pembagian berkas, pembagian layar dan banyak integrasi bot dan widget. Buat ruangan dan komunitas, tetap terhubung, dan selesaikan hal-hal penting.
