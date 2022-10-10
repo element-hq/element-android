@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.flow.FlowSession
 import org.matrix.android.sdk.flow.flow
 
@@ -41,6 +42,7 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         val fakeRoomService: FakeRoomService = FakeRoomService(),
+        val fakeUserService: FakeUserService = FakeUserService(),
         private val fakeEventService: FakeEventService = FakeEventService(),
 ) : Session by mockk(relaxed = true) {
 
@@ -58,6 +60,7 @@ class FakeSession(
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
     override fun eventService() = fakeEventService
+    override fun userService() = fakeUserService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {
@@ -88,8 +91,10 @@ class FakeSession(
     /**
      * Do not forget to call mockkStatic("org.matrix.android.sdk.flow.FlowSessionKt") in the setup method of the tests.
      */
+    @SuppressWarnings("all")
     fun givenFlowSession(): FlowSession {
         val fakeFlowSession = mockk<FlowSession>()
+
         every { flow() } returns fakeFlowSession
         return fakeFlowSession
     }
