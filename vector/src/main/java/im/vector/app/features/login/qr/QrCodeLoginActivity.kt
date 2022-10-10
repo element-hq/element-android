@@ -23,6 +23,7 @@ import android.view.View
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
 
@@ -38,7 +39,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
         val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             if (qrCodeLoginArgs?.loginType == QrCodeLoginType.LOGIN) {
-                addFragmentToBackstack(
+                addFragment(
                         views.container,
                         QrCodeLoginInstructionsFragment::class.java,
                         qrCodeLoginArgs,

@@ -2168,7 +2168,7 @@
     <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
-    <string name="login_signin_with_qr_code">Sign in with QR code</string>
+    <string name="login_scan_qr_code">Scan QR code</string>
 
     <string name="seen_by">Seen by</string>
 
@@ -3341,10 +3341,10 @@
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
     <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
     <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
-    <string name="qr_code_login_new_device_instruction_1">Open Element on your other device</string>
+    <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
-    <string name="qr_code_login_new_device_instruction_3">Select \'Link a device\'</string>
-    <string name="qr_code_login_new_device_instruction_4">Select \'Show QR code on this device\'</string>
+    <string name="qr_code_login_new_device_instruction_3">Are you on web? -> Select \'Show QR code\'</string>
+    <string name="qr_code_login_new_device_instruction_4">Are you on a mobile device? -> Select \'Scan QR code\' and then \'Show QR code\'</string>
     <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
     <string name="qr_code_login_need_an_alternative_method">Need an alternative method?</string>
     <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>

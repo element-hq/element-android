@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +42,21 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewState()
         initScanQrCodeButton()
         initShowQrCodeButton()
+    }
+
+    private fun observeViewState() {
+        viewModel.onEach {
+            if (it.loginType == QrCodeLoginType.LOGIN) {
+                views.qrCodeLoginInstructionsShowQrCodeButton.isVisible = false
+                views.qrCodeLoginInstructionsAlternativeLayout.isVisible = false
+            } else {
+                views.qrCodeLoginInstructionsShowQrCodeButton.isVisible = true
+                views.qrCodeLoginInstructionsAlternativeLayout.isVisible = true
+            }
+        }
     }
 
     private fun initShowQrCodeButton() {
