@@ -118,15 +118,6 @@
             android:padding="6dp"
             android:text="@string/four"
             android:textColor="?colorPrimary" />
-
-        <TextView
-            android:id="@+id/instruction4TextView"
-            style="@style/TextAppearance.Vector.Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            tools:text="@string/qr_code_login_new_device_instruction_4" />
     </LinearLayout>
 
 </merge>

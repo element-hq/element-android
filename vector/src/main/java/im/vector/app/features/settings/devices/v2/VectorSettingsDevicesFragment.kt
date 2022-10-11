@@ -37,6 +37,8 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.login.qr.QrCodeLoginArgs
+import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -86,6 +88,7 @@ class VectorSettingsDevicesFragment :
         initWaitingView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
+        initQrLoginView()
         observeViewEvents()
     }
 
@@ -147,6 +150,30 @@ class VectorSettingsDevicesFragment :
                         excludeCurrentDevice = false
                 )
             }
+        }
+    }
+
+    private fun initQrLoginView() {
+        views.deviceListHeaderScanQrCodeButton.debouncedClicks {
+            navigator
+                    .openLoginWithQrCode(
+                            requireActivity(),
+                            QrCodeLoginArgs(
+                                    loginType = QrCodeLoginType.LINK_A_DEVICE,
+                                    showQrCodeByDefault = false,
+                            )
+                    )
+        }
+
+        views.deviceListHeaderShowQrCodeButton.debouncedClicks {
+            navigator
+                    .openLoginWithQrCode(
+                            requireActivity(),
+                            QrCodeLoginArgs(
+                                    loginType = QrCodeLoginType.LINK_A_DEVICE,
+                                    showQrCodeByDefault = true,
+                            )
+                    )
         }
     }
 

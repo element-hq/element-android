@@ -21,10 +21,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.fragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginInstructionsBinding
@@ -50,11 +49,20 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
     private fun observeViewState() {
         viewModel.onEach {
             if (it.loginType == QrCodeLoginType.LOGIN) {
-                views.qrCodeLoginInstructionsShowQrCodeButton.isVisible = false
-                views.qrCodeLoginInstructionsAlternativeLayout.isVisible = false
+                views.qrCodeLoginInstructionsView.setInstructions(
+                        listOf(
+                                getString(R.string.qr_code_login_new_device_instruction_1),
+                                getString(R.string.qr_code_login_new_device_instruction_2),
+                                getString(R.string.qr_code_login_new_device_instruction_3),
+                        )
+                )
             } else {
-                views.qrCodeLoginInstructionsShowQrCodeButton.isVisible = true
-                views.qrCodeLoginInstructionsAlternativeLayout.isVisible = true
+                views.qrCodeLoginInstructionsView.setInstructions(
+                        listOf(
+                                getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_1),
+                                getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_2),
+                        )
+                )
             }
         }
     }

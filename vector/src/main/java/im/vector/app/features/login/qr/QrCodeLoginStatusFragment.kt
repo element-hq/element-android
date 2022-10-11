@@ -52,7 +52,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     private fun observeViewState() {
         viewModel.onEach {
             when (it.connectionStatus) {
-                is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(it.connectionStatus)
+                is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(it.connectionStatus, it.loginType)
                 QrCodeLoginConnectionStatus.ConnectingToDevice -> handleConnectingToDevice()
                 QrCodeLoginConnectionStatus.SigningIn -> handleSigningIn()
                 is QrCodeLoginConnectionStatus.Failed -> handleFailed(it.connectionStatus)
@@ -62,6 +62,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     }
 
     private fun handleFailed(connectionStatus: QrCodeLoginConnectionStatus.Failed) {
+        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = false
         views.qrCodeLoginStatusLoadingLayout.isVisible = false
         views.qrCodeLoginStatusHeaderView.isVisible = true
         views.qrCodeLoginStatusSecurityCode.isVisible = false
@@ -85,6 +86,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     }
 
     private fun handleConnectingToDevice() {
+        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = false
         views.qrCodeLoginStatusLoadingLayout.isVisible = true
         views.qrCodeLoginStatusHeaderView.isVisible = false
         views.qrCodeLoginStatusSecurityCode.isVisible = false
@@ -95,8 +97,14 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     }
 
     private fun handleSigningIn() {
+        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = false
         views.qrCodeLoginStatusLoadingLayout.isVisible = true
-        views.qrCodeLoginStatusHeaderView.isVisible = false
+        views.qrCodeLoginStatusHeaderView.apply {
+            isVisible = true
+            setTitle(getString(R.string.dialog_title_success))
+            setDescription("")
+            setImage(R.drawable.ic_tick, ThemeUtils.getColor(requireContext(), R.attr.colorPrimary))
+        }
         views.qrCodeLoginStatusSecurityCode.isVisible = false
         views.qrCodeLoginStatusNoMatchLayout.isVisible = false
         views.qrCodeLoginStatusCancelButton.isVisible = false
@@ -104,11 +112,12 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusLoadingTextView.setText(R.string.qr_code_login_signing_in)
     }
 
-    private fun handleConnectionEstablished(connectionStatus: QrCodeLoginConnectionStatus.Connected) {
+    private fun handleConnectionEstablished(connectionStatus: QrCodeLoginConnectionStatus.Connected, loginType: QrCodeLoginType) {
+        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = true
         views.qrCodeLoginStatusLoadingLayout.isVisible = false
         views.qrCodeLoginStatusHeaderView.isVisible = true
         views.qrCodeLoginStatusSecurityCode.isVisible = true
-        views.qrCodeLoginStatusNoMatchLayout.isVisible = true
+        views.qrCodeLoginStatusNoMatchLayout.isVisible = loginType == QrCodeLoginType.LOGIN
         views.qrCodeLoginStatusCancelButton.isVisible = true
         views.qrCodeLoginStatusTryAgainButton.isVisible = false
         views.qrCodeLoginStatusSecurityCode.text = connectionStatus.securityCode

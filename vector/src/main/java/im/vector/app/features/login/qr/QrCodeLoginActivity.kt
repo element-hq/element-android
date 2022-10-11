@@ -26,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
+import org.matrix.android.sdk.api.extensions.orFalse
+import timber.log.Timber
 
 @AndroidEntryPoint
 class QrCodeLoginActivity : SimpleFragmentActivity() {
@@ -38,17 +40,34 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
 
         val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
-            if (qrCodeLoginArgs?.loginType == QrCodeLoginType.LOGIN) {
-                addFragment(
-                        views.container,
-                        QrCodeLoginInstructionsFragment::class.java,
-                        qrCodeLoginArgs,
-                        tag = FRAGMENT_QR_CODE_INSTRUCTIONS_TAG
-                )
+            when (qrCodeLoginArgs?.loginType) {
+                QrCodeLoginType.LOGIN -> {
+                    showInstructionsFragment(qrCodeLoginArgs)
+                }
+                QrCodeLoginType.LINK_A_DEVICE -> {
+                    if (qrCodeLoginArgs.showQrCodeByDefault.orFalse()) {
+                        handleNavigateToShowQrCodeScreen()
+                    } else {
+                        showInstructionsFragment(qrCodeLoginArgs)
+                    }
+                }
+                null -> {
+                    Timber.i("QrCodeLoginArgs is null. This is not expected.")
+                    finish()
+                }
             }
         }
 
         observeViewEvents()
+    }
+
+    private fun showInstructionsFragment(qrCodeLoginArgs: QrCodeLoginArgs) {
+        addFragment(
+                views.container,
+                QrCodeLoginInstructionsFragment::class.java,
+                qrCodeLoginArgs,
+                tag = FRAGMENT_QR_CODE_INSTRUCTIONS_TAG
+        )
     }
 
     private fun observeViewEvents() {
@@ -61,7 +80,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
     }
 
     private fun handleNavigateToShowQrCodeScreen() {
-        addFragmentToBackstack(
+        addFragment(
                 views.container,
                 QrCodeLoginShowQrCodeFragment::class.java,
                 tag = FRAGMENT_SHOW_QR_CODE_TAG

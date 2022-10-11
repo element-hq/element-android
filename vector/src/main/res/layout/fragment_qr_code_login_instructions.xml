@@ -27,8 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/qrCodeLoginInstructionsHeaderView"
         app:qrCodeLoginInstruction1="@string/qr_code_login_new_device_instruction_1"
         app:qrCodeLoginInstruction2="@string/qr_code_login_new_device_instruction_2"
-        app:qrCodeLoginInstruction3="@string/qr_code_login_new_device_instruction_3"
-        app:qrCodeLoginInstruction4="@string/qr_code_login_new_device_instruction_4" />
+        app:qrCodeLoginInstruction3="@string/qr_code_login_new_device_instruction_3" />
 
     <Button
         android:id="@+id/qrCodeLoginInstructionsShowQrCodeButton"
@@ -37,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:text="@string/qr_code_login_show_qr_code_button"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,6 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/qrCodeLoginInstructionsShowQrCodeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

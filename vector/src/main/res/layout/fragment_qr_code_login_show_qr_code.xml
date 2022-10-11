@@ -13,13 +13,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:qrCodeLoginHeaderDescription="@string/qr_code_login_header_show_qr_code_description"
+        app:qrCodeLoginHeaderDescription="@string/qr_code_login_header_show_qr_code_link_a_device_description"
         app:qrCodeLoginHeaderImageBackgroundTint="?colorPrimary"
         app:qrCodeLoginHeaderImageResource="@drawable/ic_camera"
         app:qrCodeLoginHeaderTitle="@string/qr_code_login_header_show_qr_code_title" />
 
     <im.vector.app.features.login.qr.QrCodeLoginInstructionsView
-        android:id="@+id/qrCodeLoginShowQrCodeView"
+        android:id="@+id/qrCodeLoginShowQrCodeInstructionsView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -36,7 +36,7 @@
         android:layout_height="240dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qrCodeLoginShowQrCodeView"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeLoginShowQrCodeInstructionsView"
         app:layout_constraintBottom_toTopOf="@id/qrCodeLoginShowQrCodeCancelButton"/>
 
     <Button

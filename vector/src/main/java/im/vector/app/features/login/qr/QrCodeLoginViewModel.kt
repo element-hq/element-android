@@ -90,9 +90,10 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun onConnectionEstablished(securityCode: String) {
+        val canConfirmSecurityCode = initialState.loginType == QrCodeLoginType.LINK_A_DEVICE
         setState {
             copy(
-                    connectionStatus = QrCodeLoginConnectionStatus.Connected(securityCode)
+                    connectionStatus = QrCodeLoginConnectionStatus.Connected(securityCode, canConfirmSecurityCode)
             )
         }
     }

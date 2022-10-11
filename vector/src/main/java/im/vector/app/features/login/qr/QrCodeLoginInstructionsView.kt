@@ -26,7 +26,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewQrCodeLoginInstructionsBinding
 
 class QrCodeLoginInstructionsView @JvmOverloads constructor(
@@ -55,22 +54,18 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
         val instruction1 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction1)
         val instruction2 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction2)
         val instruction3 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction3)
-        val instruction4 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction4)
         binding.instructions1Layout.isVisible = instruction1 != null
         binding.instructions2Layout.isVisible = instruction2 != null
         binding.instructions3Layout.isVisible = instruction3 != null
-        binding.instructions4Layout.isVisible = instruction4 != null
         binding.instruction1TextView.text = instruction1
         binding.instruction2TextView.text = instruction2
         binding.instruction3TextView.text = instruction3
-        binding.instruction4TextView.text = instruction4
     }
 
     fun setInstructions(instructions: List<String>) {
         setInstruction(binding.instructions1Layout, binding.instruction1TextView, instructions.getOrNull(0))
         setInstruction(binding.instructions2Layout, binding.instruction2TextView, instructions.getOrNull(1))
         setInstruction(binding.instructions3Layout, binding.instruction3TextView, instructions.getOrNull(2))
-        setInstruction(binding.instructions4Layout, binding.instruction4TextView, instructions.getOrNull(3))
     }
 
     private fun setInstruction(instructionLayout: LinearLayout, instructionTextView: TextView, instruction: String?) {

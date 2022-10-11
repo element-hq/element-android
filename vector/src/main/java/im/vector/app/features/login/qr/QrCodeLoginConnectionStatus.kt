@@ -18,7 +18,7 @@ package im.vector.app.features.login.qr
 
 sealed class QrCodeLoginConnectionStatus {
     object ConnectingToDevice : QrCodeLoginConnectionStatus()
-    data class Connected(val securityCode: String) : QrCodeLoginConnectionStatus()
+    data class Connected(val securityCode: String, val canConfirmSecurityCode: Boolean) : QrCodeLoginConnectionStatus()
     object SigningIn : QrCodeLoginConnectionStatus()
     data class Failed(val errorType: QrCodeLoginErrorType, val canTryAgain: Boolean) : QrCodeLoginConnectionStatus()
 }

@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginShowQrCodeBinding
 
@@ -49,9 +50,31 @@ class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShow
 
     private fun observeViewState() {
         viewModel.onEach {
+            setInstructions(it.loginType)
             it.generatedQrCodeData?.let { qrCodeData ->
                 showQrCode(qrCodeData)
             }
+        }
+    }
+
+    private fun setInstructions(loginType: QrCodeLoginType) {
+        if (loginType == QrCodeLoginType.LOGIN) {
+            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(R.string.qr_code_login_header_show_qr_code_new_device_description))
+            views.qrCodeLoginShowQrCodeInstructionsView.setInstructions(
+                    listOf(
+                            getString(R.string.qr_code_login_new_device_instruction_1),
+                            getString(R.string.qr_code_login_new_device_instruction_2),
+                            getString(R.string.qr_code_login_new_device_instruction_3),
+                    )
+            )
+        } else {
+            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(R.string.qr_code_login_header_show_qr_code_link_a_device_description))
+            views.qrCodeLoginShowQrCodeInstructionsView.setInstructions(
+                    listOf(
+                            getString(R.string.qr_code_login_link_a_device_show_qr_code_instruction_1),
+                            getString(R.string.qr_code_login_link_a_device_show_qr_code_instruction_2),
+                    )
+            )
         }
     }
 

@@ -22,4 +22,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class QrCodeLoginArgs(
         val loginType: QrCodeLoginType,
+        val showQrCodeByDefault: Boolean,
 ) : Parcelable
