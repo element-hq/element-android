@@ -3345,8 +3345,10 @@
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
     <string name="qr_code_login_new_device_instruction_3">Are you on web? -> Select \'Show QR code\'</string>
     <string name="qr_code_login_new_device_instruction_4">Are you on a mobile device? -> Select \'Scan QR code\' and then \'Show QR code\'</string>
+    <string name="qr_code_login_link_a_device_instruction_1">Open ${app_name} on your other device</string>
+    <string name="qr_code_login_link_a_device_instruction_2">Select \'Sign in with QR code\'</string>
     <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
-    <string name="qr_code_login_need_an_alternative_method">Need an alternative method?</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Signing in a mobile device?</string>
     <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
     <string name="qr_code_login_connecting_to_device">Connecting to device</string>
     <string name="qr_code_login_signing_in">Signing you in</string>

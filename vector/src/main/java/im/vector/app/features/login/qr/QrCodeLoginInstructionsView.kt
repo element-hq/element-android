@@ -20,6 +20,8 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
@@ -62,5 +64,21 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
         binding.instruction2TextView.text = instruction2
         binding.instruction3TextView.text = instruction3
         binding.instruction4TextView.text = instruction4
+    }
+
+    fun setInstructions(instructions: List<String>) {
+        setInstruction(binding.instructions1Layout, binding.instruction1TextView, instructions.getOrNull(0))
+        setInstruction(binding.instructions2Layout, binding.instruction2TextView, instructions.getOrNull(1))
+        setInstruction(binding.instructions3Layout, binding.instruction3TextView, instructions.getOrNull(2))
+        setInstruction(binding.instructions4Layout, binding.instruction4TextView, instructions.getOrNull(3))
+    }
+
+    private fun setInstruction(instructionLayout: LinearLayout, instructionTextView: TextView, instruction: String?) {
+        instruction?.let {
+            instructionLayout.isVisible = true
+            instructionTextView.text = instruction
+        } ?: run {
+            instructionLayout.isVisible = false
+        }
     }
 }
