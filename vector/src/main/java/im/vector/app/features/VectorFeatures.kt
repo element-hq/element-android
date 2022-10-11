@@ -40,7 +40,6 @@ interface VectorFeatures {
      * use [VectorPreferences.isNewAppLayoutEnabled] instead.
      */
     fun isNewAppLayoutFeatureEnabled(): Boolean
-    fun isNewDeviceManagementEnabled(): Boolean
     fun isVoiceBroadcastEnabled(): Boolean
 }
 
@@ -57,6 +56,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
-    override fun isNewDeviceManagementEnabled(): Boolean = false
     override fun isVoiceBroadcastEnabled(): Boolean = false
 }

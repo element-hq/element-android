@@ -86,11 +86,6 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::isNewAppLayoutFeatureEnabled
                         ),
                         createBooleanFeature(
-                                label = "Enable New Device Management",
-                                key = DebugFeatureKeys.newDeviceManagementEnabled,
-                                factory = VectorFeatures::isNewDeviceManagementEnabled
-                        ),
-                        createBooleanFeature(
                                 label = "Enable Voice Broadcast",
                                 key = DebugFeatureKeys.voiceBroadcastEnabled,
                                 factory = VectorFeatures::isVoiceBroadcastEnabled
