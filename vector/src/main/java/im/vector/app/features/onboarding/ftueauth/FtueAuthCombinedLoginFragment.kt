@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedLoginBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
@@ -57,6 +58,7 @@ class FtueAuthCombinedLoginFragment :
 
     @Inject lateinit var loginFieldsValidation: LoginFieldsValidation
     @Inject lateinit var loginErrorParser: LoginErrorParser
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
@@ -72,15 +74,19 @@ class FtueAuthCombinedLoginFragment :
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
         }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
-        views.loginWithQrCode.debouncedClicks {
-            navigator
-                    .openLoginWithQrCode(
-                            requireActivity(),
-                            QrCodeLoginArgs(
-                                    loginType = QrCodeLoginType.LOGIN,
-                                    showQrCodeByDefault = false,
-                            )
-                    )
+        if (vectorFeatures.isQrCodeLoginEnabled()) {
+            views.loginWithQrCode.debouncedClicks {
+                navigator
+                        .openLoginWithQrCode(
+                                requireActivity(),
+                                QrCodeLoginArgs(
+                                        loginType = QrCodeLoginType.LOGIN,
+                                        showQrCodeByDefault = false,
+                                )
+                        )
+            }
+        } else {
+            views.loginWithQrCode.isVisible = false
         }
     }
 

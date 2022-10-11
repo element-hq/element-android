@@ -79,6 +79,9 @@ class DebugVectorFeatures(
     override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
             ?: vectorFeatures.isNewDeviceManagementEnabled()
 
+    override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
+            ?: vectorFeatures.isQrCodeLoginEnabled()
+
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -140,4 +143,5 @@ object DebugFeatureKeys {
     val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
+    val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
 }

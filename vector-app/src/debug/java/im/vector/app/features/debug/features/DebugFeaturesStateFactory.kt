@@ -90,6 +90,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.newDeviceManagementEnabled,
                                 factory = VectorFeatures::isNewDeviceManagementEnabled
                         ),
+                        createBooleanFeature(
+                                label = "Enable QR Code Login",
+                                key = DebugFeatureKeys.qrCodeLoginEnabled,
+                                factory = VectorFeatures::isQrCodeLoginEnabled
+                        ),
                 )
         )
     }

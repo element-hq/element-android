@@ -35,6 +35,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.login.qr.QrCodeLoginArgs
@@ -63,6 +64,8 @@ class VectorSettingsDevicesFragment :
     @Inject lateinit var drawableProvider: DrawableProvider
 
     @Inject lateinit var colorProvider: ColorProvider
+
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -154,6 +157,17 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initQrLoginView() {
+        if (!vectorFeatures.isQrCodeLoginEnabled()) {
+            views.deviceListHeaderSignInWithQrCode.isVisible = false
+            views.deviceListHeaderScanQrCodeButton.isVisible = false
+            views.deviceListHeaderShowQrCodeButton.isVisible = false
+            return
+        }
+
+        views.deviceListHeaderSignInWithQrCode.isVisible = true
+        views.deviceListHeaderScanQrCodeButton.isVisible = true
+        views.deviceListHeaderShowQrCodeButton.isVisible = true
+
         views.deviceListHeaderScanQrCodeButton.debouncedClicks {
             navigator
                     .openLoginWithQrCode(
