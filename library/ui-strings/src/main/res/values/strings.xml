@@ -3325,6 +3325,8 @@
     <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="labs_enable_session_manager_title">Enable new session manager</string>
+    <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
