@@ -51,6 +51,17 @@ class FakePushersService : PushersService by mockk(relaxed = true) {
         }
     }
 
+    fun givenPushersLive(pushers: List<Pusher>) {
+        every { getPushersLive() } returns liveData { emit(pushers) }
+    }
+
+    fun verifyOnlyTogglePusherCalled(pusher: Pusher, enable: Boolean) {
+        coVerify(ordering = Ordering.ALL) {
+            getPushersLive() // verifies only getPushersLive and the following togglePusher was called
+            togglePusher(pusher, enable)
+        }
+    }
+
     fun verifyEnqueueAddHttpPusher(): HttpPusher {
         val httpPusherSlot = slot<HttpPusher>()
         verify { enqueueAddHttpPusher(capture(httpPusherSlot)) }

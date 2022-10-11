@@ -371,6 +371,32 @@ class SessionOverviewViewModelTest {
         val viewModel = createViewModel()
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
+        fakeSession.pushersService().verifyOnlyTogglePusherCalled(pushers.first(), true)
+    }
+
+    @Test
+    fun `when viewModel init, then observe pushers and emit to state`() {
+        val pushers = listOf(aPusher(deviceId = A_SESSION_ID_1))
+        fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+
+        viewModel.test()
+                .assertLatestState { state -> state.pushers.invoke() == pushers }
+                .finish()
+    }
+
+    @Test
+    fun `when handle TogglePushNotifications, then toggle enabled for device pushers`() {
+        val pushers = listOf(
+                aPusher(deviceId = A_SESSION_ID_1, enabled = false),
+                aPusher(deviceId = "another id", enabled = false)
+        )
+        fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
+
         fakeSession.pushersService().verifyOnlyGetPushersLiveAndTogglePusherCalled(pushers.first(), true)
     }
 }
