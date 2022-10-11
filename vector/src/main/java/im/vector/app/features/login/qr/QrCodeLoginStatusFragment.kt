@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginStatusBinding
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
 
 @AndroidEntryPoint
 class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBinding>() {
@@ -77,11 +78,12 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         )
     }
 
-    private fun getErrorCode(errorType: QrCodeLoginErrorType): String {
-        return when (errorType) {
-            QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
-            QrCodeLoginErrorType.TIMEOUT -> getString(R.string.qr_code_login_header_failed_timeout_description)
-            QrCodeLoginErrorType.REQUEST_WAS_DENIED -> getString(R.string.qr_code_login_header_failed_denied_description)
+    private fun getErrorCode(reason: RendezvousFailureReason): String {
+        return when (reason) {
+            RendezvousFailureReason.UnsupportedAlgorithm, RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
+            RendezvousFailureReason.Expired -> getString(R.string.qr_code_login_header_failed_timeout_description)
+            RendezvousFailureReason.UserDeclined -> getString(R.string.qr_code_login_header_failed_denied_description)
+            else -> getString(R.string.qr_code_login_header_failed_other_description)
         }
     }
 
