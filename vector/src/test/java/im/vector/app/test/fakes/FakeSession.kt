@@ -45,7 +45,6 @@ class FakeSession(
         private val fakeEventService: FakeEventService = FakeEventService(),
         val fakeSessionAccountDataService: FakeSessionAccountDataService = FakeSessionAccountDataService(),
         val fakeFilterService: FakeFilterService = FakeFilterService(),
-        val fakePushersService: FakePushersService = FakePushersService(),
 ) : Session by mockk(relaxed = true) {
 
     init {
@@ -65,7 +64,6 @@ class FakeSession(
     override fun pushersService() = fakePushersService
     override fun accountDataService() = fakeSessionAccountDataService
     override fun filterService() = fakeFilterService
-    override fun pushersService() = fakePushersService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {
