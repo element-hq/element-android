@@ -59,13 +59,28 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleOnQrCodeScanned(action: QrCodeLoginAction.OnQrCodeScanned) {
-        if (isValidQrCode(action.qrCode)) {
-            setState {
-                copy(
-                        connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
-                )
+        Timber.tag(TAG).d("Scanned code: ${action.qrCode}")
+
+        val rendezvous = Rendezvous.buildChannelFromCode(action.qrCode) { reason ->
+            Timber.tag(TAG).d("Rendezvous cancelled: $reason")
+            onFailed(reason)
+        }
+
+        setState {
+            copy(
+                    connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
+            )
+        }
+
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val confirmationCode = rendezvous.startAfterScanningCode()
+            Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
+            confirmationCode ?.let {
+                onConnectionEstablished(it)
             }
-            _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+            rendezvous.completeOnNewDevice()
         }
 
         // TODO. UI test purpose. Fixme remove!
