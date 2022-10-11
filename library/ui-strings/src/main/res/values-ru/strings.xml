@@ -1368,7 +1368,7 @@
     <string name="autocomplete_limited_results">Показываем только первые результаты, наберите больше букв…</string>
     <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
     <string name="settings_developer_mode_fail_fast_summary">${app_name} может падать чаще, когда происходит непредвиденная ошибка</string>
-    <string name="command_description_shrug">Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения</string>
+    <string name="command_description_shrug">Добавляет ¯\\_(ツ)_/¯ в начало сообщения</string>
     <string name="create_room_encryption_description">После включения шифрования его нельзя отключить.</string>
     <string name="login_error_threepid_denied">Ваш почтовый домен не имеет права регистрироваться на этом сервере</string>
     <string name="verification_conclusion_not_secure">Не безопасно</string>
@@ -2275,7 +2275,7 @@
     <string name="room_settings_space_access_title">Доступ к пространству</string>
     <string name="room_settings_access_rules_pref_dialog_title">Кто имеет к этому доступ\?</string>
     <string name="settings_notification_emails_enable_for_email">Включить уведомления по электронной почте для %s</string>
-    <string name="settings_notification_emails_no_emails">Чтобы получать уведомления по электронной почте, пожалуйста, привяжите электронную почту к вашей учетной записи Matrix</string>
+    <string name="settings_notification_emails_no_emails">Чтобы получать уведомления по электронной почте, пожалуйста, привяжите адрес электронной почты к своей учётной записи Matrix</string>
     <string name="settings_notification_emails_category">Уведомление по эл. почте</string>
     <string name="room_permissions_upgrade_the_space">Обновить пространство</string>
     <string name="room_permissions_change_space_name">Изменить название пространства</string>
@@ -2753,4 +2753,7 @@
     <string name="device_manager_learn_more_sessions_verified_title">Заверенные сессии</string>
     <string name="device_manager_learn_more_sessions_unverified_title">Незаверенные сессии</string>
     <string name="device_manager_learn_more_sessions_inactive_title">Неактивные сессии</string>
+    <string name="command_description_table_flip">Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения</string>
+    <string name="settings_security_incognito_keyboard_title">Приватная клавиатура</string>
+    <string name="settings_security_incognito_keyboard_summary">Запрещает клавиатуре обновлять персональные данные, такие как история набора текста и словарь, на основе того, что вы набрали при общении. Обратите внимание, что некоторые клавиатуры могут не соблюдать эту настройку.</string>
 </resources>
