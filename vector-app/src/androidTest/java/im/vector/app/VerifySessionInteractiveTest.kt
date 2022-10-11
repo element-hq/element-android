@@ -147,6 +147,8 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         onView(withId(R.id.bottomSheetFragmentContainer))
                 .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
 
+        // The emulator at this point has sent requests to other sessions.
+        // Find the incoming request from the existing session and start the verification process.
         val incomingRequest = existingSession!!.cryptoService().verificationService().getExistingVerificationRequests(existingSession!!.myUserId).first {
             it.requestInfo?.fromDevice == uiSession.sessionParams.deviceId
         }
