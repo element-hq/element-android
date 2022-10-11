@@ -3303,6 +3303,8 @@
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">SIGN IN WITH QR CODE</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">You can use this device to sign in a mobile or web device with a QR code. There are two ways to do this:</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
