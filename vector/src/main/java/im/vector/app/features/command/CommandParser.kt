@@ -18,6 +18,7 @@ package im.vector.app.features.command
 
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -30,39 +31,30 @@ class CommandParser @Inject constructor() {
     /**
      * Convert the text message into a Slash command.
      *
-     * @param textMessage the text message
+     * @param textMessage the text message in plain text
+     * @param formattedMessage the text messaged in HTML format
      * @param isInThreadTimeline true if the user is currently typing in a thread
      * @return a parsed slash command (ok or error)
      */
-    fun parseSlashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
+    @Suppress("NAME_SHADOWING")
+    fun parseSlashCommand(textMessage: CharSequence, formattedMessage: String?, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
-        return if (!textMessage.startsWith("/")) {
+        val message = formattedMessage ?: textMessage
+        return if (!message.startsWith("/")) {
             ParsedCommand.ErrorNotACommand
         } else {
             // "/" only
-            if (textMessage.length == 1) {
+            if (message.length == 1) {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
             // Exclude "//"
-            if ("/" == textMessage.substring(1, 2)) {
+            if ("/" == message.substring(1, 2)) {
                 return ParsedCommand.ErrorNotACommand
             }
 
-            val messageParts = try {
-                textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
-            } catch (e: Exception) {
-                Timber.e(e, "## parseSlashCommand() : split failed")
-                null
-            }
-
-            // test if the string cut fails
-            if (messageParts.isNullOrEmpty()) {
-                return ParsedCommand.ErrorEmptySlashCommand
-            }
-
+            val (messageParts, message) = extractMessage(message.toString()) ?: return ParsedCommand.ErrorEmptySlashCommand
             val slashCommand = messageParts.first()
-            val message = textMessage.substring(slashCommand.length).trim()
 
             getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
                 return ParsedCommand.ErrorCommandNotSupportedInThreads(it)
@@ -71,7 +63,12 @@ class CommandParser @Inject constructor() {
             when {
                 Command.PLAIN.matches(slashCommand) -> {
                     if (message.isNotEmpty()) {
-                        ParsedCommand.SendPlainText(message = message)
+                        if (formattedMessage != null) {
+                            val trimmedPlainTextMessage = extractMessage(textMessage.toString())?.second.orEmpty()
+                            ParsedCommand.SendFormattedText(message = trimmedPlainTextMessage, formattedMessage = message)
+                        } else {
+                            ParsedCommand.SendPlainText(message = message)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PLAIN)
                     }
@@ -413,6 +410,25 @@ class CommandParser @Inject constructor() {
                 }
             }
         }
+    }
+
+    private fun extractMessage(message: String): Pair<List<String>, String>? {
+        val messageParts = try {
+            message.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+        } catch (e: Exception) {
+            Timber.e(e, "## parseSlashCommand() : split failed")
+            null
+        }
+
+        // test if the string cut fails
+        if (messageParts.isNullOrEmpty()) {
+            return null
+        }
+
+        val slashCommand = messageParts.first()
+        val trimmedMessage = message.substring(slashCommand.length).trim()
+
+        return messageParts to trimmedMessage
     }
 
     private val notSupportedThreadsCommands: List<Command> by lazy {
