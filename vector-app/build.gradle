@@ -1,4 +1,5 @@
 import com.android.build.OutputFile
+import com.android.build.api.dsl.ManagedVirtualDevice
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.appdistribution'
@@ -211,6 +212,36 @@ android {
 
         // Comment to run on Android 12
 //        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
+        // Ref: https://developer.android.com/studio/test/gradle-managed-devices
+        managedDevices {
+            devices {
+                // Run test with ./gradlew pixel2api28GplayDebugAndroidTest
+                pixel2api28(ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 28
+                    // To include Google services, use "google". Else "aosp"
+                    systemImageSource = "google"
+                }
+                // Ref: https://developer.android.com/studio/test/gradle-managed-devices#gmd-atd
+                // Run test with ./gradlew pixel2api30AtdGplayDebugAndroidTest
+                // Warning: Screenshot tests that depend on hardware rendering currently aren't supported when using ATDs.
+                pixel2api30Atd(ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // ATDs currently support only API level 30.
+                    apiLevel = 30
+                    // You can also specify "google-atd" if you require Google Play Services, else "aosp-atd"
+                    systemImageSource = "google-atd"
+                }
+
+                // there is also a wat to create group of devices, but this is not necessary for now:
+                // https://developer.android.com/studio/test/gradle-managed-devices#gmd-groups
+            }
+        }
+        // On GitHub action, add: -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
     }
 
     signingConfigs {
