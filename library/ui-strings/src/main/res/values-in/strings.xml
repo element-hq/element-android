@@ -183,8 +183,8 @@
     <string name="settings_app_info_link_summary">Tampilkan info aplikasi dalam pengaturan sistem.</string>
     <string name="settings_app_info_link_title">Info aplikasi</string>
     <string name="settings_notification_ringtone">Suara pemberitahuan</string>
-    <string name="settings_enable_all_notif">Perbolehkan pemberitahuan untuk akun ini</string>
-    <string name="settings_enable_this_device">Perbolehkan pemberitahuan untuk perangkat ini</string>
+    <string name="settings_enable_all_notif">Aktifkan pemberitahuan untuk akun ini</string>
+    <string name="settings_enable_this_device">Aktifkan pemberitahuan untuk sesi ini</string>
     <string name="settings_containing_my_display_name">Pesan yang berisikan nama layarku</string>
     <string name="settings_containing_my_user_name">Pesan berisikan nama layarku</string>
     <string name="settings_messages_in_one_to_one">Pesan percakapan empat mata</string>
@@ -394,7 +394,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nMohon periksa pengaturan akun anda.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Perbolehkan</string>
     <string name="settings_troubleshoot_test_device_settings_title">Pengaturan Perangkat.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk perangkat ini.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk sesi ini.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Notifikasi tidak diaktifkan pada sesi ini.
 \nMohon periksa pengaturan ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Perbolehkan</string>
@@ -414,7 +414,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_boot_title">Mulai ketika menyalakan perangkat</string>
     <string name="settings_troubleshoot_test_service_boot_success">Layanan akan dimulai ketika perangkat dinyalakan kembali.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka ${app_name}.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan sampai Anda membuka ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Perbolehkan memulai ketika perangkat dinyalakan</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Periksa halangan di balik layar</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Larangan latar belakang dinonaktifkan untuk ${app_name}. Percobaan ini sebaiknya dijalankan menggunakan jaringan data ponsel (bukan WiFi).
@@ -442,7 +442,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Perhatikan bahwa sebagian jenis pesan tersetel diam (mengeluarkan pemberitahuan tanpa suara).</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam aturan Anda.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam pengaturan Anda.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nError ini di luar kendali ${app_name} dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -459,7 +459,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_cryptography_manage_keys">Pengelolaan Kunci Kriptografi</string>
     <string name="settings_inline_url_preview_summary">Pratinjau tautan dalam obrolan apabila homeserver mendukung fitur ini.</string>
     <string name="settings_send_typing_notifs">Kirim pemberitahuan mengetik</string>
-    <string name="settings_send_typing_notifs_summary">Beritahu pengguna lain bahwa Anda sedang mengetik.</string>
+    <string name="settings_send_typing_notifs_summary">Beri tahu pengguna lain bahwa Anda sedang mengetik.</string>
     <string name="settings_send_markdown">Format markdown</string>
     <string name="settings_send_markdown_summary">Format pesan menggunakan sintaks markdown sebelum dikirim. Ini mengizinkan format lanjutan seperti menggunakan tanda bintang untuk menunjukkan teks miring.</string>
     <string name="settings_show_read_receipts">Tunjukkan tanda telah dibaca</string>
@@ -565,7 +565,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_permissions_change_main_address_for_the_room">Mengubah alamat utama untuk ruangan ini</string>
     <string name="room_permissions_change_room_avatar">Mengubah avatar ruangan</string>
     <string name="room_permissions_modify_widgets">Mengubah widget</string>
-    <string name="room_permissions_notify_everyone">Beritahu semuanya</string>
+    <string name="room_permissions_notify_everyone">Beri tahu semuanya</string>
     <string name="room_permissions_remove_messages_sent_by_others">Menghapus pesan yang dikirim dari yang lain</string>
     <string name="room_permissions_change_settings">Ubah pengaturan</string>
     <string name="room_permissions_default_role">Peran bawaan</string>
@@ -962,7 +962,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_room_notifications_account_settings">Pengaturan akun</string>
     <string name="room_settings_room_notifications_manage_notifications">Anda dapat mengelola notifikasi di %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa pemberitahuan sebutan &amp; kata kunci tidak tersedia dalam ruangan terenkripsi di ponsel.</string>
-    <string name="room_settings_room_notifications_notify_me">Beritahu saya untuk</string>
+    <string name="room_settings_room_notifications_notify_me">Beri tahu saya untuk</string>
     <string name="settings_play_shutter_sound">Putar suara rana</string>
     <string name="media_source_choose">Pilih</string>
     <string name="settings_default_media_source">Sumber media bawaan</string>
@@ -997,7 +997,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <plurals name="seconds">
         <item quantity="other">%d detik</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberi tahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
 \nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa ${app_name} sedang mendengarkan peristiwa.</string>
@@ -1021,7 +1021,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_notification_keyword_contains_dot">Kata kunci tidak boleh diawali dengan \'.\'</string>
     <string name="settings_notification_new_keyword">Tambahkan kata kunci baru</string>
     <string name="settings_notification_your_keywords">Kata kunci Anda</string>
-    <string name="settings_notification_notify_me_for">Beritahu saya untuk</string>
+    <string name="settings_notification_notify_me_for">Beri tahu saya untuk</string>
     <string name="settings_notification_other">Lainnya</string>
     <string name="settings_notification_mentions_and_keywords">Sebutan dan Kata Kunci</string>
     <string name="settings_notification_default">Notifikasi Bawaan</string>
@@ -1803,9 +1803,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="dev_tools_menu_name">Alat Pengembang</string>
     <string name="a11y_public_room">Ruangan publik</string>
     <string name="a11y_view_read_receipts">Lihat laporan dibaca</string>
-    <string name="a11y_rule_notify_off">Jangan beritahu</string>
-    <string name="a11y_rule_notify_silent">Beritahu tanpa suara</string>
-    <string name="a11y_rule_notify_noisy">Beritahu dengan suara</string>
+    <string name="a11y_rule_notify_off">Jangan beri tahu</string>
+    <string name="a11y_rule_notify_silent">Beri tahu tanpa suara</string>
+    <string name="a11y_rule_notify_noisy">Beri tahu dengan suara</string>
     <string name="a11y_error_message_not_sent">Pesan tidak terkirim karena kesalahan</string>
     <string name="a11y_unchecked">Tidak dicentang</string>
     <string name="a11y_checked">Dicentang</string>
@@ -2344,7 +2344,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="action_view_threads">Tampilkan Utasan</string>
     <string name="room_message_autocomplete_notification">Notifikasi ruangan</string>
     <string name="room_message_autocomplete_users">Pengguna</string>
-    <string name="room_message_notify_everyone">Beritahu seluruh ruangan</string>
+    <string name="room_message_notify_everyone">Beri tahu seluruh ruangan</string>
     <plurals name="message_reaction_show_more">
         <item quantity="other">%1$d lagi</item>
     </plurals>
