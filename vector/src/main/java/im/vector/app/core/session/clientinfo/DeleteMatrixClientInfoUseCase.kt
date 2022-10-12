@@ -28,7 +28,6 @@ class DeleteMatrixClientInfoUseCase @Inject constructor(
         private val setMatrixClientInfoUseCase: SetMatrixClientInfoUseCase,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(): Result<Unit> = runCatching {
         Timber.d("deleting recorded client info")
         val session = activeSessionHolder.getActiveSession()
@@ -37,6 +36,6 @@ class DeleteMatrixClientInfoUseCase @Inject constructor(
                 version = "",
                 url = "",
         )
-        setMatrixClientInfoUseCase.execute(session, emptyClientInfo)
+        return setMatrixClientInfoUseCase.execute(session, emptyClientInfo)
     }
 }
