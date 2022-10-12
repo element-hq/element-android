@@ -54,6 +54,9 @@ jobs:
           disableRateLimiting: true
           public_baseurl: "http://10.0.2.2:8080/"
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
       - name: Run all the codecoverage tests at once
         run: |
           ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
