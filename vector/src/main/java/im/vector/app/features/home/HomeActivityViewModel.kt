@@ -144,9 +144,10 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     fun observeLocalNotificationsSilenced() {
         val currentSession = activeSessionHolder.getActiveSession()
+        val deviceId = currentSession.cryptoService().getMyDevice().deviceId
         viewModelScope.launch {
             currentSession.accountDataService()
-                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS)
+                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
                     .asFlow()
                     .map { it.getOrNull()?.content?.toModel<LocalNotificationSettingsContent>()?.isSilenced ?: false }
                     .onEach { setState { copy(areNotificationsSilenced = it) } }
