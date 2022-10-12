@@ -215,7 +215,7 @@ class SessionOverviewFragment :
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = true,
-                    isLastSeenDetailsVisible = true,
+                    isLastSeenDetailsVisible = !isCurrentSession,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
