@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.features.settings.labs
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -30,6 +30,8 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.threads.ThreadsManager
+import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.VectorSettingsBaseFragment
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
