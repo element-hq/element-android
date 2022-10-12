@@ -51,7 +51,6 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
@@ -91,7 +90,7 @@ class VectorSettingsSecurityPrivacyFragment :
     @Inject lateinit var rawService: RawService
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var analyticsConfig: AnalyticsConfig
-    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -562,11 +561,12 @@ class VectorSettingsSecurityPrivacyFragment :
      * Build the cryptography preference section.
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+        showDeviceListPref.isVisible = !vectorPreferences.isNewSessionManagerEnabled()
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
-        showDevicesListV2Pref.isVisible = vectorFeatures.isNewDeviceManagementEnabled()
-        showDevicesListV2Pref.title = getString(R.string.device_manager_settings_active_sessions_show_all)
+        showDevicesListV2Pref.isVisible = vectorPreferences.isNewSessionManagerEnabled()
+        showDevicesListV2Pref.isEnabled = devices.isNotEmpty()
         showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId

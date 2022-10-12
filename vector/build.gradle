@@ -104,6 +104,7 @@ android {
     }
 }
 dependencies {
+
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -143,6 +144,9 @@ dependencies {
     // Opus Encoder
     implementation libs.element.opusencoder
 
+    // WYSIWYG Editor
+    implementation libs.element.wysiwyg
+
     // Log
     api libs.jakewharton.timber
 
@@ -169,9 +173,6 @@ dependencies {
 
     // Paging
     implementation libs.androidx.pagingRuntimeKtx
-
-    // Functional Programming
-    implementation libs.arrow.core
 
     // Pref
     api libs.androidx.preferenceKtx

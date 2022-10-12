@@ -20,6 +20,7 @@ import androidx.lifecycle.liveData
 import io.mockk.Ordering
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -55,5 +56,13 @@ class FakePushersService : PushersService by mockk(relaxed = true) {
         val httpPusherSlot = slot<HttpPusher>()
         verify { enqueueAddHttpPusher(capture(httpPusherSlot)) }
         return httpPusherSlot.captured
+    }
+
+    fun givenRefreshPushersSucceeds() {
+        justRun { refreshPushers() }
+    }
+
+    fun verifyRefreshPushers() {
+        verify { refreshPushers() }
     }
 }

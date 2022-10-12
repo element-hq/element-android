@@ -124,19 +124,23 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             targetEventId: String,
             newBodyText: CharSequence,
+            newBodyFormattedText: CharSequence?,
             newBodyAutoMarkdown: Boolean,
             msgType: String,
             compatibilityText: String
     ): Event {
+        val content = if (newBodyFormattedText != null) {
+            TextContent(newBodyText.toString(), newBodyFormattedText.toString()).toMessageTextContent(msgType)
+        } else {
+            createTextContent(newBodyText, newBodyAutoMarkdown).toMessageTextContent(msgType)
+        }.toContent()
         return createMessageEvent(
                 roomId,
                 MessageTextContent(
                         msgType = msgType,
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
-                        newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
-                                .toMessageTextContent(msgType)
-                                .toContent()
+                        newContent = content,
                 )
         )
     }
@@ -581,6 +585,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             eventReplied: TimelineEvent,
             replyText: CharSequence,
+            replyTextFormatted: CharSequence?,
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean
@@ -594,7 +599,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
+        val finalReplyTextFormatted = replyTextFormatted?.toString() ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
         val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
         val replyFormatted = buildFormattedReply(
@@ -602,7 +607,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 userLink,
                 userId,
                 bodyFormatted,
-                replyTextFormatted
+                finalReplyTextFormatted
         )
         //
         // > <@alice:example.org> This is the original body
@@ -765,18 +770,20 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             quotedEvent: TimelineEvent,
             text: String,
+            formattedText: String?,
             autoMarkdown: Boolean,
             rootThreadEventId: String?
     ): Event {
         val messageContent = quotedEvent.getLastMessageContent()
-        val textMsg = messageContent?.body
+        val textMsg = if (messageContent is MessageContentWithFormattedBody) { messageContent.formattedBody } else { messageContent?.body }
         val quoteText = legacyRiotQuoteText(textMsg, text)
+        val quoteFormattedText = "<blockquote>$textMsg</blockquote>$formattedText"
 
         return if (rootThreadEventId != null) {
             createMessageEvent(
                     roomId,
                     markdownParser
-                            .parse(quoteText, force = true, advanced = autoMarkdown)
+                            .parse(quoteText, force = true, advanced = autoMarkdown).copy(formattedText = quoteFormattedText)
                             .toThreadTextContent(
                                     rootThreadEventId = rootThreadEventId,
                                     latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
@@ -786,7 +793,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         } else {
             createFormattedTextEvent(
                     roomId,
-                    markdownParser.parse(quoteText, force = true, advanced = autoMarkdown),
+                    markdownParser.parse(quoteText, force = true, advanced = autoMarkdown).copy(formattedText = quoteFormattedText),
                     MessageType.MSGTYPE_TEXT
             )
         }

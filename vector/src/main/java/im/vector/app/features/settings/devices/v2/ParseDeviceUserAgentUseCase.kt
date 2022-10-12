@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
@@ -139,13 +140,11 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun getBrowserVersion(browserSegments: List<String>, browserName: String): String? {
-        // Chrome/104.0.3497.100 -> 104
+        // e.g Chrome/104.0.3497.100 -> 104.0.3497.100
         return browserSegments
                 .find { it.startsWith(browserName) }
                 ?.split("/")
                 ?.getOrNull(1)
-                ?.split(".")
-                ?.firstOrNull()
     }
 
     private fun isEdge(browserSegments: List<String>): Boolean {

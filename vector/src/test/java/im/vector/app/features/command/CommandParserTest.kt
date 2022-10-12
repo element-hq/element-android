@@ -71,7 +71,7 @@ class CommandParserTest {
 
     private fun test(message: String, expectedResult: ParsedCommand) {
         val commandParser = CommandParser()
-        val result = commandParser.parseSlashCommand(message, false)
+        val result = commandParser.parseSlashCommand(message, null, false)
         result shouldBeEqualTo expectedResult
     }
 }

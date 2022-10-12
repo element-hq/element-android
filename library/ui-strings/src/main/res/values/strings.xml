@@ -446,6 +446,9 @@
     <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
+    <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Use a rich text editor to send formatted messages</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
@@ -3237,7 +3240,8 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
-    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
+    <!-- TODO remove this key -->
+    <string name="device_manager_settings_active_sessions_show_all" tools:ignore="UnusedResources">Show All Sessions (V2, WIP)</string>
     <string name="device_manager_sessions_other_title">Other sessions</string>
     <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
@@ -3310,6 +3314,13 @@
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_operating_system">Operating system</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
     <string name="device_manager_session_rename_edit_hint">Session name</string>
@@ -3323,6 +3334,8 @@
     <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="labs_enable_session_manager_title">Enable new session manager</string>
+    <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

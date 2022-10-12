@@ -17,10 +17,10 @@
 package im.vector.app
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import arrow.core.Option
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.Optional
 
 /**
  * Gets info about the current space the user has navigated to, any space backstack they may have
@@ -62,7 +62,7 @@ interface SpaceStateHandler : DefaultLifecycleObserver {
     /**
      * Gets a flow of the selected space for clients to react immediately to space changes.
      */
-    fun getSelectedSpaceFlow(): Flow<Option<RoomSummary>>
+    fun getSelectedSpaceFlow(): Flow<Optional<RoomSummary>>
 
     /**
      * Gets the id of the active space, or null if there is none.

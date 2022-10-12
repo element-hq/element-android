@@ -26,13 +26,13 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.cancelCurrentOnSet
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.core.extensions.isMatrixId
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
@@ -91,6 +91,7 @@ class OnboardingViewModel @AssistedInject constructor(
         private val vectorOverrides: VectorOverrides,
         private val registrationActionHandler: RegistrationActionHandler,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -616,7 +617,7 @@ class OnboardingViewModel @AssistedInject constructor(
         activeSessionHolder.setActiveSession(session)
 
         authenticationService.reset()
-        session.configureAndStart(applicationContext)
+        configureAndStartSessionUseCase.execute(session)
 
         when (authenticationDescription) {
             is AuthenticationDescription.Register -> {

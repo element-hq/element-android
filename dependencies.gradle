@@ -14,7 +14,6 @@ def kotlinCoroutines = "1.6.4"
 def dagger = "2.44"
 def appDistribution = "16.0.0-beta04"
 def retrofit = "2.9.0"
-def arrow = "0.8.2"
 def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
@@ -102,6 +101,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.1.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
@@ -113,10 +113,6 @@ ext.libs = [
         ],
         rx          : [
                 'rxKotlin'               : "io.reactivex.rxjava2:rxkotlin:2.4.0"
-        ],
-        arrow       : [
-                'core'                   : "io.arrow-kt:arrow-core:$arrow",
-                'instances'              : "io.arrow-kt:arrow-instances-core:$arrow"
         ],
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",
