@@ -237,7 +237,7 @@ android {
                     systemImageSource = "google-atd"
                 }
 
-                // there is also a wat to create group of devices, but this is not necessary for now:
+                // there is also a way to create group of devices, but this is not necessary for now:
                 // https://developer.android.com/studio/test/gradle-managed-devices#gmd-groups
             }
         }
