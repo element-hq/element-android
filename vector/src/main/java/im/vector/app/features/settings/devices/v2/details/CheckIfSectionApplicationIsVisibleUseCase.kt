@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.session.clientinfo
+package im.vector.app.features.settings.devices.v2.details
 
-/**
- * Prefix for the key account data event which holds client info.
- */
-internal const val MATRIX_CLIENT_INFO_KEY_PREFIX = "io.element.matrix_client_information."
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import org.matrix.android.sdk.api.extensions.orFalse
+import javax.inject.Inject
+
+class CheckIfSectionApplicationIsVisibleUseCase @Inject constructor() {
+
+    fun execute(matrixClientInfoContent: MatrixClientInfoContent?): Boolean {
+        return matrixClientInfoContent?.name?.isNotEmpty().orFalse() ||
+                matrixClientInfoContent?.version?.isNotEmpty().orFalse() ||
+                matrixClientInfoContent?.url?.isNotEmpty().orFalse()
+    }
+}
