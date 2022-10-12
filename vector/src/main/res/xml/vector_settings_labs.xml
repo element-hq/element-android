@@ -103,4 +103,10 @@
         android:title="@string/labs_enable_rich_text_editor_title"
         app:isPreferenceVisible="@bool/settings_labs_rich_text_editor_visible" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_new_session_manager_default"
+        android:key="SETTINGS_LABS_NEW_SESSION_MANAGER_KEY"
+        android:summary="@string/labs_enable_session_manager_summary"
+        android:title="@string/labs_enable_session_manager_title" />
+
 </androidx.preference.PreferenceScreen>
