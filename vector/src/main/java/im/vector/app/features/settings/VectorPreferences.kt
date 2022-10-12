@@ -73,6 +73,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_DEFERRED_DM_KEY = "SETTINGS_LABS_DEFERRED_DM_KEY"
         const val SETTINGS_LABS_RICH_TEXT_EDITOR_KEY = "SETTINGS_LABS_RICH_TEXT_EDITOR_KEY"
         const val SETTINGS_LABS_NEW_SESSION_MANAGER_KEY = "SETTINGS_LABS_NEW_SESSION_MANAGER_KEY"
+        const val SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY = "SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -1186,6 +1187,13 @@ class VectorPreferences @Inject constructor(
      */
     fun isNewSessionManagerEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_NEW_SESSION_MANAGER_KEY, getDefault(R.bool.settings_labs_new_session_manager_default))
+    }
+
+    /**
+     * Indicates whether or not client info recording is enabled.
+     */
+    fun isClientInfoRecordingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY, getDefault(R.bool.settings_labs_client_info_recording_default))
     }
 
     fun showLiveSenderInfo(): Boolean {

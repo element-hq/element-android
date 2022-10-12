@@ -109,4 +109,10 @@
         android:summary="@string/labs_enable_session_manager_summary"
         android:title="@string/labs_enable_session_manager_title" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_client_info_recording_default"
+        android:key="SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY"
+        android:summary="@string/labs_enable_client_info_recording_summary"
+        android:title="@string/labs_enable_client_info_recording_title" />
+
 </androidx.preference.PreferenceScreen>
