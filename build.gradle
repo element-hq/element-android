@@ -197,7 +197,7 @@ def launchTask = getGradle()
         .toLowerCase()
 
 if (launchTask.contains("coverage".toLowerCase())) {
-    apply from: 'coverage.gradle'
+    apply from: './tools/gradle/coverage.gradle'
 }
 
 apply plugin: 'org.sonarqube'
