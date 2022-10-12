@@ -65,29 +65,29 @@ class SessionsListHeaderView @JvmOverloads constructor(
             return
         }
 
-        val showLearnMore = typedArray.getBoolean(R.styleable.SessionsListHeaderView_sessionListHeaderShowLearnMore, true)
-        val learnMore = context.getString(R.string.action_learn_more)
-        val fullDescription = if (showLearnMore) {
-            buildString {
-                append(description)
-                append(" ")
-                append(learnMore)
-            }
+        val hasLearnMoreLink = typedArray.getBoolean(R.styleable.SessionsListHeaderView_sessionsListHeaderHasLearnMoreLink, true)
+        if (hasLearnMoreLink) {
+            setDescriptionWithLearnMore(description)
         } else {
-            description
+            binding.sessionsListHeaderDescription.text = description
         }
 
         binding.sessionsListHeaderDescription.isVisible = true
-        if (showLearnMore) {
-            binding.sessionsListHeaderDescription.setTextWithColoredPart(
-                    fullText = fullDescription,
-                    coloredPart = learnMore,
-                    underline = false
-            ) {
-                onLearnMoreClickListener?.invoke()
-            }
-        } else {
-            binding.sessionsListHeaderDescription.text = fullDescription
+    }
+
+    private fun setDescriptionWithLearnMore(description: String) {
+        val learnMore = context.getString(R.string.action_learn_more)
+        val fullDescription = buildString {
+            append(description)
+            append(" ")
+            append(learnMore)
+        }
+        binding.sessionsListHeaderDescription.setTextWithColoredPart(
+                fullText = fullDescription,
+                coloredPart = learnMore,
+                underline = false
+        ) {
+            onLearnMoreClickListener?.invoke()
         }
     }
 }

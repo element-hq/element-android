@@ -82,6 +82,9 @@ class DebugVectorFeatures(
     override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
             ?: vectorFeatures.isQrCodeLoginEnabled()
 
+    override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
+            ?: vectorFeatures.isVoiceBroadcastEnabled()
+
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -144,4 +147,5 @@ object DebugFeatureKeys {
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
     val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
+    val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
 }

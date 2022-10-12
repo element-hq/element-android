@@ -732,7 +732,7 @@
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
     <string name="settings_discovery_category">Ustawienia wyszukiwania</string>
-    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleść twoje konto.</string>
+    <string name="settings_discovery_manage">Ustal jak inni mogą odnaleźć twoje konto.</string>
     <string name="settings_media">Media</string>
     <string name="settings_default_media_source">Domyślne źródło mediów</string>
     <string name="encryption_message_recovery">Odzyskiwanie zaszyfrowanych wiadomości</string>
@@ -2732,4 +2732,16 @@
     <string name="timeline_error_room_not_found">Niestety, ten pokój nie został znaleziony.
 \nSpróbuj ponownie później.%s</string>
     <string name="invites_title">Zaproszenia</string>
+    <string name="home_empty_no_unreads_message">Tutaj pojawią się rozmowy które nie zostały jeszcze odczytane.</string>
+    <string name="home_empty_no_unreads_title">Brak nowych wiadomości.</string>
+    <string name="change_space">Zmień przestrzeń</string>
+    <string name="labs_enable_deferred_dm_summary">Stwórz prywatny chat dopiero po wysłaniu pierwszej wiadomości</string>
+    <string name="labs_enable_deferred_dm_title">Włącz odroczone prywatne chaty</string>
+    <string name="labs_enable_new_app_layout_summary">Odświeżony wygląd Element z opcjonalnymi kartami</string>
+    <string name="labs_enable_new_app_layout_title">Włącz nowy układ</string>
+    <string name="home_empty_space_no_rooms_message">Przestrzenie to nowa metoda na grupowanie razem wielu pokoi i osób. Dodaj tu już istniejący pokój lub stwórz nowy używając przycisku w prawym-dolnym rogu.</string>
+    <string name="space_list_empty_message">Jest to nowa metoda na grupowanie razem wielu pokoi i osób.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nwygląda nieco pusto.</string>
+    <string name="space_list_empty_title">Brak przestrzeni.</string>
 </resources>

@@ -6,6 +6,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
 apply plugin: 'com.likethesalad.stem'
@@ -36,7 +37,7 @@ ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 2
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -358,7 +359,7 @@ dependencies {
     debugImplementation project(':library:ui-styles')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
+    implementation "androidx.sharetarget:sharetarget:1.2.0"
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {
@@ -387,7 +388,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     kapt libs.dagger.hiltCompiler
-    kapt libs.airbnb.epoxyProcessor
+    ksp libs.airbnb.epoxyProcessor
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
@@ -410,7 +411,7 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
     debugImplementation libs.androidx.fragmentTesting
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }

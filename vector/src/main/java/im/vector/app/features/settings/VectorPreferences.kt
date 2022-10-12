@@ -71,6 +71,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
         const val SETTINGS_LABS_NEW_APP_LAYOUT_KEY = "SETTINGS_LABS_NEW_APP_LAYOUT_KEY"
         const val SETTINGS_LABS_DEFERRED_DM_KEY = "SETTINGS_LABS_DEFERRED_DM_KEY"
+        const val SETTINGS_LABS_RICH_TEXT_EDITOR_KEY = "SETTINGS_LABS_RICH_TEXT_EDITOR_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -87,6 +88,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY = "SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY"
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
         const val SETTINGS_PERSISTED_SPACE_BACKSTACK = "SETTINGS_PERSISTED_SPACE_BACKSTACK"
+        const val SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY = "SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY"
 
         const val SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT = "SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
 //        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
@@ -288,6 +290,7 @@ class VectorPreferences @Inject constructor(
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE,
+                SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY,
 
                 ShortcutsHandler.SHARED_PREF_KEY,
         )
@@ -969,6 +972,11 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
     }
 
+    /** Whether the keyboard should disable personalized learning. */
+    fun useIncognitoKeyboard(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY, false)
+    }
+
     /**
      * The user enable protecting app access with pin code.
      * Currently we use the pin code store to know if the pin is enabled, so this is not used
@@ -1174,5 +1182,9 @@ class VectorPreferences @Inject constructor(
 
     fun showLiveSenderInfo(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO, getDefault(R.bool.settings_timeline_show_live_sender_info_default))
+    }
+
+    fun isRichTextEditorEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_RICH_TEXT_EDITOR_KEY, getDefault(R.bool.settings_labs_rich_text_editor_default))
     }
 }

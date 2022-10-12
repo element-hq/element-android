@@ -17,6 +17,7 @@
 package im.vector.app.core.pushers
 
 import im.vector.app.R
+import im.vector.app.core.device.GetDeviceInfoUseCase
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
@@ -26,7 +27,7 @@ import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
 
-private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
+internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 class PushersManager @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
@@ -34,6 +35,7 @@ class PushersManager @Inject constructor(
         private val localeProvider: LocaleProvider,
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider,
+        private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
 ) {
     suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
@@ -63,15 +65,17 @@ class PushersManager @Inject constructor(
             pushKey: String,
             gateway: String
     ) = HttpPusher(
-            pushKey,
-            stringProvider.getString(R.string.pusher_app_id),
+            pushkey = pushKey,
+            appId = stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
-            localeProvider.current().language,
-            appNameProvider.getAppName(),
-            activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
-            gateway,
+            lang = localeProvider.current().language,
+            appDisplayName = appNameProvider.getAppName(),
+            deviceDisplayName = getDeviceInfoUseCase.execute().displayName().orEmpty(),
+            url = gateway,
+            enabled = true,
+            deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
             append = false,
-            withEventIdOnly = true
+            withEventIdOnly = true,
     )
 
     suspend fun registerEmailForPush(email: String) {

@@ -22,6 +22,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.poll.PollMode
 import org.matrix.android.sdk.api.session.Session
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 
 class CreatePollViewModel @AssistedInject constructor(
         @Assisted private val initialState: CreatePollViewState,
@@ -72,7 +72,7 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun initializeEditedPoll(eventId: String) {
         val event = room.getTimelineEvent(eventId) ?: return
-        val content = event.getLastMessageContent() as? MessagePollContent ?: return
+        val content = event.getVectorLastMessageContent() as? MessagePollContent ?: return
 
         val pollCreationInfo = content.getBestPollCreationInfo()
         val pollType = pollCreationInfo?.kind ?: PollType.DISCLOSED_UNSTABLE

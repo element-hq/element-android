@@ -96,4 +96,11 @@
         android:title="@string/labs_enable_deferred_dm_title"
         app:isPreferenceVisible="@bool/settings_labs_deferred_dm_visible" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_rich_text_editor_default"
+        android:key="SETTINGS_LABS_RICH_TEXT_EDITOR_KEY"
+        android:summary="@string/labs_enable_rich_text_editor_summary"
+        android:title="@string/labs_enable_rich_text_editor_title"
+        app:isPreferenceVisible="@bool/settings_labs_rich_text_editor_visible" />
+
 </androidx.preference.PreferenceScreen>

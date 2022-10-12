@@ -69,6 +69,9 @@
 
     <application android:supportsRtl="true">
 
+        <!-- Sentry auto-initialization disable -->
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
             android:name="android.max_aspect"

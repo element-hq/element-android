@@ -28,6 +28,7 @@ import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -42,7 +43,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
@@ -55,6 +58,8 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
@@ -77,6 +82,8 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
+import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -102,7 +109,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
 import javax.inject.Inject
@@ -163,7 +169,7 @@ class MessageItemFactory @Inject constructor(
             return buildRedactedItem(attributes, highlight)
         }
 
-        val messageContent = event.getLastMessageContent()
+        val messageContent = event.getVectorLastMessageContent()
         if (messageContent == null) {
             val malformedText = stringProvider.getString(R.string.malformed_message)
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
@@ -197,6 +203,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
+            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, params.eventsGroup, highlight, callback, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -245,7 +252,7 @@ class MessageItemFactory @Inject constructor(
                 .pollQuestion(createPollQuestion(informationData, pollViewState.question, callback))
                 .canVote(pollViewState.canVote)
                 .votesStatus(pollViewState.votesStatus)
-                .optionViewStates(pollViewState.optionViewStates)
+                .optionViewStates(pollViewState.optionViewStates.orEmpty())
                 .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -279,7 +286,7 @@ class MessageItemFactory @Inject constructor(
                 .duration(messageContent.audioInfo?.duration ?: 0)
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
-                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .fileSize(messageContent.audioInfo?.size ?: 0L)
                 .onSeek { params.callback?.onAudioSeekBarMovedTo(informationData.eventId, duration, it) }
                 .mxcUrl(fileUrl)
@@ -339,7 +346,7 @@ class MessageItemFactory @Inject constructor(
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .waveformTouchListener(waveformTouchListener)
                 .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
-                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -399,8 +406,8 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .isLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
-                .isDownloaded(session.fileService().isFileInCache(messageContent))
+                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
+                .izDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -453,12 +460,15 @@ class MessageItemFactory @Inject constructor(
                 maxWidth = maxWidth,
                 allowNonMxcUrls = informationData.sendState.isSending()
         )
+
+        val playable = messageContent.mimeType == MimeTypes.Gif
+
         return MessageImageVideoItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-                .playable(messageContent.mimeType == MimeTypes.Gif)
+                .playable(playable)
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
@@ -471,6 +481,10 @@ class MessageItemFactory @Inject constructor(
                         clickListener { view ->
                             callback?.onImageMessageClicked(messageContent, data, view, emptyList())
                         }
+                    }
+                }.apply {
+                    if (playable && vectorPreferences.autoplayAnimatedImages()) {
+                        mode(ImageContentRenderer.Mode.ANIMATED_THUMBNAIL)
                     }
                 }
     }
@@ -697,6 +711,25 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
+    }
+
+    private fun buildVoiceBroadcastItem(
+            messageContent: MessageVoiceBroadcastInfoContent,
+            eventsGroup: TimelineEventsGroup?,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): MessageVoiceBroadcastItem? {
+        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
+        val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
+        val mostRecentEvent = voiceBroadcastEventsGroup.getLastEvent()
+        val mostRecentMessageContent = (mostRecentEvent.getVectorLastMessageContent() as? MessageVoiceBroadcastInfoContent) ?: return null
+        return MessageVoiceBroadcastItem_()
+                .attributes(attributes)
+                .highlighted(highlight)
+                .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
     }
 
     private fun List<Int?>?.toFft(): List<Int>? {

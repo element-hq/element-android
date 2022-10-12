@@ -20,7 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 sealed class SpaceListAction : VectorViewModelAction {
-    data class SelectSpace(val spaceSummary: RoomSummary?) : SpaceListAction()
+    data class SelectSpace(val spaceSummary: RoomSummary?, val isSubSpace: Boolean) : SpaceListAction()
     data class OpenSpaceInvite(val spaceSummary: RoomSummary) : SpaceListAction()
     data class LeaveSpace(val spaceSummary: RoomSummary) : SpaceListAction()
     data class ToggleExpand(val spaceSummary: RoomSummary) : SpaceListAction()

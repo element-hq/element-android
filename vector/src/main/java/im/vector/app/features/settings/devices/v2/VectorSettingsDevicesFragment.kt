@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -34,6 +33,7 @@ import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.recover.SetupMode
@@ -67,6 +67,8 @@ class VectorSettingsDevicesFragment :
 
     @Inject lateinit var vectorFeatures: VectorFeatures
 
+    @Inject lateinit var stringProvider: StringProvider
+
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsDevicesBinding {
@@ -87,7 +89,6 @@ class VectorSettingsDevicesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initLearnMoreButtons()
         initWaitingView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -196,12 +197,6 @@ class VectorSettingsDevicesFragment :
         super.onDestroyView()
     }
 
-    private fun initLearnMoreButtons() {
-        views.deviceListHeaderOtherSessions.onLearnMoreClickListener = {
-            Toast.makeText(context, "Learn more other", Toast.LENGTH_LONG).show()
-        }
-    }
-
     private fun cleanUpLearnMoreButtonsListeners() {
         views.deviceListHeaderOtherSessions.onLearnMoreClickListener = null
     }
@@ -286,7 +281,7 @@ class VectorSettingsDevicesFragment :
                     isCurrentSession = true,
                     deviceFullInfo = it
             )
-            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider)
+            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.deviceListCurrentSession.debouncedClicks {
                 currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
             }

@@ -42,6 +42,7 @@ interface VectorFeatures {
     fun isNewAppLayoutFeatureEnabled(): Boolean
     fun isNewDeviceManagementEnabled(): Boolean
     fun isQrCodeLoginEnabled(): Boolean
+    fun isVoiceBroadcastEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
@@ -59,4 +60,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
     override fun isNewDeviceManagementEnabled(): Boolean = false
     override fun isQrCodeLoginEnabled(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = false
 }

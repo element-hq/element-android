@@ -15,8 +15,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:sessionListHeaderShowLearnMore="true"
             app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
@@ -64,8 +64,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider"
-            app:sessionListHeaderShowLearnMore="false"
             app:sessionsListHeaderDescription=""
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderTitle="@string/device_manager_current_session_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SessionInfoView
@@ -95,8 +95,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession"
-            app:sessionListHeaderShowLearnMore="true"
             app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title" />
 
         <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -115,7 +115,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListOtherSessions"
-            app:sessionListHeaderShowLearnMore="false"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderDescription="@string/device_manager_sessions_sign_in_with_qr_code_description"
             app:sessionsListHeaderTitle="@string/device_manager_sessions_sign_in_with_qr_code_title" />
 
