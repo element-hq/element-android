@@ -177,6 +177,7 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state)
+        updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
         updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
@@ -194,6 +195,12 @@ class SessionOverviewFragment :
             (activity as? AppCompatActivity)
                     ?.supportActionBar
                     ?.setTitle(titleResId)
+        }
+    }
+
+    private fun updateEntryDetails(deviceId: String) {
+        views.sessionOverviewEntryDetails.setOnClickListener {
+            viewNavigator.goToSessionDetails(requireContext(), deviceId)
         }
     }
 
