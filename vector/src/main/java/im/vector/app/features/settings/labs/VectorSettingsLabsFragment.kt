@@ -20,7 +20,9 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
 import androidx.preference.Preference
+import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.SwitchPreference
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -38,6 +40,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class VectorSettingsLabsFragment :
         VectorSettingsBaseFragment() {
+
+    private val viewModel: VectorSettingsLabsViewModel by fragmentViewModel()
 
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var lightweightSettingsStorage: LightweightSettingsStorage
@@ -87,6 +91,7 @@ class VectorSettingsLabsFragment :
         }
 
         configureUnreadNotificationsAsTabPreference()
+        configureEnableClientInfoRecordingPreference()
     }
 
     private fun configureUnreadNotificationsAsTabPreference() {
@@ -141,5 +146,17 @@ class VectorSettingsLabsFragment :
      */
     private fun onNewLayoutPreferenceClicked() {
         configureUnreadNotificationsAsTabPreference()
+    }
+
+    private fun configureEnableClientInfoRecordingPreference() {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY)?.onPreferenceChangeListener =
+                OnPreferenceChangeListener { _, newValue ->
+                    when {
+                        (newValue as? Boolean) == false -> viewModel.handle(VectorSettingsLabsAction.DeleteRecordedClientInfo)
+                        (newValue as? Boolean) == true -> viewModel.handle(VectorSettingsLabsAction.UpdateClientInfo)
+                        else -> Unit
+                    }
+                    true
+                }
     }
 }
