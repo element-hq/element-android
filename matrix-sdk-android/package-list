@@ -4454,6 +4454,7 @@ $dokka.location:org.matrix.android.sdk.api.util//toMatrixItem/org.matrix.android
 $dokka.location:org.matrix.android.sdk.api.util//toMatrixItem/org.matrix.android.sdk.api.session.room.sender.SenderInfo#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-matrix-item.html
 $dokka.location:org.matrix.android.sdk.api.util//toMatrixItem/org.matrix.android.sdk.api.session.user.model.User#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-matrix-item.html
 $dokka.location:org.matrix.android.sdk.api.util//toMatrixItemOrNull/org.matrix.android.sdk.api.session.room.sender.SenderInfo#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-matrix-item-or-null.html
+$dokka.location:org.matrix.android.sdk.api.util//toOption/TypeParam(bounds=[kotlin.Any])?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-option.html
 $dokka.location:org.matrix.android.sdk.api.util//toOptional/TypeParam(bounds=[kotlin.Any])?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-optional.html
 $dokka.location:org.matrix.android.sdk.api.util//toRoomAliasMatrixItem/org.matrix.android.sdk.api.session.room.model.RoomSummary#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-room-alias-matrix-item.html
 $dokka.location:org.matrix.android.sdk.api.util/BuildVersionSdkIntProvider///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-build-version-sdk-int-provider/index.html
@@ -4545,10 +4546,11 @@ $dokka.location:org.matrix.android.sdk.api.util/Optional.Companion/from/#TypePar
 $dokka.location:org.matrix.android.sdk.api.util/Optional///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/index.html
 $dokka.location:org.matrix.android.sdk.api.util/Optional/Optional/#TypeParam(bounds=[kotlin.Any])?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/-optional.html
 $dokka.location:org.matrix.android.sdk.api.util/Optional/get/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/get.html
-$dokka.location:org.matrix.android.sdk.api.util/Optional/getOrElse/#kotlin.Function0[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/get-or-else.html
 $dokka.location:org.matrix.android.sdk.api.util/Optional/getOrNull/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/get-or-null.html
 $dokka.location:org.matrix.android.sdk.api.util/Optional/hasValue/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/has-value.html
 $dokka.location:org.matrix.android.sdk.api.util/Optional/map/#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])?]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/map.html
+$dokka.location:org.matrix.android.sdk.api.util/Optional/orElse/#kotlin.Function0[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/or-else.html
+$dokka.location:org.matrix.android.sdk.api.util/Optional/orNull/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-optional/or-null.html
 $dokka.location:org.matrix.android.sdk.api.util/StringOrderUtils///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-string-order-utils/index.html
 $dokka.location:org.matrix.android.sdk.api.util/StringOrderUtils/DEFAULT_ALPHABET/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-string-order-utils/-d-e-f-a-u-l-t_-a-l-p-h-a-b-e-t.html
 $dokka.location:org.matrix.android.sdk.api.util/StringOrderUtils/average/#kotlin.String#kotlin.String#kotlin.CharArray/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-string-order-utils/average.html
