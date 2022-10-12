@@ -170,9 +170,6 @@ dependencies {
     // Paging
     implementation libs.androidx.pagingRuntimeKtx
 
-    // Functional Programming
-    implementation libs.arrow.core
-
     // Pref
     api libs.androidx.preferenceKtx
 
