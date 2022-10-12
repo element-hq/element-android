@@ -43,7 +43,6 @@ class VectorSettingsLabsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<VectorSettingsLabsViewModel, VectorSettingsLabsViewState> by hiltMavericksViewModelFactory()
 
-    // TODO add unit tests
     override fun handle(action: VectorSettingsLabsAction) {
         when (action) {
             VectorSettingsLabsAction.UpdateClientInfo -> handleUpdateClientInfo()
