@@ -29,8 +29,19 @@ import org.matrix.android.sdk.api.session.pushers.PushersService
 
 class FakePushersService : PushersService by mockk(relaxed = true) {
 
+    fun givenGetPushers(pushers: List<Pusher>) {
+        every { getPushers() } returns pushers
+    }
+
     fun givenPushersLive(pushers: List<Pusher>) {
         every { getPushersLive() } returns liveData { emit(pushers) }
+    }
+
+    fun verifyOnlyGetPushersAndTogglePusherCalled(pusher: Pusher, enable: Boolean) {
+        coVerify(ordering = Ordering.ALL) {
+            getPushers()
+            togglePusher(pusher, enable)
+        }
     }
 
     fun verifyOnlyTogglePusherCalled(pusher: Pusher, enable: Boolean) {

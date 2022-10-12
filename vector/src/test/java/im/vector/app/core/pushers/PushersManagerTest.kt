@@ -24,8 +24,12 @@ import im.vector.app.test.fakes.FakeLocaleProvider
 import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fixtures.CredentialsFixture
 import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
+import im.vector.app.test.fixtures.PusherFixture
+import im.vector.app.test.fixtures.SessionParamsFixture
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
@@ -81,5 +85,35 @@ class PushersManagerTest {
 
         val httpPusher = pushersService.verifyEnqueueAddHttpPusher()
         httpPusher shouldBeEqualTo expectedHttpPusher
+    }
+
+    @Test
+    fun `when getPusherForCurrentSession, then return pusher`() {
+        val deviceId = "device_id"
+        val sessionParams = SessionParamsFixture.aSessionParams(
+                credentials = CredentialsFixture.aCredentials(deviceId = deviceId)
+        )
+        session.givenSessionParams(sessionParams)
+        val expectedPusher = PusherFixture.aPusher(deviceId = deviceId)
+        pushersService.givenGetPushers(listOf(expectedPusher))
+
+        val pusher = pushersManager.getPusherForCurrentSession()
+
+        pusher shouldBeEqualTo expectedPusher
+    }
+
+    @Test
+    fun `when togglePusherForCurrentSession, then do service toggle pusher`() = runTest {
+        val deviceId = "device_id"
+        val sessionParams = SessionParamsFixture.aSessionParams(
+                credentials = CredentialsFixture.aCredentials(deviceId = deviceId)
+        )
+        session.givenSessionParams(sessionParams)
+        val pusher = PusherFixture.aPusher(deviceId = deviceId)
+        pushersService.givenGetPushers(listOf(pusher))
+
+        pushersManager.togglePusherForCurrentSession(true)
+
+        pushersService.verifyOnlyGetPushersAndTogglePusherCalled(pusher, true)
     }
 }
