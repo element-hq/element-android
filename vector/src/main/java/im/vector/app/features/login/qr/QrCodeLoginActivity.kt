@@ -24,7 +24,6 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
@@ -88,7 +87,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
     }
 
     private fun handleNavigateToStatusScreen() {
-        addFragmentToBackstack(
+        addFragment(
                 views.container,
                 QrCodeLoginStatusFragment::class.java,
                 tag = FRAGMENT_QR_CODE_STATUS_TAG

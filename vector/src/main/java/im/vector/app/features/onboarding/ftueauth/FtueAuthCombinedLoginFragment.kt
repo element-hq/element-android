@@ -74,7 +74,15 @@ class FtueAuthCombinedLoginFragment :
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
         }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
-        if (vectorFeatures.isQrCodeLoginEnabled()) {
+
+        viewModel.onEach(OnboardingViewState::canLoginWithQrCode) {
+            configureQrCodeLoginButtonVisibility(it)
+        }
+    }
+
+    private fun configureQrCodeLoginButtonVisibility(canLoginWithQrCode: Boolean) {
+        if (canLoginWithQrCode) {
+            views.loginWithQrCode.isVisible = true
             views.loginWithQrCode.debouncedClicks {
                 navigator
                         .openLoginWithQrCode(

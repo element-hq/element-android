@@ -44,7 +44,7 @@ class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShow
 
     private fun initCancelButton() {
         views.qrCodeLoginShowQrCodeCancelButton.debouncedClicks {
-            parentFragmentManager.popBackStack()
+            activity?.onBackPressed()
         }
     }
 

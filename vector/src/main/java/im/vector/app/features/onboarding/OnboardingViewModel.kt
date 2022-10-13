@@ -117,6 +117,25 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
+    private fun observeQrCodeLoginCapability() = viewModelScope.launch {
+        if (!vectorFeatures.isQrCodeLoginEnabled()) {
+            setState {
+                copy(
+                        canLoginWithQrCode = false
+                )
+            }
+        } else {
+            homeServerConnectionConfigFactory.create(defaultHomeserverUrl)?.let {
+                val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
+                setState {
+                    copy(
+                            canLoginWithQrCode = canLoginWithQrCode
+                    )
+                }
+            }
+        }
+    }
+
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl
 
@@ -234,6 +253,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleSplashAction(action: OnboardingAction.SplashAction) {
         setState { copy(onboardingFlow = action.onboardingFlow) }
         continueToPageAfterSplash(action.onboardingFlow)
+        observeQrCodeLoginCapability()
     }
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
