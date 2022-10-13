@@ -143,6 +143,14 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
     }
 
+    fun shouldAddHttpPusher() = if (vectorPreferences.areNotificationEnabledForDevice()) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        val currentPushers = currentSession.pushersService().getPushers()
+        currentPushers.none { it.deviceId == currentSession.sessionParams.deviceId }
+    } else {
+        false
+    }
+
     fun observeLocalNotificationsSilenced() {
         val currentSession = activeSessionHolder.getActiveSession()
         val deviceId = currentSession.cryptoService().getMyDevice().deviceId

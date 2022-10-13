@@ -218,7 +218,7 @@ class HomeActivity :
                 fcmHelper.ensureFcmTokenIsRetrieved(
                         this,
                         pushersManager,
-                        vectorPreferences.areNotificationEnabledForDevice()
+                        homeActivityViewModel.shouldAddHttpPusher()
                 )
             }
         }
