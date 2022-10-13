@@ -425,7 +425,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     override suspend fun loginUsingQrLoginToken(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             loginToken: String,
-            initialDeviceName: String,
+            initialDeviceName: String?,
             deviceId: String?,
     ): Session {
         return loginTokenAuthTask.execute(
