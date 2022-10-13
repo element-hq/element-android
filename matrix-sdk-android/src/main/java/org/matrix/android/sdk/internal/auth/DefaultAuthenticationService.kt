@@ -39,6 +39,7 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+import org.matrix.android.sdk.internal.auth.login.QrLoginTokenTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
@@ -62,7 +63,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask
+        private val directLoginTask: DirectLoginTask,
+        private val loginTokenAuthTask: QrLoginTokenTask
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -398,6 +400,17 @@ internal class DefaultAuthenticationService @Inject constructor(
                         homeServerConnectionConfig = homeServerConnectionConfig,
                         userId = matrixId,
                         password = password,
+                        deviceName = initialDeviceName,
+                        deviceId = deviceId
+                )
+        )
+    }
+
+    override suspend fun loginUsingQrLoginToken(homeServerConnectionConfig: HomeServerConnectionConfig, loginToken: String, initialDeviceName: String, deviceId: String?): Session {
+        return loginTokenAuthTask.execute(
+                QrLoginTokenTask.Params(
+                        homeServerConnectionConfig = homeServerConnectionConfig,
+                        loginToken = loginToken,
                         deviceName = initialDeviceName,
                         deviceId = deviceId
                 )
