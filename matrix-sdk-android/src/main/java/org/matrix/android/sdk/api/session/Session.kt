@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams

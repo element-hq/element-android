@@ -16,26 +16,29 @@
 
 package org.matrix.android.sdk.internal.debug
 
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 import org.matrix.android.sdk.api.debug.DebugService
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
+import org.matrix.android.sdk.internal.di.AuthDatabase
+import org.matrix.android.sdk.internal.di.GlobalDatabase
 import javax.inject.Inject
 
 internal class DefaultDebugService @Inject constructor(
-        // @AuthDatabase private val realmConfigurationAuth: RealmConfiguration,
-        // @GlobalDatabase private val realmConfigurationGlobal: RealmConfiguration,
+        @AuthDatabase private val authRealmInstance: RealmInstance,
+        @GlobalDatabase private val globalRealmInstance: RealmInstance,
         private val sessionManager: SessionManager,
 ) : DebugService {
 
     override fun getAllRealmConfigurations(): List<RealmConfiguration> {
-        return sessionManager.getLastSession()?.getRealmConfigurations().orEmpty()
-                // realmConfigurationAuth +
-                // realmConfigurationGlobal
+        return sessionManager.getLastSession()?.getRealmConfigurations().orEmpty() +
+                authRealmInstance.realmConfiguration + globalRealmInstance.realmConfiguration
     }
 
     override fun getDbUsageInfo() = buildString {
-        //append(RealmDebugTools(realmConfigurationAuth).getInfo("Auth"))
-        //append(RealmDebugTools(realmConfigurationGlobal).getInfo("Global"))
+        append(RealmDebugTools(authRealmInstance).getInfo("Auth"))
+        append(RealmDebugTools(globalRealmInstance).getInfo("Global"))
         append(sessionManager.getLastSession()?.getDbUsageInfo())
     }
 }

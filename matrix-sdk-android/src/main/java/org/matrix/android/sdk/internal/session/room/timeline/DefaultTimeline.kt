@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.kotlin.TypedRealm
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
@@ -57,7 +59,7 @@ import java.util.concurrent.atomic.AtomicReference
 internal class DefaultTimeline(
         private val roomId: String,
         private val initialEventId: String?,
-        private val realmConfiguration: RealmConfiguration,
+        private val realmInstance: RealmInstance,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val readReceiptHandler: ReadReceiptHandler,
         private val settings: TimelineSettings,
@@ -86,7 +88,6 @@ internal class DefaultTimeline(
     private val forwardState = AtomicReference(Timeline.PaginationState())
     private val backwardState = AtomicReference(Timeline.PaginationState())
 
-    private val backgroundRealm = AtomicReference<Realm>()
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
     private val timelineScope = CoroutineScope(SupervisorJob() + timelineDispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
@@ -96,11 +97,11 @@ internal class DefaultTimeline(
     private var rootThreadEventId: String? = null
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
+            timelineScope = timelineScope,
             timelineSettings = settings,
-            realm = backgroundRealm,
+            realmInstance = realmInstance,
             eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
-            realmConfiguration = realmConfiguration,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
             fetchThreadTimelineTask = fetchThreadTimelineTask,
             getContextOfEventTask = getEventTask,
@@ -151,9 +152,7 @@ internal class DefaultTimeline(
                     isFromThreadTimeline = rootThreadEventId != null
                     this@DefaultTimeline.rootThreadEventId = rootThreadEventId
                     // /
-                    val realm = Realm.getInstance(realmConfiguration)
-                    ensureReadReceiptAreLoaded(realm)
-                    backgroundRealm.set(realm)
+                    ensureReadReceiptAreLoaded()
                     listenToPostSnapshotSignals()
                     openAround(initialEventId, rootThreadEventId)
                     postSnapshot()
@@ -168,7 +167,6 @@ internal class DefaultTimeline(
             sequencer.post {
                 if (isStarted.compareAndSet(true, false)) {
                     strategy.onStop()
-                    backgroundRealm.get().closeQuietly()
                 }
             }
         }
@@ -408,14 +406,14 @@ internal class DefaultTimeline(
         }
     }
 
-    private fun ensureReadReceiptAreLoaded(realm: Realm) {
+    private fun ensureReadReceiptAreLoaded() {
         readReceiptHandler.getContentFromInitSync(roomId)
                 ?.also {
                     Timber.w("INIT_SYNC Insert when opening timeline RR for room $roomId")
                 }
                 ?.let { readReceiptContent ->
-                    realm.executeTransactionAsync {
-                        readReceiptHandler.handle(it, roomId, readReceiptContent, false, null)
+                    realmInstance.asyncWrite {
+                        readReceiptHandler.handle(this, roomId, readReceiptContent, false, null)
                         readReceiptHandler.onContentFromInitSyncHandled(roomId)
                     }
                 }

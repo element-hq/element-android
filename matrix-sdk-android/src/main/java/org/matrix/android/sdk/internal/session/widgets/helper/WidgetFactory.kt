@@ -25,7 +25,8 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
@@ -35,7 +36,7 @@ import javax.inject.Inject
 
 internal class WidgetFactory @Inject constructor(
         private val userDataSource: UserDataSource,
-        private val realmSessionProvider: RealmSessionProvider,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val displayNameResolver: DisplayNameResolver,
         private val urlResolver: ContentUrlResolver,
         @UserId private val userId: String
@@ -49,16 +50,15 @@ internal class WidgetFactory @Inject constructor(
         val senderInfo = if (widgetEvent.senderId == null || widgetEvent.roomId == null) {
             null
         } else {
-            realmSessionProvider.withRealm {
-                val roomMemberHelper = RoomMemberHelper(it, widgetEvent.roomId)
-                val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(widgetEvent.senderId)
-                SenderInfo(
-                        userId = widgetEvent.senderId,
-                        displayName = roomMemberSummaryEntity?.displayName,
-                        isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
-                        avatarUrl = roomMemberSummaryEntity?.avatarUrl
-                )
-            }
+            val realm = realmInstance.getBlockingRealm()
+            val roomMemberHelper = RoomMemberHelper(realm, widgetEvent.roomId)
+            val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(widgetEvent.senderId)
+            SenderInfo(
+                    userId = widgetEvent.senderId,
+                    displayName = roomMemberSummaryEntity?.displayName,
+                    isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
+                    avatarUrl = roomMemberSummaryEntity?.avatarUrl
+            )
         }
         val isAddedByMe = widgetEvent.senderId == userId
         return Widget(

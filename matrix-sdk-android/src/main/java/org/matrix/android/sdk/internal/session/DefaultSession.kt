@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -68,7 +68,11 @@ import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
+import org.matrix.android.sdk.internal.di.ContentScannerDatabase
+import org.matrix.android.sdk.internal.di.CryptoDatabase
+import org.matrix.android.sdk.internal.di.IdentityDatabase
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -82,10 +86,12 @@ internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
         private val workManagerProvider: WorkManagerProvider,
         private val globalErrorHandler: GlobalErrorHandler,
-        @SessionId
-        override val sessionId: String,
+        @SessionDatabase private val sessionRealmInstance: RealmInstance,
+        @CryptoDatabase private val cryptoRealmInstance: RealmInstance,
+        @IdentityDatabase private val identityRealmInstance: RealmInstance,
+        @ContentScannerDatabase private val contentScannerRealmInstance: RealmInstance,
+        @SessionId override val sessionId: String,
         override val coroutineDispatchers: MatrixCoroutineDispatchers,
-        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val lifecycleObservers: Set<@JvmSuppressWildcards SessionLifecycleObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
@@ -258,18 +264,18 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun getDbUsageInfo() = buildString {
-        append(RealmDebugTools(realmConfiguration).getInfo("Session"))
-        //append(RealmDebugTools(realmConfigurationCrypto).getInfo("Crypto"))
-        //append(RealmDebugTools(realmConfigurationIdentity).getInfo("Identity"))
-        //append(RealmDebugTools(realmConfigurationContentScanner).getInfo("ContentScanner"))
+        append(RealmDebugTools(sessionRealmInstance).getInfo("Session"))
+        append(RealmDebugTools(cryptoRealmInstance).getInfo("Crypto"))
+        append(RealmDebugTools(identityRealmInstance).getInfo("Identity"))
+        append(RealmDebugTools(contentScannerRealmInstance).getInfo("ContentScanner"))
     }
 
     override fun getRealmConfigurations(): List<RealmConfiguration> {
         return listOf(
-                realmConfiguration,
-                // realmConfigurationCrypto,
-                // realmConfigurationIdentity,
-                // realmConfigurationContentScanner,
+                sessionRealmInstance.realmConfiguration,
+                cryptoRealmInstance.realmConfiguration,
+                identityRealmInstance.realmConfiguration,
+                contentScannerRealmInstance.realmConfiguration
         )
     }
 }

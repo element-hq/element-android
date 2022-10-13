@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 import androidx.work.ExistingWorkPolicy
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -50,7 +52,7 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
      * Handle the content of a beacon info.
      * @return true if it has been processed, false if ignored.
      */
-    fun handleBeaconInfo(realm: Realm, event: Event, content: MessageBeaconInfoContent, roomId: String, isLocalEcho: Boolean): Boolean {
+    fun handleBeaconInfo(realm: MutableRealm, event: Event, content: MessageBeaconInfoContent, roomId: String, isLocalEcho: Boolean): Boolean {
         if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return false
         }
@@ -130,7 +132,7 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
      * @return true if it has been processed, false if ignored.
      */
     fun handleBeaconLocationData(
-            realm: Realm,
+            realm: MutableRealm,
             event: Event,
             content: MessageBeaconLocationDataContent,
             roomId: String,
@@ -180,11 +182,11 @@ internal class LiveLocationAggregationProcessor @Inject constructor(
         val updatedEventIds = aggregatedSummary.relatedEventIds.toMutableList().also {
             it.add(eventId)
         }
-        aggregatedSummary.relatedEventIds = RealmList(*updatedEventIds.toTypedArray())
+        aggregatedSummary.relatedEventIds = realmListOf(*updatedEventIds.toTypedArray())
     }
 
     private fun deactivateAllPreviousBeacons(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             userId: String,
             currentEventId: String,

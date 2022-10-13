@@ -16,16 +16,16 @@
 
 package org.matrix.android.sdk.internal.database
 
-import com.zhuinden.monarchy.Monarchy
-import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import kotlinx.coroutines.launch
+import io.realm.kotlin.query.RealmResults
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
-import org.matrix.android.sdk.internal.database.model.EventInsertEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
@@ -33,68 +33,54 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(
-        @SessionDatabase realmConfiguration: RealmConfiguration,
+        @SessionDatabase realmInstance: RealmInstance,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
 ) :
-        RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
+        RealmLiveEntityObserver<EventInsertEntity>(realmInstance, coroutineDispatchers.io) {
 
     private val lock = Mutex()
 
-    override val query = Monarchy.Query {
-        it.where(EventInsertEntity::class.java).equalTo(EventInsertEntityFields.CAN_BE_PROCESSED, true)
+    init {
+        realmInstance.getRealmFlow().flatMapConcat { realm ->
+            realm.query(EventInsertEntity::class, "canBeProcessed == true").asFlow()
+        }.onEach { resultChange ->
+            onChange(resultChange.list)
+        }.launchIn(observerScope)
     }
 
-    override fun onChange(results: RealmResults<EventInsertEntity>) {
-        observerScope.launch {
-            lock.withLock {
-                if (!results.isLoaded || results.isEmpty()) {
-                    return@withLock
-                }
-                val idsToDeleteAfterProcess = ArrayList<String>()
-                val filteredEvents = ArrayList<EventInsertEntity>(results.size)
-                Timber.v("EventInsertEntity updated with ${results.size} results in db")
-                results.forEach {
-                    if (shouldProcess(it)) {
-                        // don't use copy from realm over there
-                        val copiedEvent = EventInsertEntity(
-                                eventId = it.eventId,
-                                eventType = it.eventType
-                        ).apply {
-                            insertType = it.insertType
-                        }
-                        filteredEvents.add(copiedEvent)
-                    }
-                    idsToDeleteAfterProcess.add(it.eventId)
-                }
-                awaitTransaction(realmConfiguration) { realm ->
-                    Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
-                    filteredEvents.forEach { eventInsert ->
-                        val eventId = eventInsert.eventId
-                        val event = EventEntity.where(realm, eventId).findFirst()
-                        if (event == null) {
-                            Timber.v("Event $eventId not found")
-                            return@forEach
-                        }
-                        val domainEvent = event.asDomain()
-                        processors.filter {
-                            it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
-                        }.forEach {
-                            it.process(realm, domainEvent)
-                        }
-                    }
-                    realm.where(EventInsertEntity::class.java)
-                            .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
-                            .findAll()
-                            .deleteAllFromRealm()
-                }
-                processors.forEach { it.onPostProcess() }
+    private suspend fun onChange(results: RealmResults<EventInsertEntity>) {
+        fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
+            return processors.any {
+                it.shouldProcess(eventInsertEntity.eventId, eventInsertEntity.eventType, eventInsertEntity.insertType)
             }
         }
-    }
 
-    private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
-        return processors.any {
-            it.shouldProcess(eventInsertEntity.eventId, eventInsertEntity.eventType, eventInsertEntity.insertType)
+        lock.withLock {
+            if (results.isEmpty()) {
+                return@withLock
+            }
+            Timber.v("EventInsertEntity updated with ${results.size} results in db")
+            realmInstance.write { ->
+                results
+                        .filter(::shouldProcess)
+                        .forEach { eventInsert ->
+                            val eventId = eventInsert.eventId
+                            val event = EventEntity.where(this, eventId).first().find()
+                            if (event == null) {
+                                Timber.v("Event $eventId not found")
+                                return@forEach
+                            }
+                            val domainEvent = event.asDomain()
+                            processors.filter {
+                                it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
+                            }.forEach {
+                                it.process(this, domainEvent)
+                            }
+                            deleteNullable(findLatest(eventInsert))
+                        }
+            }
+            processors.forEach { it.onPostProcess() }
         }
     }
 }

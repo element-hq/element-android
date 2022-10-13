@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
-import io.realm.Realm
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -41,12 +40,12 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
         return eventType == EventType.REDACTION && insertType != EventInsertType.LOCAL_ECHO
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: MutableRealm, event: Event) {
         if (event.redacts.isNullOrBlank() || LocalEcho.isLocalEchoId(event.eventId.orEmpty())) {
             return
         }
 
-        val redactedEvent = EventEntity.where(realm, eventId = event.redacts).findFirst()
+        val redactedEvent = EventEntity.where(realm, eventId = event.redacts).first().find()
                 ?: return
 
         if (redactedEvent.type in EventType.STATE_ROOM_BEACON_INFO) {
@@ -54,11 +53,11 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
 
             if (liveSummary != null) {
                 Timber.d("deleting live summary with id: ${liveSummary.eventId}")
-                liveSummary.deleteFromRealm()
+                realm.delete(liveSummary)
                 val annotationsSummary = EventAnnotationsSummaryEntity.get(realm, eventId = redactedEvent.eventId)
                 if (annotationsSummary != null) {
                     Timber.d("deleting annotation summary with id: ${annotationsSummary.eventId}")
-                    annotationsSummary.deleteFromRealm()
+                    realm.delete(annotationsSummary)
                 }
             }
         }

@@ -16,7 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -30,15 +31,16 @@ import javax.inject.Inject
 
 internal class RoomCreateEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: MutableRealm, event: Event) {
         val createRoomContent = event.getClearContent().toModel<RoomCreateContent>()
         val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: return
 
-        val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).findFirst()
-                ?: RoomSummaryEntity(predecessorRoomId)
+        val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).first().find()
+                ?: RoomSummaryEntity()
+        predecessorRoomSummary.roomId = predecessorRoomId
         predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
         predecessorRoomSummary.isHiddenFromUser = true
-        realm.insertOrUpdate(predecessorRoomSummary)
+        realm.copyToRealm(predecessorRoomSummary, updatePolicy = UpdatePolicy.ALL)
     }
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {

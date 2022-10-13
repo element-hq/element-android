@@ -195,16 +195,14 @@ internal class RoomSyncHandler @Inject constructor(
                                                 aggregator
                                         )
                                     }
-                            realm.insertOrUpdate(roomEntities)
                             reporter?.reportProgress(index + 1F)
                         }
             }
         } else {
             // No need to split
-            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
+            handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                 handleJoinedRoom(realm, it.key, it.value, EventInsertType.INITIAL_SYNC, syncLocalTimeStampMillis, aggregator)
             }
-            realm.insertOrUpdate(rooms)
         }
     }
 

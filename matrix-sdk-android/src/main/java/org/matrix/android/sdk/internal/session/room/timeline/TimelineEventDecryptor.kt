@@ -15,8 +15,6 @@
  */
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -24,6 +22,7 @@ import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -35,8 +34,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 internal class TimelineEventDecryptor @Inject constructor(
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val cryptoService: CryptoService,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
 ) {
@@ -97,58 +95,59 @@ internal class TimelineEventDecryptor @Inject constructor(
             }
         }
         executor?.execute {
-            Realm.getInstance(realmConfiguration).use { realm ->
-                try {
-                    processDecryptRequest(request, realm)
-                } catch (e: InterruptedException) {
-                    Timber.i("Decryption got interrupted")
-                }
+            try {
+                processDecryptRequest(request)
+            } catch (e: InterruptedException) {
+                Timber.i("Decryption got interrupted")
             }
         }
     }
 
-    private fun threadAwareNonEncryptedEvents(request: DecryptionRequest, realm: Realm) {
+    private fun threadAwareNonEncryptedEvents(request: DecryptionRequest) {
         val event = request.event
-        realm.executeTransaction {
-            val eventId = event.eventId ?: return@executeTransaction
+        realmInstance.blockingWrite {
+            val eventId = event.eventId ?: return@blockingWrite
             val eventEntity = EventEntity
-                    .where(it, eventId = eventId)
-                    .findFirst()
+                    .where(this, eventId = eventId)
+                    .first()
+                    .find()
             val decryptedEvent = eventEntity?.asDomain()
-            threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+            threadsAwarenessHandler.makeEventThreadAware(this, event.roomId, decryptedEvent, eventEntity)
         }
     }
 
-    private fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
+    private fun processDecryptRequest(request: DecryptionRequest) {
         val event = request.event
         val timelineId = request.timelineId
 
         if (!request.event.isEncrypted()) {
             // Here we have requested a decryption to an event that is not encrypted
             // We will simply make this event thread aware
-            threadAwareNonEncryptedEvents(request, realm)
+            threadAwareNonEncryptedEvents(request)
             return
         }
         try {
             // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
             val result = runBlocking { cryptoService.decryptEvent(request.event, timelineId) }
             Timber.v("Successfully decrypted event ${event.eventId}")
-            realm.executeTransaction {
-                val eventId = event.eventId ?: return@executeTransaction
+            realmInstance.blockingWrite {
+                val eventId = event.eventId ?: return@blockingWrite
                 val eventEntity = EventEntity
-                        .where(it, eventId = eventId)
-                        .findFirst()
+                        .where(this, eventId = eventId)
+                        .first()
+                        .find()
                 eventEntity?.setDecryptionResult(result)
                 val decryptedEvent = eventEntity?.asDomain()
-                threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+                threadsAwarenessHandler.makeEventThreadAware(this, event.roomId, decryptedEvent, eventEntity)
             }
         } catch (e: MXCryptoError) {
             Timber.v("Failed to decrypt event ${event.eventId} : ${e.localizedMessage}")
             if (e is MXCryptoError.Base /*&& e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID*/) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
-                realm.executeTransaction {
-                    EventEntity.where(it, eventId = event.eventId ?: "")
-                            .findFirst()
+                realmInstance.blockingWrite {
+                    EventEntity.where(this, eventId = event.eventId ?: "")
+                            .first()
+                            .find()
                             ?.let {
                                 it.decryptionErrorCode = e.errorType.name
                                 it.decryptionErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.database.query
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmResults
+import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmList
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
@@ -58,6 +59,14 @@ internal fun TimelineEventEntity.Companion.whereRoomId(
 ): RealmQuery<TimelineEventEntity> {
     return where(realm)
             .query("roomId == $0", roomId)
+}
+
+internal fun TimelineEventEntity.Companion.whereChunkId(
+        realm: TypedRealm,
+        chunkId: ObjectId
+): RealmQuery<TimelineEventEntity> {
+    return where(realm)
+            .query("chunkId == $0", chunkId)
 }
 
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(

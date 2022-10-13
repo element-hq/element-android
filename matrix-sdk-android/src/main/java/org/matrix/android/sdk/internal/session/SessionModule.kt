@@ -18,16 +18,16 @@ package org.matrix.android.sdk.internal.session
 
 import android.content.Context
 import android.os.Build
-import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -49,7 +49,7 @@ import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorage
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
-import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.CacheDirectory
@@ -202,10 +202,16 @@ internal abstract class SessionModule {
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesMonarchy(@SessionDatabase realmConfiguration: RealmConfiguration): Monarchy {
-            return Monarchy.Builder()
-                    .setRealmConfiguration(realmConfiguration)
-                    .build()
+        fun providesRealmInstance(
+                @SessionDatabase realmConfiguration: RealmConfiguration,
+                @SessionCoroutineScope coroutineScope: CoroutineScope,
+                matrixCoroutineDispatchers: MatrixCoroutineDispatchers
+        ): RealmInstance {
+            return RealmInstance(
+                    coroutineScope = coroutineScope,
+                    realmConfiguration = realmConfiguration,
+                    coroutineDispatcher = matrixCoroutineDispatchers.io
+            )
         }
 
         @JvmStatic
@@ -366,10 +372,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindIdentityService(service: DefaultIdentityService): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
     @IntoSet

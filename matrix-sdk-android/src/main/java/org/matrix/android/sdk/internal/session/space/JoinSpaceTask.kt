@@ -16,14 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.space
 
-import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.task.Task
@@ -41,8 +41,7 @@ internal interface JoinSpaceTask : Task<JoinSpaceTask.Params, JoinSpaceResult> {
 
 internal class DefaultJoinSpaceTask @Inject constructor(
         private val joinRoomTask: JoinRoomTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomSummaryDataSource: RoomSummaryDataSource
 ) : JoinSpaceTask {
 
@@ -64,16 +63,16 @@ internal class DefaultJoinSpaceTask @Inject constructor(
 
         Timber.v("## Space: > Wait for post joined sync ${params.roomIdOrAlias} ...")
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(2L)) { realm ->
-                realm.where(RoomSummaryEntity::class.java)
-                        .apply {
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(2L)) { realm ->
+                realm.query(RoomSummaryEntity::class)
+                        .let {
                             if (params.roomIdOrAlias.startsWith("!")) {
-                                equalTo(RoomSummaryEntityFields.ROOM_ID, params.roomIdOrAlias)
+                                it.query("roomId == $0", params.roomIdOrAlias)
                             } else {
-                                equalTo(RoomSummaryEntityFields.CANONICAL_ALIAS, params.roomIdOrAlias)
+                                it.query("canonicalAlias == $0", params.roomIdOrAlias)
                             }
                         }
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                        .process("membershipStr", listOf(Membership.JOIN))
             }
         } catch (exception: TimeoutCancellationException) {
             Timber.w("## Space: > Error created with timeout")

@@ -16,42 +16,40 @@
 
 package org.matrix.android.sdk.internal.database.tools
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.internal.database.RealmInstance
 
 internal class RealmDebugTools(
-        private val realmConfiguration: RealmConfiguration
+        private val realmInstance: RealmInstance
 ) {
     /**
      * Get info about the DB.
      */
     fun getInfo(baseName: String): String {
+        val realm = realmInstance.getBlockingRealm()
         return buildString {
-            append("\n$baseName Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
+            val realmConfiguration = realmInstance.realmConfiguration
+            append("\n$baseName Realm located at : ${realmConfiguration.path}/${realmConfiguration.name}")
 
             if (BuildConfig.LOG_PRIVATE_DATA) {
-                val key = realmConfiguration.encryptionKey.joinToString("") { byte -> "%02x".format(byte) }
+                val key = realmConfiguration.encryptionKey?.joinToString("") { byte -> "%02x".format(byte) }
                 append("\n$baseName Realm encryption key : $key")
             }
 
-            Realm.getInstance(realmConfiguration).use { realm ->
-                // Check if we have data
-                separator()
-                separator()
-                append("\n$baseName Realm is empty: ${realm.isEmpty}")
-                var total = 0L
-                val maxNameLength = realmConfiguration.realmObjectClasses.maxOf { it.simpleName.length }
-                realmConfiguration.realmObjectClasses.forEach { modelClazz ->
-                    val count = realm.where(modelClazz).count()
-                    total += count
-                    append("\n$baseName Realm - count ${modelClazz.simpleName.padEnd(maxNameLength)} : $count")
-                }
-                separator()
-                append("\n$baseName Realm - total count: $total")
-                separator()
-                separator()
+            // Check if we have data
+            separator()
+            separator()
+            var total = 0L
+            val maxNameLength = realmConfiguration.schema.maxOf { it.simpleName?.length ?: 0 }
+            realmConfiguration.schema.forEach { modelClazz ->
+                val count = realm.query(modelClazz).count().find()
+                total += count
+                append("\n$baseName Realm - count ${modelClazz.simpleName?.padEnd(maxNameLength)} : $count")
             }
+            separator()
+            append("\n$baseName Realm - total count: $total")
+            separator()
+            separator()
         }
     }
 

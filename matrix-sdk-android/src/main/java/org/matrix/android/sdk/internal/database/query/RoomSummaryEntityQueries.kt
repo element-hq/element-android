@@ -20,16 +20,24 @@ import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmResults
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 import org.matrix.android.sdk.internal.database.queryNotIn
+import org.matrix.android.sdk.internal.query.process
 
 internal fun RoomSummaryEntity.Companion.where(realm: TypedRealm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
     return realm.query(RoomSummaryEntity::class)
             .andIf(roomId != null) {
                 query("roomId == $0", roomId!!)
             }
+}
+
+internal fun RoomSummaryEntity.Companion.where(realm: TypedRealm, roomId: String, memberships: List<Membership>): RealmQuery<RoomSummaryEntity> {
+    return realm.query(RoomSummaryEntity::class)
+            .query("roomId == $0", roomId)
+            .process("membershipStr", memberships)
 }
 
 internal fun RoomSummaryEntity.Companion.findByAlias(realm: TypedRealm, roomAlias: String): RoomSummaryEntity? {

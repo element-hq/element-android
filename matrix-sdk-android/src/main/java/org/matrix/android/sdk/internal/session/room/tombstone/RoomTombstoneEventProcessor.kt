@@ -16,7 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.tombstone
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -30,17 +31,18 @@ import javax.inject.Inject
 
 internal class RoomTombstoneEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: MutableRealm, event: Event) {
         if (event.roomId == null) return
         val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
         if (createRoomContent?.replacementRoomId == null) return
 
-        val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
-                ?: RoomSummaryEntity(event.roomId)
+        val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).first().find()
+                ?: RoomSummaryEntity()
+        predecessorRoomSummary.roomId = event.roomId
         if (predecessorRoomSummary.versioningState == VersioningState.NONE) {
             predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
         }
-        realm.insertOrUpdate(predecessorRoomSummary)
+        realm.copyToRealm(predecessorRoomSummary, updatePolicy = UpdatePolicy.ALL)
     }
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {

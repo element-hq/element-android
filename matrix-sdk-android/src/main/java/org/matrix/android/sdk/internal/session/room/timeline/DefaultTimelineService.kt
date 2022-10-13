@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -39,7 +40,7 @@ import org.matrix.android.sdk.internal.util.time.Clock
 
 internal class DefaultTimelineService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val timelineInput: TimelineInput,
         private val contextOfEventTask: GetContextOfEventTask,
         private val eventDecryptor: TimelineEventDecryptor,
@@ -67,7 +68,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 roomId = roomId,
                 initialEventId = eventId,
                 settings = settings,
-                realmConfiguration = monarchy.realmConfiguration,
+                realmInstance = realmInstance,
                 coroutineDispatchers = coroutineDispatchers,
                 paginationTask = paginationTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,

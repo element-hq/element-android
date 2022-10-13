@@ -364,15 +364,10 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         return updateEventEntity(event, eventEntity, eventPayload, messageTextContent)
     }
 
-    private fun eventThatRelatesTo(realm: TypedRealm, currentEventId: String, rootThreadEventId: String): List<EventEntity>? {
-        val threadList = realm.where<EventEntity>()
-                .beginGroup()
-                .equalTo(EventEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .or()
-                .equalTo(EventEntityFields.EVENT_ID, rootThreadEventId)
-                .endGroup()
-                .and()
-                .findAll()
+    private fun eventThatRelatesTo(realm: TypedRealm, currentEventId: String, rootThreadEventId: String): List<EventEntity> {
+        val threadList = realm.query(EventEntity::class)
+                .query("rootThreadEventId == $0 OR eventId == $0", rootThreadEventId)
+                .find()
         cacheEventRootId.add(rootThreadEventId)
         return threadList.filter {
             it.asDomain().getRelationContentForType(RelationType.THREAD)?.inReplyTo?.eventId == currentEventId

@@ -22,6 +22,7 @@ import com.squareup.moshi.JsonClass
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.get
@@ -53,7 +54,7 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
     ) : SessionWorkerParams
 
     @SessionDatabase
-    @Inject lateinit var realmConfiguration: RealmConfiguration
+    @Inject lateinit var realmInstance: RealmInstance
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -74,10 +75,10 @@ internal class DeactivateLiveLocationShareWorker(context: Context, params: Worke
     }
 
     private suspend fun deactivateLiveLocationShare(params: Params) {
-        awaitTransaction(realmConfiguration) { realm ->
+        realmInstance.write {
             Timber.d("deactivating live with id=${params.eventId}")
             val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.get(
-                    realm = realm,
+                    realm = this,
                     roomId = params.roomId,
                     eventId = params.eventId
             )

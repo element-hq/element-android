@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.debug
 
-import io.realm.RealmConfiguration
+import io.realm.kotlin.RealmConfiguration
 
 /**
  * Useful methods to access to some private data managed by the SDK.

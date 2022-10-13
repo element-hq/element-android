@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
-import io.realm.Realm
-import io.realm.kotlin.isValid
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.ext.isValid
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
@@ -41,9 +41,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.realm
 import org.matrix.android.sdk.internal.session.StreamEventsManager
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
@@ -52,7 +50,7 @@ import javax.inject.Inject
  * Insert Chunk in DB, and eventually link next and previous chunk in db.
  */
 internal class TokenChunkEventPersistor @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         @UserId private val userId: String,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val liveEventManager: Lazy<StreamEventsManager>,
@@ -70,8 +68,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
             roomId: String,
             direction: PaginationDirection
     ): Result {
-        monarchy
-                .awaitTransaction { realm ->
+        realmInstance
+                .write {
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val nextToken: String?
@@ -83,16 +81,16 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         nextToken = receivedChunk.start
                         prevToken = receivedChunk.end
                     }
-                    val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
+                    val existingChunk = ChunkEntity.find(this, roomId, prevToken = prevToken, nextToken = nextToken)
                     if (existingChunk != null) {
                         Timber.v("This chunk is already in the db, return.")
-                        return@awaitTransaction
+                        return@write
                     }
 
                     // Creates links in both directions
-                    val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
-                    val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
-                    val currentChunk = ChunkEntity.create(realm, prevToken = prevToken, nextToken = nextToken).apply {
+                    val prevChunk = ChunkEntity.find(this, roomId, nextToken = prevToken)
+                    val nextChunk = ChunkEntity.find(this, roomId, prevToken = nextToken)
+                    val currentChunk = ChunkEntity.create(this, prevToken = prevToken, nextToken = nextToken).apply {
                         this.nextChunk = nextChunk
                         this.prevChunk = prevChunk
                     }
@@ -100,9 +98,9 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     prevChunk?.nextChunk = currentChunk
 
                     if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
-                        handleReachEnd(roomId, direction, currentChunk)
+                        handleReachEnd(this, roomId, direction, currentChunk)
                     } else {
-                        handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
+                        handlePagination(this, roomId, direction, receivedChunk, currentChunk)
                     }
                 }
 
@@ -117,12 +115,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
         }
     }
 
-    private fun handleReachEnd(roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
+    private fun handleReachEnd(realm: MutableRealm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId in $direction")
         if (direction == PaginationDirection.FORWARDS) {
             // We should keep the lastForward chunk unique, the one from sync, so make an unidirectional link.
             // This will allow us to get live events from sync even from a permalink but won't make the link in the opposite.
-            val realm = currentChunk.realm
             currentChunk.nextChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
         } else {
             currentChunk.isLastBackward = true
@@ -130,7 +127,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
     }
 
     private fun handlePagination(
-            realm: Realm,
+            realm: MutableRealm,
             roomId: String,
             direction: PaginationDirection,
             receivedChunk: TokenChunkEvent,
@@ -169,6 +166,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(
+                        realm = realm,
                         roomId = roomId,
                         eventEntity = eventEntity,
                         direction = direction,
@@ -186,7 +184,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
             }
         }
         if (currentChunk.isValid()) {
-            RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
+            RoomEntity.where(realm, roomId).first().find()?.addIfNecessary(currentChunk)
         }
 
         if (lightweightSettingsStorage.areThreadMessagesEnabled()) {

@@ -16,16 +16,23 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.RealmConfiguration
-import io.realm.RealmObjectChangeListener
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
-import io.realm.kotlin.addChangeListener
-import io.realm.kotlin.removeChangeListener
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.ext.asFlow
+import io.realm.kotlin.notifications.DeletedObject
+import io.realm.kotlin.notifications.InitialObject
+import io.realm.kotlin.notifications.InitialResults
+import io.realm.kotlin.notifications.ListChangeSet
+import io.realm.kotlin.notifications.ObjectChange
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.notifications.UpdatedObject
+import io.realm.kotlin.notifications.UpdatedResults
+import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.RealmResults
+import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -39,6 +46,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.query.whereChunkId
 import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
@@ -52,6 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
 internal class TimelineChunk(
+        private val timelineScope: CoroutineScope,
         private val chunkEntity: ChunkEntity,
         private val timelineSettings: TimelineSettings,
         private val roomId: String,
@@ -59,7 +68,7 @@ internal class TimelineChunk(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val eventDecryptor: TimelineEventDecryptor,
         private val paginationTask: PaginationTask,
-        private val realmConfiguration: RealmConfiguration,
+        private val realm: TypedRealm,
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val uiEchoManager: UIEchoManager?,
@@ -76,39 +85,8 @@ internal class TimelineChunk(
     private var prevChunkLatch: CompletableDeferred<Unit>? = null
     private var nextChunkLatch: CompletableDeferred<Unit>? = null
 
-    private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
-        if (changeSet == null) return@RealmObjectChangeListener
-        if (changeSet.isDeleted.orFalse()) {
-            return@RealmObjectChangeListener
-        }
-        Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet.changedFields?.joinToString(",")}")
-        if (changeSet.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD)) {
-            isLastForward.set(chunkEntity.isLastForward)
-        }
-        if (changeSet.isFieldChanged(ChunkEntityFields.IS_LAST_BACKWARD)) {
-            isLastBackward.set(chunkEntity.isLastBackward)
-        }
-        if (changeSet.isFieldChanged(ChunkEntityFields.NEXT_CHUNK.`$`)) {
-            nextChunk = createTimelineChunk(chunkEntity.nextChunk).also {
-                it?.prevChunk = this
-            }
-            nextChunkLatch?.complete(Unit)
-        }
-        if (changeSet.isFieldChanged(ChunkEntityFields.PREV_CHUNK.`$`)) {
-            prevChunk = createTimelineChunk(chunkEntity.prevChunk).also {
-                it?.nextChunk = this
-            }
-            prevChunkLatch?.complete(Unit)
-        }
-    }
-
-    private val timelineEventsChangeListener =
-            OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
-                Timber.v("on timeline events chunk update")
-                handleDatabaseChangeSet(results, changeSet)
-            }
-
-    private var timelineEventEntities: RealmResults<TimelineEventEntity> = chunkEntity.sortedTimelineEvents(timelineSettings.rootThreadEventId)
+    private var timelineEventEntities: RealmResults<TimelineEventEntity> =
+            chunkEntity.querySortedTimelineEvents(realm, timelineSettings.rootThreadEventId).find()
     private val builtEvents: MutableList<TimelineEvent> = Collections.synchronizedList(ArrayList())
     private val builtEventsIndexes: MutableMap<String, Int> = Collections.synchronizedMap(HashMap<String, Int>())
 
@@ -116,8 +94,13 @@ internal class TimelineChunk(
     private var prevChunk: TimelineChunk? = null
 
     init {
-        timelineEventEntities.addChangeListener(timelineEventsChangeListener)
-        chunkEntity.addChangeListener(chunkObjectListener)
+        timelineEventEntities.asFlow()
+                .onEach(::handleDatabaseChangeSet)
+                .launchIn(timelineScope)
+
+        chunkEntity.asFlow()
+                .onEach(::handleChunkObjectChange)
+                .launchIn(timelineScope)
     }
 
     fun hasReachedLastForward(): Boolean {
@@ -326,8 +309,6 @@ internal class TimelineChunk(
         nextChunkLatch?.cancel()
         prevChunk = null
         prevChunkLatch?.cancel()
-        chunkEntity.removeChangeListener(chunkObjectListener)
-        timelineEventEntities.removeChangeListener(timelineEventsChangeListener)
     }
 
     /**
@@ -337,12 +318,11 @@ internal class TimelineChunk(
      */
     private fun loadFromStorage(count: Int, direction: Timeline.Direction): LoadedFromStorage {
         val displayIndex = getNextDisplayIndex(direction) ?: return LoadedFromStorage()
-        val baseQuery = timelineEventEntities.where()
+        val baseQuery = chunkEntity.querySortedTimelineEvents(realm, timelineSettings.rootThreadEventId)
 
         val timelineEvents = baseQuery
                 .offsets(direction, count, displayIndex)
-                .findAll()
-                .orEmpty()
+                .find()
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
 // Disabled due to the new fallback
@@ -434,7 +414,7 @@ internal class TimelineChunk(
         val loadMoreResult = try {
             if (token == null) {
                 if (direction == Timeline.Direction.BACKWARDS || !chunkEntity.hasBeenALastForwardChunk()) return LoadMoreResult.REACHED_END
-                val lastKnownEventId = chunkEntity.sortedTimelineEvents(timelineSettings.rootThreadEventId).firstOrNull()?.eventId
+                val lastKnownEventId = chunkEntity.querySortedTimelineEvents(realm, timelineSettings.rootThreadEventId).first().find()?.eventId
                         ?: return LoadMoreResult.FAILURE
                 val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), count)
                 fetchTokenAndPaginateTask.execute(taskParams).toLoadMoreResult()
@@ -485,64 +465,104 @@ internal class TimelineChunk(
         return offset
     }
 
+    private fun handleChunkObjectChange(chunkChanged: ObjectChange<ChunkEntity>) {
+
+        fun onChunkUpdated(updatedObject: UpdatedObject<ChunkEntity>) {
+            Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${updatedObject.changedFields.joinToString(",")}")
+            if (updatedObject.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD)) {
+                isLastForward.set(chunkEntity.isLastForward)
+            }
+            if (updatedObject.isFieldChanged(ChunkEntityFields.IS_LAST_BACKWARD)) {
+                isLastBackward.set(chunkEntity.isLastBackward)
+            }
+            if (updatedObject.isFieldChanged(ChunkEntityFields.NEXT_CHUNK.`$`)) {
+                nextChunk = createTimelineChunk(chunkEntity.nextChunk).also {
+                    it?.prevChunk = this
+                }
+                nextChunkLatch?.complete(Unit)
+            }
+            if (updatedObject.isFieldChanged(ChunkEntityFields.PREV_CHUNK.`$`)) {
+                prevChunk = createTimelineChunk(chunkEntity.prevChunk).also {
+                    it?.nextChunk = this
+                }
+                prevChunkLatch?.complete(Unit)
+            }
+        }
+
+        when (chunkChanged) {
+            is InitialObject,
+            is DeletedObject -> return
+            is UpdatedObject -> onChunkUpdated(chunkChanged)
+        }
+    }
+
     /**
      * This method is responsible for managing insertions and updates of events on this chunk.
      *
      */
-    private fun handleDatabaseChangeSet(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
-        val insertions = changeSet.insertionRanges
-        for (range in insertions) {
-            if (!validateInsertion(range, results)) continue
-            val newItems = results
-                    .subList(range.startIndex, range.startIndex + range.length)
-                    .map { it.buildAndDecryptIfNeeded() }
+    private fun handleDatabaseChangeSet(resultChanges: ResultsChange<TimelineEventEntity>) {
 
-            builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
-            newItems.mapIndexed { index, timelineEvent ->
-                if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
-                    isLastBackward.set(true)
-                }
-                val correctedIndex = range.startIndex + index
-                builtEvents.add(correctedIndex, timelineEvent)
-                builtEventsIndexes[timelineEvent.eventId] = correctedIndex
-            }
-        }
-        val modifications = changeSet.changeRanges
-        for (range in modifications) {
-            for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
-                val updatedEntity = results[modificationIndex] ?: continue
-                val builtEventIndex = builtEventsIndexes[updatedEntity.eventId] ?: continue
-                try {
-                    builtEvents[builtEventIndex] = updatedEntity.buildAndDecryptIfNeeded()
-                } catch (failure: Throwable) {
-                    Timber.v("Fail to update items at index: $modificationIndex")
+        fun validateInsertion(range: ListChangeSet.Range, results: RealmResults<TimelineEventEntity>): Boolean {
+            // Insertion can only happen from LastForward chunk after a sync.
+            if (isLastForward.get()) {
+                val firstBuiltEvent = builtEvents.firstOrNull()
+                if (firstBuiltEvent != null) {
+                    val lastInsertion = results[range.startIndex + range.length - 1] ?: return false
+                    if (firstBuiltEvent.displayIndex + 1 != lastInsertion.displayIndex) {
+                        Timber.v("There is no continuation in the chunk, chunk is not fully loaded yet, skip insert.")
+                        return false
+                    }
                 }
             }
+            return true
         }
 
-        if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
-            onBuiltEvents(true)
-        }
+        fun handleUpdatedResults(updatedResults: UpdatedResults<TimelineEventEntity>) {
+            val results = updatedResults.list
+            val insertions = updatedResults.insertionRanges
+            for (range in insertions) {
+                if (!validateInsertion(range, results)) continue
+                val newItems = results
+                        .subList(range.startIndex, range.startIndex + range.length)
+                        .map { it.buildAndDecryptIfNeeded() }
 
-        val deletions = changeSet.deletions
-        if (deletions.isNotEmpty()) {
-            onEventsDeleted()
-        }
-    }
-
-    private fun validateInsertion(range: OrderedCollectionChangeSet.Range, results: RealmResults<TimelineEventEntity>): Boolean {
-        // Insertion can only happen from LastForward chunk after a sync.
-        if (isLastForward.get()) {
-            val firstBuiltEvent = builtEvents.firstOrNull()
-            if (firstBuiltEvent != null) {
-                val lastInsertion = results[range.startIndex + range.length - 1] ?: return false
-                if (firstBuiltEvent.displayIndex + 1 != lastInsertion.displayIndex) {
-                    Timber.v("There is no continuation in the chunk, chunk is not fully loaded yet, skip insert.")
-                    return false
+                builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
+                newItems.mapIndexed { index, timelineEvent ->
+                    if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
+                        isLastBackward.set(true)
+                    }
+                    val correctedIndex = range.startIndex + index
+                    builtEvents.add(correctedIndex, timelineEvent)
+                    builtEventsIndexes[timelineEvent.eventId] = correctedIndex
                 }
             }
+            val modifications = updatedResults.changeRanges
+            for (range in modifications) {
+                for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
+                    val updatedEntity = results[modificationIndex] ?: continue
+                    val builtEventIndex = builtEventsIndexes[updatedEntity.eventId] ?: continue
+                    try {
+                        builtEvents[builtEventIndex] = updatedEntity.buildAndDecryptIfNeeded()
+                    } catch (failure: Throwable) {
+                        Timber.v("Fail to update items at index: $modificationIndex")
+                    }
+                }
+            }
+
+            if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
+                onBuiltEvents(true)
+            }
+
+            val deletions = updatedResults.deletions
+            if (deletions.isNotEmpty()) {
+                onEventsDeleted()
+            }
         }
-        return true
+
+        when (resultChanges) {
+            is InitialResults -> Unit
+            is UpdatedResults -> handleUpdatedResults(resultChanges)
+        }
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {
@@ -551,11 +571,15 @@ internal class TimelineChunk(
         }
         return if (builtEvents.isEmpty()) {
             if (initialEventId != null) {
-                timelineEventEntities.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()?.displayIndex
+                chunkEntity.querySortedTimelineEvents(realm, timelineSettings.rootThreadEventId)
+                        .query("eventId == $0", initialEventId)
+                        .first()
+                        .find()
+                        ?.displayIndex
             } else if (direction == Timeline.Direction.BACKWARDS) {
-                timelineEventEntities.first(null)?.displayIndex
+                timelineEventEntities.firstOrNull()?.displayIndex
             } else {
-                timelineEventEntities.last(null)?.displayIndex
+                timelineEventEntities.lastOrNull()?.displayIndex
             }
         } else if (direction == Timeline.Direction.FORWARDS) {
             builtEvents.first().displayIndex + 1
@@ -567,13 +591,14 @@ internal class TimelineChunk(
     private fun createTimelineChunk(chunkEntity: ChunkEntity?): TimelineChunk? {
         if (chunkEntity == null) return null
         return TimelineChunk(
+                timelineScope = timelineScope,
+                realm = realm,
                 chunkEntity = chunkEntity,
                 timelineSettings = timelineSettings,
                 roomId = roomId,
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 paginationTask = paginationTask,
-                realmConfiguration = realmConfiguration,
                 fetchThreadTimelineTask = fetchThreadTimelineTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
@@ -598,16 +623,14 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
         startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
     return if (direction == Timeline.Direction.BACKWARDS) {
-        lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-        limit(count.toLong())
+        query("displayIndex <= $0", startDisplayIndex)
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                .limit(count)
     } else {
-        greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-        // We need to sort ascending first so limit works in the right direction
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-        limit(count.toLong())
-        // Result is expected to be sorted descending
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+        query("displayIndex >= $0", startDisplayIndex)
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+                .limit(count)
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
 }
 
@@ -615,18 +638,11 @@ private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
     return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
 }
 
-private fun ChunkEntity.sortedTimelineEvents(rootThreadEventId: String?): RealmResults<TimelineEventEntity> {
+private fun ChunkEntity.querySortedTimelineEvents(realm: TypedRealm, rootThreadEventId: String?): RealmQuery<TimelineEventEntity> {
     return if (rootThreadEventId == null) {
-        timelineEvents
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+        TimelineEventEntity.whereChunkId(realm, chunkId = chunkId)
     } else {
-        timelineEvents
-                .where()
-                .beginGroup()
-                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .or()
-                .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
-                .endGroup()
-                .findAll()
-    }
+        TimelineEventEntity.whereChunkId(realm, chunkId = chunkId)
+                .query("root.rootThreadEventId == $0 OR root.eventId == $0", rootThreadEventId)
+    }.sort("displayIndex", Sort.DESCENDING)
 }

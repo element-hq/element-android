@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.prune
 
-import io.realm.Realm
-import io.realm.kotlin.deleteFromRealm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -47,22 +46,22 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         return eventType == EventType.REDACTION
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: MutableRealm, event: Event) {
         pruneEvent(realm, event)
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event) {
+    private fun pruneEvent(realm: MutableRealm, redactionEvent: Event) {
         if (redactionEvent.redacts.isNullOrBlank()) {
             return
         }
 
         // Check that we know this event
-        EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").findFirst() ?: return
+        EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").first().find() ?: return
 
         val isLocalEcho = LocalEcho.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
+        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).first().find()
                 ?: return
 
         val typeToPrune = eventToPrune.type
@@ -117,13 +116,13 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
      * with respect to redactions.
      */
     private fun handleTimelineThreadSummaryIfNeeded(
-            realm: Realm,
+            realm: MutableRealm,
             eventToPrune: EventEntity,
             isLocalEcho: Boolean,
     ) {
         if (eventToPrune.isThread() && !isLocalEcho) {
             val roomId = eventToPrune.roomId
-            val rootThreadEvent = eventToPrune.findRootThreadEvent() ?: return
+            val rootThreadEvent = eventToPrune.findRootThreadEvent(realm) ?: return
             val rootThreadEventId = eventToPrune.rootThreadEventId ?: return
 
             val inThreadMessages = countInThreadMessages(
@@ -139,8 +138,10 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                 rootThreadEvent.threadSummaryLatestMessage = null
                 ThreadSummaryEntity
                         .where(realm, roomId = roomId, rootThreadEventId)
-                        .findFirst()
-                        ?.deleteFromRealm()
+                        .first()
+                        .find()?.let {
+                            realm.delete(it)
+                        }
             }
         }
     }

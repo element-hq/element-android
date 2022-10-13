@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import io.realm.RealmConfiguration
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -38,12 +37,10 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.query.crossSigningInfoEntityQueries
 import org.matrix.android.sdk.internal.crypto.store.db.query.userEntityQueries
 import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.queryIn
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -76,7 +73,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
     @Inject lateinit var cryptoRealmInstance: RealmInstance
 
     @SessionDatabase
-    @Inject lateinit var sessionRealmConfiguration: RealmConfiguration
+    @Inject lateinit var sessionRealmInstance: RealmInstance
 
     @UserId
     @Inject lateinit var myUserId: String
@@ -205,21 +202,22 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
     private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
-        awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
+        sessionRealmInstance.write {
             val cryptoRealm = cryptoRealmInstance.getBlockingRealm()
-            sessionRealm.where(RoomMemberSummaryEntity::class.java)
-                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
-                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
-                    .findAll()
+            query(RoomMemberSummaryEntity::class)
+                    .queryIn("userId", userList)
+                    .distinct("roomId")
+                    .find()
                     .map { it.roomId }
                     .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
                     .forEach { roomId ->
-                        RoomSummaryEntity.where(sessionRealm, roomId)
-                                .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
-                                .findFirst()
+                        RoomSummaryEntity.where(this, roomId)
+                                .query("isEncrypted == true")
+                                .first()
+                                .find()
                                 ?.let { roomSummary ->
                                     Timber.v("## CrossSigning - Check shield state for room $roomId")
-                                    val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
+                                    val allActiveRoomMembers = RoomMemberHelper(this, roomId).getActiveRoomMemberIds()
                                     try {
                                         val updatedTrust = computeRoomShield(
                                                 myCrossSigningInfo,

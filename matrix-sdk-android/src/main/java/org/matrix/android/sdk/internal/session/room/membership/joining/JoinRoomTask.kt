@@ -16,22 +16,20 @@
 
 package org.matrix.android.sdk.internal.session.room.membership.joining
 
-import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
-import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
@@ -52,9 +50,7 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
 internal class DefaultJoinRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
-        private val coroutineDispatcher: MatrixCoroutineDispatchers,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,
@@ -85,16 +81,15 @@ internal class DefaultJoinRoomTask @Inject constructor(
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
         val roomId = joinRoomResponse.roomId
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                RoomSummaryEntity.where(realm, roomId = roomId)
+                        .process("membershipStr", listOf(Membership.JOIN))
             }
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
-        awaitTransaction(realmConfiguration) {
-            RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = clock.epochMillis()
+        realmInstance.write {
+            RoomSummaryEntity.where(this, roomId).first().find()?.lastActivityTime = clock.epochMillis()
         }
         setReadMarkers(roomId)
     }

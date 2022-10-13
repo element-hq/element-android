@@ -24,20 +24,18 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.cleanUp
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereChunkId
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
 
@@ -47,14 +45,11 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     } else {
         val stateKey = stateEvent.stateKey ?: return
         val type = stateEvent.type
-        val pastStateEvent = stateEvents.where()
-                .equalTo(EventEntityFields.ROOM_ID, roomId)
-                .equalTo(EventEntityFields.STATE_KEY, stateKey)
-                .equalTo(CurrentStateEventEntityFields.TYPE, type)
-                .findFirst()
-
-        if (pastStateEvent != null) {
-            stateEvents.remove(pastStateEvent)
+        val indexOfStateEvent = stateEvents.indexOfFirst {
+            it.roomId == roomId && it.stateKey == stateKey && it.type == type
+        }
+        if (indexOfStateEvent != -1) {
+            stateEvents.removeAt(indexOfStateEvent)
         }
         stateEvents.add(stateEvent)
     }
@@ -72,7 +67,7 @@ internal fun ChunkEntity.addTimelineEvent(
     if (timelineEvents.find(eventId) != null) {
         return null
     }
-    val displayIndex = nextDisplayIndex(direction)
+    val displayIndex = nextDisplayIndex(realm, direction)
     val localId = TimelineEventEntity.nextId(realm)
     val senderId = eventEntity.sender ?: ""
 
@@ -149,13 +144,17 @@ private fun handleReadReceipts(realm: MutableRealm, roomId: String, eventEntity:
     return readReceiptsSummaryEntity
 }
 
-internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
+internal fun ChunkEntity.nextDisplayIndex(realm: TypedRealm, direction: PaginationDirection): Int {
     return when (direction) {
         PaginationDirection.FORWARDS -> {
-            (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
+            (TimelineEventEntity.whereChunkId(realm, chunkId)
+                    .max("displayIndex", Int::class)
+                    .find() ?: 0) + 1
         }
         PaginationDirection.BACKWARDS -> {
-            (timelineEvents.where().min(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) - 1
+            (TimelineEventEntity.whereChunkId(realm, chunkId)
+                    .min("displayIndex", Int::class)
+                    .find() ?: 0) - 1
         }
     }
 }

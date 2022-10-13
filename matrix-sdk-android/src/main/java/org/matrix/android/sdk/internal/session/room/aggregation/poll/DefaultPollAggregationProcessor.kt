@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
 import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -45,7 +46,7 @@ import javax.inject.Inject
 
 class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationProcessor {
 
-    override fun handlePollStartEvent(realm: Realm, event: Event): Boolean {
+    override fun handlePollStartEvent(realm: MutableRealm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessagePollContent>()
         if (content?.relatesTo?.type != RelationType.REPLACE) {
             return false
@@ -74,10 +75,11 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         return true
     }
 
-    override fun handlePollResponseEvent(session: Session, realm: Realm, event: Event): Boolean {
+    override fun handlePollResponseEvent(session: Session, realm: MutableRealm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessagePollResponseContent>() ?: return false
         val roomId = event.roomId ?: return false
         val senderId = event.senderId ?: return false
+        event.eventId ?: return false
         val targetEventId = (event.getRelationContent() ?: content.relatesTo)?.eventId ?: return false
         val targetPollContent = getPollContent(session, roomId, targetEventId) ?: return false
 
@@ -95,7 +97,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         }
 
         val txId = event.unsignedData?.transactionId
-        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
+        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
         if (!isLocalEcho && aggregatedPollSummaryEntity.sourceLocalEchoEvents.contains(txId)) {
             aggregatedPollSummaryEntity.sourceLocalEchoEvents.remove(txId)
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
@@ -153,12 +155,13 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         return true
     }
 
-    override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: Realm, event: Event): Boolean {
+    override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: MutableRealm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessageEndPollContent>() ?: return false
         val roomId = event.roomId ?: return false
         val pollEventId = content.relatesTo?.eventId ?: return false
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
+        event.eventId ?: return false
 
         if (!isPollOwner && !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
             return false
@@ -170,7 +173,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val txId = event.unsignedData?.transactionId
         aggregatedPollSummaryEntity.closedTime = event.originServerTs
 
-        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
+        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
         if (!isLocalEcho && aggregatedPollSummaryEntity.sourceLocalEchoEvents.contains(txId)) {
             aggregatedPollSummaryEntity.sourceLocalEchoEvents.remove(txId)
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
@@ -188,17 +191,17 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         return pollEvent?.getLastMessageContent() as? MessagePollContent
     }
 
-    private fun getAnnotationsSummaryEntity(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
-        return EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
+    private fun getAnnotationsSummaryEntity(realm: MutableRealm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
+        return EventAnnotationsSummaryEntity.where(realm, roomId, eventId).first().find()
                 ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
     }
 
     private fun getAggregatedPollSummaryEntity(
-            realm: Realm,
+            realm: MutableRealm,
             eventAnnotationsSummaryEntity: EventAnnotationsSummaryEntity
     ): PollResponseAggregatedSummaryEntity {
         return eventAnnotationsSummaryEntity.pollResponseSummary
-                ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
+                ?: realm.copyToRealm(PollResponseAggregatedSummaryEntity()).also {
                     eventAnnotationsSummaryEntity.pollResponseSummary = it
                 }
     }

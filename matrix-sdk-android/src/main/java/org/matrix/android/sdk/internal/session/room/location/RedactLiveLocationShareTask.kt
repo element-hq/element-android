@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
-import io.realm.RealmConfiguration
-import org.matrix.android.sdk.internal.database.awaitTransaction
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -36,7 +35,7 @@ internal interface RedactLiveLocationShareTask : Task<RedactLiveLocationShareTas
 }
 
 internal class DefaultRedactLiveLocationShareTask @Inject constructor(
-        @SessionDatabase private val realmConfiguration: RealmConfiguration,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
 ) : RedactLiveLocationShareTask {
@@ -60,9 +59,9 @@ internal class DefaultRedactLiveLocationShareTask @Inject constructor(
     }
 
     private suspend fun getRelatedEventIdsOfLive(beaconInfoEventId: String): List<String> {
-        return awaitTransaction(realmConfiguration) { realm ->
+        return realmInstance.write {
             val aggregatedSummaryEntity = LiveLocationShareAggregatedSummaryEntity.get(
-                    realm = realm,
+                    realm = this,
                     eventId = beaconInfoEventId
             )
             aggregatedSummaryEntity?.relatedEventIds?.toList() ?: emptyList()

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.call
 
 import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -54,7 +55,7 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
         return allowedTypes.contains(eventType)
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: MutableRealm, event: Event) {
         eventsToPostProcess.add(event)
     }
 

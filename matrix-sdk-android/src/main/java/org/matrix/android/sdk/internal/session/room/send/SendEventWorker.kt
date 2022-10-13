@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.util.toMatrixErrorStr
@@ -55,7 +56,6 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
     @Inject lateinit var sendEventTask: SendEventTask
     @Inject lateinit var cryptoService: CryptoService
     @Inject lateinit var cancelSendTracker: CancelSendTracker
-    @SessionDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)

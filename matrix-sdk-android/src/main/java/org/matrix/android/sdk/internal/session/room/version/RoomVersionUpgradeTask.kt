@@ -16,12 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.room.version
 
-import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -41,8 +41,7 @@ internal interface RoomVersionUpgradeTask : Task<RoomVersionUpgradeTask.Params, 
 internal class DefaultRoomVersionUpgradeTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : RoomVersionUpgradeTask {
 
     override suspend fun execute(params: RoomVersionUpgradeTask.Params): String {
@@ -55,10 +54,8 @@ internal class DefaultRoomVersionUpgradeTask @Inject constructor(
 
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         tryOrNull {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, replacementRoomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                RoomSummaryEntity.where(realm, replacementRoomId, listOf(Membership.JOIN))
             }
         }
         return replacementRoomId

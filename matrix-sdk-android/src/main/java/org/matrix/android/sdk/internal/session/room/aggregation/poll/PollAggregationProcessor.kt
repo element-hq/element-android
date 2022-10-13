@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
-import io.realm.Realm
+import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -28,7 +28,7 @@ interface PollAggregationProcessor {
      * Returns true if the event is aggregated.
      */
     fun handlePollStartEvent(
-            realm: Realm,
+            realm: MutableRealm,
             event: Event
     ): Boolean
 
@@ -38,7 +38,7 @@ interface PollAggregationProcessor {
      */
     fun handlePollResponseEvent(
             session: Session,
-            realm: Realm,
+            realm: MutableRealm,
             event: Event
     ): Boolean
 
@@ -49,7 +49,7 @@ interface PollAggregationProcessor {
     fun handlePollEndEvent(
             session: Session,
             powerLevelsHelper: PowerLevelsHelper,
-            realm: Realm,
+            realm: MutableRealm,
             event: Event
     ): Boolean
 }

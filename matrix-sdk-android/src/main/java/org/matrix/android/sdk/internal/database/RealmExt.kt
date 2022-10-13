@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database
 
 import io.realm.kotlin.Deleteable
 import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.dynamic.DynamicMutableRealm
 import io.realm.kotlin.dynamic.DynamicMutableRealmObject
 import io.realm.kotlin.dynamic.DynamicRealmObject
 import io.realm.kotlin.migration.AutomaticSchemaMigration
@@ -112,6 +113,14 @@ internal fun <T : RealmObject> RealmQuery<T>.andIf(
 internal fun MutableRealm.deleteAll() {
     configuration.schema.forEach { kClass ->
         delete(query(kClass).find())
+    }
+}
+
+internal fun DynamicMutableRealm.deleteAll() {
+    configuration.schema.mapNotNull {
+        it.simpleName
+    }.forEach { className ->
+        delete(query(className).find())
     }
 }
 
