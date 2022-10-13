@@ -16,19 +16,32 @@
 
 package im.vector.app.features.login.qr
 
+import android.content.Context
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.delay
+import im.vector.app.features.home.HomeActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.rendezvous.Rendezvous
+import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
+import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
+        private val applicationContext: Context,
+        private val authenticationService: AuthenticationService,
+        private val activeSessionHolder: ActiveSessionHolder,
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
+    val TAG: String = QrCodeLoginViewModel::class.java.simpleName
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> {
@@ -75,28 +88,32 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val confirmationCode = rendezvous.startAfterScanningCode()
-            Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
-            confirmationCode ?.let {
-                onConnectionEstablished(it)
-                rendezvous.completeOnNewDevice()
-            }
-        }
+            try {
+                val confirmationCode = rendezvous.startAfterScanningCode()
+                Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
+                confirmationCode?.let {
+                    onConnectionEstablished(it)
+                    val session = rendezvous.waitForLoginOnNewDevice(authenticationService)
+                    onSigningIn()
+                    session?.let {
+                        activeSessionHolder.setActiveSession(session)
+                        authenticationService.reset()
 
-        // TODO. UI test purpose. Fixme remove!
-        viewModelScope.launch {
-            delay(3000)
-            onFailed(QrCodeLoginErrorType.TIMEOUT, true)
-            delay(3000)
-            onConnectionEstablished("1234-ABCD-5678-EFGH")
-            delay(3000)
-            onSigningIn()
-            delay(3000)
-            onFailed(QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED, false)
+                        session.configureAndStart(applicationContext)
+
+                        rendezvous.completeVerificationOnNewDevice(session)
+
+                        _viewEvents.post(QrCodeLoginViewEvents.NavigateToHomeScreen)
+                    }
+                }
+            } catch (failure: Throwable) {
+                Timber.tag(TAG).e(failure, "Error occurred during sign in")
+                onFailed(RendezvousFailureReason.Unknown)
+            }
         }
     }
 
-    private fun onFailed(errorType: QrCodeLoginErrorType, canTryAgain: Boolean) {
+    private fun onFailed(reason: RendezvousFailureReason) {
         setState {
             copy(
                     connectionStatus = QrCodeLoginConnectionStatus.Failed(errorType, canTryAgain)
@@ -119,13 +136,6 @@ class QrCodeLoginViewModel @AssistedInject constructor(
                     connectionStatus = QrCodeLoginConnectionStatus.SigningIn
             )
         }
-    }
-
-    /**
-     * TODO. UI test purpose. Fixme accordingly.
-     */
-    private fun isValidQrCode(qrCode: String): Boolean {
-        return qrCode.startsWith("http")
     }
 
     /**
