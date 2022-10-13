@@ -43,6 +43,8 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
+import im.vector.lib.core.utils.compat.getSerializableCompat
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
@@ -68,7 +70,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
         @Suppress("UNCHECKED_CAST")
         fun getOutput(intent: Intent): Content? {
-            return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
+            return intent.extras?.getSerializableCompat(EXTRA_RESULT) as? Content
         }
 
         private fun createResultIntent(content: Content): Intent {
@@ -88,7 +90,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     override fun getTitleRes() = R.string.room_widget_activity_title
 
     override fun initUiAndData() {
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
         if (widgetArgs == null) {
             finish()
             return
@@ -150,7 +152,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
         if (widgetArgs?.kind?.supportsPictureInPictureMode().orFalse()) {
             enterPictureInPicture()
         }

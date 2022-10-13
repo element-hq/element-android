@@ -183,6 +183,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                     }
                     .show()
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

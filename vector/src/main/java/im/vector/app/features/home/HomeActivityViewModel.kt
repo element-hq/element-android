@@ -42,6 +42,7 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -101,7 +102,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory() {
         override fun initialState(viewModelContext: ViewModelContext): HomeActivityViewState? {
             val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtraCompat(Mavericks.KEY_ARG)
             return args?.let { HomeActivityViewState(authenticationDescription = it.authenticationDescription) }
                     ?: super.initialState(viewModelContext)
         }
@@ -160,6 +161,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     .onEach { didAskUser ->
                         if (!didAskUser) {
                             _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        } else {
+                            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
                         }
                     }
                     .launchIn(viewModelScope)
@@ -179,6 +182,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     // do nothing
                 }
             }
+        } else {
+            _viewEvents.post(HomeActivityViewEvents.ShowNotificationDialog)
         }
     }
 

@@ -15,8 +15,6 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
@@ -36,7 +34,7 @@ class TestFirebaseToken @Inject constructor(
         private val fcmHelper: FcmHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         status = TestStatus.RUNNING
         try {
             FirebaseMessaging.getInstance().token
@@ -53,7 +51,7 @@ class TestFirebaseToken @Inject constructor(
                                 "ACCOUNT_MISSING" -> {
                                     quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_fcm_failed_account_missing_quick_fix) {
                                         override fun doFix() {
-                                            startAddGoogleAccountIntent(context, activityResultLauncher)
+                                            startAddGoogleAccountIntent(context, testParameters.activityResultLauncher)
                                         }
                                     }
                                     stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_account_missing, errorMsg)

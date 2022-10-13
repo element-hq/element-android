@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -63,7 +64,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val args = intent?.getParcelableExtra<SpaceBottomSheetSettingsArgs>(Mavericks.KEY_ARG)
+        val args = intent?.getParcelableExtraCompat<SpaceBottomSheetSettingsArgs>(Mavericks.KEY_ARG)
 
         if (isFirstCreation()) {
             replaceFragment(

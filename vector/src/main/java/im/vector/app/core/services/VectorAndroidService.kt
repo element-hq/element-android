@@ -18,6 +18,7 @@ package im.vector.app.core.services
 
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import timber.log.Timber
 
@@ -54,5 +55,14 @@ abstract class VectorAndroidService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    protected fun stopForegroundCompat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
     }
 }
