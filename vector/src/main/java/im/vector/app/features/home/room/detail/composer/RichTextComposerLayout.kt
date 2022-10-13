@@ -95,10 +95,18 @@ class RichTextComposerLayout @JvmOverloads constructor(
         collapse(false)
 
         views.composerEditText.addTextChangedListener(object : TextWatcher {
+            private var previousTextWasExpanded = false
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
                 callback?.onTextChanged(s)
+
+                val isExpanded = s.lines().count() > 1
+                if (previousTextWasExpanded != isExpanded) {
+                    updateTextFieldBorder(isExpanded)
+                }
+                previousTextWasExpanded = isExpanded
             }
         })
 
@@ -147,7 +155,6 @@ class RichTextComposerLayout @JvmOverloads constructor(
         val inflater = LayoutInflater.from(context)
         val button = ViewRichTextMenuButtonBinding.inflate(inflater, views.richTextMenu, true)
         button.root.tag = action
-//        menuIcons[action] = button.root
         with(button.root) {
             contentDescription = resources.getString(description)
             setImageResource(iconId)
@@ -161,6 +168,15 @@ class RichTextComposerLayout @JvmOverloads constructor(
         val button = findViewWithTag<ImageButton>(action) ?: return
         button.isEnabled = !menuState.disabledActions.contains(action)
         button.isSelected = menuState.reversedActions.contains(action)
+    }
+
+    private fun updateTextFieldBorder(isExpanded: Boolean) {
+        val borderResource = if (isExpanded) {
+            R.drawable.bg_composer_rich_edit_text_expanded
+        } else {
+            R.drawable.bg_composer_rich_edit_text_single_line
+        }
+        views.composerEditTextOuterBorder.setBackgroundResource(borderResource)
     }
 
     override fun replaceFormattedContent(text: CharSequence) {

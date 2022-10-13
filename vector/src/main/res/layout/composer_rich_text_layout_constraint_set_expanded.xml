@@ -141,7 +141,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="0dp"
         android:layout_marginHorizontal="12dp"
-        android:background="@drawable/bg_composer_rich_edit_text"
+        android:background="@drawable/bg_composer_rich_edit_text_single_line"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintBottom_toTopOf="@id/sendButton"

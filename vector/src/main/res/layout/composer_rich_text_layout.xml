@@ -101,7 +101,7 @@
         android:id="@+id/composerEditTextOuterBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_composer_rich_edit_text" />
+        android:background="@drawable/bg_composer_rich_edit_text_single_line" />
 
     <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"

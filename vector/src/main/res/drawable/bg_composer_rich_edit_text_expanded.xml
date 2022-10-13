@@ -8,6 +8,6 @@
         android:width="1dp"
         android:color="?vctr_content_quaternary" />
 
-    <corners android:radius="28dp" />
+    <corners android:radius="@dimen/rich_text_composer_corner_radius_expanded" />
 
 </shape>
