@@ -11,7 +11,7 @@
         <item name="android:textColor">?vctr_message_text_color</item>
     </style>
 
-    <style name="Widget.Vector.EditText.Composer.RichText" parent="Widget.AppCompat.EditText">
+    <style name="Widget.Vector.EditText.Composer.RichTextComposer" parent="Widget.AppCompat.EditText">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:maxLines">12</item>

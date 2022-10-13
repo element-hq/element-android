@@ -6,9 +6,6 @@
     android:layout_height="48dp"
     android:layout_marginHorizontal="2dp"
     android:background="@drawable/bg_rich_text_menu_button"
-    android:contentDescription="@string/rich_text_editor_format_bold"
     app:tint="@color/selector_rich_text_menu_icon"
-    tools:src="@drawable/ic_composer_bold">
-    <!-- The contentDescription attr is populated programmatically. This is just to fix lint issues. -->
-
-</ImageButton>
+    tools:src="@drawable/ic_composer_bold"
+    tools:ignore="ContentDescription" />
