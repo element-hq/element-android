@@ -23,18 +23,12 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.rendezvous.Rendezvous
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
-import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
-        @Assisted private val initialState: QrCodeLoginViewState
+        @Assisted private val initialState: QrCodeLoginViewState,
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
-
-    val TAG: String = QrCodeLoginViewModel::class.java.simpleName
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> {
@@ -65,64 +59,32 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleOnQrCodeScanned(action: QrCodeLoginAction.OnQrCodeScanned) {
-        Timber.tag(TAG).d("Scanned code: ${action.qrCode}")
-
-        val rendezvous = Rendezvous.buildChannelFromCode(action.qrCode) { reason ->
-            Timber.tag(TAG).d("Rendezvous cancelled: $reason")
-            onFailed(reason)
-        }
-
-        setState {
-            copy(
-                    connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
-            )
-        }
-
-        _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val confirmationCode = rendezvous.startAfterScanningCode()
-            Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
-            confirmationCode ?.let {
-                onConnectionEstablished(it)
+        if (isValidQrCode(action.qrCode)) {
+            setState {
+                copy(
+                        connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
+                )
             }
-            rendezvous.completeOnNewDevice()
+            _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
         }
-    //        if (isValidQrCode(action.qrCode)) {
-//            setState {
-//                copy(
-//                        connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
-//                )
-//            }
-//            _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
-//        }
-//
 
-//        // TODO. UI test purpose. Fixme remove!
-//        viewModelScope.launch {
-//            delay(3000)
-//            onFailed(QrCodeLoginErrorType.TIMEOUT, true)
-//            delay(3000)
-//            onConnectionEstablished("1234-ABCD-5678-EFGH")
-//            delay(3000)
-//            onSigningIn()
-//            delay(3000)
-//            onFailed(QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED, false)
-//        }
-//        // TODO. UI test purpose. Fixme remove!
-//        viewModelScope.launch {
-//            delay(3000)
-//            onConnectionEstablished("1234-ABCD-5678-EFGH")
-//            delay(3000)
-//            onSigningIn()
-//        }
+        // TODO. UI test purpose. Fixme remove!
+        viewModelScope.launch {
+            delay(3000)
+            onFailed(QrCodeLoginErrorType.TIMEOUT, true)
+            delay(3000)
+            onConnectionEstablished("1234-ABCD-5678-EFGH")
+            delay(3000)
+            onSigningIn()
+            delay(3000)
+            onFailed(QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED, false)
+        }
     }
 
-
-    private fun onFailed(reason: RendezvousFailureReason) {
+    private fun onFailed(errorType: QrCodeLoginErrorType, canTryAgain: Boolean) {
         setState {
             copy(
-                    connectionStatus = QrCodeLoginConnectionStatus.Failed(reason, reason.canRetry)
+                    connectionStatus = QrCodeLoginConnectionStatus.Failed(errorType, canTryAgain)
             )
         }
     }
