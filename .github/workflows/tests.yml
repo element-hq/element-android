@@ -59,7 +59,6 @@ jobs:
 
       - name: Run all the codecoverage tests at once
         run: |
-          ./gradlew cleanManagedDevices --unused-only
           ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
           ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
           ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
