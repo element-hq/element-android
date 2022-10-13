@@ -45,23 +45,22 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.session.Session
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
+@Ignore
 class SecurityBootstrapTest : VerificationTestBase() {
 
     var existingSession: Session? = null
 
     @get:Rule
-    val activityRule = RuleChain
-            .outerRule(ActivityScenarioRule(MainActivity::class.java))
-            .around(ClearCurrentSessionRule())
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun createSessionWithCrossSigning() {
@@ -85,7 +84,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
-            onView(withId(R.id.later))
+            onView(withId(R.id.submit))
                     .check(matches(isDisplayed()))
                     .perform(click())
         }

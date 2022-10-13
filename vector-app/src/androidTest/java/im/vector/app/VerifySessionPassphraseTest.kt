@@ -123,7 +123,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
-            onView(withId(R.id.later))
+            onView(withId(R.id.submit))
                     .check(matches(isDisplayed()))
                     .perform(click())
         }

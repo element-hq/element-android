@@ -99,7 +99,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
-            onView(withId(R.id.later))
+            onView(withId(R.id.submit))
                     .check(matches(isDisplayed()))
                     .perform(click())
         }
@@ -189,7 +189,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         IdlingRegistry.getInstance().register(sasReadyIdle)
         IdlingRegistry.getInstance().register(otherSessionSasReadyIdle)
-        onView(isRoot()).perform(SleepViewAction.sleep(1000))
+        onView(isRoot()).perform(SleepViewAction.sleep(5000))
         // will only execute when Idle is ready
         val expectedEmojis = firstSessionTr.getEmojiCodeRepresentation()
         val targets = listOf(R.id.emoji0, R.id.emoji1, R.id.emoji2, R.id.emoji3, R.id.emoji4, R.id.emoji5, R.id.emoji6)
