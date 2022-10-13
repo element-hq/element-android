@@ -39,7 +39,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
-        private val activeSessionHolder: ActiveSessionHolder,
+        private val activeSessionHolder: ActiveSessionHolder
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
     val TAG: String = QrCodeLoginViewModel::class.java.simpleName
 
@@ -116,7 +116,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     private fun onFailed(reason: RendezvousFailureReason) {
         setState {
             copy(
-                    connectionStatus = QrCodeLoginConnectionStatus.Failed(errorType, canTryAgain)
+                    connectionStatus = QrCodeLoginConnectionStatus.Failed(reason, reason.canRetry)
             )
         }
     }
