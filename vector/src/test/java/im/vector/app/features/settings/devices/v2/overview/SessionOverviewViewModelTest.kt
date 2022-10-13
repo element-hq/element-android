@@ -30,6 +30,7 @@ import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
@@ -79,7 +80,8 @@ class SessionOverviewViewModelTest {
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID_1
     )
-    private val fakeSession = FakeSession()
+    private val fakePushersService = FakePushersService()
+    private val fakeSession = FakeSession(fakePushersService = fakePushersService)
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
@@ -114,6 +116,13 @@ class SessionOverviewViewModelTest {
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun `given the viewModel has been initialized then pushers are refreshed`() {
+        createViewModel()
+
+        fakePushersService.verifyRefreshPushers()
     }
 
     @Test
@@ -481,6 +490,6 @@ class SessionOverviewViewModelTest {
         val viewModel = createViewModel()
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
-        fakeSession.pushersService().verifyOnlyTogglePusherCalled(pushers.first(), true)
+        fakeSession.pushersService().verifyTogglePusherCalled(pushers.first(), true)
     }
 }

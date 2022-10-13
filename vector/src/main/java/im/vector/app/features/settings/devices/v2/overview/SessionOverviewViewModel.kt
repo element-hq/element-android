@@ -74,9 +74,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
+        refreshPushers()
         observeSessionInfo(initialState.deviceId)
         observeCurrentSessionInfo()
         observePushers(initialState.deviceId)
+    }
+
+    private fun refreshPushers() {
+        session.pushersService().refreshPushers()
     }
 
     private fun observeSessionInfo(deviceId: String) {
