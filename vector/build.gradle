@@ -80,6 +80,15 @@ android {
                     // To include Google services, use "google". Else "aosp"
                     systemImageSource = "google"
                 }
+                // Run test with ./gradlew pixel2api30GplayDebugAndroidTest
+                pixel2api30(ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 30
+                    // To include Google services, use "google". Else "aosp"
+                    systemImageSource = "google"
+                }
                 // Ref: https://developer.android.com/studio/test/gradle-managed-devices#gmd-atd
                 // Run test with ./gradlew pixel2api30AtdGplayDebugAndroidTest
                 // Warning: Screenshot tests that depend on hardware rendering currently aren't supported when using ATDs.

@@ -87,5 +87,6 @@ task unitTestsWithCoverage(type: GradleBuild) {
 task instrumentationTestsWithCoverage(type: GradleBuild) {
     startParameter.projectProperties.coverage = [enableTestCoverage: true]
     startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
-    tasks = [':vector-app:pixel2api30AtdGplayDebugAndroidTest', ':vector:pixel2api30AtdDebugAndroidTest', 'matrix-sdk-android:pixel2api30AtdDebugAndroidTest']
+    // tasks = [':vector-app:pixel2api30AtdGplayDebugAndroidTest', ':vector:pixel2api30AtdDebugAndroidTest', 'matrix-sdk-android:pixel2api30AtdDebugAndroidTest']
+    tasks = [':vector-app:pixel2api30GplayDebugAndroidTest', ':vector:pixel2api30DebugAndroidTest', 'matrix-sdk-android:pixel2api30DebugAndroidTest']
 }
