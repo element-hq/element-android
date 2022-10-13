@@ -62,8 +62,6 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private val animationDuration = 100L
 
-    private val menuIcons = mutableMapOf<ComposerAction, ImageButton>()
-
     override val text: Editable?
         get() = views.composerEditText.text
     override val formattedText: String?
