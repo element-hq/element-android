@@ -162,34 +162,31 @@ class SessionInfoView @JvmOverloads constructor(
             drawableProvider: DrawableProvider,
             colorProvider: ColorProvider,
     ) {
-        deviceInfo.lastSeenTs
-                ?.takeIf { isLastSeenDetailsVisible }
-                ?.let { timestamp ->
-                    views.sessionInfoLastActivityTextView.isVisible = true
-                    views.sessionInfoLastActivityTextView.text = if (isInactive) {
-                        val formattedTs = dateFormatter.format(timestamp, DateFormatKind.TIMELINE_DAY_DIVIDER)
-                        context.resources.getQuantityString(
-                                R.plurals.device_manager_other_sessions_description_inactive,
-                                SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
-                                SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
-                                formattedTs
-                        )
-                    } else {
-                        val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                        context.getString(R.string.device_manager_session_last_activity, formattedTs)
-                    }
-                    val drawable = if (isInactive) {
-                        val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                        drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor)
-                    } else {
-                        null
-                    }
-                    views.sessionInfoLastActivityTextView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
-                }
-                ?: run {
-                    views.sessionInfoLastActivityTextView.isGone = true
-                }
-
+        if (deviceInfo.lastSeenTs != null && isLastSeenDetailsVisible) {
+            val timestamp = deviceInfo.lastSeenTs
+            views.sessionInfoLastActivityTextView.isVisible = true
+            views.sessionInfoLastActivityTextView.text = if (isInactive) {
+                val formattedTs = dateFormatter.format(timestamp, DateFormatKind.TIMELINE_DAY_DIVIDER)
+                context.resources.getQuantityString(
+                        R.plurals.device_manager_other_sessions_description_inactive,
+                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                        SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
+                        formattedTs
+                )
+            } else {
+                val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                context.getString(R.string.device_manager_session_last_activity, formattedTs)
+            }
+            val drawable = if (isInactive) {
+                val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor)
+            } else {
+                null
+            }
+            views.sessionInfoLastActivityTextView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        } else {
+            views.sessionInfoLastActivityTextView.isGone = true
+        }
         views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isLastSeenDetailsVisible })
     }
 
