@@ -33,7 +33,7 @@ android {
     namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
-    ndkVersion "21.3.6528147"
+    // ndkVersion "21.3.6528147"
 
     compileSdk versions.compileSdk
 
