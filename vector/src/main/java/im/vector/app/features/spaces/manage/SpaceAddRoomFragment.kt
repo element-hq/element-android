@@ -214,7 +214,7 @@ class SpaceAddRoomFragment :
             roomEpoxyController.submitList(it)
         }
         listenItemCount(viewModel.roomCountFlow) { roomEpoxyController.totalSize = it }
-        views.roomList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        views.roomList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         views.roomList.setHasFixedSize(true)
     }
 

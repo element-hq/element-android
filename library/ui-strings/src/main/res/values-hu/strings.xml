@@ -2668,4 +2668,46 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="other">%1$d+ napja inaktív (%2$s)</item>
     </plurals>
     <string name="invites_empty_message">Itt láthatók a meghívók és elvégzendő műveletek.</string>
+    <string name="device_manager_session_details_device_ip_address">IP cím</string>
+    <string name="device_manager_session_details_session_last_activity">Utolsó tevékenység</string>
+    <string name="device_manager_session_details_session_name">Munkamenet neve</string>
+    <string name="device_manager_session_details_description">Alkalmazás, eszköz és aktivitás információ.</string>
+    <string name="device_manager_session_details_title">Munkamenet információk</string>
+    <string name="device_manager_other_sessions_clear_filter">Szűrő törlése</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Nincs inaktív munkamenet.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Nincs ellenőrizetlen munkamenet.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Nincs ellenőrzött munkamenet.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Fontold meg, hogy kijelentkezel a régi munkamenetekből (%1$d napja vagy régebben használtál) amit már nem használsz.</item>
+        <item quantity="other">Fontold meg, hogy kijelentkezel a régi munkamenetekből (%1$d napja vagy régebben használtál) amit már nem használsz.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inaktív</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Erősítse meg a munkameneteit a még biztonságosabb csevegéshez vagy jelentkezzen ki ezekből, ha nem ismeri fel vagy már nem használja őket.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Ellenőrizetlen</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">A legjobb biztonság érdekében jelentkezz ki minden olyan munkamenetből amit nem ismersz fel vagy régen használtál már.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Hitelesített</string>
+    <string name="a11y_device_manager_filter">Szűrés</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">%1$d napja inaktív</item>
+        <item quantity="other">%1$d napja inaktív</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inaktív</string>
+    <string name="device_manager_filter_option_unverified_description">Nem áll készen a biztonságos üzenetküldésre</string>
+    <string name="device_manager_filter_option_unverified">Ellenőrizetlen</string>
+    <string name="device_manager_filter_option_verified_description">Felkészülve a biztonságos üzenetküldésre</string>
+    <string name="device_manager_filter_option_verified">Hitelesített</string>
+    <string name="device_manager_filter_option_all_sessions">Minden munkamenet</string>
+    <string name="device_manager_filter_bottom_sheet_title">Szűrés</string>
+    <string name="device_manager_session_last_activity">Utolsó aktivitás %1$s</string>
+    <string name="device_manager_device_title">Eszköz</string>
+    <string name="device_manager_session_title">Munkamenet</string>
+    <string name="device_manager_current_session_title">Jelenlegi munkamenet</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">A jobb biztonság vagy megbízhatóság érdekében ellenőrizze vagy jelentkezzen ki ebből a munkamenetből.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Ez a munkamenet beállítva a biztonságos üzenetküldéshez.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="labs_enable_deferred_dm_summary">Közvetlen beszélgetés indítása csak az első üzenettel</string>
+    <string name="labs_enable_deferred_dm_title">Késleltetett közvetlen üzenetek engedélyezése</string>
+    <string name="labs_enable_new_app_layout_summary">Egyszerűsített Element opcionálisan lapokkal</string>
+    <string name="labs_enable_new_app_layout_title">Új kinézet engedélyezése</string>
 </resources>

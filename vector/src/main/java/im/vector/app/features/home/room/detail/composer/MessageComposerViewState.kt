@@ -33,15 +33,15 @@ import kotlin.random.Random
  */
 sealed interface SendMode {
     data class Regular(
-            val text: String,
+            val text: CharSequence,
             val fromSharing: Boolean,
             // This is necessary for forcing refresh on selectSubscribe
             private val random: Int = Random.nextInt()
     ) : SendMode
 
-    data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
-    data class Edit(val timelineEvent: TimelineEvent, val text: String) : SendMode
-    data class Reply(val timelineEvent: TimelineEvent, val text: String) : SendMode
+    data class Quote(val timelineEvent: TimelineEvent, val text: CharSequence) : SendMode
+    data class Edit(val timelineEvent: TimelineEvent, val text: CharSequence) : SendMode
+    data class Reply(val timelineEvent: TimelineEvent, val text: CharSequence) : SendMode
     data class Voice(val text: String) : SendMode
 }
 
@@ -66,7 +66,8 @@ data class MessageComposerViewState(
         val rootThreadEventId: String? = null,
         val startsThread: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
-        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
+        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle,
+        val text: CharSequence? = null,
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {

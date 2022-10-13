@@ -76,9 +76,6 @@ class DebugVectorFeatures(
     override fun isNewAppLayoutFeatureEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
             ?: vectorFeatures.isNewAppLayoutFeatureEnabled()
 
-    override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
-            ?: vectorFeatures.isNewDeviceManagementEnabled()
-
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
 
@@ -140,8 +137,6 @@ object DebugFeatureKeys {
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
     val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
-    val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
-    val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
 }

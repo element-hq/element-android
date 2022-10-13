@@ -1,0 +1,1 @@
+Refactor TimelineFragment, split it into MessageComposerFragment and VoiceRecorderFragment.

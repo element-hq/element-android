@@ -54,6 +54,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -104,6 +105,10 @@ class VectorSettingsNotificationPreferenceFragment :
         }
 
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            pushersManager.getPusherForCurrentSession()?.let { pusher ->
+                it.isChecked = pusher.enabled
+            }
+
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
@@ -117,6 +122,16 @@ class VectorSettingsNotificationPreferenceFragment :
                         }
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
+                        lifecycleScope.launch {
+                            val result = runCatching {
+                                pushersManager.togglePusherForCurrentSession(true)
+                            }
+
+                            result.exceptionOrNull()?.let { _ ->
+                                Toast.makeText(context, R.string.error_check_network, Toast.LENGTH_SHORT).show()
+                                it.isChecked = false
+                            }
+                        }
                     }
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
