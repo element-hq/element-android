@@ -85,8 +85,8 @@ class QrCodeLoginViewModel @AssistedInject constructor(
             Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
             confirmationCode ?.let {
                 onConnectionEstablished(it)
-                rendezvous.completeOnNewDevice()
             }
+            rendezvous.completeOnNewDevice()
         }
     //        if (isValidQrCode(action.qrCode)) {
 //            setState {
