@@ -140,7 +140,7 @@ interface AuthenticationService {
     suspend fun loginUsingQrLoginToken(
             homeServerConnectionConfig: HomeServerConnectionConfig,
             loginToken: String,
-            initialDeviceName: String?,
+            initialDeviceName: String? = null,
             deviceId: String? = null
     ): Session
 }
