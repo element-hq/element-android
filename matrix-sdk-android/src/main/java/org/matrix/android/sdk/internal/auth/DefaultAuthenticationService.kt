@@ -66,7 +66,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
         private val directLoginTask: DirectLoginTask,
-        private val loginTokenAuthTask: QrLoginTokenTask
+        private val qrLoginTokenTask: QrLoginTokenTask
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -428,7 +428,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             initialDeviceName: String?,
             deviceId: String?,
     ): Session {
-        return loginTokenAuthTask.execute(
+        return qrLoginTokenTask.execute(
                 QrLoginTokenTask.Params(
                         homeServerConnectionConfig = homeServerConnectionConfig,
                         loginToken = loginToken,
