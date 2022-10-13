@@ -447,7 +447,7 @@
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
     <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
-    <string name="labs_enable_rich_text_editor_summary">Use a rich text editor to send formatted messages</string>
+    <string name="labs_enable_rich_text_editor_summary">Try out the rich text editor (plain text mode coming soon)</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -3357,5 +3357,11 @@
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
+    <!-- WYSIWYG Composer -->
+    <string name="rich_text_editor_format_bold">Apply bold format</string>
+    <string name="rich_text_editor_format_italic">Apply italic format</string>
+    <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
+    <string name="rich_text_editor_format_underline">Apply underline format</string>
 
 </resources>

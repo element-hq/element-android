@@ -27,6 +27,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
@@ -42,7 +43,10 @@ import im.vector.app.core.animations.SimpleTransitionListener
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
+import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.InlineFormat
+import uniffi.wysiwyg_composer.ComposerAction
+import uniffi.wysiwyg_composer.MenuState
 
 class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
@@ -57,6 +61,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
     private var currentConstraintSetId: Int = -1
 
     private val animationDuration = 100L
+
+    private val menuIcons = mutableMapOf<ComposerAction, ImageButton>()
 
     override val text: Editable?
         get() = views.composerEditText.text
@@ -116,30 +122,47 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     private fun setupRichTextMenu() {
-        addRichTextMenuItem(R.drawable.ic_composer_bold, "Bold") {
+        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.Bold) {
             views.composerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_italic, "Italic") {
+        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.Italic) {
             views.composerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_underlined, "Underline") {
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.Underline) {
             views.composerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, "Strikethrough") {
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
             views.composerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
+        }
+
+        views.composerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
+            if (state is MenuState.Update) {
+                updateMenuStateFor(ComposerAction.Bold, state)
+                updateMenuStateFor(ComposerAction.Italic, state)
+                updateMenuStateFor(ComposerAction.Underline, state)
+                updateMenuStateFor(ComposerAction.StrikeThrough, state)
+            }
         }
     }
 
-    private fun addRichTextMenuItem(@DrawableRes iconId: Int, description: String, action: () -> Unit) {
+    private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
         val inflater = LayoutInflater.from(context)
         val button = ViewRichTextMenuButtonBinding.inflate(inflater, views.richTextMenu, true)
+        button.root.tag = action
+//        menuIcons[action] = button.root
         with(button.root) {
-            contentDescription = description
+            contentDescription = resources.getString(description)
             setImageResource(iconId)
             setOnClickListener {
-                action()
+                onClick()
             }
         }
+    }
+
+    private fun updateMenuStateFor(action: ComposerAction, menuState: MenuState.Update) {
+        val button = findViewWithTag<ImageButton>(action) ?: return
+        button.isEnabled = !menuState.disabledActions.contains(action)
+        button.isSelected = menuState.reversedActions.contains(action)
     }
 
     override fun replaceFormattedContent(text: CharSequence) {

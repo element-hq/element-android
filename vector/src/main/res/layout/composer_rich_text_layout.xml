@@ -91,6 +91,7 @@
         android:id="@+id/attachmentButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingTop="2dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
@@ -100,16 +101,17 @@
         android:id="@+id/composerEditTextOuterBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_composer_edit_text" />
+        android:background="@drawable/bg_composer_rich_edit_text" />
 
     <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"
-        style="@style/Widget.Vector.EditText.Composer"
+        style="@style/Widget.Vector.EditText.Composer.RichText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         tools:hint="@string/room_message_placeholder"
+        tools:text="@tools:sample/lorem/random"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
