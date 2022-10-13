@@ -322,7 +322,7 @@ ext.initScreenshotTests = { project ->
     if (hasScreenshots) {
         project.apply plugin: 'app.cash.paparazzi'
     }
-    project.dependencies { testCompileOnly "app.cash.paparazzi:paparazzi:1.0.0" }
+    project.dependencies { testCompileOnly "app.cash.paparazzi:paparazzi:1.1.0" }
     project.android.testOptions.unitTests.all {
         def screenshotTestCapture = "**/*ScreenshotTest*"
         if (hasScreenshots) {
