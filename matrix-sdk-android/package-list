@@ -4449,6 +4449,8 @@ $dokka.location:org.matrix.android.sdk.api.util//appendParamsToUrl/java.lang.Str
 $dokka.location:org.matrix.android.sdk.api.util//awaitCallback/#kotlin.Function1[org.matrix.android.sdk.api.MatrixCallback[TypeParam(bounds=[kotlin.Any?])],kotlin.Unit]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/await-callback.html
 $dokka.location:org.matrix.android.sdk.api.util//emptyJsonDict/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/empty-json-dict.html
 $dokka.location:org.matrix.android.sdk.api.util//fromBase64/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/from-base64.html
+$dokka.location:org.matrix.android.sdk.api.util//getApplicationInfoCompat/android.content.pm.PackageManager#kotlin.String#kotlin.Int/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/get-application-info-compat.html
+$dokka.location:org.matrix.android.sdk.api.util//getPackageInfoCompat/android.content.pm.PackageManager#kotlin.String#kotlin.Int/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/get-package-info-compat.html
 $dokka.location:org.matrix.android.sdk.api.util//md5/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/md5.html
 $dokka.location:org.matrix.android.sdk.api.util//toBase64NoPadding/kotlin.ByteArray#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-base64-no-padding.html
 $dokka.location:org.matrix.android.sdk.api.util//toEveryoneInRoomMatrixItem/org.matrix.android.sdk.api.session.room.model.RoomSummary#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/to-everyone-in-room-matrix-item.html
