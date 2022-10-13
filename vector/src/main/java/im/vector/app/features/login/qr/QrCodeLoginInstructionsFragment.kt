@@ -83,7 +83,6 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val scannedQrCode = QrCodeScannerActivity.getResultText(activityResult.data)
             val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
-            Timber.d("Scanned QR code: $scannedQrCode $wasQrCode")
 
             if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
                 onQrCodeScanned(scannedQrCode)
@@ -99,6 +98,5 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
 
     private fun onQrCodeScannerFailed() {
         Timber.d("QrCodeLoginInstructionsFragment.onQrCodeScannerFailed")
-        QrCodeScannerActivity.startForResult(requireActivity(), scanActivityResultLauncher)
     }
 }
