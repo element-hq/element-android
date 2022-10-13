@@ -94,7 +94,6 @@ class SessionInfoView @JvmOverloads constructor(
             encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted -> renderCrossSigningVerified(isCurrentSession)
             encryptionTrustLevel == RoomEncryptionTrustLevel.Default && !isCurrentSession -> renderCrossSigningUnknown()
             else -> renderCrossSigningUnverified(isCurrentSession, isVerifyButtonVisible)
-
         }
         if (hasLearnMoreLink) {
             appendLearnMoreToVerificationStatus()
