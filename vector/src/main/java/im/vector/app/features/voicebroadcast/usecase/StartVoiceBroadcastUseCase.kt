@@ -16,22 +16,33 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.home.room.detail.composer.AudioMessageHelper
+import android.content.Context
+import android.os.Build
+import androidx.core.content.FileProvider
+import im.vector.app.core.resources.BuildMeta
+import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class StartVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
-        private val audioMessageHelper: AudioMessageHelper,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
+        private val context: Context,
+        private val buildMeta: BuildMeta,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -55,7 +66,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
     private suspend fun startVoiceBroadcast(room: Room) {
         Timber.d("## StartVoiceBroadcastUseCase: Send new voice broadcast info state event")
-        room.stateService().sendStateEvent(
+        val eventId = room.stateService().sendStateEvent(
                 eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
@@ -64,10 +75,33 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 ).toContent()
         )
 
-        startRecording(room)
+        startRecording(room, eventId)
     }
 
-    private fun startRecording(room: Room) {
-        audioMessageHelper.startRecording(room.roomId)
+    private fun startRecording(room: Room, eventId: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
+                sendVoiceFile(room, file, eventId)
+            }
+            voiceBroadcastRecorder?.startRecord(room.roomId)
+        }
+    }
+
+    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String) {
+        val outputFileUri = FileProvider.getUriForFile(
+                context,
+                buildMeta.applicationId + ".fileProvider",
+                voiceMessageFile,
+                "Voice message.${voiceMessageFile.extension}"
+        )
+        val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
+        if (audioType.duration > 1000) {
+            room.sendService().sendMedia(
+                    attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
+                    compressBeforeSending = false,
+                    roomIds = emptySet(),
+                    relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+            )
+        }
     }
 }

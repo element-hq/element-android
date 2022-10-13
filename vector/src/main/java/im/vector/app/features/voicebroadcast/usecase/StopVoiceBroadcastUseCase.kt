@@ -16,8 +16,9 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.home.room.detail.composer.AudioMessageHelper
+import android.os.Build
 import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
@@ -32,7 +33,7 @@ import javax.inject.Inject
 
 class StopVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
-        private val audioMessageHelper: AudioMessageHelper,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -67,6 +68,8 @@ class StopVoiceBroadcastUseCase @Inject constructor(
     }
 
     private fun stopRecording() {
-        audioMessageHelper.stopRecording()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            voiceBroadcastRecorder?.stopRecord()
+        }
     }
 }
