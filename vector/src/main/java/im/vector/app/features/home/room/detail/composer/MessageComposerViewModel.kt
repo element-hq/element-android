@@ -151,7 +151,8 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
+            val formatted = vectorPreferences.isRichTextEditorEnabled()
+            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent(formatted))) }
         }
     }
 
@@ -552,7 +553,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                     state.sendMode.timelineEvent,
                                     messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
-                                    (messageContent as? MessageContentWithFormattedBody)?.formattedBody,
+                                    action.formattedText,
                                     action.autoMarkdown
                             )
                         } else {
