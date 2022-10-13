@@ -16,8 +16,11 @@
 
 package org.matrix.android.sdk.internal.rendezvous
 
+import android.net.Uri
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -56,9 +59,12 @@ internal data class Payload(
 
 private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
 
-data class Rendezvous(
+/**
+ * Implementation of MSC3906 to sign in + E2EE set up using a QR code.
+ */
+class Rendezvous(
         val channel: RendezvousChannel,
-        val theirIntent: RendezvousIntent
+        val theirIntent: RendezvousIntent,
 ) {
     companion object {
         fun buildChannelFromCode(code: String, onCancelled: (reason: RendezvousFailureReason) -> Unit): Rendezvous {
@@ -116,7 +122,7 @@ data class Rendezvous(
         return checksum
     }
 
-    suspend fun completeOnNewDevice(): Session? {
+    suspend fun waitForLoginOnNewDevice(authenticationService: AuthenticationService): Session? {
         Timber.tag(TAG).i("Waiting for login_token");
 
         val loginToken = receive()
@@ -143,59 +149,46 @@ data class Rendezvous(
 
         Timber.tag(TAG).i("Got login_token: $login_token for $homeserver");
 
-        // TODO: set view to be state logging in?
+        val hsConfig = HomeServerConnectionConfig(homeServerUri = Uri.parse(homeserver))
+        return authenticationService.loginUsingQrLoginToken(hsConfig, login_token)
+    }
 
-        // use token to login
-//        const login = await sendLoginRequest(homeserver, undefined, "m.login.token", { token: login_token });
-//
-//        await setLoggedIn(login);
-//
-//        const { deviceId, userId } = login;
-//
-//        const client = MatrixClientPeg.get();
-//
+    suspend fun completeVerificationOnNewDevice(session: Session) {
+        val userId = session.myUserId
+        val crypto = session.cryptoService()
+        val deviceId = crypto.getMyDevice().deviceId
+        val deviceKey = crypto.getMyDevice().fingerprint()
+        send(Payload(PayloadType.Progress, outcome = "success", device_id = deviceId, device_key = deviceKey))
 
-        val newSession: Session? = null
+        // await confirmation of verification
 
-        newSession ?.let {
-            session ->
-            val userId = session.myUserId
-            val crypto = session.cryptoService()
-            val deviceId = crypto.getMyDevice().deviceId
-            val deviceKey = crypto.getMyDevice().fingerprint()
-            send(Payload(PayloadType.Progress, outcome = "success", device_id = deviceId, device_key = deviceKey))
-
-            // await confirmation of verification
-
-            val verificationResponse = receive()
-            val verifyingDeviceId = verificationResponse?.verifying_device_id ?: throw RuntimeException("No verifying device id returned")
-            val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
-            if (verifyingDeviceFromServer?.fingerprint() == verificationResponse.verifying_device_key) {
-                // set other device as verified
-                Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified");
-                crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
-
-                verificationResponse.master_key ?.let {
-                    // set master key as trusted
-                    crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, it)
-
-                }
-
-                // request secrets from the verifying device
-                Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
-
-                session.sharedSecretStorageService() .let {
-                    it.requestSecret(verifyingDeviceId, MASTER_KEY_SSSS_NAME)
-                    it.requestSecret(verifyingDeviceId, SELF_SIGNING_KEY_SSSS_NAME)
-                    it.requestSecret(verifyingDeviceId, USER_SIGNING_KEY_SSSS_NAME)
-                    it.requestSecret(verifyingDeviceId, KEYBACKUP_SECRET_SSSS_NAME)
-                }
-            } else {
-                Timber.tag(TAG).i("Verifying device $verifyingDeviceId doesn't match: $verifyingDeviceFromServer")
-            }
+        val verificationResponse = receive()
+        val verifyingDeviceId = verificationResponse?.verifying_device_id ?: throw RuntimeException("No verifying device id returned")
+        val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
+        if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifying_device_key) {
+            Timber.tag(TAG).w("Verifying device $verifyingDeviceId doesn't match: $verifyingDeviceFromServer")
+            return;
         }
 
-        return newSession
+        // set other device as verified
+        Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified");
+        crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
+
+        // TODO: what do we do with the master key?
+//        verificationResponse.master_key ?.let {
+//            // set master key as trusted
+//            crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, it)
+//        }
+
+        // request secrets from the verifying device
+        Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
+
+        session.sharedSecretStorageService() .let {
+            it.requestSecret(MASTER_KEY_SSSS_NAME, verifyingDeviceId)
+            it.requestSecret(SELF_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
+            it.requestSecret(USER_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
+            it.requestSecret(KEYBACKUP_SECRET_SSSS_NAME, verifyingDeviceId)
+        }
     }
 
     private suspend fun receive(): Payload? {
