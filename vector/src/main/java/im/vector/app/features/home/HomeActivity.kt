@@ -215,6 +215,7 @@ class HomeActivity :
                 )
             }
         }
+
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
@@ -406,6 +407,14 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
+        lifecycleScope.launch {
+            if (state.areNotificationsSilenced) {
+                unifiedPushHelper.unregister(pushersManager)
+            } else {
+                unifiedPushHelper.register(this@HomeActivity)
+            }
+        }
+
         when (val status = state.syncRequestState) {
             is SyncRequestState.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
