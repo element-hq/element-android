@@ -124,4 +124,10 @@ interface AuthenticationService {
             initialDeviceName: String,
             deviceId: String? = null
     ): Session
+
+    /**
+     * @param homeServerConnectionConfig the information about the homeserver and other configuration
+     * Return true if qr code login is supported by the server, false otherwise.
+     */
+    suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean
 }
