@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.features.home.HomeActivity
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
@@ -75,6 +76,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
             when (it) {
                 QrCodeLoginViewEvents.NavigateToStatusScreen -> handleNavigateToStatusScreen()
                 QrCodeLoginViewEvents.NavigateToShowQrCodeScreen -> handleNavigateToShowQrCodeScreen()
+                QrCodeLoginViewEvents.NavigateToHomeScreen -> handleNavigateToHomeScreen()
             }
         }
     }
@@ -93,6 +95,11 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
                 QrCodeLoginStatusFragment::class.java,
                 tag = FRAGMENT_QR_CODE_STATUS_TAG
         )
+    }
+
+    private fun handleNavigateToHomeScreen() {
+        val intent = HomeActivity.newIntent(this, firstStartMainActivity = false, existingSession = true)
+        startActivity(intent)
     }
 
     companion object {
