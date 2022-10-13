@@ -62,7 +62,7 @@ class ConfigureAndStartSessionUseCaseTest {
     }
 
     @Test
-    fun `given start sync needed and client info recording enabled when configuring and starting the session then it should be configured properly`() = runTest {
+    fun `given start sync needed and client info recording enabled when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
@@ -81,7 +81,7 @@ class ConfigureAndStartSessionUseCaseTest {
     }
 
     @Test
-    fun `given start sync needed and client info recording disabled when configuring and starting the session then it should be configured properly`() = runTest {
+    fun `given start sync needed and client info recording disabled when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
@@ -100,7 +100,7 @@ class ConfigureAndStartSessionUseCaseTest {
     }
 
     @Test
-    fun `given a session and no start sync needed when configuring and starting the session then it should be configured properly`() = runTest {
+    fun `given a session and no start sync needed when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
