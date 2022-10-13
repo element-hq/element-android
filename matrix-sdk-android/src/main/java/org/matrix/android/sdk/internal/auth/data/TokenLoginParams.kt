@@ -24,6 +24,6 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 internal data class TokenLoginParams(
         @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
         @Json(name = "token") val token: String,
-        @Json(name = "initial_device_display_name") override val deviceDisplayName: String?,
-        @Json(name = "device_id") override val deviceId: String?
+        @Json(name = "initial_device_display_name") override val deviceDisplayName: String? = null,
+        @Json(name = "device_id") override val deviceId: String? = null
 ) : LoginParams
