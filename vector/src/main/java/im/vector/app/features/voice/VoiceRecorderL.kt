@@ -31,10 +31,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.util.md5
-import java.io.File
-import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -44,15 +40,12 @@ class VoiceRecorderL(
         private val context: Context,
         coroutineContext: CoroutineContext,
         private val codec: OggOpusEncoder,
-) : VoiceRecorder {
+) : AbstractVoiceRecorder(context) {
 
     companion object {
         private val SAMPLE_RATE = SampleRate.Rate48kHz
         private const val BITRATE = 24 * 1024
     }
-
-    private val outputDirectory: File by lazy { ensureAudioDirectory(context) }
-    private var outputFile: File? = null
 
     private val recorderScope = CoroutineScope(coroutineContext)
     private var recordingJob: Job? = null
@@ -64,6 +57,8 @@ class VoiceRecorderL(
     // Size of the audio buffer for Short values
     private var bufferSizeInShorts = 0
     private var maxAmplitude = 0
+
+    override val fileNameExt: String = "ogg"
 
     private fun initializeCodec(filePath: String) {
         codec.init(filePath, SAMPLE_RATE)
@@ -86,19 +81,10 @@ class VoiceRecorderL(
         }
     }
 
-    override fun initializeRecord(attachmentData: ContentAttachmentData) {
-        outputFile = attachmentData.findVoiceFile(outputDirectory)
-    }
-
     override fun startRecord(roomId: String) {
-        val fileName = "${UUID.randomUUID()}.ogg"
-        val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
-            mkdirs()
+        outputFile = createOutputFile(roomId).also {
+            initializeCodec(it.absolutePath)
         }
-        val outputFile = File(outputDirectoryForRoom, fileName)
-        this.outputFile = outputFile
-
-        initializeCodec(outputFile.absolutePath)
 
         recordingJob = recorderScope.launch {
             audioRecorder?.startRecording()
@@ -140,17 +126,8 @@ class VoiceRecorderL(
         codec.release()
     }
 
-    override fun cancelRecord() {
-        outputFile?.delete()
-        outputFile = null
-    }
-
     override fun getMaxAmplitude(): Int {
         return maxAmplitude
-    }
-
-    override fun getVoiceMessageFile(): File? {
-        return outputFile
     }
 
     private fun createAudioRecord() {

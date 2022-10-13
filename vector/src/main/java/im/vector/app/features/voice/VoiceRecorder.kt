@@ -22,11 +22,19 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 
 interface VoiceRecorder {
+
     /**
-     * Initialize recording with a pre-recorded file.
-     * @param attachmentData data of the recorded file
+     * Audio file extension (eg. `mp4`).
      */
-    fun initializeRecord(attachmentData: ContentAttachmentData)
+    val fileNameExt: String
+
+    /**
+     * Initialize recording with an optional pre-recorded file.
+     *
+     * @param roomId id of the room to initialize record
+     * @param attachmentData data of the pre-recorded file, if any.
+     */
+    fun initializeRecord(roomId: String, attachmentData: ContentAttachmentData? = null)
 
     /**
      * Start the recording.

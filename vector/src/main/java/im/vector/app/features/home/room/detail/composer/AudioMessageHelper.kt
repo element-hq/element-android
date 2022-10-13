@@ -55,8 +55,8 @@ class AudioMessageHelper @Inject constructor(
     private var amplitudeTicker: CountUpTimer? = null
     private var playbackTicker: CountUpTimer? = null
 
-    fun initializeRecorder(attachmentData: ContentAttachmentData) {
-        voiceRecorder.initializeRecord(attachmentData)
+    fun initializeRecorder(roomId: String, attachmentData: ContentAttachmentData) {
+        voiceRecorder.initializeRecord(roomId, attachmentData)
         amplitudeList.clear()
         attachmentData.waveform?.let {
             amplitudeList.addAll(it)
