@@ -94,7 +94,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         val isInitiator = theirPublicKey == null
 
         if (isInitiator) {
-            Timber.tag(TAG).i("Waiting for other device to send their public key")
+//            Timber.tag(TAG).i("Waiting for other device to send their public key")
             val res = this.receiveAsPayload() ?: throw RuntimeException("No reply from other device")
 
             if (res.key == null) {
@@ -106,7 +106,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
             theirPublicKey = Base64.decode(res.key, Base64.NO_WRAP)
         } else {
             // send our public key unencrypted
-            Timber.tag(TAG).i("Sending public key")
+//            Timber.tag(TAG).i("Sending public key")
             send(ECDHPayload(
                     algorithm = SecureRendezvousChannelAlgorithm.ECDH_V1,
                     key = Base64.encodeToString(ourPublicKey, Base64.NO_WRAP)
@@ -121,10 +121,10 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
 
         aesKey = olmSAS!!.generateShortCode(aesInfo, 32)
 
-        Timber.tag(TAG).i("Our public key: ${Base64.encodeToString(ourPublicKey, Base64.NO_WRAP)}")
-        Timber.tag(TAG).i("Their public key: ${Base64.encodeToString(theirPublicKey, Base64.NO_WRAP)}")
-        Timber.tag(TAG).i("AES info: $aesInfo")
-        Timber.tag(TAG).i("AES key: ${Base64.encodeToString(aesKey, Base64.NO_WRAP)}")
+//        Timber.tag(TAG).i("Our public key: ${Base64.encodeToString(ourPublicKey, Base64.NO_WRAP)}")
+//        Timber.tag(TAG).i("Their public key: ${Base64.encodeToString(theirPublicKey, Base64.NO_WRAP)}")
+//        Timber.tag(TAG).i("AES info: $aesInfo")
+//        Timber.tag(TAG).i("AES key: ${Base64.encodeToString(aesKey, Base64.NO_WRAP)}")
 
         val rawChecksum = olmSAS!!.generateShortCode(aesInfo, 5)
         return getDecimalCodeRepresentation(rawChecksum)
@@ -180,7 +180,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
     }
 
     private fun encrypt(plainText: ByteArray): ECDHPayload {
-        Timber.tag(TAG).i("Encrypting: ${plainText.toString(Charsets.UTF_8)}")
+//        Timber.tag(TAG).d("Encrypting: ${plainText.toString(Charsets.UTF_8)}")
         val iv = ByteArray(16)
         SecureRandom().nextBytes(iv)
 
@@ -212,7 +212,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
 
         val plainTextBytes = plainText.toByteArray()
 
-        Timber.tag(TAG).i("Decrypted: ${plainTextBytes.toString(Charsets.UTF_8)}")
+//        Timber.tag(TAG).d("Decrypted: ${plainTextBytes.toString(Charsets.UTF_8)}")
         return plainTextBytes
     }
 }
