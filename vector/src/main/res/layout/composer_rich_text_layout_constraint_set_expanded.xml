@@ -150,7 +150,7 @@
 
     <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"
-        style="@style/Widget.Vector.EditText.Composer.RichTextComposer"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/room_message_placeholder"
