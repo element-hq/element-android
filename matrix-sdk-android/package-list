@@ -1,5 +1,9 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
+$dokka.location:org.matrix.android.sdk.api.account////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/index.html
+$dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/index.html
+$dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent/LocalNotificationSettingsContent/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/-local-notification-settings-content.html
+$dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent/isSilenced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/is-silenced.html
 $dokka.location:org.matrix.android.sdk.api.auth.data////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.auth.data/index.html
 $dokka.location:org.matrix.android.sdk.api.auth.data/Credentials///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.auth.data/-credentials/index.html
 $dokka.location:org.matrix.android.sdk.api.auth.data/Credentials/Credentials/#kotlin.String#kotlin.String#kotlin.String?#kotlin.String?#kotlin.String?#org.matrix.android.sdk.api.auth.data.DiscoveryInformation?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.auth.data/-credentials/-credentials.html
@@ -682,6 +686,7 @@ $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTy
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_IDENTITY_SERVER/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-i-d-e-n-t-i-t-y_-s-e-r-v-e-r.html
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_IGNORED_USER_LIST/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-i-g-n-o-r-e-d_-u-s-e-r_-l-i-s-t.html
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_INTEGRATION_PROVISIONING/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-i-n-t-e-g-r-a-t-i-o-n_-p-r-o-v-i-s-i-o-n-i-n-g.html
+$dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_LOCAL_NOTIFICATION_SETTINGS/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-l-o-c-a-l_-n-o-t-i-f-i-c-a-t-i-o-n_-s-e-t-t-i-n-g-s.html
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_OVERRIDE_COLORS/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-o-v-e-r-r-i-d-e_-c-o-l-o-r-s.html
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_PREVIEW_URLS/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-p-r-e-v-i-e-w_-u-r-l-s.html
 $dokka.location:org.matrix.android.sdk.api.session.accountdata/UserAccountDataTypes/TYPE_PUSH_RULES/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.accountdata/-user-account-data-types/-t-y-p-e_-p-u-s-h_-r-u-l-e-s.html
@@ -4695,6 +4700,7 @@ $dokka.location:org.matrix.android.sdk.userstories/Us400RoomSendContent///Pointi
 $dokka.location:org.matrix.android.sdk.userstories/Us500Notification///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.userstories/-us500-notification/index.html
 $dokka.location:org.matrix.android.sdk.userstories/Us600SyncWithTheServer///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.userstories/-us600-sync-with-the-server/index.html
 org.matrix.android.sdk.api
+org.matrix.android.sdk.api.account
 org.matrix.android.sdk.api.auth
 org.matrix.android.sdk.api.auth.data
 org.matrix.android.sdk.api.auth.login
