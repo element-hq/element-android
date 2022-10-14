@@ -45,7 +45,6 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -58,7 +57,6 @@ import kotlin.coroutines.Continuation
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        private val session: Session,
         private val stringProvider: StringProvider,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -66,6 +64,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
+        private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
@@ -86,7 +85,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun refreshPushers() {
-        session.pushersService().refreshPushers()
+        activeSessionHolder.getActiveSession().pushersService().refreshPushers()
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -109,15 +108,17 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun observePushers(deviceId: String) {
-        val pusherFlow = session.flow()
+        val pusherFlow = activeSessionHolder.getActiveSession().flow()
                 .livePushers()
                 .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
+                .map {
+                    it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled }
+                }
 
-        val accountDataFlow = session.flow()
+        val accountDataFlow = activeSessionHolder.getActiveSession().flow()
                 .liveUserAccountData(TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
                 .unwrap()
-                .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() ?: true }
+                .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
 
         merge(pusherFlow, accountDataFlow)
                 .onEach { it?.let { setState { copy(notificationsEnabled = it) } } }
@@ -232,16 +233,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
-            val devicePusher = session.pushersService().getPushers().firstOrNull { it.deviceId == initialState.deviceId }
-            devicePusher?.let { pusher ->
-                session.pushersService().togglePusher(pusher, action.enabled)
-            }
-
-            val newNotificationSettingsContent = mapOf("is_silenced" to !action.enabled)
-            session.accountDataService().updateUserAccountData(
-                    TYPE_LOCAL_NOTIFICATION_SETTINGS + action.deviceId,
-                    newNotificationSettingsContent,
-            )
+            togglePushNotificationUseCase.execute(action.deviceId, action.enabled)
+            setState { copy(notificationsEnabled = action.enabled) }
         }
     }
 }
