@@ -98,7 +98,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
                         activeSessionHolder.setActiveSession(session)
                         authenticationService.reset()
 
-                        configureAndStartSessionUseCase.execute(session, startSyncing)
+                        configureAndStartSessionUseCase.execute(session)
 
                         rendezvous.completeVerificationOnNewDevice(session)
 
