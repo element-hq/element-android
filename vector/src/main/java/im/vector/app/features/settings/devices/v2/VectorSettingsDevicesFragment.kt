@@ -158,7 +158,7 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initQrLoginView() {
-        if (!vectorFeatures.allowReciprocateQrCodeLogin()) {
+        if (!vectorFeatures.isReciprocateQrCodeLogin()) {
             views.deviceListHeaderSignInWithQrCode.isVisible = false
             views.deviceListHeaderScanQrCodeButton.isVisible = false
             views.deviceListHeaderShowQrCodeButton.isVisible = false
