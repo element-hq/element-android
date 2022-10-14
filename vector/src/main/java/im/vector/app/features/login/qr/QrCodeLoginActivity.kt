@@ -25,6 +25,7 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
@@ -37,7 +38,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
-        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
+        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             when (qrCodeLoginArgs?.loginType) {
                 QrCodeLoginType.LOGIN -> {
