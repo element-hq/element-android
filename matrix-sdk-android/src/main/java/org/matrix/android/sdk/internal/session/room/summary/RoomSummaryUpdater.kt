@@ -46,7 +46,6 @@ import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntity
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -251,7 +250,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                             )
 
                             RoomSummaryEntity.where(realm, child.roomId)
-                                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                    .process("membershipStr", Membership.activeMemberships())
                                     .first()
                                     .find()
                                     ?.let { childSum ->
@@ -317,7 +316,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                         )
 
                                         RoomSummaryEntity.where(realm, parentInfo.roomId)
-                                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                                .process("membershipStr", Membership.activeMemberships())
                                                 .first()
                                                 .find()
                                                 ?.let { parentSum ->
@@ -385,7 +384,7 @@ internal class RoomSummaryUpdater @Inject constructor(
             // it's more annoying as based on if the other members belong the space or not
             RoomSummaryEntity.where(realm)
                     .query("isDirect == true")
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .process("membershipStr", Membership.activeMemberships())
                     .find()
                     .forEach { dmRoom ->
                         val relatedSpaces = lookupMap.keys
@@ -411,14 +410,14 @@ internal class RoomSummaryUpdater @Inject constructor(
             // Maybe a good place to count the number of notifications for spaces?
 
             realm.query(RoomSummaryEntity::class)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                    .process("membershipStr", Membership.activeMemberships())
                     .query("roomType == $0", RoomType.SPACE)
                     .find().forEach { space ->
                         // get all children
                         var highlightCount = 0
                         var notificationCount = 0
                         realm.query(RoomSummaryEntity::class)
-                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
+                                .process("membershipStr", listOf(Membership.JOIN))
                                 .query("roomType != $0", RoomType.SPACE)
                                 .query("ANY flattenParentIds == $0", space.roomId)
                                 .find().forEach {

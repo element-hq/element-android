@@ -19,11 +19,9 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase

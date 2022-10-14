@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

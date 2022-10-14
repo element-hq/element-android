@@ -3,6 +3,7 @@ package org.matrix.android.sdk.internal.database
 import androidx.lifecycle.asFlow
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.paging.PagedList.BoundaryCallback
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -19,6 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -99,18 +101,35 @@ internal class RealmInstance(
     fun <T : RealmObject, R> queryPagedList(
             config: PagedList.Config,
             mapper: RealmObjectMapper<T, R>,
+            boundaryCallback: BoundaryCallback<R>? = null,
             queryBuilder: RealmQueryBuilder<T>,
+    ): Flow<PagedList<R>> {
+        return queryUpdatablePagedList(
+                config = config,
+                mapper = mapper,
+                boundaryCallback = boundaryCallback,
+                liveQueryBuilder = flowOf(queryBuilder)
+        )
+    }
+
+    fun <T : RealmObject, R> queryUpdatablePagedList(
+            config: PagedList.Config,
+            mapper: RealmObjectMapper<T, R>,
+            boundaryCallback: BoundaryCallback<R>? = null,
+            liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
     ): Flow<PagedList<R>> {
         return getRealmFlow().flatMapConcat { realm ->
             val livePagedList = LivePagedListBuilder(
                     RealmTiledDataSource.Factory(
                             realm = realm,
-                            queryBuilder = queryBuilder,
+                            liveQueryBuilder = liveQueryBuilder,
                             mapper = mapper,
                             coroutineScope = coroutineScope
                     ),
                     config
-            ).build()
+            ).apply {
+                setBoundaryCallback(boundaryCallback)
+            }.build()
             livePagedList.asFlow()
         }
     }

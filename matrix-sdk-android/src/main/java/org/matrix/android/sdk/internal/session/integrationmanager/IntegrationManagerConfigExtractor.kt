@@ -32,10 +32,10 @@ internal class IntegrationManagerConfigExtractor @Inject constructor() {
                         if (apiUrl != null &&
                                 apiUrl.startsWith("https://") &&
                                 uiUrl!!.startsWith("https://")) {
-                            return WellknownIntegrationManagerConfigEntity(
-                                    apiUrl = apiUrl,
-                                    uiUrl = uiUrl
-                            )
+                            return WellknownIntegrationManagerConfigEntity().apply {
+                                this.apiUrl = apiUrl
+                                this.uiUrl = uiUrl
+                            }
                         }
                     }
                 }

@@ -21,9 +21,7 @@ import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
-import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
-import org.matrix.android.sdk.internal.database.query.readReceiptSummaryEntityQueries
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
@@ -134,16 +132,17 @@ internal class ReadReceiptHandler @Inject constructor(
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).find()
-                    ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
+                    ?: realm.copyToRealm(ReadReceiptsSummaryEntity().apply {
+                        this.eventId = eventId
                         this.roomId = roomId
-                    }
+                    })
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
                 val receiptEntity = ReadReceiptEntity.getOrCreate(realm, roomId, userId)
                 // ensure new ts is superior to the previous one
                 if (ts > receiptEntity.originServerTs) {
-                    ReadReceiptsSummaryEntity.where(realm, receiptEntity.eventId).findFirst()?.also {
+                    ReadReceiptsSummaryEntity.where(realm, receiptEntity.eventId).find()?.also {
                         it.readReceipts.remove(receiptEntity)
                     }
                     receiptEntity.eventId = eventId

@@ -43,9 +43,7 @@ import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.whereChunkId
 import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
@@ -469,19 +467,19 @@ internal class TimelineChunk(
 
         fun onChunkUpdated(updatedObject: UpdatedObject<ChunkEntity>) {
             Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${updatedObject.changedFields.joinToString(",")}")
-            if (updatedObject.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD)) {
+            if (updatedObject.isFieldChanged("isLastForward")) {
                 isLastForward.set(chunkEntity.isLastForward)
             }
-            if (updatedObject.isFieldChanged(ChunkEntityFields.IS_LAST_BACKWARD)) {
+            if (updatedObject.isFieldChanged("isLastBackward")) {
                 isLastBackward.set(chunkEntity.isLastBackward)
             }
-            if (updatedObject.isFieldChanged(ChunkEntityFields.NEXT_CHUNK.`$`)) {
+            if (updatedObject.isFieldChanged("nextChunk")) {
                 nextChunk = createTimelineChunk(chunkEntity.nextChunk).also {
                     it?.prevChunk = this
                 }
                 nextChunkLatch?.complete(Unit)
             }
-            if (updatedObject.isFieldChanged(ChunkEntityFields.PREV_CHUNK.`$`)) {
+            if (updatedObject.isFieldChanged("prevChunk")) {
                 prevChunk = createTimelineChunk(chunkEntity.prevChunk).also {
                     it?.nextChunk = this
                 }
@@ -507,7 +505,7 @@ internal class TimelineChunk(
             if (isLastForward.get()) {
                 val firstBuiltEvent = builtEvents.firstOrNull()
                 if (firstBuiltEvent != null) {
-                    val lastInsertion = results[range.startIndex + range.length - 1] ?: return false
+                    val lastInsertion = results.getOrNull(range.startIndex + range.length - 1) ?: return false
                     if (firstBuiltEvent.displayIndex + 1 != lastInsertion.displayIndex) {
                         Timber.v("There is no continuation in the chunk, chunk is not fully loaded yet, skip insert.")
                         return false
@@ -539,7 +537,7 @@ internal class TimelineChunk(
             val modifications = updatedResults.changeRanges
             for (range in modifications) {
                 for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
-                    val updatedEntity = results[modificationIndex] ?: continue
+                    val updatedEntity = results.getOrNull(modificationIndex) ?: continue
                     val builtEventIndex = builtEventsIndexes[updatedEntity.eventId] ?: continue
                     try {
                         builtEvents[builtEventIndex] = updatedEntity.buildAndDecryptIfNeeded()
@@ -624,13 +622,13 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
 ): RealmQuery<TimelineEventEntity> {
     return if (direction == Timeline.Direction.BACKWARDS) {
         query("displayIndex <= $0", startDisplayIndex)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                .sort("displayIndex", Sort.DESCENDING)
                 .limit(count)
     } else {
         query("displayIndex >= $0", startDisplayIndex)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+                .sort("displayIndex", Sort.ASCENDING)
                 .limit(count)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                .sort("displayIndex", Sort.DESCENDING)
     }
 }
 

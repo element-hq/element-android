@@ -17,55 +17,10 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import android.util.Base64
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmModel
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-
-/**
- * Get realm, invoke the action, close realm, and return the result of the action.
- */
-internal fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T): T {
-    return Realm.getInstance(realmConfiguration).use { realm ->
-        action.invoke(realm)
-    }
-}
-
-/**
- * Get realm, do the query, copy from realm, close realm, and return the copied result.
- */
-internal fun <T : RealmModel> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
-    return Realm.getInstance(realmConfiguration).use { realm ->
-        action.invoke(realm)?.let { realm.copyFromRealm(it) }
-    }
-}
-
-/**
- * Get realm, do the list query, copy from realm, close realm, and return the copied result.
- */
-internal fun <T : RealmModel> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
-    return Realm.getInstance(realmConfiguration).use { realm ->
-        action.invoke(realm).let { realm.copyFromRealm(it) }
-    }
-}
-
-/**
- * Get realm instance, invoke the action in a transaction and close realm.
- */
-internal fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
-    Realm.getInstance(realmConfiguration).use { realm ->
-        realm.executeTransaction { action.invoke(it) }
-    }
-}
-
-internal fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
-    Realm.getInstance(realmConfiguration).use { realm ->
-        realm.executeTransactionAsync { action.invoke(it) }
-    }
-}
 
 /**
  * Serialize any Serializable object, zip it and convert to Base64 String.

@@ -153,6 +153,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     val eventEntity = createEventEntity(params.roomId, event, this)
                     roomMemberContentsByUser.addSenderState(this, params.roomId, event.senderId)
                     threadChunk.addTimelineEvent(
+                            realm = this,
                             roomId = params.roomId,
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,
@@ -177,6 +178,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     val eventEntity = createEventEntity(params.roomId, threadRootEvent, this)
                     roomMemberContentsByUser.addSenderState(this, params.roomId, threadRootEvent.senderId)
                     threadChunk.addTimelineEvent(
+                            realm = this,
                             roomId = params.roomId,
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,

@@ -24,9 +24,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
-import org.matrix.android.sdk.internal.database.model.IgnoredUserEntityFields
 import org.matrix.android.sdk.internal.database.model.UserEntity
-import org.matrix.android.sdk.internal.database.model.UserEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.queryNotIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -82,7 +80,7 @@ internal class UserDataSource @Inject constructor(
                     ?.let {
                         query = query.queryNotIn("userId", it)
                     }
-            query.sort(UserEntityFields.DISPLAY_NAME)
+            query.sort("displayName")
         }.asLiveData()
     }
 
@@ -95,7 +93,7 @@ internal class UserDataSource @Inject constructor(
         return realmInstance.queryList(::mapper) { realm ->
             realm.query(IgnoredUserEntity::class)
                     .query("userId != ''")
-                    .sort(IgnoredUserEntityFields.USER_ID)
+                    .sort("userId")
         }.asLiveData()
     }
 }

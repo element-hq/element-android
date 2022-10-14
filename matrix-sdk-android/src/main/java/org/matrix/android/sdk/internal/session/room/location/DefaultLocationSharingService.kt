@@ -113,7 +113,7 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     }
 
     override fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>> {
-        return realmInstance.queryList(liveLocationShareAggregatedSummaryMapper) {
+        return realmInstance.queryList(liveLocationShareAggregatedSummaryMapper::map) {
             LiveLocationShareAggregatedSummaryEntity.findRunningLiveInRoom(it, roomId = roomId)
         }.asLiveData()
     }

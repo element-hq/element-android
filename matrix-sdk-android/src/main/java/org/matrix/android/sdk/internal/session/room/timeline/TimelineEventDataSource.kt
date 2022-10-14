@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -51,7 +50,7 @@ internal class TimelineEventDataSource @Inject constructor(
         val realm = realmInstance.getBlockingRealm()
         return TimelineEventEntity.whereRoomId(realm, roomId)
                 .sort("root.originServerTs", io.realm.kotlin.query.Sort.ASCENDING)
-                .distinct(TimelineEventEntityFields.EVENT_ID)
+                .distinct("eventId")
                 .find()
                 .mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
     }

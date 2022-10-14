@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import io.realm.RealmList
 import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel

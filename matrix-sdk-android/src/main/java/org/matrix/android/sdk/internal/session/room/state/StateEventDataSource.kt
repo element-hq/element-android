@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.queryIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
@@ -92,7 +91,7 @@ internal class StateEventDataSource @Inject constructor(
                         queryIn("type", eventTypes.toList())
                     }
                     // It's OK to cast stateKey as QueryStringValue
-                    .process(CurrentStateEventEntityFields.STATE_KEY, stateKey as QueryStringValue)
+                    .process("stateKey", stateKey as QueryStringValue)
         }
     }
 }

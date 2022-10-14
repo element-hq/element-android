@@ -20,21 +20,20 @@ import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.Sort
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 
 internal fun RealmQuery<RoomSummaryEntity>.process(sortOrder: RoomSortOrder): RealmQuery<RoomSummaryEntity> {
     when (sortOrder) {
         RoomSortOrder.NAME -> {
-            sort(RoomSummaryEntityFields.DISPLAY_NAME, Sort.ASCENDING)
+            sort("displayName", Sort.ASCENDING)
         }
         RoomSortOrder.ACTIVITY -> {
-            sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+            sort("lastActivityTime", Sort.DESCENDING)
         }
         RoomSortOrder.PRIORITY_AND_ACTIVITY -> {
             sort(
-                    RoomSummaryEntityFields.IS_FAVOURITE to Sort.DESCENDING,
-                    RoomSummaryEntityFields.IS_LOW_PRIORITY to Sort.ASCENDING,
-                    RoomSummaryEntityFields.LAST_ACTIVITY_TIME to Sort.DESCENDING
+                    "isFavourite" to Sort.DESCENDING,
+                    "isLowPriority" to Sort.ASCENDING,
+                    "lastActivityTime" to Sort.DESCENDING
             )
         }
         RoomSortOrder.NONE -> {

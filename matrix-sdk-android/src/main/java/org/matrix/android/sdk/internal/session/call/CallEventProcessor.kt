@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.call
 
-import io.realm.Realm
 import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event

@@ -183,9 +183,9 @@ internal class RoomSyncHandler @Inject constructor(
                 handlingStrategy.data.keys
                         .chunked(bestChunkSize.chunkSize)
                         .forEachIndexed { index, roomIds ->
-                            val roomEntities = roomIds
+                            roomIds
                                     .also { Timber.d("INIT_SYNC insert ${roomIds.size} rooms") }
-                                    .map {
+                                    .forEach {
                                         handleJoinedRoom(
                                                 realm = realm,
                                                 roomId = it,

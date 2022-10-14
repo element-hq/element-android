@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -75,7 +74,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
 
             events = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
                     .query("decryptionResultJson LIKE $0", TimelineEventFilter.DecryptedContent.URL)
-                    .sort(EventEntityFields.ORIGIN_SERVER_TS, Sort.DESCENDING)
+                    .sort("originServerTs", Sort.DESCENDING)
                     .find()
                     .map { it.asDomain() }
                     // Exclude stickers
@@ -96,13 +95,11 @@ internal class DefaultGetUploadsTask @Inject constructor(
             events = chunk.events
         }
 
-        var uploadEvents = listOf<UploadEvent>()
-
         val cacheOfSenderInfos = mutableMapOf<String, SenderInfo>()
 
         // Get a snapshot of all room members
         val roomMemberHelper = RoomMemberHelper(realm, params.roomId)
-        uploadEvents = events.mapNotNull { event ->
+        val uploadEvents = events.mapNotNull { event ->
             val eventId = event.eventId ?: return@mapNotNull null
             val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return@mapNotNull null
             val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@mapNotNull null

@@ -23,7 +23,6 @@ import io.realm.kotlin.types.RealmList
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.queryIn
@@ -92,7 +91,7 @@ internal fun EventEntity.Companion.whereTypes(
 }
 
 internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
-    return return firstOrNull { it.eventId == eventId }
+    return firstOrNull { it.eventId == eventId }
 }
 
 internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {

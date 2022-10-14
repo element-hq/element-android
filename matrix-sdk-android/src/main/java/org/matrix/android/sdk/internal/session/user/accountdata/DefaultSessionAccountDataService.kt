@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content

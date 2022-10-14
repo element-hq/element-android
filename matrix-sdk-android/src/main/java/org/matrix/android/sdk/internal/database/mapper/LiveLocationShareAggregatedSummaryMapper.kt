@@ -19,14 +19,12 @@ package org.matrix.android.sdk.internal.database.mapper
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
-import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import javax.inject.Inject
 
-internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() :
-        RealmObjectMapper<LiveLocationShareAggregatedSummaryEntity, LiveLocationShareAggregatedSummary> {
+internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() {
 
-    override fun map(realmObject: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
+    fun map(realmObject: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
         return LiveLocationShareAggregatedSummary(
                 userId = realmObject.userId,
                 isActive = realmObject.isActive,

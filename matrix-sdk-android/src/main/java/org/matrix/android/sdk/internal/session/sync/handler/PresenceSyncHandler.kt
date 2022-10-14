@@ -54,8 +54,8 @@ internal class PresenceSyncHandler @Inject constructor(private val matrixConfigu
      * Store user presence to DB and update Direct Rooms and Room Member Summaries accordingly.
      */
     private fun storePresenceToDB(realm: MutableRealm, userPresenceEntity: UserPresenceEntity) =
-            realm.copyToRealm(userPresenceEntity, updatePolicy = UpdatePolicy.ALL)?.also {
-                RoomSummaryEntity.updateDirectUserPresence(realm, userPresenceEntity.userId, this)
-                RoomMemberSummaryEntity.updateUserPresence(realm, userPresenceEntity.userId, this)
+            realm.copyToRealm(userPresenceEntity, updatePolicy = UpdatePolicy.ALL).also {
+                RoomSummaryEntity.updateDirectUserPresence(realm, userPresenceEntity.userId, it)
+                RoomMemberSummaryEntity.updateUserPresence(realm, userPresenceEntity.userId, it)
             }
 }

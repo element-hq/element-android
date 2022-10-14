@@ -23,18 +23,18 @@ import org.matrix.android.sdk.internal.database.model.UserEntity
 internal object UserEntityFactory {
 
     fun create(userId: String, roomMember: RoomMemberContent): UserEntity {
-        return UserEntity(
-                userId = userId,
-                displayName = roomMember.displayName.orEmpty(),
-                avatarUrl = roomMember.avatarUrl.orEmpty()
-        )
+        return UserEntity().apply {
+            this.userId = userId
+            this.displayName = roomMember.displayName.orEmpty()
+            this.avatarUrl = roomMember.avatarUrl.orEmpty()
+        }
     }
 
     fun create(user: User): UserEntity {
-        return UserEntity(
-                userId = user.userId,
-                displayName = user.displayName.orEmpty(),
-                avatarUrl = user.avatarUrl.orEmpty()
-        )
+        return UserEntity().apply {
+            this.userId = user.userId
+            this.displayName = user.displayName.orEmpty()
+            this.avatarUrl = user.avatarUrl.orEmpty()
+        }
     }
 }

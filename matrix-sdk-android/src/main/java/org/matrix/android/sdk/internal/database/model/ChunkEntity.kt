@@ -39,12 +39,12 @@ internal class ChunkEntity : RealmObject {
     var timelineEvents: RealmList<TimelineEventEntity> = realmListOf()
 
     // Only one chunk will have isLastForward == true
-    @Index var isLastForward: Boolean = false
-    @Index var isLastBackward: Boolean = false
+    var isLastForward: Boolean = false
+    var isLastBackward: Boolean = false
 
     // Threads
     @Index var rootThreadEventId: String? = null
-    @Index var isLastForwardThread: Boolean = false
+    var isLastForwardThread: Boolean = false
 
     fun identifier() = "${prevToken}_$nextToken"
 

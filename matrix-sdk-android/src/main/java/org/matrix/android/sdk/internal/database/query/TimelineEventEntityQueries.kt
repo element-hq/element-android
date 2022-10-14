@@ -21,12 +21,15 @@ import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmList
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.queryIn
 
 internal fun TimelineEventEntity.Companion.where(realm: TypedRealm): RealmQuery<TimelineEventEntity> {
@@ -84,53 +87,42 @@ internal fun TimelineEventEntity.Companion.latestEvent(
         includesSending: Boolean,
         filters: TimelineEventFilters = TimelineEventFilters()
 ): TimelineEventEntity? {
-    val roomEntity = RoomEntity.where(realm, roomId).first().find() ?: return null
-    val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterEvents(filters)
 
-    val liveEvents = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.where()?.filterEvents(filters)
-    val query = if (includesSending && sendingTimelineEvents.findAll().isNotEmpty()) {
+    val roomEntity = RoomEntity.where(realm, roomId).first().find() ?: return null
+    val sendingTimelineEvents = roomEntity.sendingTimelineEvents
+    val liveEvents = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents.orEmpty()
+    val events = if (includesSending && sendingTimelineEvents.isNotEmpty()) {
         sendingTimelineEvents
     } else {
         liveEvents
     }
-    return query
-            ?.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-            ?.findFirst()
-}
-
-internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEventFilters): RealmQuery<TimelineEventEntity> {
-    if (filters.filterTypes && filters.allowedTypes.isNotEmpty()) {
-        beginGroup()
-        filters.allowedTypes.forEachIndexed { index, filter ->
-            if (filter.stateKey == null) {
-                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
-            } else {
-                beginGroup()
-                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
-                and()
-                equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, filter.stateKey)
-                endGroup()
+    return events
+            .lastOrNull { timelineEvent ->
+                if (filters.filterUseless && timelineEvent.root?.isUseless.orFalse()) {
+                    return@lastOrNull false
+                }
+                if (filters.filterTypes && filters.allowedTypes.isNotEmpty() &&
+                        filters.allowedTypes.none { it.eventType == timelineEvent.root?.type }) {
+                    return@lastOrNull false
+                }
+                val event by lazy {
+                    timelineEvent.root?.asDomain()
+                }
+                val relationContent by lazy {
+                    event?.getRelationContent()
+                }
+                if (filters.filterEdits &&
+                        (relationContent?.type == RelationType.REPLACE) ||
+                        relationContent?.type == RelationType.RESPONSE ||
+                        relationContent?.type == RelationType.REFERENCE
+                ) {
+                    return@lastOrNull false
+                }
+                if (filters.filterRedacted && event?.isRedacted().orFalse()) {
+                    return@lastOrNull false
+                }
+                true
             }
-            if (index != filters.allowedTypes.size - 1) {
-                or()
-            }
-        }
-        endGroup()
-    }
-    if (filters.filterUseless) {
-        not()
-                .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
-    }
-    if (filters.filterEdits) {
-        not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
-        not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
-        not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.REFERENCE)
-    }
-    if (filters.filterRedacted) {
-        not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)
-    }
-
-    return this
 }
 
 internal fun RealmQuery<TimelineEventEntity>.filterTypes(filterTypes: List<String>): RealmQuery<TimelineEventEntity> {

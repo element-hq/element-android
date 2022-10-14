@@ -34,7 +34,6 @@ import org.matrix.android.sdk.internal.database.helper.findLatestSessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -103,9 +102,9 @@ internal class DefaultMembershipService @AssistedInject constructor(
     private fun roomMembersQuery(realm: TypedRealm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
         return with(queryStringValueProcessor) {
             RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
-                    .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
-                    .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                    .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                    .process("userId", queryParams.userId)
+                    .process("membershipStr", queryParams.memberships)
+                    .process("displayName", queryParams.displayName)
                     .apply {
                         if (queryParams.excludeSelf) {
                             query("userId != $0", userId)

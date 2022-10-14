@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.extensions.realm
 
 internal fun RoomEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<RoomEntity> {
     return realm.query(RoomEntity::class)

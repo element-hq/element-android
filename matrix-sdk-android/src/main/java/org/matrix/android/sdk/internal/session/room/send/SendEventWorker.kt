@@ -19,14 +19,11 @@ package org.matrix.android.sdk.internal.session.room.send
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
-import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker

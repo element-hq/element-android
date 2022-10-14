@@ -20,9 +20,7 @@ import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.types.RealmList
-import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
-import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
 
 internal fun ThreadSummaryEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ThreadSummaryEntity> {
     return realm.query(ThreadSummaryEntity::class)
@@ -50,11 +48,13 @@ internal fun ThreadSummaryEntity.Companion.getOrNull(realm: TypedRealm, roomId: 
     return where(realm, roomId, rootThreadEventId).first().find()
 }
 
+/*
 internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): ThreadSummaryEntity? {
     return this.where()
             .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
             .findFirst()
 }
+ */
 
 internal fun ThreadSummaryEntity.Companion.findRootOrLatest(realm: TypedRealm, eventId: String): ThreadSummaryEntity? {
     return realm.query(ThreadSummaryEntity::class)

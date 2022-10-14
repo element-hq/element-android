@@ -152,11 +152,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                         it.userId == initialState.userId
                     } != null
                 }
-                .map {
-
-                }
                 .execute {
-                    it
                     copy(isIgnored = it)
                 }
     }

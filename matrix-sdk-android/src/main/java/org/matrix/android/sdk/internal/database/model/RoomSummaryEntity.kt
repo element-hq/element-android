@@ -92,7 +92,6 @@ internal class RoomSummaryEntity : RealmObject {
             if (value != field) field = value
         }
 
-    @Index
     var isDirect: Boolean = false
         set(value) {
             if (value != field) field = value
@@ -157,19 +156,16 @@ internal class RoomSummaryEntity : RealmObject {
         isServerNotice = newTags.any { it.first == RoomTag.ROOM_TAG_SERVER_NOTICE }
     }
 
-    @Index
     var isFavourite: Boolean = false
         set(value) {
             if (value != field) field = value
         }
 
-    @Index
     var isLowPriority: Boolean = false
         set(value) {
             if (value != field) field = value
         }
 
-    @Index
     var isServerNotice: Boolean = false
         set(value) {
             if (value != field) field = value
@@ -257,7 +253,6 @@ internal class RoomSummaryEntity : RealmObject {
             }
         }
 
-    @Index
     var isHiddenFromUser: Boolean = false
         set(value) {
             if (value != field) field = value

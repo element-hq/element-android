@@ -40,7 +40,6 @@ import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.cleanUp
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
-import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
@@ -202,7 +201,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
             } else {
                 // ThreadSummary do not exists lets try to create one
                 Timber.i("###THREADS ThreadSummaryHelper ADD root eventId:$rootThreadEventId do not exists, lets try to create one")
-                threadEventEntity.findRootThreadEvent()?.let { rootThreadEventEntity ->
+                threadEventEntity.findRootThreadEvent(realm)?.let { rootThreadEventEntity ->
                     // Root thread event entity exists so lets create a new record
                     ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEventEntity.eventId).let {
                         it.updateThreadSummary(
@@ -316,7 +315,7 @@ private fun getLatestEvent(rootThreadEvent: Event): Event? {
 internal fun ThreadSummaryEntity.Companion.findAllThreadsForRoomId(realm: TypedRealm, roomId: String): RealmQuery<ThreadSummaryEntity> =
         ThreadSummaryEntity
                 .where(realm, roomId = roomId)
-                .sort(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.ORIGIN_SERVER_TS, Sort.DESCENDING)
+                .sort("latestThreadEventEntity.originServerTs", Sort.DESCENDING)
 
 /**
  * Enhance each [ThreadSummary] root and latest event with the equivalent decrypted text edition/replacement.

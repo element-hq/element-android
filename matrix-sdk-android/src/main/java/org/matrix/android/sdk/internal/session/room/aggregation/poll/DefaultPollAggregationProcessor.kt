@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
-import io.realm.Realm
 import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session

@@ -3,19 +3,22 @@ package org.matrix.android.sdk.internal.database.pagedlist
 import androidx.paging.DataSource
 import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.UpdatedResults
-import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.RealmQueryBuilder
 
 internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
         realm: Realm,
-        queryBuilder: RealmQueryBuilder<T>,
+        liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
         private val mapper: RealmObjectMapper<T, R>,
         coroutineScope: CoroutineScope
 ) :
@@ -23,30 +26,35 @@ internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
 
     class Factory<T : RealmObject, R>(
             private val realm: Realm,
-            private val queryBuilder: RealmQueryBuilder<T>,
+            private val liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
             private val mapper: RealmObjectMapper<T, R>,
             private val coroutineScope: CoroutineScope,
     ) : DataSource.Factory<Int, R>() {
 
         override fun create(): DataSource<Int, R> {
             val childScope = CoroutineScope(SupervisorJob() + coroutineScope.coroutineContext)
-            return RealmTiledDataSource(realm, queryBuilder, mapper, childScope)
+            return RealmTiledDataSource(realm, liveQueryBuilder, mapper, childScope)
         }
     }
 
-    private val results: RealmResults<T>
+    private var results: List<T> = emptyList()
 
     init {
         addInvalidatedCallback {
             coroutineScope.coroutineContext.cancelChildren()
         }
-        results = queryBuilder.build(realm).find()
-        results.asFlow()
+        liveQueryBuilder
+                .take(1)
+                .flatMapConcat {
+                    it.build(realm).asFlow()
+                }
                 .onEach { resultsChange ->
                     when (resultsChange) {
                         is UpdatedResults -> invalidate()
                         else -> Unit
                     }
+                }.onCompletion {
+                    invalidate()
                 }
                 .launchIn(coroutineScope)
     }

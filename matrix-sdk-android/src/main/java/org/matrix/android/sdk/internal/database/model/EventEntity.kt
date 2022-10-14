@@ -44,7 +44,7 @@ internal class EventEntity : RealmObject {
     var ageLocalTs: Long? = null
 
     // Thread related, no need to create a new Entity for performance
-    @Index var isRootThread: Boolean = false
+    var isRootThread: Boolean = false
     @Index var rootThreadEventId: String? = null
 
     // Number messages within the thread

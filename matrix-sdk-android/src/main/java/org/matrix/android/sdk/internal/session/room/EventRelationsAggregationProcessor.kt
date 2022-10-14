@@ -15,7 +15,6 @@
  */
 package org.matrix.android.sdk.internal.session.room
 
-import io.realm.Realm
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -52,7 +51,6 @@ import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -103,7 +101,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 Timber.w("Event has no room id ${event.eventId}")
                 return
             }
-            val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
+            val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
             when (event.type) {
                 EventType.REACTION -> {
                     // we got a reaction!!

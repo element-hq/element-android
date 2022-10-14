@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.sync.parsing
 
-import io.realm.Realm
 import io.realm.kotlin.MutableRealm
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
@@ -25,7 +24,6 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntity
-import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
@@ -57,14 +55,16 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
     }
 
     private fun handleGeneric(roomEntity: RoomEntity, content: JsonDict?, eventType: String) {
-        val existing = roomEntity.accountData.where().equalTo(RoomAccountDataEntityFields.TYPE, eventType).findFirst()
+        val existing = roomEntity.accountData.firstOrNull {
+            it.type == eventType
+        }
         if (existing != null) {
             existing.contentStr = ContentMapper.map(content)
         } else {
-            val roomAccountData = RoomAccountDataEntity(
-                    type = eventType,
-                    contentStr = ContentMapper.map(content)
-            )
+            val roomAccountData = RoomAccountDataEntity().apply {
+                this.type = eventType
+                this.contentStr = ContentMapper.map(content)
+            }
             roomEntity.accountData.add(roomAccountData)
         }
     }

@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.kotlin.TypedRealm
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -32,7 +29,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership

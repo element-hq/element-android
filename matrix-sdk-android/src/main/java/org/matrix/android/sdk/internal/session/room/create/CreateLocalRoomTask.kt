@@ -175,6 +175,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
             }
 
             chunkEntity.addTimelineEvent(
+                    realm = realm,
                     roomId = roomId,
                     eventEntity = eventEntity,
                     direction = PaginationDirection.FORWARDS,

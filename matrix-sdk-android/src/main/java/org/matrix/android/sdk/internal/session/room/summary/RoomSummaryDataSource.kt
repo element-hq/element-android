@@ -21,11 +21,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.asLiveData
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.sum
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -44,9 +44,9 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmInstance
+import org.matrix.android.sdk.internal.database.RealmQueryBuilder
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.queryIn
@@ -185,36 +185,32 @@ internal class RoomSummaryDataSource @Inject constructor(
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder,
     ): UpdatableLivePageResult {
-        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
-            roomSummariesQuery(realm, queryParams).process(sortOrder)
-        }
-        val dataSourceFactory = realmDataSourceFactory.map {
-            roomSummaryMapper.map(it)
-        }
 
         val boundaries = MutableLiveData(ResultBoundaries())
+        val boundaryCallback = object : PagedList.BoundaryCallback<RoomSummary>() {
+            override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {
+                boundaries.postValue(boundaries.value?.copy(frontLoaded = true))
+            }
 
-        val mapped = monarchy.findAllPagedWithChanges(
-                realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory, pagedListConfig).also {
-                    it.setBoundaryCallback(object : PagedList.BoundaryCallback<RoomSummary>() {
-                        override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {
-                            boundaries.postValue(boundaries.value?.copy(frontLoaded = true))
-                        }
+            override fun onItemAtFrontLoaded(itemAtFront: RoomSummary) {
+                boundaries.postValue(boundaries.value?.copy(endLoaded = true))
+            }
 
-                        override fun onItemAtFrontLoaded(itemAtFront: RoomSummary) {
-                            boundaries.postValue(boundaries.value?.copy(endLoaded = true))
-                        }
+            override fun onZeroItemsLoaded() {
+                boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
+            }
+        }
 
-                        override fun onZeroItemsLoaded() {
-                            boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
-                        }
-                    })
-                }
-        )
+        fun queryBuilder(queryParams: RoomSummaryQueryParams) = RealmQueryBuilder {
+            roomSummariesQuery(it, queryParams).process(sortOrder)
+        }
+
+        val liveQueryBuilder = MutableStateFlow(queryBuilder((queryParams)))
+
+        val livePagedList = realmInstance.queryUpdatablePagedList(pagedListConfig, roomSummaryMapper::map, boundaryCallback, liveQueryBuilder).asLiveData()
 
         return object : UpdatableLivePageResult {
-            override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
+            override val livePagedList: LiveData<PagedList<RoomSummary>> = livePagedList
 
             override val liveBoundaries: LiveData<ResultBoundaries>
                 get() = boundaries
@@ -222,9 +218,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             override var queryParams: RoomSummaryQueryParams = queryParams
                 set(value) {
                     field = value
-                    realmDataSourceFactory.updateQuery {
-                        roomSummariesQuery(it, value).process(sortOrder)
-                    }
+                    liveQueryBuilder.tryEmit(queryBuilder(value))
                 }
         }
     }
@@ -251,10 +245,10 @@ internal class RoomSummaryDataSource @Inject constructor(
     private fun roomSummariesQuery(realm: TypedRealm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         var query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
-                    .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
+                    .process("roomId", QueryStringValue.IsNotEmpty)
                     .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
-                    .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                    .process("canonicalAlias", queryParams.canonicalAlias)
+                    .process("membershipStr", queryParams.memberships)
                     .query("isHiddenFromUser == false")
         }
 
@@ -302,9 +296,9 @@ internal class RoomSummaryDataSource @Inject constructor(
 
     private fun QueryStringValue.toDisplayNameField(): String {
         return if (isNormalized()) {
-            RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME
+            "normalizedDisplayName"
         } else {
-            RoomSummaryEntityFields.DISPLAY_NAME
+            "displayName"
         }
     }
 

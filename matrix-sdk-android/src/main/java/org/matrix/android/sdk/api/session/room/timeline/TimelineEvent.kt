@@ -54,7 +54,6 @@ data class TimelineEvent(
          */
         val localId: Long,
         val eventId: String,
-        var chunkId: ObjectId? = null,
         /**
          * This display index is the position in the current chunk.
          * It's not unique on the timeline as it's reset on each chunk.

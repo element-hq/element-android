@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import androidx.work.ExistingWorkPolicy
-import io.realm.Realm
-import io.realm.RealmList
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import org.matrix.android.sdk.api.extensions.orTrue

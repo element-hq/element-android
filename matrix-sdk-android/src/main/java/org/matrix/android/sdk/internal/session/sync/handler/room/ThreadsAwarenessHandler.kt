@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
-import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -44,7 +43,6 @@ import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.where
@@ -53,7 +51,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
@@ -253,7 +250,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     ): String? {
         event.eventId ?: return null
         val rootThreadEventId = if (isFromCache) event.eventId else event.getRootThreadEventId() ?: return null
-        eventThatRelatesTo(realm, event.eventId, rootThreadEventId)?.forEach { eventEntityFound ->
+        eventThatRelatesTo(realm, event.eventId, rootThreadEventId).forEach { eventEntityFound ->
             val newEventFound = eventEntityFound.asDomain()
             val newEventBody = newEventFound.getDecryptedTextSummary() ?: return null
             val newEventPayload = newEventFound.mxDecryptionResult?.payload?.toMutableMap() ?: return null

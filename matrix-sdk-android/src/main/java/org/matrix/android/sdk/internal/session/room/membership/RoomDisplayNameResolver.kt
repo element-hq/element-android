@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
-import io.realm.Realm
 import io.realm.kotlin.TypedRealm
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -29,7 +28,6 @@ import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -78,7 +76,6 @@ internal class RoomDisplayNameResolver @Inject constructor(
         }
 
         val roomMembers = RoomMemberHelper(realm, roomId)
-        val activeMembers = roomMembers.queryActiveRoomMembersEvent().find()
 
         if (roomEntity?.membership == Membership.INVITE) {
             val inviteMeEvent = roomMembers.getLastStateEvent(userId)

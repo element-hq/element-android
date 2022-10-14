@@ -302,7 +302,7 @@ internal fun updateNotificationsNew(roomId: String, realm: MutableRealm, current
 
     val readReceiptChunkTimelineEvents = TimelineEventEntity.whereChunkId(realm, chunkId = readReceiptChunk.chunkId)
             .sort("displayIndex", Sort.ASCENDING)
-            .find() ?: return
+            .find()
 
     val readReceiptChunkPosition = readReceiptChunkTimelineEvents.indexOfFirst { it.eventId == readReceipt }
 

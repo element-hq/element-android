@@ -24,15 +24,14 @@ internal object RoomMemberEntityFactory {
 
     fun create(roomId: String, userId: String, roomMember: RoomMemberContent, presence: UserPresenceEntity?): RoomMemberSummaryEntity {
         val primaryKey = "${roomId}_$userId"
-        return RoomMemberSummaryEntity(
-                primaryKey = primaryKey,
-                userId = userId,
-                roomId = roomId,
-                displayName = roomMember.displayName,
-                avatarUrl = roomMember.avatarUrl
-        ).apply {
-            membership = roomMember.membership
-            userPresenceEntity = presence
+        return RoomMemberSummaryEntity().apply {
+            this.primaryKey = primaryKey
+            this.userId = userId
+            this.roomId = roomId
+            this.displayName = roomMember.displayName
+            this.avatarUrl = roomMember.avatarUrl
+            this.membership = roomMember.membership
+            this.userPresenceEntity = presence
         }
     }
 }

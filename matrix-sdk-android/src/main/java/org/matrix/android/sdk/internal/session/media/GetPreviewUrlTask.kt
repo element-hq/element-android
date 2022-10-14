@@ -84,16 +84,15 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
 
     private suspend fun doRequestWithCache(url: String, timestamp: Long?, validityDurationInMillis: Long, strict: Boolean): PreviewUrlData {
         // Get data from cache
-        var dataFromCache: PreviewUrlData? = null
-        var isCacheValid = false
+        val dataFromCache: PreviewUrlData?
+        val isCacheValid: Boolean
         val realm = realmInstance.getRealm()
         val entity = PreviewUrlCacheEntity.get(realm, url)
         dataFromCache = entity?.toDomain()
         isCacheValid = entity != null && Date().time < entity.lastUpdatedTimestamp + validityDurationInMillis
 
-        val finalDataFromCache = dataFromCache
-        if (finalDataFromCache != null && isCacheValid) {
-            return finalDataFromCache
+        if (dataFromCache != null && isCacheValid) {
+            return dataFromCache
         }
 
         // No cache or outdated cache
@@ -101,7 +100,7 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
             doRequest(url, timestamp)
         } catch (throwable: Throwable) {
             // In case of error, we can return value from cache even if outdated
-            return finalDataFromCache
+            return dataFromCache
                     ?.takeIf { !strict }
                     ?: throw throwable
         }
