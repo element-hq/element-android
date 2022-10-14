@@ -181,9 +181,13 @@ fun TimelineEvent.isRootThread(): Boolean {
 /**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
  */
-fun TimelineEvent.getTextEditableContent(): String {
+fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
     val lastMessageContent = getLastMessageContent()
-    val lastContentBody = lastMessageContent.getFormattedBody() ?: return ""
+    val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
+        lastMessageContent.formattedBody
+    } else {
+        lastMessageContent?.body
+    } ?: return ""
     return if (isReply()) {
         extractUsefulTextFromReply(lastContentBody)
     } else {
@@ -200,12 +204,4 @@ fun MessageContent.getTextDisplayableContent(): String {
             ?: newContent?.toModel<MessageContent>()?.body
             ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
             ?: body
-}
-
-fun MessageContent?.getFormattedBody(): String? {
-    return if (this is MessageContentWithFormattedBody) {
-        formattedBody
-    } else {
-        this?.body
-    }
 }
