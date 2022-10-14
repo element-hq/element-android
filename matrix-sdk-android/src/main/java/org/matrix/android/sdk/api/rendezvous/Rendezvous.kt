@@ -91,7 +91,11 @@ class Rendezvous(
 
         if (incompatible) {
             send(Payload(PayloadType.Finish, intent = ourIntent))
-            val reason = if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) RendezvousFailureReason.OtherDeviceNotSignedIn else RendezvousFailureReason.OtherDeviceAlreadySignedIn
+            val reason = if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
+                RendezvousFailureReason.OtherDeviceNotSignedIn
+            } else {
+                RendezvousFailureReason.OtherDeviceAlreadySignedIn
+            }
             channel.cancel(reason)
         }
 
@@ -175,7 +179,6 @@ class Rendezvous(
         Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
         crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
-        // TODO: what do we do with the master key?
         verificationResponse.masterKey ?.let { masterKeyFromVerifyingDevice ->
             // set master key as trusted
             crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
