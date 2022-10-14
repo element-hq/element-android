@@ -36,17 +36,22 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
@@ -104,10 +109,19 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun observePushers(deviceId: String) {
-        session.flow()
+        val pusherFlow = session.flow()
                 .livePushers()
                 .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                .execute { copy(pushers = it) }
+                .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
+
+        val accountDataFlow = session.flow()
+                .liveUserAccountData(TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
+                .unwrap()
+                .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() ?: true }
+
+        merge(pusherFlow, accountDataFlow)
+                .onEach { it?.let { setState { copy(notificationsEnabled = it) } } }
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: SessionOverviewAction) {
@@ -218,10 +232,16 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
-            val devicePushers = awaitState().pushers.invoke()?.filter { it.deviceId == action.deviceId }
-            devicePushers?.forEach { pusher ->
+            val devicePusher = session.pushersService().getPushers().firstOrNull { it.deviceId == initialState.deviceId }
+            devicePusher?.let { pusher ->
                 session.pushersService().togglePusher(pusher, action.enabled)
             }
+
+            val newNotificationSettingsContent = mapOf("is_silenced" to !action.enabled)
+            session.accountDataService().updateUserAccountData(
+                    TYPE_LOCAL_NOTIFICATION_SETTINGS + action.deviceId,
+                    newNotificationSettingsContent,
+            )
         }
     }
 }

@@ -18,7 +18,6 @@ package im.vector.app.features.settings.devices.v2.overview
 
 import android.os.SystemClock
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
@@ -30,7 +29,6 @@ import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
-import im.vector.app.test.fakes.FakePushersService
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
@@ -58,6 +56,7 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import javax.net.ssl.HttpsURLConnection
@@ -80,8 +79,7 @@ class SessionOverviewViewModelTest {
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID_1
     )
-    private val fakePushersService = FakePushersService()
-    private val fakeSession = FakeSession(fakePushersService = fakePushersService)
+    private val fakeSession = FakeSession()
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
@@ -122,7 +120,7 @@ class SessionOverviewViewModelTest {
     fun `given the viewModel has been initialized then pushers are refreshed`() {
         createViewModel()
 
-        fakePushersService.verifyRefreshPushers()
+        fakeSession.pushersService().verifyRefreshPushers()
     }
 
     @Test
@@ -134,7 +132,7 @@ class SessionOverviewViewModelTest {
                 deviceId = A_SESSION_ID_1,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
-                pushers = Loading(),
+                notificationsEnabled = true,
         )
 
         val viewModel = createViewModel()
@@ -230,7 +228,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                pushers = Loading(),
+                notificationsEnabled = true,
         )
 
         // When
@@ -267,7 +265,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                pushers = Loading(),
+                notificationsEnabled = true,
         )
         fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
 
@@ -302,7 +300,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                pushers = Loading(),
+                notificationsEnabled = true,
         )
         fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
@@ -475,7 +473,7 @@ class SessionOverviewViewModelTest {
         val viewModel = createViewModel()
 
         viewModel.test()
-                .assertLatestState { state -> state.pushers.invoke() == pushers }
+                .assertLatestState { state -> state.notificationsEnabled }
                 .finish()
     }
 
@@ -486,10 +484,28 @@ class SessionOverviewViewModelTest {
                 aPusher(deviceId = "another id", enabled = false)
         )
         fakeSession.pushersService().givenPushersLive(pushers)
+        fakeSession.pushersService().givenGetPushers(pushers)
 
         val viewModel = createViewModel()
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
         fakeSession.pushersService().verifyTogglePusherCalled(pushers.first(), true)
+    }
+
+    @Test
+    fun `when handle TogglePushNotifications, then update account local notification settings`() {
+        val pushers = listOf(
+                aPusher(deviceId = A_SESSION_ID_1, enabled = false),
+                aPusher(deviceId = "another id", enabled = false)
+        )
+        fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
+
+        fakeSession.accountDataService().verifyUpdateUserAccountDataEventSucceeds(
+                UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_SESSION_ID_1,
+                mapOf("is_silenced" to false),
+        )
     }
 }
