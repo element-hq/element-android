@@ -17,12 +17,12 @@
 package im.vector.app.features.crypto.keys
 
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeCryptoService
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +91,10 @@ class KeysExporterTest {
 
     private fun givenFileDescriptorWithSize(size: Long) {
         context.givenFileDescriptor(A_URI, mode = "r") {
-            mockk<ParcelFileDescriptor>().also { every { it.statSize } returns size }
+            mockk {
+                every { statSize } returns size
+                justRun { close() }
+            }
         }
     }
 }
