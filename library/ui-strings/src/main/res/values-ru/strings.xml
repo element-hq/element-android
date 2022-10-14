@@ -438,8 +438,8 @@
     <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
-    <string name="passphrase_enter_passphrase">Введите парольную фразу</string>
-    <string name="passphrase_confirm_passphrase">Подтвердите парольную фразу</string>
+    <string name="passphrase_enter_passphrase">Введите мнемоническую фразу</string>
+    <string name="passphrase_confirm_passphrase">Подтвердите мнемоническую фразу</string>
     <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
@@ -617,7 +617,7 @@
     </plurals>
     <string name="system_alerts_header">Системные оповещения</string>
     <string name="dialog_title_error">Ошибка</string>
-    <string name="passphrase_create_passphrase">Создать парольную фразу</string>
+    <string name="passphrase_create_passphrase">Создать мнемоническую фразу</string>
     <string name="passphrase_passphrase_does_not_match">Парольные фразы не совпадают</string>
     <string name="resource_limit_contact_admin">свяжитесь с вашим администратором</string>
     <string name="resource_limit_soft_default">Превышен один из ресурсных лимитов сервера, по этому <b>некоторые пользователи не смогут авторизоваться</b>.</string>
@@ -637,7 +637,7 @@
     <string name="settings_call_ringtone_title">Мелодия входящего вызова</string>
     <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
     <string name="video_call_in_progress">Идёт видеозвонок …</string>
-    <string name="room_participants_action_remove">Удалить из чата</string>
+    <string name="room_participants_action_remove">Удалить из комнаты</string>
     <string name="settings_notification_troubleshoot">Поиск проблем с уведомлениями</string>
     <string name="settings_send_typing_notifs">Оправлять уведомления о наборе текста</string>
     <string name="settings_send_markdown">Markdown форматирование</string>
@@ -725,9 +725,9 @@
     <string name="settings_cryptography_manage_keys">Управление криптографическими ключами</string>
     <string name="encryption_settings_manage_message_recovery_summary">Управление резервным копированием ключей</string>
     <string name="notification_silent">Беззвучный</string>
-    <string name="passphrase_empty_error_message">Пожалуйста, введите парольную фразу</string>
+    <string name="passphrase_empty_error_message">Пожалуйста, введите мнемоническую фразу</string>
     <string name="passphrase_passphrase_too_weak">Парольная фраза слишком простая</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите парольную фразу, если хотите, чтобы ${app_name} сгенерировал ключ восстановления.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите мнемоническую фразу, если хотите, чтобы ${app_name} сгенерировал ключ восстановления.</string>
     <string name="keys_backup_setup_step1_title">Никогда не теряйте зашифрованных сообщений</string>
     <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Ключи для прочтения этих сообщений есть только у вас и получателя(ей).
 \n
@@ -815,9 +815,9 @@
     <string name="keys_backup_banner_in_progress">Резервное копирование ключей…</string>
     <string name="keys_backup_banner_recover_line1">Никогда не теряйте зашифрованные сообщения</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Поделиться</string>
-    <string name="keys_backup_setup_step3_button_title_no_passphrase">Я сделал копию</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Я сделал(а) копию</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Храните ключ восстановления в надежном месте, например, в диспетчере паролей (или в сейфе)</string>
-    <string name="keys_backup_setup_step2_text_title">Защитите резервную копию парольной фразой.</string>
+    <string name="keys_backup_setup_step2_text_title">Защитите резервную копию мнемонической фразой.</string>
     <string name="encryption_message_recovery">Восстановление зашифрованных сообщений</string>
     <string name="keys_backup_setup">Начать использовать резервное копирование ключей</string>
     <string name="keys_backup_banner_recover_line2">Использовать резервное копирование ключей</string>
@@ -1222,7 +1222,7 @@
     <string name="verification_cannot_access_other_session">Используйте пароль восстановления или ключ</string>
     <string name="e2e_use_keybackup">Разблокировать историю зашифрованных сообщений</string>
     <string name="verify_cancelled_notice">Проверка была отменена. Вы можете начать проверку снова.</string>
-    <string name="recovery_passphrase">Парольная фраза для восстановления</string>
+    <string name="recovery_passphrase">Мнемоническая фраза для восстановления</string>
     <string name="enter_account_password">Введите %s, чтобы продолжить.</string>
     <string name="bootstrap_dont_reuse_pwd">Не переиспользуйте пароль учётной записи.</string>
     <string name="bootstrap_loading_text">Это может занять несколько секунд, пожалуйста, наберитесь терпения.</string>
@@ -1429,9 +1429,9 @@
     <string name="verification_emoji_notice">Сравните уникальные эмодзи, убедившись, что они появились в том же порядке.</string>
     <string name="verification_code_notice">Сравните код с тем, который отображается на экране другого пользователя.</string>
     <string name="verification_conclusion_ok_notice">Сообщения от этого пользователя зашифрованы сквозным шифрованием и не смогут быть прочитаны третьими лицами.</string>
-    <string name="verification_conclusion_ok_self_notice">Ваша новая сессия подтверждена. У нее есть доступ к вашим зашифрованным сообщениям, а другие пользователи увидят его как доверенное.</string>
+    <string name="verification_conclusion_ok_self_notice">Ваша новая сессия подтверждена. Она имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут воспринимать её как заверенную.</string>
     <string name="encryption_information_cross_signing_state">Перекрёстная подпись</string>
-    <string name="encryption_information_dg_xsigning_complete">Перекрестная подпись включена
+    <string name="encryption_information_dg_xsigning_complete">Перекрёстная подпись включена
 \nЛичные ключи хранятся на устройстве.</string>
     <string name="encryption_information_dg_xsigning_trusted">Перекрестная подпись включена
 \nКлючи являются доверенными.
@@ -2756,4 +2756,14 @@
     <string name="command_description_table_flip">Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения</string>
     <string name="settings_security_incognito_keyboard_title">Приватная клавиатура</string>
     <string name="settings_security_incognito_keyboard_summary">Запрещает клавиатуре обновлять персональные данные, такие как история набора текста и словарь, на основе того, что вы набрали при общении. Обратите внимание, что некоторые клавиатуры могут не соблюдать эту настройку.</string>
+    <string name="action_got_it">Понятно</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 В настройках безопасности вы включили шифрование только для заверенных сессий во всех комнатах.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Не отправлять зашифрованные сообщения незаверенным сессиям в этой комнате.</string>
+    <string name="device_manager_learn_more_sessions_inactive">Неактивные сессии — это сессии, которыми вы не пользовались определенное время, но они продолжают получать ключи шифрования.
+\n
+\nУдаление неактивных сессий повышает безопасность и производительность, а также облегчает выявление подозрительных новых сессий.</string>
+    <string name="device_manager_learn_more_session_rename_title">Переименование сессий</string>
+    <string name="device_manager_learn_more_session_rename">Другие пользователи в личных сообщениях и комнатах, к которым вы присоединились, могут просматривать весь список ваших сессий.
+\n
+\nЭто даёт им уверенность в том, что они действительно общаются с вами, но это также означает, что они могут видеть название сессии, которое вы ввели здесь.</string>
 </resources>
