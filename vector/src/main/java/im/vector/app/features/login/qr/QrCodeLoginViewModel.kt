@@ -24,8 +24,8 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -37,7 +37,8 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
     val TAG: String = QrCodeLoginViewModel::class.java.simpleName
 
@@ -97,7 +98,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
                         activeSessionHolder.setActiveSession(session)
                         authenticationService.reset()
 
-                        session.configureAndStart(applicationContext)
+                        configureAndStartSessionUseCase.execute(session, startSyncing)
 
                         rendezvous.completeVerificationOnNewDevice(session)
 
