@@ -72,7 +72,7 @@ interface SendService {
             text: String,
             formattedText: String? = null,
             autoMarkdown: Boolean,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
     ): Cancelable
 
     /**
@@ -90,7 +90,7 @@ interface SendService {
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
             rootThreadEventId: String? = null,
-            relatesTo: RelationDefaultContent? = null
+            relatesTo: RelationDefaultContent? = null,
     ): Cancelable
 
     /**
@@ -106,7 +106,7 @@ interface SendService {
             attachments: List<ContentAttachmentData>,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
     ): Cancelable
 
     /**
