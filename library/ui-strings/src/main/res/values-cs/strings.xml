@@ -648,8 +648,8 @@
     <string name="encryption_import_room_keys">Import klíčů místností</string>
     <string name="encryption_import_room_keys_summary">Import klíčů z místního souboru</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Šifrovat pouze do ověřených relací</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílat šifrované zprávy do neověřených relací z této relace.</string>
     <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>
     <string name="encryption_information_unknown_ip">neznámá ip</string>
@@ -1079,7 +1079,7 @@
     <string name="no_ignored_users">Neignorujete žádné uživatele</string>
     <string name="help_long_click_on_room_for_more_options">Více možností po dlouhém stisku na místnost</string>
     <string name="room_join_rules_public">%1$s učinil místnost veřejnou pro kohokoli znalého odkazu.</string>
-    <string name="room_join_rules_invite">%1$s nastavil místnost jen pro pozvané.</string>
+    <string name="room_join_rules_invite">%1$s nastavil místnost jako pouze pro pozvané.</string>
     <string name="timeline_unread_messages">Nepřečtené zprávy</string>
     <string name="login_splash_title">Je to Vaše konverzace. Vlastněte ji.</string>
     <string name="login_splash_text1">Chatujte s lidmi přímo nebo ve skupinách</string>
@@ -1218,7 +1218,7 @@
     <string name="settings_developer_mode_fail_fast_summary">${app_name} může spadnout častěji, když se objeví neočekávané chyby</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
     <string name="create_room_encryption_title">Zapnout šifrování</string>
-    <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
+    <string name="create_room_encryption_description">Po zapnutí šifrování ho není možné vypnout.</string>
     <string name="login_error_threepid_denied">Vaše emailová doména není autorizována registrovat se na tomto serveru</string>
     <string name="verification_conclusion_warning">Nedůvěryhodné přihlášení</string>
     <string name="verification_sas_match">Shodují se</string>
@@ -1297,10 +1297,10 @@
     <string name="verification_conclusion_ok_self_notice">Vaše nová relace je nyní ověřena. Má přístup k Vašim zašifrovaným zprávám a ostatní uživatelé ji uvidi jako důvěryhodnou.</string>
     <string name="encryption_information_cross_signing_state">Křížové podepisování</string>
     <string name="encryption_information_dg_xsigning_complete">Křížové podpisování je zapnuto.
-\nPrivátní klíče v zařízení.</string>
+\nSoukromé klíče v zařízení.</string>
     <string name="encryption_information_dg_xsigning_trusted">Křížové podpisování je zapnuto
 \nKlíče jsou důvěryhodné.
-\nPrivátní klíče nejsou známy</string>
+\nSoukromé klíče nejsou známy</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Křížové podpisování je zapnuto.
 \nKlíče nejsou důvěryhodné</string>
     <string name="encryption_information_dg_xsigning_disabled">Křížové podpisování není zapnuto</string>
@@ -2019,11 +2019,11 @@
     <string name="create_space_error_empty_field_space_name">Dejte prostoru jméno a pokračujte.</string>
     <string name="create_spaces_details_public_header">Doplňte nějaké podrobnosti, aby zaujal. Můžete je kdykoli změnit.</string>
     <string name="activity_create_space_title">Vytvořit prostor</string>
-    <string name="space_type_private_desc">Pouze na pozvání, nejlepší pro Vás nebo týmy</string>
-    <string name="space_type_private">Privátní</string>
+    <string name="space_type_private_desc">Pouze na pozvání, nejlepší pro vás nebo týmy</string>
+    <string name="space_type_private">Soukromý</string>
     <string name="space_type_public_desc">Otevřený pro všechny, nejlepší pro komunity</string>
     <string name="space_type_public">Veřejný</string>
-    <string name="create_spaces_private_teammates">Privátní prostor pro Vás a Vaše kolegy</string>
+    <string name="create_spaces_private_teammates">Soukromý prostor pro vás a vaše kolegy</string>
     <string name="create_spaces_me_and_teammates">Já a kolegové</string>
     <string name="create_spaces_organise_rooms">Soukromý prostor pro uspořádání vašich místností</string>
     <string name="create_spaces_just_me">Jen já</string>
@@ -2032,7 +2032,7 @@
     <string name="create_spaces_join_info_help">Ke vstupu do existujícího prostoru potřebujete pozvání.</string>
     <string name="create_spaces_you_can_change_later">Můžete změnit později</string>
     <string name="create_spaces_choose_type_label">Jaký typ prostoru chcete vytvořit\?</string>
-    <string name="your_private_space">Váš privátní prostor</string>
+    <string name="your_private_space">Váš soukromý prostor</string>
     <string name="your_public_space">Váš veřejný prostor</string>
     <string name="add_space">Přidat prostor</string>
     <string name="command_description_leave_room">Opustit místnost s daným id (nebo nynější místnost pokud prázdné)</string>
@@ -2044,7 +2044,7 @@
     <string name="room_settings_room_access_public_description">Kdokoliv může místnost najít a připojit se do ní</string>
     <string name="room_settings_room_access_public_title">Veřejný</string>
     <string name="room_settings_room_access_private_description">Pouze pozvaní mohou místnost najít a vstoupit do ní</string>
-    <string name="room_settings_room_access_private_title">Privátní</string>
+    <string name="room_settings_room_access_private_title">Soukromý</string>
     <string name="room_settings_room_access_entry_unknown">Neznámé nastavení přístupu (%s)</string>
     <string name="room_settings_room_access_entry_knock">Každý může na místnost zaklepat, členové pak mohou přijmout či odmítnout</string>
     <string name="room_settings_guest_access_title">Dovolit hostům vstoupit</string>
@@ -2165,7 +2165,7 @@
     <string name="spaces_which_can_access">Prostory, které mají přístup</string>
     <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
-    <string name="room_settings_room_access_private_invite_only_title">Soukromý (pouze pro pozvané)</string>
+    <string name="room_settings_room_access_private_invite_only_title">Soukromý (jen pro pozvané)</string>
     <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
     <string name="settings_room_upgrades">Aktualizace místnosti</string>
     <string name="settings_messages_by_bot">Zprávy od bota</string>
