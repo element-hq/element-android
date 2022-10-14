@@ -135,6 +135,7 @@ ext.groups = [
                         'commons-logging',
                         'info.picocli',
                         'io.element.android',
+                        'io.perfmark',
                         'io.github.davidburstrom.contester',
                         'io.github.detekt.sarif4k',
                         'io.github.microutils',
