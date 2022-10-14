@@ -113,7 +113,7 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     }
 
     private fun handleConnectionEstablished(connectionStatus: QrCodeLoginConnectionStatus.Connected, loginType: QrCodeLoginType) {
-        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = true
+        views.qrCodeLoginConfirmSecurityCodeLayout.isVisible = loginType == QrCodeLoginType.LINK_A_DEVICE
         views.qrCodeLoginStatusLoadingLayout.isVisible = false
         views.qrCodeLoginStatusHeaderView.isVisible = true
         views.qrCodeLoginStatusSecurityCode.isVisible = true
