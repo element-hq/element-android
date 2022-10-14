@@ -34,8 +34,8 @@ abstract class AbstractVoiceRecorderQ(private val context: Context) : AbstractVo
     protected var nextOutputFile: File? = null
 
     private val audioSource: Int = MediaRecorder.AudioSource.DEFAULT
-    private val audioEncodingBitRate: Int = 24_000
     private val audioSamplingRate: Int = 48_000
+    protected val audioEncodingBitRate: Int = 24_000
 
     abstract val outputFormat: Int // see MediaRecorder.OutputFormat
     abstract val audioEncoder: Int // see MediaRecorder.AudioEncoder
