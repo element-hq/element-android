@@ -146,6 +146,7 @@
     <color name="shield_color_gray">#91A1C0</color>
     <color name="shield_color_warning">#FF4B55</color>
     <color name="shield_color_warning_background">#0FFF4B55</color>
+    <color name="shield_color_unknown">@color/palette_gray_200</color>
 
     <!-- Badge Colors -->
     <attr name="vctr_badge_color_border" format="color" />

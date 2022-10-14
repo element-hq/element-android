@@ -57,7 +57,7 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
                 } else {
                     emptyList()
                 }
-                filterDevicesUseCase.execute(deviceFullInfoList, filterType, excludedDeviceIds)
+                filterDevicesUseCase.execute(currentSessionCrossSigningInfo, deviceFullInfoList, filterType, excludedDeviceIds)
             }
 
             deviceFullInfoFlow.distinctUntilChanged()

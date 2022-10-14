@@ -3254,10 +3254,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
+    <string name="device_manager_verification_status_unknown">Unknown verification status</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>

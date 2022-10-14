@@ -24,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,7 +41,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -181,11 +179,6 @@ class SessionOverviewFragment :
         updateSessionInfo(state)
         updateLoading(state.isLoading)
         updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
-        if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSessionTrusted, state.deviceInfo.invoke())
-        } else {
-            hideSessionInfo()
-        }
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -214,7 +207,7 @@ class SessionOverviewFragment :
                     deviceFullInfo = deviceInfo,
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
-                    isLearnMoreLinkVisible = true,
+                    isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
                     isLastSeenDetailsVisible = !isCurrentSession,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
@@ -241,18 +234,6 @@ class SessionOverviewFragment :
                 }
             }
         }
-    }
-
-    private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
-        views.sessionOverviewInfo.isVisible = true
-        val viewState = SessionInfoViewState(
-                isCurrentSession = isCurrentSession,
-                deviceFullInfo = deviceFullInfo,
-                isDetailsButtonVisible = false,
-                isLearnMoreLinkVisible = true,
-                isLastSeenDetailsVisible = true,
-        )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
     }
 
     private fun updateLoading(isLoading: Boolean) {
@@ -312,9 +293,5 @@ class SessionOverviewFragment :
                 description = getString(descriptionResId),
         )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
-    }
-
-    private fun hideSessionInfo() {
-        views.sessionOverviewInfo.isGone = true
     }
 }
