@@ -16,66 +16,12 @@
 
 package im.vector.app.features.voicebroadcast
 
-import android.content.Context
-import android.media.MediaRecorder
-import android.os.Build
-import androidx.annotation.RequiresApi
-import im.vector.app.features.voice.AbstractVoiceRecorderQ
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import im.vector.app.features.voice.VoiceRecorder
 import java.io.File
 
-@RequiresApi(Build.VERSION_CODES.Q)
-class VoiceBroadcastRecorder(
-        context: Context,
-) : AbstractVoiceRecorderQ(context) {
+interface VoiceBroadcastRecorder : VoiceRecorder {
 
-    private val maxFileSize = 25_000L // 0,025 Mb = 25 Kb ~= 6s
-
-    var listener: Listener? = null
-
-    override val outputFormat = MediaRecorder.OutputFormat.MPEG_4
-    override val audioEncoder = MediaRecorder.AudioEncoder.HE_AAC
-
-    override val fileNameExt: String = "mp4"
-
-    override fun initializeRecord(roomId: String, attachmentData: ContentAttachmentData?) {
-        super.initializeRecord(roomId, attachmentData)
-        mediaRecorder?.setMaxFileSize(maxFileSize)
-        mediaRecorder?.setOnInfoListener { _, what, _ ->
-            when (what) {
-                MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_APPROACHING -> onMaxFileSizeApproaching(roomId)
-                MediaRecorder.MEDIA_RECORDER_INFO_NEXT_OUTPUT_FILE_STARTED -> onNextOutputFileStarted()
-                else -> Unit // Nothing to do
-            }
-        }
-    }
-
-    override fun stopRecord() {
-        super.stopRecord()
-        notifyOutputFileCreated()
-        listener = null
-    }
-
-    override fun release() {
-        mediaRecorder?.setOnInfoListener(null)
-        super.release()
-    }
-
-    private fun onMaxFileSizeApproaching(roomId: String) {
-        setNextOutputFile(roomId)
-    }
-
-    private fun onNextOutputFileStarted() {
-        notifyOutputFileCreated()
-    }
-
-    private fun notifyOutputFileCreated() {
-        outputFile?.let {
-            listener?.onVoiceMessageCreated(it)
-            outputFile = nextOutputFile
-            nextOutputFile = null
-        }
-    }
+    var listener: Listener?
 
     fun interface Listener {
         fun onVoiceMessageCreated(file: File)

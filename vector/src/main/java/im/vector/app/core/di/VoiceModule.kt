@@ -23,6 +23,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorderQ
 import javax.inject.Singleton
 
 @Module
@@ -32,7 +33,7 @@ object VoiceModule {
     @Singleton
     fun providesVoiceBroadcastRecorder(context: Context): VoiceBroadcastRecorder? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceBroadcastRecorder(context)
+            VoiceBroadcastRecorderQ(context)
         } else {
             null
         }
