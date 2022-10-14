@@ -16,7 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.model
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeNull
@@ -48,7 +48,7 @@ class VoiceBroadcastEventTest {
         )
         val event = Event(
                 eventId = AN_EVENT_ID,
-                type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 content = content.toContent(),
         )
         val expectedReference = RelationDefaultContent(RelationType.REFERENCE, event.eventId)
@@ -71,7 +71,7 @@ class VoiceBroadcastEventTest {
                 relatesTo = RelationDefaultContent(RelationType.REFERENCE, A_REFERENCED_EVENT_ID),
         )
         val event = Event(
-                type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 content = content.toContent(),
         )
         val expectedReference = content.relatesTo

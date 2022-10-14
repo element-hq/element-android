@@ -16,7 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
@@ -41,7 +41,7 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
         Timber.d("## PauseVoiceBroadcastUseCase: Pause voice broadcast requested")
 
         val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
-                STATE_ROOM_VOICE_BROADCAST_INFO,
+                VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 QueryStringValue.Equals(session.myUserId)
         )?.asVoiceBroadcastEvent()
         when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
@@ -54,7 +54,7 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
     private suspend fun pauseVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## PauseVoiceBroadcastUseCase: Send new voice broadcast info state event")
         room.stateService().sendStateEvent(
-                eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         relatesTo = reference,

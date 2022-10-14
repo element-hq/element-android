@@ -21,7 +21,7 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.toContentAttachmentData
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
@@ -51,7 +51,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 
         val onGoingVoiceBroadcastEvents = room.stateService().getStateEvents(
-                setOf(STATE_ROOM_VOICE_BROADCAST_INFO),
+                setOf(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO),
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
@@ -67,7 +67,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
     private suspend fun startVoiceBroadcast(room: Room) {
         Timber.d("## StartVoiceBroadcastUseCase: Send new voice broadcast info state event")
         val eventId = room.stateService().sendStateEvent(
-                eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,

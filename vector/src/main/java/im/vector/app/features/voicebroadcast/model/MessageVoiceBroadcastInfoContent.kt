@@ -18,7 +18,7 @@ package im.vector.app.features.voicebroadcast.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType.MSGTYPE_VOICE_BROADCAST_INFO
@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 import timber.log.Timber
 
 /**
- * Content of the state event of type [STATE_ROOM_VOICE_BROADCAST_INFO].
+ * Content of the state event of type [VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO].
  *
  * It contains general info related to a voice broadcast.
  */
