@@ -151,9 +151,9 @@ class VectorSettingsLabsFragment :
     private fun configureEnableClientInfoRecordingPreference() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY)?.onPreferenceChangeListener =
                 OnPreferenceChangeListener { _, newValue ->
-                    when {
-                        (newValue as? Boolean) == false -> viewModel.handle(VectorSettingsLabsAction.DeleteRecordedClientInfo)
-                        (newValue as? Boolean) == true -> viewModel.handle(VectorSettingsLabsAction.UpdateClientInfo)
+                    when (newValue as? Boolean) {
+                        false -> viewModel.handle(VectorSettingsLabsAction.DeleteRecordedClientInfo)
+                        true -> viewModel.handle(VectorSettingsLabsAction.UpdateClientInfo)
                         else -> Unit
                     }
                     true
