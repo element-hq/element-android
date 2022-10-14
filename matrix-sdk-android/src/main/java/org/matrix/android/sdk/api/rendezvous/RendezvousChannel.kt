@@ -19,6 +19,9 @@ package org.matrix.android.sdk.api.rendezvous
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 
+/**
+ * Representation of a rendezvous channel such as that described by MSC3903
+ */
 interface RendezvousChannel {
     var transport: RendezvousTransport
 
@@ -44,7 +47,7 @@ interface RendezvousChannel {
      */
     suspend fun close()
 
-    // TODO: this should be transport independent in the future
+    // In future we probably want this to be a more generic RendezvousCode but it is suffice for now
     suspend fun generateCode(intent: RendezvousIntent): ECDHRendezvousCode
     suspend fun cancel(reason: RendezvousFailureReason)
 }

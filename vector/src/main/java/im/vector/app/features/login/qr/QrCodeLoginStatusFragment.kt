@@ -80,7 +80,8 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
 
     private fun getErrorCode(reason: RendezvousFailureReason): String {
         return when (reason) {
-            RendezvousFailureReason.UnsupportedAlgorithm, RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
+            RendezvousFailureReason.UnsupportedAlgorithm,
+            RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
             RendezvousFailureReason.Expired -> getString(R.string.qr_code_login_header_failed_timeout_description)
             RendezvousFailureReason.UserDeclined -> getString(R.string.qr_code_login_header_failed_denied_description)
             else -> getString(R.string.qr_code_login_header_failed_other_description)
