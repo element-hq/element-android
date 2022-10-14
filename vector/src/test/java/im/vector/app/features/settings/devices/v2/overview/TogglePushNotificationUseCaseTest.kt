@@ -64,5 +64,4 @@ class TogglePushNotificationUseCaseTest {
                 LocalNotificationSettingsContent(isSilenced = false).toContent(),
         )
     }
-
 }

@@ -177,7 +177,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
+        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
