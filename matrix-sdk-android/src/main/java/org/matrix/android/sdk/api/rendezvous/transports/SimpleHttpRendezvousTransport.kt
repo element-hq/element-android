@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.rendezvous.transports
+package org.matrix.android.sdk.api.rendezvous.transports
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,10 +23,10 @@ import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
-import org.matrix.android.sdk.internal.rendezvous.RendezvousTransport
-import org.matrix.android.sdk.internal.rendezvous.model.RendezvousTransportDetails
-import org.matrix.android.sdk.internal.rendezvous.model.RendezvousTransportType
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportType
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date

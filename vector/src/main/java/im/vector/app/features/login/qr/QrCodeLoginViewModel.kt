@@ -31,8 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.rendezvous.Rendezvous
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.Rendezvous
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.rendezvous.model
+package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.rendezvous.transports.SimpleHttpRendezvousTransportDetails
 
 @JsonClass(generateAdapter = true)
-data class ECDHRendezvous(
-        @Json val transport: SimpleHttpRendezvousTransportDetails,
-        @Json val algorithm: SecureRendezvousChannelAlgorithm,
-        @Json val key: String
-)
-
-@JsonClass(generateAdapter = true)
-data class ECDHRendezvousCode(
-        @Json val intent: RendezvousIntent,
-        @Json val rendezvous: ECDHRendezvous
+open class RendezvousTransportDetails(
+    @Json val type: RendezvousTransportType
 )

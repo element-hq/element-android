@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.rendezvous.model
+package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
 
-enum class RendezvousTransportType(val value: String) {
-    @Json(name = "http.v1") MSC3886_SIMPLE_HTTP_V1("http.v1")
+enum class RendezvousIntent {
+    @Json(name = "login.start") LOGIN_ON_NEW_DEVICE,
+    @Json(name = "login.reciprocate") RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
 }

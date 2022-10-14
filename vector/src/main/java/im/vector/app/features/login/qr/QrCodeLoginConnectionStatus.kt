@@ -16,7 +16,7 @@
 
 package im.vector.app.features.login.qr
 
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 
 sealed class QrCodeLoginConnectionStatus {
     object ConnectingToDevice : QrCodeLoginConnectionStatus()

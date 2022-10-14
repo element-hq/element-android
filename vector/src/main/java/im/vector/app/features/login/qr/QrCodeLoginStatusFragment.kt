@@ -27,7 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginStatusBinding
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 
 @AndroidEntryPoint
 class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBinding>() {

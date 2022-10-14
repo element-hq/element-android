@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.rendezvous.model
+package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-open class RendezvousTransportDetails(
-    @Json val type: RendezvousTransportType
-)
+enum class RendezvousTransportType(val value: String) {
+    @Json(name = "http.v1") MSC3886_SIMPLE_HTTP_V1("http.v1")
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.rendezvous.channels
+package org.matrix.android.sdk.api.rendezvous.channels
 
 import android.util.Base64
 import com.squareup.moshi.Json
@@ -23,15 +23,15 @@ import okhttp3.MediaType.Companion.toMediaType
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
-import org.matrix.android.sdk.internal.rendezvous.RendezvousFailureReason
-import org.matrix.android.sdk.internal.rendezvous.RendezvousChannel
-import org.matrix.android.sdk.internal.rendezvous.RendezvousTransport
-import org.matrix.android.sdk.internal.rendezvous.model.ECDHRendezvous
-import org.matrix.android.sdk.internal.rendezvous.model.ECDHRendezvousCode
-import org.matrix.android.sdk.internal.rendezvous.model.RendezvousError
-import org.matrix.android.sdk.internal.rendezvous.model.RendezvousIntent
-import org.matrix.android.sdk.internal.rendezvous.model.SecureRendezvousChannelAlgorithm
-import org.matrix.android.sdk.internal.rendezvous.transports.SimpleHttpRendezvousTransportDetails
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.RendezvousChannel
+import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
+import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvous
+import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
+import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
+import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransportDetails
 import org.matrix.olm.OlmSAS
 import timber.log.Timber
 import java.security.SecureRandom
@@ -107,10 +107,12 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         } else {
             // send our public key unencrypted
 //            Timber.tag(TAG).i("Sending public key")
-            send(ECDHPayload(
+            send(
+                    ECDHPayload(
                     algorithm = SecureRendezvousChannelAlgorithm.ECDH_V1,
                     key = Base64.encodeToString(ourPublicKey, Base64.NO_WRAP)
-            ))
+            )
+            )
         }
 
         olmSAS!!.setTheirPublicKey(Base64.encodeToString(theirPublicKey, Base64.NO_WRAP))
