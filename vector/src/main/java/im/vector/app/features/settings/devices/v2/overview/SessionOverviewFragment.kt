@@ -47,7 +47,6 @@ import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
 /**
@@ -178,7 +177,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
+        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -219,18 +218,13 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, pushers: List<Pusher>) {
+    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
         views.sessionOverviewPushNotifications.apply {
-            if (pushers.isEmpty()) {
-                isVisible = false
-            } else {
-                val allPushersAreEnabled = pushers.all { it.enabled }
-                setOnCheckedChangeListener(null)
-                setChecked(allPushersAreEnabled)
-                post {
-                    setOnCheckedChangeListener { _, isChecked ->
-                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
-                    }
+            setOnCheckedChangeListener(null)
+            setChecked(enabled)
+            post {
+                setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
                 }
             }
         }

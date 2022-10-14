@@ -36,24 +36,27 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        private val session: Session,
         private val stringProvider: StringProvider,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
@@ -61,6 +64,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
+        private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
@@ -74,9 +78,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     init {
+        refreshPushers()
         observeSessionInfo(initialState.deviceId)
         observeCurrentSessionInfo()
         observePushers(initialState.deviceId)
+    }
+
+    private fun refreshPushers() {
+        activeSessionHolder.getSafeActiveSession()?.pushersService()?.refreshPushers()
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -99,10 +108,20 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun observePushers(deviceId: String) {
-        session.flow()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val pusherFlow = session.flow()
                 .livePushers()
                 .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                .execute { copy(pushers = it) }
+                .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
+
+        val accountDataFlow = session.flow()
+                .liveUserAccountData(TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
+                .unwrap()
+                .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
+
+        merge(pusherFlow, accountDataFlow)
+                .onEach { it?.let { setState { copy(notificationsEnabled = it) } } }
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: SessionOverviewAction) {
@@ -213,10 +232,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
-            val devicePushers = awaitState().pushers.invoke()?.filter { it.deviceId == action.deviceId }
-            devicePushers?.forEach { pusher ->
-                session.pushersService().togglePusher(pusher, action.enabled)
-            }
+            togglePushNotificationUseCase.execute(action.deviceId, action.enabled)
+            setState { copy(notificationsEnabled = action.enabled) }
         }
     }
 }
