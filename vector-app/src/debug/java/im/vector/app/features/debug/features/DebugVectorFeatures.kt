@@ -79,11 +79,11 @@ class DebugVectorFeatures(
     override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
             ?: vectorFeatures.isQrCodeLoginEnabled()
 
-    override fun allowQrCodeLoginForAllServers() = read(DebugFeatureKeys.allowQrCodeLoginForAllServers)
-            ?: vectorFeatures.allowQrCodeLoginForAllServers()
+    override fun isQrCodeLoginForAllServers() = read(DebugFeatureKeys.qrCodeLoginForAllServers)
+            ?: vectorFeatures.isQrCodeLoginForAllServers()
 
-    override fun allowReciprocateQrCodeLogin() = read(DebugFeatureKeys.allowReciprocateQrCodeLogin)
-            ?: vectorFeatures.allowReciprocateQrCodeLogin()
+    override fun isReciprocateQrCodeLogin() = read(DebugFeatureKeys.reciprocateQrCodeLogin)
+            ?: vectorFeatures.isReciprocateQrCodeLogin()
 
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
@@ -148,7 +148,7 @@ object DebugFeatureKeys {
     val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
-    val allowQrCodeLoginForAllServers = booleanPreferencesKey("allow-qr-code-login-for-all-servers")
-    val allowReciprocateQrCodeLogin = booleanPreferencesKey("allow-reciprocate-qr-code-login")
+    val qrCodeLoginForAllServers = booleanPreferencesKey("qr-code-login-for-all-servers")
+    val reciprocateQrCodeLogin = booleanPreferencesKey("reciprocate-qr-code-login")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
 }

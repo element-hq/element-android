@@ -133,9 +133,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 homeServerCapabilitiesEntity.roomVersionsJson = capabilities?.roomVersions?.let {
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
-                homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
-                        getVersionResult?.doesServerSupportThreads().orFalse()
-                homeServerCapabilitiesEntity.canLoginWithQrCode = getVersionResult?.doesServerSupportQrCodeLogin().orFalse()
             }
 
             if (getMediaConfigResult != null) {
@@ -146,6 +143,9 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             if (getVersionResult != null) {
                 homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
                 homeServerCapabilitiesEntity.canControlLogoutDevices = getVersionResult.doesServerSupportLogoutDevices()
+                homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
+                        getVersionResult.doesServerSupportThreads().orFalse()
+                homeServerCapabilitiesEntity.canLoginWithQrCode = getVersionResult.doesServerSupportQrCodeLogin().orFalse()
             }
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {

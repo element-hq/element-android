@@ -125,7 +125,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         canLoginWithQrCode = false
                 )
             }
-        } else if (vectorFeatures.allowQrCodeLoginForAllServers()) {
+        } else if (vectorFeatures.isQrCodeLoginForAllServers()) {
             // allow for all servers
             setState {
                 copy(
