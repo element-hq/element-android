@@ -34,6 +34,7 @@ import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -194,8 +195,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     }
 }
 
-private fun <T : Parcelable> Activity.readPayload(default: T): T {
-    return intent.getParcelableExtra(KEY_ACTIVITY_PAYLOAD) ?: default
+private inline fun <reified T : Parcelable> Activity.readPayload(default: T): T {
+    return intent.getParcelableExtraCompat<T>(KEY_ACTIVITY_PAYLOAD) ?: default
 }
 
 private fun <T : Parcelable> Intent.applyPayload(payload: T): Intent {

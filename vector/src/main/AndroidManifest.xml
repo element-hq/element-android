@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- https://developer.android.com/develop/ui/views/notifications/notification-permission#exemptions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Call feature -->
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <!-- Commented because Google PlayStore does not like we add permission if we are not requiring it. And it was added for future use -->

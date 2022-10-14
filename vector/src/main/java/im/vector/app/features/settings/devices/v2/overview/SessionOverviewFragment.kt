@@ -177,6 +177,7 @@ class SessionOverviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateToolbar(state)
+        updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
         updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
@@ -197,6 +198,12 @@ class SessionOverviewFragment :
         }
     }
 
+    private fun updateEntryDetails(deviceId: String) {
+        views.sessionOverviewEntryDetails.setOnClickListener {
+            viewNavigator.goToSessionDetails(requireContext(), deviceId)
+        }
+    }
+
     private fun updateSessionInfo(viewState: SessionOverviewViewState) {
         if (viewState.deviceInfo is Success) {
             views.sessionOverviewInfo.isVisible = true
@@ -208,7 +215,7 @@ class SessionOverviewFragment :
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = true,
-                    isLastSeenDetailsVisible = true,
+                    isLastSeenDetailsVisible = !isCurrentSession,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {

@@ -45,6 +45,7 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
@@ -96,7 +97,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
 
         // Get config extra
-        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
+        val loginConfig = intent.getParcelableExtraCompat<LoginConfig?>(EXTRA_CONFIG)
         if (isFirstCreation()) {
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
@@ -316,7 +317,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     }
 
     override fun onBackPressed() {
-        validateBackPressed { super.onBackPressed() }
+        validateBackPressed {
+            @Suppress("DEPRECATION")
+            super.onBackPressed()
+        }
     }
 
     private fun onRegistrationStageNotSupported() {

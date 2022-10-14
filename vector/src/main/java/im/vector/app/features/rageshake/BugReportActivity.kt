@@ -128,7 +128,7 @@ class BugReportActivity :
             val isValid = !views.bugReportMaskView.isVisible
 
             it.isEnabled = isValid
-            it.icon.alpha = if (isValid) 255 else 100
+            it.icon?.alpha = if (isValid) 255 else 100
         }
     }
 
@@ -267,6 +267,7 @@ class BugReportActivity :
         // Ensure there is no crash status remaining, which will be sent later on by mistake
         bugReporter.deleteCrashFile()
 
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 

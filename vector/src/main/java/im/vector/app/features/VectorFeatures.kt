@@ -40,7 +40,6 @@ interface VectorFeatures {
      * use [VectorPreferences.isNewAppLayoutEnabled] instead.
      */
     fun isNewAppLayoutFeatureEnabled(): Boolean
-    fun isNewDeviceManagementEnabled(): Boolean
     fun isQrCodeLoginEnabled(): Boolean
     fun allowQrCodeLoginForAllServers(): Boolean
     fun allowReciprocateQrCodeLogin(): Boolean
@@ -60,7 +59,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
-    override fun isNewDeviceManagementEnabled(): Boolean = false
     override fun isQrCodeLoginEnabled(): Boolean = false
     override fun allowQrCodeLoginForAllServers(): Boolean = false
     override fun allowReciprocateQrCodeLogin(): Boolean = false

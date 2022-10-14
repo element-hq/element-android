@@ -76,9 +76,6 @@ class DebugVectorFeatures(
     override fun isNewAppLayoutFeatureEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
             ?: vectorFeatures.isNewAppLayoutFeatureEnabled()
 
-    override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
-            ?: vectorFeatures.isNewDeviceManagementEnabled()
-
     override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
             ?: vectorFeatures.isQrCodeLoginEnabled()
 
@@ -149,9 +146,7 @@ object DebugFeatureKeys {
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
     val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
-    val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
-    val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
     val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
     val allowQrCodeLoginForAllServers = booleanPreferencesKey("allow-qr-code-login-for-all-servers")
     val allowReciprocateQrCodeLogin = booleanPreferencesKey("allow-reciprocate-qr-code-login")

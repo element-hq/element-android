@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
 import im.vector.app.features.MainActivity
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -38,7 +39,7 @@ class LiveLocationMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
-        val mapViewArgs: LiveLocationMapViewArgs? = intent?.extras?.getParcelable(EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS)
+        val mapViewArgs: LiveLocationMapViewArgs? = intent?.extras?.getParcelableCompat(EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS)
         if (mapViewArgs == null) {
             finish()
             return

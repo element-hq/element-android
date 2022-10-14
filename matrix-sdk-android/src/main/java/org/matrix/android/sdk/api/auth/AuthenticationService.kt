@@ -130,4 +130,18 @@ interface AuthenticationService {
      * Return true if qr code login is supported by the server, false otherwise.
      */
     suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean
+
+    /**
+     * Authenticate using m.login.token method during sign in with QR code.
+     * @param homeServerConnectionConfig the information about the homeserver and other configuration
+     * @param loginToken the m.login.token
+     * @param initialDeviceName the initial device name
+     * @param deviceId the device id, optional. If not provided or null, the server will generate one.
+     */
+    suspend fun loginUsingQrLoginToken(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            loginToken: String,
+            initialDeviceName: String? = null,
+            deviceId: String? = null
+    ): Session
 }

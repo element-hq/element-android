@@ -46,6 +46,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -99,7 +100,7 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val timelineArgs: TimelineArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS) ?: return
+        val timelineArgs: TimelineArgs = intent?.extras?.getParcelableCompat(EXTRA_ROOM_DETAIL_ARGS) ?: return
         intent.putExtra(Mavericks.KEY_ARG, timelineArgs)
         currentRoomId = timelineArgs.roomId
 
@@ -177,6 +178,7 @@ class RoomDetailActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

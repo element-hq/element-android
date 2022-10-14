@@ -20,6 +20,7 @@ import androidx.lifecycle.liveData
 import io.mockk.Ordering
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -29,8 +30,19 @@ import org.matrix.android.sdk.api.session.pushers.PushersService
 
 class FakePushersService : PushersService by mockk(relaxed = true) {
 
+    fun givenGetPushers(pushers: List<Pusher>) {
+        every { getPushers() } returns pushers
+    }
+
     fun givenPushersLive(pushers: List<Pusher>) {
         every { getPushersLive() } returns liveData { emit(pushers) }
+    }
+
+    fun verifyOnlyGetPushersAndTogglePusherCalled(pusher: Pusher, enable: Boolean) {
+        coVerify(ordering = Ordering.ALL) {
+            getPushers()
+            togglePusher(pusher, enable)
+        }
     }
 
     fun verifyOnlyTogglePusherCalled(pusher: Pusher, enable: Boolean) {
@@ -44,5 +56,13 @@ class FakePushersService : PushersService by mockk(relaxed = true) {
         val httpPusherSlot = slot<HttpPusher>()
         verify { enqueueAddHttpPusher(capture(httpPusherSlot)) }
         return httpPusherSlot.captured
+    }
+
+    fun givenRefreshPushersSucceeds() {
+        justRun { refreshPushers() }
+    }
+
+    fun verifyRefreshPushers() {
+        verify { refreshPushers() }
     }
 }
