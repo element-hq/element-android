@@ -6,10 +6,18 @@
     <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
 <script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async="async"></script>
 <link href="../../../../styles/style.css" rel="Stylesheet">
 <link href="../../../../styles/jetbrains-mono.css" rel="Stylesheet">
@@ -21,6 +29,7 @@ if(savedDarkMode === true){
 <script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
@@ -43,10 +52,10 @@ if(savedDarkMode === true){
     </div>
     <div id="main">
 <div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room/RoomSummaryQueryParams.Builder///PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../../index.html">org.matrix.android.sdk.api.session.room</a><span class="delimiter">/</span><a href="../index.html">RoomSummaryQueryParams</a><span class="delimiter">/</span><a href="index.html">Builder</a></div>
+  <div class="breadcrumbs"><a href="../../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../../index.html">org.matrix.android.sdk.api.session.room</a><span class="delimiter">/</span><a href="../index.html">RoomSummaryQueryParams</a><span class="delimiter">/</span><span class="current">Builder</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Builder</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Builder for <a href="../index.html">RoomSummaryQueryParams</a>. <a href="../../room-summary-query-params.html">roomSummaryQueryParams</a> and <a href="../../space-summary-query-params.html">spaceSummaryQueryParams</a> can also be used to build an instance of <a href="../index.html">RoomSummaryQueryParams</a>.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a></div><p class="paragraph">Builder for <a href="../index.html">RoomSummaryQueryParams</a>. <a href="../../room-summary-query-params.html">roomSummaryQueryParams</a> and <a href="../../space-summary-query-params.html">spaceSummaryQueryParams</a> can also be used to build an instance of <a href="../index.html">RoomSummaryQueryParams</a>.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
@@ -62,7 +71,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-builder.html"><span class="token function">Builder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-builder.html"><span class="token function">Builder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
               </div>
             </div>
           </div>
@@ -79,7 +88,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">RoomSummaryQueryParams</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">RoomSummaryQueryParams</a></div></div></div>
               </div>
             </div>
           </div>
@@ -96,7 +105,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1020530764%2FProperties%2F468305090" anchor-label="canonicalAlias" id="-1020530764%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="canonical-alias.html">canonicalAlias</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1020530764%2FProperties%2F468305090" anchor-label="canonicalAlias" id="-1020530764%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="canonical-alias.html">canonicalAlias</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a></div></div></div>
               </div>
             </div>
           </div>
@@ -111,7 +120,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1819688093%2FProperties%2F468305090" anchor-label="displayName" id="1819688093%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="display-name.html">displayName</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1819688093%2FProperties%2F468305090" anchor-label="displayName" id="1819688093%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="display-name.html">displayName</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a></div></div></div>
               </div>
             </div>
           </div>
@@ -126,7 +135,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1348988086%2FProperties%2F468305090" anchor-label="excludeType" id="1348988086%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="exclude-type.html">excludeType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1348988086%2FProperties%2F468305090" anchor-label="excludeType" id="1348988086%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="exclude-type.html">excludeType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
               </div>
             </div>
           </div>
@@ -141,7 +150,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="485314728%2FProperties%2F468305090" anchor-label="includeType" id="485314728%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="include-type.html">includeType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="485314728%2FProperties%2F468305090" anchor-label="includeType" id="485314728%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="include-type.html">includeType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
               </div>
             </div>
           </div>
@@ -156,7 +165,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1152119379%2FProperties%2F468305090" anchor-label="memberships" id="-1152119379%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="memberships.html">memberships</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../org.matrix.android.sdk.api.session.room.model/-membership/index.html">Membership</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1152119379%2FProperties%2F468305090" anchor-label="memberships" id="-1152119379%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="memberships.html">memberships</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../../org.matrix.android.sdk.api.session.room.model/-membership/index.html">Membership</a><span class="token operator">&gt;</span></div></div></div>
               </div>
             </div>
           </div>
@@ -171,7 +180,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1580972479%2FProperties%2F468305090" anchor-label="roomCategoryFilter" id="1580972479%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-category-filter.html">roomCategoryFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-room-category-filter/index.html">RoomCategoryFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1580972479%2FProperties%2F468305090" anchor-label="roomCategoryFilter" id="1580972479%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-category-filter.html">roomCategoryFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-room-category-filter/index.html">RoomCategoryFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
               </div>
             </div>
           </div>
@@ -186,7 +195,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="35499610%2FProperties%2F468305090" anchor-label="roomId" id="35499610%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-id.html">roomId</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="35499610%2FProperties%2F468305090" anchor-label="roomId" id="35499610%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-id.html">roomId</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-query-string-value/index.html">QueryStringValue</a></div></div></div>
               </div>
             </div>
           </div>
@@ -201,7 +210,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-546122897%2FProperties%2F468305090" anchor-label="roomTagQueryFilter" id="-546122897%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-tag-query-filter.html">roomTagQueryFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-room-tag-query-filter/index.html">RoomTagQueryFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-546122897%2FProperties%2F468305090" anchor-label="roomTagQueryFilter" id="-546122897%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="room-tag-query-filter.html">roomTagQueryFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-room-tag-query-filter/index.html">RoomTagQueryFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
               </div>
             </div>
           </div>
@@ -216,7 +225,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1738465292%2FProperties%2F468305090" anchor-label="spaceFilter" id="1738465292%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="space-filter.html">spaceFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-space-filter/index.html">SpaceFilter</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1738465292%2FProperties%2F468305090" anchor-label="spaceFilter" id="1738465292%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="space-filter.html">spaceFilter</a><span class="token operator">: </span><a href="../../../org.matrix.android.sdk.api.query/-space-filter/index.html">SpaceFilter</a></div></div></div>
               </div>
             </div>
           </div>

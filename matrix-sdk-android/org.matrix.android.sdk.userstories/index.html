@@ -6,10 +6,18 @@
     <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
 <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
 <link href="../../styles/style.css" rel="Stylesheet">
 <link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
@@ -21,6 +29,7 @@ if(savedDarkMode === true){
 <script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
@@ -43,10 +52,10 @@ if(savedDarkMode === true){
     </div>
     <div id="main">
 <div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.userstories////PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="index.html">org.matrix.android.sdk.userstories</a></div>
+  <div class="breadcrumbs"><a href="../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><span class="current">org.matrix.android.sdk.userstories</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>Package</span></span> <span>org.</span><wbr></wbr><span>matrix.</span><wbr></wbr><span>android.</span><wbr></wbr><span>sdk.</span><wbr></wbr><span><span>userstories</span></span></h1>
-    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><p class="paragraph">This package contains some user stories (<strong>Us</strong> prefix) of the SDK usage. You will find example of what it is possible to do with the SDK and the API which can be used to do it.</p></div></div>
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><p class="paragraph">This package contains some user stories (<strong>Us</strong> prefix) of the SDK usage. You will find example of what it is possible to do with the SDK and the API which can be used to do it.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button></div>
@@ -62,7 +71,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us000-init-matrix/index.html">Us000InitMatrix</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Init a Matrix object.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us000-init-matrix/index.html">Us000InitMatrix</a></div><div class="brief "><p class="paragraph">Init a Matrix object.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -77,7 +86,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us100-sign-in/index.html">Us100SignIn</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Sign in to an existing account.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us100-sign-in/index.html">Us100SignIn</a></div><div class="brief "><p class="paragraph">Sign in to an existing account.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -92,7 +101,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us150-verify-session/index.html">Us150VerifySession</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Verify a Session after a Sign in.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us150-verify-session/index.html">Us150VerifySession</a></div><div class="brief "><p class="paragraph">Verify a Session after a Sign in.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -107,7 +116,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us190-sign-out/index.html">Us190SignOut</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Sign out.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us190-sign-out/index.html">Us190SignOut</a></div><div class="brief "><p class="paragraph">Sign out.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -122,7 +131,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us200-room-list/index.html">Us200RoomList</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Get the Room list.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us200-room-list/index.html">Us200RoomList</a></div><div class="brief "><p class="paragraph">Get the Room list.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -137,7 +146,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us300-room-timeline/index.html">Us300RoomTimeline</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Display a Room timeline, and navigate backward and forward.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us300-room-timeline/index.html">Us300RoomTimeline</a></div><div class="brief "><p class="paragraph">Display a Room timeline, and navigate backward and forward.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -152,7 +161,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us350-room-timeline-from-permalink/index.html">Us350RoomTimelineFromPermalink</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Display a Room timeline at a specific point.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us350-room-timeline-from-permalink/index.html">Us350RoomTimelineFromPermalink</a></div><div class="brief "><p class="paragraph">Display a Room timeline at a specific point.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -167,7 +176,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us400-room-send-content/index.html">Us400RoomSendContent</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Send content to a room, including monitoring the sending state.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us400-room-send-content/index.html">Us400RoomSendContent</a></div><div class="brief "><p class="paragraph">Send content to a room, including monitoring the sending state.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -182,7 +191,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us500-notification/index.html">Us500Notification</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Get notified when new Events are received.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us500-notification/index.html">Us500Notification</a></div><div class="brief "><p class="paragraph">Get notified when new Events are received.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -197,7 +206,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us600-sync-with-the-server/index.html">Us600SyncWithTheServer</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Manage the sync with the server.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-us600-sync-with-the-server/index.html">Us600SyncWithTheServer</a></div><div class="brief "><p class="paragraph">Manage the sync with the server.</p></div></div></div>
               </div>
             </div>
           </div>

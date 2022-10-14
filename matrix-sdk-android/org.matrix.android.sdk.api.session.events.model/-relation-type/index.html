@@ -6,10 +6,18 @@
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
 <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
 <link href="../../../styles/style.css" rel="Stylesheet">
 <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
@@ -21,6 +29,7 @@ if(savedDarkMode === true){
 <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
@@ -43,10 +52,10 @@ if(savedDarkMode === true){
     </div>
     <div id="main">
 <div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.events.model/RelationType///PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.events.model</a><span class="delimiter">/</span><a href="index.html">RelationType</a></div>
+  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.events.model</a><span class="delimiter">/</span><span class="current">RelationType</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Relation</span><wbr></wbr><span><span>Type</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">RelationType</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Constants defining known event relation types from Matrix specifications.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">RelationType</a></div><p class="paragraph">Constants defining known event relation types from Matrix specifications.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Properties">Properties</button></div>
@@ -62,7 +71,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="899655726%2FProperties%2F468305090" anchor-label="ANNOTATION" id="899655726%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-a-n-n-o-t-a-t-i-o-n.html">ANNOTATION</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="899655726%2FProperties%2F468305090" anchor-label="ANNOTATION" id="899655726%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which annotates an existing event.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="899655726%2FProperties%2F468305090" anchor-label="ANNOTATION" id="899655726%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-a-n-n-o-t-a-t-i-o-n.html">ANNOTATION</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><a data-name="899655726%2FProperties%2F468305090" anchor-label="ANNOTATION" id="899655726%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which annotates an existing event.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -77,7 +86,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1736858162%2FProperties%2F468305090" anchor-label="REFERENCE" id="1736858162%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-f-e-r-e-n-c-e.html">REFERENCE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1736858162%2FProperties%2F468305090" anchor-label="REFERENCE" id="1736858162%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which references an existing event.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1736858162%2FProperties%2F468305090" anchor-label="REFERENCE" id="1736858162%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-f-e-r-e-n-c-e.html">REFERENCE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><a data-name="1736858162%2FProperties%2F468305090" anchor-label="REFERENCE" id="1736858162%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which references an existing event.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -92,7 +101,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-755879191%2FProperties%2F468305090" anchor-label="REPLACE" id="-755879191%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-p-l-a-c-e.html">REPLACE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-755879191%2FProperties%2F468305090" anchor-label="REPLACE" id="-755879191%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which replaces an existing event.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-755879191%2FProperties%2F468305090" anchor-label="REPLACE" id="-755879191%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-p-l-a-c-e.html">REPLACE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><a data-name="-755879191%2FProperties%2F468305090" anchor-label="REPLACE" id="-755879191%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which replaces an existing event.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -107,7 +116,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1831328932%2FProperties%2F468305090" anchor-label="RESPONSE" id="-1831328932%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-s-p-o-n-s-e.html">RESPONSE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1831328932%2FProperties%2F468305090" anchor-label="RESPONSE" id="-1831328932%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which adds a response to an existing event.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1831328932%2FProperties%2F468305090" anchor-label="RESPONSE" id="-1831328932%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-s-p-o-n-s-e.html">RESPONSE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><a data-name="-1831328932%2FProperties%2F468305090" anchor-label="RESPONSE" id="-1831328932%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which adds a response to an existing event.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -122,7 +131,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="443365811%2FProperties%2F468305090" anchor-label="THREAD" id="443365811%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-t-h-r-e-a-d.html">THREAD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="443365811%2FProperties%2F468305090" anchor-label="THREAD" id="443365811%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which is a thread reply to an existing event.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="443365811%2FProperties%2F468305090" anchor-label="THREAD" id="443365811%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-t-h-r-e-a-d.html">THREAD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><a data-name="443365811%2FProperties%2F468305090" anchor-label="THREAD" id="443365811%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Lets you define an event which is a thread reply to an existing event.</p></div></div></div>
               </div>
             </div>
           </div>

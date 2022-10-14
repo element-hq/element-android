@@ -6,10 +6,18 @@
     <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
 <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
 <link href="../../styles/style.css" rel="Stylesheet">
 <link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
@@ -21,6 +29,7 @@ if(savedDarkMode === true){
 <script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
@@ -43,9 +52,9 @@ if(savedDarkMode === true){
     </div>
     <div id="main">
 <div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.permalinks////PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="index.html">org.matrix.android.sdk.api.session.permalinks</a></div>
+  <div class="breadcrumbs"><a href="../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><span class="current">org.matrix.android.sdk.api.session.permalinks</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>Package</span></span> <span>org.</span><wbr></wbr><span>matrix.</span><wbr></wbr><span>android.</span><wbr></wbr><span>sdk.</span><wbr></wbr><span>api.</span><wbr></wbr><span>session.</span><wbr></wbr><span>permalinks</span></h1>
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button></div>
@@ -61,7 +70,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-matrix-linkify/index.html">MatrixLinkify</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">MatrixLinkify take a piece of text and turns all of the matrix patterns matches in the text into clickable links.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-matrix-linkify/index.html">MatrixLinkify</a></div><div class="brief "><p class="paragraph">MatrixLinkify take a piece of text and turns all of the matrix patterns matches in the text into clickable links.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -76,7 +85,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-matrix-permalink-span/index.html">MatrixPermalinkSpan</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">callback<span class="token operator">: </span><a href="-matrix-permalink-span/-callback/index.html">MatrixPermalinkSpan.Callback</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/android/text/style/ClickableSpan.html">ClickableSpan</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This MatrixPermalinkSpan is a clickable span which use a <a href="-matrix-permalink-span/-callback/index.html">Callback</a> to communicate back.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="-matrix-permalink-span/index.html">MatrixPermalinkSpan</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">callback<span class="token operator">: </span><a href="-matrix-permalink-span/-callback/index.html">MatrixPermalinkSpan.Callback</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/android/text/style/ClickableSpan.html">ClickableSpan</a></div><div class="brief "><p class="paragraph">This MatrixPermalinkSpan is a clickable span which use a <a href="-matrix-permalink-span/-callback/index.html">Callback</a> to communicate back.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -91,7 +100,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-matrix-to-converter/index.html">MatrixToConverter</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Mapping of an input URI to a matrix.to compliant URI.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-matrix-to-converter/index.html">MatrixToConverter</a></div><div class="brief "><p class="paragraph">Mapping of an input URI to a matrix.to compliant URI.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -106,7 +115,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-permalink-data/index.html">PermalinkData</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This sealed class represents all the permalink cases. You don't have to instantiate yourself but should use <a href="-permalink-parser/index.html">PermalinkParser</a> instead.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-permalink-data/index.html">PermalinkData</a></div><div class="brief "><p class="paragraph">This sealed class represents all the permalink cases. You don't have to instantiate yourself but should use <a href="-permalink-parser/index.html">PermalinkParser</a> instead.</p></div></div></div>
               </div>
             </div>
           </div>
@@ -121,7 +130,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-permalink-parser/index.html">PermalinkParser</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This class turns a uri to a <a href="-permalink-data/index.html">PermalinkData</a>. element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org) or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-permalink-parser/index.html">PermalinkParser</a></div><div class="brief "><p class="paragraph">This class turns a uri to a <a href="-permalink-data/index.html">PermalinkData</a>. element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org) or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)</p></div></div></div>
               </div>
             </div>
           </div>
@@ -136,7 +145,7 @@ if(savedDarkMode === true){
                 </span></span></div>
             <div>
               <div class="title">
-                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-permalink-service/index.html">PermalinkService</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Useful methods to create permalink (like matrix.to links or client permalinks). See <a href="../org.matrix.android.sdk.api/-matrix-configuration/client-permalink-base-url.html">org.matrix.android.sdk.api.MatrixConfiguration.clientPermalinkBaseUrl</a> to setup a custom permalink base url.</p></div></div></div>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-permalink-service/index.html">PermalinkService</a></div><div class="brief "><p class="paragraph">Useful methods to create permalink (like matrix.to links or client permalinks). See <a href="../org.matrix.android.sdk.api/-matrix-configuration/client-permalink-base-url.html">org.matrix.android.sdk.api.MatrixConfiguration.clientPermalinkBaseUrl</a> to setup a custom permalink base url.</p></div></div></div>
               </div>
             </div>
           </div>

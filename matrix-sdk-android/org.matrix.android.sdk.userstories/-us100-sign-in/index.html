@@ -6,10 +6,18 @@
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-const savedDarkMode = storage ? JSON.parse(storage) : false
-if(savedDarkMode === true){
-    document.getElementsByTagName("html")[0].classList.add("theme-dark")
-}</script>
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
 <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
 <link href="../../../styles/style.css" rel="Stylesheet">
 <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
@@ -21,6 +29,7 @@ if(savedDarkMode === true){
 <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
@@ -43,10 +52,10 @@ if(savedDarkMode === true){
     </div>
     <div id="main">
 <div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.userstories/Us100SignIn///PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.userstories</a><span class="delimiter">/</span><a href="index.html">Us100SignIn</a></div>
+  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.userstories</a><span class="delimiter">/</span><span class="current">Us100SignIn</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Us100Sign</span><wbr></wbr><span><span>In</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Us100SignIn</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class=""> Title</h3><p class="paragraph">Sign in to an existing account.</p><h4 class=""> Required APIs:</h4><ul><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api/-matrix/authentication-service.html">org.matrix.android.sdk.api.Matrix.authenticationService</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth/-authentication-service/get-login-flow.html">org.matrix.android.sdk.api.auth.AuthenticationService.getLoginFlow</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth/-authentication-service/get-login-wizard.html">org.matrix.android.sdk.api.auth.AuthenticationService.getLoginWizard</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth.login/-login-wizard/login.html">org.matrix.android.sdk.api.auth.login.LoginWizard.login</a></p></li></ul></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Us100SignIn</a></div><h3 class=""> Title</h3><p class="paragraph">Sign in to an existing account.</p><h4 class=""> Required APIs:</h4><ul><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api/-matrix/authentication-service.html">org.matrix.android.sdk.api.Matrix.authenticationService</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth/-authentication-service/get-login-flow.html">org.matrix.android.sdk.api.auth.AuthenticationService.getLoginFlow</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth/-authentication-service/get-login-wizard.html">org.matrix.android.sdk.api.auth.AuthenticationService.getLoginWizard</a></p></li><li><p class="paragraph"><a href="../../org.matrix.android.sdk.api.auth.login/-login-wizard/login.html">org.matrix.android.sdk.api.auth.login.LoginWizard.login</a></p></li></ul></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"></div>
