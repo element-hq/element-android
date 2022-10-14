@@ -176,10 +176,17 @@ class Rendezvous(
         crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
         // TODO: what do we do with the master key?
-//        verificationResponse.master_key ?.let {
-//            // set master key as trusted
-//            crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, it)
-//        }
+        verificationResponse.master_key ?.let { masterKeyFromVerifyingDevice ->
+            // set master key as trusted
+            crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
+                if (localMasterKey.unpaddedBase64PublicKey == masterKeyFromVerifyingDevice) {
+                    Timber.tag(TAG).i("Setting master key as trusted")
+                    crypto.crossSigningService().markMyMasterKeyAsTrusted()
+                } else {
+                    Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
+                }
+            } ?: Timber.tag(TAG).i("No local master key")
+        } ?: Timber.tag(TAG).i("No master key given by verifying device")
 
         // request secrets from the verifying device
         Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
