@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import java.lang.ref.WeakReference
 
 class BluetoothHeadsetReceiver : BroadcastReceiver() {
@@ -59,7 +60,7 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
             else -> return // ignore intermediate states
         }
 
-        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+        val device = intent.getParcelableExtraCompat<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
         val deviceName = device?.name
         when (device?.bluetoothClass?.deviceClass) {
             BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE,

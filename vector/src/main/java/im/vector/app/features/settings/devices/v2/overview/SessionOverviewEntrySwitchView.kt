@@ -49,6 +49,7 @@ class SessionOverviewEntrySwitchView @JvmOverloads constructor(
             setTitle(it)
             setDescription(it)
             setSwitchedEnabled(it)
+            setClickListener()
         }
     }
 
@@ -67,8 +68,14 @@ class SessionOverviewEntrySwitchView @JvmOverloads constructor(
     }
 
     private fun setSwitchedEnabled(typedArray: TypedArray) {
-        val enabled = typedArray.getBoolean(R.styleable.SessionOverviewEntrySwitchView_sessionOverviewEntrySwitchEnabled, true)
+        val enabled = typedArray.getBoolean(R.styleable.SessionOverviewEntrySwitchView_sessionOverviewEntrySwitchEnabled, false)
         binding.sessionsOverviewEntrySwitch.isChecked = enabled
+    }
+
+    private fun setClickListener() {
+        binding.root.setOnClickListener {
+            setChecked(!binding.sessionsOverviewEntrySwitch.isChecked)
+        }
     }
 
     fun setChecked(checked: Boolean) {

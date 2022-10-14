@@ -17,18 +17,15 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
+import org.matrix.android.sdk.internal.database.model.PusherEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo038(realm: DynamicRealm) : RealmMigrator(realm, 38) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_LOGIN_WITH_QR_CODE, Boolean::class.java)
-                ?.transform { obj ->
-                    obj.set(HomeServerCapabilitiesEntityFields.CAN_LOGIN_WITH_QR_CODE, false)
-                }
-                ?.forceRefreshOfHomeServerCapabilities()
+        realm.schema.get("PusherEntity")
+                ?.addField(PusherEntityFields.ENABLED, Boolean::class.java)
+                ?.addField(PusherEntityFields.DEVICE_ID, String::class.java)
+                ?.transform { obj -> obj.set(PusherEntityFields.ENABLED, true) }
     }
 }

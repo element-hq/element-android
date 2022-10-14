@@ -772,7 +772,7 @@ class TimelineFragment :
         }
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView.debouncedClicks {
+            menuItem.actionView?.debouncedClicks {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -783,7 +783,7 @@ class TimelineFragment :
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView.debouncedClicks {
+            menuItem.actionView?.debouncedClicks {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -812,16 +812,16 @@ class TimelineFragment :
                 // icon should be default color no badge
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
-                        .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
-                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
+                        ?.findViewById<ImageView>(R.id.action_view_icon_image)
+                        ?.setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
+                actionView?.findViewById<TextView>(R.id.cart_badge)?.isVisible = false
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             } else {
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
-                        .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                        ?.findViewById<ImageView>(R.id.action_view_icon_image)
+                        ?.setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                actionView?.findViewById<TextView>(R.id.cart_badge)?.setTextOrHide("$widgetsCount")
                 @Suppress("AlwaysShowAction")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
@@ -893,7 +893,7 @@ class TimelineFragment :
      */
     private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
         val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
-        val badgeFrameLayout = menuThreadList.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout)
+        val badgeFrameLayout = menuThreadList?.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout) ?: return
         val badgeTextView = menuThreadList.findViewById<TextView>(R.id.threadNotificationBadgeTextView)
 
         val unreadThreadMessages = state.threadNotificationBadgeState.numberOfLocalUnreadThreads

@@ -52,6 +52,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun onBackPressed() {
         hideWaitingView()
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 

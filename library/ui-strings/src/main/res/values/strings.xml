@@ -447,7 +447,7 @@
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
     <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
-    <string name="labs_enable_rich_text_editor_summary">Use a rich text editor to send formatted messages</string>
+    <string name="labs_enable_rich_text_editor_summary">Try out the rich text editor (plain text mode coming soon)</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -638,6 +638,8 @@
     <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_notification">${app_name} needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
 
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
     <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
@@ -857,7 +859,9 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} needs the permission to show notifications.\nPlease grant the permission.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="grant_permission">Grant Permission</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>
@@ -1666,6 +1670,7 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
+    <string name="error_check_network">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
@@ -3240,7 +3245,8 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
-    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
+    <!-- TODO remove this key -->
+    <string name="device_manager_settings_active_sessions_show_all" tools:ignore="UnusedResources">Show All Sessions (V2, WIP)</string>
     <string name="device_manager_sessions_other_title">Other sessions</string>
     <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
@@ -3313,6 +3319,13 @@
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_operating_system">Operating system</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
     <string name="device_manager_session_rename_edit_hint">Session name</string>
@@ -3329,6 +3342,8 @@
     <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="labs_enable_session_manager_title">Enable new session manager</string>
+    <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
@@ -3385,5 +3400,11 @@
     <string name="qr_code_login_try_again">Try again</string>
     <string name="qr_code_login_confirm_security_code">Confirm</string>
     <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
+
+    <!-- WYSIWYG Composer -->
+    <string name="rich_text_editor_format_bold">Apply bold format</string>
+    <string name="rich_text_editor_format_italic">Apply italic format</string>
+    <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
+    <string name="rich_text_editor_format_underline">Apply underline format</string>
 
 </resources>

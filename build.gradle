@@ -30,10 +30,10 @@ buildscript {
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.2.2"
         classpath 'org.owasp:dependency-check-gradle:7.2.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
-        classpath 'app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0'
+        classpath 'app.cash.paparazzi:paparazzi-gradle-plugin:1.1.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

@@ -48,6 +48,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
@@ -86,6 +87,7 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -142,6 +144,7 @@ class HomeActivity :
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
     @Inject lateinit var disclaimerDialog: DisclaimerDialog
+    @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
@@ -169,6 +172,10 @@ class HomeActivity :
                 roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
+    }
+
+    private val postPermissionLauncher = registerForPermissionsResult { _, _ ->
+        // Nothing to do with the result.
     }
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -215,6 +222,7 @@ class HomeActivity :
                 )
             }
         }
+
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
@@ -245,7 +253,7 @@ class HomeActivity :
                 }
                 .launchIn(lifecycleScope)
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
@@ -272,6 +280,7 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowNotificationDialog -> handleShowNotificationDialog()
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
@@ -285,6 +294,10 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowNotificationDialog() {
+        notificationPermissionManager.eventuallyRequestPermission(this, postPermissionLauncher)
     }
 
     private fun handleShowReleaseNotes() {
@@ -327,7 +340,7 @@ class HomeActivity :
     private fun migrateThreadsIfNeeded(checkSession: Boolean) {
         if (checkSession) {
             // We should check session to ensure we will only clear cache if needed
-            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
             if (args?.hasExistingSession == true) {
                 // existingSession --> Will be true only if we came from an existing active session
                 Timber.i("----> Migrating threads from an existing session..")
@@ -406,6 +419,14 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
+        lifecycleScope.launch {
+            if (state.areNotificationsSilenced) {
+                unifiedPushHelper.unregister(pushersManager)
+            } else {
+                unifiedPushHelper.register(this@HomeActivity)
+            }
+        }
+
         when (val status = state.syncRequestState) {
             is SyncRequestState.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
@@ -538,7 +559,7 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val parcelableExtra = intent?.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
@@ -667,7 +688,10 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            validateBackPressed { super.onBackPressed() }
+            validateBackPressed {
+                @Suppress("DEPRECATION")
+                super.onBackPressed()
+            }
         }
     }
 

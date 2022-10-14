@@ -505,6 +505,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private fun onBackPressed(fromToolbar: Boolean) {
         val handled = recursivelyDispatchOnBackPressed(supportFragmentManager, fromToolbar)
         if (!handled) {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

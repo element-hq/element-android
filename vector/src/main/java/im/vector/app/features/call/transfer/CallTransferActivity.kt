@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -112,7 +113,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
         }
 
         fun getCallTransferResult(intent: Intent?): CallTransferResult? {
-            return intent?.extras?.getParcelable(EXTRA_TRANSFER_RESULT)
+            return intent?.extras?.getParcelableCompat(EXTRA_TRANSFER_RESULT)
         }
     }
 }
