@@ -100,6 +100,7 @@ import im.vector.app.features.settings.devtools.KeyRequestViewModel
 import im.vector.app.features.settings.font.FontScaleSettingViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
+import im.vector.app.features.settings.labs.VectorSettingsLabsViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
@@ -665,4 +666,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(SessionLearnMoreViewModel::class)
     fun sessionLearnMoreViewModelFactory(factory: SessionLearnMoreViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VectorSettingsLabsViewModel::class)
+    fun vectorSettingsLabsViewModelFactory(factory: VectorSettingsLabsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

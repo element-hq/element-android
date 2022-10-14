@@ -44,6 +44,7 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 /**
@@ -164,12 +165,11 @@ class VectorSettingsDevicesFragment :
         if (state.devices is Success) {
             val devices = state.devices()
             val currentDeviceId = state.currentSessionCrossSigningInfo.deviceId
-            val currentDeviceInfo = devices?.firstOrNull {
-                it.deviceInfo.deviceId == currentDeviceId
-            }
+            val currentDeviceInfo = devices?.firstOrNull { it.deviceInfo.deviceId == currentDeviceId }
+            val isCurrentSessionVerified = currentDeviceInfo?.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted
             val otherDevices = devices?.filter { it.deviceInfo.deviceId != currentDeviceId }
 
-            renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount)
+            renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount, isCurrentSessionVerified)
             renderCurrentDevice(currentDeviceInfo)
             renderOtherSessionsView(otherDevices)
         } else {
@@ -181,14 +181,21 @@ class VectorSettingsDevicesFragment :
         handleLoadingStatus(state.isLoading)
     }
 
-    private fun renderSecurityRecommendations(inactiveSessionsCount: Int, unverifiedSessionsCount: Int) {
-        if (unverifiedSessionsCount == 0 && inactiveSessionsCount == 0) {
+    private fun renderSecurityRecommendations(
+            inactiveSessionsCount: Int,
+            unverifiedSessionsCount: Int,
+            isCurrentSessionVerified: Boolean,
+    ) {
+        val isUnverifiedSectionVisible = unverifiedSessionsCount > 0 && isCurrentSessionVerified
+        val isInactiveSectionVisible = inactiveSessionsCount > 0
+        if (isUnverifiedSectionVisible.not() && isInactiveSectionVisible.not()) {
             hideSecurityRecommendations()
         } else {
             views.deviceListHeaderSectionSecurityRecommendations.isVisible = true
             views.deviceListSecurityRecommendationsDivider.isVisible = true
-            views.deviceListUnverifiedSessionsRecommendation.isVisible = unverifiedSessionsCount > 0
-            views.deviceListInactiveSessionsRecommendation.isVisible = inactiveSessionsCount > 0
+
+            views.deviceListUnverifiedSessionsRecommendation.isVisible = isUnverifiedSectionVisible
+            views.deviceListInactiveSessionsRecommendation.isVisible = isInactiveSectionVisible
             val unverifiedSessionsViewState = SecurityRecommendationViewState(
                     description = getString(R.string.device_manager_unverified_sessions_description),
                     sessionsCount = unverifiedSessionsCount,
@@ -206,11 +213,19 @@ class VectorSettingsDevicesFragment :
         }
     }
 
+    private fun hideUnverifiedSessionsRecommendation() {
+        views.deviceListUnverifiedSessionsRecommendation.isVisible = false
+    }
+
+    private fun hideInactiveSessionsRecommendation() {
+        views.deviceListInactiveSessionsRecommendation.isVisible = false
+    }
+
     private fun hideSecurityRecommendations() {
         views.deviceListHeaderSectionSecurityRecommendations.isVisible = false
-        views.deviceListUnverifiedSessionsRecommendation.isVisible = false
-        views.deviceListInactiveSessionsRecommendation.isVisible = false
         views.deviceListSecurityRecommendationsDivider.isVisible = false
+        hideUnverifiedSessionsRecommendation()
+        hideInactiveSessionsRecommendation()
     }
 
     private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?) {

@@ -22,7 +22,8 @@ enum class LoginType {
     UNSUPPORTED,
     CUSTOM,
     DIRECT,
-    UNKNOWN;
+    UNKNOWN,
+    QR;
 
     companion object {
 
@@ -32,6 +33,7 @@ enum class LoginType {
             UNSUPPORTED.name -> UNSUPPORTED
             CUSTOM.name -> CUSTOM
             DIRECT.name -> DIRECT
+            QR.name -> QR
             else -> UNKNOWN
         }
     }

@@ -17,22 +17,27 @@
 package im.vector.app.features.settings.devices.v2.filter
 
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 class FilterDevicesUseCase @Inject constructor() {
 
     fun execute(
+            currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo,
             devices: List<DeviceFullInfo>,
             filterType: DeviceManagerFilterType,
             excludedDeviceIds: List<String> = emptyList(),
     ): List<DeviceFullInfo> {
+        val isCurrentSessionVerified = currentSessionCrossSigningInfo.isCrossSigningVerified.orFalse()
         return devices
                 .filter {
                     when (filterType) {
                         DeviceManagerFilterType.ALL_SESSIONS -> true
-                        DeviceManagerFilterType.VERIFIED -> it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
-                        DeviceManagerFilterType.UNVERIFIED -> !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
+                        // when current session is not verified, other session status cannot be trusted
+                        DeviceManagerFilterType.VERIFIED -> isCurrentSessionVerified && it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
+                        // when current session is not verified, other session status cannot be trusted
+                        DeviceManagerFilterType.UNVERIFIED -> isCurrentSessionVerified && !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
                         DeviceManagerFilterType.INACTIVE -> it.isInactive
                     }
                 }

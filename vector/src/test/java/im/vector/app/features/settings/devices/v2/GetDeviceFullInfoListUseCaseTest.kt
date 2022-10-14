@@ -144,10 +144,11 @@ class GetDeviceFullInfoListUseCaseTest {
                 matrixClientInfo = matrixClientInfo3,
         )
         val expectedResult = listOf(expectedResult3, expectedResult2, expectedResult1)
-        every { filterDevicesUseCase.execute(any(), any()) } returns expectedResult
+        every { filterDevicesUseCase.execute(any(), any(), any()) } returns expectedResult
+        val filterType = DeviceManagerFilterType.ALL_SESSIONS
 
         // When
-        val result = getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.ALL_SESSIONS, excludeCurrentDevice = false)
+        val result = getDeviceFullInfoListUseCase.execute(filterType, excludeCurrentDevice = false)
                 .test(this)
 
         // Then
@@ -166,6 +167,7 @@ class GetDeviceFullInfoListUseCaseTest {
             getMatrixClientInfoUseCase.execute(fakeActiveSessionHolder.fakeSession, A_DEVICE_ID_1)
             getMatrixClientInfoUseCase.execute(fakeActiveSessionHolder.fakeSession, A_DEVICE_ID_2)
             getMatrixClientInfoUseCase.execute(fakeActiveSessionHolder.fakeSession, A_DEVICE_ID_3)
+            filterDevicesUseCase.execute(currentSessionCrossSigningInfo, expectedResult, filterType, emptyList())
         }
     }
 

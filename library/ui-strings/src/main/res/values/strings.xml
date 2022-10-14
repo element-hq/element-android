@@ -447,7 +447,7 @@
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
     <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
-    <string name="labs_enable_rich_text_editor_summary">Use a rich text editor to send formatted messages</string>
+    <string name="labs_enable_rich_text_editor_summary">Try out the rich text editor (plain text mode coming soon)</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -3254,10 +3254,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
+    <string name="device_manager_verification_status_unknown">Unknown verification status</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
@@ -3340,6 +3342,8 @@
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
     <string name="labs_enable_session_manager_title">Enable new session manager</string>
     <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
+    <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
+    <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
@@ -3361,5 +3365,11 @@
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
+    <!-- WYSIWYG Composer -->
+    <string name="rich_text_editor_format_bold">Apply bold format</string>
+    <string name="rich_text_editor_format_italic">Apply italic format</string>
+    <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
+    <string name="rich_text_editor_format_underline">Apply underline format</string>
 
 </resources>

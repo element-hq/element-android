@@ -130,33 +130,38 @@
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_goneMarginBottom="57dp"
         tools:ignore="MissingPrefix" />
 
     <FrameLayout
         android:id="@+id/composerEditTextOuterBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:minHeight="40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/sendButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/bg_composer_rich_edit_text_single_line"
+        app:layout_constraintVertical_bias="0"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
-        app:layout_goneMarginEnd="12dp" />
+        app:layout_constraintBottom_toTopOf="@id/sendButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <io.element.android.wysiwyg.EditorEditText
         android:id="@+id/composerEditText"
-        style="@style/Widget.Vector.EditText.Composer"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="@string/room_message_placeholder"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
-        app:layout_constraintBottom_toTopOf="@id/sendButton"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
         app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
         app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
-        app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
+        app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageButton
@@ -169,10 +174,9 @@
         android:scaleType="center"
         android:src="@drawable/ic_send"
         android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/composerEditText"
-        app:layout_constraintVertical_bias="1"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
