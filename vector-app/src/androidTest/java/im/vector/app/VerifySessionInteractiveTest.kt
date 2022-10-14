@@ -165,7 +165,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         val sasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, uiSession)
         val otherSessionSasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, existingSession!!)
 
-        onView(isRoot()).perform(SleepViewAction.sleep(1000))
+        onView(isRoot()).perform(SleepViewAction.sleep(5000))
 
         // Assert QR code option is there and available
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
