@@ -42,7 +42,6 @@ data class DeviceListViewState(
         val userId: String,
         val allowDeviceAction: Boolean,
         val userItem: MatrixItem? = null,
-        val isMine: Boolean = false,
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
@@ -70,14 +69,12 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
                         userId = userId,
                         allowDeviceAction = args.allowDeviceAction,
                         userItem = it,
-                        isMine = userId == session.myUserId
                 )
             } ?: return super.initialState(viewModelContext)
         }
     }
 
     init {
-
         session.flow().liveUserCryptoDevices(initialState.userId)
                 .execute {
                     copy(cryptoDevices = it).also {
