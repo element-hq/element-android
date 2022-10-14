@@ -23,6 +23,8 @@ interface VoiceBroadcastRecorder : VoiceRecorder {
 
     var listener: Listener?
 
+    fun startRecord(roomId: String, chunkLength: Int)
+
     fun interface Listener {
         fun onVoiceMessageCreated(file: File)
     }

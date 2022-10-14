@@ -17,7 +17,6 @@
 package im.vector.app.features.voicebroadcast.usecase
 
 import android.content.Context
-import android.os.Build
 import androidx.core.content.FileProvider
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.toContentAttachmentData
@@ -66,25 +65,24 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
     private suspend fun startVoiceBroadcast(room: Room) {
         Timber.d("## StartVoiceBroadcastUseCase: Send new voice broadcast info state event")
+        val chunkLength = VoiceBroadcastConstants.DEFAULT_CHUNK_LENGTH // Todo Get the length from the room settings
         val eventId = room.stateService().sendStateEvent(
                 eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,
-                        chunkLength = 5L, // TODO Get length from voice broadcast settings
+                        chunkLength = chunkLength,
                 ).toContent()
         )
 
-        startRecording(room, eventId)
+        startRecording(room, eventId, chunkLength)
     }
 
-    private fun startRecording(room: Room, eventId: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
-                sendVoiceFile(room, file, eventId)
-            }
-            voiceBroadcastRecorder?.startRecord(room.roomId)
+    private fun startRecording(room: Room, eventId: String, chunkLength: Int) {
+        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
+            sendVoiceFile(room, file, eventId)
         }
+        voiceBroadcastRecorder?.startRecord(room.roomId, chunkLength)
     }
 
     private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String) {

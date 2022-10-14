@@ -28,7 +28,7 @@ class VoiceBroadcastRecorderQ(
         context: Context,
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
-    private val maxFileSize = 25_000L // 0,025 Mb = 25 Kb ~= 6s
+    private var maxFileSize = 25_000L // 0,025 Mb = 25 Kb ~= 6s
 
     override var listener: VoiceBroadcastRecorder.Listener? = null
 
@@ -47,6 +47,11 @@ class VoiceBroadcastRecorderQ(
                 else -> Unit // Nothing to do
             }
         }
+    }
+
+    override fun startRecord(roomId: String, chunkLength: Int) {
+        maxFileSize = (chunkLength * 0.004166).toLong() // TODO change this approximate conversion
+        startRecord(roomId)
     }
 
     override fun stopRecord() {
