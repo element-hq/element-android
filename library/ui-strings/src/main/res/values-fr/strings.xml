@@ -2600,7 +2600,6 @@
 \nCe serveur d’accueil n’a peut-être pas été configuré pour afficher les cartes.</string>
     <string name="a11y_open_settings">Ouvrir les paramètres</string>
     <string name="all_chats">Toutes les conversations</string>
-    <string name="device_manager_settings_active_sessions_show_all">Afficher toutes les sessions (V2, en cours)</string>
     <string name="device_manager_sessions_other_description">Pour une meilleure sécurité, vérifiez vos sessions et déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.</string>
     <string name="device_manager_sessions_other_title">Autres sessions</string>
     <string name="settings_sessions_list">Sessions</string>

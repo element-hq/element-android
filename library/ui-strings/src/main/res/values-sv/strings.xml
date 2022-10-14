@@ -2626,7 +2626,6 @@
     <string name="a11y_device_manager_device_type_mobile">Mobil</string>
     <string name="device_manager_sessions_other_description">För bäst säkerhet, verifiera dina sessioner och logga ut från alla sessioner du inte känner igen eller använder längre.</string>
     <string name="device_manager_sessions_other_title">Andra sessioner</string>
-    <string name="device_manager_settings_active_sessions_show_all">Visa alla sessioner (V2, WIP)</string>
     <string name="labs_enable_element_call_permission_shortcuts_summary">Godkänn automatiskt Element Call-widgets och ge kamera-/mikrofonåtkomst</string>
     <string name="labs_enable_element_call_permission_shortcuts">Aktivera Element Call-behörighetsgenvägar</string>
     <string name="tooltip_attachment_voice_broadcast">Starta en röstsändning</string>

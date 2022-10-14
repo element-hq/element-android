@@ -2700,7 +2700,6 @@
 \nМожливо, цей домашній сервер не налаштовано для показу карт.</string>
     <string name="a11y_open_settings">Відкрити налаштування</string>
     <string name="all_chats">Усі бесіди</string>
-    <string name="device_manager_settings_active_sessions_show_all">Показати всі сеанси (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Звірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте для кращої безпеки.</string>
     <string name="device_manager_sessions_other_title">Інші сеанси</string>
     <string name="settings_sessions_list">Сеанси</string>

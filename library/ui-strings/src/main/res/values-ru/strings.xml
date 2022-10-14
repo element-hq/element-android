@@ -2664,7 +2664,6 @@
     <string name="device_manager_sessions_other_title">Другие сессии</string>
     <string name="settings_sessions_list">Сессии</string>
     <string name="a11y_create_message">Создать беседу или комнату</string>
-    <string name="device_manager_settings_active_sessions_show_all">Показать все сессии (V2, в разработке)</string>
     <string name="room_list_filter_people">ЛС</string>
     <string name="home_layout_preferences">Настройки вида</string>
     <string name="home_layout_preferences_filters">Фильтры</string>

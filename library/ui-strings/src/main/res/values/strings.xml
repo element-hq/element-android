@@ -3244,8 +3244,6 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
-    <!-- TODO remove this key -->
-    <string name="device_manager_settings_active_sessions_show_all" tools:ignore="UnusedResources">Show All Sessions (V2, WIP)</string>
     <string name="device_manager_sessions_other_title">Other sessions</string>
     <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>

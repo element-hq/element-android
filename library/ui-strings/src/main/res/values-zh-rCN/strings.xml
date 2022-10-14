@@ -2550,7 +2550,6 @@
 \n此主服务器可能没有设置好显示地图。</string>
     <string name="a11y_open_settings">打开设置</string>
     <string name="all_chats">全部聊天</string>
-    <string name="device_manager_settings_active_sessions_show_all">显示全部会话（V2, WIP）</string>
     <string name="device_manager_sessions_other_description">为获得最佳安全性，请验证你的会话，并从任何你不认识或不再使用的会话登出。</string>
     <string name="device_manager_sessions_other_title">其他会话</string>
     <string name="settings_sessions_list">会话</string>

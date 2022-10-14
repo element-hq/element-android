@@ -2552,7 +2552,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="search_space_two_parents">%1$s dan %2$s</string>
     <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
     <string name="all_chats">Semua Obrolan</string>
-    <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
     <string name="device_manager_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
     <string name="device_manager_sessions_other_title">Sesi lainnya</string>
     <string name="settings_sessions_list">Sesi</string>
