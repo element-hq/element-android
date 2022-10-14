@@ -124,7 +124,16 @@ class OnboardingViewModel @AssistedInject constructor(
                         canLoginWithQrCode = false
                 )
             }
+        } else if (vectorFeatures.allowQrCodeLoginForAllServers()) {
+            // allow for all servers
+            setState {
+                copy(
+                        canLoginWithQrCode = true
+                )
+            }
         } else {
+            // check if selected server supports MSC3882 first
+            // FIXME: this should be checking the selected homeserver not defaultHomeserverUrl
             homeServerConnectionConfigFactory.create(defaultHomeserverUrl)?.let {
                 val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
                 setState {

@@ -82,6 +82,12 @@ class DebugVectorFeatures(
     override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
             ?: vectorFeatures.isQrCodeLoginEnabled()
 
+    override fun allowQrCodeLoginForAllServers() = read(DebugFeatureKeys.allowQrCodeLoginForAllServers)
+            ?: vectorFeatures.allowQrCodeLoginForAllServers()
+
+    override fun allowReciprocateQrCodeLogin() = read(DebugFeatureKeys.allowReciprocateQrCodeLogin)
+            ?: vectorFeatures.allowReciprocateQrCodeLogin()
+
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
 
@@ -147,5 +153,7 @@ object DebugFeatureKeys {
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
     val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
+    val allowQrCodeLoginForAllServers = booleanPreferencesKey("allow-qr-code-login-for-all-servers")
+    val allowReciprocateQrCodeLogin = booleanPreferencesKey("allow-reciprocate-qr-code-login")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
 }
