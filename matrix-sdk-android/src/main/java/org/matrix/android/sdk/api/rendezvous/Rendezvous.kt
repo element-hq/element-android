@@ -49,12 +49,12 @@ internal data class Payload(
         @Json val protocols: List<String>? = null,
         @Json val protocol: String? = null,
         @Json val homeserver: String? = null,
-        @Json val login_token: String? = null,
-        @Json val device_id: String? = null,
-        @Json val device_key: String? = null,
-        @Json val verifying_device_id: String? = null,
-        @Json val verifying_device_key: String? = null,
-        @Json val master_key: String? = null
+        @Json(name = "login_token") val loginToken: String? = null,
+        @Json(name = "device_id") val deviceId: String? = null,
+        @Json(name = "device_key") val deviceKey: String? = null,
+        @Json(name = "verifying_device_id") val verifyingDeviceId: String? = null,
+        @Json(name = "verifying_device_key") val verifyingDeviceKey: String? = null,
+        @Json(name = "master_key") val masterKey: String? = null
 )
 
 private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
@@ -146,7 +146,7 @@ class Rendezvous(
         }
 
         val homeserver = loginToken?.homeserver ?: throw RuntimeException("No homeserver returned")
-        val login_token = loginToken.login_token ?: throw RuntimeException("No login token returned")
+        val login_token = loginToken.loginToken ?: throw RuntimeException("No login token returned")
 
         Timber.tag(TAG).i("Got login_token: $login_token for $homeserver")
 
@@ -159,14 +159,14 @@ class Rendezvous(
         val crypto = session.cryptoService()
         val deviceId = crypto.getMyDevice().deviceId
         val deviceKey = crypto.getMyDevice().fingerprint()
-        send(Payload(PayloadType.Progress, outcome = "success", device_id = deviceId, device_key = deviceKey))
+        send(Payload(PayloadType.Progress, outcome = "success", deviceId = deviceId, deviceKey = deviceKey))
 
         // await confirmation of verification
 
         val verificationResponse = receive()
-        val verifyingDeviceId = verificationResponse?.verifying_device_id ?: throw RuntimeException("No verifying device id returned")
+        val verifyingDeviceId = verificationResponse?.verifyingDeviceId ?: throw RuntimeException("No verifying device id returned")
         val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
-        if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifying_device_key) {
+        if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
             Timber.tag(TAG).w("Verifying device $verifyingDeviceId doesn't match: $verifyingDeviceFromServer")
             return
         }
@@ -176,7 +176,7 @@ class Rendezvous(
         crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
         // TODO: what do we do with the master key?
-        verificationResponse.master_key ?.let { masterKeyFromVerifyingDevice ->
+        verificationResponse.masterKey ?.let { masterKeyFromVerifyingDevice ->
             // set master key as trusted
             crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
                 if (localMasterKey.unpaddedBase64PublicKey == masterKeyFromVerifyingDevice) {
