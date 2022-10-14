@@ -27,7 +27,7 @@ class TogglePushNotificationUseCase @Inject constructor(
 ) {
 
     suspend fun execute(deviceId: String, enabled: Boolean) {
-        val session = activeSessionHolder.getActiveSession()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
         val devicePusher = session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
         devicePusher?.let { pusher ->
             session.pushersService().togglePusher(pusher, enabled)

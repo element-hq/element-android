@@ -85,7 +85,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun refreshPushers() {
-        activeSessionHolder.getActiveSession().pushersService().refreshPushers()
+        activeSessionHolder.getSafeActiveSession()?.pushersService()?.refreshPushers()
     }
 
     private fun observeSessionInfo(deviceId: String) {
@@ -108,14 +108,13 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun observePushers(deviceId: String) {
-        val pusherFlow = activeSessionHolder.getActiveSession().flow()
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val pusherFlow = session.flow()
                 .livePushers()
                 .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                .map {
-                    it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled }
-                }
+                .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
 
-        val accountDataFlow = activeSessionHolder.getActiveSession().flow()
+        val accountDataFlow = session.flow()
                 .liveUserAccountData(TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
                 .unwrap()
                 .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
