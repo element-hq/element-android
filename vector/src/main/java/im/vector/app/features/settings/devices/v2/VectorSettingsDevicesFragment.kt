@@ -186,14 +186,16 @@ class VectorSettingsDevicesFragment :
             unverifiedSessionsCount: Int,
             isCurrentSessionVerified: Boolean,
     ) {
-        if (unverifiedSessionsCount == 0 && inactiveSessionsCount == 0) {
+        val isUnverifiedSectionVisible = unverifiedSessionsCount > 0 && isCurrentSessionVerified
+        val isInactiveSectionVisible = inactiveSessionsCount > 0
+        if (isUnverifiedSectionVisible.not() && isInactiveSectionVisible.not()) {
             hideSecurityRecommendations()
         } else {
             views.deviceListHeaderSectionSecurityRecommendations.isVisible = true
             views.deviceListSecurityRecommendationsDivider.isVisible = true
 
-            views.deviceListUnverifiedSessionsRecommendation.isVisible = unverifiedSessionsCount > 0 && isCurrentSessionVerified
-            views.deviceListInactiveSessionsRecommendation.isVisible = inactiveSessionsCount > 0
+            views.deviceListUnverifiedSessionsRecommendation.isVisible = isUnverifiedSectionVisible
+            views.deviceListInactiveSessionsRecommendation.isVisible = isInactiveSectionVisible
             val unverifiedSessionsViewState = SecurityRecommendationViewState(
                     description = getString(R.string.device_manager_unverified_sessions_description),
                     sessionsCount = unverifiedSessionsCount,
