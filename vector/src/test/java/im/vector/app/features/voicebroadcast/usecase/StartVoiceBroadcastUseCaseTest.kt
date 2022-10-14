@@ -17,14 +17,17 @@
 package im.vector.app.features.voicebroadcast.usecase
 
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeRoom
 import im.vector.app.test.fakes.FakeRoomService
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
@@ -44,7 +47,13 @@ class StartVoiceBroadcastUseCaseTest {
 
     private val fakeRoom = FakeRoom()
     private val fakeSession = FakeSession(fakeRoomService = FakeRoomService(fakeRoom))
-    private val startVoiceBroadcastUseCase = StartVoiceBroadcastUseCase(fakeSession)
+    private val fakeVoiceBroadcastRecorder = mockk<VoiceBroadcastRecorder>(relaxed = true)
+    private val startVoiceBroadcastUseCase = StartVoiceBroadcastUseCase(
+            fakeSession,
+            fakeVoiceBroadcastRecorder,
+            FakeContext().instance,
+            mockk()
+    )
 
     @Test
     fun `given a room id with potential several existing voice broadcast states when calling execute then the voice broadcast is started or not`() = runTest {
