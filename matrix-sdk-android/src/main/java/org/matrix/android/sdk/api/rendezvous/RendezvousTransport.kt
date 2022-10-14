@@ -20,10 +20,10 @@ import okhttp3.MediaType
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
 
 interface RendezvousTransport {
-    var ready: Boolean;
-    var onCancelled: ((reason: RendezvousFailureReason) -> Unit)?;
-    suspend fun details(): RendezvousTransportDetails;
-    suspend fun send(contentType: MediaType, data: ByteArray);
-    suspend fun receive(): ByteArray?;
-    suspend fun cancel(reason: RendezvousFailureReason);
+    var ready: Boolean
+    var onCancelled: ((reason: RendezvousFailureReason) -> Unit)?
+    suspend fun details(): RendezvousTransportDetails
+    suspend fun send(contentType: MediaType, data: ByteArray)
+    suspend fun receive(): ByteArray?
+    suspend fun cancel(reason: RendezvousFailureReason)
 }

@@ -20,25 +20,30 @@ import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 
 interface RendezvousChannel {
-    var transport: RendezvousTransport;
+    var transport: RendezvousTransport
+
     /**
      * @returns the checksum/confirmation digits to be shown to the user
      */
     suspend fun connect(): String
+
     /**
      * Send a payload via the channel.
      * @param data payload to send
      */
     suspend fun send(data: ByteArray)
+
     /**
      * Receive a payload from the channel.
      * @returns the received payload
      */
     suspend fun receive(): ByteArray?
+
     /**
      * @returns a representation of the channel that can be encoded in a QR or similar
      */
     suspend fun close()
+
     // TODO: this should be transport independent in the future
     suspend fun generateCode(intent: RendezvousIntent): ECDHRendezvousCode
     suspend fun cancel(reason: RendezvousFailureReason)

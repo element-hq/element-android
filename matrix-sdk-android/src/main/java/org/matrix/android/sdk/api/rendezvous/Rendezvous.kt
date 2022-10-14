@@ -22,6 +22,10 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
+import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
+import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -29,10 +33,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.util.MatrixJsonParser
-import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
-import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
-import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
-import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import timber.log.Timber
 
 internal enum class PayloadType(val value: String) {
@@ -80,6 +80,7 @@ class Rendezvous(
     }
 
     private val adapter = MatrixJsonParser.getMoshi().adapter(Payload::class.java)
+
     // not yet implemented: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
     val ourIntent: RendezvousIntent = RendezvousIntent.LOGIN_ON_NEW_DEVICE
 
@@ -98,7 +99,7 @@ class Rendezvous(
     }
 
     suspend fun startAfterScanningCode(): String? {
-        val checksum = channel.connect();
+        val checksum = channel.connect()
 
         Timber.tag(TAG).i("Connected to secure channel with checksum: $checksum")
 
@@ -107,7 +108,7 @@ class Rendezvous(
         }
 
         // get protocols
-        Timber.tag(TAG).i("Waiting for protocols");
+        Timber.tag(TAG).i("Waiting for protocols")
         val protocolsResponse = receive()
 
         if (protocolsResponse?.protocols == null || !protocolsResponse.protocols.contains("login_token")) {
@@ -123,7 +124,7 @@ class Rendezvous(
     }
 
     suspend fun waitForLoginOnNewDevice(authenticationService: AuthenticationService): Session? {
-        Timber.tag(TAG).i("Waiting for login_token");
+        Timber.tag(TAG).i("Waiting for login_token")
 
         val loginToken = receive()
 
@@ -147,7 +148,7 @@ class Rendezvous(
         val homeserver = loginToken?.homeserver ?: throw RuntimeException("No homeserver returned")
         val login_token = loginToken.login_token ?: throw RuntimeException("No login token returned")
 
-        Timber.tag(TAG).i("Got login_token: $login_token for $homeserver");
+        Timber.tag(TAG).i("Got login_token: $login_token for $homeserver")
 
         val hsConfig = HomeServerConnectionConfig(homeServerUri = Uri.parse(homeserver))
         return authenticationService.loginUsingQrLoginToken(hsConfig, login_token)
@@ -167,11 +168,11 @@ class Rendezvous(
         val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
         if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifying_device_key) {
             Timber.tag(TAG).w("Verifying device $verifyingDeviceId doesn't match: $verifyingDeviceFromServer")
-            return;
+            return
         }
 
         // set other device as verified
-        Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified");
+        Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
         crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
         // TODO: what do we do with the master key?
@@ -183,7 +184,7 @@ class Rendezvous(
         // request secrets from the verifying device
         Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
 
-        session.sharedSecretStorageService() .let {
+        session.sharedSecretStorageService().let {
             it.requestSecret(MASTER_KEY_SSSS_NAME, verifyingDeviceId)
             it.requestSecret(SELF_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
             it.requestSecret(USER_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
@@ -192,12 +193,12 @@ class Rendezvous(
     }
 
     private suspend fun receive(): Payload? {
-        val data = channel.receive()?: return null
+        val data = channel.receive() ?: return null
         return adapter.fromJson(data.toString(Charsets.UTF_8))
     }
 
     private suspend fun send(payload: Payload) {
-        channel.send(adapter.toJson(payload).toByteArray(Charsets.UTF_8));
+        channel.send(adapter.toJson(payload).toByteArray(Charsets.UTF_8))
     }
 
     suspend fun cancel(reason: RendezvousFailureReason) {

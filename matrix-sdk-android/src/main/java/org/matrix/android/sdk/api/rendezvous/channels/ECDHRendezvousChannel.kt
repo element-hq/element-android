@@ -21,10 +21,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import okhttp3.MediaType.Companion.toMediaType
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.util.MatrixJsonParser
-import org.matrix.android.sdk.internal.extensions.toUnsignedInt
-import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import org.matrix.android.sdk.api.rendezvous.RendezvousChannel
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvous
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
@@ -32,8 +30,9 @@ import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransportDetails
+import org.matrix.android.sdk.api.util.MatrixJsonParser
+import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 import org.matrix.olm.OlmSAS
-import timber.log.Timber
 import java.security.SecureRandom
 import java.util.LinkedList
 import javax.crypto.Cipher
@@ -72,7 +71,7 @@ const val KEY_SPEC = "AES"
  *  Implements X25519 ECDH key agreement and AES-256-GCM encryption channel as per MSC3903:
  *  https://github.com/matrix-org/matrix-spec-proposals/pull/3903
  */
-class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPublicKeyBase64: String?): RendezvousChannel {
+class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPublicKeyBase64: String?) : RendezvousChannel {
     private var olmSAS: OlmSAS?
     private val ourPublicKey: ByteArray
     private val ecdhAdapter = MatrixJsonParser.getMoshi().adapter(ECDHPayload::class.java)

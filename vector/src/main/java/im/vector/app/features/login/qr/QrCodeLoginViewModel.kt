@@ -26,11 +26,9 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.HomeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.rendezvous.Rendezvous
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import timber.log.Timber

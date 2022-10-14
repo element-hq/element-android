@@ -36,7 +36,7 @@ private val TAG = LoggerTag(SimpleHttpRendezvousTransport::class.java.simpleName
 @JsonClass(generateAdapter = true)
 data class SimpleHttpRendezvousTransportDetails(
         @Json val uri: String
-): RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1)
+) : RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1)
 
 /**
  * Implementation of the Simple HTTP transport MSC3886: https://github.com/matrix-org/matrix-spec-proposals/pull/3886
