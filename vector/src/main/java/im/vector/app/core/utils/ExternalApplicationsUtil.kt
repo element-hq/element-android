@@ -16,6 +16,7 @@
 
 package im.vector.app.core.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
@@ -256,6 +257,7 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
+@SuppressLint("Recycle")
 suspend fun saveMedia(
         context: Context,
         file: File,
