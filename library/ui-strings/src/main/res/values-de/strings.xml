@@ -2239,7 +2239,7 @@
     <string name="create_poll_question_hint">Frage oder Thema</string>
     <string name="create_poll_question_title">Abstimmungsthema oder Frage</string>
     <string name="create_poll_title">Abstimmung erstellen</string>
-    <string name="attachment_type_poll">Abstimmung</string>
+    <string name="attachment_type_poll">Umfrage</string>
     <string name="open_discovery_settings">Auffindungseinstellungen öffnen</string>
     <string name="shortcut_disabled_reason_sign_out">Sitzung abgemeldet!</string>
     <string name="shortcut_disabled_reason_room_left">Raum verlassen!</string>
@@ -2666,7 +2666,7 @@
     <string name="device_manager_session_details_title">Sitzungsdetails</string>
     <string name="device_manager_other_sessions_clear_filter">Filter zurücksetzen</string>
     <string name="device_manager_other_sessions_no_inactive_sessions_found">Keine inaktiven Sitzungen gefunden.</string>
-    <string name="device_manager_other_sessions_no_unverified_sessions_found">Keine nicht verifizierten Sitzungen gefunden.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Keine unverifizierten Sitzungen gefunden.</string>
     <string name="device_manager_other_sessions_no_verified_sessions_found">Keine verifizierten Sitzungen gefunden.</string>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
         <item quantity="one">Erwäge, dich aus alten (ein Tag oder mehr), nicht mehr verwendeten Sitzungen abzumelden.</item>
@@ -2707,8 +2707,8 @@
     <string name="device_manager_verification_status_detail_current_session_unverified">Verifiziere deine aktuelle Sitzung für besonders sichere Kommunikation.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Deine aktuelle Sitzung ist für sichere Kommunikation bereit.</string>
     <string name="device_manager_view_details">Details anzeigen</string>
-    <string name="device_manager_verification_status_detail_other_session_unverified">Für bestmögliche Sicherheit und Zuverlässigkeit verifiziere diese Sitzungen oder melde dich von ihr ab.</string>
-    <string name="device_manager_other_sessions_recommendation_description_verified">Für die bestmögliche Sicherheit, melde dich von allen Sitzungen ab, die du nicht erkennst oder nicht mehr benutzt.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Für bestmögliche Sicherheit und Zuverlässigkeit verifiziere diese Sitzung oder melde sie ab.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Für bestmögliche Sicherheit, melde dich von allen Sitzungen ab, die du nicht erkennst oder benutzt.</string>
     <string name="device_manager_learn_more_session_rename">Andere Nutzer in Direktnachrichten und Räumen, in denen du dich befindest, können eine vollständige Liste deiner Sitzungen einsehen.
 \n
 \nDies gibt ihnen die Sicherheit, dass sie auch wirklich mit dir kommunizieren. Allerdings bedeutet es auch, dass sie die Sitzungsnamen sehen können, die du hier angibst.</string>
