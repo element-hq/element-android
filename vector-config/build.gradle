@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace "im.vector.app.config"
+
     compileSdk versions.compileSdk
 
     defaultConfig {

@@ -19,6 +19,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
+    namespace "im.vector.lib.multipicker"
+
     compileSdk versions.compileSdk
 
     defaultConfig {
