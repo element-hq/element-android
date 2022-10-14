@@ -11,4 +11,14 @@
         <item name="android:textColor">?vctr_message_text_color</item>
     </style>
 
+    <style name="Widget.Vector.EditText.RichTextComposer" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:maxLines">12</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?vctr_message_text_color</item>
+    </style>
+
 </resources>
