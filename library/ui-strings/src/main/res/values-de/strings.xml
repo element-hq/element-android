@@ -2765,4 +2765,10 @@
     <string name="device_manager_verification_status_detail_other_session_unknown">Verifiziere deine aktuelle Sitzung, um den Verifizierungsstatus dieser Sitzung anzuzeigen.</string>
     <string name="device_manager_verification_status_unknown">Unbekannter Verifizierungsstatus</string>
     <string name="push_gateway_item_device_id">Sitzungs-ID:</string>
+    <string name="push_gateway_item_enabled">Aktiviert:</string>
+    <string name="error_check_network">Etwas ist schiefgelaufen. Bitte überprüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="grant_permission">Berechtigung geben</string>
+    <string name="permissions_rationale_msg_notification">${app_name} braucht die Berechtigung, um Benachrichtigungen anzuzeigen. Benachrichtigungen können deine Nachrichten, Einladungen etc. anzeigen.
+\n
+\nBitte erlaube den Zugriff im nächsten Dialog, damit Benachrichtigungen angezeigt werden können.</string>
 </resources>
