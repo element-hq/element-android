@@ -1240,10 +1240,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="preference_voice_and_video">Suara &amp; Video</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_url">Url:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_device_name">Nama Tampilan Sesi:</string>
+    <string name="push_gateway_item_app_display_name">Nama Tampilan Aplikasi:</string>
+    <string name="push_gateway_item_push_key">Kunci Dorongan:</string>
+    <string name="push_gateway_item_app_id">ID Aplikasi:</string>
     <string name="settings_push_gateway_no_pushers">Tidak ada gateway dorong terdaftar</string>
     <string name="settings_push_rules_no_rules">Tidak ada aturan push yang ditentukan</string>
     <string name="settings_push_rules">Aturan Push</string>
@@ -1632,7 +1632,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_set_email_submit">Lanjut</string>
     <string name="login_set_email_optional_hint">Email (opsional)</string>
     <string name="login_set_email_mandatory_hint">Email</string>
-    <string name="login_set_email_notice">Atur sebuah alamat email untuk memulihkan akun Anda. Nantinya, Anda dapat mengizinkan orang yang Anda tahu untuk menemukan Anda dari email secara opsional.</string>
+    <string name="login_set_email_notice">Atur sebuah alamat email untuk memulihkan akun Anda. Nantinya, Anda dapat mengizinkan orang yang Anda tahu untuk menemukan Anda dari email ini secara opsional.</string>
     <string name="login_set_email_title">Atur alamat email</string>
     <string name="login_reset_password_cancel_confirmation_content">Kata sandi Anda belum diubah.
 \n
@@ -2690,4 +2690,34 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Ada perangkat yang belum diverifikasi di ruangan ini, mereka tidak akan mendekripsikan pesan yang Anda kirim.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Jangan kirim pesan terenkripsi ke sesi yang belum diverifikasi di ruangan ini.</string>
     <string name="action_got_it">Saya mengerti</string>
+    <string name="rich_text_editor_format_underline">Terapkan format garis bawah</string>
+    <string name="rich_text_editor_format_strikethrough">Terapkan format coret</string>
+    <string name="rich_text_editor_format_italic">Terapkan format miring</string>
+    <string name="rich_text_editor_format_bold">Terapkan format tebal</string>
+    <string name="labs_enable_client_info_recording_summary">Rekam nama klien, versi, dan URL untuk lebih mudah mengenal sesi di pengelola sesi.</string>
+    <string name="labs_enable_client_info_recording_title">Aktifkan perekaman info klien</string>
+    <string name="labs_enable_session_manager_summary">Miliki keterlihatan dan kendali yang lebih baik pada semua sesi Anda.</string>
+    <string name="labs_enable_session_manager_title">Aktifkan pengelola sesi baru</string>
+    <string name="device_manager_session_details_device_operating_system">Sistem operasi</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Peramban</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Versi</string>
+    <string name="device_manager_session_details_application_name">Nama</string>
+    <string name="device_manager_session_details_application">Aplikasi</string>
+    <string name="device_manager_push_notifications_description">Terima notifikasi dorongan di sesi ini.</string>
+    <string name="device_manager_push_notifications_title">Notifikasi dorongan</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifikasi sesi Anda saat ini untuk menampilkan status verifikasi sesi ini.</string>
+    <string name="device_manager_verification_status_unknown">Status verifikasi tidak diketahui</string>
+    <string name="push_gateway_item_enabled">Diaktifkan:</string>
+    <string name="push_gateway_item_device_id">ID Sesi:</string>
+    <string name="error_check_network">Ada sesuatu yang salah. Mohon periksa koneksi jaringan Anda dan coba lagi.</string>
+    <string name="grant_permission">Berikan Izin</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} membutuhkan izin untuk menampilkan notifikasi.
+\nMohon berikan izin itu.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} membutuhkan izin untuk menampilkan notifikasi. Notifikasi dapat menampilkan pesan Anda, undangan Anda, dll.
+\n
+\nMohon perbolehkan akses di munculan berikutnya untuk dapat melihat notifikasi.</string>
+    <string name="labs_enable_rich_text_editor_summary">Coba editor teks kaya (mode teks biasa akan datang)</string>
+    <string name="labs_enable_rich_text_editor_title">Aktifkan editor teks kaya</string>
 </resources>
