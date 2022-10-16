@@ -1158,10 +1158,10 @@
     <string name="settings_push_rules">Tõuketeavituste reeglid</string>
     <string name="settings_push_rules_no_rules">Tõuketeavituste reegleid pole kirjeldatud</string>
     <string name="settings_push_gateway_no_pushers">Tõuketeavituste võrguväravaid pole registreeritud</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">Rakenduse ID:</string>
+    <string name="push_gateway_item_push_key">Tõuketeenuse võti:</string>
+    <string name="push_gateway_item_app_display_name">Rakenduse kuvatav nimi:</string>
+    <string name="push_gateway_item_device_name">Sessiooni nimi:</string>
     <string name="push_gateway_item_url">URL:</string>
     <string name="push_gateway_item_format">Vorming:</string>
     <string name="preference_voice_and_video">Heli ja video</string>
@@ -2733,4 +2733,6 @@
     <string name="command_description_devtools">Ava arendaja töövahendite vaade</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Ära iialgi saada selles jututoas krüptitud sõnumeid verifitseerimata sessioonidesse.</string>
     <string name="action_got_it">Selge lugu</string>
+    <string name="labs_enable_rich_text_editor_summary">Proovi vormindatud teksti alusel töötavat tekstitoimetit (varsti lisandub ka vormindamata teksti režiim)</string>
+    <string name="labs_enable_rich_text_editor_title">Võta kasutusele vormindatud teksti pruukiv tekstitoimeti</string>
 </resources>
