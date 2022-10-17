@@ -26,11 +26,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -80,9 +82,10 @@ class VoiceBroadcastPlayer @Inject constructor(
         currentPlayingIndex = -1
     }
 
-    @Suppress("UNUSED_PARAMETER")
     private fun updatePlaylist(room: Room, eventId: String) {
-        // TODO get the list of voice messages
+        val timelineEvents = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, eventId)
+        val audioEvents = timelineEvents.mapNotNull { it.root.asMessageAudioEvent() }
+        playlist = audioEvents.sortedBy { it.root.originServerTs }
     }
 
     private fun startPlayback() {
