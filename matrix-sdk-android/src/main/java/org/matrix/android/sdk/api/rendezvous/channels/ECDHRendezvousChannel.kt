@@ -24,12 +24,8 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.RendezvousChannel
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
-import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvous
-import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
-import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
-import org.matrix.android.sdk.api.rendezvous.model.SimpleHttpRendezvousTransportDetails
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 import org.matrix.olm.OlmSAS

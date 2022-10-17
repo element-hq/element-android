@@ -143,10 +143,11 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
     }
 
     private fun get404Error(): RendezvousError {
-        return if (expiresAt != null && Date() > expiresAt)
-            RendezvousError("Expired", RendezvousFailureReason.Expired)
-        else
-            RendezvousError("Received unexpected 404", RendezvousFailureReason.Unknown)
+        if (expiresAt != null && Date() > expiresAt) {
+            return RendezvousError("Expired", RendezvousFailureReason.Expired)
+        }
+
+        return RendezvousError("Received unexpected 404", RendezvousFailureReason.Unknown)
     }
 
     override suspend fun close() {
