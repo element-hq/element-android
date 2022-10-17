@@ -100,21 +100,19 @@ class QrCodeLoginViewModel @AssistedInject constructor(
             try {
                 val confirmationCode = rendezvous.startAfterScanningCode()
                 Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
-                confirmationCode?.let {
-                    onConnectionEstablished(it)
-                    val session = rendezvous.waitForLoginOnNewDevice(authenticationService)
-                    onSigningIn()
-                    session?.let {
-                        activeSessionHolder.setActiveSession(session)
-                        authenticationService.reset()
 
-                        configureAndStartSessionUseCase.execute(session)
+                onConnectionEstablished(confirmationCode)
 
-                        rendezvous.completeVerificationOnNewDevice(session)
+                val session = rendezvous.waitForLoginOnNewDevice(authenticationService)
+                onSigningIn()
 
-                        _viewEvents.post(QrCodeLoginViewEvents.NavigateToHomeScreen)
-                    }
-                }
+                activeSessionHolder.setActiveSession(session)
+                authenticationService.reset()
+                configureAndStartSessionUseCase.execute(session)
+
+                rendezvous.completeVerificationOnNewDevice(session)
+
+                _viewEvents.post(QrCodeLoginViewEvents.NavigateToHomeScreen)
             } catch (t: Throwable) {
                 Timber.tag(TAG).e(t, "Error occurred during sign in")
                 if (t is RendezvousError) {

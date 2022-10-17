@@ -89,7 +89,7 @@ class Rendezvous(
     }
 
     @Throws(RendezvousError::class)
-    suspend fun startAfterScanningCode(): String? {
+    suspend fun startAfterScanningCode(): String {
         val checksum = channel.connect()
 
         Timber.tag(TAG).i("Connected to secure channel with checksum: $checksum")
@@ -111,7 +111,7 @@ class Rendezvous(
     }
 
     @Throws(RendezvousError::class)
-    suspend fun waitForLoginOnNewDevice(authenticationService: AuthenticationService): Session? {
+    suspend fun waitForLoginOnNewDevice(authenticationService: AuthenticationService): Session {
         Timber.tag(TAG).i("Waiting for login_token")
 
         val loginToken = receive()
