@@ -17,7 +17,9 @@
 package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 enum class RendezvousIntent {
     @Json(name = "login.start") LOGIN_ON_NEW_DEVICE,
     @Json(name = "login.reciprocate") RECIPROCATE_LOGIN_ON_EXISTING_DEVICE

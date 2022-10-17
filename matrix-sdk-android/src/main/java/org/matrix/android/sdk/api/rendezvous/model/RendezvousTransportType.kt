@@ -17,7 +17,9 @@
 package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 enum class RendezvousTransportType(val value: String) {
     @Json(name = "http.v1") MSC3886_SIMPLE_HTTP_V1("http.v1")
 }
