@@ -21,5 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 enum class RendezvousTransportType(val value: String) {
-    @Json(name = "http.v1") MSC3886_SIMPLE_HTTP_V1("http.v1")
+    @Json(name = "org.matrix.msc3886.http.v1")
+    MSC3886_SIMPLE_HTTP_V1("org.matrix.msc3886.http.v1")
 }

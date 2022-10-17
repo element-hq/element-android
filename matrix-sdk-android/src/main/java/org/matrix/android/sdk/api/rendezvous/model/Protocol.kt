@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 enum class Protocol(val value: String) {
-    @Json(name = "login_token")
-    LOGIN_TOKEN("login_token")
+    @Json(name = "org.matrix.msc3906.login_token")
+    LOGIN_TOKEN("org.matrix.msc3906.login_token")
 }
