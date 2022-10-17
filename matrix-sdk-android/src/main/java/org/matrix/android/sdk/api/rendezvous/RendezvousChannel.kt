@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 
 /**
- * Representation of a rendezvous channel such as that described by MSC3903
+ * Representation of a rendezvous channel such as that described by MSC3903.
  */
 interface RendezvousChannel {
     var transport: RendezvousTransport

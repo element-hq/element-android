@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.rendezvous.transports
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.delay
 import okhttp3.MediaType
 import okhttp3.Request
@@ -142,8 +140,6 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
                 response.close()
             }
         }
-
-        return null
     }
 
     override suspend fun cancel(reason: RendezvousFailureReason) {

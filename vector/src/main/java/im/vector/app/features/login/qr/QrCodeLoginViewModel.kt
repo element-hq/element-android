@@ -16,7 +16,6 @@
 
 package im.vector.app.features.login.qr
 
-import android.content.Context
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
