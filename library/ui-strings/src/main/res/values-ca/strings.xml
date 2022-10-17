@@ -1200,7 +1200,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_app_id">ID d\'aplicació:</string>
     <string name="alert_push_are_disabled_description">Revisa la configuració per activar les notificacions</string>
     <string name="settings_troubleshoot_test_push_notification_content">Estàs veient la notificació! Clica\'m!</string>
     <string name="member_banned_by">Vetat per %1$s</string>
@@ -2742,4 +2742,7 @@
     <string name="settings_security_incognito_keyboard_summary">Sol·licita que no es desi cap dada personalitzada del teclat en funció del que escrius a les converses (per exemple l\'historial d\'escriptura o el diccionari). Tingues en compte que alguns teclats poden no respectar aquesta configuració.</string>
     <string name="settings_security_incognito_keyboard_title">Teclat incògnit</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 Has activat el xifrat a només en sessions verificades a totes les sales, a Configuració &gt; Seguretat.</string>
+    <string name="device_manager_verification_status_unknown">Estat de verificació desconegut</string>
+    <string name="login_scan_qr_code">Escaneja codi QR</string>
+    <string name="push_gateway_item_device_id">ID de sessió:</string>
 </resources>
