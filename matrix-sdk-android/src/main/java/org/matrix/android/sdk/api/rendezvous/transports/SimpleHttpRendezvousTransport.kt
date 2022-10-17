@@ -64,8 +64,7 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         }
 
         val method = if (uri != null) "PUT" else "POST"
-        // TODO: properly determine endpoint
-        val uri = if (uri != null) uri!! else "https://rendezvous.lab.element.dev"
+        val uri = this.uri ?: throw RuntimeException("No rendezvous URI")
 
         val httpClient = okhttp3.OkHttpClient.Builder().build()
 
