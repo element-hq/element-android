@@ -120,7 +120,14 @@ class VoiceBroadcastPlayer @Inject constructor(
     }
 
     private suspend fun prepareMediaPlayer(messageAudioContent: MessageAudioContent): MediaPlayer {
-        val audioFile = session.fileService().downloadFile(messageAudioContent)
+        // Download can fail
+        val audioFile = try {
+            session.fileService().downloadFile(messageAudioContent)
+        } catch (failure: Throwable) {
+            Timber.e(failure, "Unable to start playback")
+            throw VoiceFailure.UnableToPlay(failure)
+        }
+
         return audioFile.inputStream().use { fis ->
             MediaPlayer().apply {
                 setAudioAttributes(
