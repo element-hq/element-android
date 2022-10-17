@@ -109,7 +109,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+//                    TODO: main or null
+                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = false) }
                 }
             }
         }

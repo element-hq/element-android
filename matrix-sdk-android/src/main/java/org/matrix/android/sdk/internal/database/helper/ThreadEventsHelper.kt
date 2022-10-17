@@ -22,6 +22,8 @@ import io.realm.RealmQuery
 import io.realm.Sort
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.isRedacted
+import org.matrix.android.sdk.api.session.room.model.ReadReceipt
+import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -273,8 +275,8 @@ internal fun TimelineEventEntity.Companion.isUserMentionedInThread(realm: Realm,
 /**
  * Find the read receipt for the current user.
  */
-internal fun findMyReadReceipt(realm: Realm, roomId: String, userId: String): String? =
-        ReadReceiptEntity.where(realm, roomId = roomId, userId = userId)
+internal fun findMyReadReceipt(realm: Realm, roomId: String, userId: String, threadId: String?): String? =
+        ReadReceiptEntity.where(realm, roomId = roomId, userId = userId, threadId = threadId)
                 .findFirst()
                 ?.eventId
 
@@ -294,7 +296,7 @@ internal fun isUserMentioned(currentUserId: String, timelineEventEntity: Timelin
  * immediately so we should not display wrong notifications
  */
 internal fun updateNotificationsNew(roomId: String, realm: Realm, currentUserId: String) {
-    val readReceipt = findMyReadReceipt(realm, roomId, currentUserId) ?: return
+    val readReceipt = findMyReadReceipt(realm, roomId, currentUserId, ReadService.THREAD_ID_MAIN) ?: return
 
     val readReceiptChunk = ChunkEntity
             .findIncludingEvent(realm, readReceipt) ?: return
