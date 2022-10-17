@@ -37,7 +37,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
 
     @AssistedFactory
