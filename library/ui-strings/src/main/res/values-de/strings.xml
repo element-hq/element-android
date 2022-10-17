@@ -2771,4 +2771,37 @@
     <string name="permissions_rationale_msg_notification">${app_name} braucht die Berechtigung, um Benachrichtigungen anzuzeigen. Benachrichtigungen können deine Nachrichten, Einladungen etc. anzeigen.
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, damit Benachrichtigungen angezeigt werden können.</string>
+    <string name="qr_code_login_confirm_security_code_description">Bitte vergewissere dich, dass du den Ursprung dieses Codes kennst. Durch die Verbindung beider Geräte, gewährst du Zugriff auf deinen gesamten Account.</string>
+    <string name="qr_code_login_confirm_security_code">Bestätigen</string>
+    <string name="qr_code_login_try_again">Nochmal versuchen</string>
+    <string name="qr_code_login_status_no_match">Keine Übereinstimmung\?</string>
+    <string name="qr_code_login_signing_in">Du wirst angemeldet</string>
+    <string name="qr_code_login_connecting_to_device">Stelle Verbindung zum Gerät her</string>
+    <string name="qr_code_login_scan_qr_code_button">QR-Code scannen</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Mobiles Gerät anmelden\?</string>
+    <string name="qr_code_login_show_qr_code_button">QR-Code auf diesem Gerät anzeigen</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Wähle \'QR-Code scannen\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Wähle \'Mit QR-Code anmelden\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
+    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code auf diesem Gerät anzeigen\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre -&gt; Alle Sitzungen anzeigen</string>
+    <string name="qr_code_login_new_device_instruction_1">Öffne ${app_name} auf deinem anderen Gerät</string>
+    <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
+    <string name="qr_code_login_header_failed_title">Verbindung fehlgeschlagen</string>
+    <string name="qr_code_login_header_connected_description">Überprüfe dein angemeldetes Gerät. Der unten gezeigte Code sollte angezeigt werden. Bestätige, dass beide Codes übereinstimmen:</string>
+    <string name="qr_code_login_header_connected_title">Sichere Verbindung hergestellt</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scanne den unten angezeigten QR-Code mit deinem nicht angemeldeten Gerät.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Benutze dein angemeldetes Gerät um den unten angezeigten QR-Code zu scannen:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Mit QR-Code anmelden</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Benutze die Kamera auf diesem Gerät um den vom anderen Gerät angezeigten QR-Code zu scannen:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR-Code scannen</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kannst dieses Gerät benutzen um ein anderes Gerät per QR-Code anzumelden. Dafür gibt es zwei Wege:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
+    <string name="login_scan_qr_code">QR-Code scannen</string>
 </resources>
