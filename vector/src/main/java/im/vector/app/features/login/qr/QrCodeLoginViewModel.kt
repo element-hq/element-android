@@ -35,7 +35,6 @@ import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
-        private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase
