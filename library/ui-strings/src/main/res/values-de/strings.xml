@@ -2741,4 +2741,6 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Es befinden sich nicht verifizierte Geräte in diesem Raum. Sie werden deine Nachrichten nicht entschlüsseln können.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Niemals verschlüsselte Nachrichten zu unverifizierten Sitzungen in diesem Raum senden.</string>
     <string name="action_got_it">Verstanden</string>
+    <string name="labs_enable_rich_text_editor_summary">Probiere den Rich-Text-Editor aus (bald auch mit Plain-Text-Modus)</string>
+    <string name="labs_enable_rich_text_editor_title">Aktiviere Rich-Text-Editor</string>
 </resources>
