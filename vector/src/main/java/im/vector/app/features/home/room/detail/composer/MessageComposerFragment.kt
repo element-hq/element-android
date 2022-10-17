@@ -236,6 +236,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 // Pause voice broadcast if the timeline is not shown anymore
                 it.isVoiceBroadcasting && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
                 else -> {
+                    timelineViewModel.handle(VoiceBroadcastAction.Listening.Pause)
                     messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
                 }
             }

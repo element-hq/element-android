@@ -42,6 +42,7 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -84,6 +85,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val audioMessageHelper: AudioMessageHelper,
         private val analyticsTracker: AnalyticsTracker,
+        private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -981,6 +983,8 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun handleEntersBackground(composerText: String) {
         // Always stop all voice actions. It may be playing in timeline or active recording
         val playingAudioContent = audioMessageHelper.stopAllVoiceActions(deleteRecord = false)
+        // TODO remove this when there will be a listening indicator outside of the timeline
+        voiceBroadcastHelper.pausePlayback()
 
         val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
         if (isVoiceRecording) {
