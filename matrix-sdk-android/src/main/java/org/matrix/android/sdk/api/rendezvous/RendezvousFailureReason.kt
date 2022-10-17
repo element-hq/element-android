@@ -16,16 +16,17 @@
 
 package org.matrix.android.sdk.api.rendezvous
 
-enum class RendezvousFailureReason(val value: String, val canRetry: Boolean = true) {
-    UserDeclined("user_declined"),
-    OtherDeviceNotSignedIn("other_device_not_signed_in"),
-    OtherDeviceAlreadySignedIn("other_device_already_signed_in"),
-    Unknown("unknown"),
-    Expired("expired"),
-    UserCancelled("user_cancelled"),
-    InvalidCode("invalid_code"),
-    UnsupportedAlgorithm("unsupported_algorithm", false),
-    DataMismatch("data_mismatch"),
-    UnsupportedTransport("unsupported_transport", false),
-    HomeserverLacksSupport("homeserver_lacks_support", false)
+enum class RendezvousFailureReason(val canRetry: Boolean = true) {
+    UserDeclined,
+    OtherDeviceNotSignedIn,
+    OtherDeviceAlreadySignedIn,
+    Unknown,
+    Expired,
+    UserCancelled,
+    InvalidCode,
+    UnsupportedAlgorithm(false),
+    UnsupportedTransport(false),
+    UnsupportedHomeserver(false),
+    ProtocolError,
+    E2EESecurityIssue(false)
 }

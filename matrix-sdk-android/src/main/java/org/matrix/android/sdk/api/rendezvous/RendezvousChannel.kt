@@ -16,8 +16,7 @@
 
 package org.matrix.android.sdk.api.rendezvous
 
-import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
-import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 
 /**
  * Representation of a rendezvous channel such as that described by MSC3903.
@@ -28,26 +27,25 @@ interface RendezvousChannel {
     /**
      * @returns the checksum/confirmation digits to be shown to the user
      */
+    @Throws(RendezvousError::class)
     suspend fun connect(): String
 
     /**
      * Send a payload via the channel.
      * @param data payload to send
      */
+    @Throws(RendezvousError::class)
     suspend fun send(data: ByteArray)
 
     /**
      * Receive a payload from the channel.
      * @returns the received payload
      */
+    @Throws(RendezvousError::class)
     suspend fun receive(): ByteArray?
 
     /**
-     * @returns a representation of the channel that can be encoded in a QR or similar
+     * @returns closes the channel and cleans up
      */
     suspend fun close()
-
-    // In future we probably want this to be a more generic RendezvousCode but it is suffice for now
-    suspend fun generateCode(intent: RendezvousIntent): ECDHRendezvousCode
-    suspend fun cancel(reason: RendezvousFailureReason)
 }

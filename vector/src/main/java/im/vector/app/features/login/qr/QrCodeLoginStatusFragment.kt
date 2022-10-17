@@ -70,8 +70,14 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         return when (reason) {
             RendezvousFailureReason.UnsupportedAlgorithm,
             RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
+            RendezvousFailureReason.UnsupportedHomeserver -> getString(R.string.qr_code_login_header_failed_homeserver_is_not_supported_description)
             RendezvousFailureReason.Expired -> getString(R.string.qr_code_login_header_failed_timeout_description)
             RendezvousFailureReason.UserDeclined -> getString(R.string.qr_code_login_header_failed_denied_description)
+            RendezvousFailureReason.E2EESecurityIssue -> getString(R.string.qr_code_login_header_failed_e2ee_security_issue_description)
+            RendezvousFailureReason.OtherDeviceAlreadySignedIn -> getString(R.string.qr_code_login_header_failed_other_device_already_signed_in_description)
+            RendezvousFailureReason.OtherDeviceNotSignedIn -> getString(R.string.qr_code_login_header_failed_other_device_not_signed_in_description)
+            RendezvousFailureReason.InvalidCode -> getString(R.string.qr_code_login_header_failed_invalid_qr_code_description)
+            RendezvousFailureReason.UserCancelled -> getString(R.string.qr_code_login_header_failed_user_cancelled_description)
             else -> getString(R.string.qr_code_login_header_failed_other_description)
         }
     }

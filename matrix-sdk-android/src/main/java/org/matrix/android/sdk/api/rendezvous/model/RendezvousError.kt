@@ -18,4 +18,4 @@ package org.matrix.android.sdk.api.rendezvous.model
 
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 
-class RendezvousError(val description: String, val reason: RendezvousFailureReason) : RuntimeException(description)
+class RendezvousError(val description: String, val reason: RendezvousFailureReason) : Exception(description)

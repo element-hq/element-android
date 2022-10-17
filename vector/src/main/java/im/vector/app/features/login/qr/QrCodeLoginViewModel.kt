@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.rendezvous.Rendezvous
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
@@ -38,14 +39,15 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
-    val TAG: String = QrCodeLoginViewModel::class.java.simpleName
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> {
         override fun create(initialState: QrCodeLoginViewState): QrCodeLoginViewModel
     }
 
-    companion object : MavericksViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> by hiltMavericksViewModelFactory() {
+        val TAG: String = QrCodeLoginViewModel::class.java.simpleName
+    }
 
     override fun handle(action: QrCodeLoginAction) {
         when (action) {
@@ -71,9 +73,14 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     private fun handleOnQrCodeScanned(action: QrCodeLoginAction.OnQrCodeScanned) {
         Timber.tag(TAG).d("Scanned code: ${action.qrCode}")
 
-        val rendezvous = Rendezvous.buildChannelFromCode(action.qrCode) { reason ->
-            Timber.tag(TAG).d("Rendezvous cancelled: $reason")
-            onFailed(reason)
+        val rendezvous = try { Rendezvous.buildChannelFromCode(action.qrCode) } catch (t: Throwable) {
+            Timber.tag(TAG).e(t, "Error occurred during sign in")
+            if (t is RendezvousError) {
+                onFailed(t.reason)
+            } else {
+                onFailed(RendezvousFailureReason.Unknown)
+            }
+            return
         }
 
         setState {
@@ -103,9 +110,13 @@ class QrCodeLoginViewModel @AssistedInject constructor(
                         _viewEvents.post(QrCodeLoginViewEvents.NavigateToHomeScreen)
                     }
                 }
-            } catch (failure: Throwable) {
-                Timber.tag(TAG).e(failure, "Error occurred during sign in")
-                onFailed(RendezvousFailureReason.Unknown)
+            } catch (t: Throwable) {
+                Timber.tag(TAG).e(t, "Error occurred during sign in")
+                if (t is RendezvousError) {
+                    onFailed(t.reason)
+                } else {
+                    onFailed(RendezvousFailureReason.Unknown)
+                }
             }
         }
     }

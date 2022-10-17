@@ -23,6 +23,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
 import org.matrix.android.sdk.api.rendezvous.model.SimpleHttpRendezvousTransportDetails
 import timber.log.Timber
@@ -32,7 +33,7 @@ import java.util.Date
 /**
  * Implementation of the Simple HTTP transport MSC3886: https://github.com/matrix-org/matrix-spec-proposals/pull/3886
  */
-class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: RendezvousFailureReason) -> Unit)?, rendezvousUri: String?) : RendezvousTransport {
+class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTransport {
     companion object {
         private val TAG = LoggerTag(SimpleHttpRendezvousTransport::class.java.simpleName, LoggerTag.RENDEZVOUS).value
     }
@@ -55,7 +56,7 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
 
     override suspend fun send(contentType: MediaType, data: ByteArray) {
         if (cancelled) {
-            return
+            throw IllegalStateException("Rendezvous cancelled")
         }
 
         val method = if (uri != null) "PUT" else "POST"
@@ -75,9 +76,7 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         val response = httpClient.newCall(request.build()).execute()
 
         if (response.code == 404) {
-            // we set to unknown and the cancel method will rewrite the reason to expired if applicable
-            cancel(RendezvousFailureReason.Unknown)
-            return
+            throw get404Error()
         }
         etag = response.header("etag")
 
@@ -98,12 +97,12 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
     }
 
     override suspend fun receive(): ByteArray? {
+        if (cancelled) {
+            throw IllegalStateException("Rendezvous cancelled")
+        }
         val uri = uri ?: throw IllegalStateException("Rendezvous not set up")
         val httpClient = okhttp3.OkHttpClient.Builder().build()
         while (true) {
-            if (cancelled) {
-                return null
-            }
             Timber.tag(TAG).i("Polling: $uri after etag $etag")
             val request = Request.Builder()
                     .url(uri)
@@ -118,9 +117,7 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
             try {
                 // expired
                 if (response.code == 404) {
-                    // we set to unknown and the cancel method will rewrite the reason to expired if applicable
-                    cancel(RendezvousFailureReason.Unknown)
-                    return null
+                    throw get404Error()
                 }
 
                 // rely on server expiring the channel rather than checking ourselves
@@ -145,31 +142,27 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         }
     }
 
-    override suspend fun cancel(reason: RendezvousFailureReason) {
-        var mappedReason = reason
-        Timber.tag(TAG).i("$expiresAt")
-        if (mappedReason == RendezvousFailureReason.Unknown &&
-                expiresAt != null && Date() > expiresAt
-        ) {
-            mappedReason = RendezvousFailureReason.Expired
-        }
+    private fun get404Error(): RendezvousError {
+        return if (expiresAt != null && Date() > expiresAt)
+            RendezvousError("Expired", RendezvousFailureReason.Expired)
+        else
+            RendezvousError("Received unexpected 404", RendezvousFailureReason.Unknown)
+    }
 
+    override suspend fun close() {
         cancelled = true
         ready = false
-        onCancelled ?.let { it(mappedReason) }
 
-        if (mappedReason == RendezvousFailureReason.UserDeclined) {
-            uri ?.let {
-                try {
-                    val httpClient = okhttp3.OkHttpClient.Builder().build()
-                    val request = Request.Builder()
-                            .url(it)
-                            .delete()
-                            .build()
-                    httpClient.newCall(request).execute()
-                } catch (e: Exception) {
-                    Timber.tag(TAG).w(e, "Failed to delete channel")
-                }
+        uri ?.let {
+            try {
+                val httpClient = okhttp3.OkHttpClient.Builder().build()
+                val request = Request.Builder()
+                        .url(it)
+                        .delete()
+                        .build()
+                httpClient.newCall(request).execute()
+            } catch (e: Throwable) {
+                Timber.tag(TAG).w(e, "Failed to delete channel")
             }
         }
     }

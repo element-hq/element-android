@@ -89,13 +89,14 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         ourPublicKey = Base64.decode(olmSAS!!.publicKey, Base64.NO_WRAP)
     }
 
+    @Throws(RendezvousError::class)
     override suspend fun connect(): String {
         olmSAS ?.let { olmSAS ->
             val isInitiator = theirPublicKey == null
 
             if (isInitiator) {
                 Timber.tag(TAG).i("Waiting for other device to send their public key")
-                val res = this.receiveAsPayload() ?: throw RuntimeException("No reply from other device")
+                val res = this.receiveAsPayload() ?: throw RendezvousError("No reply from other device", RendezvousFailureReason.ProtocolError)
 
                 if (res.key == null) {
                     throw RendezvousError(
@@ -137,7 +138,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
 
     override suspend fun send(data: ByteArray) {
         if (aesKey == null) {
-            throw RuntimeException("Shared secret not established")
+            throw IllegalStateException("Shared secret not established")
         }
         send(encrypt(data))
     }
@@ -150,29 +151,10 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
 
     override suspend fun receive(): ByteArray? {
         if (aesKey == null) {
-            throw RuntimeException("Shared secret not established")
+            throw IllegalStateException("Shared secret not established")
         }
         val payload = receiveAsPayload() ?: return null
         return decrypt(payload)
-    }
-
-    override suspend fun generateCode(intent: RendezvousIntent): ECDHRendezvousCode {
-        return ECDHRendezvousCode(
-                intent,
-                rendezvous = ECDHRendezvous(
-                        transport.details() as SimpleHttpRendezvousTransportDetails,
-                        SecureRendezvousChannelAlgorithm.ECDH_V1,
-                        key = Base64.encodeToString(ourPublicKey, Base64.NO_WRAP)
-                )
-        )
-    }
-
-    override suspend fun cancel(reason: RendezvousFailureReason) {
-        try {
-            transport.cancel(reason)
-        } finally {
-            close()
-        }
     }
 
     override suspend fun close() {
@@ -183,6 +165,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
                 olmSAS = null
             }
         }
+        transport.close()
     }
 
     private fun encrypt(plainText: ByteArray): ECDHPayload {

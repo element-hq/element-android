@@ -3383,6 +3383,12 @@
     <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
     <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
     <string name="qr_code_login_header_failed_other_description">The request failed.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">A security issue was encountered setting up secure messaging. One of the following may be compromised: Your homeserver; Your intent connection(s); Your device(s);</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">The other device is already signed in.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">The other device must be signed in.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">The QR code scanned is invalid.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">The sign in was cancelled on the other device.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">The homeserver doesn\'t support sign in with QR code.</string>
     <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy -> Show All Sessions</string>
     <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code in this device\'</string>

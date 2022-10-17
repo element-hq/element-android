@@ -26,5 +26,11 @@ enum class Outcome(val value: String) {
     DECLINED("declined"),
 
     @Json(name = "unsupported")
-    UNSUPPORTED("unsupported")
+    UNSUPPORTED("unsupported"),
+
+    @Json(name = "verified")
+    VERIFIED("verified"),
+
+    @Json(name = "e2ee_security_error")
+    E2EE_SECURITY_ERROR("e2ee_security_error")
 }

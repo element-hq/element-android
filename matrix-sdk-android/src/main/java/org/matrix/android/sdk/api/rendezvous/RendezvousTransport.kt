@@ -17,13 +17,16 @@
 package org.matrix.android.sdk.api.rendezvous
 
 import okhttp3.MediaType
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
 
 interface RendezvousTransport {
     var ready: Boolean
-    var onCancelled: ((reason: RendezvousFailureReason) -> Unit)?
+    @Throws(RendezvousError::class)
     suspend fun details(): RendezvousTransportDetails
+    @Throws(RendezvousError::class)
     suspend fun send(contentType: MediaType, data: ByteArray)
+    @Throws(RendezvousError::class)
     suspend fun receive(): ByteArray?
-    suspend fun cancel(reason: RendezvousFailureReason)
+    suspend fun close()
 }

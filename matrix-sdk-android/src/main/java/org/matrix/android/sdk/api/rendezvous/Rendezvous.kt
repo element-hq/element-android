@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.rendezvous.model.Outcome
 import org.matrix.android.sdk.api.rendezvous.model.Payload
 import org.matrix.android.sdk.api.rendezvous.model.PayloadType
 import org.matrix.android.sdk.api.rendezvous.model.Protocol
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
@@ -47,10 +48,16 @@ class Rendezvous(
     companion object {
         private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
 
-        fun buildChannelFromCode(code: String, onCancelled: (reason: RendezvousFailureReason) -> Unit): Rendezvous {
-            val parsed = MatrixJsonParser.getMoshi().adapter(ECDHRendezvousCode::class.java).fromJson(code) ?: throw RuntimeException("Invalid code")
+        @Throws(RendezvousError::class)
+        fun buildChannelFromCode(code: String): Rendezvous {
+            val parsed = try {
+                // we rely on moshi validating the code and throwing exception if invalid JSON or doesn't
+                MatrixJsonParser.getMoshi().adapter(ECDHRendezvousCode::class.java).fromJson(code)
+            } catch (a: Throwable) {
+                throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
+            } ?: throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
 
-            val transport = SimpleHttpRendezvousTransport(onCancelled, parsed.rendezvous.transport.uri)
+            val transport = SimpleHttpRendezvousTransport(parsed.rendezvous.transport.uri)
 
             return Rendezvous(
                     ECDHRendezvousChannel(transport, parsed.rendezvous.key),
@@ -64,32 +71,30 @@ class Rendezvous(
     // not yet implemented: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
     val ourIntent: RendezvousIntent = RendezvousIntent.LOGIN_ON_NEW_DEVICE
 
-    private suspend fun areIntentsIncompatible(): Boolean {
+    @Throws(RendezvousError::class)
+    private suspend fun checkCompatibility() {
         val incompatible = theirIntent == ourIntent
 
         Timber.tag(TAG).d("ourIntent: $ourIntent, theirIntent: $theirIntent, incompatible: $incompatible")
 
         if (incompatible) {
+            // inform the other side
             send(Payload(PayloadType.FINISH, intent = ourIntent))
-            val reason = if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                RendezvousFailureReason.OtherDeviceNotSignedIn
+            if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
+                throw RendezvousError("The other device isn't signed in", RendezvousFailureReason.OtherDeviceNotSignedIn)
             } else {
-                RendezvousFailureReason.OtherDeviceAlreadySignedIn
+                throw RendezvousError("The other device is already signed in", RendezvousFailureReason.OtherDeviceAlreadySignedIn)
             }
-            channel.cancel(reason)
         }
-
-        return incompatible
     }
 
+    @Throws(RendezvousError::class)
     suspend fun startAfterScanningCode(): String? {
         val checksum = channel.connect()
 
         Timber.tag(TAG).i("Connected to secure channel with checksum: $checksum")
 
-        if (areIntentsIncompatible()) {
-            return null
-        }
+        checkCompatibility()
 
         // get protocols
         Timber.tag(TAG).i("Waiting for protocols")
@@ -97,9 +102,7 @@ class Rendezvous(
 
         if (protocolsResponse?.protocols == null || !protocolsResponse.protocols.contains(Protocol.LOGIN_TOKEN)) {
             send(Payload(PayloadType.FINISH, outcome = Outcome.UNSUPPORTED))
-            Timber.tag(TAG).i("No supported protocol")
-            cancel(RendezvousFailureReason.Unknown)
-            return null
+            throw RendezvousError("Unsupported protocols", RendezvousFailureReason.UnsupportedHomeserver)
         }
 
         send(Payload(PayloadType.PROGRESS, protocol = Protocol.LOGIN_TOKEN))
@@ -107,6 +110,7 @@ class Rendezvous(
         return checksum
     }
 
+    @Throws(RendezvousError::class)
     suspend fun waitForLoginOnNewDevice(authenticationService: AuthenticationService): Session? {
         Timber.tag(TAG).i("Waiting for login_token")
 
@@ -115,24 +119,19 @@ class Rendezvous(
         if (loginToken?.type == PayloadType.FINISH) {
             when (loginToken.outcome) {
                 Outcome.DECLINED -> {
-                    Timber.tag(TAG).i("Login declined by other device")
-                    channel.cancel(RendezvousFailureReason.UserDeclined)
-                    return null
+                    throw RendezvousError("Login declined by other device", RendezvousFailureReason.UserDeclined)
                 }
                 Outcome.UNSUPPORTED -> {
-                    Timber.tag(TAG).i("Not supported")
-                    channel.cancel(RendezvousFailureReason.HomeserverLacksSupport)
-                    return null
+                    throw RendezvousError("Homeserver lacks support", RendezvousFailureReason.UnsupportedHomeserver)
                 }
                 else -> {
-                    channel.cancel(RendezvousFailureReason.Unknown)
-                    return null
+                    throw RendezvousError("Unknown error", RendezvousFailureReason.Unknown)
                 }
             }
         }
 
-        val homeserver = loginToken?.homeserver ?: throw RuntimeException("No homeserver returned")
-        val token = loginToken.loginToken ?: throw RuntimeException("No login token returned")
+        val homeserver = loginToken?.homeserver ?: throw RendezvousError("No homeserver returned", RendezvousFailureReason.ProtocolError)
+        val token = loginToken.loginToken ?: throw RendezvousError("No login token returned", RendezvousFailureReason.ProtocolError)
 
         Timber.tag(TAG).i("Got login_token now attempting to sign in with $homeserver")
 
@@ -140,6 +139,7 @@ class Rendezvous(
         return authenticationService.loginUsingQrLoginToken(hsConfig, token)
     }
 
+    @Throws(RendezvousError::class)
     suspend fun completeVerificationOnNewDevice(session: Session) {
         val userId = session.myUserId
         val crypto = session.cryptoService()
@@ -148,57 +148,75 @@ class Rendezvous(
         send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
 
         // await confirmation of verification
-
         val verificationResponse = receive()
-        val verifyingDeviceId = verificationResponse?.verifyingDeviceId ?: throw RuntimeException("No verifying device id returned")
-        val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
-        if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
-            Timber.tag(TAG).w(
-                    "Verifying device $verifyingDeviceId key doesn't match: ${
-                        verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})"
-            )
-            throw RuntimeException("Key from verifying device doesn't match")
-        }
+        if (verificationResponse?.outcome == Outcome.VERIFIED) {
+            val verifyingDeviceId = verificationResponse.verifyingDeviceId
+                    ?: throw RendezvousError("No verifying device id returned", RendezvousFailureReason.ProtocolError)
+            val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
+            if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
+                Timber.tag(TAG).w(
+                        "Verifying device $verifyingDeviceId key doesn't match: ${
+                            verifyingDeviceFromServer?.fingerprint()
+                        } vs ${verificationResponse.verifyingDeviceKey})"
+                )
+                // inform the other side
+                send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                throw RendezvousError("Key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
+            }
 
-        // set other device as verified
-        Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
-        crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
+            verificationResponse.masterKey?.let { masterKeyFromVerifyingDevice ->
+                // check master key againt what the homeserver told us
+                crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
+                    if (localMasterKey.unpaddedBase64PublicKey != masterKeyFromVerifyingDevice) {
+                        Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
+                        // inform the other side
+                        send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                        throw RendezvousError("Master key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
+                    }
+                    // set other device as verified
+                    Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
+                    crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
-        verificationResponse.masterKey ?.let { masterKeyFromVerifyingDevice ->
-            // set master key as trusted
-            crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
-                if (localMasterKey.unpaddedBase64PublicKey == masterKeyFromVerifyingDevice) {
                     Timber.tag(TAG).i("Setting master key as trusted")
                     crypto.crossSigningService().markMyMasterKeyAsTrusted()
-                } else {
-                    Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
-                    throw RuntimeException("Master key from verifying device doesn't match")
-                }
-            } ?: Timber.tag(TAG).i("No local master key")
-        } ?: Timber.tag(TAG).i("No master key given by verifying device")
+                } ?: Timber.tag(TAG).w("No local master key so not verifying")
+            } ?: run {
+                // set other device as verified anyway
+                Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
+                crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
 
-        // request secrets from the verifying device
-        Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
+                Timber.tag(TAG).i("No master key given by verifying device")
+            }
 
-        session.sharedSecretStorageService().let {
-            it.requestSecret(MASTER_KEY_SSSS_NAME, verifyingDeviceId)
-            it.requestSecret(SELF_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
-            it.requestSecret(USER_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
-            it.requestSecret(KEYBACKUP_SECRET_SSSS_NAME, verifyingDeviceId)
+            // request secrets from the verifying device
+            Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
+
+            session.sharedSecretStorageService().let {
+                it.requestSecret(MASTER_KEY_SSSS_NAME, verifyingDeviceId)
+                it.requestSecret(SELF_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
+                it.requestSecret(USER_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
+                it.requestSecret(KEYBACKUP_SECRET_SSSS_NAME, verifyingDeviceId)
+            }
+        } else {
+            Timber.tag(TAG).i("Not doing verification")
         }
     }
 
+    @Throws(RendezvousError::class)
     private suspend fun receive(): Payload? {
         val data = channel.receive() ?: return null
-        return adapter.fromJson(data.toString(Charsets.UTF_8))
+        val payload = try {
+            adapter.fromJson(data.toString(Charsets.UTF_8))
+        } catch (e: Exception) {
+            Timber.tag(TAG).w(e, "Failed to parse payload")
+            throw RendezvousError("Invalid payload received", RendezvousFailureReason.Unknown)
+        }
+
+        return payload
     }
 
     private suspend fun send(payload: Payload) {
         channel.send(adapter.toJson(payload).toByteArray(Charsets.UTF_8))
-    }
-
-    suspend fun cancel(reason: RendezvousFailureReason) {
-        channel.cancel(reason)
     }
 
     suspend fun close() {
