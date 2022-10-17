@@ -43,7 +43,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
@@ -58,8 +57,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
@@ -83,7 +80,6 @@ import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
-import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -141,6 +137,7 @@ class MessageItemFactory @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
+        private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
 ) {
 
     // TODO inject this properly?
@@ -203,7 +200,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
-            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, params.eventsGroup, highlight, callback, attributes)
+            is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(messageContent, params.eventsGroup, highlight, callback, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -714,25 +711,6 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-    }
-
-    private fun buildVoiceBroadcastItem(
-            messageContent: MessageVoiceBroadcastInfoContent,
-            eventsGroup: TimelineEventsGroup?,
-            highlight: Boolean,
-            callback: TimelineEventController.Callback?,
-            attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceBroadcastItem? {
-        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
-        val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
-        val mostRecentEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent()
-        val mostRecentMessageContent = (mostRecentEvent.getVectorLastMessageContent() as? MessageVoiceBroadcastInfoContent) ?: return null
-        return MessageVoiceBroadcastItem_()
-                .attributes(attributes)
-                .highlighted(highlight)
-                .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(callback)
     }
 
     private fun List<Int?>?.toFft(): List<Int>? {
