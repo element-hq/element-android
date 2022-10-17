@@ -63,6 +63,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     @Inject lateinit var session: Session
 
+    @Inject lateinit var vectorPreferences: VectorPreferences
+
     override fun initUiAndData() {
         setupToolbar(views.settingsToolbar)
                 .allowBack()
@@ -77,13 +79,19 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                     replaceFragment(views.vectorSettingsPage, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacy ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.SecurityPrivacyManageSessions ->
+                SettingsActivityPayload.SecurityPrivacyManageSessions -> {
+                    val fragmentClass = if (vectorPreferences.isNewSessionManagerEnabled()) {
+                        im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment::class.java
+                    } else {
+                        VectorSettingsDevicesFragment::class.java
+                    }
                     replaceFragment(
                             views.vectorSettingsPage,
-                            VectorSettingsDevicesFragment::class.java,
+                            fragmentClass,
                             null,
                             FRAGMENT_TAG
                     )
+                }
                 SettingsActivityPayload.Notifications -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
