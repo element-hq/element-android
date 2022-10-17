@@ -42,6 +42,13 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCancelButton()
+        initTryAgainButton()
+    }
+
+    private fun initTryAgainButton() {
+        views.qrCodeLoginStatusTryAgainButton.debouncedClicks {
+            viewModel.handle(QrCodeLoginAction.TryAgain)
+        }
     }
 
     private fun initCancelButton() {

@@ -38,28 +38,31 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
-        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
-            when (qrCodeLoginArgs?.loginType) {
-                QrCodeLoginType.LOGIN -> {
-                    showInstructionsFragment(qrCodeLoginArgs)
-                }
-                QrCodeLoginType.LINK_A_DEVICE -> {
-                    if (qrCodeLoginArgs.showQrCodeImmediately) {
-                        handleNavigateToShowQrCodeScreen()
-                    } else {
-                        showInstructionsFragment(qrCodeLoginArgs)
-                    }
-                }
-                null -> {
-                    Timber.i("QrCodeLoginArgs is null. This is not expected.")
-                    finish()
-                    return
-                }
-            }
+           navigateToInitialFragment()
         }
 
         observeViewEvents()
+    }
+
+    private fun navigateToInitialFragment() {
+        val qrCodeLoginArgs: QrCodeLoginArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
+        when (qrCodeLoginArgs?.loginType) {
+            QrCodeLoginType.LOGIN -> {
+                showInstructionsFragment(qrCodeLoginArgs)
+            }
+            QrCodeLoginType.LINK_A_DEVICE -> {
+                if (qrCodeLoginArgs.showQrCodeImmediately) {
+                    handleNavigateToShowQrCodeScreen()
+                } else {
+                    showInstructionsFragment(qrCodeLoginArgs)
+                }
+            }
+            null -> {
+                Timber.i("QrCodeLoginArgs is null. This is not expected.")
+                finish()
+            }
+        }
     }
 
     private fun showInstructionsFragment(qrCodeLoginArgs: QrCodeLoginArgs) {
@@ -77,8 +80,13 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
                 QrCodeLoginViewEvents.NavigateToStatusScreen -> handleNavigateToStatusScreen()
                 QrCodeLoginViewEvents.NavigateToShowQrCodeScreen -> handleNavigateToShowQrCodeScreen()
                 QrCodeLoginViewEvents.NavigateToHomeScreen -> handleNavigateToHomeScreen()
+                QrCodeLoginViewEvents.NavigateToInitialScreen -> handleNavigateToInitialScreen()
             }
         }
+    }
+
+    private fun handleNavigateToInitialScreen() {
+        navigateToInitialFragment()
     }
 
     private fun handleNavigateToShowQrCodeScreen() {
