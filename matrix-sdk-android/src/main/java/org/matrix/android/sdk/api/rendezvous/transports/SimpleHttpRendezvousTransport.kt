@@ -67,8 +67,6 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         // TODO: properly determine endpoint
         val uri = if (uri != null) uri!! else "https://rendezvous.lab.element.dev"
 
-//        Timber.tag(TAG).i("Sending data: ${data.toString(Charsets.UTF_8)} to $uri")
-
         val httpClient = okhttp3.OkHttpClient.Builder().build()
 
         val request = Request.Builder()
@@ -123,8 +121,6 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
             val response = httpClient.newCall(request.build()).execute()
 
             try {
-//                Timber.tag(TAG).d("Received polling response: ${response.code} from $uri")
-
                 if (response.code == 404) {
                     cancel(RendezvousFailureReason.Unknown)
                     return null
@@ -140,9 +136,7 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
                     response.header("etag")?.let {
                         etag = it
                     }
-                    val data = response.body?.bytes()
-//                    Timber.tag(TAG).d("Received data: ${data?.toString(Charsets.UTF_8)} from $uri with etag $etag")
-                    return data
+                    return response.body?.bytes()
                 }
 
                 done = false
@@ -159,7 +153,8 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         var mappedReason = reason
         Timber.tag(TAG).i("$expiresAt")
         if (mappedReason == RendezvousFailureReason.Unknown &&
-                expiresAt != null && Date() > expiresAt) {
+                expiresAt != null && Date() > expiresAt
+        ) {
             mappedReason = RendezvousFailureReason.Expired
         }
 

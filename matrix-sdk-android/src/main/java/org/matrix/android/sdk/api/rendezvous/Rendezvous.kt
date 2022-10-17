@@ -36,9 +36,14 @@ import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 
 internal enum class PayloadType(val value: String) {
-    @Json(name = "m.login.start") Start("m.login.start"),
-    @Json(name = "m.login.finish") Finish("m.login.finish"),
-    @Json(name = "m.login.progress") Progress("m.login.progress")
+    @Json(name = "m.login.start")
+    Start("m.login.start"),
+
+    @Json(name = "m.login.finish")
+    Finish("m.login.finish"),
+
+    @Json(name = "m.login.progress")
+    Progress("m.login.progress")
 }
 
 @JsonClass(generateAdapter = true)
@@ -150,12 +155,12 @@ class Rendezvous(
         }
 
         val homeserver = loginToken?.homeserver ?: throw RuntimeException("No homeserver returned")
-        val login_token = loginToken.loginToken ?: throw RuntimeException("No login token returned")
+        val token = loginToken.loginToken ?: throw RuntimeException("No login token returned")
 
-        Timber.tag(TAG).i("Got login_token: $login_token for $homeserver")
+        Timber.tag(TAG).i("Got login_token now attempting to sign in with $homeserver")
 
         val hsConfig = HomeServerConnectionConfig(homeServerUri = Uri.parse(homeserver))
-        return authenticationService.loginUsingQrLoginToken(hsConfig, login_token)
+        return authenticationService.loginUsingQrLoginToken(hsConfig, token)
     }
 
     suspend fun completeVerificationOnNewDevice(session: Session) {
@@ -171,8 +176,8 @@ class Rendezvous(
         val verifyingDeviceId = verificationResponse?.verifyingDeviceId ?: throw RuntimeException("No verifying device id returned")
         val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
         if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
-            Timber.tag(TAG).w("Verifying device $verifyingDeviceId doesn't match: $verifyingDeviceFromServer")
-            return
+            Timber.tag(TAG).w("Verifying device $verifyingDeviceId key doesn't match: ${verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})")
+            throw RuntimeException("Key from verifying device doesn't match")
         }
 
         // set other device as verified
@@ -187,6 +192,7 @@ class Rendezvous(
                     crypto.crossSigningService().markMyMasterKeyAsTrusted()
                 } else {
                     Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
+                    throw RuntimeException("Master key from verifying device doesn't match")
                 }
             } ?: Timber.tag(TAG).i("No local master key")
         } ?: Timber.tag(TAG).i("No master key given by verifying device")
