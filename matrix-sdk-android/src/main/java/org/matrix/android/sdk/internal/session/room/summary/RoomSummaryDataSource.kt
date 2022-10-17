@@ -257,7 +257,7 @@ internal class RoomSummaryDataSource @Inject constructor(
                 query = query.query("isFavourite == $0", fav)
             }
             tagFilter.isLowPriority?.let { lp ->
-                query.query("isLowPriority == $0", lp)
+                query = query.query("isLowPriority == $0", lp)
             }
             tagFilter.isServerNotice?.let { sn ->
                 query = query.query("isServerNotice == $0", sn)
