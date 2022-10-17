@@ -323,7 +323,10 @@ class MessageItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes
-    ): MessageVoiceItem {
+    ): MessageVoiceItem? {
+        val eventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) }
+        if (eventsGroup != null && eventsGroup.getLastDisplayableEvent().eventId != params.event.eventId) return null
+
         val fileUrl = getAudioFileUrl(messageContent, informationData)
         val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
@@ -722,7 +725,7 @@ class MessageItemFactory @Inject constructor(
     ): MessageVoiceBroadcastItem? {
         if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
         val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
-        val mostRecentEvent = voiceBroadcastEventsGroup.getLastEvent()
+        val mostRecentEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent()
         val mostRecentMessageContent = (mostRecentEvent.getVectorLastMessageContent() as? MessageVoiceBroadcastInfoContent) ?: return null
         return MessageVoiceBroadcastItem_()
                 .attributes(attributes)
