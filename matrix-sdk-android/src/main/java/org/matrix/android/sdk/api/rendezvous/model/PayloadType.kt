@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.rendezvous.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
+@JsonClass(generateAdapter = false)
 internal enum class PayloadType(val value: String) {
     @Json(name = "m.login.start")
     START("m.login.start"),
