@@ -16,6 +16,7 @@
 
 package im.vector.app.core.files
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
@@ -52,6 +53,7 @@ fun writeToFile(data: ByteArray, file: File) {
     }
 }
 
+@SuppressLint("Recycle")
 fun addEntryToDownloadManager(
         context: Context,
         file: File,
