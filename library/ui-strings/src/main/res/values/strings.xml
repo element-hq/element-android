@@ -2183,6 +2183,7 @@
     <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
+    <string name="login_scan_qr_code">Scan QR code</string>
 
     <string name="seen_by">Seen by</string>
 
@@ -3330,6 +3331,9 @@
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Sign in with QR Code</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">You can use this device to sign in a mobile or web device with a QR code. There are two ways to do this:</string>
+
     <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
     <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
@@ -3363,6 +3367,39 @@
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+
+    <!-- QR Code Login -->
+    <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Sign in with QR code</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Use your signed in device to scan the QR code below:</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scan the QR code below with your device that’s signed out.</string>
+    <string name="qr_code_login_header_connected_title">Secure connection established</string>
+    <string name="qr_code_login_header_connected_description">Check your signed in device, the code below should be displayed. Confirm that the code below matches with that device:</string>
+    <string name="qr_code_login_header_failed_title">Unsuccessful connection</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
+    <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
+    <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
+    <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
+    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy -> Show All Sessions</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code in this device\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Select \'Sign in with QR code\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Select \'Scan QR code\'</string>
+    <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Signing in a mobile device?</string>
+    <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
+    <string name="qr_code_login_connecting_to_device">Connecting to device</string>
+    <string name="qr_code_login_signing_in">Signing you in</string>
+    <string name="qr_code_login_status_no_match">No match?</string>
+    <string name="qr_code_login_try_again">Try again</string>
+    <string name="qr_code_login_confirm_security_code">Confirm</string>
+    <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
 
     <!-- WYSIWYG Composer -->
     <string name="rich_text_editor_format_bold">Apply bold format</string>

@@ -60,6 +60,7 @@ import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.location.live.map.LiveLocationMapViewModel
 import im.vector.app.features.location.preview.LocationPreviewViewModel
 import im.vector.app.features.login.LoginViewModel
+import im.vector.app.features.login.qr.QrCodeLoginViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
 import im.vector.app.features.media.VectorAttachmentViewerViewModel
 import im.vector.app.features.onboarding.OnboardingViewModel
@@ -661,6 +662,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RenameSessionViewModel::class)
     fun renameSessionViewModelFactory(factory: RenameSessionViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(QrCodeLoginViewModel::class)
+    fun qrCodeLoginViewModelFactory(factory: QrCodeLoginViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

@@ -35,8 +35,11 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.login.qr.QrCodeLoginArgs
+import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -63,6 +66,8 @@ class VectorSettingsDevicesFragment :
 
     @Inject lateinit var colorProvider: ColorProvider
 
+    @Inject lateinit var vectorFeatures: VectorFeatures
+
     @Inject lateinit var stringProvider: StringProvider
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
@@ -88,6 +93,7 @@ class VectorSettingsDevicesFragment :
         initWaitingView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
+        initQrLoginView()
         observeViewEvents()
     }
 
@@ -150,6 +156,38 @@ class VectorSettingsDevicesFragment :
                 )
             }
         }
+    }
+
+    private fun initQrLoginView() {
+        if (!vectorFeatures.isReciprocateQrCodeLogin()) {
+            views.deviceListHeaderSignInWithQrCode.isVisible = false
+            views.deviceListHeaderScanQrCodeButton.isVisible = false
+            views.deviceListHeaderShowQrCodeButton.isVisible = false
+            return
+        }
+
+        views.deviceListHeaderSignInWithQrCode.isVisible = true
+        views.deviceListHeaderScanQrCodeButton.isVisible = true
+        views.deviceListHeaderShowQrCodeButton.isVisible = true
+
+        views.deviceListHeaderScanQrCodeButton.debouncedClicks {
+            navigateToQrCodeScreen(showQrCodeImmediately = false)
+        }
+
+        views.deviceListHeaderShowQrCodeButton.debouncedClicks {
+            navigateToQrCodeScreen(showQrCodeImmediately = true)
+        }
+    }
+
+    private fun navigateToQrCodeScreen(showQrCodeImmediately: Boolean) {
+        navigator
+                .openLoginWithQrCode(
+                        requireActivity(),
+                        QrCodeLoginArgs(
+                                loginType = QrCodeLoginType.LINK_A_DEVICE,
+                                showQrCodeImmediately = showQrCodeImmediately,
+                        )
+                )
     }
 
     override fun onDestroyView() {
