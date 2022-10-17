@@ -22,4 +22,5 @@ sealed class QrCodeLoginViewEvents : VectorViewEvents {
     object NavigateToStatusScreen : QrCodeLoginViewEvents()
     object NavigateToShowQrCodeScreen : QrCodeLoginViewEvents()
     object NavigateToHomeScreen : QrCodeLoginViewEvents()
+    object NavigateToInitialScreen : QrCodeLoginViewEvents()
 }

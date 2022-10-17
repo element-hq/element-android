@@ -54,7 +54,12 @@ class QrCodeLoginViewModel @AssistedInject constructor(
             is QrCodeLoginAction.OnQrCodeScanned -> handleOnQrCodeScanned(action)
             QrCodeLoginAction.GenerateQrCode -> handleQrCodeViewStarted()
             QrCodeLoginAction.ShowQrCode -> handleShowQrCode()
+            QrCodeLoginAction.TryAgain -> handleTryAgain()
         }
+    }
+
+    private fun handleTryAgain() {
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToInitialScreen)
     }
 
     private fun handleShowQrCode() {
