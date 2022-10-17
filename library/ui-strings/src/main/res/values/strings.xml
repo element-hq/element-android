@@ -3369,8 +3369,7 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
-    <string name="four">4</string>
-   
+
     <!-- QR Code Login -->
     <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
     <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
