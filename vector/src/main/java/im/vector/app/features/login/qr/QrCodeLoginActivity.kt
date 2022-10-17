@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.lib.core.utils.compat.getParcelableCompat
-import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -46,7 +45,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
                     showInstructionsFragment(qrCodeLoginArgs)
                 }
                 QrCodeLoginType.LINK_A_DEVICE -> {
-                    if (qrCodeLoginArgs.showQrCodeByDefault.orFalse()) {
+                    if (qrCodeLoginArgs.showQrCodeImmediately) {
                         handleNavigateToShowQrCodeScreen()
                     } else {
                         showInstructionsFragment(qrCodeLoginArgs)
@@ -55,6 +54,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
                 null -> {
                     Timber.i("QrCodeLoginArgs is null. This is not expected.")
                     finish()
+                    return
                 }
             }
         }

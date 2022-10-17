@@ -50,7 +50,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     override fun handle(action: QrCodeLoginAction) {
         when (action) {
             is QrCodeLoginAction.OnQrCodeScanned -> handleOnQrCodeScanned(action)
-            QrCodeLoginAction.QrCodeViewStarted -> handleQrCodeViewStarted()
+            QrCodeLoginAction.GenerateQrCode -> handleQrCodeViewStarted()
             QrCodeLoginAction.ShowQrCode -> handleShowQrCode()
         }
     }
@@ -139,6 +139,6 @@ class QrCodeLoginViewModel @AssistedInject constructor(
      * TODO. UI test purpose. Fixme accordingly.
      */
     private fun generateQrCodeData(): String {
-        return "https://element.io"
+        return "TODO"
     }
 }

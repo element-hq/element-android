@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewQrCodeLoginHeaderBinding
 
 class QrCodeLoginHeaderView @JvmOverloads constructor(
@@ -52,27 +53,26 @@ class QrCodeLoginHeaderView @JvmOverloads constructor(
 
     private fun setTitle(typedArray: TypedArray) {
         val title = typedArray.getString(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderTitle)
-        binding.qrCodeLoginHeaderTitleTextView.text = title
+        setTitle(title)
     }
 
     private fun setDescription(typedArray: TypedArray) {
         val description = typedArray.getString(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderDescription)
-        binding.qrCodeLoginHeaderDescriptionTextView.text = description
+        setDescription(description)
     }
 
     private fun setImage(typedArray: TypedArray) {
         val imageResource = typedArray.getResourceId(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageResource, 0)
         val backgroundTint = typedArray.getColor(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageBackgroundTint, 0)
-        binding.qrCodeLoginHeaderImageView.setImageResource(imageResource)
-        binding.qrCodeLoginHeaderImageView.backgroundTintList = ColorStateList.valueOf(backgroundTint)
+        setImage(imageResource, backgroundTint)
     }
 
-    fun setTitle(title: String) {
-        binding.qrCodeLoginHeaderTitleTextView.text = title
+    fun setTitle(title: String?) {
+        binding.qrCodeLoginHeaderTitleTextView.setTextOrHide(title)
     }
 
-    fun setDescription(description: String) {
-        binding.qrCodeLoginHeaderDescriptionTextView.text = description
+    fun setDescription(description: String?) {
+        binding.qrCodeLoginHeaderDescriptionTextView.setTextOrHide(description)
     }
 
     fun setImage(imageResource: Int, backgroundTintColor: Int) {

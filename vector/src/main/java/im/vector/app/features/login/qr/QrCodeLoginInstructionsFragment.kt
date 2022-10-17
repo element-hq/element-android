@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -41,30 +42,8 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewState()
         initScanQrCodeButton()
         initShowQrCodeButton()
-    }
-
-    private fun observeViewState() {
-        viewModel.onEach {
-            if (it.loginType == QrCodeLoginType.LOGIN) {
-                views.qrCodeLoginInstructionsView.setInstructions(
-                        listOf(
-                                getString(R.string.qr_code_login_new_device_instruction_1),
-                                getString(R.string.qr_code_login_new_device_instruction_2),
-                                getString(R.string.qr_code_login_new_device_instruction_3),
-                        )
-                )
-            } else {
-                views.qrCodeLoginInstructionsView.setInstructions(
-                        listOf(
-                                getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_1),
-                                getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_2),
-                        )
-                )
-            }
-        }
     }
 
     private fun initShowQrCodeButton() {
@@ -98,5 +77,24 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
 
     private fun onQrCodeScannerFailed() {
         Timber.d("QrCodeLoginInstructionsFragment.onQrCodeScannerFailed")
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        if (state.loginType == QrCodeLoginType.LOGIN) {
+            views.qrCodeLoginInstructionsView.setInstructions(
+                    listOf(
+                            getString(R.string.qr_code_login_new_device_instruction_1),
+                            getString(R.string.qr_code_login_new_device_instruction_2),
+                            getString(R.string.qr_code_login_new_device_instruction_3),
+                    )
+            )
+        } else {
+            views.qrCodeLoginInstructionsView.setInstructions(
+                    listOf(
+                            getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_1),
+                            getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_2),
+                    )
+            )
+        }
     }
 }

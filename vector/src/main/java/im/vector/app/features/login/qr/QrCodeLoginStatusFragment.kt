@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
@@ -41,24 +42,11 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCancelButton()
-        observeViewState()
     }
 
     private fun initCancelButton() {
         views.qrCodeLoginStatusCancelButton.debouncedClicks {
             activity?.onBackPressedDispatcher?.onBackPressed()
-        }
-    }
-
-    private fun observeViewState() {
-        viewModel.onEach {
-            when (it.connectionStatus) {
-                is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(it.connectionStatus, it.loginType)
-                QrCodeLoginConnectionStatus.ConnectingToDevice -> handleConnectingToDevice()
-                QrCodeLoginConnectionStatus.SigningIn -> handleSigningIn()
-                is QrCodeLoginConnectionStatus.Failed -> handleFailed(it.connectionStatus)
-                null -> { /* NOOP */ }
-            }
         }
     }
 
@@ -130,5 +118,15 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
                 imageResource = R.drawable.ic_qr_code_login_connected,
                 backgroundTintColor = ThemeUtils.getColor(requireContext(), R.attr.colorPrimary)
         )
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        when (state.connectionStatus) {
+            is QrCodeLoginConnectionStatus.Connected -> handleConnectionEstablished(state.connectionStatus, state.loginType)
+            QrCodeLoginConnectionStatus.ConnectingToDevice -> handleConnectingToDevice()
+            QrCodeLoginConnectionStatus.SigningIn -> handleSigningIn()
+            is QrCodeLoginConnectionStatus.Failed -> handleFailed(state.connectionStatus)
+            null -> { /* NOOP */ }
+        }
     }
 }
