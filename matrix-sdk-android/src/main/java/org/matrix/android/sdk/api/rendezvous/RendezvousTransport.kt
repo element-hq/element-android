@@ -22,11 +22,15 @@ import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
 
 interface RendezvousTransport {
     var ready: Boolean
+
     @Throws(RendezvousError::class)
     suspend fun details(): RendezvousTransportDetails
+
     @Throws(RendezvousError::class)
     suspend fun send(contentType: MediaType, data: ByteArray)
+
     @Throws(RendezvousError::class)
     suspend fun receive(): ByteArray?
+
     suspend fun close()
 }
