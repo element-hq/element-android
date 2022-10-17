@@ -18,13 +18,7 @@ package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
 
-internal enum class PayloadType(val value: String) {
-    @Json(name = "m.login.start")
-    START("m.login.start"),
-
-    @Json(name = "m.login.finish")
-    FINISH("m.login.finish"),
-
-    @Json(name = "m.login.progress")
-    PROGRESS("m.login.progress")
+enum class Protocol(val value: String) {
+    @Json(name = "login_token")
+    LOGIN_TOKEN("login_token")
 }

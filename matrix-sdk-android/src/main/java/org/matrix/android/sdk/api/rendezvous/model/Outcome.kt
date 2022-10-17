@@ -18,13 +18,13 @@ package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
 
-internal enum class PayloadType(val value: String) {
-    @Json(name = "m.login.start")
-    START("m.login.start"),
+enum class Outcome(val value: String) {
+    @Json(name = "success")
+    SUCCESS("success"),
 
-    @Json(name = "m.login.finish")
-    FINISH("m.login.finish"),
+    @Json(name = "declined")
+    DECLINED("declined"),
 
-    @Json(name = "m.login.progress")
-    PROGRESS("m.login.progress")
+    @Json(name = "unsupported")
+    UNSUPPORTED("unsupported")
 }

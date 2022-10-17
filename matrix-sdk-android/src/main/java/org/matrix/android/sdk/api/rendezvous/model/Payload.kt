@@ -23,9 +23,9 @@ import com.squareup.moshi.JsonClass
 internal data class Payload(
         @Json val type: PayloadType,
         @Json val intent: RendezvousIntent? = null,
-        @Json val outcome: String? = null,
-        @Json val protocols: List<String>? = null,
-        @Json val protocol: String? = null,
+        @Json val outcome: Outcome? = null,
+        @Json val protocols: List<Protocol>? = null,
+        @Json val protocol: Protocol? = null,
         @Json val homeserver: String? = null,
         @Json(name = "login_token") val loginToken: String? = null,
         @Json(name = "device_id") val deviceId: String? = null,

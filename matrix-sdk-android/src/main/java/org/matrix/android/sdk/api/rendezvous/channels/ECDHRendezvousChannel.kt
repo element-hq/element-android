@@ -50,6 +50,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         private const val KEY_SPEC = "AES"
         private val TAG = LoggerTag(ECDHRendezvousChannel::class.java.simpleName, LoggerTag.RENDEZVOUS).value
 
+        // n.b. we are only aver processing byte array that we have generated, so we can make assumptions about the length
         private fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
             val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
             val b1 = byteArray[1].toUnsignedInt() // need unsigned byte

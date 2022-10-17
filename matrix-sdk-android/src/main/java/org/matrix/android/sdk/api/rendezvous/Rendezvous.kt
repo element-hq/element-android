@@ -22,8 +22,10 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
+import org.matrix.android.sdk.api.rendezvous.model.Outcome
 import org.matrix.android.sdk.api.rendezvous.model.Payload
 import org.matrix.android.sdk.api.rendezvous.model.PayloadType
+import org.matrix.android.sdk.api.rendezvous.model.Protocol
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
@@ -68,7 +70,7 @@ class Rendezvous(
         Timber.tag(TAG).d("ourIntent: $ourIntent, theirIntent: $theirIntent, incompatible: $incompatible")
 
         if (incompatible) {
-            send(Payload(PayloadType.Finish, intent = ourIntent))
+            send(Payload(PayloadType.FINISH, intent = ourIntent))
             val reason = if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
                 RendezvousFailureReason.OtherDeviceNotSignedIn
             } else {
@@ -93,14 +95,14 @@ class Rendezvous(
         Timber.tag(TAG).i("Waiting for protocols")
         val protocolsResponse = receive()
 
-        if (protocolsResponse?.protocols == null || !protocolsResponse.protocols.contains("login_token")) {
-            send(Payload(PayloadType.Finish, outcome = "unsupported"))
+        if (protocolsResponse?.protocols == null || !protocolsResponse.protocols.contains(Protocol.LOGIN_TOKEN)) {
+            send(Payload(PayloadType.FINISH, outcome = Outcome.UNSUPPORTED))
             Timber.tag(TAG).i("No supported protocol")
             cancel(RendezvousFailureReason.Unknown)
             return null
         }
 
-        send(Payload(PayloadType.Progress, protocol = "login_token"))
+        send(Payload(PayloadType.PROGRESS, protocol = Protocol.LOGIN_TOKEN))
 
         return checksum
     }
@@ -110,21 +112,23 @@ class Rendezvous(
 
         val loginToken = receive()
 
-        if (loginToken?.type == PayloadType.Finish) {
+        if (loginToken?.type == PayloadType.FINISH) {
             when (loginToken.outcome) {
-                "declined" -> {
+                Outcome.DECLINED -> {
                     Timber.tag(TAG).i("Login declined by other device")
                     channel.cancel(RendezvousFailureReason.UserDeclined)
                     return null
                 }
-                "unsupported" -> {
+                Outcome.UNSUPPORTED -> {
                     Timber.tag(TAG).i("Not supported")
                     channel.cancel(RendezvousFailureReason.HomeserverLacksSupport)
                     return null
                 }
+                else -> {
+                    channel.cancel(RendezvousFailureReason.Unknown)
+                    return null
+                }
             }
-            channel.cancel(RendezvousFailureReason.Unknown)
-            return null
         }
 
         val homeserver = loginToken?.homeserver ?: throw RuntimeException("No homeserver returned")
@@ -141,7 +145,7 @@ class Rendezvous(
         val crypto = session.cryptoService()
         val deviceId = crypto.getMyDevice().deviceId
         val deviceKey = crypto.getMyDevice().fingerprint()
-        send(Payload(PayloadType.Progress, outcome = "success", deviceId = deviceId, deviceKey = deviceKey))
+        send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
 
         // await confirmation of verification
 
@@ -149,8 +153,9 @@ class Rendezvous(
         val verifyingDeviceId = verificationResponse?.verifyingDeviceId ?: throw RuntimeException("No verifying device id returned")
         val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
         if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
-            Timber.tag(TAG).w("Verifying device $verifyingDeviceId key doesn't match: ${
-                verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})"
+            Timber.tag(TAG).w(
+                    "Verifying device $verifyingDeviceId key doesn't match: ${
+                        verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})"
             )
             throw RuntimeException("Key from verifying device doesn't match")
         }
