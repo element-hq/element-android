@@ -20,8 +20,17 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ECDHRendezvous(
-        @Json val transport: SimpleHttpRendezvousTransportDetails,
-        @Json val algorithm: SecureRendezvousChannelAlgorithm,
-        @Json val key: String
+internal data class Payload(
+        @Json val type: PayloadType,
+        @Json val intent: RendezvousIntent? = null,
+        @Json val outcome: String? = null,
+        @Json val protocols: List<String>? = null,
+        @Json val protocol: String? = null,
+        @Json val homeserver: String? = null,
+        @Json(name = "login_token") val loginToken: String? = null,
+        @Json(name = "device_id") val deviceId: String? = null,
+        @Json(name = "device_key") val deviceKey: String? = null,
+        @Json(name = "verifying_device_id") val verifyingDeviceId: String? = null,
+        @Json(name = "verifying_device_key") val verifyingDeviceKey: String? = null,
+        @Json(name = "master_key") val masterKey: String? = null
 )

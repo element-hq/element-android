@@ -20,8 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ECDHRendezvous(
-        @Json val transport: SimpleHttpRendezvousTransportDetails,
-        @Json val algorithm: SecureRendezvousChannelAlgorithm,
-        @Json val key: String
+data class ECDHRendezvousCode(
+        @Json val intent: RendezvousIntent,
+        @Json val rendezvous: ECDHRendezvous
 )

@@ -17,11 +17,14 @@
 package org.matrix.android.sdk.api.rendezvous.model
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-data class ECDHRendezvous(
-        @Json val transport: SimpleHttpRendezvousTransportDetails,
-        @Json val algorithm: SecureRendezvousChannelAlgorithm,
-        @Json val key: String
-)
+internal enum class PayloadType(val value: String) {
+    @Json(name = "m.login.start")
+    Start("m.login.start"),
+
+    @Json(name = "m.login.finish")
+    Finish("m.login.finish"),
+
+    @Json(name = "m.login.progress")
+    Progress("m.login.progress")
+}

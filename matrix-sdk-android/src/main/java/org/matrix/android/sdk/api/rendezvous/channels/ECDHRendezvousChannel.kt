@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
-import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransportDetails
+import org.matrix.android.sdk.api.rendezvous.model.SimpleHttpRendezvousTransportDetails
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 import org.matrix.olm.OlmSAS
@@ -40,39 +40,40 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-@JsonClass(generateAdapter = true)
-data class ECDHPayload(
-        @Json val algorithm: SecureRendezvousChannelAlgorithm? = null,
-        @Json val key: String? = null,
-        @Json val ciphertext: String? = null,
-        @Json val iv: String? = null
-)
-
-private val TAG = LoggerTag(ECDHRendezvousChannel::class.java.simpleName, LoggerTag.RENDEZVOUS).value
-
-fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-    val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
-    val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
-    val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
-    val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
-    val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
-    // (B0 << 5 | B1 >> 3) + 1000
-    val first = (b0.shl(5) or b1.shr(3)) + 1000
-    // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
-    val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
-    // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
-    val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
-    return "$first-$second-$third"
-}
-
-const val ALGORITHM_SPEC = "AES/GCM/NoPadding"
-const val KEY_SPEC = "AES"
-
 /**
  *  Implements X25519 ECDH key agreement and AES-256-GCM encryption channel as per MSC3903:
  *  https://github.com/matrix-org/matrix-spec-proposals/pull/3903
  */
 class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPublicKeyBase64: String?) : RendezvousChannel {
+    companion object {
+        private const val ALGORITHM_SPEC = "AES/GCM/NoPadding"
+        private const val KEY_SPEC = "AES"
+        private val TAG = LoggerTag(ECDHRendezvousChannel::class.java.simpleName, LoggerTag.RENDEZVOUS).value
+
+        private fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
+            val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
+            val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
+            val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
+            val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
+            val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
+            // (B0 << 5 | B1 >> 3) + 1000
+            val first = (b0.shl(5) or b1.shr(3)) + 1000
+            // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
+            val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
+            // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
+            val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
+            return "$first-$second-$third"
+        }
+    }
+
+    @JsonClass(generateAdapter = true)
+    internal data class ECDHPayload(
+            @Json val algorithm: SecureRendezvousChannelAlgorithm? = null,
+            @Json val key: String? = null,
+            @Json val ciphertext: String? = null,
+            @Json val iv: String? = null
+    )
+
     private var olmSAS: OlmSAS?
     private val ourPublicKey: ByteArray
     private val ecdhAdapter = MatrixJsonParser.getMoshi().adapter(ECDHPayload::class.java)

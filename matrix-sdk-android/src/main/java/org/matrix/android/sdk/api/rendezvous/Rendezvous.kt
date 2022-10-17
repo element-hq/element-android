@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.api.rendezvous
 
 import android.net.Uri
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
+import org.matrix.android.sdk.api.rendezvous.model.Payload
+import org.matrix.android.sdk.api.rendezvous.model.PayloadType
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
@@ -35,35 +35,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_S
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 
-internal enum class PayloadType(val value: String) {
-    @Json(name = "m.login.start")
-    Start("m.login.start"),
-
-    @Json(name = "m.login.finish")
-    Finish("m.login.finish"),
-
-    @Json(name = "m.login.progress")
-    Progress("m.login.progress")
-}
-
-@JsonClass(generateAdapter = true)
-internal data class Payload(
-        @Json val type: PayloadType,
-        @Json val intent: RendezvousIntent? = null,
-        @Json val outcome: String? = null,
-        @Json val protocols: List<String>? = null,
-        @Json val protocol: String? = null,
-        @Json val homeserver: String? = null,
-        @Json(name = "login_token") val loginToken: String? = null,
-        @Json(name = "device_id") val deviceId: String? = null,
-        @Json(name = "device_key") val deviceKey: String? = null,
-        @Json(name = "verifying_device_id") val verifyingDeviceId: String? = null,
-        @Json(name = "verifying_device_key") val verifyingDeviceKey: String? = null,
-        @Json(name = "master_key") val masterKey: String? = null
-)
-
-private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
-
 /**
  * Implementation of MSC3906 to sign in + E2EE set up using a QR code.
  */
@@ -72,6 +43,8 @@ class Rendezvous(
         val theirIntent: RendezvousIntent,
 ) {
     companion object {
+        private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
+
         fun buildChannelFromCode(code: String, onCancelled: (reason: RendezvousFailureReason) -> Unit): Rendezvous {
             val parsed = MatrixJsonParser.getMoshi().adapter(ECDHRendezvousCode::class.java).fromJson(code) ?: throw RuntimeException("Invalid code")
 
@@ -176,7 +149,9 @@ class Rendezvous(
         val verifyingDeviceId = verificationResponse?.verifyingDeviceId ?: throw RuntimeException("No verifying device id returned")
         val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
         if (verifyingDeviceFromServer?.fingerprint() != verificationResponse.verifyingDeviceKey) {
-            Timber.tag(TAG).w("Verifying device $verifyingDeviceId key doesn't match: ${verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})")
+            Timber.tag(TAG).w("Verifying device $verifyingDeviceId key doesn't match: ${
+                verifyingDeviceFromServer?.fingerprint()} vs ${verificationResponse.verifyingDeviceKey})"
+            )
             throw RuntimeException("Key from verifying device doesn't match")
         }
 

@@ -26,22 +26,19 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportDetails
-import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportType
+import org.matrix.android.sdk.api.rendezvous.model.SimpleHttpRendezvousTransportDetails
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
-
-private val TAG = LoggerTag(SimpleHttpRendezvousTransport::class.java.simpleName, LoggerTag.RENDEZVOUS).value
-
-@JsonClass(generateAdapter = true)
-data class SimpleHttpRendezvousTransportDetails(
-        @Json val uri: String
-) : RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1)
 
 /**
  * Implementation of the Simple HTTP transport MSC3886: https://github.com/matrix-org/matrix-spec-proposals/pull/3886
  */
 class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: RendezvousFailureReason) -> Unit)?, rendezvousUri: String?) : RendezvousTransport {
+    companion object {
+        private val TAG = LoggerTag(SimpleHttpRendezvousTransport::class.java.simpleName, LoggerTag.RENDEZVOUS).value
+    }
+
     override var ready = false
     private var cancelled = false
     private var uri: String?
