@@ -3385,7 +3385,7 @@
     <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
     <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
     <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy -> Show All Sessions</string>
-    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code\'</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code in this device\'</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Start at the sign in screen</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Select \'Sign in with QR code\'</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Start at the sign in screen</string>

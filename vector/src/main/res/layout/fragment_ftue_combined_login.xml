@@ -251,10 +251,12 @@
             android:layout_height="60dp"
             android:layout_marginTop="12dp"
             android:text="@string/login_scan_qr_code"
+            android:visibility="gone"
             app:drawableLeftCompat="@drawable/ic_qr_code"
             app:layout_constraintEnd_toEndOf="@id/loginGutterEnd"
             app:layout_constraintStart_toStartOf="@id/loginGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/ssoButtonsHeader" />
+            app:layout_constraintTop_toBottomOf="@id/ssoButtonsHeader"
+            tools:visibility="visible" />
 
         <im.vector.app.features.login.SocialLoginButtonsView
             android:id="@+id/ssoButtons"

@@ -23,8 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
@@ -40,7 +39,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     override fun handle(action: QrCodeLoginAction) {
         when (action) {
             is QrCodeLoginAction.OnQrCodeScanned -> handleOnQrCodeScanned(action)
-            QrCodeLoginAction.QrCodeViewStarted -> handleQrCodeViewStarted()
+            QrCodeLoginAction.GenerateQrCode -> handleQrCodeViewStarted()
             QrCodeLoginAction.ShowQrCode -> handleShowQrCode()
         }
     }
@@ -66,18 +65,6 @@ class QrCodeLoginViewModel @AssistedInject constructor(
                 )
             }
             _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
-        }
-
-        // TODO. UI test purpose. Fixme remove!
-        viewModelScope.launch {
-            delay(3000)
-            onFailed(QrCodeLoginErrorType.TIMEOUT, true)
-            delay(3000)
-            onConnectionEstablished("1234-ABCD-5678-EFGH")
-            delay(3000)
-            onSigningIn()
-            delay(3000)
-            onFailed(QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED, false)
         }
     }
 
@@ -106,17 +93,14 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         }
     }
 
-    /**
-     * TODO. UI test purpose. Fixme accordingly.
-     */
+    // TODO. Implement in the logic related PR.
     private fun isValidQrCode(qrCode: String): Boolean {
-        return qrCode.startsWith("http")
+        Timber.d("isValidQrCode: $qrCode")
+        return false
     }
 
-    /**
-     * TODO. UI test purpose. Fixme accordingly.
-     */
+    // TODO. Implement in the logic related PR.
     private fun generateQrCodeData(): String {
-        return "https://element.io"
+        return "TODO"
     }
 }

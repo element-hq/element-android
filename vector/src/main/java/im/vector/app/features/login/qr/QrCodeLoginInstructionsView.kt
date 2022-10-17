@@ -54,18 +54,19 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
         val instruction1 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction1)
         val instruction2 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction2)
         val instruction3 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction3)
-        binding.instructions1Layout.isVisible = instruction1 != null
-        binding.instructions2Layout.isVisible = instruction2 != null
-        binding.instructions3Layout.isVisible = instruction3 != null
-        binding.instruction1TextView.text = instruction1
-        binding.instruction2TextView.text = instruction2
-        binding.instruction3TextView.text = instruction3
+        setInstructions(
+                listOf(
+                        instruction1,
+                        instruction2,
+                        instruction3,
+                )
+        )
     }
 
-    fun setInstructions(instructions: List<String>) {
-        setInstruction(binding.instructions1Layout, binding.instruction1TextView, instructions.getOrNull(0))
-        setInstruction(binding.instructions2Layout, binding.instruction2TextView, instructions.getOrNull(1))
-        setInstruction(binding.instructions3Layout, binding.instruction3TextView, instructions.getOrNull(2))
+    fun setInstructions(instructions: List<String?>?) {
+        setInstruction(binding.instructions1Layout, binding.instruction1TextView, instructions?.getOrNull(0))
+        setInstruction(binding.instructions2Layout, binding.instruction2TextView, instructions?.getOrNull(1))
+        setInstruction(binding.instructions3Layout, binding.instruction3TextView, instructions?.getOrNull(2))
     }
 
     private fun setInstruction(instructionLayout: LinearLayout, instructionTextView: TextView, instruction: String?) {

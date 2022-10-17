@@ -81,20 +81,18 @@ class FtueAuthCombinedLoginFragment :
     }
 
     private fun configureQrCodeLoginButtonVisibility(canLoginWithQrCode: Boolean) {
+        views.loginWithQrCode.isVisible = canLoginWithQrCode
         if (canLoginWithQrCode) {
-            views.loginWithQrCode.isVisible = true
             views.loginWithQrCode.debouncedClicks {
                 navigator
                         .openLoginWithQrCode(
                                 requireActivity(),
                                 QrCodeLoginArgs(
                                         loginType = QrCodeLoginType.LOGIN,
-                                        showQrCodeByDefault = false,
+                                        showQrCodeImmediately = false,
                                 )
                         )
             }
-        } else {
-            views.loginWithQrCode.isVisible = false
         }
     }
 

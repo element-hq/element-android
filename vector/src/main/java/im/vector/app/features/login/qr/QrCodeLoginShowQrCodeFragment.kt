@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
@@ -38,22 +39,12 @@ class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShow
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCancelButton()
-        observeViewState()
-        viewModel.handle(QrCodeLoginAction.QrCodeViewStarted)
+        viewModel.handle(QrCodeLoginAction.GenerateQrCode)
     }
 
     private fun initCancelButton() {
         views.qrCodeLoginShowQrCodeCancelButton.debouncedClicks {
             activity?.onBackPressedDispatcher?.onBackPressed()
-        }
-    }
-
-    private fun observeViewState() {
-        viewModel.onEach {
-            setInstructions(it.loginType)
-            it.generatedQrCodeData?.let { qrCodeData ->
-                showQrCode(qrCodeData)
-            }
         }
     }
 
@@ -80,5 +71,12 @@ class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShow
 
     private fun showQrCode(qrCodeData: String) {
         views.qrCodeLoginSHowQrCodeImageView.setData(qrCodeData)
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        state.generatedQrCodeData?.let { qrCodeData ->
+            showQrCode(qrCodeData)
+        }
+        setInstructions(state.loginType)
     }
 }

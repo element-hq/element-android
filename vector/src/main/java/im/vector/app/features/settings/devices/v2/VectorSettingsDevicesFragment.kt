@@ -170,26 +170,23 @@ class VectorSettingsDevicesFragment :
         views.deviceListHeaderShowQrCodeButton.isVisible = true
 
         views.deviceListHeaderScanQrCodeButton.debouncedClicks {
-            navigator
-                    .openLoginWithQrCode(
-                            requireActivity(),
-                            QrCodeLoginArgs(
-                                    loginType = QrCodeLoginType.LINK_A_DEVICE,
-                                    showQrCodeByDefault = false,
-                            )
-                    )
+            navigateToQrCodeScreen(showQrCodeImmediately = false)
         }
 
         views.deviceListHeaderShowQrCodeButton.debouncedClicks {
-            navigator
-                    .openLoginWithQrCode(
-                            requireActivity(),
-                            QrCodeLoginArgs(
-                                    loginType = QrCodeLoginType.LINK_A_DEVICE,
-                                    showQrCodeByDefault = true,
-                            )
-                    )
+            navigateToQrCodeScreen(showQrCodeImmediately = true)
         }
+    }
+
+    private fun navigateToQrCodeScreen(showQrCodeImmediately: Boolean) {
+        navigator
+                .openLoginWithQrCode(
+                        requireActivity(),
+                        QrCodeLoginArgs(
+                                loginType = QrCodeLoginType.LINK_A_DEVICE,
+                                showQrCodeImmediately = showQrCodeImmediately,
+                        )
+                )
     }
 
     override fun onDestroyView() {
