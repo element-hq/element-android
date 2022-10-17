@@ -147,9 +147,10 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     /**
-     * TODO. UI test purpose. Fixme accordingly.
+     * QR code generation is not currently supported and this is a placeholder for future
+     * functionality.
      */
     private fun generateQrCodeData(): String {
-        return "TODO"
+        return "NOT SUPPORTED"
     }
 }
