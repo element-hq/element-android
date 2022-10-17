@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.rendezvous.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
+@JsonClass(generateAdapter = false)
 enum class SecureRendezvousChannelAlgorithm(val value: String) {
     @Json(name = "org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256")
     ECDH_V1("org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256")
