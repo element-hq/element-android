@@ -2880,4 +2880,37 @@
 \nДозвольте доступ до наступних спливних вікон, щоб мати змогу переглядати сповіщення.</string>
     <string name="labs_enable_rich_text_editor_summary">Спробуйте розширений текстовий редактор (незабаром з\'явиться режим звичайного тексту)</string>
     <string name="labs_enable_rich_text_editor_title">Увімкнути розширений текстовий редактор</string>
+    <string name="qr_code_login_confirm_security_code_description">Переконайтеся, що ви знаєте походження цього коду. Пов\'язавши пристрої, ви надасте будь-кому повний доступ до свого облікового запису.</string>
+    <string name="qr_code_login_confirm_security_code">Підтвердити</string>
+    <string name="qr_code_login_try_again">Повторити спробу</string>
+    <string name="qr_code_login_status_no_match">Не збігається\?</string>
+    <string name="qr_code_login_signing_in">Вхід</string>
+    <string name="qr_code_login_connecting_to_device">Під\'єднання до пристрою</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Входите на мобільному пристрої\?</string>
+    <string name="qr_code_login_show_qr_code_button">Показати QR-код на цьому пристрої</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Виберіть «Сканувати QR-код»</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Виберіть «Увійти за допомогою QR-коду»</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Почніть з екрана входу</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Почніть з екрана входу</string>
+    <string name="qr_code_login_new_device_instruction_3">Виберіть «Показати QR-код на цьому пристрої»</string>
+    <string name="qr_code_login_new_device_instruction_2">Перейдіть до Налаштування -&gt; Безпека й приватність -&gt; Показати всі сеанси</string>
+    <string name="qr_code_login_new_device_instruction_1">Відкрийте ${app_name} на іншому своєму пристрої</string>
+    <string name="qr_code_login_header_failed_denied_description">Запит на іншому пристрої було відхилено.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Пов\'язування не було завершено у встановлені терміни.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Пов\'язування з цим пристроєм не підтримується.</string>
+    <string name="qr_code_login_header_failed_title">Невдале з\'єднання</string>
+    <string name="qr_code_login_header_connected_description">Перевірте свій пристрій, на якому ви ввійшли. На екрані повинен з\'явитися код, наведений нижче. Переконайтеся, що наведений код збігається з кодом на вашому пристрої:</string>
+    <string name="qr_code_login_header_connected_title">Безпечне з\'єднання встановлено</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Зіскануйте QR-код нижче своїм пристроєм, з якого ви вийшли.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Скануйте QR-код нижче за допомогою свого пристрою для входу:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Увійти за допомогою QR-коду</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Використовуйте камеру цього пристрою, щоб зісканувати QR-код, показаний на іншому пристрої:</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">За допомогою цього пристрою ви можете ввійти на мобільному або вебпристрої за допомогою QR-коду. Зробити це можна двома способами:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Увійти за допомогою QR-коду</string>
+    <string name="qr_code_login_scan_qr_code_button">Сканувати QR-код</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Сканувати QR-код</string>
+    <string name="login_scan_qr_code">Сканувати QR-код</string>
 </resources>
