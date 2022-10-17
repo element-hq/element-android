@@ -97,10 +97,12 @@ internal fun ChunkEntity.Companion.findIncludingEvent(realm: TypedRealm, eventId
 
 internal fun ChunkEntity.Companion.create(
         realm: MutableRealm,
+        roomId: String,
         prevToken: String?,
         nextToken: String?
 ): ChunkEntity {
     val chunkEntity = ChunkEntity().apply {
+        this.roomId = roomId
         this.prevToken = prevToken
         this.nextToken = nextToken
     }

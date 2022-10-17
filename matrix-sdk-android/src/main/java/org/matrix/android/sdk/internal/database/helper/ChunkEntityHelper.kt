@@ -67,6 +67,7 @@ internal fun ChunkEntity.addTimelineEvent(
     if (timelineEvents.find(eventId) != null) {
         return null
     }
+    val chunkId = this.chunkId
     val displayIndex = nextDisplayIndex(realm, direction)
     val localId = TimelineEventEntity.nextId(realm)
     val senderId = eventEntity.sender ?: ""
@@ -75,6 +76,7 @@ internal fun ChunkEntity.addTimelineEvent(
     val readReceiptsSummaryEntity = if (!ownedByThreadChunk) handleReadReceipts(realm, roomId, eventEntity, senderId) else null
     val timelineEventEntity = realm.copyToRealm(
             TimelineEventEntity().apply {
+                this.chunkId = chunkId
                 this.localId = localId
                 this.root = eventEntity
                 this.eventId = eventId

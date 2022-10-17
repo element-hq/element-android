@@ -190,12 +190,9 @@ internal class LoadTimelineStrategy constructor(
         dependencies.timelineInput.listeners.add(timelineInputListener)
         val realm = dependencies.realmInstance.getRealm()
         chunkEntity = getChunkEntity(realm).also {
-            it.asFlow().onEach {
-
-            }.launchIn(dependencies.timelineScope)
+            it.asFlow().onEach(this::onChunkResultsChanged).launchIn(dependencies.timelineScope)
             timelineChunk = it.createTimelineChunk()
         }
-
         if (dependencies.timelineSettings.useLiveSenderInfo) {
             liveRoomStateListener.start()
         }
@@ -299,6 +296,7 @@ internal class LoadTimelineStrategy constructor(
      * rootThreadEventId included.
      */
     private suspend fun recreateThreadChunkEntity(rootThreadEventId: String) {
+        val roomId = this.roomId
         dependencies.realmInstance.write {
             // Lets delete the chunk and start a new one
             ChunkEntity.findLastForwardChunkOfThread(this, roomId, rootThreadEventId)?.let {
@@ -307,6 +305,7 @@ internal class LoadTimelineStrategy constructor(
             }
             val threadChunk = copyToRealm(ChunkEntity().apply {
                 Timber.i("###THREADS LoadTimelineStrategy [onStart] Created new thread chunk with rootThreadEventId: $rootThreadEventId")
+                this.roomId = roomId
                 this.rootThreadEventId = rootThreadEventId
                 this.isLastForwardThread = true
             }

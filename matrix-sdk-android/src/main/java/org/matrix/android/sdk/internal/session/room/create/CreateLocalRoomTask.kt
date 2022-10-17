@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.types.ObjectId
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -143,6 +144,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      */
     private fun createLocalRoomChunk(realm: MutableRealm, roomId: String, createRoomBody: CreateRoomBody, invitedUsers: List<User>): ChunkEntity {
         val chunkEntity = ChunkEntity().apply {
+            this.roomId = roomId
             isLastBackward = true
             isLastForward = true
         }

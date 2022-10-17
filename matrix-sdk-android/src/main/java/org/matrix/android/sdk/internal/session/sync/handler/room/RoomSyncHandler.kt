@@ -387,6 +387,7 @@ internal class RoomSyncHandler @Inject constructor(
             }
             realm.copyToRealm(
                     ChunkEntity().apply {
+                        this.roomId = roomId
                         this.prevToken = prevToken
                         this.isLastForward = true
                     }

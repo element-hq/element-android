@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmQueryBuilder
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.queryIn
@@ -205,8 +206,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             roomSummariesQuery(it, queryParams).process(sortOrder)
         }
 
-        val liveQueryBuilder = MutableStateFlow(queryBuilder((queryParams)))
-
+        val liveQueryBuilder = RealmTiledDataSource.LiveQueryBuilder(queryBuilder(queryParams))
         val livePagedList = realmInstance.queryUpdatablePagedList(pagedListConfig, roomSummaryMapper::map, boundaryCallback, liveQueryBuilder).asLiveData()
 
         return object : UpdatableLivePageResult {
@@ -218,7 +218,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             override var queryParams: RoomSummaryQueryParams = queryParams
                 set(value) {
                     field = value
-                    liveQueryBuilder.tryEmit(queryBuilder(value))
+                    liveQueryBuilder.queryBuilder = queryBuilder(value)
                 }
         }
     }
@@ -234,8 +234,8 @@ internal class RoomSummaryDataSource @Inject constructor(
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
         val realm = realmInstance.getBlockingRealm()
         val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
-        val notifCount = roomSummariesQuery.sum<Int>("notificationCounts").find()
-        val highlightCount = roomSummariesQuery.sum<Int>("highlightCounts").find()
+        val notifCount = roomSummariesQuery.sum<Int>("notificationCount").find()
+        val highlightCount = roomSummariesQuery.sum<Int>("highlightCount").find()
         return RoomAggregateNotificationCount(
                 notifCount,
                 highlightCount

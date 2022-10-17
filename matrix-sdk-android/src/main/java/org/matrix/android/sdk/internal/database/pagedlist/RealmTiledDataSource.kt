@@ -7,18 +7,14 @@ import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.RealmQueryBuilder
 
 internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
         realm: Realm,
-        liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
+        liveQueryBuilder: LiveQueryBuilder<T>,
         private val mapper: RealmObjectMapper<T, R>,
         coroutineScope: CoroutineScope
 ) :
@@ -26,7 +22,7 @@ internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
 
     class Factory<T : RealmObject, R>(
             private val realm: Realm,
-            private val liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
+            private val liveQueryBuilder: LiveQueryBuilder<T>,
             private val mapper: RealmObjectMapper<T, R>,
             private val coroutineScope: CoroutineScope,
     ) : DataSource.Factory<Int, R>() {
@@ -37,26 +33,33 @@ internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
         }
     }
 
-    private var results: List<T> = emptyList()
+    class LiveQueryBuilder<T : RealmObject>(queryBuilder: RealmQueryBuilder<T>) {
+
+        var dataSource: DataSource<*, *>? = null
+
+        var queryBuilder: RealmQueryBuilder<T> = queryBuilder
+            set(value) {
+                field = value
+                dataSource?.invalidate()
+            }
+    }
+
+    private val results: List<T>
 
     init {
         addInvalidatedCallback {
+            liveQueryBuilder.dataSource = null
             coroutineScope.coroutineContext.cancelChildren()
         }
-        liveQueryBuilder
-                .take(1)
-                .flatMapConcat {
-                    it.build(realm).asFlow()
-                }
+        liveQueryBuilder.dataSource = this
+        results = liveQueryBuilder.queryBuilder.build(realm).find()
+        results.asFlow()
                 .onEach { resultsChange ->
                     when (resultsChange) {
                         is UpdatedResults -> invalidate()
                         else -> Unit
                     }
-                }.onCompletion {
-                    invalidate()
-                }
-                .launchIn(coroutineScope)
+                }.launchIn(coroutineScope)
     }
 
     override fun countItems(): Int {

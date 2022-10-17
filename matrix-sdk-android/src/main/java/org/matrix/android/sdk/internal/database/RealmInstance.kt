@@ -108,7 +108,7 @@ internal class RealmInstance(
                 config = config,
                 mapper = mapper,
                 boundaryCallback = boundaryCallback,
-                liveQueryBuilder = flowOf(queryBuilder)
+                liveQueryBuilder = RealmTiledDataSource.LiveQueryBuilder(queryBuilder)
         )
     }
 
@@ -116,7 +116,7 @@ internal class RealmInstance(
             config: PagedList.Config,
             mapper: RealmObjectMapper<T, R>,
             boundaryCallback: BoundaryCallback<R>? = null,
-            liveQueryBuilder: Flow<RealmQueryBuilder<T>>,
+            liveQueryBuilder: RealmTiledDataSource.LiveQueryBuilder<T>,
     ): Flow<PagedList<R>> {
         return getRealmFlow().flatMapConcat { realm ->
             val livePagedList = LivePagedListBuilder(

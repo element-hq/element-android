@@ -31,6 +31,6 @@ internal class RoomTagHandler @Inject constructor() {
         val tags = content.tags.entries.map { (tagName, params) ->
             Pair(tagName, params["order"] as? Double)
         }
-        RoomSummaryEntity.getOrCreate(realm, roomId).updateTags(tags)
+        RoomSummaryEntity.getOrCreate(realm, roomId).updateTags(realm, tags)
     }
 }

@@ -90,7 +90,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     // Creates links in both directions
                     val prevChunk = ChunkEntity.find(this, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(this, roomId, prevToken = nextToken)
-                    val currentChunk = ChunkEntity.create(this, prevToken = prevToken, nextToken = nextToken).apply {
+                    val currentChunk = ChunkEntity.create(this, roomId = roomId, prevToken = prevToken, nextToken = nextToken).apply {
                         this.nextChunk = nextChunk
                         this.prevChunk = prevChunk
                     }

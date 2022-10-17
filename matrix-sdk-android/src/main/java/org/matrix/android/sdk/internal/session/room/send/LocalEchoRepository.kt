@@ -82,7 +82,7 @@ internal class LocalEchoRepository @Inject constructor(
                 this.insertType = EventInsertType.LOCAL_ECHO
             }
             copyToRealm(eventInsertEntity)
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).first().find() ?: return@asyncWrite
+            val roomEntity = RoomEntity.where(this, roomId = roomId).first().find() ?: return@asyncWrite
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(this, roomId)
         }

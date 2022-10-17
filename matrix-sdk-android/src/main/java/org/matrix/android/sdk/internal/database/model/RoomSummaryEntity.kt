@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
@@ -128,7 +129,7 @@ internal class RoomSummaryEntity : RealmObject {
 
     fun tags(): List<RoomTagEntity> = tags
 
-    fun updateTags(newTags: List<Pair<String, Double?>>) {
+    fun updateTags(realm: MutableRealm, newTags: List<Pair<String, Double?>>) {
         val toDelete = mutableListOf<RoomTagEntity>()
         tags.forEach { existingTag ->
             val updatedTag = newTags.firstOrNull { it.first == existingTag.tagName }
@@ -138,7 +139,7 @@ internal class RoomSummaryEntity : RealmObject {
                 existingTag.tagOrder = updatedTag.second
             }
         }
-        //toDelete.forEach { it.deleteFromRealm() }
+        toDelete.forEach { realm.delete(it) }
         newTags.forEach { newTag ->
             if (tags.all { it.tagName != newTag.first }) {
                 // we must add it
