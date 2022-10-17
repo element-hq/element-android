@@ -20,6 +20,7 @@ package org.matrix.android.sdk.internal.session.profile
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
@@ -37,7 +38,7 @@ internal abstract class GetProfileInfoTask : Task<GetProfileInfoTask.Params, Jso
 internal class DefaultGetProfileInfoTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val monarchy: Monarchy,
+        @SessionDatabase private val monarchy: Monarchy,
 ) : GetProfileInfoTask() {
 
     override suspend fun execute(params: Params): JsonDict {
