@@ -75,7 +75,9 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
         val response = httpClient.newCall(request.build()).execute()
 
         if (response.code == 404) {
+            // we set to unknown and the cancel method will rewrite the reason to expired if applicable
             cancel(RendezvousFailureReason.Unknown)
+            return
         }
         etag = response.header("etag")
 
@@ -116,7 +118,8 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
             try {
                 // expired
                 if (response.code == 404) {
-                    cancel(RendezvousFailureReason.Expired)
+                    // we set to unknown and the cancel method will rewrite the reason to expired if applicable
+                    cancel(RendezvousFailureReason.Unknown)
                     return null
                 }
 
