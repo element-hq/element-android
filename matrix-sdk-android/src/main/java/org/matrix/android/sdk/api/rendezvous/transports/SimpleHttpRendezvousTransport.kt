@@ -99,9 +99,8 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
 
     override suspend fun receive(): ByteArray? {
         val uri = uri ?: throw IllegalStateException("Rendezvous not set up")
-        var done = false
         val httpClient = okhttp3.OkHttpClient.Builder().build()
-        while (!done) {
+        while (true) {
             if (cancelled) {
                 return null
             }
@@ -117,8 +116,9 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
             val response = httpClient.newCall(request.build()).execute()
 
             try {
+                // expired
                 if (response.code == 404) {
-                    cancel(RendezvousFailureReason.Unknown)
+                    cancel(RendezvousFailureReason.Expired)
                     return null
                 }
 
@@ -135,7 +135,8 @@ class SimpleHttpRendezvousTransport(override var onCancelled: ((reason: Rendezvo
                     return response.body?.bytes()
                 }
 
-                done = false
+                // sleep for a second before polling again
+                // we rely on the server expiring the channel rather than checking it ourselves
                 delay(1000)
             } finally {
                 response.close()
