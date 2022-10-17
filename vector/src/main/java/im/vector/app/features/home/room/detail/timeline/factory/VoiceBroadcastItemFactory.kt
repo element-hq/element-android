@@ -15,8 +15,8 @@
  */
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
@@ -25,10 +25,14 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadca
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class VoiceBroadcastItemFactory @Inject constructor(
+        private val session: Session,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
 ) {
 
     fun create(
@@ -42,11 +46,15 @@ class VoiceBroadcastItemFactory @Inject constructor(
         if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
         val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
         val mostRecentTimelineEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent()
-        val mostRecentMessageContent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()?.content ?: return null
+        val mostRecentEvent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()
+        val mostRecentMessageContent = mostRecentEvent?.content ?: return null
+        val isRecording = mostRecentMessageContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && mostRecentEvent.root.stateKey == session.myUserId
         return MessageVoiceBroadcastItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
                 .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
+                .recording(isRecording)
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }
