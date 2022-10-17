@@ -869,10 +869,10 @@
     <string name="settings_push_rules">Règles de notification</string>
     <string name="settings_push_rules_no_rules">Aucune règle de notification définie</string>
     <string name="settings_push_gateway_no_pushers">Aucune passerelle de notification enregistrée</string>
-    <string name="push_gateway_item_app_id">app_id :</string>
-    <string name="push_gateway_item_push_key">push_key :</string>
-    <string name="push_gateway_item_app_display_name">app_display_name :</string>
-    <string name="push_gateway_item_device_name">session_name :</string>
+    <string name="push_gateway_item_app_id">App ID :</string>
+    <string name="push_gateway_item_push_key">Clé Push :</string>
+    <string name="push_gateway_item_app_display_name">Nom d’affichage de l’application :</string>
+    <string name="push_gateway_item_device_name">Nom d’affichage de la session :</string>
     <string name="push_gateway_item_url">URL :</string>
     <string name="push_gateway_item_format">Format :</string>
     <string name="preference_voice_and_video">Voix et vidéo</string>
@@ -2742,4 +2742,34 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Il y a des appareils non vérifiés dans ce salon, ils ne pourront pas déchiffrer vos messages envoyés.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées dans ce salon.</string>
     <string name="action_got_it">Compris</string>
+    <string name="rich_text_editor_format_underline">Souligner le texte</string>
+    <string name="rich_text_editor_format_strikethrough">Barrer le texte</string>
+    <string name="rich_text_editor_format_italic">Mettre en italique</string>
+    <string name="rich_text_editor_format_bold">Mettre en gras</string>
+    <string name="labs_enable_client_info_recording_summary">Enregistre le nom du client, sa version, et son URL pour retrouvez vos sessions plus facilement dans le gestionnaire de sessions.</string>
+    <string name="labs_enable_client_info_recording_title">Activer l’enregistrement des informations du client</string>
+    <string name="labs_enable_session_manager_summary">Ayez une meilleur visibilité et plus de contrôle sur toutes vos sessions.</string>
+    <string name="labs_enable_session_manager_title">Activer le nouveau gestionnaire de session</string>
+    <string name="device_manager_session_details_device_operating_system">Système d’exploitation</string>
+    <string name="device_manager_session_details_device_model">Modèle</string>
+    <string name="device_manager_session_details_device_browser">Navigateur</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_name">Nom</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_push_notifications_description">Recevoir les notifications push sur cette session.</string>
+    <string name="device_manager_push_notifications_title">Notifications push</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Vérifiez votre session actuelle pour découvrir le statut de vérification de cette session.</string>
+    <string name="device_manager_verification_status_unknown">Status de vérification inconnu</string>
+    <string name="push_gateway_item_enabled">Activer :</string>
+    <string name="push_gateway_item_device_id">Identifiant de session :</string>
+    <string name="error_check_network">Quelque chose s’est mal passé. Vérifiez votre connexion réseau et réessayez.</string>
+    <string name="grant_permission">Accorder la permission</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} a besoin d’une permission pour afficher les notifications.
+\nVeuillez accorder la permission.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} a besoin de la permission pour afficher les notifications. Les notifications peuvent afficher vos messages, vos invitations, etc.
+\n
+\nVeuillez autoriser l’accès sur la prochaine fenêtre pour pouvoir voir des notifications.</string>
+    <string name="labs_enable_rich_text_editor_summary">Essayer l’éditeur de texte formaté (le mode texte brut arrive bientôt)</string>
+    <string name="labs_enable_rich_text_editor_title">Activer l’éditeur de texte formaté</string>
 </resources>

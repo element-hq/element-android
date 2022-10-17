@@ -1700,7 +1700,7 @@
     <string name="login_set_msisdn_notice2">Prosím, použite medzinárodný formát.</string>
     <string name="login_set_msisdn_notice">Nastavte si telefónne číslo, aby ste voliteľne umožnili ľuďom, ktorých poznáte, aby vás objavili.</string>
     <string name="does_not_look_like_valid_email">Toto nevyzerá ako platná e-mailová adresa</string>
-    <string name="login_set_email_notice">Nastavte si e-mail na obnovenie konta. Neskôr môžete voliteľne povoliť známym, aby vás objavili podľa vášho e-mailu.</string>
+    <string name="login_set_email_notice">Nastavte si e-mail na obnovenie konta. Neskôr môžete voliteľne povoliť svojim známym, aby vás objavili podľa tohto e-mailu.</string>
     <string name="login_set_email_title">Nastaviť e-mailovú adresu</string>
     <string name="login_reset_password_success_submit">Späť na prihlásenie</string>
     <string name="login_reset_password_success_notice">Vaše heslo bolo obnovené.</string>
@@ -2796,4 +2796,34 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ V tejto miestnosti sa nachádzajú neoverené zariadenia, ktoré nebudú schopné dešifrovať odoslané správy.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Nikdy neposielať šifrované správy do neoverených relácií v tejto miestnosti.</string>
     <string name="action_got_it">Rozumiem</string>
+    <string name="rich_text_editor_format_underline">Použiť formát podčiarknutia</string>
+    <string name="rich_text_editor_format_strikethrough">Použiť formát prečiarknutia</string>
+    <string name="rich_text_editor_format_italic">Použiť formát kurzívou</string>
+    <string name="rich_text_editor_format_bold">Použiť tučný formát</string>
+    <string name="labs_enable_client_info_recording_summary">Zaznamenať názov klienta, verziu a url, aby bolo možné ľahšie rozpoznať relácie v správcovi relácií.</string>
+    <string name="labs_enable_client_info_recording_title">Povoliť zaznamenanie informácií o klientovi</string>
+    <string name="labs_enable_session_manager_summary">Majte lepší prehľad a kontrolu nad všetkými reláciami.</string>
+    <string name="labs_enable_session_manager_title">Použiť nového správcu relácií</string>
+    <string name="device_manager_session_details_device_operating_system">Operačný systém</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Prehliadač</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Verzia</string>
+    <string name="device_manager_session_details_application_name">Názov</string>
+    <string name="device_manager_session_details_application">Aplikácia</string>
+    <string name="device_manager_push_notifications_description">Prijímať push oznámenia v tejto relácii.</string>
+    <string name="device_manager_push_notifications_title">Push oznámenia</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Overením aktuálnej relácie zistíte stav overenia tejto relácie.</string>
+    <string name="device_manager_verification_status_unknown">Neznámy stav overenia</string>
+    <string name="push_gateway_item_enabled">Zapnuté:</string>
+    <string name="push_gateway_item_device_id">ID relácie:</string>
+    <string name="error_check_network">Niečo sa pokazilo. Skontrolujte, prosím, svoje sieťové pripojenie a skúste to znova.</string>
+    <string name="grant_permission">Udeliť oprávnenie</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potrebuje povolenie na zobrazovanie oznámení.
+\nProsím, udeľte toto povolenie.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potrebuje povolenie na zobrazovanie oznámení. Oznámenia môžu zobrazovať vaše správy, pozvánky atď.
+\n
+\nPovoľte prístup na ďalších vyskakovacích oknách, aby ste mohli zobrazovať oznámenia.</string>
+    <string name="labs_enable_rich_text_editor_summary">Vyskúšajte rozšírený textový editor (čistý textový režim sa objaví čoskoro)</string>
+    <string name="labs_enable_rich_text_editor_title">Povoliť rozšírený textový editor</string>
 </resources>
