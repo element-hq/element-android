@@ -66,14 +66,14 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusCancelButton.isVisible = true
         views.qrCodeLoginStatusTryAgainButton.isVisible = connectionStatus.canTryAgain
         views.qrCodeLoginStatusHeaderView.setTitle(getString(R.string.qr_code_login_header_failed_title))
-        views.qrCodeLoginStatusHeaderView.setDescription(getErrorCode(connectionStatus.errorType))
+        views.qrCodeLoginStatusHeaderView.setDescription(getErrorDescription(connectionStatus.errorType))
         views.qrCodeLoginStatusHeaderView.setImage(
                 imageResource = R.drawable.ic_qr_code_login_failed,
                 backgroundTintColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
         )
     }
 
-    private fun getErrorCode(reason: RendezvousFailureReason): String {
+    private fun getErrorDescription(reason: RendezvousFailureReason): String {
         return when (reason) {
             RendezvousFailureReason.UnsupportedAlgorithm,
             RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
