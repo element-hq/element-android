@@ -37,8 +37,9 @@ internal class RoomTombstoneEventProcessor @Inject constructor() : EventInsertLi
         if (createRoomContent?.replacementRoomId == null) return
 
         val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).first().find()
-                ?: RoomSummaryEntity()
-        predecessorRoomSummary.roomId = event.roomId
+                ?: RoomSummaryEntity().apply {
+                    this.roomId = event.roomId
+                }
         if (predecessorRoomSummary.versioningState == VersioningState.NONE) {
             predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
         }
