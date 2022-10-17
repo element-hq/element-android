@@ -125,6 +125,8 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun onFailed(reason: RendezvousFailureReason) {
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+
         setState {
             copy(
                     connectionStatus = QrCodeLoginConnectionStatus.Failed(reason, reason.canRetry)
