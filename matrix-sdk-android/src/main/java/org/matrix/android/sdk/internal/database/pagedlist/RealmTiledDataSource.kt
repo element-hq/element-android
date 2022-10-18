@@ -1,13 +1,17 @@
 package org.matrix.android.sdk.internal.database.pagedlist
 
 import androidx.paging.DataSource
+import androidx.paging.DataSource.InvalidatedCallback
 import io.realm.kotlin.Realm
 import io.realm.kotlin.notifications.UpdatedResults
+import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.RealmQueryBuilder
@@ -28,7 +32,7 @@ internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
     ) : DataSource.Factory<Int, R>() {
 
         override fun create(): DataSource<Int, R> {
-            val childScope = CoroutineScope(SupervisorJob() + coroutineScope.coroutineContext)
+            val childScope = CoroutineScope(coroutineScope.coroutineContext + SupervisorJob() + CoroutineName("RealmTiledDataSource"))
             return RealmTiledDataSource(realm, liveQueryBuilder, mapper, childScope)
         }
     }
@@ -44,22 +48,29 @@ internal class RealmTiledDataSource<T : RealmObject, R> internal constructor(
             }
     }
 
-    private val results: List<T>
+    private val results: RealmResults<T>
+    private val invalidatedCallback = InvalidatedCallback {
+        liveQueryBuilder.dataSource = null
+        coroutineScope.cancel()
+    }
 
     init {
-        addInvalidatedCallback {
-            liveQueryBuilder.dataSource = null
-            coroutineScope.coroutineContext.cancelChildren()
-        }
+        addInvalidatedCallback(invalidatedCallback)
         liveQueryBuilder.dataSource = this
         results = liveQueryBuilder.queryBuilder.build(realm).find()
         results.asFlow()
                 .onEach { resultsChange ->
                     when (resultsChange) {
-                        is UpdatedResults -> invalidate()
+                        is UpdatedResults -> {
+                            invalidate()
+                        }
                         else -> Unit
                     }
-                }.launchIn(coroutineScope)
+                }
+                .onCompletion {
+                    removeInvalidatedCallback(invalidatedCallback)
+                }
+                .launchIn(coroutineScope)
     }
 
     override fun countItems(): Int {
