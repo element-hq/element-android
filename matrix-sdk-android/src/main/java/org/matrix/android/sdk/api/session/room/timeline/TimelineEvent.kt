@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -180,8 +181,13 @@ fun TimelineEvent.isRootThread(): Boolean {
 /**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
  */
-fun TimelineEvent.getTextEditableContent(): String {
-    val lastContentBody = getLastMessageContent()?.body ?: return ""
+fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
+    val lastMessageContent = getLastMessageContent()
+    val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
+        lastMessageContent.formattedBody
+    } else {
+        lastMessageContent?.body
+    } ?: return ""
     return if (isReply()) {
         extractUsefulTextFromReply(lastContentBody)
     } else {

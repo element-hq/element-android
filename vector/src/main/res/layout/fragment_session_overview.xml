@@ -31,6 +31,16 @@
             app:sessionOverviewEntryDescription="@string/device_manager_session_details_description"
             app:sessionOverviewEntryTitle="@string/device_manager_session_details_title" />
 
+        <im.vector.app.features.settings.devices.v2.overview.SessionOverviewEntrySwitchView
+            android:id="@+id/sessionOverviewPushNotifications"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewEntryDetails"
+            app:sessionOverviewEntrySwitchDescription="@string/device_manager_push_notifications_description"
+            app:sessionOverviewEntrySwitchTitle="@string/device_manager_push_notifications_title" />
+
         <Button
             android:id="@+id/sessionOverviewSignout"
             style="@style/Widget.Vector.Button.Text.Destructive"
@@ -41,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sessionOverviewEntryDetails"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewPushNotifications"
             app:layout_constraintWidth="wrap_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -125,6 +125,7 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
+    namespace "im.vector.application"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -359,7 +360,7 @@ dependencies {
     debugImplementation project(':library:ui-styles')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
+    implementation "androidx.sharetarget:sharetarget:1.2.0"
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {
@@ -373,7 +374,7 @@ dependencies {
 
     gplayImplementation "com.google.android.gms:play-services-location:20.0.0"
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.8') {
+    gplayImplementation('com.google.firebase:firebase-messaging:23.1.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_hovered="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <solid android:color="?attr/vctr_rich_text_editor_menu_button_background" />
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <solid android:color="?attr/vctr_rich_text_editor_menu_button_background" />
+        </shape>
+    </item>
+    <item>
+        <ripple android:color="?attr/vctr_rich_text_editor_menu_button_background" />
+    </item>
+</selector>

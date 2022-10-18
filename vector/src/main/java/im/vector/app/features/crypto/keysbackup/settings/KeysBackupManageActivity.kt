@@ -114,6 +114,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
             finish()
             return
         }
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 }

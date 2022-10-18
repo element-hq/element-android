@@ -146,10 +146,16 @@
     <color name="shield_color_gray">#91A1C0</color>
     <color name="shield_color_warning">#FF4B55</color>
     <color name="shield_color_warning_background">#0FFF4B55</color>
+    <color name="shield_color_unknown">@color/palette_gray_200</color>
 
     <!-- Badge Colors -->
     <attr name="vctr_badge_color_border" format="color" />
     <color name="vctr_badge_color_border_light">@color/palette_white</color>
     <color name="vctr_badge_color_border_dark">@color/palette_black_950</color>
+
+    <!-- WYSIWYG Colors -->
+    <attr name="vctr_rich_text_editor_menu_button_background" format="color" />
+    <color name="vctr_rich_text_editor_menu_button_background_light">#EEF8F4</color>
+    <color name="vctr_rich_text_editor_menu_button_background_dark">#1D292A</color>
 
 </resources>

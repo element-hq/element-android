@@ -16,20 +16,32 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import android.content.Context
+import androidx.core.content.FileProvider
+import im.vector.app.core.resources.BuildMeta
+import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class StartVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
+        private val context: Context,
+        private val buildMeta: BuildMeta,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -38,7 +50,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 
         val onGoingVoiceBroadcastEvents = room.stateService().getStateEvents(
-                setOf(STATE_ROOM_VOICE_BROADCAST_INFO),
+                setOf(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO),
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
@@ -53,15 +65,39 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
     private suspend fun startVoiceBroadcast(room: Room) {
         Timber.d("## StartVoiceBroadcastUseCase: Send new voice broadcast info state event")
-        room.stateService().sendStateEvent(
-                eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+        val chunkLength = VoiceBroadcastConstants.DEFAULT_CHUNK_LENGTH_IN_SECONDS // Todo Get the length from the room settings
+        val eventId = room.stateService().sendStateEvent(
+                eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,
-                        chunkLength = 5L, // TODO Get length from voice broadcast settings
+                        chunkLength = chunkLength,
                 ).toContent()
         )
 
-        // TODO start recording audio files
+        startRecording(room, eventId, chunkLength)
+    }
+
+    private fun startRecording(room: Room, eventId: String, chunkLength: Int) {
+        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
+            sendVoiceFile(room, file, eventId)
+        }
+        voiceBroadcastRecorder?.startRecord(room.roomId, chunkLength)
+    }
+
+    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String) {
+        val outputFileUri = FileProvider.getUriForFile(
+                context,
+                buildMeta.applicationId + ".fileProvider",
+                voiceMessageFile,
+                "Voice message.${voiceMessageFile.extension}"
+        )
+        val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
+        room.sendService().sendMedia(
+                attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
+                compressBeforeSending = false,
+                roomIds = emptySet(),
+                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+        )
     }
 }

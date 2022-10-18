@@ -177,6 +177,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
+        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -205,8 +206,8 @@ class SessionOverviewFragment :
                     deviceFullInfo = deviceInfo,
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
-                    isLearnMoreLinkVisible = true,
-                    isLastSeenDetailsVisible = true,
+                    isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
+                    isLastSeenDetailsVisible = !isCurrentSession,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
@@ -214,6 +215,18 @@ class SessionOverviewFragment :
             }
         } else {
             views.sessionOverviewInfo.isVisible = false
+        }
+    }
+
+    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
+        views.sessionOverviewPushNotifications.apply {
+            setOnCheckedChangeListener(null)
+            setChecked(enabled)
+            post {
+                setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                }
+            }
         }
     }
 

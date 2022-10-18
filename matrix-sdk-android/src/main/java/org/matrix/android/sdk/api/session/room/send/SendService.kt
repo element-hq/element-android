@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.PollType
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -60,12 +61,19 @@ interface SendService {
     /**
      * Method to quote an events content.
      * @param quotedEvent The event to which we will quote it's content.
-     * @param text the text message to send
+     * @param text the plain text message to send
+     * @param formattedText the formatted text message to send
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @param rootThreadEventId when this param is not null, the message will be sent in this specific thread
      * @return a [Cancelable]
      */
-    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
+    fun sendQuotedTextMessage(
+            quotedEvent: TimelineEvent,
+            text: String,
+            formattedText: String? = null,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null,
+    ): Cancelable
 
     /**
      * Method to send a media asynchronously.
@@ -74,13 +82,15 @@ interface SendService {
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
      * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
+     * @param relatesTo add a relation content to the media event
      * @return a [Cancelable]
      */
     fun sendMedia(
             attachment: ContentAttachmentData,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
+            relatesTo: RelationDefaultContent? = null,
     ): Cancelable
 
     /**
@@ -96,7 +106,7 @@ interface SendService {
             attachments: List<ContentAttachmentData>,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
     ): Cancelable
 
     /**

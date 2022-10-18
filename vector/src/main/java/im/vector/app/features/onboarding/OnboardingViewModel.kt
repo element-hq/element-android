@@ -26,13 +26,13 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.cancelCurrentOnSet
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.core.extensions.isMatrixId
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
@@ -91,6 +91,7 @@ class OnboardingViewModel @AssistedInject constructor(
         private val vectorOverrides: VectorOverrides,
         private val registrationActionHandler: RegistrationActionHandler,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -114,6 +115,35 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun observeDataStore() = viewModelScope.launch {
         vectorOverrides.forceLoginFallback.setOnEach { isForceLoginFallbackEnabled ->
             copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
+        }
+    }
+
+    private fun checkQrCodeLoginCapability(homeServerUrl: String) {
+        if (!vectorFeatures.isQrCodeLoginEnabled()) {
+            setState {
+                copy(
+                        canLoginWithQrCode = false
+                )
+            }
+        } else if (vectorFeatures.isQrCodeLoginForAllServers()) {
+            // allow for all servers
+            setState {
+                copy(
+                        canLoginWithQrCode = true
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                // check if selected server supports MSC3882 first
+                homeServerConnectionConfigFactory.create(homeServerUrl)?.let {
+                    val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
+                    setState {
+                        copy(
+                                canLoginWithQrCode = canLoginWithQrCode
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -616,7 +646,7 @@ class OnboardingViewModel @AssistedInject constructor(
         activeSessionHolder.setActiveSession(session)
 
         authenticationService.reset()
-        session.configureAndStart(applicationContext)
+        configureAndStartSessionUseCase.execute(session)
 
         when (authenticationDescription) {
             is AuthenticationDescription.Register -> {
@@ -640,6 +670,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
                 val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
                 state.personalizationState.copy(
+                        userId = session.myUserId,
                         displayName = state.registrationState.selectedMatrixId?.let { MatrixPatterns.extractUserNameFromId(it) },
                         supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
                         supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
@@ -679,6 +710,7 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, postAction)
+            checkQrCodeLoginCapability(homeServerConnectionConfig.homeServerUri.toString())
         }
     }
 

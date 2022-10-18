@@ -25,7 +25,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import arrow.core.Try
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -167,7 +166,7 @@ class KeysBackupSetupStep3Fragment :
 
     private fun exportRecoveryKeyToFile(uri: Uri, data: String) {
         lifecycleScope.launch(Dispatchers.Main) {
-            Try {
+            try {
                 withContext(Dispatchers.IO) {
                     requireContext().safeOpenOutputStream(uri)
                             ?.use { os ->
@@ -176,24 +175,19 @@ class KeysBackupSetupStep3Fragment :
                             }
                 }
                         ?: throw IOException("Unable to write the file")
+                viewModel.copyHasBeenMade = true
+                activity?.let {
+                    MaterialAlertDialogBuilder(it)
+                            .setTitle(R.string.dialog_title_success)
+                            .setMessage(R.string.recovery_key_export_saved)
+                }
+            } catch (throwable: Throwable) {
+                activity?.let {
+                    MaterialAlertDialogBuilder(it)
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(errorFormatter.toHumanReadable(throwable))
+                }
             }
-                    .fold(
-                            { throwable ->
-                                activity?.let {
-                                    MaterialAlertDialogBuilder(it)
-                                            .setTitle(R.string.dialog_title_error)
-                                            .setMessage(errorFormatter.toHumanReadable(throwable))
-                                }
-                            },
-                            {
-                                viewModel.copyHasBeenMade = true
-                                activity?.let {
-                                    MaterialAlertDialogBuilder(it)
-                                            .setTitle(R.string.dialog_title_success)
-                                            .setMessage(R.string.recovery_key_export_saved)
-                                }
-                            }
-                    )
                     ?.setCancelable(false)
                     ?.setPositiveButton(R.string.ok, null)
                     ?.show()

@@ -19,6 +19,8 @@ package im.vector.app.features.settings.devices.v2
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
@@ -53,7 +55,7 @@ class DevicesViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
     private val getDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
-    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
+    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
 
@@ -245,7 +247,8 @@ class DevicesViewModelTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
                 isInactive = false,
                 isCurrentDevice = true,
-                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+                matrixClientInfo = MatrixClientInfoContent(),
         )
         val deviceFullInfo2 = DeviceFullInfo(
                 deviceInfo = mockk(),
@@ -253,7 +256,8 @@ class DevicesViewModelTest {
                 roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
                 isInactive = true,
                 isCurrentDevice = false,
-                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+                matrixClientInfo = MatrixClientInfoContent(),
         )
         val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
         val deviceFullInfoListFlow = flowOf(deviceFullInfoList)

@@ -16,8 +16,6 @@
 
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
@@ -38,7 +36,7 @@ class TestEndpointAsTokenRegistration @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         // Check if we have a registered pusher for this token
         val endpoint = unifiedPushHelper.getEndpointOrToken() ?: run {
             status = TestStatus.FAILED
@@ -66,9 +64,9 @@ class TestEndpointAsTokenRegistration @Inject constructor(
                     WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
                         if (workInfo != null) {
                             if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                                manager?.retry(activityResultLauncher)
+                                manager?.retry(testParameters)
                             } else if (workInfo.state == WorkInfo.State.FAILED) {
-                                manager?.retry(activityResultLauncher)
+                                manager?.retry(testParameters)
                             }
                         }
                     })

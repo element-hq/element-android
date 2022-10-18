@@ -61,7 +61,6 @@ import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -80,7 +79,6 @@ class NewHomeDetailFragment :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
-    @Inject lateinit var session: Session
     @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()

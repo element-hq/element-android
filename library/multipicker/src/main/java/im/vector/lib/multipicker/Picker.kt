@@ -22,6 +22,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
+import im.vector.lib.core.utils.compat.getParcelableArrayListExtraCompat
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.core.utils.compat.queryIntentActivitiesCompat
 
 /**
  * Abstract class to provide all types of Pickers.
@@ -45,13 +48,13 @@ abstract class Picker<T> {
 
         val uriList = mutableListOf<Uri>()
         if (data.action == Intent.ACTION_SEND) {
-            (data.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri)?.let { uriList.add(it) }
+            data.getParcelableExtraCompat<Uri>(Intent.EXTRA_STREAM)?.let { uriList.add(it) }
         } else if (data.action == Intent.ACTION_SEND_MULTIPLE) {
-            val extraUriList: List<Uri>? = data.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+            val extraUriList: List<Uri>? = data.getParcelableArrayListExtraCompat(Intent.EXTRA_STREAM)
             extraUriList?.let { uriList.addAll(it) }
         }
 
-        val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivities(data, PackageManager.MATCH_DEFAULT_ONLY)
+        val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivitiesCompat(data, PackageManager.MATCH_DEFAULT_ONLY)
         uriList.forEach {
             for (resolveInfo in resInfoList) {
                 val packageName: String = resolveInfo.activityInfo.packageName
@@ -91,6 +94,7 @@ abstract class Picker<T> {
         } else if (dataUri != null) {
             selectedUriList.add(dataUri)
         } else {
+            @Suppress("DEPRECATION")
             data?.extras?.get(Intent.EXTRA_STREAM)?.let {
                 (it as? List<*>)?.filterIsInstance<Uri>()?.let { uriList ->
                     selectedUriList.addAll(uriList)

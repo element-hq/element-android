@@ -47,10 +47,12 @@ class KeysExporter @Inject constructor(
         when {
             output == null -> throw IllegalStateException("Exported file not found")
             output.statSize != expectedSize -> {
-                throw UnexpectedExportKeysFileSizeException(
+                val exception = UnexpectedExportKeysFileSizeException(
                         expectedFileSize = expectedSize,
                         actualFileSize = output.statSize
                 )
+                output.close()
+                throw exception
             }
         }
     }

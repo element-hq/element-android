@@ -146,7 +146,7 @@ class EmojiReactionPickerActivity :
         val searchItem = menu.findItem(R.id.search)
         (searchItem.actionView as? SearchView)?.let { searchView ->
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
                     searchView.isIconified = false
                     searchView.requestFocusFromTouch()
                     // we want to force the tool bar as visible even if hidden with scroll flags
@@ -154,7 +154,7 @@ class EmojiReactionPickerActivity :
                     return true
                 }
 
-                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                     // when back, clear all search
                     views.emojiPickerToolbar.minimumHeight = 0
                     searchView.setQuery("", true)

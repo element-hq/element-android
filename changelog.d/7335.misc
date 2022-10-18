@@ -1,0 +1,1 @@
+Dependency to arrow has been removed. Please use `org.matrix.android.sdk.api.util.Optional` instead.

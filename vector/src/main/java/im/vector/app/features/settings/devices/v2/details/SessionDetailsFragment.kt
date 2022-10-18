@@ -33,7 +33,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.FragmentSessionDetailsBinding
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import javax.inject.Inject
 
 /**
@@ -92,16 +92,16 @@ class SessionDetailsFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.deviceInfo is Success) {
-            renderSessionDetails(state.deviceInfo.invoke())
+        if (state.deviceFullInfo is Success) {
+            renderSessionDetails(state.deviceFullInfo.invoke())
         } else {
             hideSessionDetails()
         }
     }
 
-    private fun renderSessionDetails(deviceInfo: DeviceInfo) {
+    private fun renderSessionDetails(deviceFullInfo: DeviceFullInfo) {
         views.sessionDetails.isVisible = true
-        sessionDetailsController.setData(deviceInfo)
+        sessionDetailsController.setData(deviceFullInfo)
     }
 
     private fun hideSessionDetails() {

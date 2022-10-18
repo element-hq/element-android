@@ -16,5 +16,11 @@
 
 package im.vector.app.features.voicebroadcast
 
-/** Voice Broadcast State Event. */
-const val STATE_ROOM_VOICE_BROADCAST_INFO = "io.element.voice_broadcast_info"
+object VoiceBroadcastConstants {
+
+    /** Voice Broadcast State Event. */
+    const val STATE_ROOM_VOICE_BROADCAST_INFO = "io.element.voice_broadcast_info"
+
+    /** Default voice broadcast chunk duration, in seconds. */
+    const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 30
+}
