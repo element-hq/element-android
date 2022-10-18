@@ -88,7 +88,6 @@ internal fun Versions.doesServerSupportThreadUnreadNotifications(): Boolean {
     val msc3771 = unstableFeatures?.get(FEATURE_THREADS_MSC3771) ?: false
     val msc3773 = unstableFeatures?.get(FEATURE_THREADS_MSC3773) ?: false
     return getMaxVersion() >= HomeServerVersion.v1_4_0 || (msc3771 && msc3773)
-
 }
 
 internal fun Versions.doesServerSupportQrCodeLogin(): Boolean {
