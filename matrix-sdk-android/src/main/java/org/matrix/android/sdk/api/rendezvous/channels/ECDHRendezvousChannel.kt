@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
 import org.matrix.android.sdk.api.util.MatrixJsonParser
-import org.matrix.android.sdk.internal.extensions.toUnsignedInt
+import org.matrix.android.sdk.internal.crypto.verification.SASDefaultVerificationTransaction
 import org.matrix.olm.OlmSAS
 import timber.log.Timber
 import java.security.SecureRandom
@@ -48,20 +48,9 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         private const val KEY_SPEC = "AES"
         private val TAG = LoggerTag(ECDHRendezvousChannel::class.java.simpleName, LoggerTag.RENDEZVOUS).value
 
-        // n.b. we are only aver processing byte array that we have generated, so we can make assumptions about the length
+        // this is the same representation as for SAS but we delimit by dashes instead of spaces for readability
         private fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-            val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
-            val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
-            val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
-            val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
-            val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
-            // (B0 << 5 | B1 >> 3) + 1000
-            val first = (b0.shl(5) or b1.shr(3)) + 1000
-            // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
-            val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
-            // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
-            val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
-            return "$first-$second-$third"
+            return SASDefaultVerificationTransaction.getDecimalCodeRepresentation(byteArray).replace(" ", "-")
         }
     }
 
