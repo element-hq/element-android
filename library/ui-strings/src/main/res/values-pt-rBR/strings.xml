@@ -2772,4 +2772,37 @@
 \nPor favor permita acesso nos próximos pop-ups para ser capaz de visualizar notificação.</string>
     <string name="labs_enable_rich_text_editor_summary">Experimente o editor de texto rico (modo de texto puro vindo em breve)</string>
     <string name="labs_enable_rich_text_editor_title">Habilitar editor de texto rico</string>
+    <string name="qr_code_login_confirm_security_code_description">Por favor assegure que você sabe a origem deste código. Ao linkar dispositivos, você vai prover alguém com acesso completo a sua conta.</string>
+    <string name="qr_code_login_confirm_security_code">Confirmar</string>
+    <string name="qr_code_login_try_again">Tentar de novo</string>
+    <string name="qr_code_login_status_no_match">Nenhuma correspondência\?</string>
+    <string name="qr_code_login_signing_in">Fazendo-lhe signin</string>
+    <string name="qr_code_login_connecting_to_device">Conectando a dispositivo</string>
+    <string name="qr_code_login_scan_qr_code_button">Scannar QR code</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Fazendo signin com um dispositivo móvel\?</string>
+    <string name="qr_code_login_show_qr_code_button">Mostrar QR code neste dispositivo</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Selecione \'Scannar QR code\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Comece na tela de signin</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Selecione \'Fazer signin com QR code\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Comece na tela de signin</string>
+    <string name="qr_code_login_new_device_instruction_3">Selecione \'Mostrar QR code neste dispositivo\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Vá para Configurações -&gt; Segurança &amp; Privacidade -&gt; Mostrar Todas as Sessões</string>
+    <string name="qr_code_login_new_device_instruction_1">Obra ${app_name} em seu outro dispositivo</string>
+    <string name="qr_code_login_header_failed_denied_description">A requisição foi negada no outro dispositivo.</string>
+    <string name="qr_code_login_header_failed_timeout_description">A linkagem não foi completada no tempo requerido.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linkagem com este dispositivo não é suportado.</string>
+    <string name="qr_code_login_header_failed_title">Conexão malsucedida</string>
+    <string name="qr_code_login_header_connected_description">Cheque seu dispositivo feito signin, o código abaixo deveria ser exibido. Confirme que o código abaixo corresponde com esse dispositivo:</string>
+    <string name="qr_code_login_header_connected_title">Conexão segura estabelecida</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scanne o QR code abaixo com seu dispositivo que está feito signout.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Use seu dispositivo feito signin para scannar o QR code abaixo:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Fazer signin com QR code</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Use a câmera neste dispositivo para scannar o QR code mostrado em seu outro dispositivo:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Scannar QR code</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Você pode usar este dispositivo para fazer signin com um dispositivo móvel ou web com um QR code. Existem duas maneiras de fazer isto:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Fazer signin com QR Code</string>
+    <string name="login_scan_qr_code">Scannar QR code</string>
 </resources>
