@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.api.rendezvous.channels
 
 import android.util.Base64
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
