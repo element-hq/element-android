@@ -71,6 +71,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
+                        deviceId = session.sessionParams.deviceId,
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,
                         chunkLength = chunkLength,
                 ).toContent()
