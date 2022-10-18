@@ -19,12 +19,25 @@ package im.vector.app.test.fakes
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 
 class FakeVectorPreferences {
 
-    val instance = mockk<VectorPreferences>()
+    val instance = mockk<VectorPreferences>(relaxUnitFun = true)
 
     fun givenUseCompleteNotificationFormat(value: Boolean) {
         every { instance.useCompleteNotificationFormat() } returns value
+    }
+
+    fun givenSpaceBackstack(value: List<String?>) {
+        every { instance.getSpaceBackstack() } returns value
+    }
+
+    fun verifySetSpaceBackstack(value: List<String?>, inverse: Boolean = false) {
+        verify(inverse = inverse) { instance.setSpaceBackstack(value) }
+    }
+
+    fun givenIsClientInfoRecordingEnabled(isEnabled: Boolean) {
+        every { instance.isClientInfoRecordingEnabled() } returns isEnabled
     }
 }

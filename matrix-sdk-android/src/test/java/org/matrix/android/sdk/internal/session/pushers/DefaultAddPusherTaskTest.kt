@@ -71,7 +71,7 @@ class DefaultAddPusherTaskTest {
     }
 
     @Test
-    fun `given a persisted pusher when adding Pusher then updates api and mutates persisted result with Registered state`() {
+    fun `given a persisted pusher, when adding Pusher, then updates api and mutates persisted result with Registered state`() {
         val realmResult = PusherEntity(appDisplayName = null)
         monarchy.givenWhereReturns(result = realmResult)
                 .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
@@ -85,7 +85,7 @@ class DefaultAddPusherTaskTest {
     }
 
     @Test
-    fun `given a persisted push entity and SetPush API fails when adding Pusher then mutates persisted result with Failed registration state and rethrows`() {
+    fun `given a persisted push entity and SetPush API fails, when adding Pusher, then mutates persisted result with Failed registration state and rethrows`() {
         val realmResult = PusherEntity()
         monarchy.givenWhereReturns(result = realmResult)
                 .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
@@ -99,7 +99,7 @@ class DefaultAddPusherTaskTest {
     }
 
     @Test
-    fun `given no persisted push entity and SetPush API fails when adding Pusher then rethrows error`() {
+    fun `given no persisted push entity and SetPush API fails, when adding Pusher, then rethrows error`() {
         monarchy.givenWhereReturns<PusherEntity>(result = null)
                 .givenEqualTo(PusherEntityFields.PUSH_KEY, A_JSON_PUSHER.pushKey)
         pushersAPI.givenSetPusherErrors(SocketException())

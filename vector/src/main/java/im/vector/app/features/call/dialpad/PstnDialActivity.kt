@@ -23,12 +23,10 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
-import im.vector.app.features.settings.VectorLocale
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -40,7 +38,6 @@ class PstnDialActivity : SimpleFragmentActivity() {
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var directRoomHelper: DirectRoomHelper
     @Inject lateinit var session: Session
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     private var progress: AppCompatDialog? = null
 
@@ -78,7 +75,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
             arguments = Bundle().apply {
                 putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, true)
                 putBoolean(DialPadFragment.EXTRA_ENABLE_OK, true)
-                putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
             }
             callback = object : DialPadFragment.Callback {
                 override fun onOkClicked(formatted: String?, raw: String?) {

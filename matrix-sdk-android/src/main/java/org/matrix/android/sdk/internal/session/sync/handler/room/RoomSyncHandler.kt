@@ -39,7 +39,11 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.clearWith
+=======
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
+>>>>>>> develop
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
@@ -98,6 +102,7 @@ internal class RoomSyncHandler @Inject constructor(
         private val timelineInput: TimelineInput,
         private val liveEventService: Lazy<StreamEventsManager>,
         private val clock: Clock,
+        private val unRequestedForwardManager: UnRequestedForwardManager,
 ) {
 
     sealed class HandlingStrategy {
@@ -153,12 +158,12 @@ internal class RoomSyncHandler @Inject constructor(
             }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountInvitedRooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
+                    handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                 }
 
             is HandlingStrategy.LEFT -> {
                 handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountLeftRooms, 0.3f) {
-                    handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
+                    handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                 }
             }
         }
@@ -281,7 +286,8 @@ internal class RoomSyncHandler @Inject constructor(
                 Membership.JOIN,
                 roomSync.summary,
                 roomSync.unreadNotifications,
-                updateMembers = hasRoomMember
+                updateMembers = hasRoomMember,
+                aggregator = aggregator
         )
         return roomEntity
     }
@@ -291,7 +297,8 @@ internal class RoomSyncHandler @Inject constructor(
             roomId: String,
             roomSync: InvitedRoomSync,
             insertType: EventInsertType,
-            syncLocalTimestampMillis: Long
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
     ): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
@@ -315,7 +322,8 @@ internal class RoomSyncHandler @Inject constructor(
             it.type == EventType.STATE_ROOM_MEMBER
         }
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.INVITE)
-        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId)
+        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId, aggregator = aggregator)
+        unRequestedForwardManager.onInviteReceived(roomId, inviterEvent?.senderId.orEmpty(), clock.epochMillis())
         return roomEntity
     }
 
@@ -324,7 +332,8 @@ internal class RoomSyncHandler @Inject constructor(
             roomId: String,
             roomSync: RoomSync,
             insertType: EventInsertType,
-            syncLocalTimestampMillis: Long
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
     ): RoomEntity {
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
@@ -362,7 +371,7 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { realm.deleteOnCascade(it, deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
+        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications, aggregator = aggregator)
         return roomEntity
     }
 
@@ -548,7 +557,8 @@ internal class RoomSyncHandler @Inject constructor(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    isSafe = result.isSafe
             )
         } catch (e: MXCryptoError) {
             if (e is MXCryptoError.Base) {

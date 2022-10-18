@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+<<<<<<< HEAD
 import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -23,25 +24,49 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
+=======
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
+import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
+>>>>>>> develop
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
-import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+<<<<<<< HEAD
+=======
+import org.matrix.android.sdk.internal.util.logLimit
+import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
+>>>>>>> develop
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+<<<<<<< HEAD
         private val getProfileInfoTask: GetProfileInfoTask,
         @SessionDatabase private val realmInstance: RealmInstance,
+=======
+        private val crossSigningService: DefaultCrossSigningService,
+        private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
+        private val workManagerProvider: WorkManagerProvider,
+        @SessionId private val sessionId: String,
+>>>>>>> develop
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
         updateDirectUserIds(aggregator.directChatsToCheck)
         fetchAndUpdateUsers(aggregator.userIdsToFetch)
+        handleUserIdsForCheckingTrustAndAffectedRoomShields(aggregator.userIdsForCheckingTrustAndAffectedRoomShields)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -79,19 +104,26 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndUpdateUsers(userIdsToFetch: List<String>) {
-        fetchUsers(userIdsToFetch)
-                .takeIf { it.isNotEmpty() }
-                ?.saveLocally()
+    private fun fetchAndUpdateUsers(userIdsToFetch: Collection<String>) {
+        if (userIdsToFetch.isEmpty()) return
+        Timber.d("## Configure Worker to update users: ${userIdsToFetch.logLimit()}")
+        val workerParams = UpdateTrustWorker.Params(
+                sessionId = sessionId,
+                filename = updateTrustWorkerDataRepository.createParam(userIdsToFetch.toList())
+        )
+        val workerData = WorkerParamsFactory.toData(workerParams)
+
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<UpdateUserWorker>()
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManagerProvider.workManager
+                .beginUniqueWork("USER_UPDATE_QUEUE", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                .enqueue()
     }
 
-    private suspend fun fetchUsers(userIdsToFetch: List<String>) = userIdsToFetch.mapNotNull {
-        tryOrNull {
-            val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
-            User.fromJson(it, profileJson)
-        }
-    }
-
+<<<<<<< HEAD
     private suspend fun List<User>.saveLocally() {
         realmInstance.write {
             forEach { user ->
@@ -99,5 +131,9 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 copyToRealm(userEntity, updatePolicy = UpdatePolicy.ALL)
             }
         }
+=======
+    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Iterable<String>) {
+        crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
+>>>>>>> develop
     }
 }

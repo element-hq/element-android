@@ -70,6 +70,7 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
+    "amitkma",
     "aringenbach",
     "BillCarsonFr",
     "bmarty",
@@ -117,4 +118,11 @@ if (hasPngs) {
 // Check for reviewers
 if (github.requested_reviewers.users.length == 0 && !pr.draft) {
     warn("Please add a reviewer to your PR.")
+}
+
+// Check that translations have not been modified by developers
+if (user != "RiotTranslateBot") {
+   if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
+       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) is allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
+   }
 }

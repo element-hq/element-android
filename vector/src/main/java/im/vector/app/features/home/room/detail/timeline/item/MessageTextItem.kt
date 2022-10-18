@@ -144,6 +144,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentTextStub
+        private val STUB_ID = R.id.messageContentTextStub
     }
 }

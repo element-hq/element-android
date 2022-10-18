@@ -40,6 +40,7 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewAction
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 
 @AndroidEntryPoint
 class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
@@ -80,7 +81,7 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
-            val args = intent?.getParcelableExtra<SpaceDirectoryArgs>(Mavericks.KEY_ARG)
+            val args = intent?.getParcelableExtraCompat<SpaceDirectoryArgs>(Mavericks.KEY_ARG)
             replaceFragment(
                     views.simpleFragmentContainer,
                     SpaceDirectoryFragment::class.java,

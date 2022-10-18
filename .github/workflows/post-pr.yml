@@ -31,7 +31,7 @@ jobs:
   ui-tests:
     name: UI Tests (Synapse)
     needs: should-i-run
-    runs-on: macos-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     strategy:
       fail-fast: false
       matrix:
@@ -94,7 +94,7 @@ jobs:
     needs:
       - should-i-run
       - ui-tests
-    if: always() && (needs.should-i-run.result == 'success' ) && ((needs.codecov-units.result != 'success' ) || (needs.ui-tests.result != 'success') || (needs.integration-tests.result != 'success'))
+    if: always() && (needs.should-i-run.result == 'success' ) && (needs.ui-tests.result != 'success')
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: michaelkaye/matrix-hookshot-action@v1.0.0

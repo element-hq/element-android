@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SessionOverviewEntryView">
+        <attr name="sessionOverviewEntryTitle" format="string" />
+        <attr name="sessionOverviewEntryDescription" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="SessionOverviewEntrySwitchView">
+        <attr name="sessionOverviewEntrySwitchTitle" format="string" />
+        <attr name="sessionOverviewEntrySwitchDescription" format="string" />
+        <attr name="sessionOverviewEntrySwitchEnabled" format="boolean" />
+    </declare-styleable>
+
+</resources>

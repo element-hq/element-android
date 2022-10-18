@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="notice_room_invite_no_invitee">%s\'s ఆహ్వానం</string>
+    <string name="notice_room_invite">%1$s ఆహ్వానించారు %2$s</string>
+    <string name="notice_room_leave">%1$s వదిలి వెళారు</string>
+    <string name="notice_room_reject">%1$s ఆహ్వానాన్ని తిరస్కరించారు</string>
+    <string name="notice_room_remove">%1$s తన్నాడు %2$s</string>
+    <string name="notice_room_unban">%1$s నిషేధాన్ని %2$s</string>
+    <string name="notice_room_ban">%1$s నిషేధించారు %2$s</string>
+    <string name="notice_room_withdraw">%1$s ఉపసంహరించుకుంది %2$s\'s ఆహ్వానం</string>
+    <string name="notice_avatar_url_changed">%1$s వారి అవతార్ను మార్చారు</string>
+    <string name="notice_display_name_set">%1$s వారి డిస్ప్లే పేరును ని సెట్ చేసారు %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s వారి ప్రదర్శన పేరును %2$s నుండి %3$s మార్చారు</string>
+    <string name="notice_display_name_removed">%1$s వారి ప్రదర్శన పేరుని తీసివేసారు (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s అంశం మార్చబడింది:%2$s</string>
+    <string name="notice_room_name_changed">%1$s గది పెరు మార్చబడింది %2$s</string>
+    <string name="notice_placed_video_call">%s ఒక వీడియో కాల్ని ఉంచింది.</string>
+    <string name="notice_placed_voice_call">%s వాయిస్ కాల్ని ఉంచారు.</string>
+    <string name="notice_answered_call">%s కాల్కి సమాధానం ఇచ్చారు.</string>
+    <string name="notice_ended_call">%s కాల్ ముగిసింది.</string>
+    <string name="notice_made_future_room_visibility">%1$s భవిష్యత్ గది చరిత్రను %2$s కి కనిపించేలా చేసింది</string>
+    <string name="notice_room_visibility_invited">పాయింట్నుండి, అన్ని గది సభ్యుల వారు ఆహ్వానించబడ్డారు.</string>
+    <string name="notice_room_visibility_joined">పాయింట్ నుండి, అన్ని గదుల సభ్యుల వారు చేరారు.</string>
+    <string name="notice_room_visibility_shared">అన్ని గదుల సభ్యులు.</string>
+    <string name="notice_room_visibility_world_readable">ఎవరైనా.</string>
+
+
+    <string name="notice_avatar_changed_too">(అవతార్ మార్చబడింది)</string>
+    <string name="notice_room_name_removed">%1$s గది పేరు తొలగించబడింది</string>
+    <string name="notice_room_topic_removed">%1$s గది అంశాన్ని తీసివేసారు</string>
+    <string name="notice_room_third_party_invite">%1$s గదిలో చేరడానికి %2$s కు ఆహ్వానాన్ని పంపారు</string>
+    <string name="notice_room_third_party_registered_invite">%2$sకోసం %1$s ఆహ్వానాన్ని అంగీకరించారు</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** వ్యక్తీకరించడానికి సాధ్యం కాలేదు: %s **</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">ఈ సందేశానికి పంపేవారి పరికరం మాకు కీలను పంపలేదు.</string>
+
+    <string name="unable_to_send_message">సందేశం పంపడం సాధ్యం కాలేదు</string>
+
+
+    <string name="matrix_error">మాట్రిక్స్ లోపం</string>
+
+
+    <string name="encrypted_message">ఎన్క్రిప్టెడ్ సందేశం</string>
+
+    <string name="medium_email">ఇమెయిల్ చిరునామా</string>
+    <string name="medium_phone_number">ఫోను నంబరు</string>
+
+
+
+    <string name="notice_room_invite_you">%1$s మిమ్మల్ని ఆహ్వానించారు</string>
+    <string name="notice_room_join">%1$s చేరారు</string>
+
+    <string name="room_displayname_two_members">%1$s మరియు %2$s</string>
+    <string name="room_displayname_room_invite">గదికి ఆహ్వానం</string>
+    <string name="room_displayname_empty_room">ఖాళీ గది</string>
+    <string name="ok">అలాగే</string>
+    <string name="action_save">దాచు</string>
+    <string name="auth_forgot_password">సంకేతపదం మరచిపోయారా?</string>
+    <string name="action_send">పంపు</string>
+    <string name="action_share">పంచుకొను</string>
+    <string name="action_delete">తొలగించు</string>
+    <string name="action_invite">ఆహ్వానము</string>
+
+    <string name="action_open">తెరువు</string>
+
+    <string name="action_leave">వదిలివేయు</string>
+    <string name="title_activity_settings">అమరికలు</string>
+    <string name="action_cancel">రద్దుచేయి</string>
+    <string name="later">తరువాత</string>
+    <string name="view_source">మూలాన్ని వీక్షించండి</string>
+    <string name="action_rename">పేరు మార్చండి</string>
+    <string name="or">లేదా</string>
+    <string name="action_video_call">విడియో కాల్</string>
+    <string name="action_close">మూసివేయు</string>
+    <string name="copied_to_clipboard">క్లిప్బోర్డ్కు నకలు చేయబడింది</string>
+
+    <string name="dialog_title_confirmation">నిర్ధారణ</string>
+    <string name="dialog_title_warning">హెచ్చరిక</string>
+
+    <string name="bottom_action_favourites">ఇశ్టాంశాలు</string>
+    <string name="bottom_action_people">ప్రజలు</string>
+    <string name="bottom_action_rooms">గదులు</string>
+
+
+    <string name="invitations_header">ఆహ్వానాలు</string>
+    <string name="low_priority_header">తక్కువ ప్రాధాన్యత</string>
+
+    <string name="direct_chats_header">సంభాషణలు</string>
+    <string name="matrix_only_filter">మ్యాట్రిక్స్ పరిచయాలు మాత్రమే</string>
+    <string name="no_result_placeholder">ఫలితాలు లేవు</string>
+
+    <string name="rooms_header">గదులు</string>
+
+
+    <string name="send_bug_report_include_logs">లాగ్లను పంపు</string>
+    <string name="send_bug_report_include_crash_logs">క్రాష్ లాగ్లను పంపండి</string>
+    <string name="send_bug_report_include_screenshot">తెరపట్టుని పంపండి</string>
+    <string name="send_bug_report">బగ్ నివేదిక</string>
+    <string name="send_bug_report_description">దయచేసి బగ్ను వివరించండి. మీరు ఎం చేసారు? మీరు ఏమి జరిగే అవకాశము ఉందనుకున్నారు? వాస్తవానికి ఏం జరిగింది?</string>
+    <string name="send_bug_report_placeholder">ఇక్కడ మీ సమస్యను వివరించండి</string>
+    <string name="action_quote">కోట్</string>
+    <string name="permalink">పెర్మాలింక్</string>
+    <string name="view_decrypted_source">డెక్రిప్టెడ్ మూలాన్ని చూడండి</string>
+    <string name="report_content">నివేదిక వివరాలు</string>
+    <string name="action_sign_out">సైన్ అవుట్ చేయండి</string>
+
+    <string name="action_quick_reply">శీఘ్ర ప్రత్యుత్తరం</string>
+    <string name="action_mark_all_as_read">అన్నీ చదివినట్లు గుర్తించు</string>
+    <string name="home_filter_placeholder_home">గదుల కోసం శోధించండి</string>
+    <string name="send_bug_report_progress">పురోగతి (%s%%)</string>
+
+
+    <string name="join_room">గదిలో చేరండి</string>
+    <string name="username">వాడుకరి పేరు</string>
+    <string name="logout">లాగ్ అవుట్ చేయండి</string>
+    <string name="hs_url">హోమ్ సర్వర్ URL</string>
+    <string name="search">వెతుకు</string>
+
+    <string name="start_video_call">వీడియో కాల్ని ప్రారంభించండి</string>
+
+    <string name="option_send_files">దస్త్రాలను పంపండి</string>
+    <string name="auth_login">ప్రవేశించు</string>
+    <string name="auth_submit">సమర్పించు</string>
+    <string name="auth_invalid_login_param">తప్పు వాడుకరి పేరు మరియు/లేదా సంకేతపదము</string>
+    <string name="auth_invalid_email">ఇది చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామా లాగా లేదు</string>
+    <string name="auth_email_already_defined">ఈ ఇమెయిల్ చిరునామా ఇప్పటికే నిర్వచించబడింది.</string>
+    <string name="auth_recaptcha_message">ఈ హోమ్ సర్వర్ మీరు రోబోట్ కాదని నిర్ధారించుకోవాలనుకుంటుంది</string>
+    <string name="auth_reset_password_error_unauthorized">ఇమెయిల్ చిరునామాను ధృవీకరించడంలో విఫలమైంది: మీరు ఇమెయిల్ లో లంకెను క్లిక్ చేసారా లేదా అని నిర్ధారించుకోండి</string>
+    <string name="login_error_invalid_home_server">చెల్లుబాటు అయ్యే URL ను ఇవ్వండి</string>
+    <string name="login_error_bad_json">తప్పు JSON</string>
+    <string name="login_error_not_json">చెల్లుబాటు అయ్యే JSON లేదు</string>
+    <string name="login_error_limit_exceeded">చాలా ఎక్కువ అభ్యర్థనలు పంపించబడ్డాయి</string>
+    <string name="compression_opt_list_original">వాస్తవ</string>
+    <string name="compression_opt_list_large">పెద్దది</string>
+    <string name="compression_opt_list_medium">మద్యమ</string>
+    <string name="compression_opt_list_small">చిన్నది</string>
+
+
+
+
+    <string name="call_connecting">కాల్ అనుసంధానించబడుతున్నది…</string>
+    <string name="call_ended">కాల్ ముగిసింది</string>
+    <string name="incoming_video_call">మీకు వస్తున్న వీడియో కాల్</string>
+    <string name="incoming_voice_call">మీకు వస్తున్న కాల్</string>
+    <string name="call_in_progress">కాల్ పురోగతిలో వుంది</string>
+
+
+
+    <string name="permissions_rationale_popup_title">సమాచారం</string>
+    <string name="permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి ${app_name}కు అనుమతి అవసరం.</string>
+
+    <string name="yes">అవును</string>
+    <string name="no">కాదు</string>
+    <string name="_continue">కొనసాగించండి</string>
+
+    <string name="action_remove">తీసివేయి</string>
+    <string name="action_join">చేరండి</string>
+    <string name="action_reject">తిరస్కరించు</string>
+
+    <string name="room_jump_to_first_unread">మొదటి చదవని సందేశానికి వెళ్ళు.</string>
+
+
+    <string name="room_participants_leave_prompt_title">గదిని వదలండి</string>
+    <string name="room_participants_leave_prompt_msg">మీరు ఖచ్చితంగా గదిని వదిలేయాలనుకుంటున్నారా?</string>
+
+
+
+    <string name="room_participants_action_invite">ఆహ్వానము</string>
+    <string name="room_participants_action_ban">నిషేధించు</string>
+    <string name="start_voice_call">వాయిస్ కాల్ని ప్రారంభించండి</string>
+    <string name="room_participants_action_ignore">ఈ వాడుకరి అన్ని సందేశాలను దాచు</string>
+    <string name="room_participants_action_unignore">ఈ వాడుకరి అన్ని సందేశాలను చూపించు</string>
+    <string name="room_participants_action_mention">సూచన</string>
+
+
+    <string name="room_one_user_is_typing">%s టైప్ చేస్తున్నారు…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s టైప్ చేస్తున్నారు …</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; ఇతరులు టైప్ చేస్తున్నారు…</string>
+    <string name="room_do_not_have_permission_to_post">మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు</string>
+
+    <string name="ssl_trust">నమ్మకం</string>
+    <string name="ssl_do_not_trust">నమ్మకండి</string>
+    <string name="ssl_logout_account">లాగౌట్</string>
+    <string name="ssl_remain_offline">పట్టించుకోకుండా</string>
+    <string name="ssl_fingerprint_hash">వేలిముద్ర (%s):</string>
+    <string name="ssl_could_not_verify">రిమోట్ సర్వర్ యొక్క గుర్తింపును ధృవీకరించలేకపోయింది.</string>
+
+
+
+    <string name="search_hint">వెతుకు</string>
+    <string name="search_members_hint">గది సభ్యుల వడపోత</string>
+    <string name="search_no_results">ఫలితాలు లేవు</string>
+
+
+
+
+    <string name="settings_profile_picture">ప్రొఫైల్ చిత్రం</string>
+    <string name="settings_display_name">ప్రదర్శన పేరు</string>
+    <string name="settings_add_email_address">ఇమెయిల్ చిరునామాను జోడించండి</string>
+    <string name="settings_add_phone_number">ఫోన్ నంబర్ను జోడించండి</string>
+    <string name="settings_app_info_link_title">అప్లికేషన్ సమాచారం</string>
+
+    <string name="settings_messages_in_group_chat">గుంపు చాట్లలోని సందేశాలు</string>
+    <string name="settings_invited_to_room">నేను ఒక గదికి ఆహ్వానించబడినప్పుడు</string>
+    <string name="settings_call_invitations">కాల్ ఆహ్వానాలు</string>
+    <string name="settings_messages_sent_by_bot">బాట్ పంపిన సందేశాలు</string>
+
+    <string name="settings_background_sync">నేపథ్య సమకాలీకరణ</string>
+    <string name="settings_set_sync_timeout">సమకాలీకరణ అభ్యర్థన సమయం ముగిసింది</string>
+    <string name="settings_set_sync_delay">రెండు సమకాలీకరణ అభ్యర్థనల మధ్య ఆలస్యం</string>
+
+    <string name="settings_version">వెర్షన్</string>
+    <string name="settings_olm_version">olm వెర్షన్</string>
+    <string name="settings_app_term_conditions">నిబంధనలు &amp; షరతులు</string>
+    <string name="settings_third_party_notices">మూడవ పార్టీ నోటీసులు</string>
+    <string name="settings_copyright">కాపీరైట్</string>
+    <string name="settings_privacy_policy">గోప్యతా విధానం</string>
+    <string name="settings_user_settings">వాడుకరి అమరికలు</string>
+    <string name="settings_clear_cache">క్యాషేని తీసివేయి</string>
+    <string name="settings_notifications">నోటిఫికేషన్లు</string>
+    <string name="settings_ignored_users">విస్మరించబడిన వాడుకరులు</string>
+    <string name="settings_other">ఇతర</string>
+    <string name="settings_advanced">ఆధునిక</string>
+    <string name="settings_cryptography">క్రిప్టోగ్రఫీ</string>
+    <string name="settings_notifications_targets">నోటిఫికేషన్ లక్ష్యాలు</string>
+    <string name="settings_contact">స్థానిక పరిచయాలు</string>
+    <string name="settings_contacts_app_permission">పరిచయాల అనుమతి</string>
+    <string name="settings_contacts_phonebook_country">ఫోన్ బుక్ దేశం</string>
+    <string name="settings_home_display">హోమ్ ప్రదర్శన</string>
+    <string name="devices_details_name_title">పేరు</string>
+    <string name="devices_details_device_name">పరికరం పేరు</string>
+    <string name="devices_details_last_seen_title">ఆఖరి సారిగా చూసింది</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_delete_dialog_title">ప్రామాణీకరణ</string>
+
+    <string name="settings_home_server">హోమ్ సర్వర్</string>
+    <string name="settings_logged_in">లాగా లాగిన్ అయ్యింది</string>
+    <string name="settings_change_password">సంకేతపదాన్ని మార్చండి</string>
+    <string name="settings_old_password">పాత సంకేతపదం</string>
+    <string name="settings_new_password">కొత్త సంకేతపదం</string>
+    <string name="settings_fail_to_update_password">సంకేతపదం నవీకరించడం విఫలమైంది</string>
+    <string name="settings_password_updated">మీ సంకేతపదం నవీకరించబడింది</string>
+    <string name="settings_unignore_user">%s నుండి అన్ని సందేశాలను చూపించాలా?</string>
+
+
+
+    <string name="settings_select_country">దేశాన్ని ఎంచుకోండి</string>
+
+
+
+    <string name="room_settings_topic">విషయము</string>
+
+
+    <string name="room_settings_room_read_history_rules_pref_title">గది చరిత్ర చదవదగినది</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">చరిత్రను ఎవరు చదవగలరు?</string>
+
+    <string name="room_settings_room_internal_id">ఈ గది అంతర్గత ID</string>
+
+
+    <string name="room_settings_set_main_address">ప్రధాన చిరునామాగా సెట్ చేయండి</string>
+
+    <string name="encryption_information_device_name">పరికరం పేరు</string>
+    <string name="device_manager_session_details_session_id">పరికరం ID</string>
+    <string name="encryption_information_device_key">పరికరం కీ</string>
+
+    <string name="encryption_export_e2e_room_keys">E2E గది కీలను ఎగుమతి చేయండి</string>
+    <string name="encryption_export_room_keys">గది కీలను ఎగుమతి చేయండి</string>
+    <string name="encryption_export_room_keys_summary">స్థానిక ఫైల్కు కీలను ఎగుమతి చేయండి</string>
+    <string name="encryption_export_export">ఎగుమతి చేయండి</string>
+    <string name="encryption_information_not_verified">తనిఖీ చెయ్యబడలేదు</string>
+    <string name="encryption_information_verified">నిర్థారించబడింది</string>
+
+
+    <string name="encryption_information_verify">నిర్ధారించండి</string>
+
+    <string name="directory_server_placeholder">హోమెర్స్వేర్ URL</string>
+    <string name="directory_server_all_rooms_on_server">%s సర్వర్లో అన్ని గదులు</string>
+    <string name="directory_server_native_rooms">అన్ని స్థానిక %s గదులు</string>
+
+    <string name="send_bug_report_alert_message">చిరాకుతో ఫోను ఊపుతున్నట్లున్నారు. సమస్య నివేదిక పంపాలని ఉందా?</string>
+    <string name="option_take_photo_video">చిత్రం లేదా విడియో తీయిండి</string>
+
+    <string name="call_error_user_not_responding">అటు వైపు ఎవరు కాల్ ఎత్తలేదు</string>
+    <string name="action_voice_call">వాయిస్ కాల్</string>
+    <string name="passphrase_enter_passphrase">గుప్తపదం ఇవ్వండి</string>
+    <string name="passphrase_confirm_passphrase">గుప్తపదం మరల ఇవ్వండి</string>
+    <string name="room_settings_read_history_entry_members_only_joined">సభ్యులు మాత్రమే (చేరినప్పుడ్నుంచి)</string>
+
+    <string name="room_settings_read_history_entry_members_only_invited">సభ్యులు మాత్రమే (ఆహ్వానించినప్పుడ్నించి)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">సభ్యులు మాత్రమే (ఈ ఎంపిక ఎంచుకునప్పుడ్నించి)</string>
+
+    <string name="send_bug_report_logs_description">సమస్యలను నిర్ధారించడానికి, ఈ క్లయింట్ నుండి లాగ్లు మరియు ఈ బగ్ నివేదికతో పంపబడతాయి. మీరు పైన ఉన్న వచనాన్ని మాత్రమే పంపించాలనుకుంటే, దయచేసి అన్టిక్ చెయ్యి:</string>
+    <string name="send_bug_report_app_crashed">దరఖాస్తు క్రాష్ అయ్యింది. మీరు క్రాష్ నివేదికను సమర్పించాలనుకుంటున్నారా?</string>
+
+    <string name="send_bug_report_sent">బగ్ నివేదిక విజయవంతంగా పంపబడింది</string>
+    <string name="send_bug_report_failed">లోపపు నివేదిక పంపబడదు (%s)</string>
+
+
+
+
+
+
+    <string name="permissions_rationale_msg_camera_and_audio">"మీ కెమెరాను మరియు మీ శబ్ద ప్రసారిణి సాంగత్యం చేయడానికి రియోట్కు అనుమతి అవసరం.
+\n
+\nదయచేసి   పిలుపు చేయడానికి వీలుగా తదుపరి పాప్-అప్ల్లో ప్రాప్యతను అనుమతించండి."</string>
+
+    <string name="encryption_information_verify_device_warning2">ఇది సరిపోలితే, దిగువ ధృవీకరించు బటన్ను నొక్కండి. అది కాకపోతే, అప్పుడు ఎవరో ఈ పరికరాన్ని అడ్డుకుంటున్నారు మరియు మీరు బహుశా బ్లాక్ బటన్ను నొక్కాలనుకుంటున్నారు.
+\nభవిష్యత్తులో ఈ ధృవీకరణ ప్రక్రియ మరింత అధునాతనంగా ఉంటుంది.</string>
+
+
+
+
+</resources>

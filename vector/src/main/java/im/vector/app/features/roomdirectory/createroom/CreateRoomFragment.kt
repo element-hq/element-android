@@ -100,7 +100,10 @@ class CreateRoomFragment :
                 .allowBack(useCross = true)
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit -> {
+                    @Suppress("DEPRECATION")
+                    vectorBaseActivity.onBackPressed()
+                }
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }
         }

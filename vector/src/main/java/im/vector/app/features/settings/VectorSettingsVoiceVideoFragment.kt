@@ -23,16 +23,19 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
-import im.vector.app.core.utils.getCallRingtoneName
-import im.vector.app.core.utils.getCallRingtoneUri
-import im.vector.app.core.utils.setCallRingtoneUri
-import im.vector.app.core.utils.setUseRiotDefaultRingtone
+import im.vector.app.core.utils.RingtoneUtils
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
+
+    @Inject lateinit var ringtoneUtils: RingtoneUtils
 
     override var titleRes = R.string.preference_voice_and_video
     override val preferenceXmlRes = R.xml.vector_settings_voice_video
@@ -52,12 +55,12 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     override fun bindPref() {
         // Incoming call sounds
         mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
+            ringtoneUtils.setUseRiotDefaultRingtone(mUseRiotCallRingtonePreference.isChecked)
             false
         }
 
         mCallRingtonePreference.let {
-            activity?.let { activity -> it.summary = getCallRingtoneName(activity) }
+            it.summary = ringtoneUtils.getCallRingtoneName()
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayRingtonePicker()
                 false
@@ -67,11 +70,10 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
 
     private val ringtoneStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            val callRingtoneUri: Uri? = activityResult.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            val thisActivity = activity
-            if (callRingtoneUri != null && thisActivity != null) {
-                setCallRingtoneUri(thisActivity, callRingtoneUri)
-                mCallRingtonePreference.summary = getCallRingtoneName(thisActivity)
+            val callRingtoneUri: Uri? = activityResult.data?.getParcelableExtraCompat(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            if (callRingtoneUri != null) {
+                ringtoneUtils.setCallRingtoneUri(callRingtoneUri)
+                mCallRingtonePreference.summary = ringtoneUtils.getCallRingtoneName()
             }
         }
     }
@@ -82,7 +84,7 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
             putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
             putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
             putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE)
-            activity?.let { putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, getCallRingtoneUri(it)) }
+            putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, ringtoneUtils.getCallRingtoneUri())
         }
         ringtoneStartForActivityResult.launch(intent)
     }

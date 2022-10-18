@@ -35,7 +35,13 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo016
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo017
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo018
+<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.MatrixAutomaticSchemaMigration
+=======
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo019
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo020
+import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
+>>>>>>> develop
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
@@ -49,7 +55,11 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,
 ) : MatrixAutomaticSchemaMigration(
         dbName = "Crypto",
+<<<<<<< HEAD
         schemaVersion = 18L,
+=======
+        schemaVersion = 20L,
+>>>>>>> develop
 ) {
 
     /**
@@ -59,6 +69,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmCryptoStoreMigration
     override fun hashCode() = 5000
 
+<<<<<<< HEAD
     override fun doMigrate(oldVersion: Long, migrationContext: AutomaticSchemaMigration.MigrationContext) {
         if (oldVersion < 1) MigrateCryptoTo001Legacy(migrationContext).perform()
         if (oldVersion < 2) MigrateCryptoTo002Legacy(migrationContext).perform()
@@ -78,5 +89,28 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         if (oldVersion < 16) MigrateCryptoTo016(migrationContext).perform()
         if (oldVersion < 17) MigrateCryptoTo017(migrationContext).perform()
         if (oldVersion < 18) MigrateCryptoTo018(migrationContext).perform()
+=======
+    override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
+        if (oldVersion < 1) MigrateCryptoTo001Legacy(realm).perform()
+        if (oldVersion < 2) MigrateCryptoTo002Legacy(realm).perform()
+        if (oldVersion < 3) MigrateCryptoTo003RiotX(realm).perform()
+        if (oldVersion < 4) MigrateCryptoTo004(realm).perform()
+        if (oldVersion < 5) MigrateCryptoTo005(realm).perform()
+        if (oldVersion < 6) MigrateCryptoTo006(realm).perform()
+        if (oldVersion < 7) MigrateCryptoTo007(realm).perform()
+        if (oldVersion < 8) MigrateCryptoTo008(realm, clock).perform()
+        if (oldVersion < 9) MigrateCryptoTo009(realm).perform()
+        if (oldVersion < 10) MigrateCryptoTo010(realm).perform()
+        if (oldVersion < 11) MigrateCryptoTo011(realm).perform()
+        if (oldVersion < 12) MigrateCryptoTo012(realm).perform()
+        if (oldVersion < 13) MigrateCryptoTo013(realm).perform()
+        if (oldVersion < 14) MigrateCryptoTo014(realm).perform()
+        if (oldVersion < 15) MigrateCryptoTo015(realm).perform()
+        if (oldVersion < 16) MigrateCryptoTo016(realm).perform()
+        if (oldVersion < 17) MigrateCryptoTo017(realm).perform()
+        if (oldVersion < 18) MigrateCryptoTo018(realm).perform()
+        if (oldVersion < 19) MigrateCryptoTo019(realm).perform()
+        if (oldVersion < 20) MigrateCryptoTo020(realm).perform()
+>>>>>>> develop
     }
 }

@@ -47,12 +47,13 @@
     <dimen name="composer_min_height">56dp</dimen>
     <dimen name="composer_attachment_size">52dp</dimen>
     <dimen name="composer_attachment_margin">1dp</dimen>
-
+    <dimen name="rich_text_composer_corner_radius_single_line">28dp</dimen>
+    <dimen name="rich_text_composer_corner_radius_expanded">14dp</dimen>
 
     <dimen name="chat_bubble_margin_start">28dp</dimen>
-    <dimen name="chat_bubble_margin_end">62dp</dimen>
-    <dimen name="chat_bubble_fixed_size">300dp</dimen>
-    <dimen name="chat_bubble_corner_radius">12dp</dimen>
+    <dimen name="chat_bubble_margin_end">6dp</dimen>
+    <dimen name="chat_bubble_fixed_size">350sp</dimen>
+    <dimen name="chat_bubble_corner_radius">8dp</dimen>
 
     <!--  Onboarding   -->
     <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>
@@ -74,4 +75,9 @@
 
     <!-- Material 3 -->
     <dimen name="collapsing_toolbar_layout_medium_size">112dp</dimen>
+
+
+    <dimen name="release_notes_vertical_margin_small">8dp</dimen>
+    <dimen name="release_notes_vertical_margin">16dp</dimen>
+    <dimen name="release_notes_vertical_margin_large">28dp</dimen>
 </resources>

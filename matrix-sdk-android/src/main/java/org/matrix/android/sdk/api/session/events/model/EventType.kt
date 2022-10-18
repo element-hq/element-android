@@ -70,6 +70,9 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
     const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
+    // This type is for local purposes, it should never be processed by the server
+    const val LOCAL_STATE_ROOM_THIRD_PARTY_INVITE = "local.room.third_party_invite"
+
     // Call Events
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
@@ -124,5 +127,18 @@ object EventType {
                 type == CALL_NEGOTIATE ||
                 type == CALL_REJECT ||
                 type == CALL_REPLACES
+    }
+
+    fun isVerificationEvent(type: String): Boolean {
+        return when (type) {
+            KEY_VERIFICATION_START,
+            KEY_VERIFICATION_ACCEPT,
+            KEY_VERIFICATION_KEY,
+            KEY_VERIFICATION_MAC,
+            KEY_VERIFICATION_CANCEL,
+            KEY_VERIFICATION_DONE,
+            KEY_VERIFICATION_READY -> true
+            else -> false
+        }
     }
 }

@@ -41,6 +41,46 @@ data class Interaction(
 
     enum class Name {
         /**
+         * User tapped the All filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterAll,
+
+        /**
+         * User tapped the Favourites filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterFavourites,
+
+        /**
+         * User tapped the People filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterPeople,
+
+        /**
+         * User tapped the Unreads filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterUnreads,
+
+        /**
+         * User disabled filters from the all chats layout settings.
+         */
+        MobileAllChatsFiltersDisabled,
+
+        /**
+         * User enabled filters from the all chats layout settings.
+         */
+        MobileAllChatsFiltersEnabled,
+
+        /**
+         * User disabled recents from the all chats layout settings.
+         */
+        MobileAllChatsRecentsDisabled,
+
+        /**
+         * User enabled recents from the all chats layout settings.
+         */
+        MobileAllChatsRecentsEnabled,
+
+        /**
          * User tapped on Add to Home button on Room Details screen.
          */
         MobileRoomAddHome,
@@ -59,6 +99,11 @@ data class Interaction(
          * User tapped on a thread summary item on Room screen.
          */
         MobileRoomThreadSummaryItem,
+
+        /**
+         * User validated the creation of a new space.
+         */
+        MobileSpaceCreationValidated,
 
         /**
          * User tapped on the filter button on ThreadList screen.
@@ -80,6 +125,12 @@ data class Interaction(
          * switching should occur.
          */
         SpacePanelSwitchSpace,
+
+        /**
+         * User tapped an unselected sub space from the space list -> space
+         * switching should occur.
+         */
+        SpacePanelSwitchSubSpace,
 
         /**
          * User clicked the create room button in the add existing room to space

@@ -22,10 +22,19 @@ import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
 
+<<<<<<< HEAD
 internal class CrossSigningInfoEntity : RealmObject {
     @PrimaryKey
     var userId: String? = null
     var crossSigningKeys: RealmList<KeyInfoEntity> = realmListOf()
+=======
+internal open class CrossSigningInfoEntity(
+        @PrimaryKey
+        var userId: String? = null,
+        var wasUserVerifiedOnce: Boolean = false,
+        var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
+) : RealmObject() {
+>>>>>>> develop
 
     companion object
 

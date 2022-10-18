@@ -34,6 +34,7 @@
         android:icon="@drawable/ic_filter"
         android:title="@string/home_filter_placeholder_home"
         app:iconTint="?vctr_content_secondary"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
 </menu>

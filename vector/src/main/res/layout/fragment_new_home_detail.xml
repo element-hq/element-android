@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentCallsView">
+        app:layout_constraintTop_toBottomOf="@id/syncStateView">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -68,37 +68,72 @@
                         android:id="@+id/avatar"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:padding="6dp"
                         android:contentDescription="@string/a11y_open_settings"
+                        android:padding="6dp"
                         tools:src="@sample/user_round_avatars" />
 
                 </com.google.android.material.appbar.MaterialToolbar>
+
+                <ImageView
+                    android:id="@+id/debug_button"
+                    style="@style/VectorDebug"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginStart="12dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_settings_x"
+                    app:tint="?colorPrimary"
+                    tools:ignore="MissingPrefix" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/roomListContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/roomListContainer"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:menu="@menu/home_bottom_navigation" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newLayoutOpenSpacesButton"
+        style="@style/Widget.Vector.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:accessibilityTraversalAfter="@id/newLayoutCreateChatButton"
+        android:contentDescription="@string/a11y_open_spaces"
+        android:src="@drawable/ic_spaces"
+        android:visibility="gone"
+        app:backgroundTint="?attr/vctr_toolbar_background"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/newLayoutCreateChatButton"
+        app:layout_constraintEnd_toEndOf="@id/newLayoutCreateChatButton"
+        app:layout_constraintStart_toStartOf="@id/newLayoutCreateChatButton"
+        app:tint="?attr/colorPrimary"
+        tools:targetApi="lollipop_mr1"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newLayoutCreateChatButton"
+        style="@style/Widget.Vector.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/a11y_create_message"
+        android:src="@drawable/ic_new_chat"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:targetApi="lollipop_mr1"
+        tools:visibility="visible" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
 
 @AndroidEntryPoint
 class RoomMemberProfileActivity : VectorBaseActivity<ActivitySimpleBinding>() {
@@ -48,7 +49,7 @@ class RoomMemberProfileActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
+            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG) ?: return
             addFragment(views.simpleFragmentContainer, RoomMemberProfileFragment::class.java, fragmentArgs)
         }
 

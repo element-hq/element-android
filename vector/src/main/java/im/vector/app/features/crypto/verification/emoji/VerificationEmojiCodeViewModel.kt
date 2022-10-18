@@ -40,13 +40,13 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 data class VerificationEmojiCodeViewState(
         val transactionId: String?,
-        val otherUser: MatrixItem? = null,
+        val otherUser: MatrixItem,
         val supportsEmoji: Boolean = true,
         val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
         val decimalDescription: Async<String> = Uninitialized,
@@ -59,15 +59,13 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 ) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
-        withState { state ->
-            refreshStateFromTx(
-                    session.cryptoService().verificationService()
-                            .getExistingTransaction(
-                                    state.otherUser?.id ?: "", state.transactionId
-                                    ?: ""
-                            ) as? SasVerificationTransaction
-            )
-        }
+        refreshStateFromTx(
+                session.cryptoService().verificationService()
+                        .getExistingTransaction(
+                                otherUserId = initialState.otherUser.id,
+                                tid = initialState.transactionId ?: ""
+                        ) as? SasVerificationTransaction
+        )
 
         session.cryptoService().verificationService().addListener(this)
     }
@@ -165,10 +163,10 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
-            val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
+            val matrixItem = session.getUserOrDefault(args.otherUserId).toMatrixItem()
 
             return VerificationEmojiCodeViewState(
                     transactionId = args.verificationId,

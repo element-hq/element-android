@@ -82,15 +82,18 @@ class RoomUploadsMediaFragment :
         controller.listener = this
     }
 
-    @Suppress("DEPRECATION")
     private fun getNumberOfColumns(): Int {
-        val displayMetrics = DisplayMetrics()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requireContext().display?.getMetrics(displayMetrics)
+        val screenWidthInPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val a = requireActivity().windowManager.currentWindowMetrics
+            a.bounds.width()
         } else {
+            val displayMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
         }
-        return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
+        val screenWidthInDp = dimensionConverter.pxToDp(screenWidthInPx)
+        return screenWidthInDp / IMAGE_SIZE_DP
     }
 
     override fun onDestroyView() {

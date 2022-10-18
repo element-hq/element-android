@@ -16,6 +16,7 @@
 package im.vector.app.features.attachments
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -25,6 +26,8 @@ import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.compat.getParcelableCompat
+import im.vector.lib.core.utils.compat.getSerializableCompat
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
@@ -44,6 +47,7 @@ class AttachmentsHelper(
     interface Callback {
         fun onContactAttachmentReady(contactAttachment: ContactAttachment)
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
+        fun onAttachmentError(throwable: Throwable)
     }
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
@@ -64,8 +68,8 @@ class AttachmentsHelper(
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        captureUri = savedInstanceState?.getParcelable(CAPTURE_PATH_KEY) as? Uri
-        pendingType = savedInstanceState?.getSerializable(PENDING_TYPE_KEY) as? AttachmentTypeSelectorView.Type
+        captureUri = savedInstanceState?.getParcelableCompat(CAPTURE_PATH_KEY)
+        pendingType = savedInstanceState?.getSerializableCompat(PENDING_TYPE_KEY)
     }
 
     // Public Methods
@@ -73,21 +77,21 @@ class AttachmentsHelper(
     /**
      * Starts the process for handling file picking.
      */
-    fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.FILE).startWith(activityResultLauncher)
     }
 
     /**
      * Starts the process for handling image/video picking.
      */
-    fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
      * Starts the process for handling audio picking.
      */
-    fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.AUDIO).startWith(activityResultLauncher)
     }
 
@@ -101,11 +105,11 @@ class AttachmentsHelper(
             cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>
     ) {
         PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
-            override fun takePhoto() {
+            override fun takePhoto() = doSafe {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
             }
 
-            override fun takeVideo() {
+            override fun takeVideo() = doSafe {
                 captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
             }
         })
@@ -114,8 +118,16 @@ class AttachmentsHelper(
     /**
      * Starts the process for handling contact picking.
      */
-    fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) = doSafe {
         MultiPicker.get(MultiPicker.CONTACT).startWith(activityResultLauncher)
+    }
+
+    private fun doSafe(function: () -> Unit) {
+        try {
+            function()
+        } catch (activityNotFound: ActivityNotFoundException) {
+            callback.onAttachmentError(activityNotFound)
+        }
     }
 
     /**

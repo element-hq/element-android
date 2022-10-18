@@ -37,16 +37,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.SpaceStateHandler
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
@@ -55,8 +56,11 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.disclaimer.DisclaimerDialog
+import im.vector.app.features.home.room.list.actions.RoomListSharedAction
+import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
+import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
@@ -72,7 +76,6 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
-import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -80,7 +83,9 @@ import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -110,6 +115,7 @@ class HomeActivity :
         VectorMenuProvider {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+    private lateinit var roomListSharedActionViewModel: RoomListSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
 
@@ -121,11 +127,9 @@ class HomeActivity :
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
 
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    @Inject lateinit var pushManager: PushersManager
+    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var permalinkHandler: PermalinkHandler
@@ -135,6 +139,10 @@ class HomeActivity :
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
+    @Inject lateinit var disclaimerDialog: DisclaimerDialog
+    @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
+
+    private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -155,10 +163,15 @@ class HomeActivity :
                 navigator.switchToSpace(
                         context = this,
                         spaceId = spaceId,
-                        postSwitchOption
+                        postSwitchOption,
                 )
+                roomListSharedActionViewModel.post(RoomListSharedAction.CloseBottomSheet)
             }
         }
+    }
+
+    private val postPermissionLauncher = registerForPermissionsResult { _, _ ->
+        // Nothing to do with the result.
     }
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -193,26 +206,30 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         unifiedPushHelper.register(this) {
             if (unifiedPushHelper.isEmbeddedDistributor()) {
                 fcmHelper.ensureFcmTokenIsRetrieved(
                         this,
-                        pushManager,
-                        vectorPreferences.areNotificationEnabledForDevice()
+                        pushersManager,
+                        homeActivityViewModel.shouldAddHttpPusher()
                 )
             }
         }
+
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
+        roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            if (vectorFeatures.isNewAppLayoutEnabled()) {
+            if (vectorPreferences.isNewAppLayoutEnabled()) {
                 views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 replaceFragment(views.homeDetailFragmentContainer, NewHomeDetailFragment::class.java)
             } else {
                 replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                 replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+                views.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
         }
 
@@ -232,7 +249,7 @@ class HomeActivity :
                 }
                 .launchIn(lifecycleScope)
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
@@ -259,6 +276,8 @@ class HomeActivity :
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.ShowNotificationDialog -> handleShowNotificationDialog()
+                HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
             }
@@ -271,6 +290,14 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleShowNotificationDialog() {
+        notificationPermissionManager.eventuallyRequestPermission(this, postPermissionLauncher)
+    }
+
+    private fun handleShowReleaseNotes() {
+        startActivity(Intent(this, ReleaseNotesActivity::class.java))
     }
 
     private fun showSpaceSettings(spaceId: String) {
@@ -309,7 +336,7 @@ class HomeActivity :
     private fun migrateThreadsIfNeeded(checkSession: Boolean) {
         if (checkSession) {
             // We should check session to ensure we will only clear cache if needed
-            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            val args = intent.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
             if (args?.hasExistingSession == true) {
                 // existingSession --> Will be true only if we came from an existing active session
                 Timber.i("----> Migrating threads from an existing session..")
@@ -362,7 +389,7 @@ class HomeActivity :
 
             lifecycleScope.launch {
                 val isHandled = permalinkHandler.launch(
-                        context = this@HomeActivity,
+                        fragmentActivity = this@HomeActivity,
                         deepLink = resolvedLink,
                         navigationInterceptor = this@HomeActivity,
                         buildTask = true
@@ -388,6 +415,14 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
+        lifecycleScope.launch {
+            if (state.areNotificationsSilenced) {
+                unifiedPushHelper.unregister(pushersManager)
+            } else {
+                unifiedPushHelper.register(this@HomeActivity)
+            }
+        }
+
         when (val status = state.syncRequestState) {
             is SyncRequestState.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
@@ -498,7 +533,7 @@ class HomeActivity :
         )
     }
 
-    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
+    private fun promptSecurityEvent(userItem: MatrixItem.UserItem, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = "upgradeSecurity",
@@ -520,7 +555,7 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+        val parcelableExtra = intent?.getParcelableExtraCompat<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
@@ -553,7 +588,7 @@ class HomeActivity :
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
-            showDisclaimerDialog(this)
+            disclaimerDialog.showDisclaimerDialog(this)
         }
 
         // Force remote backup state update to update the banner if needed
@@ -561,9 +596,17 @@ class HomeActivity :
 
         // Check nightly
         nightlyProxy.onHomeResumed()
+
+        checkNewAppLayoutFlagChange()
     }
 
-    override fun getMenuRes() = if (vectorFeatures.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
+    private fun checkNewAppLayoutFlagChange() {
+        if (vectorPreferences.isNewAppLayoutEnabled() != isNewAppLayoutEnabled) {
+            restart()
+        }
+    }
+
+    override fun getMenuRes() = if (vectorPreferences.isNewAppLayoutEnabled()) R.menu.menu_new_home else R.menu.menu_home
 
     override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
@@ -610,8 +653,16 @@ class HomeActivity :
                 launchInviteFriends()
                 true
             }
+            R.id.menu_home_qr -> {
+                launchQrCode()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun launchQrCode() {
+        startActivity(UserCodeActivity.newIntent(this, sharedActionViewModel.session.myUserId))
     }
 
     private fun launchInviteFriends() {
@@ -633,7 +684,10 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            validateBackPressed { super.onBackPressed() }
+            validateBackPressed {
+                @Suppress("DEPRECATION")
+                super.onBackPressed()
+            }
         }
     }
 

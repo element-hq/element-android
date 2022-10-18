@@ -16,7 +16,6 @@
 
 package im.vector.app.core.extensions
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -91,11 +90,9 @@ fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
  *
  * @return true if no active connection is found
  */
-@Suppress("deprecation")
-@SuppressLint("NewApi") // false positive
 fun Context.inferNoConnectivity(sdkIntProvider: BuildVersionSdkIntProvider): Boolean {
     val connectivityManager = getSystemService<ConnectivityManager>()!!
-    return if (sdkIntProvider.get() > Build.VERSION_CODES.M) {
+    return if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.M)) {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         when {
             networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false
@@ -104,6 +101,7 @@ fun Context.inferNoConnectivity(sdkIntProvider: BuildVersionSdkIntProvider): Boo
             else -> true
         }
     } else {
+        @Suppress("DEPRECATION")
         when (connectivityManager.activeNetworkInfo?.type) {
             ConnectivityManager.TYPE_WIFI -> false
             ConnectivityManager.TYPE_MOBILE -> false

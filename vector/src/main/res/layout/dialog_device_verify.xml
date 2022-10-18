@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/encryption_information_device_id"
+            android:text="@string/device_manager_session_details_session_id"
             android:textStyle="bold" />
 
         <TextView

@@ -31,8 +31,13 @@ import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
 import org.matrix.android.sdk.internal.auth.db.RealmPendingSessionStore
 import org.matrix.android.sdk.internal.auth.db.RealmSessionParamsStore
 import org.matrix.android.sdk.internal.auth.login.DefaultDirectLoginTask
+import org.matrix.android.sdk.internal.auth.login.DefaultQrLoginTokenTask
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.RealmInstance
+=======
+import org.matrix.android.sdk.internal.auth.login.QrLoginTokenTask
+>>>>>>> develop
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import org.matrix.android.sdk.internal.di.MatrixCoroutineScope
@@ -114,4 +119,7 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
+
+    @Binds
+    abstract fun bindQrLoginTokenTask(task: DefaultQrLoginTokenTask): QrLoginTokenTask
 }

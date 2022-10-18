@@ -85,8 +85,7 @@ class VectorSettingsDevicesFragment :
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvents.SelfVerification -> {
-                    VerificationBottomSheet.forSelfVerification(it.session)
-                            .show(childFragmentManager, "REQPOP")
+                    navigator.requestSelfSessionVerification(requireActivity())
                 }
                 is DevicesViewEvents.ShowManuallyVerify -> {
                     ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
@@ -94,7 +93,7 @@ class VectorSettingsDevicesFragment :
                     }
                 }
                 is DevicesViewEvents.PromptResetSecrets -> {
-                    navigator.open4SSetup(requireContext(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                    navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
             }
         }

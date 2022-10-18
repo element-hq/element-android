@@ -19,6 +19,7 @@ import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.pushers.PusherState
 
+<<<<<<< HEAD
 // TODO
 //        at java.lang.Thread.run(Thread.java:764)
 //     Caused by: java.lang.IllegalArgumentException: 'value' is not a valid managed object.
@@ -37,6 +38,20 @@ internal class PusherEntity : RealmObject {
     var profileTag: String? = null
     var lang: String? = null
     var data: PusherDataEntity? = null
+=======
+internal open class PusherEntity(
+        var pushKey: String = "",
+        var kind: String? = null,
+        var appId: String = "",
+        var appDisplayName: String? = null,
+        var deviceDisplayName: String? = null,
+        var profileTag: String? = null,
+        var lang: String? = null,
+        var data: PusherDataEntity? = null,
+        var enabled: Boolean = true,
+        var deviceId: String? = null,
+) : RealmObject() {
+>>>>>>> develop
     private var stateStr: String = PusherState.UNREGISTERED.name
 
     var state: PusherState

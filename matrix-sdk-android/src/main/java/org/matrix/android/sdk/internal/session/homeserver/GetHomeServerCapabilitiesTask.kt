@@ -20,11 +20,11 @@ import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportQrCodeLogin
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreads
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.database.RealmInstance
@@ -131,8 +131,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 homeServerCapabilitiesEntity.roomVersionsJson = capabilities?.roomVersions?.let {
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
-                homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
-                        getVersionResult?.doesServerSupportThreads().orFalse()
             }
 
             if (getMediaConfigResult != null) {
@@ -143,6 +141,9 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             if (getVersionResult != null) {
                 homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
                 homeServerCapabilitiesEntity.canControlLogoutDevices = getVersionResult.doesServerSupportLogoutDevices()
+                homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
+                        getVersionResult.doesServerSupportThreads()
+                homeServerCapabilitiesEntity.canLoginWithQrCode = getVersionResult.doesServerSupportQrCodeLogin()
             }
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {

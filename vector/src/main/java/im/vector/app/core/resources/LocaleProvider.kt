@@ -23,9 +23,14 @@ import androidx.core.os.ConfigurationCompat
 import java.util.Locale
 import javax.inject.Inject
 
-class LocaleProvider @Inject constructor(private val resources: Resources) {
+interface LocaleProvider {
 
-    fun current(): Locale {
+    fun current(): Locale
+}
+
+class DefaultLocaleProvider @Inject constructor(private val resources: Resources) : LocaleProvider {
+
+    override fun current(): Locale {
         return ConfigurationCompat.getLocales(resources.configuration).get(0) ?: Locale.getDefault()
     }
 }

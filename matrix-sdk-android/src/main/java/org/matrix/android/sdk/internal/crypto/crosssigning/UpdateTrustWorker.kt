@@ -158,7 +158,12 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             // i have all the new trusts, update DB
             trusts.forEach {
                 val verified = it.value?.isVerified() == true
+<<<<<<< HEAD
                 updateCrossSigningKeysTrust(it.key, verified)
+=======
+                Timber.v("[$myUserId] ## CrossSigning - Updating user trust: ${it.key} to $verified")
+                updateCrossSigningKeysTrust(cryptoRealm, it.key, verified)
+>>>>>>> develop
             }
 
             // Ok so now we have to check device trust for all these users..
@@ -202,6 +207,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
     private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
+<<<<<<< HEAD
         sessionRealmInstance.write {
             val cryptoRealm = cryptoRealmInstance.getBlockingRealm()
             query(RoomMemberSummaryEntity::class)
@@ -228,6 +234,37 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                                         if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
                                             Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
                                             roomSummary.roomEncryptionTrustLevel = updatedTrust
+=======
+        awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
+            Timber.d("## CrossSigning - Updating shields for impacted rooms - in transaction")
+            Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
+                sessionRealm.where(RoomMemberSummaryEntity::class.java)
+                        .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
+                        .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+                        .findAll()
+                        .map { it.roomId }
+                        .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
+                        .forEach { roomId ->
+                            RoomSummaryEntity.where(sessionRealm, roomId)
+                                    .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
+                                    .findFirst()
+                                    ?.let { roomSummary ->
+                                        Timber.v("## CrossSigning - Check shield state for room $roomId")
+                                        val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
+                                        try {
+                                            val updatedTrust = computeRoomShield(
+                                                    myCrossSigningInfo,
+                                                    cryptoRealm,
+                                                    allActiveRoomMembers,
+                                                    roomSummary
+                                            )
+                                            if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
+                                                Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
+                                                roomSummary.roomEncryptionTrustLevel = updatedTrust
+                                            }
+                                        } catch (failure: Throwable) {
+                                            Timber.e(failure)
+>>>>>>> develop
                                         }
                                     } catch (failure: Throwable) {
                                         Timber.e(failure)
@@ -235,6 +272,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                                 }
                     }
         }
+        Timber.d("## CrossSigning - Updating shields for impacted rooms - END")
     }
 
     private fun TypedRealm.getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
@@ -251,6 +289,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 ?.let { updateTrustWorkerDataRepository.delete(it) }
     }
 
+<<<<<<< HEAD
     private fun MutableRealm.updateCrossSigningKeysTrust(userId: String, verified: Boolean) {
         crossSigningInfoEntityQueries()
                 .firstUserId(userId)
@@ -265,11 +304,33 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                             info.trustLevelEntity = TrustLevelEntity().also {
                                 it.locallyVerified = verified
                                 it.crossSignedVerified = verified
+=======
+    private fun updateCrossSigningKeysTrust(cryptoRealm: Realm, userId: String, verified: Boolean) {
+        cryptoRealm.where(CrossSigningInfoEntity::class.java)
+                .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+                .findFirst()
+                ?.let { userKeyInfo ->
+                    userKeyInfo
+                            .crossSigningKeys
+                            .forEach { key ->
+                                // optimization to avoid trigger updates when there is no change..
+                                if (key.trustLevelEntity?.isVerified() != verified) {
+                                    Timber.d("## CrossSigning - Trust change for $userId : $verified")
+                                    val level = key.trustLevelEntity
+                                    if (level == null) {
+                                        key.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
+                                            it.locallyVerified = verified
+                                            it.crossSignedVerified = verified
+                                        }
+                                    } else {
+                                        level.locallyVerified = verified
+                                        level.crossSignedVerified = verified
+                                    }
+                                }
+>>>>>>> develop
                             }
-                        } else {
-                            level.locallyVerified = verified
-                            level.crossSignedVerified = verified
-                        }
+                    if (verified) {
+                        userKeyInfo.wasUserVerifiedOnce = true
                     }
                 }
     }
@@ -295,8 +356,18 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                     cryptoRealm.getCrossSigningInfo(userId)?.isTrusted() == true
                 }
 
+        val resetTrust = listToCheck
+                .filter { userId ->
+                    val crossSigningInfo = getCrossSigningInfo(cryptoRealm, userId)
+                    crossSigningInfo?.isTrusted() != true && crossSigningInfo?.wasTrustedOnce == true
+                }
+
         return if (allTrustedUserIds.isEmpty()) {
-            RoomEncryptionTrustLevel.Default
+            if (resetTrust.isEmpty()) {
+                RoomEncryptionTrustLevel.Default
+            } else {
+                RoomEncryptionTrustLevel.Warning
+            }
         } else {
             // If one of the verified user as an untrusted device -> warning
             // If all devices of all verified users are trusted -> green
@@ -323,11 +394,15 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         if (hasWarning) {
                             RoomEncryptionTrustLevel.Warning
                         } else {
-                            if (listToCheck.size == allTrustedUserIds.size) {
-                                // all users are trusted and all devices are verified
-                                RoomEncryptionTrustLevel.Trusted
+                            if (resetTrust.isEmpty()) {
+                                if (listToCheck.size == allTrustedUserIds.size) {
+                                    // all users are trusted and all devices are verified
+                                    RoomEncryptionTrustLevel.Trusted
+                                } else {
+                                    RoomEncryptionTrustLevel.Default
+                                }
                             } else {
-                                RoomEncryptionTrustLevel.Default
+                                RoomEncryptionTrustLevel.Warning
                             }
                         }
                     }
@@ -340,7 +415,8 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 userId = userId,
                 crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
                     crossSigningKeysMapper.map(userId, it)
-                }
+                },
+                wasTrustedOnce = xsignInfo.wasUserVerifiedOnce
         )
     }
 

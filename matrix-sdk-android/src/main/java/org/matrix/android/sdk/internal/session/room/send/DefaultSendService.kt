@@ -99,11 +99,18 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String?): Cancelable {
+    override fun sendQuotedTextMessage(
+            quotedEvent: TimelineEvent,
+            text: String,
+            formattedText: String?,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String?
+    ): Cancelable {
         return localEchoEventFactory.createQuotedTextEvent(
                 roomId = roomId,
                 quotedEvent = quotedEvent,
                 text = text,
+                formattedText = formattedText,
                 autoMarkdown = autoMarkdown,
                 rootThreadEventId = rootThreadEventId
         )

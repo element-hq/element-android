@@ -19,8 +19,6 @@ package im.vector.app.core.utils
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -36,6 +34,7 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
+import org.matrix.android.sdk.api.util.getApplicationInfoCompat
 
 /**
  * Tells if the application ignores battery optimizations.
@@ -65,7 +64,7 @@ fun Context.isAnimationEnabled(): Boolean {
  */
 fun Context.getApplicationLabel(packageName: String): String {
     return try {
-        val ai = packageManager.getApplicationInfo(packageName, 0)
+        val ai = packageManager.getApplicationInfoCompat(packageName, 0)
         packageManager.getApplicationLabel(ai).toString()
     } catch (e: PackageManager.NameNotFoundException) {
         packageName
@@ -100,8 +99,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
  * @param toastMessage content of the toast message as a String resource
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
-    val clipboard = context.getSystemService<ClipboardManager>()!!
-    clipboard.setPrimaryClip(ClipData.newPlainText("", text))
+    CopyToClipboardUseCase(context).execute(text)
     if (showToast) {
         context.toast(toastMessage)
     }

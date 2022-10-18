@@ -18,6 +18,7 @@ package im.vector.app.features.spaces
 
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -34,16 +35,33 @@ import org.matrix.android.sdk.api.util.MatrixItem
 abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder>(R.layout.item_new_space) {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var avatarRenderer: AvatarRenderer
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
+    @EpoxyAttribute var expanded: Boolean = false
+    @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onLongClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onSpaceSelectedListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onToggleExpandListener: ClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.onClick(listener)
+        val context = holder.root.context
+        holder.root.onClick(onSpaceSelectedListener)
+        holder.root.setOnLongClickListener {
+            onLongClickListener?.invoke(holder.root)
+            true
+        }
         holder.name.text = matrixItem.displayName
-        holder.rootView.isChecked = selected
+        holder.root.isChecked = selected
+
+        holder.chevron.setOnClickListener(onToggleExpandListener)
+        holder.chevron.isVisible = hasChildren
+        holder.chevron.setImageResource(if (expanded) R.drawable.ic_expand_more else R.drawable.ic_arrow_right)
+        holder.chevron.contentDescription = context.getString(
+                if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children,
+                matrixItem.displayName,
+        )
 
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.unreadCounter.render(countState)
@@ -55,9 +73,10 @@ abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder
     }
 
     class Holder : VectorEpoxyHolder() {
-        val rootView by bind<CheckableConstraintLayout>(R.id.root)
+        val root by bind<CheckableConstraintLayout>(R.id.root)
         val avatar by bind<ImageView>(R.id.avatar)
         val name by bind<TextView>(R.id.name)
         val unreadCounter by bind<UnreadCounterBadgeView>(R.id.unread_counter)
+        val chevron by bind<ImageView>(R.id.chevron)
     }
 }

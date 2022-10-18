@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
@@ -31,16 +32,16 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
+import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
@@ -122,7 +123,11 @@ class MessageInformationDataFactory @Inject constructor(
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration,
-                messageType = event.root.getMsgType()
+                messageType = if (event.root.isSticker()) {
+                    MessageType.MSGTYPE_STICKER_LOCAL
+                } else {
+                    event.root.getMsgType()
+                }
         )
     }
 
@@ -144,54 +149,81 @@ class MessageInformationDataFactory @Inject constructor(
     }
 
     private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
-        return if (
-                event.root.sendState == SendState.SYNCED &&
-                roomSummary?.isEncrypted.orFalse() &&
-                // is user verified
-                session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
-            val ts = roomSummary?.encryptionEventTs ?: 0
-            val eventTs = event.root.originServerTs ?: 0
-            if (event.isEncrypted()) {
+        if (roomSummary?.isEncrypted != true) {
+            // No decoration for clear room
+            // Questionable? what if the event is E2E?
+            return E2EDecoration.NONE
+        }
+        if (event.root.sendState != SendState.SYNCED) {
+            // we don't display e2e decoration if event not synced back
+            return E2EDecoration.NONE
+        }
+        val userCrossSigningInfo = session.cryptoService()
+                .crossSigningService()
+                .getUserCrossSigningKeys(event.root.senderId.orEmpty())
+
+        if (userCrossSigningInfo?.isTrusted() == true) {
+            return if (event.isEncrypted()) {
                 // Do not decorate failed to decrypt, or redaction (we lost sender device info)
                 if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
                     E2EDecoration.NONE
                 } else {
-                    val sendingDevice = event.root.content
-                            .toModel<EncryptedEventContent>()
-                            ?.deviceId
-                            ?.let { deviceId ->
-                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
+                    val sendingDevice = event.root.getSenderKey()
+                            ?.let {
+                                session.cryptoService().deviceWithIdentityKey(
+                                        it,
+                                        event.root.content?.get("algorithm") as? String ?: ""
+                                )
                             }
-                    when {
-                        sendingDevice == null -> {
-                            // For now do not decorate this with warning
-                            // maybe it's a deleted session
-                            E2EDecoration.NONE
-                        }
-                        sendingDevice.trustLevel == null -> {
-                            E2EDecoration.WARN_SENT_BY_UNKNOWN
-                        }
-                        sendingDevice.trustLevel?.isVerified().orFalse() -> {
-                            E2EDecoration.NONE
-                        }
-                        else -> {
-                            E2EDecoration.WARN_SENT_BY_UNVERIFIED
+                    if (event.root.mxDecryptionResult?.isSafe == false) {
+                        E2EDecoration.WARN_UNSAFE_KEY
+                    } else {
+                        when {
+                            sendingDevice == null -> {
+                                // For now do not decorate this with warning
+                                // maybe it's a deleted session
+                                E2EDecoration.WARN_SENT_BY_DELETED_SESSION
+                            }
+                            sendingDevice.trustLevel == null -> {
+                                E2EDecoration.WARN_SENT_BY_UNKNOWN
+                            }
+                            sendingDevice.trustLevel?.isVerified().orFalse() -> {
+                                E2EDecoration.NONE
+                            }
+                            else -> {
+                                E2EDecoration.WARN_SENT_BY_UNVERIFIED
+                            }
                         }
                     }
                 }
             } else {
-                if (event.root.isStateEvent()) {
-                    // Do not warn for state event, they are always in clear
-                    E2EDecoration.NONE
-                } else {
-                    // If event is in clear after the room enabled encryption we should warn
-                    if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
-                }
+                e2EDecorationForClearEventInE2ERoom(event, roomSummary)
             }
         } else {
-            E2EDecoration.NONE
+            return if (!event.isEncrypted()) {
+                e2EDecorationForClearEventInE2ERoom(event, roomSummary)
+            } else if (event.root.mxDecryptionResult != null) {
+                if (event.root.mxDecryptionResult?.isSafe == true) {
+                    E2EDecoration.NONE
+                } else {
+                    E2EDecoration.WARN_UNSAFE_KEY
+                }
+            } else {
+                E2EDecoration.NONE
+            }
         }
     }
+
+    private fun e2EDecorationForClearEventInE2ERoom(event: TimelineEvent, roomSummary: RoomSummary) =
+            if (event.root.isStateEvent()) {
+                // Do not warn for state event, they are always in clear
+                E2EDecoration.NONE
+            } else {
+                val ts = roomSummary.encryptionEventTs ?: 0
+                val eventTs = event.root.originServerTs ?: 0
+                // If event is in clear after the room enabled encryption we should warn
+                if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
+            }
 
     /**
      * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
@@ -202,7 +234,7 @@ class MessageInformationDataFactory @Inject constructor(
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
             EventType.MESSAGE -> {
-                event.getLastMessageContent() is MessageVerificationRequestContent
+                event.getVectorLastMessageContent() is MessageVerificationRequestContent
             }
             else -> false
         }

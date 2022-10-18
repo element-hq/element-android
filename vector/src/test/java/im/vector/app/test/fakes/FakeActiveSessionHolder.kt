@@ -33,4 +33,8 @@ class FakeActiveSessionHolder(
     fun expectSetsActiveSession(session: Session) {
         justRun { instance.setActiveSession(session) }
     }
+
+    fun givenGetSafeActiveSessionReturns(session: Session?) {
+        every { instance.getSafeActiveSession() } returns session
+    }
 }

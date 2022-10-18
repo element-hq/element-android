@@ -104,19 +104,21 @@ internal class DefaultRelationService @AssistedInject constructor(
             targetEvent: TimelineEvent,
             msgType: String,
             newBodyText: CharSequence,
+            newFormattedBodyText: CharSequence?,
             newBodyAutoMarkdown: Boolean,
             compatibilityBodyText: String
     ): Cancelable {
-        return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newBodyAutoMarkdown, compatibilityBodyText)
+        return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newFormattedBodyText, newBodyAutoMarkdown, compatibilityBodyText)
     }
 
     override fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
             newBodyText: String,
+            newFormattedBodyText: String?,
             compatibilityBodyText: String
     ): Cancelable {
-        return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, compatibilityBodyText)
+        return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, newFormattedBodyText, compatibilityBodyText)
     }
 
     override suspend fun fetchEditHistory(eventId: String): List<Event> {
@@ -126,6 +128,7 @@ internal class DefaultRelationService @AssistedInject constructor(
     override fun replyToMessage(
             eventReplied: TimelineEvent,
             replyText: CharSequence,
+            replyFormattedText: CharSequence?,
             autoMarkdown: Boolean,
             showInThread: Boolean,
             rootThreadEventId: String?
@@ -134,6 +137,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                 roomId = roomId,
                 eventReplied = eventReplied,
                 replyText = replyText,
+                replyTextFormatted = replyFormattedText,
                 autoMarkdown = autoMarkdown,
                 rootThreadEventId = rootThreadEventId,
                 showInThread = showInThread
@@ -174,6 +178,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                     roomId = roomId,
                     eventReplied = eventReplied,
                     replyText = replyInThreadText,
+                    replyTextFormatted = formattedText,
                     autoMarkdown = autoMarkdown,
                     rootThreadEventId = rootThreadEventId,
                     showInThread = false

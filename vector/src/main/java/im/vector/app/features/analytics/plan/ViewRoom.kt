@@ -111,6 +111,11 @@ data class ViewRoom(
         MobileSearchContactDetail,
 
         /**
+         * Room accessed via space bottom sheet list.
+         */
+        MobileSpaceBottomSheet,
+
+        /**
          * Room accessed via interacting with direct chat item in the space
          * contact detail screen.
          */

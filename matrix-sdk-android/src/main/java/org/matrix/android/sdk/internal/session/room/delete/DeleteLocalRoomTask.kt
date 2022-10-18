@@ -21,12 +21,16 @@ import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
+import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereInRoom
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask.Params
@@ -48,6 +52,7 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
         if (RoomLocalEcho.isLocalEchoId(roomId)) {
             realmInstance.write {
                 Timber.i("## DeleteLocalRoomTask - delete local room id $roomId")
+<<<<<<< HEAD
                 RoomMemberSummaryEntity.where(this, roomId = roomId).find()
                         .also { Timber.i("## DeleteLocalRoomTask - RoomMemberSummaryEntity - delete ${it.size} entries") }
                         .also { delete(it) }
@@ -69,6 +74,38 @@ internal class DefaultDeleteLocalRoomTask @Inject constructor(
                 RoomEntity.where(this, roomId = roomId).find()
                         .also { Timber.i("## DeleteLocalRoomTask - RoomEntity - delete ${it.size} entries") }
                         .also { delete(it) }
+=======
+                ReadReceiptsSummaryEntity.whereInRoom(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ReadReceiptsSummaryEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                ReadReceiptEntity.whereRoomId(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ReadReceiptEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                RoomMemberSummaryEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - RoomMemberSummaryEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                CurrentStateEventEntity.whereRoomId(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - CurrentStateEventEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                EventEntity.whereRoomId(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - EventEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                TimelineEventEntity.whereRoomId(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - TimelineEventEntity - delete ${it.size} entries") }
+                        ?.forEach { it.deleteOnCascade(true) }
+                ChunkEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - ChunkEntity - delete ${it.size} entries") }
+                        ?.forEach { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
+                RoomSummaryEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - RoomSummaryEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                RoomEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - RoomEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+                LocalRoomSummaryEntity.where(realm, roomId = roomId).findAll()
+                        ?.also { Timber.i("## DeleteLocalRoomTask - LocalRoomSummaryEntity - delete ${it.size} entries") }
+                        ?.deleteAllFromRealm()
+>>>>>>> develop
             }
         } else {
             Timber.i("## DeleteLocalRoomTask - Failed to remove room with id $roomId: not a local room")

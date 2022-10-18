@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -58,11 +59,11 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.UserDraft
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
@@ -113,6 +114,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.VoiceWaveformMovedTo -> handleVoiceWaveformMovedTo(action)
             is MessageComposerAction.AudioSeekBarMovedTo -> handleAudioSeekBarMovedTo(action)
             is MessageComposerAction.SlashCommandConfirmed -> handleSlashCommandConfirmed(action)
+            is MessageComposerAction.InsertUserDisplayName -> handleInsertUserDisplayName(action)
         }
     }
 
@@ -144,12 +146,13 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEnterRegularMode(action: MessageComposerAction.EnterRegularMode) = setState {
-        copy(sendMode = SendMode.Regular(action.text, action.fromSharing))
+        copy(sendMode = SendMode.Regular(currentComposerText, action.fromSharing))
     }
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
+            val formatted = vectorPreferences.isRichTextEditorEnabled()
+            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent(formatted))) }
         }
     }
 
@@ -181,13 +184,13 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Quote(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Quote(timelineEvent, currentComposerText)) }
         }
     }
 
     private fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Reply(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Reply(timelineEvent, currentComposerText)) }
         }
     }
 
@@ -200,6 +203,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Regular -> {
                     when (val parsedCommand = commandParser.parseSlashCommand(
                             textMessage = action.text,
+                            formattedMessage = action.formattedText,
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand -> {
@@ -208,10 +212,15 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 room.relationService().replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = action.text,
+                                        formattedText = action.formattedText,
                                         autoMarkdown = action.autoMarkdown
                                 )
                             } else {
-                                room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                                if (action.formattedText != null) {
+                                    room.sendService().sendFormattedTextMessage(action.text.toString(), action.formattedText)
+                                } else {
+                                    room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                                }
                             }
 
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
@@ -243,6 +252,24 @@ class MessageComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
                         }
+                        is ParsedCommand.SendFormattedText -> {
+                            // Send the text message to the room, without markdown
+                            if (state.rootThreadEventId != null) {
+                                room.relationService().replyInThread(
+                                        rootThreadEventId = state.rootThreadEventId,
+                                        replyInThreadText = parsedCommand.message,
+                                        formattedText = parsedCommand.formattedMessage,
+                                        autoMarkdown = false
+                                )
+                            } else {
+                                room.sendService().sendFormattedTextMessage(
+                                        text = parsedCommand.message.toString(),
+                                        formattedText = parsedCommand.formattedMessage
+                                )
+                            }
+                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                            popDraft()
+                        }
                         is ParsedCommand.ChangeRoomName -> {
                             handleChangeRoomNameSlashCommand(parsedCommand)
                         }
@@ -254,6 +281,10 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SetUserPowerLevel -> {
                             handleSetUserPowerLevel(parsedCommand)
+                        }
+                        is ParsedCommand.DevTools -> {
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
                         }
                         is ParsedCommand.ClearScalarToken -> {
                             // TODO
@@ -359,6 +390,11 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SendLenny -> {
                             sendPrefixedMessage("( ͡° ͜ʖ ͡°)", parsedCommand.message, state.rootThreadEventId)
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
+                            popDraft()
+                        }
+                        is ParsedCommand.SendTableFlip -> {
+                            sendPrefixedMessage("(╯°□°）╯︵ ┻━┻", parsedCommand.message, state.rootThreadEventId)
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
@@ -500,16 +536,24 @@ class MessageComposerViewModel @AssistedInject constructor(
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimelineEvent(inReplyTo)?.let {
-                            room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString())
+                            room.relationService().editReply(state.sendMode.timelineEvent, it, action.text.toString(), action.formattedText)
                         }
                     } else {
-                        val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-                        val existingBody = messageContent?.body ?: ""
-                        if (existingBody != action.text) {
+                        val messageContent = state.sendMode.timelineEvent.getVectorLastMessageContent()
+                        val existingBody: String
+                        val needsEdit = if (messageContent is MessageContentWithFormattedBody) {
+                            existingBody = messageContent.formattedBody ?: ""
+                            existingBody != action.formattedText
+                        } else {
+                            existingBody = messageContent?.body ?: ""
+                            existingBody != action.text
+                        }
+                        if (needsEdit) {
                             room.relationService().editTextMessage(
                                     state.sendMode.timelineEvent,
                                     messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
+                                    action.formattedText,
                                     action.autoMarkdown
                             )
                         } else {
@@ -523,6 +567,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     room.sendService().sendQuotedTextMessage(
                             quotedEvent = state.sendMode.timelineEvent,
                             text = action.text.toString(),
+                            formattedText = action.formattedText,
                             autoMarkdown = action.autoMarkdown,
                             rootThreadEventId = state.rootThreadEventId
                     )
@@ -539,11 +584,13 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 rootThreadEventId = it,
                                 replyInThreadText = action.text.toString(),
                                 autoMarkdown = action.autoMarkdown,
+                                formattedText = action.formattedText,
                                 eventReplied = timelineEvent
                         )
                     } ?: room.relationService().replyToMessage(
                             eventReplied = timelineEvent,
                             replyText = action.text.toString(),
+                            replyFormattedText = action.formattedText,
                             autoMarkdown = action.autoMarkdown,
                             showInThread = showInThread,
                             rootThreadEventId = rootThreadEventId
@@ -866,7 +913,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
             }
         }
-        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
+        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(fromSharing = false))
     }
 
     private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
@@ -883,7 +930,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handlePlayOrPauseRecordingPlayback() {
-        audioMessageHelper.startOrPauseRecordingPlayback()
+        try {
+            audioMessageHelper.startOrPauseRecordingPlayback()
+        } catch (failure: Throwable) {
+            _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+        }
     }
 
     fun endAllVoiceActions(deleteRecord: Boolean = true) {
@@ -928,6 +979,10 @@ class MessageComposerViewModel @AssistedInject constructor(
         } else {
             handleSaveTextDraft(draft = composerText)
         }
+    }
+
+    private fun handleInsertUserDisplayName(action: MessageComposerAction.InsertUserDisplayName) {
+        _viewEvents.post(MessageComposerViewEvents.InsertUserDisplayName(action.userId))
     }
 
     private fun launchSlashCommandFlowSuspendable(parsedCommand: ParsedCommand, block: suspend () -> Unit) {

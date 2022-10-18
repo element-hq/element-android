@@ -54,6 +54,7 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -107,7 +108,7 @@ class FtueAuthVariant(
         }
 
         // Get config extra
-        val loginConfig = activity.intent.getParcelableExtra<LoginConfig?>(OnboardingActivity.EXTRA_CONFIG)
+        val loginConfig = activity.intent.getParcelableExtraCompat<LoginConfig?>(OnboardingActivity.EXTRA_CONFIG)
         if (isFirstCreation) {
             onboardingViewModel.handle(OnboardingAction.InitWith(loginConfig))
         }
@@ -411,7 +412,8 @@ class FtueAuthVariant(
     private fun onEmail(stage: Stage) {
         when {
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
-                    FtueAuthEmailEntryFragment::class.java
+                    FtueAuthEmailEntryFragment::class.java,
+                    FtueAuthEmailEntryFragmentArgument(mandatory = stage.mandatory)
             )
             else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,

@@ -15,10 +15,8 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import kotlin.properties.Delegates
 
@@ -50,7 +48,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
         test.manager = this
     }
 
-    fun runDiagnostic(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun runDiagnostic(testParameters: TroubleshootTest.TestParameters) {
         if (isCancelled) return
         currentTestIndex = 0
         val handler = Handler(Looper.getMainLooper())
@@ -69,7 +67,7 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
                             // Cosmetic: Start with a small delay for UI/UX reason (better animation effect) for non async tests
                             handler.postDelayed({
                                 if (fragment.isAdded) {
-                                    troubleshootTest.perform(activityResultLauncher)
+                                    troubleshootTest.perform(testParameters)
                                 }
                             }, 600)
                         } else {
@@ -81,18 +79,18 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
             }
         }
         if (fragment.isAdded) {
-            testList.firstOrNull()?.perform(activityResultLauncher)
+            testList.firstOrNull()?.perform(testParameters)
         }
     }
 
-    fun retry(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    fun retry(testParameters: TroubleshootTest.TestParameters) {
         testList.forEach {
             it.cancel()
             it.description = null
             it.quickFix = null
             it.status = TroubleshootTest.TestStatus.NOT_STARTED
         }
-        runDiagnostic(activityResultLauncher)
+        runDiagnostic(testParameters)
     }
 
     fun hasQuickFix(): Boolean {

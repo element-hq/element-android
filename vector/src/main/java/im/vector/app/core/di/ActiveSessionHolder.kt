@@ -17,12 +17,11 @@
 package im.vector.app.core.di
 
 import android.content.Context
-import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
@@ -31,6 +30,8 @@ import im.vector.app.features.session.SessionListener
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOption
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -50,6 +51,7 @@ class ActiveSessionHolder @Inject constructor(
         private val sessionInitializer: SessionInitializer,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -57,7 +59,7 @@ class ActiveSessionHolder @Inject constructor(
     fun setActiveSession(session: Session) {
         Timber.w("setActiveSession of ${session.myUserId}")
         activeSessionReference.set(session)
-        activeSessionDataSource.post(Option.just(session))
+        activeSessionDataSource.post(session.toOption())
 
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
@@ -77,7 +79,7 @@ class ActiveSessionHolder @Inject constructor(
         }
 
         activeSessionReference.set(null)
-        activeSessionDataSource.post(Option.empty())
+        activeSessionDataSource.post(Optional.empty())
 
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
@@ -109,7 +111,9 @@ class ActiveSessionHolder @Inject constructor(
                 }
                 ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
                     setActiveSession(session)
-                    session.configureAndStart(applicationContext, startSyncing = startSync)
+                    runBlocking {
+                        configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
+                    }
                 }
     }
 

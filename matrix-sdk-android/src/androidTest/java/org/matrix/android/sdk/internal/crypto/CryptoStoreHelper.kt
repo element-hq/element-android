@@ -24,7 +24,11 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.CRYPTO_REALM_SCHEMA
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.RealmInstance
+=======
+import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
+>>>>>>> develop
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.time.DefaultClock
 import kotlin.random.Random
@@ -45,6 +49,7 @@ internal class CryptoStoreHelper {
                 userId = "userId_" + Random.nextInt(),
                 deviceId = "deviceId_sample",
                 clock = DefaultClock(),
+                myDeviceLastSeenInfoEntityMapper = MyDeviceLastSeenInfoEntityMapper()
         )
     }
 }

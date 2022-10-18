@@ -34,9 +34,9 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/avatar"
-        app:layout_constraintEnd_toStartOf="@id/unread_counter"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unread_counter"
+        app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Element Corp" />
 
@@ -53,25 +53,28 @@
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/chevron"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="147"
         tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/chevron"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="21dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_arrow_right"
-        android:visibility="visible"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/a11y_expand_space_children"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:tint="?vctr_content_secondary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_arrow_right"
+        tools:visibility="visible" />
 
 </im.vector.app.core.platform.CheckableConstraintLayout>

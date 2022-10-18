@@ -16,6 +16,7 @@
 
 package im.vector.app.core.error
 
+import android.content.ActivityNotFoundException
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
@@ -134,6 +135,8 @@ class DefaultErrorFormatter @Inject constructor(
             is MatrixIdFailure.InvalidMatrixId ->
                 stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
             is VoiceFailure -> voiceMessageError(throwable)
+            is ActivityNotFoundException ->
+                stringProvider.getString(R.string.error_no_external_application_found)
             else -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)

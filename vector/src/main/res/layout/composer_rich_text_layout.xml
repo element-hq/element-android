@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:constraintSet="@layout/composer_rich_text_layout_constraint_set_compact"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <!-- ========================
+        /!\ Constraints for this layout are defined in external layout files that are used as constraint set for animation.
+        /!\ These 3 files must be modified to stay coherent!
+    ======================== -->
+    <View
+        android:id="@+id/related_message_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?colorSurface"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/related_message_background_top_separator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?vctr_list_separator"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageAvatar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:importantForAccessibility="no"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/composerRelatedMessageTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/first_names"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/composerRelatedMessageContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="?vctr_message_text_color"
+        tools:ignore="MissingConstraints"
+        tools:text="@tools:sample/lorem"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageActionIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:importantForAccessibility="no"
+        app:tint="?vctr_content_primary"
+        tools:ignore="MissingConstraints,MissingPrefix" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:importantForAccessibility="no"
+        tools:ignore="MissingPrefix" />
+
+    <ImageButton
+        android:id="@+id/composerRelatedMessageCloseButton"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/action_cancel"
+        android:src="@drawable/ic_close_round"
+        app:tint="?colorError"
+        tools:ignore="MissingConstraints,MissingPrefix" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/composer_preview_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="composerRelatedMessageContent,composerRelatedMessageActionIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/attachmentButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="2dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/option_send_files"
+        android:src="@drawable/ic_attachment"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/composerEditTextOuterBorder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_composer_rich_edit_text_single_line" />
+
+    <io.element.android.wysiwyg.EditorEditText
+        android:id="@+id/composerEditText"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:nextFocusLeft="@id/composerEditText"
+        android:nextFocusUp="@id/composerEditText"
+        tools:hint="@string/room_message_placeholder"
+        tools:text="@tools:sample/lorem/random"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_send"
+        android:contentDescription="@string/action_send"
+        android:src="@drawable/ic_send"
+        tools:ignore="MissingConstraints" />
+
+    <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_constraintStart_toEndOf="@id/attachmentButton"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/richTextMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!--
+    <ImageButton
+        android:id="@+id/voiceMessageMicButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_start_voice_message"
+        android:src="@drawable/ic_voice_mic" />
+    -->
+
+</merge>

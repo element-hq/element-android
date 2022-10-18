@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recentRoot"
-    android:layout_width="60dp"
+    android:layout_width="84dp"
     android:layout_height="wrap_content"
-    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:paddingHorizontal="12dp"
     tools:viewBindingIgnore="true">
 
     <ImageView
@@ -50,6 +50,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
+        android:importantForAccessibility="no"
         android:lines="1"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toBottomOf="parent"
