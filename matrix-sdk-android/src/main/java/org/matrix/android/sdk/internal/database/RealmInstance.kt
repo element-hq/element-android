@@ -20,12 +20,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
 

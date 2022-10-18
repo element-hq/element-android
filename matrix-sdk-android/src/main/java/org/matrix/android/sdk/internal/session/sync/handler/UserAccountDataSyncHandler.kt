@@ -127,7 +127,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                 .query(PushRulesEntity::class)
                 .find()
                 .forEach {
-                    //it.deleteOnCascade()
+                    // it.deleteOnCascade()
                 }
 
         // Save only global rules for the moment
@@ -228,8 +228,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         TimelineEventEntity.findAllFrom(realm, userIds)
                 .also { Timber.d("Deleting ${it.size} TimelineEventEntity from ignored users") }
                 .forEach {
-                    //TODO DELETE ON CASCADE
-                    //it.deleteOnCascade(true)
+                    // TODO DELETE ON CASCADE
+                    // it.deleteOnCascade(true)
                 }
 
         // Handle the case when some users are unignored from another session

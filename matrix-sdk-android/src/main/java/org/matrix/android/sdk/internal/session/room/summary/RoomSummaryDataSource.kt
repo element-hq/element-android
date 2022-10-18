@@ -25,7 +25,6 @@ import androidx.paging.PagedList
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.sum
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -186,7 +185,6 @@ internal class RoomSummaryDataSource @Inject constructor(
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder,
     ): UpdatableLivePageResult {
-
         val boundaries = MutableLiveData(ResultBoundaries())
         val boundaryCallback = object : PagedList.BoundaryCallback<RoomSummary>() {
             override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {

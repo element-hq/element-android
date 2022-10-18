@@ -118,7 +118,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         val hasReachEnd = response.nextBatch == null
 
         realmInstance.write {
-
             val threadChunk = ChunkEntity.findLastForwardChunkOfThread(this, params.roomId, params.rootThreadEventId)
                     ?: run {
                         return@write

@@ -22,12 +22,10 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.asLiveData
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
-import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.database.RealmObjectMapper
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.mapper.AccountDataMapper
 import org.matrix.android.sdk.internal.database.model.RoomEntity

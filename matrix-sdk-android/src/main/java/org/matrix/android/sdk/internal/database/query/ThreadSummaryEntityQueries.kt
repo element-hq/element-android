@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.database.query
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.query.RealmQuery
-import io.realm.kotlin.types.RealmList
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 
 internal fun ThreadSummaryEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<ThreadSummaryEntity> {

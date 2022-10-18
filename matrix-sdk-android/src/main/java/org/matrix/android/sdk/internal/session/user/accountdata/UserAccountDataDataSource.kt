@@ -53,7 +53,7 @@ internal class UserAccountDataDataSource @Inject constructor(
     }
 
     fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>> {
-        return realmInstance.queryList(accountDataMapper::map){
+        return realmInstance.queryList(accountDataMapper::map) {
             accountDataEventsQuery(it, types)
         }.asLiveData()
     }

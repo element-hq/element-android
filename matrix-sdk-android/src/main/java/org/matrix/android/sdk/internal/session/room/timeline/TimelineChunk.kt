@@ -464,7 +464,6 @@ internal class TimelineChunk(
     }
 
     private fun handleChunkObjectChange(chunkChanged: ObjectChange<ChunkEntity>) {
-
         fun onChunkUpdated(updatedObject: UpdatedObject<ChunkEntity>) {
             Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${updatedObject.changedFields.joinToString(",")}")
             if (updatedObject.isFieldChanged("isLastForward")) {
@@ -499,7 +498,6 @@ internal class TimelineChunk(
      *
      */
     private fun handleDatabaseChangeSet(resultChanges: ResultsChange<TimelineEventEntity>) {
-
         fun validateInsertion(range: ListChangeSet.Range, results: RealmResults<TimelineEventEntity>): Boolean {
             // Insertion can only happen from LastForward chunk after a sync.
             if (isLastForward.get()) {

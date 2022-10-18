@@ -36,4 +36,3 @@ internal fun ReadMarkerEntity.Companion.create(realm: MutableRealm, roomId: Stri
     }
     return realm.copyToRealm(readMarkerEntity)
 }
-

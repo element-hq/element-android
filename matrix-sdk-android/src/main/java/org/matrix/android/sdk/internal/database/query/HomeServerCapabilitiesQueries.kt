@@ -37,4 +37,3 @@ internal fun HomeServerCapabilitiesEntity.Companion.getOrCreate(realm: MutableRe
 internal fun HomeServerCapabilitiesEntity.Companion.create(realm: MutableRealm): HomeServerCapabilitiesEntity {
     return realm.copyToRealm(HomeServerCapabilitiesEntity())
 }
-

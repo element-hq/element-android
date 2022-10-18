@@ -85,7 +85,6 @@ internal class UserDataSource @Inject constructor(
     }
 
     fun getIgnoredUsersLive(): LiveData<List<User>> {
-
         fun mapper(ignoredUserEntity: IgnoredUserEntity): User {
             return getUser(ignoredUserEntity.userId) ?: User(userId = ignoredUserEntity.userId)
         }

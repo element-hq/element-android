@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.timeline
 
-import io.realm.kotlin.types.ObjectId
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event

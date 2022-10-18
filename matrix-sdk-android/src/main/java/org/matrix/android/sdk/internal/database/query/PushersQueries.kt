@@ -41,4 +41,3 @@ internal fun PushRulesEntity.Companion.where(
             .query("scope == $0", scope)
             .query("kindStr == $0", kind.name)
 }
-

@@ -252,7 +252,6 @@ internal class IntegrationManager @Inject constructor(
     }
 
     private fun observeWellknownConfig() {
-
         fun mapConfig(entity: WellknownIntegrationManagerConfigEntity): IntegrationManagerConfig {
             return IntegrationManagerConfig(entity.uiUrl, entity.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER)
         }

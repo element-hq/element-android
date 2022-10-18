@@ -156,7 +156,6 @@ internal class DefaultPushRuleService @Inject constructor(
     }
 
     override fun getKeywords(): LiveData<Set<String>> {
-
         fun map(pushRulesEntity: PushRulesEntity): List<String> {
             return pushRulesEntity.pushRules
                     .map(PushRuleEntity::ruleId)

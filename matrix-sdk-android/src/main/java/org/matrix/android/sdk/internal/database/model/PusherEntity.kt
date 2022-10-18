@@ -55,8 +55,7 @@ internal class PusherEntity : RealmObject {
     companion object
 }
 
-internal fun MutableRealm.deleteOnCascade(pusherEntity: PusherEntity){
+internal fun MutableRealm.deleteOnCascade(pusherEntity: PusherEntity) {
     pusherEntity.data?.also { delete(it) }
     delete(pusherEntity)
 }
-

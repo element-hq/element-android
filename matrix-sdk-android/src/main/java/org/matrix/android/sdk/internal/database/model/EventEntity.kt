@@ -83,7 +83,7 @@ internal class EventEntity : RealmObject {
     companion object
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
-        //assertIsManaged()
+        // assertIsManaged()
         val decryptionResult = OlmDecryptionResult(
                 payload = result.clearEvent,
                 senderKey = result.senderCurve25519Key,

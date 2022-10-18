@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import io.realm.kotlin.MutableRealm
-import io.realm.kotlin.types.ObjectId
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull

@@ -114,7 +114,6 @@ internal class LoadTimelineStrategy constructor(
     private var timelineChunk: TimelineChunk? = null
 
     private suspend fun onChunkResultsChanged(resultsChange: ResultsChange<ChunkEntity>) {
-
         suspend fun onUpdates(updatedResults: UpdatedResults<ChunkEntity>) {
             val shouldRebuildChunk = updatedResults.insertions.isNotEmpty()
             if (shouldRebuildChunk) {

@@ -42,4 +42,3 @@ internal fun MutableRealm.deleteOnCascade(pushRulesEntity: PushRulesEntity) {
     pushRulesEntity.pushRules.clearWith { deleteOnCascade(it) }
     delete(pushRulesEntity)
 }
-
