@@ -64,9 +64,12 @@ class OtherSessionsViewModel @AssistedInject constructor(
                 }
     }
 
+    // TODO update unit tests
     override fun handle(action: OtherSessionsAction) {
         when (action) {
             is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
+            OtherSessionsAction.DisableSelectMode -> handleDisableSelectMode()
+            OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode()
         }
     }
 
@@ -77,5 +80,13 @@ class OtherSessionsViewModel @AssistedInject constructor(
             )
         }
         observeDevices(action.filterType)
+    }
+
+    private fun handleDisableSelectMode() {
+        setState { copy(isSelectModeEnabled = false) }
+    }
+
+    private fun handleEnableSelectMode() {
+        setState { copy(isSelectModeEnabled = true) }
     }
 }

@@ -21,4 +21,6 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 
 sealed class OtherSessionsAction : VectorViewModelAction {
     data class FilterDevices(val filterType: DeviceManagerFilterType) : OtherSessionsAction()
+    object EnableSelectMode : OtherSessionsAction()
+    object DisableSelectMode : OtherSessionsAction()
 }

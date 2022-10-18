@@ -18,8 +18,12 @@ package im.vector.app.features.settings.devices.v2.othersessions
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -31,7 +35,9 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
@@ -46,17 +52,63 @@ import javax.inject.Inject
 class OtherSessionsFragment :
         VectorBaseFragment<FragmentOtherSessionsBinding>(),
         VectorBaseBottomSheetDialogFragment.ResultListener,
-        OtherSessionsView.Callback {
+        OtherSessionsView.Callback,
+        VectorMenuProvider {
 
     private val viewModel: OtherSessionsViewModel by fragmentViewModel()
     private val args: OtherSessionsArgs by args()
 
     @Inject lateinit var colorProvider: ColorProvider
 
+    @Inject lateinit var stringProvider: StringProvider
+
     @Inject lateinit var viewNavigator: OtherSessionsViewNavigator
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
+    }
+
+    override fun getMenuRes() = R.menu.menu_other_sessions
+
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            val isSelectModeEnabled = state.isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled
+        }
+    }
+
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.otherSessionsSelect -> {
+                enableSelectMode(true)
+                true
+            }
+            else -> false
+        }
+    }
+
+    // TODO call enableSelectMode(true) on long press of an item when disabled
+    private fun enableSelectMode(isEnabled: Boolean) {
+        val action = if (isEnabled) OtherSessionsAction.EnableSelectMode else OtherSessionsAction.DisableSelectMode
+        viewModel.handle(action)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(owner = this) {
+            handleBackPress(this)
+        }
+    }
+
+    private fun handleBackPress(onBackPressedCallback: OnBackPressedCallback) = withState(viewModel) { state ->
+        if (state.isSelectModeEnabled) {
+            enableSelectMode(false)
+        } else {
+            onBackPressedCallback.isEnabled = false
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,9 +154,20 @@ class OtherSessionsFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        updateToolbar(state.isSelectModeEnabled)
         if (state.devices is Success) {
             renderDevices(state.devices(), state.currentFilter)
         }
+    }
+
+    private fun updateToolbar(isSelectModeEnabled: Boolean) {
+        invalidateOptionsMenu()
+        val title = if (isSelectModeEnabled) {
+            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_selected, 0, 0)
+        } else {
+            getString(args.titleResourceId)
+        }
+        toolbar?.title = title
     }
 
     private fun renderDevices(devices: List<DeviceFullInfo>?, currentFilter: DeviceManagerFilterType) {
