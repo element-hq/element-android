@@ -2720,4 +2720,37 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nMohon perbolehkan akses di munculan berikutnya untuk dapat melihat notifikasi.</string>
     <string name="labs_enable_rich_text_editor_summary">Coba editor teks kaya (mode teks biasa akan datang)</string>
     <string name="labs_enable_rich_text_editor_title">Aktifkan editor teks kaya</string>
+    <string name="qr_code_login_confirm_security_code_description">Pastikan Anda tahu asal kode ini. Dengan menautkan perangkat, Anda akan memberikan seseorang akses penuh ke akun Anda.</string>
+    <string name="qr_code_login_confirm_security_code">Konfirmasi</string>
+    <string name="qr_code_login_try_again">Coba lagi</string>
+    <string name="qr_code_login_status_no_match">Tidak cocok\?</string>
+    <string name="qr_code_login_signing_in">Memasukkan Anda</string>
+    <string name="qr_code_login_connecting_to_device">Menghubungkan ke perangkat</string>
+    <string name="qr_code_login_scan_qr_code_button">Pindai kode QR</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Ingin masuk di perangkat ponsel\?</string>
+    <string name="qr_code_login_show_qr_code_button">Tampilkan kode QR di perangkat ini</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Pilih \'Pindai dengan kode QR\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Mulai dari layar masuk</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Pilih \'Masuk dengan kode QR\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Mulai dari layar masuk</string>
+    <string name="qr_code_login_new_device_instruction_3">Pilih \'Tampilkan kode QR di perangkat ini\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Pergi ke Pengaturan → Keamanan &amp; Privasi → Tampilkan Semua Sesi</string>
+    <string name="qr_code_login_new_device_instruction_1">Buka ${app_name} di perangkat Anda yang lain</string>
+    <string name="qr_code_login_header_failed_denied_description">Permintaan ditolak di perangkat lain.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Penautan tidak selesai dalam waktu yang dibutuhkan.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Penautan dengan perangkat ini tidak didukung.</string>
+    <string name="qr_code_login_header_failed_title">Koneksi tidak berhasil</string>
+    <string name="qr_code_login_header_connected_description">Periksa perangkat yang masuk, kode di bawah seharusnya ditampilkan. Konfirmasi bahwa kode di bawah cocok dengan perangkat itu:</string>
+    <string name="qr_code_login_header_connected_title">Koneksi aman dibuat</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Pindai kode QR di bawah dengan perangkat Anda yang telah keluar dari akun.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Gunakan perangkat yang sudah masuk untuk memindai kode QR di bawah:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Masuk dengan kode QR</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Gunakan kamera pada perangkat ini untuk memindai kode QR yang ditampilkan pada perangkat Anda yang lain:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Pindai kode QR</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Anda dapat menggunakan perangkat ini untuk masuk ke perangkat ponsel atau web dengan sebuah kode QR. Ada dua cara untuk melalukan ini:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Masuk dengan Kode QR</string>
+    <string name="login_scan_qr_code">Pindai kode QR</string>
 </resources>
