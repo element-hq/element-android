@@ -16,11 +16,16 @@
 
 package im.vector.app.features.voicebroadcast
 
-object VoiceBroadcastConstants {
+import im.vector.app.features.voice.VoiceRecorder
+import java.io.File
 
-    /** Voice Broadcast State Event. */
-    const val STATE_ROOM_VOICE_BROADCAST_INFO = "io.element.voice_broadcast_info"
+interface VoiceBroadcastRecorder : VoiceRecorder {
 
-    /** Default voice broadcast chunk duration, in seconds. */
-    const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 30
+    var listener: Listener?
+
+    fun startRecord(roomId: String, chunkLength: Int)
+
+    fun interface Listener {
+        fun onVoiceMessageCreated(file: File)
+    }
 }

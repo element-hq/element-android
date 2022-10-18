@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,8 +41,11 @@ import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -90,6 +94,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     init {
         loadDraftIfAny()
         observePowerLevelAndEncryption()
+        observeVoiceBroadcast()
         subscribeToStateInternal()
     }
 
@@ -180,6 +185,16 @@ class MessageComposerViewModel @AssistedInject constructor(
         }.setOnEach {
             copy(canSendMessage = it)
         }
+    }
+
+    private fun observeVoiceBroadcast() {
+        room.stateService().getStateEventLive(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(session.myUserId))
+                .asFlow()
+                .unwrap()
+                .mapNotNull { it.asVoiceBroadcastEvent()?.content?.voiceBroadcastState }
+                .setOnEach {
+                    copy(voiceBroadcastState = it)
+                }
     }
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
@@ -943,7 +958,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
-        audioMessageHelper.initializeRecorder(attachmentData)
+        audioMessageHelper.initializeRecorder(room.roomId, attachmentData)
         setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Draft) }
     }
 

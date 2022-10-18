@@ -16,14 +16,14 @@
 
 package im.vector.app.features.voicebroadcast.model
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
- * [Event] wrapper for [STATE_ROOM_VOICE_BROADCAST_INFO] event type.
+ * [Event] wrapper for [VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO] event type.
  * Provides additional fields and functions related to voice broadcast.
  */
 @JvmInline
@@ -50,6 +50,6 @@ value class VoiceBroadcastEvent(val root: Event) {
 }
 
 /**
- * Map a [STATE_ROOM_VOICE_BROADCAST_INFO] state event to a [VoiceBroadcastEvent].
+ * Map a [VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO] state event to a [VoiceBroadcastEvent].
  */
-fun Event.asVoiceBroadcastEvent() = if (type == STATE_ROOM_VOICE_BROADCAST_INFO) VoiceBroadcastEvent(this) else null
+fun Event.asVoiceBroadcastEvent() = if (type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO) VoiceBroadcastEvent(this) else null

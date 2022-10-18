@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -59,7 +59,7 @@ class TimelineEventsGroups {
         val content = root.getClearContent()
         return when {
             EventType.isCallEvent(type) -> (content?.get("call_id") as? String)
-            type == STATE_ROOM_VOICE_BROADCAST_INFO -> root.asVoiceBroadcastEvent()?.reference?.eventId
+            type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> root.asVoiceBroadcastEvent()?.reference?.eventId
             type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY -> root.stateKey
             else -> {
                 null

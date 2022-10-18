@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.PollType
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -71,7 +72,7 @@ interface SendService {
             text: String,
             formattedText: String? = null,
             autoMarkdown: Boolean,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
     ): Cancelable
 
     /**
@@ -81,13 +82,15 @@ interface SendService {
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
      * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
+     * @param relatesTo add a relation content to the media event
      * @return a [Cancelable]
      */
     fun sendMedia(
             attachment: ContentAttachmentData,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
+            relatesTo: RelationDefaultContent? = null,
     ): Cancelable
 
     /**
@@ -103,7 +106,7 @@ interface SendService {
             attachments: List<ContentAttachmentData>,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String? = null
+            rootThreadEventId: String? = null,
     ): Cancelable
 
     /**

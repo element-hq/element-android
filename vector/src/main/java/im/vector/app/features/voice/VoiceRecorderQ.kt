@@ -22,13 +22,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 
 /**
- * VoiceRecorder to be used on Android versions >= [Build.VERSION_CODES.Q]. It uses the native OPUS support on Android 10+.
+ * VoiceRecorder to be used on Android versions >= [Build.VERSION_CODES.Q].
+ * It uses the native OPUS support on Android 10+.
  */
 @RequiresApi(Build.VERSION_CODES.Q)
-class VoiceRecorderQ(context: Context) : AbstractVoiceRecorder(context, "ogg") {
-    override fun setOutputFormat(mediaRecorder: MediaRecorder) {
-        // We can directly use OGG here
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.OGG)
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
-    }
+class VoiceRecorderQ(context: Context) : AbstractVoiceRecorderQ(context) {
+
+    // We can directly use OGG here
+    override val outputFormat = MediaRecorder.OutputFormat.OGG
+    override val audioEncoder = MediaRecorder.AudioEncoder.OPUS
+
+    override val fileNameExt: String = "ogg"
 }

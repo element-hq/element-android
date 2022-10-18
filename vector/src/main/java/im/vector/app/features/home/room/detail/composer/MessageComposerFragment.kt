@@ -227,10 +227,18 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun onPause() {
         super.onPause()
 
-        if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
-            // we're rotating, maintain any active recordings
-        } else {
-            messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
+        withState(messageComposerViewModel) {
+            when {
+                it.isVoiceRecording && requireActivity().isChangingConfigurations -> {
+                    // we're rotating, maintain any active recordings
+                }
+                // TODO remove this when there will be a recording indicator outside of the timeline
+                // Pause voice broadcast if the timeline is not shown anymore
+                it.isVoiceBroadcasting && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Pause)
+                else -> {
+                    messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
+                }
+            }
         }
     }
 

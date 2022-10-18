@@ -16,7 +16,8 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 class StopVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -39,7 +41,7 @@ class StopVoiceBroadcastUseCase @Inject constructor(
         Timber.d("## StopVoiceBroadcastUseCase: Stop voice broadcast requested")
 
         val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
-                STATE_ROOM_VOICE_BROADCAST_INFO,
+                VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 QueryStringValue.Equals(session.myUserId)
         )?.asVoiceBroadcastEvent()
         when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
@@ -53,7 +55,7 @@ class StopVoiceBroadcastUseCase @Inject constructor(
     private suspend fun stopVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## StopVoiceBroadcastUseCase: Send new voice broadcast info state event")
         room.stateService().sendStateEvent(
-                eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         relatesTo = reference,
@@ -61,6 +63,10 @@ class StopVoiceBroadcastUseCase @Inject constructor(
                 ).toContent(),
         )
 
-        // TODO stop recording audio files
+        stopRecording()
+    }
+
+    private fun stopRecording() {
+        voiceBroadcastRecorder?.stopRecord()
     }
 }
