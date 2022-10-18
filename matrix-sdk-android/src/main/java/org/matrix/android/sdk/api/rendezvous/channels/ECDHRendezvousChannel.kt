@@ -73,7 +73,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
             @Json val iv: String? = null
     )
 
-    private var olmSASMutex = Mutex()
+    private val olmSASMutex = Mutex()
     private var olmSAS: OlmSAS?
     private val ourPublicKey: ByteArray
     private val ecdhAdapter = MatrixJsonParser.getMoshi().adapter(ECDHPayload::class.java)
