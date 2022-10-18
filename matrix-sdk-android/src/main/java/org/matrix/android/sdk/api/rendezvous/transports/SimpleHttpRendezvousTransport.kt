@@ -69,7 +69,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
                 .method(method, data.toRequestBody())
                 .header("content-type", contentType.toString())
 
-        etag ?.let {
+        etag?.let {
             request.header("if-match", it)
         }
 
@@ -85,7 +85,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
         if (method == "POST") {
             val location = response.header("location") ?: throw RuntimeException("No rendezvous URI found in response")
 
-            response.header("expires") ?.let {
+            response.header("expires")?.let {
                 val format = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz")
                 expiresAt = format.parse(it)
             }
@@ -108,7 +108,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
                     .url(uri)
                     .get()
 
-            etag ?.let {
+            etag?.let {
                 request.header("if-none-match", it)
             }
 
@@ -154,7 +154,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
         cancelled = true
         ready = false
 
-        uri ?.let {
+        uri?.let {
             try {
                 val httpClient = okhttp3.OkHttpClient.Builder().build()
                 val request = Request.Builder()

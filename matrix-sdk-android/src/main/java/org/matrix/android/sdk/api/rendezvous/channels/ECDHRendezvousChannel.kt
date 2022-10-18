@@ -81,7 +81,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
     private var aesKey: ByteArray? = null
 
     init {
-        theirPublicKeyBase64 ?.let {
+        theirPublicKeyBase64?.let {
             theirPublicKey = Base64.decode(it, Base64.NO_WRAP)
         }
         olmSAS = OlmSAS()
@@ -142,7 +142,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
     }
 
     private suspend fun receiveAsPayload(): ECDHPayload? {
-        transport.receive()?.toString(Charsets.UTF_8) ?.let {
+        transport.receive()?.toString(Charsets.UTF_8)?.let {
             return ecdhAdapter.fromJson(it)
         } ?: return null
     }
