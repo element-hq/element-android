@@ -90,6 +90,10 @@ class VectorSettingsLabsFragment :
             }
         }
 
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_VOICE_BROADCAST_KEY)?.let { pref ->
+            pref.isVisible = vectorFeatures.isVoiceBroadcastEnabled()
+        }
+
         configureUnreadNotificationsAsTabPreference()
         configureEnableClientInfoRecordingPreference()
     }

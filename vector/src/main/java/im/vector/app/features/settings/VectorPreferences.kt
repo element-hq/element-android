@@ -1206,6 +1206,7 @@ class VectorPreferences @Inject constructor(
     }
 
     fun isVoiceBroadcastEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
+        return vectorFeatures.isVoiceBroadcastEnabled() &&
+                defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
     }
 }
