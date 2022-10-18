@@ -65,7 +65,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
     private suspend fun startVoiceBroadcast(room: Room) {
         Timber.d("## StartVoiceBroadcastUseCase: Send new voice broadcast info state event")
-        val chunkLength = VoiceBroadcastConstants.DEFAULT_CHUNK_LENGTH // Todo Get the length from the room settings
+        val chunkLength = VoiceBroadcastConstants.DEFAULT_CHUNK_LENGTH_IN_SECONDS // Todo Get the length from the room settings
         val eventId = room.stateService().sendStateEvent(
                 eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
