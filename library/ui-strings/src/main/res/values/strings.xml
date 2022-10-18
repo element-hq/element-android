@@ -3383,7 +3383,7 @@
     <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
     <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
     <string name="qr_code_login_header_failed_other_description">The request failed.</string>
-    <string name="qr_code_login_header_failed_e2ee_security_issue_description">A security issue was encountered setting up secure messaging. One of the following may be compromised: Your homeserver; Your intent connection(s); Your device(s);</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">A security issue was encountered setting up secure messaging. One of the following may be compromised: Your homeserver; Your internet connection(s); Your device(s);</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">The other device is already signed in.</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">The other device must be signed in.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">That QR code is invalid.</string>
