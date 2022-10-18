@@ -93,13 +93,11 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 "Voice message.${voiceMessageFile.extension}"
         )
         val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
-        if (audioType.duration > 1000) {
-            room.sendService().sendMedia(
-                    attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
-                    compressBeforeSending = false,
-                    roomIds = emptySet(),
-                    relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
-            )
-        }
+        room.sendService().sendMedia(
+                attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
+                compressBeforeSending = false,
+                roomIds = emptySet(),
+                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+        )
     }
 }
