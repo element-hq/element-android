@@ -16,9 +16,11 @@
 
 package im.vector.app.features.settings.devices.v2.filter
 
-import im.vector.app.features.settings.devices.v2.DeviceExtendedInfo
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
+import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.junit.Test
@@ -37,7 +39,8 @@ private val activeVerifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = false,
         isCurrentDevice = true,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val inactiveVerifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_VERIFIED_DEVICE"),
@@ -49,7 +52,8 @@ private val inactiveVerifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
         isInactive = true,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val activeUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "ACTIVE_UNVERIFIED_DEVICE"),
@@ -61,7 +65,8 @@ private val activeUnverifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = false,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 private val inactiveUnverifiedDevice = DeviceFullInfo(
         deviceInfo = DeviceInfo(deviceId = "INACTIVE_UNVERIFIED_DEVICE"),
@@ -73,7 +78,8 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
         roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Warning,
         isInactive = true,
         isCurrentDevice = false,
-        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE)
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+        matrixClientInfo = MatrixClientInfoContent(),
 )
 
 private val devices = listOf(
@@ -89,32 +95,58 @@ class FilterDevicesUseCaseTest {
 
     @Test
     fun `given a device list when filter type is ALL_SESSIONS then returns the same list`() {
-        val filteredDeviceList = filterDevicesUseCase.execute(devices, DeviceManagerFilterType.ALL_SESSIONS, emptyList())
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(true)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.ALL_SESSIONS, emptyList())
 
         filteredDeviceList.size shouldBeEqualTo devices.size
     }
 
     @Test
-    fun `given a device list when filter type is VERIFIED then returns only verified devices`() {
-        val filteredDeviceList = filterDevicesUseCase.execute(devices, DeviceManagerFilterType.VERIFIED, emptyList())
+    fun `given a device list and current session is verified when filter type is VERIFIED then returns only verified devices`() {
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(true)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.VERIFIED, emptyList())
 
         filteredDeviceList.size shouldBeEqualTo 2
         filteredDeviceList shouldContainAll listOf(activeVerifiedDevice, inactiveVerifiedDevice)
     }
 
     @Test
-    fun `given a device list when filter type is UNVERIFIED then returns only unverified devices`() {
-        val filteredDeviceList = filterDevicesUseCase.execute(devices, DeviceManagerFilterType.UNVERIFIED, emptyList())
+    fun `given a device list and current session is unverified when filter type is VERIFIED then returns empty list of devices`() {
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(false)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.VERIFIED, emptyList())
+
+        filteredDeviceList.size shouldBeEqualTo 0
+    }
+
+    @Test
+    fun `given a device list and current session is verified when filter type is UNVERIFIED then returns only unverified devices`() {
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(true)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.UNVERIFIED, emptyList())
 
         filteredDeviceList.size shouldBeEqualTo 2
         filteredDeviceList shouldContainAll listOf(activeUnverifiedDevice, inactiveUnverifiedDevice)
     }
 
     @Test
+    fun `given a device list and current session is unverified when filter type is UNVERIFIED then returns empty list of devices`() {
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(false)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.UNVERIFIED, emptyList())
+
+        filteredDeviceList.size shouldBeEqualTo 0
+    }
+
+    @Test
     fun `given a device list when filter type is INACTIVE then returns only inactive devices`() {
-        val filteredDeviceList = filterDevicesUseCase.execute(devices, DeviceManagerFilterType.INACTIVE, emptyList())
+        val currentSessionCrossSigningInfo = givenCurrentSessionVerified(true)
+        val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.INACTIVE, emptyList())
 
         filteredDeviceList.size shouldBeEqualTo 2
         filteredDeviceList shouldContainAll listOf(inactiveVerifiedDevice, inactiveUnverifiedDevice)
     }
+
+    private fun givenCurrentSessionVerified(isVerified: Boolean): CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(
+            isCrossSigningVerified = isVerified,
+            isCrossSigningInitialized = true,
+            deviceId = ""
+    )
 }

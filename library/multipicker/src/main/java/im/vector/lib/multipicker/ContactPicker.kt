@@ -16,6 +16,7 @@
 
 package im.vector.lib.multipicker
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,7 @@ class ContactPicker : Picker<MultiPickerContactType>() {
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected contact or empty list if user did not select any contacts.
      */
+    @SuppressLint("Recycle")
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerContactType> {
         val contactList = mutableListOf<MultiPickerContactType>()
 

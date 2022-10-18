@@ -130,6 +130,7 @@ internal class FileUploader @Inject constructor(
             workingFile.outputStream().use {
                 inputStream.copyTo(it)
             }
+            inputStream.close()
             workingFile
         }
     }

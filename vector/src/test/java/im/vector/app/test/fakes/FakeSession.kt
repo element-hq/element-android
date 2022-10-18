@@ -16,9 +16,9 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.flow.FlowSession
 import org.matrix.android.sdk.flow.flow
 
@@ -42,8 +41,11 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         val fakeRoomService: FakeRoomService = FakeRoomService(),
+        val fakePushersService: FakePushersService = FakePushersService(),
         val fakeUserService: FakeUserService = FakeUserService(),
         private val fakeEventService: FakeEventService = FakeEventService(),
+        val fakeSessionAccountDataService: FakeSessionAccountDataService = FakeSessionAccountDataService(),
+        val fakeFilterService: FakeFilterService = FakeFilterService(),
 ) : Session by mockk(relaxed = true) {
 
     init {
@@ -60,6 +62,9 @@ class FakeSession(
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
     override fun eventService() = fakeEventService
+    override fun pushersService() = fakePushersService
+    override fun accountDataService() = fakeSessionAccountDataService
+    override fun filterService() = fakeFilterService
     override fun userService() = fakeUserService
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
@@ -70,9 +75,9 @@ class FakeSession(
         }
     }
 
-    fun expectStartsSyncing() {
+    fun expectStartsSyncing(configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase) {
         coJustRun {
-            this@FakeSession.configureAndStart(any(), startSyncing = true)
+            configureAndStartSessionUseCase.execute(this@FakeSession, startSyncing = true)
             this@FakeSession.startSyncing(any())
         }
     }
@@ -81,7 +86,7 @@ class FakeSession(
         every { this@FakeSession.sessionParams } returns sessionParams
     }
 
-    fun givenSessionId(sessionId: String): SessionParams {
+    fun givenSessionId(sessionId: String?): SessionParams {
         val sessionParams = mockk<SessionParams>()
         every { sessionParams.deviceId } returns sessionId
         givenSessionParams(sessionParams)

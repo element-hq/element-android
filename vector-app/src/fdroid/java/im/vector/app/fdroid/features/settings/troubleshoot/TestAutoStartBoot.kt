@@ -15,8 +15,6 @@
  */
 package im.vector.app.fdroid.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.VectorPreferences
@@ -32,7 +30,7 @@ class TestAutoStartBoot @Inject constructor(
 ) :
         TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         if (vectorPreferences.autoStartOnBoot()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_service_boot_success)
             status = TestStatus.SUCCESS
@@ -42,7 +40,7 @@ class TestAutoStartBoot @Inject constructor(
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_service_boot_quickfix) {
                 override fun doFix() {
                     vectorPreferences.setAutoStartOnBoot(true)
-                    manager?.retry(activityResultLauncher)
+                    manager?.retry(testParameters)
                 }
             }
             status = TestStatus.FAILED

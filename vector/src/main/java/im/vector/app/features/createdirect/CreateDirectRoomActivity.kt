@@ -78,6 +78,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         sharedActionViewModel
                 .stream()
                 .onEach { action ->
+                    @Suppress("DEPRECATION")
                     when (action) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()

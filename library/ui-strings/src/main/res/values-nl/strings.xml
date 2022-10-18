@@ -2596,7 +2596,6 @@
     </plurals>
     <string name="search_space_two_parents">%1$s en %2$s</string>
     <string name="auth_reset_password_error_unverified">E-mailadres niet geverifieerd, controleer je inbox</string>
-    <string name="device_manager_settings_active_sessions_show_all">Alle sessies weergeven (V2, WIP)</string>
     <string name="location_share_loading_map_error">Kan kaart niet laden
 \nDeze server is mogelijk niet geconfigureerd om kaarten weer te geven.</string>
     <string name="a11y_open_settings">Open instellingen</string>

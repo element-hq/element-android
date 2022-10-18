@@ -142,7 +142,8 @@ class LockScreenCodeView @JvmOverloads constructor(
         var codeLength: Int = 0
 
         constructor(source: Parcel) : super(source) {
-            source.readList(code, null)
+            val codeStr = source.readString().orEmpty()
+            code = codeStr.toMutableList()
             codeLength = source.readInt()
         }
 
@@ -150,7 +151,7 @@ class LockScreenCodeView @JvmOverloads constructor(
 
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
-            out.writeList(code)
+            out.writeString(String(code.toCharArray()))
             out.writeInt(codeLength)
         }
 

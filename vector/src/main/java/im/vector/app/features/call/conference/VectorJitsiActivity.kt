@@ -38,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.parcelize.Parcelize
 import org.jitsi.meet.sdk.JitsiMeet
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
@@ -200,7 +201,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         // Is it a switch to another conf?
         intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<Args>(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtraCompat<Args>(Mavericks.KEY_ARG) }
                 ?.let {
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))
                 }

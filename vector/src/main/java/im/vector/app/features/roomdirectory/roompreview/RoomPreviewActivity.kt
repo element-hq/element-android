@@ -24,6 +24,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectoryData
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
@@ -83,7 +84,7 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val args = intent.getParcelableExtra<RoomPreviewData>(ARG)
+            val args = intent.getParcelableExtraCompat<RoomPreviewData>(ARG)
 
             if (args?.worldReadable == true) {
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview

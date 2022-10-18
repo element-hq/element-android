@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.features.settings.devices.v2.details.extended
 
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 

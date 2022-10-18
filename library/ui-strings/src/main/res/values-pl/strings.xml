@@ -2688,7 +2688,6 @@
     <string name="auth_reset_password_error_unverified">Email nie został zweryfikowany, sprawdź swoją skrzynkę</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">Nie udało się zarejestrować tokena punktu końcowego na serwerze domowym:
 \n%1$s</string>
-    <string name="device_manager_settings_active_sessions_show_all">Wyświetl wszystkie sesje (V2, WIP)</string>
     <string name="settings_troubleshoot_test_current_gateway">Bieżąca brama: %s</string>
     <string name="settings_troubleshoot_test_current_gateway_title">Wejście</string>
     <string name="settings_troubleshoot_test_current_endpoint_failed">Nie można znaleźć punktu końcowego.</string>

@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -24,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -46,6 +48,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
+import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
@@ -87,6 +90,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val cryptoService: DefaultCryptoService,
         private val clock: Clock,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val getEventTask: GetEventTask,
 ) : FetchThreadTimelineTask {
 
     enum class Result {
@@ -114,11 +119,26 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
             params: FetchThreadTimelineTask.Params
     ): Result {
         val threadList = response.chunks
-        val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
 
-        monarchy.awaitTransaction { realm ->
+        val isRootThreadTimelineEventEntityKnown: Boolean
+        var threadRootEvent: Event? = null
 
+        if (hasReachEnd) {
+            isRootThreadTimelineEventEntityKnown = realmSessionProvider.withRealm { realm ->
+                TimelineEventEntity
+                        .where(realm, roomId = params.roomId, eventId = params.rootThreadEventId)
+                        .findFirst()
+            } != null
+            if (!isRootThreadTimelineEventEntityKnown) {
+                // Fetch the root event from the server
+                threadRootEvent = tryOrNull {
+                    getEventTask.execute(GetEventTask.Params(roomId = params.roomId, eventId = params.rootThreadEventId))
+                }
+            }
+        }
+
+        monarchy.awaitTransaction { realm ->
             val threadChunk = ChunkEntity.findLastForwardChunkOfThread(realm, params.roomId, params.rootThreadEventId)
                     ?: run {
                         return@awaitTransaction
@@ -173,7 +193,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     // Case when thread event is not in the device
                     Timber.i("###THREADS FetchThreadTimelineTask root thread event: ${params.rootThreadEventId} NOT FOUND! Lets create a temp one")
                     val eventEntity = createEventEntity(params.roomId, threadRootEvent, realm)
-                    roomMemberContentsByUser.addSenderState(realm, params.roomId, threadRootEvent.senderId)
+                    roomMemberContentsByUser.addSenderState(realm, params.roomId, threadRootEvent.senderId!!)
                     threadChunk.addTimelineEvent(
                             roomId = params.roomId,
                             eventEntity = eventEntity,

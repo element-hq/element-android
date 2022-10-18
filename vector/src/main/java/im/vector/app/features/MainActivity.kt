@@ -57,6 +57,7 @@ import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.start.StartAppViewState
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -181,7 +182,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun handleAppStarted() {
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
-            val nextIntent = intent.getParcelableExtra<Intent>(EXTRA_NEXT_INTENT)
+            val nextIntent = intent.getParcelableExtraCompat<Intent>(EXTRA_NEXT_INTENT)
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
             setResult(RESULT_OK)
@@ -218,7 +219,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun parseArgs(): MainActivityArgs {
-        val argsFromIntent: MainActivityArgs? = intent.getParcelableExtra(EXTRA_ARGS)
+        val argsFromIntent: MainActivityArgs? = intent.getParcelableExtraCompat(EXTRA_ARGS)
         Timber.w("Starting MainActivity with $argsFromIntent")
 
         return MainActivityArgs(
