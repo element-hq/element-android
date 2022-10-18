@@ -2718,4 +2718,37 @@
 \n請在下一個彈出式視窗允許存取以檢視通知。</string>
     <string name="labs_enable_rich_text_editor_summary">試用格式化文字編輯器（純文字模式即將推出）</string>
     <string name="labs_enable_rich_text_editor_title">啟用格式化文字編輯器</string>
+    <string name="qr_code_login_confirm_security_code_description">請確保您知道此驗證碼的來源。透過連結裝置，您將為某人提供對您帳號的完整存取權限。</string>
+    <string name="qr_code_login_confirm_security_code">確認</string>
+    <string name="qr_code_login_try_again">再試一次</string>
+    <string name="qr_code_login_status_no_match">不相符？</string>
+    <string name="qr_code_login_signing_in">登入</string>
+    <string name="qr_code_login_connecting_to_device">連線至裝置</string>
+    <string name="qr_code_login_scan_qr_code_button">掃描 QR code</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">正在使用行動裝置登入？</string>
+    <string name="qr_code_login_show_qr_code_button">在此裝置顯示 QR code</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">選取「掃描 QR code」</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">從登入畫面開始</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">選取「使用 QR code 登入」</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">從登入畫面開始</string>
+    <string name="qr_code_login_new_device_instruction_3">選取「在此裝置上顯示 QR code」</string>
+    <string name="qr_code_login_new_device_instruction_2">到「設定」→「安全與隱私」→「顯示所有工作階段」</string>
+    <string name="qr_code_login_new_device_instruction_1">在您的其他裝置上開啟 ${app_name}</string>
+    <string name="qr_code_login_header_failed_denied_description">請求在另一台裝置上被拒絕。</string>
+    <string name="qr_code_login_header_failed_timeout_description">連結未在規定時間內完成。</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">不支援與其裝置連結。</string>
+    <string name="qr_code_login_header_failed_title">連線不成功</string>
+    <string name="qr_code_login_header_connected_description">請檢查您已登入的裝置，應該會顯示以下驗證碼。請確認以下驗證碼與該裝置相符：</string>
+    <string name="qr_code_login_header_connected_title">已建立安全連線</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用您已登出的裝置掃描以下 QR code。</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">使用您已登入的裝置來掃描下方的 QR code：</string>
+    <string name="qr_code_login_header_show_qr_code_title">使用 QR code 登入</string>
+    <string name="qr_code_login_header_scan_qr_code_description">使用此裝置的相機掃描您其他裝置上顯示的 QR code：</string>
+    <string name="qr_code_login_header_scan_qr_code_title">掃描 QR code</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">您可以使用此裝置透過 QR code 登入移動裝置或網路裝置。有兩種方法可以作到：</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">使用 QR code 登入</string>
+    <string name="login_scan_qr_code">掃描 QR code</string>
 </resources>
