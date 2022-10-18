@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 
 private const val AN_EVENT_ID = "event_id"
 private const val A_REFERENCED_EVENT_ID = "event_id_ref"
-private const val A_CHUNK_LENGTH = 3_600L
+private const val A_CHUNK_LENGTH = 30
 
 class VoiceBroadcastEventTest {
 
