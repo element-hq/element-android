@@ -121,9 +121,17 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object OpenElementCallWidget : RoomDetailAction()
 
     sealed class VoiceBroadcastAction : RoomDetailAction() {
-        object Start : VoiceBroadcastAction()
-        object Pause : VoiceBroadcastAction()
-        object Resume : VoiceBroadcastAction()
-        object Stop : VoiceBroadcastAction()
+        sealed class Recording : VoiceBroadcastAction() {
+            object Start : Recording()
+            object Pause : Recording()
+            object Resume : Recording()
+            object Stop : Recording()
+        }
+
+        sealed class Listening : VoiceBroadcastAction() {
+            data class PlayOrResume(val eventId: String) : Listening()
+            object Pause : Listening()
+            object Stop : Listening()
+        }
     }
 }

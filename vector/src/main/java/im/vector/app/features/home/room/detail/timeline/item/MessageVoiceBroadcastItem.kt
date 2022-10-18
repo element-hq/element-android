@@ -22,8 +22,10 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
-import im.vector.app.features.home.room.detail.RoomDetailAction
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 
 @EpoxyModelClass
@@ -35,6 +37,15 @@ abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastI
     @EpoxyAttribute
     var voiceBroadcastState: VoiceBroadcastState? = null
 
+    @EpoxyAttribute
+    var recording: Boolean = false
+
+    @EpoxyAttribute
+    lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
+
+    private val voiceBroadcastEventId
+        get() = attributes.informationData.eventId
+
     override fun isCacheable(): Boolean = false
 
     override fun bind(holder: Holder) {
@@ -44,16 +55,37 @@ abstract class MessageVoiceBroadcastItem : AbsMessageItem<MessageVoiceBroadcastI
 
     @SuppressLint("SetTextI18n") // Temporary text
     private fun bindVoiceBroadcastItem(holder: Holder) {
+        holder.currentStateText.text = "Voice Broadcast state: ${voiceBroadcastState?.value ?: "None"}"
+        if (recording) {
+            renderRecording(holder)
+        } else {
+            renderListening(holder)
+        }
+    }
+
+    private fun renderListening(holder: Holder) {
+        audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
+            override fun onUpdate(state: State) {
+                holder.playButton.isEnabled = state !is State.Playing
+                holder.pauseButton.isEnabled = state is State.Playing
+                holder.stopButton.isEnabled = state !is State.Idle
+            }
+        })
+        holder.playButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastEventId)) }
+        holder.pauseButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
+        holder.stopButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Stop) }
+    }
+
+    private fun renderRecording(holder: Holder) {
         with(holder) {
-            currentStateText.text = "Voice Broadcast state: ${voiceBroadcastState?.value ?: "None"}"
             playButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.PAUSED
             pauseButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.STARTED || voiceBroadcastState == VoiceBroadcastState.RESUMED
             stopButton.isEnabled = voiceBroadcastState == VoiceBroadcastState.STARTED ||
                     voiceBroadcastState == VoiceBroadcastState.RESUMED ||
                     voiceBroadcastState == VoiceBroadcastState.PAUSED
-            playButton.setOnClickListener { attributes.callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Resume) }
-            pauseButton.setOnClickListener { attributes.callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Pause) }
-            stopButton.setOnClickListener { attributes.callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Stop) }
+            playButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
+            pauseButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
+            stopButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
         }
     }
 

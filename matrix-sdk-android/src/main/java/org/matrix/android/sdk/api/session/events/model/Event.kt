@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -355,6 +356,10 @@ fun Event.isAudioMessage(): Boolean {
         MessageType.MSGTYPE_AUDIO -> true
         else -> false
     }
+}
+
+fun Event.isVoiceMessage(): Boolean {
+    return this.asMessageAudioEvent()?.content?.voiceMessageIndicator != null
 }
 
 fun Event.isFileMessage(): Boolean {

@@ -18,12 +18,15 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.getVoiceBroadcastEventId
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.threeten.bp.Duration
@@ -61,6 +64,10 @@ class TimelineEventsGroups {
             EventType.isCallEvent(type) -> (content?.get("call_id") as? String)
             type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> root.asVoiceBroadcastEvent()?.reference?.eventId
             type == EventType.STATE_ROOM_WIDGET || type == EventType.STATE_ROOM_WIDGET_LEGACY -> root.stateKey
+            type == EventType.MESSAGE && root.asMessageAudioEvent().isVoiceBroadcast() -> {
+                // Group voice messages with a reference to an eventId
+                root.asMessageAudioEvent()?.getVoiceBroadcastEventId()
+            }
             else -> {
                 null
             }
@@ -134,8 +141,8 @@ class CallSignalingEventsGroup(private val group: TimelineEventsGroup) {
 }
 
 class VoiceBroadcastEventsGroup(private val group: TimelineEventsGroup) {
-    fun getLastEvent(): TimelineEvent {
+    fun getLastDisplayableEvent(): TimelineEvent {
         return group.events.find { it.root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState == VoiceBroadcastState.STOPPED }
-                ?: group.events.maxBy { it.root.originServerTs ?: 0L }
+                ?: group.events.filter { it.root.type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO }.maxBy { it.root.originServerTs ?: 0L }
     }
 }

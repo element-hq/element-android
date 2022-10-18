@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Sort
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -61,6 +62,20 @@ internal class TimelineEventDataSource @Inject constructor(
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
                     .orEmpty()
+        }
+    }
+
+    fun getTimelineEventsRelatedTo(roomId: String, eventType: String, eventId: String): List<TimelineEvent> {
+        // TODO Remove this trick and call relations API
+        // see https://spec.matrix.org/latest/client-server-api/#get_matrixclientv1roomsroomidrelationseventidreltypeeventtype
+        return realmSessionProvider.withRealm { realm ->
+            TimelineEventEntity.whereRoomId(realm, roomId)
+                    .sort(TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS, Sort.ASCENDING)
+                    .distinct(TimelineEventEntityFields.EVENT_ID)
+                    .findAll()
+                    .mapNotNull {
+                        timelineEventMapper.map(it).takeIf { it.root.getRelationContent()?.takeIf { it.type == eventType && it.eventId == eventId } != null }
+                    }
         }
     }
 }
