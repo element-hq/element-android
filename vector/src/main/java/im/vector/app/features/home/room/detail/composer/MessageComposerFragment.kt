@@ -310,7 +310,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     )
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
-                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
+                            vectorPreferences.isVoiceBroadcastEnabled(), // TODO check user permission
                     )
                 }
                 attachmentTypeSelector.show(composer.attachmentButton)

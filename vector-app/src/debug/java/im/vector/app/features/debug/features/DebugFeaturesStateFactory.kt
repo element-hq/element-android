@@ -100,11 +100,6 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.reciprocateQrCodeLogin,
                                 factory = VectorFeatures::isReciprocateQrCodeLogin
                         ),
-                        createBooleanFeature(
-                                label = "Enable Voice Broadcast",
-                                key = DebugFeatureKeys.voiceBroadcastEnabled,
-                                factory = VectorFeatures::isVoiceBroadcastEnabled
-                        ),
                 )
         )
     }
