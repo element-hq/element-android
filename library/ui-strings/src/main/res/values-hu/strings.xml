@@ -569,7 +569,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_troubleshoot_diagnostic_success_status">Alapszintű diagnosztika nem talált hibát. Ha még mindig nem kapsz értesítéseket, kérlek küldj egy hiba jegyet amivel segítheted a hibakeresésünket.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Egy vagy több teszt is sikertelen volt, próbáld ki a javasolt javítást, javításokat.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Egy vagy több teszt sikertelenül végződött, kérlek küldj egy hibabejelentést ami segít nekünk a problémát kivizsgálni.</string>
-    <string name="settings_troubleshoot_test_system_settings_title">Rendszer beállítások.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Rendszerbeállítások.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
 Kérlek ellenőrizd a rendszerbeállításokat.</string>
@@ -582,7 +582,7 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Munkamenet beállítások.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Az értesítések engedélyezve vannak ezen az munkameneten.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Az értesítések tiltva vannak ezen a munkameneten. Kérlek ellenőrizd a ${app_name} beállításokat.</string>
-    <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyez</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyezés</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Szolgáltatások ellenőrzése</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK elérhető és a legújabb verziójú.</string>
     <string name="settings_troubleshoot_test_play_services_failed">"${app_name} a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
@@ -824,7 +824,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="navigate_to_room_when_already_in_the_room">Már nézed ezt a szobát!</string>
     <string name="settings_general_title">Általános</string>
     <string name="settings_preferences">Beállítások</string>
-    <string name="settings_security_and_privacy">Biztonság &amp; Adatvédelem</string>
+    <string name="settings_security_and_privacy">Biztonság és adatvédelem</string>
     <string name="settings_push_rules">„Push” szabályok</string>
     <string name="settings_push_rules_no_rules">„Push” szabályok nincsenek</string>
     <string name="settings_push_gateway_no_pushers">„Push” átjárók nincsenek regisztrálva</string>
@@ -834,8 +834,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="push_gateway_item_device_name">Munkamenet képernyő név:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formátum:</string>
-    <string name="preference_voice_and_video">Hang &amp; Videó</string>
-    <string name="preference_root_help_about">Segítség &amp; Névjegy</string>
+    <string name="preference_voice_and_video">Hang és videó</string>
+    <string name="preference_root_help_about">Súgó és névjegy</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token regisztrálása</string>
     <string name="send_suggestion">Javaslat tétel</string>
     <string name="send_suggestion_content">A javaslatodat kérlek ír le alulra.</string>
