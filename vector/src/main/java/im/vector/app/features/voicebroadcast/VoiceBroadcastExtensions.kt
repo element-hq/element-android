@@ -16,14 +16,18 @@
 
 package im.vector.app.features.voicebroadcast
 
-import org.matrix.android.sdk.api.session.events.model.RelationType
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 
-fun MessageAudioEvent?.isVoiceBroadcast() = this?.getVoiceBroadcastEventId() != null
+fun MessageAudioEvent?.isVoiceBroadcast() = this?.root?.getClearContent()?.get(VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY) != null
+fun MessageAudioEvent.getVoiceBroadcastEventId(): String? = if (isVoiceBroadcast()) root.getRelationContent()?.eventId else null
 
-fun MessageAudioEvent.getVoiceBroadcastEventId(): String? =
-        // TODO Improve this condition by checking the referenced event type
-        root.takeIf { content.voiceMessageIndicator != null }
-                ?.getRelationContent()?.takeIf { it.type == RelationType.REFERENCE }
-                ?.eventId
+fun MessageAudioEvent.getVoiceBroadcastChunk(): VoiceBroadcastChunk? {
+    @Suppress("UNCHECKED_CAST")
+    return (root.getClearContent()?.get(VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY) as? Content).toModel<VoiceBroadcastChunk>()
+}
+
+val MessageAudioEvent.sequence: Int? get() = getVoiceBroadcastChunk()?.sequence

@@ -23,6 +23,7 @@ import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
@@ -98,7 +99,10 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                 compressBeforeSending = false,
                 roomIds = emptySet(),
-                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId),
+                additionalContent = mapOf(
+                        VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY to VoiceBroadcastChunk(sequence = sequence).toContent()
+                )
         )
     }
 }

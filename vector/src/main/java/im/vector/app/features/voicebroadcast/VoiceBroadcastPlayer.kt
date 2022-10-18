@@ -85,7 +85,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     private fun updatePlaylist(room: Room, eventId: String) {
         val timelineEvents = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, eventId)
         val audioEvents = timelineEvents.mapNotNull { it.root.asMessageAudioEvent() }
-        playlist = audioEvents.sortedBy { it.root.originServerTs }
+        playlist = audioEvents.sortedBy { it.getVoiceBroadcastChunk()?.sequence?.toLong() ?: it.root.originServerTs }
     }
 
     private fun startPlayback() {
