@@ -110,20 +110,6 @@ internal fun <T : RealmObject> RealmQuery<T>.andIf(
     }
 }
 
-internal fun MutableRealm.deleteAll() {
-    configuration.schema.forEach { kClass ->
-        delete(query(kClass).find())
-    }
-}
-
-internal fun DynamicMutableRealm.deleteAll() {
-    configuration.schema.mapNotNull {
-        it.simpleName
-    }.forEach { className ->
-        delete(query(className).find())
-    }
-}
-
 internal fun MutableRealm.deleteNullable(deleteable: Deleteable?) {
     if (deleteable == null) return
     delete(deleteable)
