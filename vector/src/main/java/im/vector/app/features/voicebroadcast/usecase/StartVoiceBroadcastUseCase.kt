@@ -79,20 +79,21 @@ class StartVoiceBroadcastUseCase @Inject constructor(
     }
 
     private fun startRecording(room: Room, eventId: String, chunkLength: Int) {
-        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
-            sendVoiceFile(room, file, eventId)
+        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file, sequence ->
+            sendVoiceFile(room, file, eventId, sequence)
         }
         voiceBroadcastRecorder?.startRecord(room.roomId, chunkLength)
     }
 
-    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String) {
+    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String, sequence: Int) {
         val outputFileUri = FileProvider.getUriForFile(
                 context,
                 buildMeta.applicationId + ".fileProvider",
                 voiceMessageFile,
-                "Voice message.${voiceMessageFile.extension}"
+                "Voice Broadcast Part ($sequence).${voiceMessageFile.extension}"
         )
         val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
+        // TODO put sequence in event content
         room.sendService().sendMedia(
                 attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                 compressBeforeSending = false,

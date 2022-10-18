@@ -16,6 +16,7 @@
 
 package im.vector.app.features.voicebroadcast
 
+import androidx.annotation.IntRange
 import im.vector.app.features.voice.VoiceRecorder
 import java.io.File
 
@@ -26,6 +27,6 @@ interface VoiceBroadcastRecorder : VoiceRecorder {
     fun startRecord(roomId: String, chunkLength: Int)
 
     fun interface Listener {
-        fun onVoiceMessageCreated(file: File)
+        fun onVoiceMessageCreated(file: File, @IntRange(from = 1) sequence: Int)
     }
 }

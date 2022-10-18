@@ -29,6 +29,7 @@ class VoiceBroadcastRecorderQ(
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
     private var maxFileSize = 0L // zero or negative for no limit
+    private var currentSequence = 0
 
     override var listener: VoiceBroadcastRecorder.Listener? = null
 
@@ -51,6 +52,7 @@ class VoiceBroadcastRecorderQ(
 
     override fun startRecord(roomId: String, chunkLength: Int) {
         maxFileSize = (chunkLength * audioEncodingBitRate / 8).toLong()
+        currentSequence = 1
         startRecord(roomId)
     }
 
@@ -58,6 +60,7 @@ class VoiceBroadcastRecorderQ(
         super.stopRecord()
         notifyOutputFileCreated()
         listener = null
+        currentSequence = 0
     }
 
     override fun release() {
@@ -71,11 +74,12 @@ class VoiceBroadcastRecorderQ(
 
     private fun onNextOutputFileStarted() {
         notifyOutputFileCreated()
+        currentSequence++
     }
 
     private fun notifyOutputFileCreated() {
         outputFile?.let {
-            listener?.onVoiceMessageCreated(it)
+            listener?.onVoiceMessageCreated(it, currentSequence)
             outputFile = nextOutputFile
             nextOutputFile = null
         }
