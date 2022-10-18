@@ -95,7 +95,6 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 "Voice Broadcast Part ($sequence).${voiceMessageFile.extension}"
         )
         val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
-        // TODO put sequence in event content
         room.sendService().sendMedia(
                 attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                 compressBeforeSending = false,
