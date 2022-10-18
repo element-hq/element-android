@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.user.accountdata
 
+import io.realm.kotlin.internal.platform.freeze
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 import org.matrix.android.sdk.internal.database.query.get
@@ -41,7 +42,7 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {
         val realm = realmInstance.getRealm()
-        val newBreadcrumbs = BreadcrumbsEntity.get(realm)?.recentRoomIds
+        val newBreadcrumbs = BreadcrumbsEntity.get(realm)?.recentRoomIds?.toMutableList()
                 // Get the breadcrumbs entity, if any
                 ?.apply {
                     // Modify the list to add the newTopRoomId first
