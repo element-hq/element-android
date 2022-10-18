@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
  * Representation of a rendezvous channel such as that described by MSC3903.
  */
 interface RendezvousChannel {
-    var transport: RendezvousTransport
+    val transport: RendezvousTransport
 
     /**
      * @returns the checksum/confirmation digits to be shown to the user
@@ -45,7 +45,7 @@ interface RendezvousChannel {
     suspend fun receive(): ByteArray?
 
     /**
-     * @returns closes the channel and cleans up
+     * Closes the channel and cleans up.
      */
     suspend fun close()
 }
