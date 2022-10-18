@@ -22,7 +22,7 @@ import io.mockk.slot
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
 
-class FakeUserService: UserService by mockk() {
+class FakeUserService : UserService by mockk() {
 
     private val userIdSlot = slot<String>()
 

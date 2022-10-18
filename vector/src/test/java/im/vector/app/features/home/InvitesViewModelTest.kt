@@ -100,7 +100,6 @@ class InvitesViewModelTest {
                 session = fakeSession,
                 stringProvider = fakeStringProvider.instance,
                 drawableProvider = fakeDrawableProvider.instance,
-
                 ).also {
             viewModel = it
             initialState = state
