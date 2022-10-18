@@ -69,8 +69,7 @@ class RoomProfileActivity :
 
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
-    @Inject
-    lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     override fun getBinding(): ActivitySimpleBinding {
         return ActivitySimpleBinding.inflate(layoutInflater)

@@ -670,6 +670,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
                 val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
                 state.personalizationState.copy(
+                        userId = session.myUserId,
                         displayName = state.registrationState.selectedMatrixId?.let { MatrixPatterns.extractUserNameFromId(it) },
                         supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
                         supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar

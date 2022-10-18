@@ -63,8 +63,6 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     @Inject lateinit var session: Session
 
-    @Inject lateinit var vectorPreferences: VectorPreferences
-
     override fun initUiAndData() {
         setupToolbar(views.settingsToolbar)
                 .allowBack()
