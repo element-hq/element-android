@@ -45,7 +45,7 @@ interface RendezvousChannel {
     suspend fun receive(): ByteArray?
 
     /**
-     * @returns closes the channel and cleans up
+     * Closes the channel and cleans up.
      */
     suspend fun close()
 }
