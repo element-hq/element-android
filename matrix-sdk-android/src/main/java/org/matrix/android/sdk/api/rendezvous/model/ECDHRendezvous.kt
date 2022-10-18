@@ -16,12 +16,11 @@
 
 package org.matrix.android.sdk.api.rendezvous.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ECDHRendezvous(
-        @Json val transport: SimpleHttpRendezvousTransportDetails,
-        @Json val algorithm: SecureRendezvousChannelAlgorithm,
-        @Json val key: String
+        val transport: SimpleHttpRendezvousTransportDetails,
+        val algorithm: SecureRendezvousChannelAlgorithm,
+        val key: String
 )

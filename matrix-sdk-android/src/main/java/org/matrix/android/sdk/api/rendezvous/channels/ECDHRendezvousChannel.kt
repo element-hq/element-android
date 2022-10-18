@@ -56,10 +56,10 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
 
     @JsonClass(generateAdapter = true)
     internal data class ECDHPayload(
-            @Json val algorithm: SecureRendezvousChannelAlgorithm? = null,
-            @Json val key: String? = null,
-            @Json val ciphertext: String? = null,
-            @Json val iv: String? = null
+            val algorithm: SecureRendezvousChannelAlgorithm? = null,
+            val key: String? = null,
+            val ciphertext: String? = null,
+            val iv: String? = null
     )
 
     private val olmSASMutex = Mutex()

@@ -16,11 +16,10 @@
 
 package org.matrix.android.sdk.api.rendezvous.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ECDHRendezvousCode(
-        @Json val intent: RendezvousIntent,
-        @Json val rendezvous: ECDHRendezvous
+        val intent: RendezvousIntent,
+        val rendezvous: ECDHRendezvous
 )
