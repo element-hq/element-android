@@ -57,7 +57,7 @@ internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): Thr
 
 internal fun ThreadSummaryEntity.Companion.findRootOrLatest(realm: TypedRealm, eventId: String): ThreadSummaryEntity? {
     return realm.query(ThreadSummaryEntity::class)
-            .query("rootThreadEventId == $0 OR latestThreadEventEntity.eventId == $1", eventId, eventId)
+            .query("rootThreadEventId == $0 OR latestThreadEventEntity.eventId == $0", eventId)
             .first()
             .find()
 }

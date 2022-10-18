@@ -73,7 +73,7 @@ internal class UserDataSource @Inject constructor(
             query = if (filter.isNullOrEmpty()) {
                 query.query("userId != ''")
             } else {
-                query.query("displayName CONTAINS[c] $0 OR userId CONTAINS $1", filter, filter)
+                query.query("displayName CONTAINS[c] $0 OR userId CONTAINS $0", filter)
             }
             excludedUserIds
                     ?.takeIf { it.isNotEmpty() }

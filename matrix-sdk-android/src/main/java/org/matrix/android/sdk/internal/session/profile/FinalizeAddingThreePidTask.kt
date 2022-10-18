@@ -99,7 +99,7 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         // Delete the pending three pid
         realmInstance.write {
             val pendingThreePidEntities = query(PendingThreePidEntity::class)
-                    .query("email == $0 OR msisdn == $1", params.threePid.value, params.threePid.value)
+                    .query("email == $0 OR msisdn == $0", params.threePid.value)
                     .find()
             delete(pendingThreePidEntities)
         }
