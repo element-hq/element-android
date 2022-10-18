@@ -27,5 +27,5 @@ object VoiceBroadcastConstants {
     const val VOICE_BROADCAST_CHUNK_KEY = "io.element.voice_broadcast_chunk"
 
     /** Default voice broadcast chunk duration, in seconds. */
-    const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 10
+    const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 120
 }
