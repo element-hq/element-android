@@ -89,7 +89,6 @@ class OtherSessionsFragment :
         }
     }
 
-    // TODO call enableSelectMode(true) on long press of an item when disabled
     private fun enableSelectMode(isEnabled: Boolean) {
         val action = if (isEnabled) OtherSessionsAction.EnableSelectMode else OtherSessionsAction.DisableSelectMode
         viewModel.handle(action)
@@ -251,6 +250,12 @@ class OtherSessionsFragment :
                 description = description,
         )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
+    }
+
+    override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
+        if (!state.isSelectModeEnabled) {
+            enableSelectMode(true)
+        }
     }
 
     override fun onOtherSessionClicked(deviceId: String) {

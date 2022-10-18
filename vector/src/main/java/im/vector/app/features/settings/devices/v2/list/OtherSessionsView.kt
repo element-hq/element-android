@@ -40,6 +40,7 @@ class OtherSessionsView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), OtherSessionsController.Callback {
 
     interface Callback {
+        fun onOtherSessionLongClicked(deviceId: String)
         fun onOtherSessionClicked(deviceId: String)
         fun onViewAllOtherSessionsClicked()
     }
@@ -106,5 +107,9 @@ class OtherSessionsView @JvmOverloads constructor(
 
     override fun onItemClicked(deviceId: String) {
         callback?.onOtherSessionClicked(deviceId)
+    }
+
+    override fun onItemLongClicked(deviceId: String) {
+        callback?.onOtherSessionLongClicked(deviceId)
     }
 }

@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.list
 
 import android.graphics.drawable.Drawable
+import android.view.View.OnLongClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -59,11 +60,15 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onLongClickListener: OnLongClickListener? = null
+
     private val setDeviceTypeIconUseCase = SetDeviceTypeIconUseCase()
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.onClick(clickListener)
+        holder.view.setOnLongClickListener(onLongClickListener)
         if (clickListener == null) {
             holder.view.isClickable = false
         }

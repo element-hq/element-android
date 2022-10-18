@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
+import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
@@ -38,6 +39,7 @@ class OtherSessionsController @Inject constructor(
     var callback: Callback? = null
 
     interface Callback {
+        fun onItemLongClicked(deviceId: String)
         fun onItemClicked(deviceId: String)
     }
 
@@ -72,6 +74,10 @@ class OtherSessionsController @Inject constructor(
                     sessionDescriptionColor(descriptionColor)
                     stringProvider(this@OtherSessionsController.stringProvider)
                     clickListener { device.deviceInfo.deviceId?.let { host.callback?.onItemClicked(it) } }
+                    onLongClickListener(View.OnLongClickListener {
+                        device.deviceInfo.deviceId?.let { host.callback?.onItemLongClicked(it) }
+                        true
+                    })
                 }
             }
         }

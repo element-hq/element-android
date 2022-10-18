@@ -331,6 +331,10 @@ class VectorSettingsDevicesFragment :
         views.waitingView.root.isVisible = isLoading
     }
 
+    override fun onOtherSessionLongClicked(deviceId: String) {
+        // do nothing
+    }
+
     override fun onOtherSessionClicked(deviceId: String) {
         navigateToSessionOverview(deviceId)
     }
