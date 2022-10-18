@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 
 fun MessageAudioEvent?.isVoiceBroadcast() = this?.root?.getClearContent()?.get(VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY) != null
+
 fun MessageAudioEvent.getVoiceBroadcastEventId(): String? = if (isVoiceBroadcast()) root.getRelationContent()?.eventId else null
 
 fun MessageAudioEvent.getVoiceBroadcastChunk(): VoiceBroadcastChunk? {
