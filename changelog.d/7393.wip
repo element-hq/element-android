@@ -1,1 +1,1 @@
-[Voice Broadcast] Move the feature flag to the labs
+[Voice Broadcast] Enable the feature (behind a lab flag and only for Android 10 and up)
