@@ -168,7 +168,6 @@ dependencies {
 
     // Database
     implementation libs.realm.base
-    kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Shared Preferences
     implementation libs.androidx.preferenceKtx

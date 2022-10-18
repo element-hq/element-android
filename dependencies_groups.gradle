@@ -219,8 +219,6 @@ ext.groups = [
                         'com.amulyakhare',
                         'com.otaliastudios',
                         'com.yqritc',
-                        // https://github.com/cmelchior/realmfieldnameshelper/issues/42
-                        'dk.ilios',
                         'im.dlg',
                         'me.dm7.barcodescanner',
                         'me.gujun.android',
