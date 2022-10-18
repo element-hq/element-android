@@ -54,6 +54,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
         return SimpleHttpRendezvousTransportDetails(uri)
     }
 
+    @Throws(RendezvousError::class)
     override suspend fun send(contentType: MediaType, data: ByteArray) {
         if (cancelled) {
             throw IllegalStateException("Rendezvous cancelled")
@@ -96,6 +97,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
         }
     }
 
+    @Throws(RendezvousError::class)
     override suspend fun receive(): ByteArray? {
         if (cancelled) {
             throw IllegalStateException("Rendezvous cancelled")
