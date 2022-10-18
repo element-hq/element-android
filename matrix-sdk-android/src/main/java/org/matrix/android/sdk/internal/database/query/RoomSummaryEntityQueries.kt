@@ -49,7 +49,7 @@ internal fun RoomSummaryEntity.Companion.findByAlias(realm: TypedRealm, roomAlia
         return roomSummary
     }
     return realm.query(RoomSummaryEntity::class)
-            .query("flatAliases CONTAINS |$roomAlias")
+            .query("flatAliases CONTAINS $0", "|$roomAlias")
             .first()
             .find()
 }
