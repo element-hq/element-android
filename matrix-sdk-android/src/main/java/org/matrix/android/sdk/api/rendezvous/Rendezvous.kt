@@ -165,21 +165,25 @@ class Rendezvous(
             }
 
             verificationResponse.masterKey?.let { masterKeyFromVerifyingDevice ->
-                // check master key againt what the homeserver told us
-                crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()?.let { localMasterKey ->
-                    if (localMasterKey.unpaddedBase64PublicKey != masterKeyFromVerifyingDevice) {
-                        Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
-                        // inform the other side
-                        send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
-                        throw RendezvousError("Master key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
-                    }
-                    // set other device as verified
-                    Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
-                    crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
+                // verifying device provided us with a master key, so use it to check integrity
 
-                    Timber.tag(TAG).i("Setting master key as trusted")
-                    crypto.crossSigningService().markMyMasterKeyAsTrusted()
-                } ?: Timber.tag(TAG).w("No local master key so not verifying")
+                // see what the homeserver told us
+                val localMasterKey = crypto.crossSigningService().getMyCrossSigningKeys()?.masterKey()
+
+                // n.b. if no local master key this is a problem, as well as it not matching
+                if (localMasterKey?.unpaddedBase64PublicKey != masterKeyFromVerifyingDevice) {
+                    Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
+                    // inform the other side
+                    send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                    throw RendezvousError("Master key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
+                }
+
+                // set other device as verified
+                Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
+                crypto.setDeviceVerification(DeviceTrustLevel(locallyVerified = true, crossSigningVerified = false), userId, verifyingDeviceId)
+
+                Timber.tag(TAG).i("Setting master key as trusted")
+                crypto.crossSigningService().markMyMasterKeyAsTrusted()
             } ?: run {
                 // set other device as verified anyway
                 Timber.tag(TAG).i("Setting device $verifyingDeviceId as verified")
