@@ -2763,4 +2763,37 @@
 \nConsenti l\'accesso nelle prossime schermate per potere vedere la notifica.</string>
     <string name="labs_enable_rich_text_editor_summary">Prova l\'editor in rich text (il testo semplice è in arrivo)</string>
     <string name="labs_enable_rich_text_editor_title">Attiva editor in rich text</string>
+    <string name="qr_code_login_confirm_security_code_description">Assicurati di conoscere l\'origine di questo codice. Collegando i dispositivi, fornirai a qualcuno l\'accesso totale al tuo account.</string>
+    <string name="qr_code_login_confirm_security_code">Conferma</string>
+    <string name="qr_code_login_try_again">Riprova</string>
+    <string name="qr_code_login_status_no_match">Non corrisponde\?</string>
+    <string name="qr_code_login_signing_in">Accesso in corso</string>
+    <string name="qr_code_login_connecting_to_device">Connessione al dispositivo</string>
+    <string name="qr_code_login_scan_qr_code_button">Scansiona codice QR</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Effettuare l\'accesso in un dispositivo mobile\?</string>
+    <string name="qr_code_login_show_qr_code_button">Mostra codice QR in questo dispositivo</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Seleziona \'Scansiona codice QR\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Inizia nella schermata di accesso</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Seleziona ‘Accedi con codice QR’</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Inizia nella schermata di accesso</string>
+    <string name="qr_code_login_new_device_instruction_3">Seleziona ‘Mostra codice QR in questo dispositivo’</string>
+    <string name="qr_code_login_new_device_instruction_2">Vai in Impostazioni -&gt; Sicurezza e privacy -&gt; Mostra tutte le sessioni</string>
+    <string name="qr_code_login_new_device_instruction_1">Apri ${app_name} sull\'altro dispositivo</string>
+    <string name="qr_code_login_header_failed_denied_description">La richiesta è stata negata sull\'altro dispositivo.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Il collegamento non è stato completato nel tempo previsto.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Il collegamento con questo dispositivo non è supportato.</string>
+    <string name="qr_code_login_header_failed_title">Connessione non riuscita</string>
+    <string name="qr_code_login_header_connected_description">Controlla il dispositivo che ha l\'accesso, dovresti vedere il codice sotto. Conferma che il codice corrisponda con quel dispositivo:</string>
+    <string name="qr_code_login_header_connected_title">Connessione sicura stabilita</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scansiona il codice QR sottostante con il dispositivo che è disconnesso.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Usa il dispositivo che ha l\'accesso per scansionare il codice QR sotto:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Accedi con codice QR</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Usa la fotocamera di questo dispositivo per scansionare il codice QR mostrato nell\'altro dispositivo:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Scansiona codice QR</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Puoi usare questo dispositivo per accedere in un dispositivo mobile o web con un codice QR. Ci sono due modi:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Accedi con codice QR</string>
+    <string name="login_scan_qr_code">Scansiona codice QR</string>
 </resources>
