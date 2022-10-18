@@ -16,7 +16,6 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import android.os.Build
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
@@ -68,8 +67,6 @@ class StopVoiceBroadcastUseCase @Inject constructor(
     }
 
     private fun stopRecording() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            voiceBroadcastRecorder?.stopRecord()
-        }
+        voiceBroadcastRecorder?.stopRecord()
     }
 }

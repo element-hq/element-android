@@ -91,11 +91,7 @@ abstract class AbstractVoiceRecorderQ(private val context: Context) : AbstractVo
     fun setNextOutputFile(roomId: String) {
         val mediaRecorder = mediaRecorder ?: return
         nextOutputFile = createOutputFile(roomId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mediaRecorder.setNextOutputFile(nextOutputFile)
-        } else {
-            mediaRecorder.setNextOutputFile(nextOutputFile?.outputStream()?.fd)
-        }
+        mediaRecorder.setNextOutputFile(nextOutputFile)
     }
 
     private fun createMediaRecorder(): MediaRecorder {
@@ -115,10 +111,6 @@ abstract class AbstractVoiceRecorderQ(private val context: Context) : AbstractVo
     private fun setOutputFile(roomId: String) {
         val mediaRecorder = mediaRecorder ?: return
         outputFile = outputFile ?: createOutputFile(roomId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mediaRecorder.setOutputFile(outputFile)
-        } else {
-            mediaRecorder.setOutputFile(outputFile?.outputStream()?.fd)
-        }
+        mediaRecorder.setOutputFile(outputFile)
     }
 }
