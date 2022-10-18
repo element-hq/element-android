@@ -76,7 +76,7 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleOnQrCodeScanned(action: QrCodeLoginAction.OnQrCodeScanned) {
-        Timber.tag(TAG).d("Scanned code: ${action.qrCode}")
+        Timber.tag(TAG).d("Scanned code of length ${action.qrCode.length}")
 
         val rendezvous = try { Rendezvous.buildChannelFromCode(action.qrCode) } catch (t: Throwable) {
             Timber.tag(TAG).e(t, "Error occurred during sign in")
