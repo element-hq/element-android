@@ -94,7 +94,7 @@ jobs:
     needs:
       - should-i-run
       - ui-tests
-    if: always() && (needs.should-i-run.result == 'success' ) && ((needs.codecov-units.result != 'success' ) || (needs.ui-tests.result != 'success') || (needs.integration-tests.result != 'success'))
+    if: always() && (needs.should-i-run.result == 'success' ) && (needs.ui-tests.result != 'success')
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: michaelkaye/matrix-hookshot-action@v1.0.0
