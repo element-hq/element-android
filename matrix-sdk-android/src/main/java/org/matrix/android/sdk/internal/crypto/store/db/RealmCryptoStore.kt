@@ -82,7 +82,6 @@ import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.andIf
 import org.matrix.android.sdk.internal.database.clearWith
-import org.matrix.android.sdk.internal.database.deleteAll
 import org.matrix.android.sdk.internal.database.deleteNullable
 import org.matrix.android.sdk.internal.database.queryIn
 import org.matrix.android.sdk.internal.di.CryptoDatabase

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.cache
 
 import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.database.deleteAll
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 

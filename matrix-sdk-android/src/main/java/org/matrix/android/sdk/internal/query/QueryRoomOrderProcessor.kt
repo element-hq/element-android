@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 
 internal fun RealmQuery<RoomSummaryEntity>.process(sortOrder: RoomSortOrder): RealmQuery<RoomSummaryEntity> {
-    when (sortOrder) {
+    return when (sortOrder) {
         RoomSortOrder.NAME -> {
             sort("displayName", Sort.ASCENDING)
         }
@@ -37,7 +37,7 @@ internal fun RealmQuery<RoomSummaryEntity>.process(sortOrder: RoomSortOrder): Re
             )
         }
         RoomSortOrder.NONE -> {
+            this
         }
     }
-    return this
 }
