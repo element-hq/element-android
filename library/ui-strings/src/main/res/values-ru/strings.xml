@@ -367,8 +367,8 @@
     <string name="settings_add_phone_number">Добавить телефон</string>
     <string name="settings_app_info_link_summary">Системные настройки приложения.</string>
     <string name="settings_app_info_link_title">Сведения о приложении</string>
-    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
+    <string name="settings_enable_all_notif">Уведомления для этой учётной записи</string>
+    <string name="settings_enable_this_device">Уведомления для этой сессии</string>
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
     <string name="settings_invited_to_room">Когда меня приглашают в комнату</string>
@@ -663,7 +663,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии.
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включены для этой сессии.
 \nПожалуйста, проверьте настройки ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
@@ -830,8 +830,8 @@
     <string name="keys_backup_setup_step2_text_description">Зашифрованная копия ключей будет храниться на вашем сервере. Для безопасности защитите её мнемонической фразой.
 \n
 \nДля максимальной безопасности мнемоническая фраза должна отличаться от пароля вашей учётной записи.</string>
-    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете вашу парольную фразу. 
-\nХраните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
+    <string name="keys_backup_setup_step3_text_line2">Бумажный ключ — это подстраховка: вы можете использовать его для восстановления доступа к своим зашифрованным сообщениям, если забудете свою мнемоническую фразу.
+\nХраните свой бумажный ключ в очень надёжном месте, например, в менеджере паролей (или в сейфе)</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортирование ключей…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Скачивание ключей…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление бумажного ключа…</string>
@@ -1572,8 +1572,8 @@
     <string name="or_other_mx_capable_client">или другой клиент Matrix поддерживающий перекрестную подпись</string>
     <string name="command_description_discard_session">Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату</string>
     <string name="enter_secret_storage_passphrase_or_key">Чтобы продолжить, используйте %1$s или %2$s.</string>
-    <string name="use_recovery_key">Используйте ключ восстановления</string>
-    <string name="enter_secret_storage_input_key">Выберите ключ восстановления или введите его вручную, введя или вставив из буфера обмена</string>
+    <string name="use_recovery_key">Используйте бумажный ключ</string>
+    <string name="enter_secret_storage_input_key">Выберите бумажный ключ или введите его вручную, введя или вставив из буфера обмена</string>
     <string name="failed_to_access_secure_storage">Не удалось получить доступ к защищенному хранилищу данных</string>
     <string name="unencrypted">Не зашифровано</string>
     <string name="encrypted_unverified">Зашифровано неподтверждённой сессией</string>

@@ -2784,9 +2784,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Wähle „Mit QR-Code anmelden“</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
-    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code auf diesem Gerät anzeigen\'</string>
-    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre -&gt; Alle Sitzungen anzeigen</string>
-    <string name="qr_code_login_new_device_instruction_1">Öffne ${app_name} auf deinem anderen Gerät</string>
+    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code anzeigen\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre</string>
+    <string name="qr_code_login_new_device_instruction_1">Öffne die App auf deinem anderen Gerät</string>
     <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
     <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
@@ -2797,11 +2797,20 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Benutze dein angemeldetes Gerät um den unten angezeigten QR-Code einzulesen:</string>
     <string name="qr_code_login_header_show_qr_code_title">Mit QR-Code anmelden</string>
     <string name="qr_code_login_header_scan_qr_code_description">Benutze die Kamera auf diesem Gerät um den vom anderen Gerät angezeigten QR-Code zu scannen:</string>
-    <string name="qr_code_login_header_scan_qr_code_title">QR-Code scannen</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR-Code einlesen</string>
     <string name="three">3</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kannst dieses Gerät benutzen um ein anderes Gerät per QR-Code anzumelden. Dafür gibt es zwei Wege:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
-    <string name="login_scan_qr_code">QR-Code scannen</string>
+    <string name="login_scan_qr_code">QR-Code einlesen</string>
+    <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Der Heim-Server unterstützt Anmelden per QR-Code nicht.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Die Anmeldung wurde vom anderen Gerät abgebrochen.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Das andere Gerät muss angemeldet sein.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Das andere Gerät ist bereits angemeldet.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Es ist ein Problem bei der Herstellung der sicheren Kommunikation aufgetreten. Eines der folgenden Dinge könnte kompromitiert sein: Dein Heim-Server; deine Internetverbindung(en); dein(e) Gerät(e);</string>
+    <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
 </resources>
