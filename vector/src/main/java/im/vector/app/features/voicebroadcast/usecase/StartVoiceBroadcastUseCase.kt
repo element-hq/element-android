@@ -23,6 +23,7 @@ import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
@@ -70,6 +71,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
+                        deviceId = session.sessionParams.deviceId,
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,
                         chunkLength = chunkLength,
                 ).toContent()
@@ -93,12 +95,14 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 "Voice Broadcast Part ($sequence).${voiceMessageFile.extension}"
         )
         val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
-        // TODO put sequence in event content
         room.sendService().sendMedia(
                 attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                 compressBeforeSending = false,
                 roomIds = emptySet(),
-                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId),
+                additionalContent = mapOf(
+                        VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY to VoiceBroadcastChunk(sequence = sequence).toContent()
+                )
         )
     }
 }
