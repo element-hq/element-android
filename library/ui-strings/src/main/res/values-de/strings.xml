@@ -2811,6 +2811,6 @@
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Das andere Gerät muss angemeldet sein.</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Das andere Gerät ist bereits angemeldet.</string>
-    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Es ist ein Problem bei der Herstellung der sicheren Kommunikation aufgetreten. Eines der folgenden Dinge könnte kompromitiert sein: Dein Heim-Server; deine Internetverbindung(en); dein(e) Gerät(e);</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Es ist ein Problem bei der Herstellung der sicheren Kommunikation aufgetreten. Eines der folgenden Dinge könnte kompromittiert sein: Dein Heim-Server; deine Internetverbindung(en); dein(e) Gerät(e);</string>
     <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
 </resources>
