@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
+import io.realm.kotlin.query.Sort
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
@@ -50,7 +51,7 @@ internal class TimelineEventDataSource @Inject constructor(
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
         val realm = realmInstance.getBlockingRealm()
         return TimelineEventEntity.whereRoomId(realm, roomId)
-                .sort("root.originServerTs", io.realm.kotlin.query.Sort.ASCENDING)
+                .sort("root.originServerTs", Sort.ASCENDING)
                 .distinct("eventId")
                 .find()
                 .mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
@@ -61,7 +62,7 @@ internal class TimelineEventDataSource @Inject constructor(
         // see https://spec.matrix.org/latest/client-server-api/#get_matrixclientv1roomsroomidrelationseventidreltypeeventtype
         val realm = realmInstance.getBlockingRealm()
         return TimelineEventEntity.whereRoomId(realm, roomId)
-                .sort("root.originServerTs", io.realm.kotlin.query.Sort.ASCENDING)
+                .sort("root.originServerTs", Sort.ASCENDING)
                 .distinct("eventId")
                 .find()
                 .mapNotNull {

@@ -25,6 +25,7 @@ import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmSingleQuery
+import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -737,7 +738,7 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getLastUsedSessionId(deviceKey: String): String? {
         return realmInstance.getBlockingRealm()
                 .queryOlmSessionEntity(deviceKey)
-                .sort("lastReceivedMessageTs", io.realm.kotlin.query.Sort.DESCENDING)
+                .sort("lastReceivedMessageTs", Sort.DESCENDING)
                 .find()
                 .firstOrNull()
                 ?.sessionId
@@ -746,7 +747,7 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getDeviceSessionIds(deviceKey: String): List<String> {
         return realmInstance.getBlockingRealm()
                 .queryOlmSessionEntity(deviceKey)
-                .sort("lastReceivedMessageTs", io.realm.kotlin.query.Sort.DESCENDING)
+                .sort("lastReceivedMessageTs", Sort.DESCENDING)
                 .find()
                 .mapNotNull { sessionEntity ->
                     sessionEntity.sessionId
@@ -1172,7 +1173,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
         return realmInstance.queryPagedList(pagedListConfig, mapper) { realm ->
             realm.query(AuditTrailEntity::class)
-                    .sort("ageLocalTs", io.realm.kotlin.query.Sort.DESCENDING)
+                    .sort("ageLocalTs", Sort.DESCENDING)
         }.asLiveData()
     }
 
@@ -1205,7 +1206,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
         return realmInstance.queryPagedList(pagedListConfig, pagedMapper) {
             it.query(AuditTrailEntity::class, "type == $0", type.name)
-                    .sort("ageLocalTs", io.realm.kotlin.query.Sort.DESCENDING)
+                    .sort("ageLocalTs", Sort.DESCENDING)
         }.asLiveData()
     }
 
