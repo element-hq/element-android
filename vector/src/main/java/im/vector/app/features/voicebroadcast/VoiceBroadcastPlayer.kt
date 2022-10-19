@@ -24,6 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlayb
 import im.vector.app.features.voice.VoiceFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -42,13 +43,13 @@ class VoiceBroadcastPlayer @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
 ) {
-
-    private val session get() = sessionHolder.getActiveSession()
-
-    private val mediaPlayerScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val session
+        get() = sessionHolder.getActiveSession()
 
     private var currentMediaPlayer: MediaPlayer? = null
     private var currentPlayingIndex: Int = -1
+
     private var playlist = emptyList<MessageAudioEvent>()
     private val currentVoiceBroadcastEventId
         get() = playlist.firstOrNull()?.root?.getRelationContent()?.eventId
@@ -90,7 +91,7 @@ class VoiceBroadcastPlayer @Inject constructor(
 
     private fun startPlayback() {
         val content = playlist.firstOrNull()?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
-        mediaPlayerScope.launch {
+        coroutineScope.launch {
             try {
                 currentMediaPlayer = prepareMediaPlayer(content)
                 currentMediaPlayer?.start()
@@ -162,7 +163,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                     release(currentMediaPlayer)
                     currentMediaPlayer = mp
                     currentPlayingIndex++
-                    mediaPlayerScope.launch { prepareNextFile() }
+                    coroutineScope.launch { prepareNextFile() }
                 }
             }
             return false
