@@ -41,8 +41,16 @@
     <bool name="settings_labs_deferred_dm_default">true</bool>
     <bool name="settings_labs_thread_messages_default">false</bool>
     <bool name="settings_labs_new_app_layout_default">true</bool>
+    <bool name="settings_labs_new_session_manager_default">false</bool>
+    <bool name="settings_labs_new_session_manager_visible">true</bool>
+    <bool name="settings_labs_client_info_recording_default">false</bool>
+    <bool name="settings_labs_client_info_recording_visible">true</bool>
     <bool name="settings_timeline_show_live_sender_info_visible">true</bool>
     <bool name="settings_timeline_show_live_sender_info_default">false</bool>
+    <bool name="settings_labs_rich_text_editor_visible">true</bool>
+    <bool name="settings_labs_rich_text_editor_default">false</bool>
+    <bool name="settings_labs_enable_voice_broadcast_visible">true</bool>
+    <bool name="settings_labs_enable_voice_broadcast_default">false</bool>
     <!-- Level 1: Advanced settings -->
 
     <!-- Level 1: Help and about -->

@@ -446,6 +446,9 @@
     <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
 
+    <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Try out the rich text editor (plain text mode coming soon)</string>
+
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
@@ -635,6 +638,8 @@
     <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_notification">${app_name} needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
 
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
     <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
@@ -854,7 +859,9 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} needs the permission to show notifications.\nPlease grant the permission.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="grant_permission">Grant Permission</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>
@@ -1663,6 +1670,7 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
+    <string name="error_check_network">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
@@ -1702,13 +1710,15 @@
     <string name="settings_push_rules_no_rules">No push rules defined</string>
     <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
 
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Push Key:</string>
+    <string name="push_gateway_item_app_display_name">App Display Name:</string>
+    <string name="push_gateway_item_device_name">Session Display Name:</string>
+    <string name="push_gateway_item_device_id">Session ID:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_profile_tag">Profile tag:</string>
+    <string name="push_gateway_item_enabled">Enabled:</string>
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
@@ -2115,7 +2125,7 @@
     <string name="login_reset_password_cancel_confirmation_content">Your password is not yet changed.\n\nStop the password change process?</string>
 
     <string name="login_set_email_title">Set email address</string>
-    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by your this address.</string>
+    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by this address.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (optional)</string>
     <string name="login_set_email_submit">Next</string>
@@ -2173,6 +2183,7 @@
     <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
+    <string name="login_scan_qr_code">Scan QR code</string>
 
     <string name="seen_by">Seen by</string>
 
@@ -3234,7 +3245,6 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
-    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
     <string name="device_manager_sessions_other_title">Other sessions</string>
     <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
@@ -3243,10 +3253,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
+    <string name="device_manager_verification_status_unknown">Unknown verification status</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
@@ -3302,14 +3314,26 @@
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
+    <string name="device_manager_push_notifications_title">Push notifications</string>
+    <string name="device_manager_push_notifications_description">Receive push notifications on this session.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_operating_system">Operating system</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Sign in with QR Code</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">You can use this device to sign in a mobile or web device with a QR code. There are two ways to do this:</string>
+
     <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
     <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
@@ -3318,6 +3342,12 @@
     <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="labs_enable_session_manager_title">Enable new session manager</string>
+    <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
+    <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
+    <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
+    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast (under active development)</string>
+    <string name="labs_enable_voice_broadcast_summary">Be able to record and send voice broadcast in room timeline.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
@@ -3339,5 +3369,44 @@
     <!--    Note to translators: for RTL languages, context menu will be at top left corner instead of top right corner. Thanks!-->
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
+
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+
+    <!-- QR Code Login -->
+    <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Sign in with QR code</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Use your signed in device to scan the QR code below:</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scan the QR code below with your device that’s signed out.</string>
+    <string name="qr_code_login_header_connected_title">Secure connection established</string>
+    <string name="qr_code_login_header_connected_description">Check your signed in device, the code below should be displayed. Confirm that the code below matches with that device:</string>
+    <string name="qr_code_login_header_failed_title">Unsuccessful connection</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
+    <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
+    <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
+    <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
+    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy -> Show All Sessions</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code in this device\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Select \'Sign in with QR code\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Select \'Scan QR code\'</string>
+    <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Signing in a mobile device?</string>
+    <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
+    <string name="qr_code_login_connecting_to_device">Connecting to device</string>
+    <string name="qr_code_login_signing_in">Signing you in</string>
+    <string name="qr_code_login_status_no_match">No match?</string>
+    <string name="qr_code_login_try_again">Try again</string>
+    <string name="qr_code_login_confirm_security_code">Confirm</string>
+    <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
+
+    <!-- WYSIWYG Composer -->
+    <string name="rich_text_editor_format_bold">Apply bold format</string>
+    <string name="rich_text_editor_format_italic">Apply italic format</string>
+    <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
+    <string name="rich_text_editor_format_underline">Apply underline format</string>
 
 </resources>

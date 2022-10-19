@@ -95,7 +95,7 @@
     <string name="auth_invalid_login_param">Nama pengguna dan/atau kata sandi salah</string>
     <string name="auth_reset_password_error_unauthorized">Verifikasi alamat email gagal: pastikan tautan yang termuat di email telah diklik</string>
     <string name="login_error_bad_json">JSON amburadul</string>
-    <string name="login_error_not_json">Tidak berisi JSON yang sah</string>
+    <string name="login_error_not_json">Tidak berisi JSON yang absah</string>
     <string name="login_error_limit_exceeded">Pengajuan yang dikirimkan terlalu banyak</string>
     <string name="incoming_video_call">Panggilan Video Masuk</string>
     <string name="incoming_voice_call">Panggilan Suara Masuk</string>
@@ -183,8 +183,8 @@
     <string name="settings_app_info_link_summary">Tampilkan info aplikasi dalam pengaturan sistem.</string>
     <string name="settings_app_info_link_title">Info aplikasi</string>
     <string name="settings_notification_ringtone">Suara pemberitahuan</string>
-    <string name="settings_enable_all_notif">Perbolehkan pemberitahuan untuk akun ini</string>
-    <string name="settings_enable_this_device">Perbolehkan pemberitahuan untuk perangkat ini</string>
+    <string name="settings_enable_all_notif">Aktifkan pemberitahuan untuk akun ini</string>
+    <string name="settings_enable_this_device">Aktifkan pemberitahuan untuk sesi ini</string>
     <string name="settings_containing_my_display_name">Pesan yang berisikan nama layarku</string>
     <string name="settings_containing_my_user_name">Pesan berisikan nama layarku</string>
     <string name="settings_messages_in_one_to_one">Pesan percakapan empat mata</string>
@@ -216,7 +216,7 @@
     <string name="widget_integration_missing_user_id">Tidak ada user_id dalam permohonan.</string>
     <string name="widget_integration_room_not_visible">Ruang %s tidak terlihat.</string>
     <string name="widget_integration_missing_parameter">Ada parameter penting yang hilang.</string>
-    <string name="room_add_matrix_apps">Tambahkan apps Matrix</string>
+    <string name="room_add_matrix_apps">Tambahkan aplikasi Matrix</string>
     <string name="settings_labs_native_camera">Gunakan kamera bawaan</string>
     <string name="you_added_a_new_device">Anda menambahkan perangkat baru \'%s\', yang sedang meminta kunci enkripsi.</string>
     <string name="your_unverified_device_requesting">Perangkat Anda yang belum terverifikasi \'%s\' sedang meminta kunci enkripsi.</string>
@@ -234,7 +234,7 @@
     <string name="command_description_remove_user">Keluarkan pengguna dengan id berikut</string>
     <string name="command_description_nick">Ubah nama panggilan layar Anda</string>
     <string name="command_description_markdown">Mati/Nyalakan markdown</string>
-    <string name="command_description_clear_scalar_token">Untuk memperbaiki kepengurusan Apps Matrix</string>
+    <string name="command_description_clear_scalar_token">Untuk memperbaiki kepengurusan Aplikasi Matrix</string>
     <string name="notification_off">Mati</string>
     <string name="notification_noisy">Berisik</string>
     <string name="encrypted_message">Pesan terenkripsi</string>
@@ -394,7 +394,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nMohon periksa pengaturan akun anda.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Perbolehkan</string>
     <string name="settings_troubleshoot_test_device_settings_title">Pengaturan Perangkat.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk perangkat ini.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk sesi ini.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Notifikasi tidak diaktifkan pada sesi ini.
 \nMohon periksa pengaturan ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Perbolehkan</string>
@@ -414,7 +414,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_boot_title">Mulai ketika menyalakan perangkat</string>
     <string name="settings_troubleshoot_test_service_boot_success">Layanan akan dimulai ketika perangkat dinyalakan kembali.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka ${app_name}.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan sampai Anda membuka ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Perbolehkan memulai ketika perangkat dinyalakan</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Periksa halangan di balik layar</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Larangan latar belakang dinonaktifkan untuk ${app_name}. Percobaan ini sebaiknya dijalankan menggunakan jaringan data ponsel (bukan WiFi).
@@ -442,7 +442,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Perhatikan bahwa sebagian jenis pesan tersetel diam (mengeluarkan pemberitahuan tanpa suara).</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam aturan Anda.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam pengaturan Anda.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nError ini di luar kendali ${app_name} dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -450,7 +450,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nError ini di luar kendali ${app_name}. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Tambah Akun</string>
-    <string name="settings_troubleshoot_test_battery_failed">Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode Doze. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode tidur. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Abaikan Optimisasi</string>
     <string name="settings_noisy_notifications_preferences">Kelola Pemberitahuan Berisik</string>
     <string name="settings_call_notifications_preferences">Kelola Pemberitahuan Panggilan</string>
@@ -459,7 +459,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_cryptography_manage_keys">Pengelolaan Kunci Kriptografi</string>
     <string name="settings_inline_url_preview_summary">Pratinjau tautan dalam obrolan apabila homeserver mendukung fitur ini.</string>
     <string name="settings_send_typing_notifs">Kirim pemberitahuan mengetik</string>
-    <string name="settings_send_typing_notifs_summary">Beritahu pengguna lain bahwa Anda sedang mengetik.</string>
+    <string name="settings_send_typing_notifs_summary">Beri tahu pengguna lain bahwa Anda sedang mengetik.</string>
     <string name="settings_send_markdown">Format markdown</string>
     <string name="settings_send_markdown_summary">Format pesan menggunakan sintaks markdown sebelum dikirim. Ini mengizinkan format lanjutan seperti menggunakan tanda bintang untuk menunjukkan teks miring.</string>
     <string name="settings_show_read_receipts">Tunjukkan tanda telah dibaca</string>
@@ -565,7 +565,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_permissions_change_main_address_for_the_room">Mengubah alamat utama untuk ruangan ini</string>
     <string name="room_permissions_change_room_avatar">Mengubah avatar ruangan</string>
     <string name="room_permissions_modify_widgets">Mengubah widget</string>
-    <string name="room_permissions_notify_everyone">Beritahu semuanya</string>
+    <string name="room_permissions_notify_everyone">Beri tahu semuanya</string>
     <string name="room_permissions_remove_messages_sent_by_others">Menghapus pesan yang dikirim dari yang lain</string>
     <string name="room_permissions_change_settings">Ubah pengaturan</string>
     <string name="room_permissions_default_role">Peran bawaan</string>
@@ -610,11 +610,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="settings_call_show_confirmation_dialog_summary">Meminta untuk konfirmasi sebelum memulai panggilan</string>
     <string name="settings_call_show_confirmation_dialog_title">Cegah panggilan tidak disengaja</string>
-    <string name="error_unauthorized">Tidak sah, tidak ada kredensial otentikasi yang valid</string>
+    <string name="error_unauthorized">Tidak sah, tidak ada kredensial otentikasi yang absah</string>
     <string name="login_error_ssl_other">Kesalahan SSL.</string>
     <string name="login_error_ssl_peer_unverified">Kesalahan SSL: identitas peer belum diverifikasi.</string>
     <string name="login_error_homeserver_not_found">Tidak dapat mencapai homeserver pada URL ini, silakan periksa</string>
-    <string name="login_error_no_homeserver_found">Ini bukan alamat server Matrix yang valid</string>
+    <string name="login_error_no_homeserver_found">Ini bukan alamat server Matrix yang absah</string>
     <string name="auth_msisdn_already_defined">Nomor telepon ini sudah ditentukan.</string>
     <string name="auth_login_sso">Masuk dengan single sign-on</string>
     <string name="use_as_default_and_do_not_ask_again">Gunakan sebagai bawaan dan jangan tanya lagi</string>
@@ -676,10 +676,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="action_revoke">Batalkan</string>
     <string name="none">Tidak Ada</string>
     <string name="system_theme">Bawaan Sistem</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung. (algoritma tidak dikenali %1$s).</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s mengaktifkan enkripsi ujung-ke-ujung. (algoritma tidak dikenali %2$s).</string>
-    <string name="notice_end_to_end_ok_by_you">Anda mengaktifkan enkripsi ujung-ke-ujung.</string>
-    <string name="notice_end_to_end_ok">%1$s mengaktifkan enkripsi ujung-ke-ujung.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Anda mengaktifkan enkripsi ujung ke ujung. (algoritma tidak dikenali %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s mengaktifkan enkripsi ujung ke ujung. (algoritma tidak dikenali %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Anda mengaktifkan enkripsi ujung ke ujung.</string>
+    <string name="notice_end_to_end_ok">%1$s mengaktifkan enkripsi ujung ke ujung.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Anda telah mencegah para tamu untuk bergabung ke ruangan.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s telah mencegah para tamu untuk bergabung ke ruangan.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Anda telah mencegah para tamu untuk bergabung ke ruangan.</string>
@@ -816,7 +816,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Semua server dilarang untuk berpartisipasi! Ruangan ini tidak lagi dapat digunakan.</string>
     <string name="notice_room_server_acl_updated_no_change">Tidak ada berubahan.</string>
     <string name="settings_phone_numbers">Nomor telepon</string>
-    <string name="settings_emails_empty">Tidak ada email yang ditambahkan ke akun Anda</string>
+    <string name="settings_emails_empty">Tidak ada alamat email yang ditambahkan ke akun Anda</string>
     <string name="settings_emails">Surel</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server yang cocok dengan literal IP sekarang dilarang.</string>
     <string name="notice_room_server_acl_updated_banned">• Server yang cocok dengan %s sekarang dilarang.</string>
@@ -962,16 +962,16 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_room_notifications_account_settings">Pengaturan akun</string>
     <string name="room_settings_room_notifications_manage_notifications">Anda dapat mengelola notifikasi di %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa pemberitahuan sebutan &amp; kata kunci tidak tersedia dalam ruangan terenkripsi di ponsel.</string>
-    <string name="room_settings_room_notifications_notify_me">Beritahu saya untuk</string>
+    <string name="room_settings_room_notifications_notify_me">Beri tahu saya untuk</string>
     <string name="settings_play_shutter_sound">Putar suara rana</string>
     <string name="media_source_choose">Pilih</string>
     <string name="settings_default_media_source">Sumber media bawaan</string>
     <string name="compression_opt_list_choose">Pilih</string>
     <string name="settings_default_compression">Kompresi bawaan</string>
     <string name="settings_media">Media</string>
-    <string name="settings_emails_and_phone_numbers_summary">Kelola email dan nomor telepon yang ditautkan ke akun Matrix Anda</string>
+    <string name="settings_emails_and_phone_numbers_summary">Kelola alamat email dan nomor telepon yang ditautkan ke akun Matrix Anda</string>
     <string name="settings_emails_and_phone_numbers_title">Email dan nomor telepon</string>
-    <string name="settings_fail_to_update_password_invalid_current_password">Sandi tidak valid</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Kata sandi tidak absah</string>
     <string name="settings_password">Sandi</string>
     <string name="disabled_integration_dialog_content">Aktifkan \'Izinkan integrasi\' di Pengaturan untuk melakukan ini.</string>
     <string name="disabled_integration_dialog_title">Integrasi dinonaktifkan</string>
@@ -997,7 +997,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <plurals name="seconds">
         <item quantity="other">%d detik</item>
     </plurals>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberi tahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
 \nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa ${app_name} sedang mendengarkan peristiwa.</string>
@@ -1021,7 +1021,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_notification_keyword_contains_dot">Kata kunci tidak boleh diawali dengan \'.\'</string>
     <string name="settings_notification_new_keyword">Tambahkan kata kunci baru</string>
     <string name="settings_notification_your_keywords">Kata kunci Anda</string>
-    <string name="settings_notification_notify_me_for">Beritahu saya untuk</string>
+    <string name="settings_notification_notify_me_for">Beri tahu saya untuk</string>
     <string name="settings_notification_other">Lainnya</string>
     <string name="settings_notification_mentions_and_keywords">Sebutan dan Kata Kunci</string>
     <string name="settings_notification_default">Notifikasi Bawaan</string>
@@ -1035,16 +1035,16 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="video_call_with_participant">Panggilan video dengan %s</string>
     <string name="call_ringing">Panggilan berdering…</string>
     <string name="spaces">Space</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Kami mengirimi Anda email konfirmasi ke %s, mohon periksa email Anda dan klik tautan konfirmasi</string>
-    <string name="settings_discovery_no_mails">Opsi penemuan akan muncul setelah Anda menambahkan email.</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Kami mengirim Anda email konfirmasi ke %s, mohon periksa email Anda dan klik tautan konfirmasi</string>
+    <string name="settings_discovery_no_mails">Opsi penemuan akan muncul setelah Anda menambahkan sebuah alamat email.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Memutuskan sambungan dari server identitas Anda akan membuat Anda tidak dapat ditemukan oleh pengguna lain dan Anda tidak akan dapat mengundang orang lain melalui email atau nomor telepon.</string>
     <string name="settings_discovery_consent_title">Kirim email dan nomor telepon</string>
-    <string name="settings_discovery_consent_notice_on">Anda telah memberikan persetujuan untuk mengirim email dan nomor telepon ke server identitas ini untuk menemukan pengguna lain dari kontak Anda.</string>
+    <string name="settings_discovery_consent_notice_on">Anda telah memberikan persetujuan untuk mengirim alamat email dan nomor telepon ke server identitas ini untuk menemukan pengguna lain dari kontak Anda.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Anda sedang berbagi email atau nomor telepon di server identitas %1$s. Anda harus menyambungkan kembali ke %2$s untuk berhenti membagikannya.</string>
     <string name="settings_agree_to_terms">Setujui Persyaratan Layanan server identitas (%s) agar Anda dapat ditemukan melalui email atau nomor telepon.</string>
-    <string name="settings_discovery_confirm_mail">Kami mengirimi Anda email konfirmasi ke %s, periksa email Anda dan klik tautan konfirmasi</string>
+    <string name="settings_discovery_confirm_mail">Kami mengirim Anda sebuah email ke %s, periksa email Anda dan klik tautan konfirmasi</string>
     <string name="login_reset_password_on">Setel ulang sandi di %1$s</string>
-    <string name="login_login_with_email_error">Email ini tidak terkait dengan akun apa pun.</string>
+    <string name="login_login_with_email_error">Alamat email ini tidak terkait dengan akun apa pun.</string>
     <string name="login_registration_not_supported">Aplikasi tidak dapat membuat akun di homeserver ini.
 \n
 \nApakah Anda ingin mendaftar menggunakan klien web\?</string>
@@ -1080,7 +1080,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_server_text">Sama seperti email, akun memiliki satu tempat, tetapi Anda dapat berkomunikasi dengan siapa saja</string>
     <string name="login_server_title">Pilih server</string>
     <string name="login_splash_submit">Mulai</string>
-    <string name="login_splash_text3">Luaskan &amp; sesuaikan pengalaman Anda</string>
+    <string name="login_splash_text3">Tingkatkan &amp; sesuaikan pengalaman Anda</string>
     <string name="login_splash_title">Ini adalah percakapan Anda. Miliki percakapan Anda.</string>
     <string name="login_splash_text2">Jaga percakapan tetap pribadi dengan enkripsi</string>
     <string name="login_splash_text1">Chat dengan orang-orang secara langsung atau dalam grup</string>
@@ -1148,9 +1148,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="labs_show_unread_notifications_as_tab">Tambahkan tab terdedikasi untuk notifikasi yang belum dibaca di layar utama.</string>
     <string name="error_file_too_big_simple">File ini terlalu besar untuk diupload.</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Cadangan mempunyai tanda tangan yang tidak valid dari sesi %s yang belum diverifikasi</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Cadangan mempunyai tanda tangan yang tidak valid dari sesi %s yang terverifikasi</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Cadangan mempunyai tanda tangan yang valid dari sesi %s yang belum diverifikasi</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Cadangan mempunyai tanda tangan yang tidak absah dari sesi %s yang belum diverifikasi</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Cadangan mempunyai tanda tangan yang tidak absah dari sesi %s yang terverifikasi</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Cadangan mempunyai tanda tangan yang absah dari sesi %s yang belum diverifikasi</string>
     <string name="send_file_step_sending_thumbnail">Mengirim gambar mini (%1$s / %2$s)</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d pengguna telah membaca</item>
@@ -1240,10 +1240,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="preference_voice_and_video">Suara &amp; Video</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_url">Url:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_device_name">Nama Tampilan Sesi:</string>
+    <string name="push_gateway_item_app_display_name">Nama Tampilan Aplikasi:</string>
+    <string name="push_gateway_item_push_key">Kunci Dorongan:</string>
+    <string name="push_gateway_item_app_id">ID Aplikasi:</string>
     <string name="settings_push_gateway_no_pushers">Tidak ada gateway dorong terdaftar</string>
     <string name="settings_push_rules_no_rules">Tidak ada aturan push yang ditentukan</string>
     <string name="settings_push_rules">Aturan Push</string>
@@ -1278,8 +1278,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_settings_delete_confirm_title">Hapus Cadangan</string>
     <string name="keys_backup_settings_checking_backup_state">Memeriksa status cadangan</string>
     <string name="keys_backup_settings_deleting_backup">Menghapus cadangan…</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Cadangan mempunyai tanda tangan yang valid dari sesi %s yang terverifikasi.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Cadangan mempunyai tanda tangan yang valid dari sesi ini.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Cadangan mempunyai tanda tangan yang absah dari sesi %s yang terverifikasi.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Cadangan mempunyai tanda tangan yang absah dari sesi ini.</string>
     <string name="keys_backup_settings_signature_from_unknown_device">Cadangan mempunyai tanda tangan dari sesi tidak dikenal dengan ID %s.</string>
     <string name="keys_backup_settings_status_not_setup">Kunci Anda tidak dicadangkan dari sesi ini.</string>
     <string name="keys_backup_settings_status_ko">Cadangan Kunci belum aktif di sesi ini.</string>
@@ -1342,7 +1342,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_setup_step1_manual_export">Ekspor kunci secara manual</string>
     <string name="keys_backup_setup_step1_advanced">(Lanjutan)</string>
     <string name="keys_backup_setup">Mulai menggunakan Cadangan Kunci</string>
-    <string name="keys_backup_setup_step1_description">Pesan di ruangan terenkripsi diamankan dengan enkripsi ujung-ke-ujung. Hanya Anda dan penerima memiliki kunci untuk membaca pesan-pesan ini.
+    <string name="keys_backup_setup_step1_description">Pesan di ruangan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima memiliki kunci untuk membaca pesan ini.
 \n
 \nCadangkan kunci Anda dengan aman untuk menghindari kehilangan kunci Anda.</string>
     <string name="keys_backup_setup_step1_title">Jangan pernah kehilangan pesan terenkripsi</string>
@@ -1351,7 +1351,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="passphrase_empty_error_message">Mohon masukkan frasa sandi</string>
     <string name="passphrase_passphrase_does_not_match">Frasa sandi tidak cocok</string>
     <string name="passphrase_create_passphrase">Buat frasa sandi</string>
-    <string name="no_valid_google_play_services_apk">Tidak menemukan APK Layanan Google Play yang valid. Notifikasi mungkin tidak berkerja dengan seharusnya.</string>
+    <string name="no_valid_google_play_services_apk">Tidak menemukan APK Layanan Google Play yang absah. Notifikasi mungkin tidak bekerja dengan seharusnya.</string>
     <string name="settings_security_and_privacy">Keamanan &amp; Privasi</string>
     <string name="settings_preferences">Preferensi</string>
     <string name="settings_general_title">Umum</string>
@@ -1435,7 +1435,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_active_sessions_manage">Kelola Sesi</string>
     <string name="settings_active_sessions_show_all">Tampilkan Semua Sesi</string>
     <string name="settings_active_sessions_list">Sesi Aktif</string>
-    <string name="settings_hs_admin_e2e_disabled">Admin server Anda telah menonaktifkan enkripsi ujung-ke-ujung secara bawaan di ruangan &amp; Pesan Langsung privat.</string>
+    <string name="settings_hs_admin_e2e_disabled">Admin server Anda telah menonaktifkan enkripsi ujung ke ujung secara bawaan di ruangan &amp; Pesan Langsung privat.</string>
     <string name="encryption_information_dg_xsigning_disabled">Tanda Tangan Silang dinonaktifkan</string>
     <string name="encryption_information_dg_xsigning_trusted">Tanda Tangan Silang diaktifkan.
 \nKunci dipercaya.
@@ -1446,7 +1446,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nKunci Privat di perangkat.</string>
     <string name="encryption_information_cross_signing_state">Tanda Tangan Silang</string>
     <string name="verification_conclusion_ok_self_notice">Sesi baru Anda telah diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.</string>
-    <string name="verification_conclusion_ok_notice">Pesan dengan pengguna ini dienkripsi ujung-ke-ujung dan tidak dapat dibaca oleh pihak ketiga.</string>
+    <string name="verification_conclusion_ok_notice">Pesan dengan pengguna ini dienkripsi ujung ke ujung dan tidak dapat dibaca oleh pihak ketiga.</string>
     <string name="verification_code_notice">Bandingkan kode dengan yang ditampilkan di layar pengguna lain.</string>
     <string name="verification_emoji_notice">Bandingkan emoji yang unik, dan pastikan mereka muncul di urutan yang sama.</string>
     <string name="verification_request_start_notice">Supaya aman, lakukan secara langsung atau gunakan cara lain untuk berkomunikasi.</string>
@@ -1454,8 +1454,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Aktifkan enkripsi</string>
     <string name="room_settings_enable_encryption_dialog_content">Ketika diaktifkan, enkripsi tidak dapat dinonaktifkan. Pesan yang dikirim di ruangan terenkripsi tidak dapat dilihat oleh servernya, hanya anggota ruangan. Mengaktifkan enkripsi mungkin mencegah banyaknya bot dan jembatan bekerja dengan seharusnya.</string>
     <string name="room_settings_enable_encryption_dialog_title">Aktifkan enkripsi\?</string>
-    <string name="room_settings_enable_encryption_no_permission">Anda tidak memiliki izin untuk mengaktifkan enkripsi ujung-ke-ujung di ruangan ini.</string>
-    <string name="room_settings_enable_encryption">Aktifkan enkripsi ujung-ke-ujung…</string>
+    <string name="room_settings_enable_encryption_no_permission">Anda tidak memiliki izin untuk mengaktifkan enkripsi ujung ke ujung di ruangan ini.</string>
+    <string name="room_settings_enable_encryption">Aktifkan enkripsi ujung ke ujung…</string>
     <string name="settings_category_composer">Editor pesan</string>
     <string name="settings_category_timeline">Linimasa</string>
     <string name="command_description_rainbow_emote">Mengirim emote yang dicantum berwarna pelangi</string>
@@ -1490,14 +1490,14 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_profile_section_more">Lebih banyak</string>
     <string name="room_profile_section_security_learn_more">Pelajari lebih lanjut</string>
     <string name="room_profile_section_security">Keamanan</string>
-    <string name="direct_room_profile_encrypted_subtitle">Pesan di ruangan ini dienkripsi ujung-ke-ujung.
+    <string name="direct_room_profile_encrypted_subtitle">Pesan di ruangan ini dienkripsi secara ujung ke ujung.
 \n
 \nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.</string>
-    <string name="room_profile_encrypted_subtitle">Pesan di ruangan ini dienkripsi ujung-ke-ujung.
+    <string name="room_profile_encrypted_subtitle">Pesan di ruangan ini dienkripsi secara ujung ke ujung.
 \n
 \nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">Pesan ini tidak terenkripsi secara ujung-ke-ujung.</string>
-    <string name="room_profile_not_encrypted_subtitle">Pesan di ruangan ini tidak terenkripsi secara ujung-ke-ujung.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Pesan ini tidak terenkripsi secara ujung ke ujung.</string>
+    <string name="room_profile_not_encrypted_subtitle">Pesan di ruangan ini tidak terenkripsi secara ujung ke ujung.</string>
     <string name="verification_request_waiting_for">Menunggu untuk %s…</string>
     <string name="verification_verified_user">Diverifikasi %s</string>
     <string name="verification_verify_user">Verifikasi %s</string>
@@ -1587,8 +1587,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n• Administrator server Anda telah menghilangkan akses Anda untuk keamanan.</string>
     <string name="signed_out_title">Anda telah keluar</string>
     <string name="seen_by">Dilihat oleh</string>
-    <string name="autodiscover_well_known_error">Tidak dapat menemukan homeserver yang valid. Mohon cek pengenal Anda</string>
-    <string name="login_signin_matrix_id_error_invalid_matrix_id">Ini bukan pengenal pengguna yang valid. Format yang diharapkan: \'@pengguna:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Tidak dapat menemukan homeserver yang absah. Mohon cek pengenal Anda</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Ini bukan pengenal pengguna yang absah. Format yang diharapkan: \'@pengguna:homeserver.org\'</string>
     <string name="login_signin_matrix_id_password_notice">Jika Anda tidak tahu kata sandi Anda, kembali untuk mengatur ulang.</string>
     <string name="login_signin_matrix_id_hint">ID Matrix</string>
     <string name="login_signin_matrix_id_notice">Jika Anda membuat akun di sebuah homeserver, gunakan ID Matrix Anda (mis. @pengguna:domain.com) dan kata sandi dibawah.</string>
@@ -1616,7 +1616,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_signup_password_hint">Kata sandi</string>
     <string name="login_signup_username_hint">Nama pengguna</string>
     <string name="login_signin_username_hint">Nama pengguna atau email</string>
-    <string name="login_msisdn_error_other">Nomor telepon kelihatannya tidak valid. Mohon dicek lagi</string>
+    <string name="login_msisdn_error_other">Nomor telepon kelihatannya tidak absah. Mohon dicek lagi</string>
     <string name="login_msisdn_error_not_international">Nomor telepon internasional harus mulai dengan \'+\'</string>
     <string name="login_msisdn_notice">Mohon menggunakan format internasional (nomor telepon harus mulai dengan \'+\')</string>
     <string name="login_msisdn_confirm_submit">Lanjut</string>
@@ -1632,7 +1632,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_set_email_submit">Lanjut</string>
     <string name="login_set_email_optional_hint">Email (opsional)</string>
     <string name="login_set_email_mandatory_hint">Email</string>
-    <string name="login_set_email_notice">Atur sebuah email untuk memulihkan akun Anda. Nantinya, Anda dapat mengizinkan orang yang Anda tahu untuk menemukan Anda dari email secara opsional.</string>
+    <string name="login_set_email_notice">Atur sebuah alamat email untuk memulihkan akun Anda. Nantinya, Anda dapat mengizinkan orang yang Anda tahu untuk menemukan Anda dari email ini secara opsional.</string>
     <string name="login_set_email_title">Atur alamat email</string>
     <string name="login_reset_password_cancel_confirmation_content">Kata sandi Anda belum diubah.
 \n
@@ -1646,9 +1646,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Ketuk tautan untuk mengkonfirmasi kata sandi baru Anda. Setelah Anda mengikuti petunjuk yang ada di tautan, klik bawahnya.</string>
     <string name="login_reset_password_mail_confirmation_notice">Email verifikasi terkirim ke %1$s.</string>
     <string name="login_reset_password_mail_confirmation_title">Cek kotak masuk Anda</string>
-    <string name="login_reset_password_error_not_found">Email ini tidak tertaut dengan akun apa pun</string>
+    <string name="login_reset_password_error_not_found">Alamat email ini tidak tertaut dengan akun apa pun</string>
     <string name="login_reset_password_warning_submit">Lanjut</string>
-    <string name="login_reset_password_warning_content">Mengubah kata sandi Anda akan mengatur ulang kunci enkripsi ujung-ke-ujung pada semua sesi Anda, yang akan membuat riwayat obrolan terenkripsi tidak dapat dibaca. Atur Cadangan Kunci atau ekspor kunci ruangan Anda dari sesi lain sebelum mengatur ulang kata sandi Anda.</string>
+    <string name="login_reset_password_warning_content">Mengubah kata sandi Anda akan mengatur ulang kunci enkripsi ujung ke ujung pada semua sesi Anda, yang akan membuat riwayat obrolan terenkripsi tidak dapat dibaca. Atur Cadangan Kunci atau ekspor kunci ruangan Anda dari sesi lain sebelum mengatur ulang kata sandi Anda.</string>
     <string name="login_reset_password_warning_title">Peringatan!</string>
     <string name="login_reset_password_password_hint">Kata sandi baru</string>
     <string name="login_reset_password_email_hint">Email</string>
@@ -1760,7 +1760,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_type_public">Publik</string>
     <string name="create_spaces_private_teammates">Space privat untuk Anda &amp; tim Anda</string>
     <string name="create_spaces_me_and_teammates">Saya dan tim saya</string>
-    <string name="create_spaces_organise_rooms">Space yang privat untuk mengorganisir ruangan Anda</string>
+    <string name="create_spaces_organise_rooms">Space yang privat untuk mengelola ruangan Anda</string>
     <string name="create_spaces_just_me">Saya saja</string>
     <string name="create_spaces_make_sure_access">Pastikan orang yang tepat memiliki akses ke %s.</string>
     <string name="create_spaces_who_are_you_working_with">Dengan siapa Anda bekerja\?</string>
@@ -1803,9 +1803,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="dev_tools_menu_name">Alat Pengembang</string>
     <string name="a11y_public_room">Ruangan publik</string>
     <string name="a11y_view_read_receipts">Lihat laporan dibaca</string>
-    <string name="a11y_rule_notify_off">Jangan beritahu</string>
-    <string name="a11y_rule_notify_silent">Beritahu tanpa suara</string>
-    <string name="a11y_rule_notify_noisy">Beritahu dengan suara</string>
+    <string name="a11y_rule_notify_off">Jangan beri tahu</string>
+    <string name="a11y_rule_notify_silent">Beri tahu tanpa suara</string>
+    <string name="a11y_rule_notify_noisy">Beri tahu dengan suara</string>
     <string name="a11y_error_message_not_sent">Pesan tidak terkirim karena kesalahan</string>
     <string name="a11y_unchecked">Tidak dicentang</string>
     <string name="a11y_checked">Dicentang</string>
@@ -1814,7 +1814,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="warning_room_not_created_yet">Ruangannya belum dibuat. Batalkan pembuatan ruangan\?</string>
     <string name="universal_link_malformed">Tautannya cacat</string>
     <string name="qr_code_not_scanned">Kode QR tidak dipindai!</string>
-    <string name="invalid_qr_code_uri">Kode QR tidak valid (URI tidak valid)!</string>
+    <string name="invalid_qr_code_uri">Kode QR tidak absah (URI tidak absah)!</string>
     <string name="cannot_dm_self">Tidak dapat membuat pesan langsung dengan Anda sendiri!</string>
     <string name="share_by_text">Bagikan melalui teks</string>
     <string name="room_error_not_found">Tidak dapat mencari ruangan ini. Pastikan ruangannya sudah ada.</string>
@@ -1875,7 +1875,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="crypto_error_withheld_generic">Anda tidak dapat mengakses pesan ini karena pengirim telah sengaja tidak mengirim kuncinya</string>
     <string name="crypto_error_withheld_unverified">Anda tidak dapat mengakses pesan ini karena sesi Anda tidak dipercayai oleh pengirim</string>
     <string name="crypto_error_withheld_blacklisted">Anda tidak dapat mengakses pesan ini karena Anda telah diblokir oleh pengirim</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Karena enkripsi ujung-ke-ujung, Anda mungkin harus menunggu untuk pesan dari seseorang untuk datang karena kunci enkripsinya tidak dikirim secara benar ke Anda.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Karena adanya enkripsi ujung ke ujung, Anda mungkin harus menunggu untuk pesan dari seseorang untuk datang karena kunci enkripsinya tidak dikirim secara benar ke Anda.</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Menunggu untuk pesan ini, mungkin membutuhkan beberapa waktu</string>
     <string name="notice_crypto_unable_to_decrypt_final">Anda tidak dapat mengakses pesan ini</string>
     <string name="room_settings_set_avatar">Atur avatar</string>
@@ -1910,7 +1910,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="identity_server_user_consent_not_provided">Izin pengguna belum diberikan.</string>
     <string name="identity_server_error_no_current_binding_error">Tidak ada asosiasi saat ini dengan pengenal ini.</string>
     <string name="identity_server_error_binding_error">Asosiasi telah gagal.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Untuk pricvasi Anda, ${app_name} hanya mendukung pengiriman email pengguna yang telah di-hash dan nomor telepon.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Demi privasi Anda, ${app_name} hanya mendukung pengiriman email pengguna dan nomor telepon yang telah di-hash.</string>
     <string name="identity_server_error_terms_not_signed">Mohon terima ketentuan server identitas ini di pengaturan.</string>
     <string name="identity_server_error_no_identity_server_configured">Mohon konfigurasi server identitas.</string>
     <string name="identity_server_error_outdated_identity_server">Server identitas ini telah usang. ${app_name} hanya mendukung API V2.</string>
@@ -1946,7 +1946,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>
     <string name="link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di ${app_name}.</string>
-    <string name="link_this_email_settings_link">Tautkan email ini ke akun Anda</string>
+    <string name="link_this_email_settings_link">Tautkan alamat email ini ke akun Anda</string>
     <string name="this_invite_to_this_space_was_sent">Undangan space ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="this_invite_to_this_room_was_sent">Undangan ruangan ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="external_link_confirmation_title">Periksa ulang tautan ini</string>
@@ -2001,7 +2001,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="bootstrap_progress_checking_backup_with_info">Memeriksa kunci cadangan (%s)</string>
     <string name="bootstrap_progress_checking_backup">Memeriksa kunci cadangan</string>
     <string name="recovery_key_empty_error_message">Mohon masukkan sebuah kunci pemulihan</string>
-    <string name="bootstrap_invalid_recovery_key">Bukan kunci pemulihan yang valid</string>
+    <string name="bootstrap_invalid_recovery_key">Bukan kunci pemulihan yang absah</string>
     <string name="use_file">Gunakan File</string>
     <string name="bootstrap_enter_recovery">Masukkan %s Anda untuk melanjutkan</string>
     <string name="security_prompt_text">Verifikasi diri Anda dan lainnya untuk tetap membuat pesan Anda aman</string>
@@ -2027,8 +2027,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_created_summary_item_by_you">Anda membuat dan mengatur ruangan ini.</string>
     <string name="room_created_summary_item">%s membuat dan mengatur ruangan ini.</string>
     <string name="encryption_not_enabled">Enkripsi tidak diaktifkan</string>
-    <string name="direct_room_encryption_enabled_tile_description">Pesan di obrolan ini dienkripsi secara ujung-ke-ujung.</string>
-    <string name="encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung-ke-ujung. Pelajari lebih lanjut &amp; verifikasi pengguna di profil mereka.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Pesan di obrolan ini dienkripsi secara ujung ke ujung.</string>
+    <string name="encryption_enabled_tile_description">Pesan di ruangan ini dienkripsi secara ujung ke ujung. Pelajari lebih lanjut &amp; verifikasi pengguna di profil mereka.</string>
     <string name="encryption_enabled">Enkripsi diaktifkan</string>
     <string name="bootstrap_cancel_text">Jika Anda batalkan, Anda mungkin kehilangan pesan terenkripsi dan data Anda jika Anda kehilangan akses ke login Anda.
 \n
@@ -2165,7 +2165,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_space_in_progress">Membuat space…</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Tampilkan info yang berguna untuk membantu debugging aplikasi</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Tampilkan info debug di layar</string>
-    <string name="does_not_look_like_valid_email">Tidak terlihat sebagai alamat email yang valid</string>
+    <string name="does_not_look_like_valid_email">Tidak terlihat sebagai alamat email yang absah</string>
     <string name="open_discovery_settings">Buka Pengaturan Penemuan</string>
     <string name="user_directory_search_hint_2">Cari dengan nama, ID atau email</string>
     <string name="create_new_space">Buat Space Baru</string>
@@ -2173,7 +2173,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_space_access_title">Akses space</string>
     <string name="room_settings_access_rules_pref_dialog_title">Siapa yang dapat akses\?</string>
     <string name="settings_notification_emails_enable_for_email">Aktifkan notifikasi email untuk %s</string>
-    <string name="settings_notification_emails_no_emails">Untuk menerima email dengan notifikasi, mohon tautkan sebuah email ke akun Matrix Anda</string>
+    <string name="settings_notification_emails_no_emails">Untuk menerima email dengan notifikasi, mohon tautkan sebuah alamat email ke akun Matrix Anda</string>
     <string name="settings_notification_emails_category">Notifikasi email</string>
     <string name="room_permissions_upgrade_the_space">Tingkatkan space ini</string>
     <string name="room_permissions_change_space_name">Ubah nama space</string>
@@ -2219,12 +2219,12 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_poll_question_title">Pertanyaan atau topik poll</string>
     <string name="create_poll_title">Buat Poll</string>
     <string name="attachment_type_poll">Poll</string>
-    <string name="identity_server_consent_dialog_title_2">Kirim email dan nomor telepon ke %s</string>
+    <string name="identity_server_consent_dialog_title_2">Kirim alamat email dan nomor telepon ke %s</string>
     <string name="settings_discovery_consent_notice_off_2">Kontak Anda privat. Untuk menemukan pengguna dari kontak Anda, kami membutuhkan izin untuk mengirim info kontak ke server identitas Anda.</string>
     <string name="shortcut_disabled_reason_sign_out">Sesinya telah dikeluarkan!</string>
     <string name="shortcut_disabled_reason_room_left">Ruangannya telah ditinggalkan!</string>
     <string name="identity_server_consent_dialog_content_question">Apakah Anda setuju untuk mengirimkan info ini\?</string>
-    <string name="identity_server_consent_dialog_content_3">Untuk menemukan kontak yang sudah ada, Anda harus mengirim info kontak (email dan nomor telepon) ke server identitas Anda. Kami meng-hash data Anda sebelum mengirim untuk privasi.</string>
+    <string name="identity_server_consent_dialog_content_3">Untuk menemukan kontak yang sudah ada, Anda harus mengirim info kontak (email dan nomor telepon) ke server identitas Anda. Kami hash data Anda sebelum mengirim demi privasi.</string>
     <string name="action_not_now">Nanti</string>
     <string name="delete_poll_dialog_content">Apakah Anda yakin untuk menghapus poll ini\? Anda tidak akan dapat memulihkannya setelah dihapus.</string>
     <string name="delete_poll_dialog_title">Hapus poll</string>
@@ -2298,17 +2298,17 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="poll_no_votes_cast">Tidak ada suara</string>
     <string name="encryption_misconfigured">Enkripsi dikonfigurasi dengan salah</string>
     <string name="room_profile_section_restore_security">Pulihkan Enkripsi</string>
-    <string name="contact_admin_to_restore_encryption">Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang valid.</string>
+    <string name="contact_admin_to_restore_encryption">Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang absah.</string>
     <string name="encryption_has_been_misconfigured">Enkripsi telah dikonfigurasi dengan salah.</string>
     <string name="sent_location">Membagikan lokasinya</string>
     <string name="login_splash_create_account">Buat akun</string>
     <string name="ftue_auth_carousel_workplace_title">Perpesanan untuk tim Anda.</string>
-    <string name="ftue_auth_carousel_encrypted_body">Terenkripsi secara ujung-ke-ujung dan tidak memerlukan nomor telepon. Tidak ada iklan atau penambangan data.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Terenkripsi secara ujung ke ujung dan tidak memerlukan nomor telepon. Tanpa iklan atau penambangan data.</string>
     <string name="ftue_auth_carousel_control_body">Anda pilih di mana percakapan Anda disimpan, memberikan Anda kendali dan kebebasan. Terhubung via Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Komunikasi aman dan independen yang memberikan tingkat privasi yang sama seperti percakapan wajah-ke-wajah di dalam rumah Anda sendiri.</string>
     <string name="attachment_type_location">Lokasi</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Klik untuk membuka pengaturan.</string>
-    <string name="room_unsupported_e2e_algorithm">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang valid.</string>
+    <string name="room_unsupported_e2e_algorithm">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang absah.</string>
     <string name="ftue_auth_use_case_skip">Belum yakin\? %s</string>
     <string name="message_bubbles">Tampilkan gelembung pesan</string>
     <string name="location_timeline_failed_to_load_map">Gagal untuk memuat peta</string>
@@ -2344,7 +2344,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="action_view_threads">Tampilkan Utasan</string>
     <string name="room_message_autocomplete_notification">Notifikasi ruangan</string>
     <string name="room_message_autocomplete_users">Pengguna</string>
-    <string name="room_message_notify_everyone">Beritahu seluruh ruangan</string>
+    <string name="room_message_notify_everyone">Beri tahu seluruh ruangan</string>
     <plurals name="message_reaction_show_more">
         <item quantity="other">%1$d lagi</item>
     </plurals>
@@ -2429,7 +2429,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_show_latest_profile_description">Tampilkan info profil (avatar dan nama tampilan) terkini untuk semua pesan.</string>
     <string name="settings_show_latest_profile">Tampilkan info pengguna terkini</string>
     <string name="a11y_presence_busy">Sibuk</string>
-    <string name="keys_backup_settings_signature_from_this_user">Cadangan memiliki tandatangan yang valid dari pengguna ini.</string>
+    <string name="keys_backup_settings_signature_from_this_user">Cadangan memiliki tandatangan yang absah dari pengguna ini.</string>
     <string name="location_share_live_until">Langsung sampai %1$s</string>
     <string name="live_location_bottom_sheet_last_updated_at">Diperbarui %1$s yang lalu</string>
     <string name="labs_enable_live_location_summary">Implementasi sementara: lokasi tetap di riwayat ruangan</string>
@@ -2480,7 +2480,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="labs_enable_msc3061_share_history_desc">Ketika mengundang ke ruangan terenkripsi yang juga membagikan riwayat, riwayat terenkripsi akan dapat dilihat.</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Pembagian kunci ruangan untuk pesan lama</string>
     <string name="send_your_first_msg_to_invite">Kirim pesan pertama Anda untuk mengundang %s ke obrolan</string>
-    <string name="direct_room_encryption_enabled_tile_description_future">Pesan di obrolan ini akan dienkripsi secara ujung-ke-ujung.</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Pesan di obrolan ini akan dienkripsi secara ujung ke ujung.</string>
     <string name="create_room_action_go">Mulai</string>
     <string name="ftue_auth_password_reset_email_confirmation_subtitle">Ikuti petunjuk yang terkirim ke %s</string>
     <string name="ftue_auth_email_verification_subtitle">Ikuti petunjuk yang terkirim ke %s</string>
@@ -2552,7 +2552,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="search_space_two_parents">%1$s dan %2$s</string>
     <string name="auth_reset_password_error_unverified">Email belum diverifikasi, periksa kotak masuk Anda</string>
     <string name="all_chats">Semua Obrolan</string>
-    <string name="device_manager_settings_active_sessions_show_all">Tampilkan Semua Sesi (V2, Dalam Pengembangan)</string>
     <string name="device_manager_sessions_other_description">Untuk keamanan terbaik, verifikasi sesi Anda dan keluarkan sesi apa pun yang Anda tidak kenal atau Anda tidak gunakan lagi.</string>
     <string name="device_manager_sessions_other_title">Sesi lainnya</string>
     <string name="settings_sessions_list">Sesi</string>
@@ -2658,4 +2657,100 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="labs_enable_deferred_dm_title">Aktifkan pesan langsung tangguhan</string>
     <string name="labs_enable_new_app_layout_summary">Sebuah Element yang sederhana dengan fitur tab opsional</string>
     <string name="labs_enable_new_app_layout_title">Aktifkan tata letak baru</string>
+    <string name="device_manager_learn_more_session_rename">Pengguna lain dalam pesan langsung dan ruangan yang Anda bergabung dapat melihat daftar sesi Anda yang lengkap.
+\n
+\nIni memberikan mereka kepastian bahwa mereka berbicara dengan Anda, tetapi ini juga berarti bahwa mereka dapat melihat nama sesi yang Anda masukkan di sini.</string>
+    <string name="device_manager_learn_more_session_rename_title">Mengubah nama sesi</string>
+    <string name="device_manager_learn_more_sessions_verified">Sesi yang terverifikasi telah masuk dengan kredensial Anda dan juga telah diverifikasi, menggunakan frasa sandi atau memverifikasi secara silang.
+\n
+\nIni berarti mereka memegang kunci enkripsi ke pesan Anda sebelumnya, dan mengonfirmasi pengguna lain yang Anda berkomunikasi bahwa sesi ini memang Anda.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Sesi tidak aktif</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Sesi belum diverifikasi</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Sesi terverifikasi</string>
+    <string name="device_manager_learn_more_sessions_unverified">Sesi yang belum diverifikasi adalah sesi yang telah masuk dengan kredensial Anda tetapi belum diverifikasi secara silang.
+\n
+\nAnda seharusnya yakin bahwa Anda mengenal sesi ini karena mereka bisa saja berarti seseorang menggunakan akun Anda secara tidak sah.</string>
+    <string name="device_manager_learn_more_sessions_inactive">Sesi yang tidak aktif adalah sesi yang Anda tidak gunakan dalam beberapa waktu, tetapi mereka masih mendapatkan kunci enkripsi.
+\n
+\nMenghapus sesi yang sudah tidak aktif meningkatkan keamanan dan performa, dan membuatnya lebih mudah untuk mengenal jika sebuah sesi baru mencurigakan.</string>
+    <string name="device_manager_session_rename_warning">Harap diketahui bahwa nama sesi juga terlihat ke orang-orang yang Anda berkomunikasi.</string>
+    <string name="device_manager_session_rename_description">Nama sesi khusus dapat membantu Anda mengenal perangkat Anda dengan lebih mudah.</string>
+    <string name="device_manager_session_rename_edit_hint">Nama sesi</string>
+    <string name="device_manager_session_rename">Ubah nama sesi</string>
+    <string name="device_manager_session_overview_signout">Keluar dari sesi ini</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Belum diverifikasi · Sesi Anda saat ini</string>
+    <string name="tooltip_attachment_voice_broadcast">Mulai sebuah siaran suara</string>
+    <string name="key_authenticity_not_guaranteed">Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.</string>
+    <string name="settings_security_incognito_keyboard_summary">Minta papan ketik untuk tidak memperbarui data yang dipersonalisasi seperti riwayat pengetikan dan kamus berdasarkan apa yang Anda ketik dalam percakapan. Dicatat bahwa beberapa papan ketik mungkin tidak menghormati pengaturan ini.</string>
+    <string name="settings_security_incognito_keyboard_title">Papan ketik samaran</string>
+    <string name="command_description_table_flip">Menambahkan (╯°□°）╯︵ ┻━┻ ke pesan teks biasa</string>
+    <string name="attachment_type_voice_broadcast">Siaran Suara</string>
+    <string name="command_description_devtools">Buka layar alat pengembang</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Anda telah mengaktifkan enkripsi ke sesi yang terverifikasi hanya untuk semua ruangan di Pengaturan Keamanan.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Ada perangkat yang belum diverifikasi di ruangan ini, mereka tidak akan mendekripsikan pesan yang Anda kirim.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Jangan kirim pesan terenkripsi ke sesi yang belum diverifikasi di ruangan ini.</string>
+    <string name="action_got_it">Saya mengerti</string>
+    <string name="rich_text_editor_format_underline">Terapkan format garis bawah</string>
+    <string name="rich_text_editor_format_strikethrough">Terapkan format coret</string>
+    <string name="rich_text_editor_format_italic">Terapkan format miring</string>
+    <string name="rich_text_editor_format_bold">Terapkan format tebal</string>
+    <string name="labs_enable_client_info_recording_summary">Rekam nama klien, versi, dan URL untuk lebih mudah mengenal sesi di pengelola sesi.</string>
+    <string name="labs_enable_client_info_recording_title">Aktifkan perekaman info klien</string>
+    <string name="labs_enable_session_manager_summary">Miliki keterlihatan dan kendali yang lebih baik pada semua sesi Anda.</string>
+    <string name="labs_enable_session_manager_title">Aktifkan pengelola sesi baru</string>
+    <string name="device_manager_session_details_device_operating_system">Sistem operasi</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Peramban</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Versi</string>
+    <string name="device_manager_session_details_application_name">Nama</string>
+    <string name="device_manager_session_details_application">Aplikasi</string>
+    <string name="device_manager_push_notifications_description">Terima notifikasi dorongan di sesi ini.</string>
+    <string name="device_manager_push_notifications_title">Notifikasi dorongan</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifikasi sesi Anda saat ini untuk menampilkan status verifikasi sesi ini.</string>
+    <string name="device_manager_verification_status_unknown">Status verifikasi tidak diketahui</string>
+    <string name="push_gateway_item_enabled">Diaktifkan:</string>
+    <string name="push_gateway_item_device_id">ID Sesi:</string>
+    <string name="error_check_network">Ada sesuatu yang salah. Mohon periksa koneksi jaringan Anda dan coba lagi.</string>
+    <string name="grant_permission">Berikan Izin</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} membutuhkan izin untuk menampilkan notifikasi.
+\nMohon berikan izin itu.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} membutuhkan izin untuk menampilkan notifikasi. Notifikasi dapat menampilkan pesan Anda, undangan Anda, dll.
+\n
+\nMohon perbolehkan akses di munculan berikutnya untuk dapat melihat notifikasi.</string>
+    <string name="labs_enable_rich_text_editor_summary">Coba editor teks kaya (mode teks biasa akan datang)</string>
+    <string name="labs_enable_rich_text_editor_title">Aktifkan editor teks kaya</string>
+    <string name="qr_code_login_confirm_security_code_description">Pastikan Anda tahu asal kode ini. Dengan menautkan perangkat, Anda akan memberikan seseorang akses penuh ke akun Anda.</string>
+    <string name="qr_code_login_confirm_security_code">Konfirmasi</string>
+    <string name="qr_code_login_try_again">Coba lagi</string>
+    <string name="qr_code_login_status_no_match">Tidak cocok\?</string>
+    <string name="qr_code_login_signing_in">Memasukkan Anda</string>
+    <string name="qr_code_login_connecting_to_device">Menghubungkan ke perangkat</string>
+    <string name="qr_code_login_scan_qr_code_button">Pindai kode QR</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Ingin masuk di perangkat ponsel\?</string>
+    <string name="qr_code_login_show_qr_code_button">Tampilkan kode QR di perangkat ini</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Pilih \'Pindai dengan kode QR\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Mulai dari layar masuk</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Pilih \'Masuk dengan kode QR\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Mulai dari layar masuk</string>
+    <string name="qr_code_login_new_device_instruction_3">Pilih \'Tampilkan kode QR di perangkat ini\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Pergi ke Pengaturan → Keamanan &amp; Privasi → Tampilkan Semua Sesi</string>
+    <string name="qr_code_login_new_device_instruction_1">Buka ${app_name} di perangkat Anda yang lain</string>
+    <string name="qr_code_login_header_failed_denied_description">Permintaan ditolak di perangkat lain.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Penautan tidak selesai dalam waktu yang dibutuhkan.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Penautan dengan perangkat ini tidak didukung.</string>
+    <string name="qr_code_login_header_failed_title">Koneksi tidak berhasil</string>
+    <string name="qr_code_login_header_connected_description">Periksa perangkat yang masuk, kode di bawah seharusnya ditampilkan. Konfirmasi bahwa kode di bawah cocok dengan perangkat itu:</string>
+    <string name="qr_code_login_header_connected_title">Koneksi aman dibuat</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Pindai kode QR di bawah dengan perangkat Anda yang telah keluar dari akun.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Gunakan perangkat yang sudah masuk untuk memindai kode QR di bawah:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Masuk dengan kode QR</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Gunakan kamera pada perangkat ini untuk memindai kode QR yang ditampilkan pada perangkat Anda yang lain:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Pindai kode QR</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Anda dapat menggunakan perangkat ini untuk masuk ke perangkat ponsel atau web dengan sebuah kode QR. Ada dua cara untuk melalukan ini:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Masuk dengan Kode QR</string>
+    <string name="login_scan_qr_code">Pindai kode QR</string>
 </resources>

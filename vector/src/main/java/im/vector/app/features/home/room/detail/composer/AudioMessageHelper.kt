@@ -55,8 +55,8 @@ class AudioMessageHelper @Inject constructor(
     private var amplitudeTicker: CountUpTimer? = null
     private var playbackTicker: CountUpTimer? = null
 
-    fun initializeRecorder(attachmentData: ContentAttachmentData) {
-        voiceRecorder.initializeRecord(attachmentData)
+    fun initializeRecorder(roomId: String, attachmentData: ContentAttachmentData) {
+        voiceRecorder.initializeRecord(roomId, attachmentData)
         amplitudeList.clear()
         attachmentData.waveform?.let {
             amplitudeList.addAll(it)
@@ -114,6 +114,7 @@ class AudioMessageHelper @Inject constructor(
      * When entering in playback mode actually.
      */
     fun pauseRecording() {
+        // TODO should we pause instead of stop?
         voiceRecorder.stopRecord()
         stopRecordingAmplitudes()
     }
@@ -219,6 +220,10 @@ class AudioMessageHelper @Inject constructor(
             Timber.e(e, "Cannot get max amplitude (native error). Amplitude recording timer will be stopped.")
             stopRecordingAmplitudes()
         }
+    }
+
+    private fun resumeRecordingAmplitudes() {
+        amplitudeTicker?.resume()
     }
 
     private fun stopRecordingAmplitudes() {

@@ -39,6 +39,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.core.utils.compat.getSerializableExtraCompat
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -71,7 +73,7 @@ class CallAndroidService : VectorAndroidService() {
     private var mediaSession: MediaSessionCompat? = null
     private val mediaSessionButtonCallback = object : MediaSessionCompat.Callback() {
         override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-            val keyEvent = mediaButtonEvent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+            val keyEvent = mediaButtonEvent?.getParcelableExtraCompat<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
             if (keyEvent.keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
                 callManager.headSetButtonTapped()
                 return true
@@ -158,7 +160,7 @@ class CallAndroidService : VectorAndroidService() {
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
+                        activity.intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
                     } else true
                 }
         ).apply {
@@ -188,7 +190,7 @@ class CallAndroidService : VectorAndroidService() {
 
     private fun handleCallTerminated(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        val endCallReason = intent.getSerializableExtra(EXTRA_END_CALL_REASON) as EndCallReason
+        val endCallReason = intent.getSerializableExtraCompat<EndCallReason>(EXTRA_END_CALL_REASON)
         val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
         alertManager.cancelAlert(callId)
         val terminatedCall = knownCalls.remove(callId)
@@ -202,7 +204,7 @@ class CallAndroidService : VectorAndroidService() {
         startForeground(notificationId, notification)
         if (knownCalls.isEmpty()) {
             Timber.tag(loggerTag.value).v("No more call, stop the service")
-            stopForeground(true)
+            stopForegroundCompat()
             mediaSession?.isActive = false
             myStopSelf()
         }

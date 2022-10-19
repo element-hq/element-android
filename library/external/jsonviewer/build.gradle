@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 
 buildscript {
     repositories {
@@ -17,6 +18,8 @@ buildscript {
 }
 
 android {
+    namespace "org.billcarsonfr.jsonviewer"
+
     compileSdk versions.compileSdk
 
     defaultConfig {
@@ -51,7 +54,7 @@ dependencies {
     implementation libs.androidx.recyclerview
 
     implementation libs.airbnb.epoxy
-    kapt libs.airbnb.epoxyProcessor
+    ksp libs.airbnb.epoxyProcessor
 
     implementation libs.airbnb.mavericks
     // Span utils

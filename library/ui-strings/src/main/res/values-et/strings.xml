@@ -1158,10 +1158,10 @@
     <string name="settings_push_rules">Tõuketeavituste reeglid</string>
     <string name="settings_push_rules_no_rules">Tõuketeavituste reegleid pole kirjeldatud</string>
     <string name="settings_push_gateway_no_pushers">Tõuketeavituste võrguväravaid pole registreeritud</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">Rakenduse ID:</string>
+    <string name="push_gateway_item_push_key">Tõuketeenuse võti:</string>
+    <string name="push_gateway_item_app_display_name">Rakenduse kuvatav nimi:</string>
+    <string name="push_gateway_item_device_name">Sessiooni nimi:</string>
     <string name="push_gateway_item_url">URL:</string>
     <string name="push_gateway_item_format">Vorming:</string>
     <string name="preference_voice_and_video">Heli ja video</string>
@@ -1197,8 +1197,8 @@
     <string name="settings_discovery_disconnect_identity_server_info">Isikutuvastusserveri kasutamise lõpetamine tähendab, et sa ei ole leitav teiste kasutajate poolt ega sulle ei saa telefoninumbri või e-posti aadressi alusel kutset saata. Küll aga saab kutset saata Matrix\'i kasutajatunnuse alusel.</string>
     <string name="settings_discovery_msisdn_title">Leitavad telefoninumbrid</string>
     <string name="labs_show_unread_notifications_as_tab">Lisa avaekraanile eraldi sakk lugemata teavituste jaoks.</string>
-    <string name="settings_discovery_confirm_mail">Saatsime kinnituskirja e-posti aadressile %s. Palun vaata oma kirju ja klõpsi selles kirjas leiduvat linki</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Saatsime kinnituskirja e-posti aadressile %s. Esmalt palun vaata oma kirju ja klõpsi selles kirjas leiduvat linki</string>
+    <string name="settings_discovery_confirm_mail">Saatsime kirja e-posti aadressile %s. Palun vaata oma kirju ja klõpsi selles kirjas leiduvat linki</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Saatsime kirja e-posti aadressile %s. Esmalt palun vaata oma kirju ja klõpsi selles kirjas leiduvat linki</string>
     <string name="settings_agree_to_terms">Selleks, et sind võiks leida e-posti aadressi või telefoninumbri alusel, nõustu isikutuvastusserveri (%s) kasutustingimustega.</string>
     <string name="labs_allow_extended_logging">Lülita sisse detailsete logide salvestamine.</string>
     <string name="no_ignored_users">Sa parasjagu ei eira ühtegi kasutajat</string>
@@ -1336,7 +1336,7 @@
     <string name="disconnect_identity_server_dialog_content">Kas katkestame ühenduse isikutuvastusserveriga %s\?</string>
     <string name="identity_server_error_no_identity_server_configured">Palun esmalt seadista isikutuvastusserver.</string>
     <string name="identity_server_error_terms_not_signed">Palun esmalt nõustu seadistustes isikutuvastusserveri kasutustingimustega.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab ${app_name} e-posti aadressid ja telefoninumbrid serverisse vaid räsituna.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab ${app_name} e-posti aadressid ja telefoninumbrid serverisse vaid räsidena.</string>
     <string name="identity_server_error_binding_error">Seoste loomine ei õnnestunud.</string>
     <string name="identity_server_error_no_current_binding_error">Selle tunnusega ei ole hetkel ühtegi seost.</string>
     <string name="identity_server_set_default_notice">Sinu koduserver (%1$s) soovitab kasutada sinu isikutuvastusserverina %2$s teenust</string>
@@ -1778,7 +1778,7 @@
     <string name="not_a_valid_qr_code">See ei ole korralik Matrix\'i QR-kood</string>
     <string name="settings_discovery_consent_action_give_consent">Nõustu</string>
     <string name="settings_discovery_consent_action_revoke">Tühista minu nõusolek</string>
-    <string name="settings_discovery_consent_notice_on">Selleks, et leida Matrixikasutajaid oma kontaktide hulgast, oled sa andnud nõusoleku saata e-posti aadresse ja telefoninumbreid sellele isikutuvastusserverile.</string>
+    <string name="settings_discovery_consent_notice_on">Selleks, et leida Matrixikasutajaid oma kontaktide hulgast, oled sa andnud nõusoleku e-posti aadresside ja telefoninumbrite saatmiseks sellele isikutuvastusserverile.</string>
     <string name="settings_discovery_consent_title">Saada e-posti aadresse ja telefoninumbreid</string>
     <string name="direct_room_user_list_suggestions_title">Soovitused</string>
     <string name="direct_room_user_list_known_title">Tuttavad kasutajad</string>
@@ -2211,7 +2211,7 @@
     <string name="room_settings_space_access_title">Ligipääs siia kogukonda</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kes pääsevad ligi siia jututuppa\?</string>
     <string name="settings_notification_emails_enable_for_email">Saada teavitusi %s e-posti aadressile</string>
-    <string name="settings_notification_emails_no_emails">Kui soovi e-posti teel saada teavitusi, siis palun seosta oma e-posti aadress oma Matrix\'i kasutajakontoga</string>
+    <string name="settings_notification_emails_no_emails">Kui soovid e-posti teel saada teavitusi, siis palun seosta oma e-posti aadress oma Matrix\'i kasutajakontoga</string>
     <string name="settings_notification_emails_category">E-posti teel saadetavad teavitused</string>
     <string name="room_permissions_upgrade_the_space">Uuenda kogukonda</string>
     <string name="room_permissions_change_space_name">Muuda kogukonna nime</string>
@@ -2591,7 +2591,6 @@
 \nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
-    <string name="device_manager_settings_active_sessions_show_all">Näita kõiki sessioone (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
     <string name="device_manager_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessioonid</string>
@@ -2691,7 +2690,7 @@
     <string name="device_manager_filter_bottom_sheet_title">Filtreeri</string>
     <string name="device_manager_session_last_activity">Viimati kasutusel %1$s</string>
     <string name="device_manager_device_title">Seade</string>
-    <string name="device_manager_session_title">Sessioonid</string>
+    <string name="device_manager_session_title">Sessioon</string>
     <string name="device_manager_current_session_title">Praegune sessioon</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Parima turvalisuse ja töökindluse nimel verifitseeri see sessioon või logi ta võrgust välja.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Turvalise sõnumivahetuse nimel palun verifitseeri oma praegune sessioon.</string>
@@ -2701,4 +2700,100 @@
     <string name="labs_enable_deferred_dm_title">Võta kasutusele viivitusega otsevestlused</string>
     <string name="labs_enable_new_app_layout_summary">Lihtsustatud Element valikuliste kaartidega</string>
     <string name="labs_enable_new_app_layout_title">Võta kasutusele rakenduse uus välimus</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Sa oled rakenduse turvaseadistustes määranud, et krüptimine kehtib vaid verifitseeritud sessioonidele.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Selles jututoas on verifitseerimata seadmeid, mis ei saa sinu saadetud sõnumeid dekrüptida.</string>
+    <string name="device_manager_learn_more_session_rename">Teised osapooled nii otsesõnumites kui jututubades näevad sinu kõikide sessioonide loendit.
+\n
+\nSee tähendab, et nad võivad uskuda, et tegemist on tõesti sinuga. Samal ajal näevad ka siin sisestatud sessiooninime.</string>
+    <string name="device_manager_learn_more_session_rename_title">Sessioonide nimede muutmine</string>
+    <string name="device_manager_learn_more_sessions_verified">Verifitseeritud sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud ning mille puhul oled risttunnustamise läbi teinud või paroolifraasi abil ta turvaliseks märkinud.
+\n
+\nSee tähendab, et nendes sessioonides on olemas sinu varasemate sõnumite krüptovõtmed ja teistele osapooltele on nad tuvastatavad nii, et tegemist on tõesti sinuga.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verifitseeritud sessioonid</string>
+    <string name="device_manager_learn_more_sessions_unverified">Verifitseerimata sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud, kuid mille puhul on risttunnustamine tegemata.
+\n
+\nPalun kontrolli, et need on sulle teadaolevad sessioonid. Vastasel korral võib olla tegemist sinu kasutajakonto lubamatu kasutamisega.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Verifitseerimata sessioonid</string>
+    <string name="device_manager_learn_more_sessions_inactive">Sessioonid, mida sa pole mõnda aega kasutanud, saavad jätkuvalt pärida sinu krüptovõtmeid.
+\n
+\nSelliste sessioonide eemaldamine parandab jõudlust ja turvalisust ning sul on lihtsam märgata, kui loendisse tekib midagi kahtlast.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Mitteaktiivsed sessioonid</string>
+    <string name="device_manager_session_rename_warning">Palun arvesta, et sessioonide nimed on näha ka kõikidele osapooltele, kellega sa suhtled.</string>
+    <string name="device_manager_session_rename_description">Sinu enda kirjutatud sessiooninimede alusel on sul oma seadmeid lihtsam ära tunda.</string>
+    <string name="device_manager_session_rename_edit_hint">Sessiooni nimi</string>
+    <string name="device_manager_session_rename">Muuda sessiooni nime</string>
+    <string name="device_manager_session_overview_signout">Logi sellest sessioonist välja</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Verifitseerimata · Sinu praegune sessioon</string>
+    <string name="tooltip_attachment_voice_broadcast">Alusta ringhäälingukõnet</string>
+    <string name="key_authenticity_not_guaranteed">Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.</string>
+    <string name="settings_security_incognito_keyboard_summary">Väldi sisetuste ja muude isikustatud andmete edastamist väljaspoole seda rakendust. Palun arvesta, et kõik klaviatuurirakendused ei pruugi seda seadistust tunnistada.</string>
+    <string name="settings_security_incognito_keyboard_title">Privaatne klahvistik</string>
+    <string name="command_description_table_flip">Lisab vormindamata sõnumi ette (╯°□°）╯︵ ┻━┻</string>
+    <string name="attachment_type_voice_broadcast">Ringhäälingukõne</string>
+    <string name="command_description_devtools">Ava arendaja töövahendite vaade</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Ära iialgi saada selles jututoas krüptitud sõnumeid verifitseerimata sessioonidesse.</string>
+    <string name="action_got_it">Selge lugu</string>
+    <string name="labs_enable_rich_text_editor_summary">Proovi vormindatud teksti alusel töötavat tekstitoimetit (varsti lisandub ka vormindamata teksti režiim)</string>
+    <string name="labs_enable_rich_text_editor_title">Võta kasutusele vormindatud teksti pruukiv tekstitoimeti</string>
+    <string name="qr_code_login_header_connected_description">Vaata seadet, kus sa oled Matrix\'i võtku loginud - seal peaks nüüd kuvatama QR-koodi. Kinnita, et allpool toodud QR-kood on sama kui tolles seadmes kuvatav kood:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Sa võid seda seadet kasutada nutiseadme või veebirakenduse sisselogimiseks QR-koodi alusel. Sa saad seda teha kahel moel:</string>
+    <string name="rich_text_editor_format_underline">Kasuta allajoonitud kirja</string>
+    <string name="rich_text_editor_format_strikethrough">Kasuta läbijoonitud kirja</string>
+    <string name="rich_text_editor_format_italic">Kasuta kaldkirja</string>
+    <string name="rich_text_editor_format_bold">Kasuta paksu kirja</string>
+    <string name="qr_code_login_confirm_security_code_description">Palun vaata, et sa kindlasti tead, kust see QR-kood kuvatakse. Sellisel viisil seadmete sidumisel sa annad oma kasutajakontole täiemahulise ligipääsu.</string>
+    <string name="qr_code_login_confirm_security_code">Kinnita</string>
+    <string name="qr_code_login_try_again">Proovi uuesti</string>
+    <string name="qr_code_login_status_no_match">Ei klapi\?</string>
+    <string name="qr_code_login_signing_in">Logime sind võrku</string>
+    <string name="qr_code_login_connecting_to_device">Loon ühendust seadmega</string>
+    <string name="qr_code_login_scan_qr_code_button">Loe QR-koodi</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Kas logid sisse nutiseadmest\?</string>
+    <string name="qr_code_login_show_qr_code_button">Näita selles seadmes QR-koodi</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Vali „Loe QR-koodi“</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Alusta sisselogimisvaatest</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vali „Logi võrku QR-koodi abil“</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Alusta sisselogimisvaatest</string>
+    <string name="qr_code_login_new_device_instruction_3">Vali „Näita selles seadmes QR-koodi“</string>
+    <string name="qr_code_login_new_device_instruction_2">Ava Seadistused -&gt; Turvalisus ja privaatsus -&gt; Näita kõiki sessioone</string>
+    <string name="qr_code_login_new_device_instruction_1">Ava ${app_name} oma teises seades</string>
+    <string name="qr_code_login_header_failed_denied_description">Teine seade lükkas päringu tagasi.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Sidumine ei lõppenud etteantud aja jooksul.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Sidumine selle seadmega ei ole toetatud.</string>
+    <string name="qr_code_login_header_failed_title">Seoste loomine ei õnnestunud</string>
+    <string name="qr_code_login_header_connected_title">Turvaline ühendus on olemas</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Loe QR-koodi seadmega, kus sa oled Matrix\'i võrgust välja loginud.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Järgneva QR-koodi skaneerimiseks kasuta seadet, kus sa oled Matrix\'i võrku loginud:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Logi sisse QR-koodi abil</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Kasuta selle seadme kaamerat ja logi sisse teises seadmes kuvatud QR-koodi alusel:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Loe QR-koodi</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="labs_enable_client_info_recording_summary">Sessioonide paremaks tuvastamiseks saad nüüd sessioonihalduris salvestada klientrakenduse nime, versiooni ja aadressi.</string>
+    <string name="labs_enable_client_info_recording_title">Luba klientrakenduse teabe salvestamine</string>
+    <string name="labs_enable_session_manager_summary">Sellega saad parema ülevaate oma sessioonidest ja võimaluse neid mugavasti hallata.</string>
+    <string name="labs_enable_session_manager_title">Kasuta uut sessioonihaldurit</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Logi sisse QR-koodi abil</string>
+    <string name="device_manager_session_details_device_operating_system">Operatsioonisüsteem</string>
+    <string name="device_manager_session_details_device_model">Mudel</string>
+    <string name="device_manager_session_details_device_browser">Brauser</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Versioon</string>
+    <string name="device_manager_session_details_application_name">Nimi</string>
+    <string name="device_manager_session_details_application">Rakendus</string>
+    <string name="device_manager_push_notifications_description">Luba selles sessioonis tõuketeavitused.</string>
+    <string name="device_manager_push_notifications_title">Tõuketeavitused</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Selle sessiooni olekut ei saa tuvastada enne kui oled ta verifitseerinud.</string>
+    <string name="device_manager_verification_status_unknown">Verifitseerimise olek on määratlemata</string>
+    <string name="login_scan_qr_code">Loe QR-koodi</string>
+    <string name="push_gateway_item_enabled">Kasutusel:</string>
+    <string name="push_gateway_item_device_id">Sessiooni tunnus:</string>
+    <string name="error_check_network">Midagi läks nüüd sassi. Palun kontrolli oma seadme võrguühendust ja proovi uuesti.</string>
+    <string name="grant_permission">Anna õigused</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} vajab teavituste näitamiseks õigusi.
+\nPalun luba vastavad õigused.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} vajab teavituste näitamiseks õigusi. Teavituste sisuks võivad olla sulle saadetud sõnumid, kutsed ja muud olulist.
+\n
+\nJärgmistes vaadetes palun anna sellele rakendusele teavituste kuvamiseks vajalikud õigused.</string>
 </resources>

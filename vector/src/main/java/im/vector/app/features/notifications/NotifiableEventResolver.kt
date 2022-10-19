@@ -17,6 +17,7 @@ package im.vector.app.features.notifications
 
 import android.net.Uri
 import im.vector.app.R
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.takeAs
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
@@ -37,7 +38,7 @@ import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -45,7 +46,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import java.util.UUID
@@ -112,7 +112,7 @@ class NotifiableEventResolver @Inject constructor(
         val notificationAction = actions.toNotificationAction()
 
         return if (notificationAction.shouldNotify) {
-            val user = session.getUser(event.senderId!!) ?: return null
+            val user = session.getUserOrDefault(event.senderId!!)
 
             val timelineEvent = TimelineEvent(
                     root = event,
@@ -231,7 +231,7 @@ class NotifiableEventResolver @Inject constructor(
 
     private suspend fun TimelineEvent.downloadAndExportImage(session: Session): Uri? {
         return kotlin.runCatching {
-            getLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
+            getVectorLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
                 val fileService = session.fileService()
                 fileService.downloadFile(imageMessage)
                 fileService.getTemporarySharableURI(imageMessage)

@@ -569,7 +569,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_troubleshoot_diagnostic_success_status">Alapszintű diagnosztika nem talált hibát. Ha még mindig nem kapsz értesítéseket, kérlek küldj egy hiba jegyet amivel segítheted a hibakeresésünket.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Egy vagy több teszt is sikertelen volt, próbáld ki a javasolt javítást, javításokat.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Egy vagy több teszt sikertelenül végződött, kérlek küldj egy hibabejelentést ami segít nekünk a problémát kivizsgálni.</string>
-    <string name="settings_troubleshoot_test_system_settings_title">Rendszer beállítások.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Rendszerbeállítások.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Az értesítések engedélyezve vannak a rendszerbeállításokban.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Az értesítések tiltva vannak a rendszerbeállításokban.
 Kérlek ellenőrizd a rendszerbeállításokat.</string>
@@ -582,7 +582,7 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Munkamenet beállítások.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Az értesítések engedélyezve vannak ezen az munkameneten.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Az értesítések tiltva vannak ezen a munkameneten. Kérlek ellenőrizd a ${app_name} beállításokat.</string>
-    <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyez</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyezés</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Szolgáltatások ellenőrzése</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK elérhető és a legújabb verziójú.</string>
     <string name="settings_troubleshoot_test_play_services_failed">"${app_name} a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
@@ -824,18 +824,18 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="navigate_to_room_when_already_in_the_room">Már nézed ezt a szobát!</string>
     <string name="settings_general_title">Általános</string>
     <string name="settings_preferences">Beállítások</string>
-    <string name="settings_security_and_privacy">Biztonság &amp; Adatvédelem</string>
+    <string name="settings_security_and_privacy">Biztonság és adatvédelem</string>
     <string name="settings_push_rules">„Push” szabályok</string>
     <string name="settings_push_rules_no_rules">„Push” szabályok nincsenek</string>
     <string name="settings_push_gateway_no_pushers">„Push” átjárók nincsenek regisztrálva</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">Alk azon:</string>
+    <string name="push_gateway_item_push_key">Push kulcs:</string>
+    <string name="push_gateway_item_app_display_name">Alk. képernyő név:</string>
+    <string name="push_gateway_item_device_name">Munkamenet képernyő név:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formátum:</string>
-    <string name="preference_voice_and_video">Hang &amp; Videó</string>
-    <string name="preference_root_help_about">Segítség &amp; Névjegy</string>
+    <string name="preference_voice_and_video">Hang és videó</string>
+    <string name="preference_root_help_about">Súgó és névjegy</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token regisztrálása</string>
     <string name="send_suggestion">Javaslat tétel</string>
     <string name="send_suggestion_content">A javaslatodat kérlek ír le alulra.</string>
@@ -897,7 +897,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_discovery_no_msisdn">Amint hozzáadtál egy telefonszámot megjelenik a felderítési beállítási lehetőség.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Az azonosítási szerverről való lecsatlakozással nem leszel mások által megtalálható és másokat sem tudsz meghívni e-mail címmel vagy telefonszámmal.</string>
     <string name="settings_discovery_msisdn_title">Felderíthető telefonszámok</string>
-    <string name="settings_discovery_confirm_mail">Megerősítő levelet küldtünk ide: %s, ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
+    <string name="settings_discovery_confirm_mail">E-mailt küldtünk ide: %s, ellenőrizd és kattints a megerősítő hivatkozásra</string>
     <string name="settings_discovery_enter_identity_server">Add meg az azonosítási szerver URL-jét</string>
     <string name="settings_discovery_bad_identity_server">Az azonosítási szerverhez nem lehet csatlakozni</string>
     <string name="settings_discovery_please_enter_server">Kérlek add meg az azonosítási szerver url-jét</string>
@@ -1391,7 +1391,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
     <string name="event_redacted">Üzenet eltávolítva</string>
     <string name="settings_show_redacted_summary">Helykitöltő mutatása a törölt szövegek helyett</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Megerősítő levelet küldtünk ide: %s, először ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">E-mailt küldtünk ide: %s, először ellenőrizd és kattints a megerősítő hivatkozásra</string>
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_files_title">FÁJLOK</string>
     <string name="uploads_files_subtitle">%1$s itt: %2$s</string>
@@ -2611,7 +2611,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_device_manager_device_type_desktop">Asztali</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_mobile">Mobil</string>
-    <string name="device_manager_settings_active_sessions_show_all">Minden munkamenet megjelenítése (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">A legjobb biztonság érdekében ellenőrizd a munkameneteket, és jelentkezz ki minden olyan munkamenetből, melyet már nem ismersz fel vagy nem használsz.</string>
     <string name="device_manager_sessions_other_title">Más munkamenetek</string>
     <string name="settings_sessions_list">Munkamenetek</string>
@@ -2710,4 +2709,100 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="labs_enable_deferred_dm_title">Késleltetett közvetlen üzenetek engedélyezése</string>
     <string name="labs_enable_new_app_layout_summary">Egyszerűsített Element opcionálisan lapokkal</string>
     <string name="labs_enable_new_app_layout_title">Új kinézet engedélyezése</string>
+    <string name="device_manager_learn_more_session_rename">Más felhasználók akikkel közvetlenül vagy szobában beszélgetsz látják a teljes listát a munkameneteidről.
+\n
+\nEzzel ők biztosak lehetnek abban, hogy ténylegesen veled beszélgetnek. Ez azt is jelenti, hogy látják a munkamenet nevét amit itt megadsz.</string>
+    <string name="device_manager_learn_more_sessions_verified">Ellenőrzött munkamenetbe a neveddel és jelszavaddal léptek be és ellenőrizve lett vagy a biztonsági jelmondattal vagy másik munkamenetből.
+\n
+\nEz azt jelenti, hogy tartalmazzák a titkosítási kulcsokat az régi üzenetekhez, és biztosítja a többieket a kommunikációban, hogy ezt a munkamenetet tényleg te használod.</string>
+    <string name="rich_text_editor_format_underline">Aláhúzott</string>
+    <string name="rich_text_editor_format_strikethrough">Áthúzott</string>
+    <string name="rich_text_editor_format_italic">Dőlt</string>
+    <string name="rich_text_editor_format_bold">Félkövér</string>
+    <string name="labs_enable_client_info_recording_summary">Kliens neve, verziója és url felvétele a munkamenet könnyebb azonosításához a munkamenet kezelőben.</string>
+    <string name="labs_enable_client_info_recording_title">Kliens információ felvételének engedélyezése</string>
+    <string name="labs_enable_session_manager_summary">Jobb áttekintés és felügyelet a munkamenetek felett.</string>
+    <string name="labs_enable_session_manager_title">Új munkamenet kezelő engedélyezése</string>
+    <string name="device_manager_learn_more_session_rename_title">Munkamenet átnevezése</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Hitelesített munkamenetek</string>
+    <string name="device_manager_learn_more_sessions_unverified">Az ellenőrizetlen munkamenetek azok amikre a felhasználói neveddel és jelszavaddal léptek be de nem lett ellenőrizve.
+\n
+\nMindenképpen győződj meg arról, hogy felismered ezeket a munkameneteket mert lehet, hogy illetéktelenül használják a fiókodat.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Ellenőrizetlen munkamenetek</string>
+    <string name="device_manager_learn_more_sessions_inactive">Az inaktív munkamenetek azok amiket egy ideje nem használtál, de továbbra is megkapják a titkosítási kulcsokat.
+\n
+\nA nem aktív munkamenetek törlésével növelhető a biztonság és a sebesség valamint könnyebb lesz felismerni a gyanús munkameneteket.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Nem aktív munkamenetek</string>
+    <string name="device_manager_session_rename_warning">Fontos, hogy a munkamenet neve a kommunikációban résztvevők számára látható.</string>
+    <string name="device_manager_session_rename_description">Az egyedi munkamenet név segíthet az eszköz könnyebb felismerésében.</string>
+    <string name="device_manager_session_rename_edit_hint">Munkamenet neve</string>
+    <string name="device_manager_session_rename">Munkamenet átnevezése</string>
+    <string name="device_manager_session_details_device_operating_system">Operációs rendszer</string>
+    <string name="device_manager_session_details_device_model">Modell</string>
+    <string name="device_manager_session_details_device_browser">Böngésző</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Verzió</string>
+    <string name="device_manager_session_details_application_name">Név</string>
+    <string name="device_manager_session_details_application">Alkalmazás</string>
+    <string name="device_manager_push_notifications_description">Push értesítések fogadása ebben a munkamenetben.</string>
+    <string name="device_manager_push_notifications_title">Push értesítések</string>
+    <string name="device_manager_session_overview_signout">Kijelentkezés ebből a munkamenetből</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Ellenőrizetlen · A jelenlegi munkameneted</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Ellenőrizd a jelenlegi munkamenetedet, hogy ismert állapotba kerüljön.</string>
+    <string name="device_manager_verification_status_unknown">Ismeretlen ellenőrzési státusz</string>
+    <string name="tooltip_attachment_voice_broadcast">Hang közvetítés indítása</string>
+    <string name="key_authenticity_not_guaranteed">A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.</string>
+    <string name="settings_security_incognito_keyboard_summary">Utasítja a billentyűzetet, hogy ne mentsen személyre szabott adatokat, mint előzmények vagy szótár abból amit a beszélgetésekben írsz. Vedd figyelembe, hogy nem minden billentyűzet veszi ezt figyelembe.</string>
+    <string name="settings_security_incognito_keyboard_title">Inkognitó billentyűzet</string>
+    <string name="command_description_table_flip">(╯°□°）╯︵ ┻━┻ -t tesz a szöveg elejére</string>
+    <string name="attachment_type_voice_broadcast">Hang közvetítés</string>
+    <string name="push_gateway_item_enabled">Engedélyezve:</string>
+    <string name="push_gateway_item_device_id">Munkamenet azon.:</string>
+    <string name="error_check_network">Valami nem sikerült. Kérlek ellenőrizd a hálózati kapcsolatot és próbáld újra.</string>
+    <string name="command_description_devtools">A fejlesztői eszközök képernyő megnyitása</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Bekapcsoltad a Biztonsági beállításoknál, hogy csak ellenőrzött munkamenetek számára legyen titkosítva az üzenet bármely szobában.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Ellenőrizetlen eszközök vannak a szobában, ezek nem fogják tudni visszafejteni az általad küldött üzeneteket.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Sose küldj titkosított üzenetet ellenőrizetlen munkamenetbe ebből a munkamenetből ebben a szobában.</string>
+    <string name="grant_permission">Engedély megadása</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} alkalmazásnak értesítések megjelenítéséhez engedélyre van szüksége.
+\nKérjük, adj rá engedélyt.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} alkalmazásnak szüksége van engedélyre az értesítések megjelenítéséhez. Az értesítés megjelenítheti az üzenetet, meghívót, stb.
+\n
+\nA következő felugró ablakban adj rá engedélyt, hogy az értesítések megjelenhessenek.</string>
+    <string name="labs_enable_rich_text_editor_summary">Próbálja ki az új szövegbevitelt (hamarosan érkezik a sima szöveges üzemmód)</string>
+    <string name="labs_enable_rich_text_editor_title">Vizuális szerkesztő engedélyezése</string>
+    <string name="action_got_it">Értem</string>
+    <string name="qr_code_login_status_no_match">Nem egyezik\?</string>
+    <string name="qr_code_login_signing_in">Bejelentkeztetés</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Mobil eszközzel jelentkezel be\?</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Kezd a bejelentkező képernyőn</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Kezd a bejelentkező képernyőn</string>
+    <string name="qr_code_login_header_connected_description">Nézd meg a már bejelentkezett eszközödet, az alábbi kódot kell megjelenítenie. Erősítsd meg, hogy az alábbi kód megegyezik a másik eszközön láthatóval:</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Használd a már belépett eszközt az alábbi QR kód beolvasásához:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Ezzel az eszközzel, QR kód segítségével, bejelentkezhetsz mobil és webes munkamenetbe. Két lehetőséged is van:</string>
+    <string name="qr_code_login_confirm_security_code_description">Győződj meg a kód eredetéről. Az eszközök összekötésével esetleg valakinek teljes hozzáférést adhatsz a fiókodhoz.</string>
+    <string name="qr_code_login_confirm_security_code">Megerősítés</string>
+    <string name="qr_code_login_try_again">Próbáld újra</string>
+    <string name="qr_code_login_connecting_to_device">Csatlakozás az eszközhöz</string>
+    <string name="qr_code_login_scan_qr_code_button">QR kód beolvasása</string>
+    <string name="qr_code_login_show_qr_code_button">QR kód megjelenítése ezen az eszközön</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Válaszd ezt: „QR kód beolvasása”</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Válaszd ezt: „Belépés QR kóddal”</string>
+    <string name="qr_code_login_new_device_instruction_3">Válaszd ezt: „QR kód megjelenítése ezen az eszközön”</string>
+    <string name="qr_code_login_new_device_instruction_2">Menj a Beállítások -&gt; Biztonság és Adatvédelem -&gt; Minden munkamenet megjelenítése menübe</string>
+    <string name="qr_code_login_new_device_instruction_1">Nyisd meg a(z) ${app_name} alkalmazást a másik eszközön</string>
+    <string name="qr_code_login_header_failed_denied_description">A kérést elutasították a másik eszközön.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Az összekötés az elvárt időn belül nem fejeződött be.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Összekötés ezzel az eszközzel nem támogatott.</string>
+    <string name="qr_code_login_header_failed_title">Kapcsolat sikertelen</string>
+    <string name="qr_code_login_header_connected_title">Biztonságos kapcsolat beállítva</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">A kijelentkezett eszközzel olvasd be a QR kódot alább.</string>
+    <string name="qr_code_login_header_show_qr_code_title">Belépés QR kóddal</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Használd a kamerát ezen az eszközön a másik eszközödön megjelenő QR kód beolvasására:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR kód beolvasása</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Belépés QR kóddal</string>
+    <string name="login_scan_qr_code">QR kód beolvasása</string>
 </resources>

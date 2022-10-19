@@ -17,8 +17,9 @@
 package im.vector.app.features.settings.devices.v2.overview
 
 import android.os.SystemClock
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
@@ -29,7 +30,9 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeVerificationService
+import im.vector.app.test.fixtures.PusherFixture.aPusher
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
@@ -67,19 +70,23 @@ private const val A_PASSWORD = "password"
 class SessionOverviewViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = testDispatcher)
+    val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val args = SessionOverviewArgs(
             deviceId = A_SESSION_ID_1
     )
+    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
-    private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val signoutSessionUseCase = mockk<SignoutSessionUseCase>()
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
+    private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -91,6 +98,7 @@ class SessionOverviewViewModelTest {
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
+            togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
     )
 
     @Before
@@ -108,8 +116,14 @@ class SessionOverviewViewModelTest {
     }
 
     @Test
-    fun `given the viewModel has been initialized then viewState is updated with session info and current session verification status`() {
-        // Given
+    fun `given the viewModel has been initialized then pushers are refreshed`() {
+        createViewModel()
+
+        fakeActiveSessionHolder.fakeSession.pushersService().verifyRefreshPushers()
+    }
+
+    @Test
+    fun `given the viewModel has been initialized then viewState is updated with session info`() {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         givenCurrentSessionIsTrusted()
@@ -117,12 +131,11 @@ class SessionOverviewViewModelTest {
                 deviceId = A_SESSION_ID_1,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
+                notificationsEnabled = true,
         )
 
-        // When
         val viewModel = createViewModel()
 
-        // Then
         viewModel.test()
                 .assertLatestState { state -> state == expectedState }
                 .finish()
@@ -214,6 +227,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
+                notificationsEnabled = true,
         )
 
         // When
@@ -250,6 +264,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
+                notificationsEnabled = true,
         )
         fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
 
@@ -284,6 +299,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
+                notificationsEnabled = true,
         )
         fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
@@ -446,5 +462,27 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.roomEncryptionTrustLevel } returns RoomEncryptionTrustLevel.Trusted
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_2) } returns flowOf(deviceFullInfo)
+    }
+
+    @Test
+    fun `when viewModel init, then observe pushers and emit to state`() {
+        val pushers = listOf(aPusher(deviceId = A_SESSION_ID_1))
+        fakeActiveSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
+
+        val viewModel = createViewModel()
+
+        viewModel.test()
+                .assertLatestState { state -> state.notificationsEnabled }
+                .finish()
+    }
+
+    @Test
+    fun `when handle TogglePushNotifications, then execute use case and update state`() {
+        val viewModel = createViewModel()
+
+        viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
+
+        togglePushNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
+        viewModel.test().assertLatestState { state -> state.notificationsEnabled }.finish()
     }
 }

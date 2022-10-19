@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
@@ -24,7 +25,7 @@ object TimelineDisplayableEvents {
     /**
      * All types we have an item to build with. Every type not defined here will be shown as DefaultItem if forced to be shown, otherwise will be hidden.
      */
-    val DISPLAYABLE_TYPES = listOf(
+    val DISPLAYABLE_TYPES: List<String> = listOf(
             EventType.MESSAGE,
             EventType.STATE_ROOM_WIDGET_LEGACY,
             EventType.STATE_ROOM_WIDGET,
@@ -51,7 +52,11 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_JOIN_RULES,
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL,
-    ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO + EventType.BEACON_LOCATION_DATA
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
+    ) +
+            EventType.POLL_START +
+            EventType.STATE_ROOM_BEACON_INFO +
+            EventType.BEACON_LOCATION_DATA
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {

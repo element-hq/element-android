@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/composerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <View
+        android:id="@+id/related_message_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?colorSurface"
+        app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/related_message_background_top_separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_list_separator"
+        app:layout_constraintEnd_toEndOf="@id/related_message_background"
+        app:layout_constraintStart_toStartOf="@id/related_message_background"
+        app:layout_constraintTop_toTopOf="@id/related_message_background" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageActionIcon"
+        app:layout_constraintEnd_toStartOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/composerRelatedMessageTitle"
+        tools:src="@sample/user_round_avatars" />
+
+    <TextView
+        android:id="@+id/composerRelatedMessageTitle"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/composerRelatedMessageCloseButton"
+        app:layout_constraintStart_toEndOf="@id/composerRelatedMessageAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/first_names" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageImage"
+        android:layout_width="100dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="6dp"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageTitle"
+        tools:ignore="MissingPrefix"
+        tools:src="@tools:sample/backgrounds/scenic"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/composerRelatedMessageContent"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="?vctr_message_text_color"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageImage"
+        tools:text="@tools:sample/lorem/random" />
+
+    <ImageView
+        android:id="@+id/composerRelatedMessageActionIcon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="38dp"
+        android:alpha="1"
+        android:importantForAccessibility="no"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageAvatar"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageAvatar"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageAvatar"
+        app:tint="?vctr_content_primary"
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_edit" />
+
+    <ImageButton
+        android:id="@+id/composerRelatedMessageCloseButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/action_cancel"
+        android:src="@drawable/ic_close_round"
+        app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorError"
+        tools:ignore="MissingPrefix" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/composer_preview_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="composerRelatedMessageContent,composerRelatedMessageActionIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/attachmentButton"
+        android:layout_width="@dimen/composer_attachment_size"
+        android:layout_height="@dimen/composer_attachment_size"
+        android:layout_margin="@dimen/composer_attachment_margin"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/option_send_files"
+        android:src="@drawable/ic_attachment"
+        app:layout_constraintBottom_toBottomOf="@id/sendButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_goneMarginBottom="57dp"
+        tools:ignore="MissingPrefix" />
+
+    <FrameLayout
+        android:id="@+id/composerEditTextOuterBorder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:minHeight="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/bg_composer_rich_edit_text_single_line"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
+        app:layout_constraintBottom_toTopOf="@id/sendButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <io.element.android.wysiwyg.EditorEditText
+        android:id="@+id/composerEditText"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/room_message_placeholder"
+        android:nextFocusLeft="@id/composerEditText"
+        android:nextFocusUp="@id/composerEditText"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
+        tools:text="@tools:sample/lorem/random" />
+
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="56dp"
+        android:layout_height="@dimen/composer_min_height"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/bg_send"
+        android:contentDescription="@string/action_send"
+        android:scaleType="center"
+        android:src="@drawable/ic_send"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
+
+    <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_constraintStart_toEndOf="@id/attachmentButton"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/richTextMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

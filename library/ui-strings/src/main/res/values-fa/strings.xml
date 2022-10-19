@@ -155,7 +155,7 @@
     <string name="notice_room_guest_access_can_join_by_you">به میهمانان اجازهٔ پیوستن به گروه دادید.</string>
     <string name="notice_room_guest_access_forbidden_by_you">میمهانان را از پیوستن به گروه بازداشتید.</string>
     <string name="notice_end_to_end_ok_by_you">رمزنگاری سرتاسری را روشن کردید.</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">رمزنگاری سرتاسری را روشن کردید (الگوریتم ناشناخته %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">رمزنگاری سرتاسری را روشن کردید (الگوریتم تشخیص‌داده‌نشده %1$s).</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">مهمان‌ها را از پیوستن به اتاق بازداشتید.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s مهمان‌ها را از پیوستن به اتاق بازداشت.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">به مهمان‌ها اجازه دادید به این‌جا بپیوندند.</string>
@@ -659,7 +659,7 @@
     <string name="settings_discovery_manage">مدیریت تنظیمات کشفتان.</string>
     <string name="settings_unignore_user">نمایش همهٔ پیام‌ها از %s؟</string>
     <string name="settings_emails_and_phone_numbers_title">رایانامه‌ها و شماره تلفن‌ها</string>
-    <string name="settings_emails_and_phone_numbers_summary">مدیریت رایانامه‌ها و شماره تلفن‌های پیوسته به حساب ماتریکستان</string>
+    <string name="settings_emails_and_phone_numbers_summary">مدیریت نشانی‌های رایانامه و شماره تلفن‌های پیوسته به حساب ماتریکستان</string>
     <string name="media_saving_period_3_days">۳ روز</string>
     <string name="media_saving_period_1_week">۱ هفته</string>
     <string name="media_saving_period_1_month">۱ ماه</string>
@@ -822,7 +822,7 @@
     <string name="add_identity_server">پیکربندی کارساز هویت</string>
     <string name="change_identity_server">تغییر کارساز هویت</string>
     <string name="settings_discovery_emails_title">نشانی‌های رایانامهٔ قابل‌کشف</string>
-    <string name="settings_discovery_no_mails">گزینه‌های کشف به محض افزودن یک رایانامه، ظاهر خواهند شد.</string>
+    <string name="settings_discovery_no_mails">گزینه‌های کشف به محض افزودن یک نشانی رایانامه، ظاهر خواهند شد.</string>
     <string name="settings_discovery_no_msisdn">گزینه‌های کشف به محض افزودن یک شماره تلفن، ظاهر خواهند شد.</string>
     <string name="settings_discovery_msisdn_title">شماره تلفن‌های قابل‌کشف</string>
     <string name="labs_allow_extended_logging">به کار انداختن گزارش‌های پرگو.</string>
@@ -1234,7 +1234,7 @@
     <string name="error_threepid_auth_failed">مطمئن شوید لینک فعال‌سازی‌ای را که به ایمیل شما ارسال شده، باز کرده‌اید.</string>
     <string name="settings_remove_three_pid_confirmation_content">برداشتن %s؟</string>
     <string name="settings_phone_numbers">شماره تلفن‌ها</string>
-    <string name="settings_emails_empty">هیچ رایانامه‌ای به حسابتان افزوده نشده</string>
+    <string name="settings_emails_empty">هیچ نشانی رایانامه‌ای به حسابتان افزوده نشده</string>
     <string name="settings_emails">نشانی‌های رایانامه</string>
     <string name="settings_phone_number_empty">هیچ شماره تلفنی به حسابتان افزوده نشده</string>
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
@@ -1397,7 +1397,7 @@
     <string name="login_signup_to">ثبت نام در %1$s</string>
     <string name="login_msisdn_error_other">شماره تلفن نامعتبر است. لطفا آن را بررسی کنید</string>
     <string name="login_msisdn_confirm_notice">ما یک کد فعال‌سازی به %1$s ارسال کردیم. لطفا آن را وارد کنید.</string>
-    <string name="login_set_email_notice">برای بازیابی حساب خود یک ایمیل تنظیم کنید. بعداً، در صورتی که تمایل داشتید می‌توانید به افراد اجازه دهید با ایمیل، شما را پیدا کنند.</string>
+    <string name="login_set_email_notice">برای بازیابی حسابتان، نشانی رایانامه‌ای تنظیم کنید. بعداً می‌توانید بگذارید افرادی که می‌شناسید، با این نشانی بیابندتان.</string>
     <string name="login_set_msisdn_notice">یک شماره تلفن تنظیم کنید تا در صورتی که تمایل دارید، به افراد اجازه پیدا کردن شما را با استفاده از آن بدهد.</string>
     <string name="login_reset_password_cancel_confirmation_content">گذرواژه شما هنوز تغییر نکرده‌است.
 \n
@@ -1407,12 +1407,12 @@
     <string name="login_reset_password_mail_confirmation_notice_2">برای تایید گذرواژه جدید لینک ارسالی را باز کرده، سپس روی متن زیر کلیک کنید.</string>
     <string name="login_reset_password_mail_confirmation_notice">یک ایمیل تائید به %1$s ارسال شد.</string>
     <string name="login_reset_password_mail_confirmation_title">صندوق ایمیل خود را بررسی کنید</string>
-    <string name="login_reset_password_error_not_found">این ایمیل به هیچ حسابی متصل نشده‌است</string>
+    <string name="login_reset_password_error_not_found">این نشانی رایانامه به هیچ حسابی پیوند داده نشده</string>
     <string name="login_reset_password_warning_content">با تغییر گذرواژه ، کلیدهای رمزگذاری سرتاسر در تمام نشست‌های شما تغییر کرده و تاریخچه گفتگوی رمزشده‌ی شما غیرقابل خواندن می‌شود. قبل از تغییر گذرواژه، کلید امنیتی یا کلید پشتیبان را وارد کرده و یا کلیدهای اتاق خود را از نشست دیگری استخراج کنید.</string>
     <string name="login_reset_password_submit">بعدی</string>
     <string name="login_reset_password_notice">برای تأیید تنظیم گذرواژه‌ی جدید ، یک ایمیل تأیید به آدرس ایمیل شما ارسال خواهد شد.</string>
     <string name="login_reset_password_on">بازنشانی گذرواژه در %1$s</string>
-    <string name="login_login_with_email_error">این ایمیل به هیچ حسابی مرتبط نیست.</string>
+    <string name="login_login_with_email_error">این نشانی رایانامه به هیچ حسابی مرتبط نیست.</string>
     <string name="login_registration_not_supported">برنامه قادر به ایجاد حساب در این سرور نیست.
 \n
 \nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟</string>
@@ -1427,7 +1427,7 @@
     <string name="login_server_text">درست مانند ایمیل، حساب‌های کاربری یک خانه دارند؛ اگرچه می توانید با هر کسی که دوست دارید، صحبت کنید</string>
     <string name="login_server_title">کارسازی برگزینید</string>
     <string name="login_splash_submit">شروع کنید</string>
-    <string name="login_splash_text3">تجارب خود را گسترش داده و شخصی‌سازی کنید</string>
+    <string name="login_splash_text3">تجربه‌هایتان را گسترش داده و شخصی‌سازی کنید</string>
     <string name="login_splash_text2">گفتگوهای خصوصی خود را با رمزگذاری محافظت کنید</string>
     <string name="login_splash_text1">با افراد به صورت مستقیم و یا در قالب گروه گپ بزنید</string>
     <string name="login_splash_title">صاحب گفتگوهای خود باشید.</string>
@@ -1484,18 +1484,18 @@
     <string name="settings_discovery_please_enter_server">لطفاً نشانی کارساز هویت را وارد کنید</string>
     <string name="settings_discovery_bad_identity_server">نتوانست به کارساز هویت وصل شود</string>
     <string name="settings_discovery_enter_identity_server">یک نشانی کارساز هویت وارد کنید</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">ما یک ایمیل تأیید به %s ارسال کردیم، ابتدا ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
-    <string name="settings_discovery_confirm_mail">ما یک ایمیل تأیید به %s ارسال کردیم، ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">رایانامه‌ای به %s فرستادیم. لطفاً نخست رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
+    <string name="settings_discovery_confirm_mail">رایانامه‌ای به %s فرستادیم. رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
     <string name="settings_discovery_disconnect_identity_server_info">قطع ارتباط با سرور هویت‌سنجی به این معنی است که توسط کاربران دیگر قابل شناسایی نخواهید بود و نمی توانید دیگران را از طریق ایمیل یا تلفن دعوت کنید.</string>
     <string name="settings_discovery_identity_server_info_none">در حال استفاده از کارساز هویتی نیستید. برای کشق و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید، یک کارساز هویت در زیر پیکربندی کنید.</string>
     <string name="settings_discovery_identity_server_info">دارید برای کشف و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید از %1$s استفاده می‌کنید.</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت ژتون</string>
     <string name="push_gateway_item_format">فرمت:</string>
     <string name="push_gateway_item_url">آدرس:</string>
-    <string name="push_gateway_item_device_name">نام نشست:</string>
-    <string name="push_gateway_item_app_display_name">نام برنامه:</string>
-    <string name="push_gateway_item_push_key">کلید push:</string>
-    <string name="push_gateway_item_app_id">شناسه برنامه:</string>
+    <string name="push_gateway_item_device_name">نام نمایشی نشست:</string>
+    <string name="push_gateway_item_app_display_name">نام نمایشی کاره:</string>
+    <string name="push_gateway_item_push_key">کلید ارسال:</string>
+    <string name="push_gateway_item_app_id">شناسهٔ کاره:</string>
     <string name="settings_push_gateway_no_pushers">هیچ push gateway‌ای ثبت نشده است</string>
     <string name="settings_push_rules_no_rules">هیچ قانونی برای push تعریف نشده است</string>
     <string name="navigate_to_room_when_already_in_the_room">شما در حال مشاهده این اتاق هستید!</string>
@@ -1680,7 +1680,7 @@
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">عبارت رمزی که فقط خودتان می‌دانید را وارد کرده و کلیدی برای پشتیبان تولید کنید.</string>
     <string name="identity_server_set_alternative_notice">به هنوتم جایگزین، می‌توانید نشامی هر کارساز هویت دیگری را وارد کنید</string>
     <string name="identity_server_set_default_notice">کارساز خانگیتان (%1$s) پیشنهاد استفاده از %2$s برای کارساز هویتتان را می‌دهد</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، المنت تنها از فرستادن شماره تلفن و رایانامه‌های کاربری در هم ریخته پشتیبانی می‌کند.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، ${app_name} تنها از فرستادن شماره‌های تلفن و نشانی‌های رایانامهٔ کاربری در هم ریخته پشتیبانی می‌کند.</string>
     <string name="identity_server_error_outdated_home_server">این عملیات ممکن نیست. کارساز خانگی منقضی شده است.</string>
     <string name="invite_users_to_room_failure">نتوانستیم کاربران را دعوت کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
     <string name="create_room_dm_failure">نتوانستیم پیامتان را ایجاد کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
@@ -1747,7 +1747,7 @@
         <item quantity="one">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
         <item quantity="other">%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
     </plurals>
-    <string name="settings_discovery_consent_notice_on">رضاییتان را برای فرستادن رایانامه‌ها و شماره‌تلفن‌ها به این کارساز هویت به منظور کشف دیگر کاربران از آشنایانتان، داده‌اید.</string>
+    <string name="settings_discovery_consent_notice_on">رضاییتان را برای فرستادن نشانی‌های رایانامه و شماره‌های تلفن به این کارساز هویت به منظور کشف دیگر کاربران از آشنایانتان، داده‌اید.</string>
     <string name="room_preview_not_found">در حال حاضر این اتاق قابل دسترسی نیست.
 \nبعدا دوباره تلاش کنید، یا از مدیر اتاق بخواهید بررسی کند که آیا دسترسی دارید.</string>
     <string name="room_alias_action_publish">انتشار این نشانی</string>
@@ -2141,7 +2141,7 @@
     <string name="settings_notification_mentions_and_keywords">اشاره‌ها و کلیدواژگان</string>
     <string name="settings_notification_default">آگاهی‌های پیش‌گزیده</string>
     <string name="link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
-    <string name="link_this_email_settings_link">این رایانامه را به حسابتان پیوند دهید</string>
+    <string name="link_this_email_settings_link">پیوند این نشانی رایانامه به حسابتان</string>
     <string name="this_invite_to_this_space_was_sent">این دعوت به این فضا به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="this_invite_to_this_room_was_sent">این دعوت به این اتاق به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="upgrade_public_room_from_to">این اتاق را از %1$s به %2$s ارتقا خواهید داد.</string>
@@ -2211,7 +2211,7 @@
     <string name="room_settings_space_access_title">دسترسی فضا</string>
     <string name="room_settings_access_rules_pref_dialog_title">چه کسی می‌تواند دسترسی داشته باشد؟</string>
     <string name="settings_notification_emails_enable_for_email">به کار انداختن آگاهی‌های رایانامه‌ای برای %s</string>
-    <string name="settings_notification_emails_no_emails">برای دریافت رایانامه با آگاهی، لطفاً رایانامه‌ای را به حساب ماتریکستان وصل کنید</string>
+    <string name="settings_notification_emails_no_emails">برای دریافت رایانامه با آگاهی، لطفاً نشانی رایانامه‌ای را به حساب ماتریکستان وصل کنید</string>
     <string name="settings_notification_emails_category">آگاهی رایانامه‌ای</string>
     <string name="room_permissions_upgrade_the_space">ارتقای فضا</string>
     <string name="room_permissions_change_space_name">تغییر نام فضا</string>
@@ -2258,13 +2258,13 @@
     <string name="create_poll_question_title">پرسش یا موضوع نظرسنجی</string>
     <string name="create_poll_title">ایجاد نظرسنجی</string>
     <string name="attachment_type_poll">نظرسنجی</string>
-    <string name="identity_server_consent_dialog_title_2">فرستادن رایانامه‌ّا و شماره‌های تلفن به %s</string>
+    <string name="identity_server_consent_dialog_title_2">فرستادن نشانی‌های رایانامه و شماره‌های تلفن به %s</string>
     <string name="settings_discovery_consent_notice_off_2">آشنایانتان خصوصی هستند. برای کشف کاربران از آشنایانتان، نیاز به اجازه‌تان برای فرستادن اطّلاعات آشنا به کارساز هویتتان داریم.</string>
     <string name="shortcut_disabled_reason_sign_out">نشست خارج شده است!</string>
     <string name="shortcut_disabled_reason_room_left">اتاق ترک شده است!</string>
     <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
     <string name="action_not_now">اکنون نه</string>
-    <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
+    <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (نشانی‌های رایانامه و شماره‌های تلفن) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
     <string name="analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
 \n
 \nمی‌توانید از %s قوانینمان را بخوانید.</string>
@@ -2600,7 +2600,6 @@
 \nشاید این کارساز خانگی برای نمایش نقشه‌ها پیکربندی نشده باشد.</string>
     <string name="a11y_open_settings">گشودن تنظیمات</string>
     <string name="all_chats">تمامی گپ‌ها</string>
-    <string name="device_manager_settings_active_sessions_show_all">نمایش تمامی نشست‌ها (ن۲، دح‌ت)</string>
     <string name="device_manager_sessions_other_description">برای امنیت بیش‌تر، نشست‌هایتان را تأیید و از هر نشستی که تشخیصش نمی‌دهید یا دیگر استفاده نمی‌کنید خارج شوید.</string>
     <string name="device_manager_sessions_other_title">دیگر نشست‌ها</string>
     <string name="settings_sessions_list">نشست‌ها</string>
@@ -2705,4 +2704,26 @@
         <item quantity="one">غیرفعّال برای ۱ روز یا بیش‌تر</item>
         <item quantity="other">غیرفعّال برای %1$d روز یا بیش‌تر</item>
     </plurals>
+    <string name="device_manager_other_sessions_description_unverified_current_session">تأیید نشده · نشست کنونیتان</string>
+    <string name="key_authenticity_not_guaranteed">اعتبار این پیام رمز شده نمی‌تواند روی این افزاره تأیید شود.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">در این اتاق، هرگز پیام‌های رمز شده به نشست‌های تأیید نشده فرستاده نشود.</string>
+    <string name="device_manager_learn_more_session_rename_title">تغییر نام نشست‌ها</string>
+    <string name="device_manager_learn_more_sessions_verified_title">نشست‌های تأییدشده</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">نشست‌های تأییدنشده</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">نشست‌های غیرفعّال</string>
+    <string name="device_manager_session_rename_warning">لطفاً آگاه باشید که نام‌های نشست برای افرادی که با آن‌ها در تماسید نیز نشان داده می‌شود.</string>
+    <string name="device_manager_session_rename_description">نام‌های نشست شخصی به نظم دادن آسان‌تر افزاره‌هایتان کمک می‌کند.</string>
+    <string name="device_manager_session_rename_edit_hint">نام نشست</string>
+    <string name="device_manager_session_rename">تغییر نام نشست</string>
+    <string name="device_manager_session_overview_signout">خروج از این نشست</string>
+    <string name="settings_security_incognito_keyboard_title">صفحه‌کلید ناشناس</string>
+    <string name="command_description_devtools">گشودن صفحهٔ ابزارهای توسعه‌دهنده</string>
+    <string name="labs_enable_deferred_dm_title">به کار انداختن پیام‌های مستقیم تعویقی</string>
+    <string name="action_got_it">گرفتم</string>
+    <string name="tooltip_attachment_voice_broadcast">آغاز یک پخش همگانی صوتی</string>
+    <string name="command_description_table_flip">(╯°□°）╯︵ ┻━┻ را به ابتدای پیام متنی خام می‌افزاید</string>
+    <string name="attachment_type_voice_broadcast">پخش همگانی صدا</string>
+    <string name="grant_permission">اعطای دسترسی</string>
+    <string name="labs_enable_rich_text_editor_summary">ویرایشگر متن غنی را بیازمایید (حالت متن خام به زودی)</string>
+    <string name="labs_enable_rich_text_editor_title">به کار انداختن ویرایشگر متن غنی</string>
 </resources>

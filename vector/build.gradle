@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'dagger.hilt.android.plugin'
 
 if (project.hasProperty("coverage")) {
@@ -27,6 +28,7 @@ project.android.buildTypes.all { buildType ->
 initScreenshotTests(project)
 
 android {
+    namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -52,6 +54,8 @@ android {
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     testOptions {
@@ -103,6 +107,7 @@ android {
     }
 }
 dependencies {
+
     implementation project(":vector-config")
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
@@ -142,6 +147,9 @@ dependencies {
     // Opus Encoder
     implementation libs.element.opusencoder
 
+    // WYSIWYG Editor
+    implementation libs.element.wysiwyg
+
     // Log
     api libs.jakewharton.timber
 
@@ -156,7 +164,7 @@ dependencies {
 
     api libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
-    kapt libs.airbnb.epoxyProcessor
+    ksp libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     api libs.airbnb.mavericks
 
@@ -168,9 +176,6 @@ dependencies {
 
     // Paging
     implementation libs.androidx.pagingRuntimeKtx
-
-    // Functional Programming
-    implementation libs.arrow.core
 
     // Pref
     api libs.androidx.preferenceKtx
@@ -295,6 +300,7 @@ dependencies {
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
+    testImplementation libs.androidx.coreTesting
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }

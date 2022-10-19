@@ -26,7 +26,6 @@ import androidx.core.app.Person
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.time.Clock
@@ -59,11 +58,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
-    @Inject
-    lateinit var activeSessionHolder: ActiveSessionHolder
-
-    @Inject
-    lateinit var clock: Clock
+    @Inject lateinit var clock: Clock
 
     private lateinit var buffer: ByteArray
 

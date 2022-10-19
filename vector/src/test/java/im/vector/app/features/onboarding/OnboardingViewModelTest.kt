@@ -18,8 +18,9 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import android.os.Build
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
@@ -50,6 +51,7 @@ import im.vector.app.test.fixtures.a401ServerError
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.fixtures.anUnrecognisedCertificateError
 import im.vector.app.test.test
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
@@ -96,7 +98,7 @@ private val SSO_REGISTRATION_DESCRIPTION = AuthenticationDescription.Register(Au
 class OnboardingViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val fakeUri = FakeUri()
     private val fakeContext = FakeContext()
@@ -111,6 +113,7 @@ class OnboardingViewModelTest {
     private val fakeStartAuthenticationFlowUseCase = FakeStartAuthenticationFlowUseCase()
     private val fakeHomeServerHistoryService = FakeHomeServerHistoryService()
     private val fakeLoginWizard = FakeLoginWizard()
+    private val fakeConfigureAndStartSessionUseCase = mockk<ConfigureAndStartSessionUseCase>()
 
     private var initialState = OnboardingViewState()
     private lateinit var viewModel: OnboardingViewModel
@@ -684,7 +687,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_USERNAME)) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState("@fake:server.fake", A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -1093,6 +1096,7 @@ class OnboardingViewModelTest {
                 FakeVectorOverrides(),
                 fakeRegistrationActionHandler.instance,
                 TestBuildVersionSdkIntProvider().also { it.value = Build.VERSION_CODES.O },
+                fakeConfigureAndStartSessionUseCase,
         ).also {
             viewModel = it
             initialState = state
@@ -1132,7 +1136,7 @@ class OnboardingViewModelTest {
     private fun givenInitialisesSession(session: Session) {
         fakeActiveSessionHolder.expectSetsActiveSession(session)
         fakeAuthenticationService.expectReset()
-        fakeSession.expectStartsSyncing()
+        fakeSession.expectStartsSyncing(fakeConfigureAndStartSessionUseCase)
     }
 
     private fun givenRegistrationResultFor(action: RegisterAction, result: RegistrationActionHandler.Result) {
@@ -1192,7 +1196,8 @@ class OnboardingViewModelTest {
     }
 }
 
-private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
+private fun HomeServerCapabilities.toPersonalisationState(userId: String, displayName: String? = null) = PersonalizationState(
+        userId = userId,
         supportsChangingDisplayName = canChangeDisplayName,
         supportsChangingProfilePicture = canChangeAvatar,
         displayName = displayName,

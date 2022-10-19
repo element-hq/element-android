@@ -96,31 +96,27 @@ class SwipeToDismissHandler(
                 .setDuration(ANIMATION_DURATION)
                 .setInterpolator(AccelerateInterpolator())
                 .setUpdateListener { onSwipeViewMove(swipeView.translationY, translationLimit) }
-                .setAnimatorListener(onAnimationEnd = {
+                .setAnimatorEndListener {
                     if (translationTo != 0f) {
                         onDismiss()
                     }
 
                     // remove the update listener, otherwise it will be saved on the next animation execution:
                     swipeView.animate().setUpdateListener(null)
-                })
+                }
                 .start()
     }
 }
 
-internal fun ViewPropertyAnimator.setAnimatorListener(
-        onAnimationEnd: ((Animator?) -> Unit)? = null,
-        onAnimationStart: ((Animator?) -> Unit)? = null
-) = this.setListener(
+private fun ViewPropertyAnimator.setAnimatorEndListener(
+        onAnimationEnd: () -> Unit,
+) = setListener(
         object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                onAnimationEnd?.invoke(animation)
+            override fun onAnimationEnd(animation: Animator) {
+                onAnimationEnd()
             }
+        }
+)
 
-            override fun onAnimationStart(animation: Animator?) {
-                onAnimationStart?.invoke(animation)
-            }
-        })
-
-internal val View?.hitRect: Rect
-    get() = Rect().also { this?.getHitRect(it) }
+private val View.hitRect: Rect
+    get() = Rect().also { getHitRect(it) }

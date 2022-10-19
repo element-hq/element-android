@@ -53,7 +53,7 @@ class OtherSessionsController @Inject constructor(
             data.forEach { device ->
                 val dateFormatKind = if (device.isInactive) DateFormatKind.TIMELINE_DAY_DIVIDER else DateFormatKind.DEFAULT_DATE_AND_TIME
                 val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, dateFormatKind)
-                val description = calculateDescription(device, formattedLastActivityDate)
+                val description = buildDescription(device, formattedLastActivityDate)
                 val descriptionColor = if (device.isCurrentDevice) {
                     host.colorProvider.getColorFromAttribute(R.attr.colorError)
                 } else {
@@ -64,7 +64,7 @@ class OtherSessionsController @Inject constructor(
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
-                    deviceType(DeviceType.UNKNOWN) // TODO. We don't have this info yet. Update accordingly.
+                    deviceType(device.deviceExtendedInfo.deviceType)
                     roomEncryptionTrustLevel(device.roomEncryptionTrustLevel)
                     sessionName(device.deviceInfo.displayName)
                     sessionDescription(description)
@@ -77,7 +77,7 @@ class OtherSessionsController @Inject constructor(
         }
     }
 
-    private fun calculateDescription(device: DeviceFullInfo, formattedLastActivityDate: String): String {
+    private fun buildDescription(device: DeviceFullInfo, formattedLastActivityDate: String): String {
         return when {
             device.isInactive -> {
                 stringProvider.getQuantityString(
@@ -92,6 +92,9 @@ class OtherSessionsController @Inject constructor(
             }
             device.isCurrentDevice -> {
                 stringProvider.getString(R.string.device_manager_other_sessions_description_unverified_current_session)
+            }
+            device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Default -> {
+                stringProvider.getString(R.string.device_manager_session_last_activity, formattedLastActivityDate)
             }
             else -> {
                 stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)

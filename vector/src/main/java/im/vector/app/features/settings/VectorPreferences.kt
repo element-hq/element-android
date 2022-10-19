@@ -71,6 +71,10 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
         const val SETTINGS_LABS_NEW_APP_LAYOUT_KEY = "SETTINGS_LABS_NEW_APP_LAYOUT_KEY"
         const val SETTINGS_LABS_DEFERRED_DM_KEY = "SETTINGS_LABS_DEFERRED_DM_KEY"
+        const val SETTINGS_LABS_RICH_TEXT_EDITOR_KEY = "SETTINGS_LABS_RICH_TEXT_EDITOR_KEY"
+        const val SETTINGS_LABS_NEW_SESSION_MANAGER_KEY = "SETTINGS_LABS_NEW_SESSION_MANAGER_KEY"
+        const val SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY = "SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY"
+        const val SETTINGS_LABS_VOICE_BROADCAST_KEY = "SETTINGS_LABS_VOICE_BROADCAST_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -1179,7 +1183,30 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_DEFERRED_DM_KEY, getDefault(R.bool.settings_labs_deferred_dm_default))
     }
 
+    /**
+     * Indicates whether or not new session manager screens are enabled.
+     */
+    fun isNewSessionManagerEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_NEW_SESSION_MANAGER_KEY, getDefault(R.bool.settings_labs_new_session_manager_default))
+    }
+
+    /**
+     * Indicates whether or not client info recording is enabled.
+     */
+    fun isClientInfoRecordingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY, getDefault(R.bool.settings_labs_client_info_recording_default))
+    }
+
     fun showLiveSenderInfo(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO, getDefault(R.bool.settings_timeline_show_live_sender_info_default))
+    }
+
+    fun isRichTextEditorEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_RICH_TEXT_EDITOR_KEY, getDefault(R.bool.settings_labs_rich_text_editor_default))
+    }
+
+    fun isVoiceBroadcastEnabled(): Boolean {
+        return vectorFeatures.isVoiceBroadcastEnabled() &&
+                defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
     }
 }

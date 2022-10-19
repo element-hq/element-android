@@ -1,35 +1,34 @@
 ext.versions = [
 
         'minSdk'            : 21,
-        'compileSdk'        : 32,
-        'targetSdk'         : 32,
+        'compileSdk'        : 33,
+        'targetSdk'         : 33,
         'sourceCompat'      : JavaVersion.VERSION_11,
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.2.2"
+def gradle = "7.3.1"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.7.20"
 def kotlinCoroutines = "1.6.4"
 def dagger = "2.44"
 def appDistribution = "16.0.0-beta04"
 def retrofit = "2.9.0"
-def arrow = "0.8.2"
 def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.164.0"
-def epoxy = "4.6.2"
-def mavericks = "2.7.0"
-def glide = "4.14.1"
+def flipper = "0.171.1"
+def epoxy = "5.0.0"
+def mavericks = "3.0.1"
+def glide = "4.14.2"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
 
-def sentry = "6.4.1"
+def sentry = "6.4.3"
 
 def fragment = "1.5.3"
 
@@ -51,12 +50,12 @@ ext.libs = [
                 'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
         ],
         androidx    : [
-                'activity'                : "androidx.activity:activity:1.5.1",
+                'activity'                : "androidx.activity:activity-ktx:1.6.0",
                 'appCompat'               : "androidx.appcompat:appcompat:1.5.1",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
-                'core'                    : "androidx.core:core-ktx:1.8.0",
+                'core'                    : "androidx.core:core-ktx:1.9.0",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.2.1",
-                'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.3",
+                'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.4",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:$fragment",
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
@@ -87,7 +86,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.56"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.12.57"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -102,6 +101,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.2.1"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
@@ -113,10 +113,6 @@ ext.libs = [
         ],
         rx          : [
                 'rxKotlin'               : "io.reactivex.rxjava2:rxkotlin:2.4.0"
-        ],
-        arrow       : [
-                'core'                   : "io.arrow-kt:arrow-core:$arrow",
-                'instances'              : "io.arrow-kt:arrow-instances-core:$arrow"
         ],
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",

@@ -58,7 +58,9 @@ data class OnboardingViewState(
         val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
 
         @PersistState
-        val personalizationState: PersonalizationState = PersonalizationState()
+        val personalizationState: PersonalizationState = PersonalizationState(),
+
+        val canLoginWithQrCode: Boolean = false,
 ) : MavericksState
 
 enum class OnboardingFlow {
@@ -78,10 +80,11 @@ data class SelectedHomeserverState(
 
 @Parcelize
 data class PersonalizationState(
+        val userId: String = "",
         val supportsChangingDisplayName: Boolean = false,
         val supportsChangingProfilePicture: Boolean = false,
         val displayName: String? = null,
-        val selectedPictureUri: Uri? = null
+        val selectedPictureUri: Uri? = null,
 ) : Parcelable {
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture

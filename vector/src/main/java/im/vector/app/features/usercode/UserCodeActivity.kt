@@ -151,7 +151,10 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     override fun onBackPressed() = withState(sharedViewModel) {
         when (it.mode) {
-            UserCodeState.Mode.SHOW -> super.onBackPressed()
+            UserCodeState.Mode.SHOW -> {
+                @Suppress("DEPRECATION")
+                super.onBackPressed()
+            }
             is UserCodeState.Mode.RESULT,
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }

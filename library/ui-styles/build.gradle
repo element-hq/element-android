@@ -21,6 +21,8 @@ plugins {
 
 android {
 
+    namespace "im.vector.lib.ui.styles"
+
     compileSdk versions.compileSdk
     defaultConfig {
         minSdk versions.minSdk

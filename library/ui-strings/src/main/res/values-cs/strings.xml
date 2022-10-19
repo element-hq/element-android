@@ -648,8 +648,8 @@
     <string name="encryption_import_room_keys">Import klíčů místností</string>
     <string name="encryption_import_room_keys_summary">Import klíčů z místního souboru</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Šifrovat pouze do ověřených relací</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílat šifrované zprávy do neověřených relací z této relace.</string>
     <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>
     <string name="encryption_information_unknown_ip">neznámá ip</string>
@@ -962,10 +962,10 @@
     <string name="settings_push_rules">Push pravidla</string>
     <string name="settings_push_rules_no_rules">Žádná push pravidla nejsou definována</string>
     <string name="settings_push_gateway_no_pushers">Žádné push brány nejsou registrovány</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">ID aplikace:</string>
+    <string name="push_gateway_item_push_key">Klíč push:</string>
+    <string name="push_gateway_item_app_display_name">Zobrazovaný název aplikace:</string>
+    <string name="push_gateway_item_device_name">Název relace:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formát:</string>
     <string name="preference_voice_and_video">Hlas a video</string>
@@ -1011,7 +1011,7 @@
     <string name="settings_discovery_no_msisdn">Volby pro nalezení se ukážou, jakmile doplníte telefonní číslo.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Odpojení od serveru identit bude znamenat, že Vás jiní uživatelé nebudou moci najít a Vy nebudete moci pozvat druhé pomocí emailu nebo telefonního čísla.</string>
     <string name="settings_discovery_msisdn_title">Telefonní čísla pro nalezení</string>
-    <string name="settings_discovery_confirm_mail">Poslali jsme Vám potvrzovací email na %s, podívejte se do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_discovery_confirm_mail">Poslali jsme vám email na %s, podívejte se do něj a klikněte na protvrzovací odkaz</string>
     <string name="settings_discovery_enter_identity_server">Zadejte URL serveru pro identity</string>
     <string name="settings_discovery_bad_identity_server">Nemohl jsem se spojit se serverem pro identity</string>
     <string name="settings_discovery_please_enter_server">Prosím, zadejte url serveru pro identity</string>
@@ -1079,12 +1079,12 @@
     <string name="no_ignored_users">Neignorujete žádné uživatele</string>
     <string name="help_long_click_on_room_for_more_options">Více možností po dlouhém stisku na místnost</string>
     <string name="room_join_rules_public">%1$s učinil místnost veřejnou pro kohokoli znalého odkazu.</string>
-    <string name="room_join_rules_invite">%1$s nastavil místnost jen pro pozvané.</string>
+    <string name="room_join_rules_invite">%1$s nastavil místnost jako pouze pro pozvané.</string>
     <string name="timeline_unread_messages">Nepřečtené zprávy</string>
     <string name="login_splash_title">Je to Vaše konverzace. Vlastněte ji.</string>
     <string name="login_splash_text1">Chatujte s lidmi přímo nebo ve skupinách</string>
     <string name="login_splash_text2">Udržujte konverzace soukromé pomocí šifrování</string>
-    <string name="login_splash_text3">Rozšiřte a upravte si svůj zážitek</string>
+    <string name="login_splash_text3">Rozšiřte a upravte si možnosti</string>
     <string name="login_splash_submit">Můžeme začít</string>
     <string name="login_server_title">Vybrat server</string>
     <string name="login_server_text">Jako email, účty mají jeden domov, ačkoli můžete mluvit s kýmkoli</string>
@@ -1136,7 +1136,7 @@
 \n
 \nZastavit proces změny hesla\?</string>
     <string name="login_set_email_title">Nastavit emailovou adresu</string>
-    <string name="login_set_email_notice">Nastavte emailovou adresu pro obnově svého účtu. Později můžete volitelně dovolit lidem, které znáte, aby Vás podle emailu nalezli.</string>
+    <string name="login_set_email_notice">Nastavte e-mailovou adresu pro obnovení účtu. Později můžete volitelně povolit svým známým, aby vás podle této adresy nalezli.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (volitelné)</string>
     <string name="login_set_email_submit">Dále</string>
@@ -1218,7 +1218,7 @@
     <string name="settings_developer_mode_fail_fast_summary">${app_name} může spadnout častěji, když se objeví neočekávané chyby</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
     <string name="create_room_encryption_title">Zapnout šifrování</string>
-    <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
+    <string name="create_room_encryption_description">Po zapnutí šifrování ho není možné vypnout.</string>
     <string name="login_error_threepid_denied">Vaše emailová doména není autorizována registrovat se na tomto serveru</string>
     <string name="verification_conclusion_warning">Nedůvěryhodné přihlášení</string>
     <string name="verification_sas_match">Shodují se</string>
@@ -1297,15 +1297,15 @@
     <string name="verification_conclusion_ok_self_notice">Vaše nová relace je nyní ověřena. Má přístup k Vašim zašifrovaným zprávám a ostatní uživatelé ji uvidi jako důvěryhodnou.</string>
     <string name="encryption_information_cross_signing_state">Křížové podepisování</string>
     <string name="encryption_information_dg_xsigning_complete">Křížové podpisování je zapnuto.
-\nPrivátní klíče v zařízení.</string>
+\nSoukromé klíče v zařízení.</string>
     <string name="encryption_information_dg_xsigning_trusted">Křížové podpisování je zapnuto
 \nKlíče jsou důvěryhodné.
-\nPrivátní klíče nejsou známy</string>
+\nSoukromé klíče nejsou známy</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Křížové podpisování je zapnuto.
 \nKlíče nejsou důvěryhodné</string>
     <string name="encryption_information_dg_xsigning_disabled">Křížové podpisování není zapnuto</string>
     <string name="settings_active_sessions_list">Aktivní relace</string>
-    <string name="settings_active_sessions_show_all">Ukázat všechny relace</string>
+    <string name="settings_active_sessions_show_all">Zobrazit všechny relace</string>
     <string name="settings_active_sessions_manage">Správa relací</string>
     <string name="settings_active_sessions_signout_device">Odhlásit se z této relace</string>
     <string name="settings_failed_to_get_crypto_device_info">Žádná kryptografická informace není k dispozici</string>
@@ -1440,7 +1440,7 @@
     <string name="event_redacted">Zpráva smazána</string>
     <string name="settings_show_redacted">Ukázat odstraněné zprávy</string>
     <string name="settings_show_redacted_summary">Zobrazit zástupný symbol za odstraněné zprávy</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Poslali jsme Vám potvrzovací email na %s, podívejte se nejdříve do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Poslali jsme vám email na %s, podívejte se nejdříve do emailu a klikněte na protvrzovací odkaz</string>
     <string name="settings_text_message_sent_wrong_code">Ověřovací kód není správný.</string>
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_media_no_result">V této místnosti nejsou žádná média</string>
@@ -2019,20 +2019,20 @@
     <string name="create_space_error_empty_field_space_name">Dejte prostoru jméno a pokračujte.</string>
     <string name="create_spaces_details_public_header">Doplňte nějaké podrobnosti, aby zaujal. Můžete je kdykoli změnit.</string>
     <string name="activity_create_space_title">Vytvořit prostor</string>
-    <string name="space_type_private_desc">Pouze na pozvání, nejlepší pro Vás nebo týmy</string>
-    <string name="space_type_private">Privátní</string>
+    <string name="space_type_private_desc">Pouze na pozvání, nejlepší pro vás nebo týmy</string>
+    <string name="space_type_private">Soukromý</string>
     <string name="space_type_public_desc">Otevřený pro všechny, nejlepší pro komunity</string>
     <string name="space_type_public">Veřejný</string>
-    <string name="create_spaces_private_teammates">Privátní prostor pro Vás a Vaše kolegy</string>
+    <string name="create_spaces_private_teammates">Soukromý prostor pro vás a vaše kolegy</string>
     <string name="create_spaces_me_and_teammates">Já a kolegové</string>
-    <string name="create_spaces_organise_rooms">Privátní prostor k organizaci Vašich místností</string>
+    <string name="create_spaces_organise_rooms">Soukromý prostor pro uspořádání vašich místností</string>
     <string name="create_spaces_just_me">Jen já</string>
     <string name="create_spaces_make_sure_access">Ujistěte se, že ti správní lidé mají přístup do %s.</string>
     <string name="create_spaces_who_are_you_working_with">S kým pracujete\?</string>
     <string name="create_spaces_join_info_help">Ke vstupu do existujícího prostoru potřebujete pozvání.</string>
     <string name="create_spaces_you_can_change_later">Můžete změnit později</string>
     <string name="create_spaces_choose_type_label">Jaký typ prostoru chcete vytvořit\?</string>
-    <string name="your_private_space">Váš privátní prostor</string>
+    <string name="your_private_space">Váš soukromý prostor</string>
     <string name="your_public_space">Váš veřejný prostor</string>
     <string name="add_space">Přidat prostor</string>
     <string name="command_description_leave_room">Opustit místnost s daným id (nebo nynější místnost pokud prázdné)</string>
@@ -2044,7 +2044,7 @@
     <string name="room_settings_room_access_public_description">Kdokoliv může místnost najít a připojit se do ní</string>
     <string name="room_settings_room_access_public_title">Veřejný</string>
     <string name="room_settings_room_access_private_description">Pouze pozvaní mohou místnost najít a vstoupit do ní</string>
-    <string name="room_settings_room_access_private_title">Privátní</string>
+    <string name="room_settings_room_access_private_title">Soukromý</string>
     <string name="room_settings_room_access_entry_unknown">Neznámé nastavení přístupu (%s)</string>
     <string name="room_settings_room_access_entry_knock">Každý může na místnost zaklepat, členové pak mohou přijmout či odmítnout</string>
     <string name="room_settings_guest_access_title">Dovolit hostům vstoupit</string>
@@ -2165,7 +2165,7 @@
     <string name="spaces_which_can_access">Prostory, které mají přístup</string>
     <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
-    <string name="room_settings_room_access_private_invite_only_title">Soukromý (pouze pro pozvané)</string>
+    <string name="room_settings_room_access_private_invite_only_title">Soukromý (jen pro pozvané)</string>
     <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
     <string name="settings_room_upgrades">Aktualizace místnosti</string>
     <string name="settings_messages_by_bot">Zprávy od bota</string>
@@ -2650,7 +2650,6 @@
 \nTento domovský server nemusí být nakonfigurován pro zobrazování map.</string>
     <string name="a11y_open_settings">Otevřít nastavení</string>
     <string name="all_chats">Všechny konverzace</string>
-    <string name="device_manager_settings_active_sessions_show_all">Zobrazit všechny relace (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.</string>
     <string name="device_manager_sessions_other_title">Ostatní relace</string>
     <string name="settings_sessions_list">Relace</string>
@@ -2764,4 +2763,100 @@
     <string name="labs_enable_deferred_dm_title">Povolit odložené přímé zprávy</string>
     <string name="labs_enable_new_app_layout_summary">Zjednodušený Element s volitelnými kartami</string>
     <string name="labs_enable_new_app_layout_title">Povolit nový vzhled</string>
+    <string name="device_manager_learn_more_session_rename">Ostatní uživatelé v přímých zprávách a místnostech, ke kterým se připojíte, si mohou prohlédnout úplný seznam vašich relací.
+\n
+\nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
+    <string name="device_manager_learn_more_session_rename_title">Přejmenování relací</string>
+    <string name="device_manager_learn_more_sessions_verified">Ověřené relace se přihlásily pomocí vašich přihlašovacích údajů a poté byly ověřeny buď pomocí vaší zabezpečené přístupové fráze, nebo křížovým ověřením.
+\n
+\nTo znamená, že uchovávají šifrovací klíče pro vaše předchozí zprávy a potvrzují ostatním uživatelům, se kterými komunikujete, že tyto relace jste skutečně vy.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Ověřené relace</string>
+    <string name="device_manager_learn_more_sessions_unverified">Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.
+\n
+\nMěli byste si být obzvláště jisti, že tyto relace rozpoznáte, protože by mohly představovat neoprávněné použití vašeho účtu.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Neověřené relace</string>
+    <string name="device_manager_learn_more_sessions_inactive">Neaktivní relace jsou relace, které jste po určitou dobu nepoužili, ale nadále dostávají šifrovací klíče.
+\n
+\nOdstranění neaktivních relací zvyšuje zabezpečení a výkon a usnadňuje identifikaci podezřelé nové relace.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Neaktivní relace</string>
+    <string name="device_manager_session_rename_warning">Uvědomte si, že jména relací jsou viditelná i pro osoby, se kterými komunikujete.</string>
+    <string name="device_manager_session_rename_description">Vlastní názvy relací vám pomohou snadněji rozpoznat vaše zařízení.</string>
+    <string name="device_manager_session_rename_edit_hint">Název relace</string>
+    <string name="device_manager_session_rename">Přejmenovat relaci</string>
+    <string name="device_manager_session_overview_signout">Odhlásit se z této relace</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Neověřeno · Vaše aktuální relace</string>
+    <string name="tooltip_attachment_voice_broadcast">Zahájit hlasové vysílání</string>
+    <string name="key_authenticity_not_guaranteed">Pravost této šifrované zprávy nelze v tomto zařízení zaručit.</string>
+    <string name="settings_security_incognito_keyboard_summary">Požadujte, aby klávesnice neaktualizovala žádné personalizované údaje, jako je historie psaní a slovník, na základě toho, co jste napsali v konverzacích. Upozorňujeme, že některé klávesnice nemusí toto nastavení respektovat.</string>
+    <string name="settings_security_incognito_keyboard_title">Inkognito klávesnice</string>
+    <string name="command_description_table_flip">Přidá znaky (╯°□°）╯︵ ┻━┻ před zprávy ve formátu obyčejného textu</string>
+    <string name="attachment_type_voice_broadcast">Hlasové vysílání</string>
+    <string name="command_description_devtools">Otevřít nástroje pro vývojáře</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 V nastavení zabezpečení jste povolili šifrování pouze do ověřených relací pro všechny místnosti.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ V této místnosti jsou neověřená zařízení, která nebudou schopna dešifrovat odeslané zprávy.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nikdy neodesílat šifrované zprávy do neověřených relací v této místnosti.</string>
+    <string name="action_got_it">Rozumím</string>
+    <string name="rich_text_editor_format_underline">Použít podtržení</string>
+    <string name="rich_text_editor_format_strikethrough">Použít přeškrtnutí</string>
+    <string name="rich_text_editor_format_bold">Použít tučný text</string>
+    <string name="rich_text_editor_format_italic">Použít kurzívu</string>
+    <string name="labs_enable_client_info_recording_summary">Zaznamenávat název, verzi a url pro snadnější rozpoznání relací ve správci relací.</string>
+    <string name="labs_enable_client_info_recording_title">Povolit záznamenávání informací o klientu</string>
+    <string name="labs_enable_session_manager_summary">Získejte lepší přehled a kontrolu nad všemi relacemi.</string>
+    <string name="labs_enable_session_manager_title">Použít nový správce relací</string>
+    <string name="device_manager_session_details_device_operating_system">Operační systém</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Prohlížeč</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Verze</string>
+    <string name="device_manager_session_details_application_name">Název</string>
+    <string name="device_manager_session_details_application">Aplikace</string>
+    <string name="device_manager_push_notifications_description">Přijímat push oznámení v této relaci.</string>
+    <string name="device_manager_push_notifications_title">Push oznámení</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Ověřením aktuální relace zjistíte stav ověření této relace.</string>
+    <string name="device_manager_verification_status_unknown">Neznámý stav ověření</string>
+    <string name="push_gateway_item_enabled">Zapnuto:</string>
+    <string name="push_gateway_item_device_id">ID relace:</string>
+    <string name="error_check_network">Něco se pokazilo. Zkontrolujte prosím síťové připojení a zkuste to znovu.</string>
+    <string name="grant_permission">Udělit oprávnění</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potřebuje oprávnění k zobrazování oznámení.
+\nUdělte prosím toto oprávnění.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potřebuje oprávnění k zobrazování oznámení. Oznámení mohou zobrazovat vaše zprávy, pozvánky atd.
+\n
+\nPro zobrazování oznámení povolte přístup na dalších vyskakovacích oknech.</string>
+    <string name="labs_enable_rich_text_editor_summary">Vyzkoušejte rozšířený textový editor (textový režim již brzy)</string>
+    <string name="labs_enable_rich_text_editor_title">Povolit rozšířený textový editor</string>
+    <string name="qr_code_login_confirm_security_code_description">Ujistěte se, že znáte původ tohoto kódu. Propojením zařízení poskytnete někomu plný přístup ke svému účtu.</string>
+    <string name="qr_code_login_confirm_security_code">Potvrdit</string>
+    <string name="qr_code_login_try_again">Zkuste to znovu</string>
+    <string name="qr_code_login_status_no_match">Neshoduje se\?</string>
+    <string name="qr_code_login_signing_in">Probíhá přihlašování</string>
+    <string name="qr_code_login_connecting_to_device">Připojování k zařízení</string>
+    <string name="qr_code_login_scan_qr_code_button">Naskenujte QR kód</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Přihlašování na mobilním zařízením\?</string>
+    <string name="qr_code_login_show_qr_code_button">Zobrazit QR kód na tomto zařízení</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Vyberte možnost \"Naskenovat QR kód\"</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vyberte možnost \"Přihlásit se pomocí QR kódu\"</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
+    <string name="qr_code_login_new_device_instruction_3">Vyberte možnost \"Zobrazit QR kód na tomto zařízení\"</string>
+    <string name="qr_code_login_new_device_instruction_2">Přejděte do Nastavení -&gt; Zabezpečení a soukromí -&gt; Zobrazit všechny relace</string>
+    <string name="qr_code_login_new_device_instruction_1">Otevřete ${app_name} na vašem druhém zařízení</string>
+    <string name="qr_code_login_header_failed_denied_description">Žádost byla na druhém zařízení zamítnuta.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Propojení nebylo dokončeno v požadovaném čase.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Propojení s tímto zařízením není podporováno.</string>
+    <string name="qr_code_login_header_failed_title">Neúspěšné připojení</string>
+    <string name="qr_code_login_header_connected_description">Zkontrolujte vaše přihlášené zařízení, měl by se zobrazit níže uvedený kód. Zkontrolujte, zda níže uvedený kód odpovídá danému zařízení:</string>
+    <string name="qr_code_login_header_connected_title">Zabezpečené připojení navázáno</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Pomocí odhlášeného zařízení naskenujte níže uvedený QR kód.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Pomocí přihlášeného zařízení naskenujte níže uvedený QR kód:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Přihlásit se pomocí QR kódu</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Pomocí fotoaparátu na tomto zařízení naskenujte QR kód zobrazený na druhém zařízení:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Naskenovat QR kód</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocí tohoto zařízení se můžete přihlásit do mobilního nebo webového zařízení pomocí QR kódu. Můžete to provést dvěma způsoby:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Přihlásit se pomocí QR kódu</string>
+    <string name="login_scan_qr_code">Naskenovat QR kód</string>
 </resources>

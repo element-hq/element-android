@@ -47,4 +47,6 @@ sealed class MessageComposerViewEvents : VectorViewEvents {
     data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean) : MessageComposerViewEvents()
 
     data class VoicePlaybackOrRecordingFailure(val throwable: Throwable) : MessageComposerViewEvents()
+
+    data class InsertUserDisplayName(val userId: String) : MessageComposerViewEvents()
 }

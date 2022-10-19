@@ -28,12 +28,12 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.14'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
-        classpath "com.likethesalad.android:stem-plugin:2.2.2"
+        classpath "com.likethesalad.android:stem-plugin:2.2.3"
         classpath 'org.owasp:dependency-check-gradle:7.2.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
-        classpath 'app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0'
+        classpath 'app.cash.paparazzi:paparazzi-gradle-plugin:1.1.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -44,6 +44,8 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
     // Detekt
     id "io.gitlab.arturbosch.detekt" version "1.21.0"
+    // Ksp
+    id "com.google.devtools.ksp" version "1.7.20-1.0.6"
 
     // Dependency Analysis
     id 'com.autonomousapps.dependency-analysis' version "1.13.1"
@@ -145,6 +147,9 @@ allprojects {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
             // To have XML report for Danger
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
+        filter {
+            exclude { element -> element.file.path.contains("$buildDir/generated/") }
         }
         disabledRules = [
                 // TODO Re-enable these 4 rules after reformatting project
@@ -324,6 +329,38 @@ ext.initScreenshotTests = { project ->
             include screenshotTestCapture
         } else {
             exclude screenshotTestCapture
+        }
+    }
+}
+
+// Workaround to have KSP generated Kotlin code available in the IDE (for code completion)
+// Ref: https://github.com/airbnb/epoxy/releases/tag/5.0.0beta02
+subprojects { project ->
+    afterEvaluate {
+        if (project.hasProperty("android")) {
+            android {
+                if (it instanceof com.android.build.gradle.LibraryExtension) {
+                    libraryVariants.all { variant ->
+                        def outputFolder = new File("build/generated/ksp/${variant.name}/kotlin")
+                        if (outputFolder.exists()) {
+                            variant.addJavaSourceFoldersToModel(outputFolder)
+                            android.sourceSets.getAt(variant.name).java {
+                                srcDir(outputFolder)
+                            }
+                        }
+                    }
+                } else if (it instanceof com.android.build.gradle.AppExtension) {
+                    applicationVariants.all { variant ->
+                        def outputFolder = new File("build/generated/ksp/${variant.name}/kotlin")
+                        if (outputFolder.exists()) {
+                            variant.addJavaSourceFoldersToModel(outputFolder)
+                            android.sourceSets.getAt(variant.name).java {
+                                srcDir(outputFolder)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

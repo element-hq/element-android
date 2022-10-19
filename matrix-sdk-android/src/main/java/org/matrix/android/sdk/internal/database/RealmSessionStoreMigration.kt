@@ -54,6 +54,8 @@ import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo034
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo035
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo036
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo037
+import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo038
+import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo039
 import org.matrix.android.sdk.internal.util.Normalizer
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import javax.inject.Inject
@@ -62,7 +64,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         private val normalizer: Normalizer
 ) : MatrixRealmMigration(
         dbName = "Session",
-        schemaVersion = 37L,
+        schemaVersion = 39L,
 ) {
     /**
      * Forces all RealmSessionStoreMigration instances to be equal.
@@ -109,5 +111,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion < 35) MigrateSessionTo035(realm).perform()
         if (oldVersion < 36) MigrateSessionTo036(realm).perform()
         if (oldVersion < 37) MigrateSessionTo037(realm).perform()
+        if (oldVersion < 38) MigrateSessionTo038(realm).perform()
+        if (oldVersion < 39) MigrateSessionTo039(realm).perform()
     }
 }
