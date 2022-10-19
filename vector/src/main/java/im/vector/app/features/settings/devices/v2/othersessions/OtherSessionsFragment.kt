@@ -154,7 +154,7 @@ class OtherSessionsFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         if (state.devices is Success) {
-            val devices = state.devices().orEmpty()
+            val devices = state.devices.invoke()
             renderDevices(devices, state.currentFilter)
             updateToolbar(devices, state.isSelectModeEnabled)
         }

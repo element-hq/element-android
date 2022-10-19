@@ -85,16 +85,15 @@ class OtherSessionsViewModel @AssistedInject constructor(
     }
 
     private fun handleDisableSelectMode() {
-        // TODO deselect all selected sessions
-        setState { copy(isSelectModeEnabled = false) }
+        setSelectionForAllDevices(isSelected = false, enableSelectMode = false)
     }
 
     private fun handleEnableSelectMode(deviceId: String?) {
-        toggleSelectionForDevice(deviceId, true)
+        toggleSelectionForDevice(deviceId, enableSelectMode = true)
     }
 
     private fun handleToggleSelectionForDevice(deviceId: String) = withState { state ->
-        toggleSelectionForDevice(deviceId, state.isSelectModeEnabled)
+        toggleSelectionForDevice(deviceId, enableSelectMode = state.isSelectModeEnabled)
     }
 
     private fun toggleSelectionForDevice(deviceId: String?, enableSelectMode: Boolean) = withState { state ->
@@ -107,6 +106,22 @@ class OtherSessionsViewModel @AssistedInject constructor(
                 devices[indexToUpdate] = updatedInfo
             }
             Success(devices)
+        } else {
+            state.devices
+        }
+
+        setState {
+            copy(
+                    devices = updatedDevices,
+                    isSelectModeEnabled = enableSelectMode
+            )
+        }
+    }
+
+    private fun setSelectionForAllDevices(isSelected: Boolean, enableSelectMode: Boolean) = withState { state ->
+        val updatedDevices = if (state.devices is Success) {
+            val updatedDevices = state.devices.invoke().map { it.copy(isSelected = isSelected) }
+            Success(updatedDevices)
         } else {
             state.devices
         }
