@@ -76,10 +76,8 @@ class VoiceBroadcastPlayer @Inject constructor(
 
     fun stop() {
         currentMediaPlayer?.stop()
-        currentMediaPlayer?.release()
-        currentMediaPlayer?.setOnInfoListener(null)
-        currentMediaPlayer = null
         currentVoiceBroadcastEventId?.let { playbackTracker.stopPlayback(it) }
+        release(currentMediaPlayer)
         playlist = emptyList()
         currentPlayingIndex = -1
     }
@@ -147,11 +145,21 @@ class VoiceBroadcastPlayer @Inject constructor(
         }
     }
 
+    private fun release(mp: MediaPlayer?) {
+        mp?.apply {
+            release()
+            setOnInfoListener(null)
+            setOnCompletionListener(null)
+            setOnErrorListener(null)
+        }
+    }
+
     inner class MediaPlayerListener : MediaPlayer.OnInfoListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
         override fun onInfo(mp: MediaPlayer, what: Int, extra: Int): Boolean {
             when (what) {
                 MediaPlayer.MEDIA_INFO_STARTED_AS_NEXT -> {
+                    release(currentMediaPlayer)
                     currentMediaPlayer = mp
                     currentPlayingIndex++
                     mediaPlayerScope.launch { prepareNextFile() }
