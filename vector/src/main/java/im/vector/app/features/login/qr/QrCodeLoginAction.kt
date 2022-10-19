@@ -22,4 +22,5 @@ sealed class QrCodeLoginAction : VectorViewModelAction {
     data class OnQrCodeScanned(val qrCode: String) : QrCodeLoginAction()
     object GenerateQrCode : QrCodeLoginAction()
     object ShowQrCode : QrCodeLoginAction()
+    object TryAgain : QrCodeLoginAction()
 }
