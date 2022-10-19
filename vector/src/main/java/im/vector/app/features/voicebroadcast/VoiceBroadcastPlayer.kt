@@ -18,6 +18,7 @@ package im.vector.app.features.voicebroadcast
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voice.VoiceFailure
@@ -25,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.getRoom
@@ -39,9 +39,11 @@ import javax.inject.Singleton
 
 @Singleton
 class VoiceBroadcastPlayer @Inject constructor(
-        private val session: Session,
+        private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
 ) {
+
+    private val session get() = sessionHolder.getActiveSession()
 
     private val mediaPlayerScope = CoroutineScope(Dispatchers.IO)
 
