@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.rendezvous.model.SimpleHttpRendezvousTransport
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 /**
  * Implementation of the Simple HTTP transport MSC3886: https://github.com/matrix-org/matrix-spec-proposals/pull/3886
@@ -87,7 +88,7 @@ class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTranspor
             val location = response.header("location") ?: throw RuntimeException("No rendezvous URI found in response")
 
             response.header("expires")?.let {
-                val format = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz")
+                val format = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US)
                 expiresAt = format.parse(it)
             }
 

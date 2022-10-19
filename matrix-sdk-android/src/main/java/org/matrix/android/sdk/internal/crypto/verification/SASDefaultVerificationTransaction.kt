@@ -95,7 +95,7 @@ internal abstract class SASDefaultVerificationTransaction(
          * The three 4-digit numbers are displayed to the user either with dashes (or another appropriate separator) separating the three numbers,
          * or with the three numbers on separate lines.
          */
-        fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
+        fun getDecimalCodeRepresentation(byteArray: ByteArray, separator: String = " "): String {
             val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
             val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
             val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
@@ -107,7 +107,7 @@ internal abstract class SASDefaultVerificationTransaction(
             val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
             // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
             val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
-            return "$first $second $third"
+            return "$first$separator$second$separator$third"
         }
     }
 

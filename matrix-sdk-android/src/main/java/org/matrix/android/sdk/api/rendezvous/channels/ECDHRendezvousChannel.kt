@@ -46,11 +46,6 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
         private const val ALGORITHM_SPEC = "AES/GCM/NoPadding"
         private const val KEY_SPEC = "AES"
         private val TAG = LoggerTag(ECDHRendezvousChannel::class.java.simpleName, LoggerTag.RENDEZVOUS).value
-
-        // this is the same representation as for SAS but we delimit by dashes instead of spaces for readability
-        private fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-            return SASDefaultVerificationTransaction.getDecimalCodeRepresentation(byteArray).replace(" ", "-")
-        }
     }
 
     @JsonClass(generateAdapter = true)
@@ -114,7 +109,7 @@ class ECDHRendezvousChannel(override var transport: RendezvousTransport, theirPu
             aesKey = sas.generateShortCode(aesInfo, 32)
 
             val rawChecksum = sas.generateShortCode(aesInfo, 5)
-            return getDecimalCodeRepresentation(rawChecksum)
+            return SASDefaultVerificationTransaction.getDecimalCodeRepresentation(rawChecksum, separator = "-")
         }
     }
 
