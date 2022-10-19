@@ -2797,11 +2797,13 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Benutze dein angemeldetes Gerät um den unten angezeigten QR-Code einzulesen:</string>
     <string name="qr_code_login_header_show_qr_code_title">Mit QR-Code anmelden</string>
     <string name="qr_code_login_header_scan_qr_code_description">Benutze die Kamera auf diesem Gerät um den vom anderen Gerät angezeigten QR-Code zu scannen:</string>
-    <string name="qr_code_login_header_scan_qr_code_title">QR-Code scannen</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR-Code einlesen</string>
     <string name="three">3</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kannst dieses Gerät benutzen um ein anderes Gerät per QR-Code anzumelden. Dafür gibt es zwei Wege:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
-    <string name="login_scan_qr_code">QR-Code scannen</string>
+    <string name="login_scan_qr_code">QR-Code einlesen</string>
+    <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
 </resources>
