@@ -24,4 +24,6 @@ sealed class OtherSessionsAction : VectorViewModelAction {
     data class EnableSelectMode(val deviceId: String?) : OtherSessionsAction()
     object DisableSelectMode : OtherSessionsAction()
     data class ToggleSelectionForDevice(val deviceId: String) : OtherSessionsAction()
+    object SelectAll : OtherSessionsAction()
+    object DeselectAll : OtherSessionsAction()
 }

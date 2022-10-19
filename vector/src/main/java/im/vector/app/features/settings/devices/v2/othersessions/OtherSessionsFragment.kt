@@ -85,6 +85,14 @@ class OtherSessionsFragment :
                 enableSelectMode(true)
                 true
             }
+            R.id.otherSessionsSelectAll -> {
+                viewModel.handle(OtherSessionsAction.SelectAll)
+                true
+            }
+            R.id.otherSessionsDeselectAll -> {
+                viewModel.handle(OtherSessionsAction.DeselectAll)
+                true
+            }
             else -> false
         }
     }

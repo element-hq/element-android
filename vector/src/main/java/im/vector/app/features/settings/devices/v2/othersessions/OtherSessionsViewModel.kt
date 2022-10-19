@@ -72,6 +72,8 @@ class OtherSessionsViewModel @AssistedInject constructor(
             OtherSessionsAction.DisableSelectMode -> handleDisableSelectMode()
             is OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode(action.deviceId)
             is OtherSessionsAction.ToggleSelectionForDevice -> handleToggleSelectionForDevice(action.deviceId)
+            OtherSessionsAction.DeselectAll -> handleDeselectAll()
+            OtherSessionsAction.SelectAll -> handleSelectAll()
         }
     }
 
@@ -116,6 +118,14 @@ class OtherSessionsViewModel @AssistedInject constructor(
                     isSelectModeEnabled = enableSelectMode
             )
         }
+    }
+
+    private fun handleSelectAll() = withState { state ->
+        setSelectionForAllDevices(isSelected = true, enableSelectMode = state.isSelectModeEnabled)
+    }
+
+    private fun handleDeselectAll() = withState { state ->
+        setSelectionForAllDevices(isSelected = false, enableSelectMode = state.isSelectModeEnabled)
     }
 
     private fun setSelectionForAllDevices(isSelected: Boolean, enableSelectMode: Boolean) = withState { state ->
