@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
-    android:paddingTop="8dp"
-    android:paddingHorizontal="8dp">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="8dp">
 
     <View
         android:id="@+id/otherSessionItemBackground"
@@ -28,9 +28,9 @@
         android:background="@drawable/bg_device_type"
         android:contentDescription="@string/a11y_device_manager_device_type_mobile"
         android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/otherSessionItemBackground"
-        app:layout_constraintStart_toStartOf="@+id/otherSessionItemBackground"
-        app:layout_constraintTop_toTopOf="@+id/otherSessionItemBackground"
+        app:layout_constraintBottom_toBottomOf="@id/otherSessionItemBackground"
+        app:layout_constraintStart_toStartOf="@id/otherSessionItemBackground"
+        app:layout_constraintTop_toTopOf="@id/otherSessionItemBackground"
         tools:src="@drawable/ic_device_type_mobile" />
 
     <im.vector.app.core.ui.views.ShieldImageView
@@ -42,7 +42,7 @@
         android:background="@drawable/circle_with_border"
         android:importantForAccessibility="no"
         android:padding="6dp"
-        app:layout_constraintStart_toStartOf="@+id/otherSessionDeviceTypeImageView"
+        app:layout_constraintStart_toStartOf="@id/otherSessionDeviceTypeImageView"
         app:layout_constraintTop_toTopOf="@id/otherSessionDeviceTypeImageView"
         tools:src="@drawable/ic_shield_trusted" />
 
@@ -80,6 +80,6 @@
         android:background="?vctr_content_quinary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/otherSessionItemBackground" />
+        app:layout_constraintTop_toBottomOf="@id/otherSessionItemBackground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
