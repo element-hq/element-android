@@ -367,8 +367,8 @@
     <string name="settings_add_phone_number">Добавить телефон</string>
     <string name="settings_app_info_link_summary">Системные настройки приложения.</string>
     <string name="settings_app_info_link_title">Сведения о приложении</string>
-    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
+    <string name="settings_enable_all_notif">Уведомления для этой учётной записи</string>
+    <string name="settings_enable_this_device">Уведомления для этой сессии</string>
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
     <string name="settings_invited_to_room">Когда меня приглашают в комнату</string>
@@ -663,7 +663,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии.
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включены для этой сессии.
 \nПожалуйста, проверьте настройки ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
@@ -1572,8 +1572,8 @@
     <string name="or_other_mx_capable_client">или другой клиент Matrix поддерживающий перекрестную подпись</string>
     <string name="command_description_discard_session">Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату</string>
     <string name="enter_secret_storage_passphrase_or_key">Чтобы продолжить, используйте %1$s или %2$s.</string>
-    <string name="use_recovery_key">Используйте ключ восстановления</string>
-    <string name="enter_secret_storage_input_key">Выберите ключ восстановления или введите его вручную, введя или вставив из буфера обмена</string>
+    <string name="use_recovery_key">Используйте бумажный ключ</string>
+    <string name="enter_secret_storage_input_key">Выберите бумажный ключ или введите его вручную, введя или вставив из буфера обмена</string>
     <string name="failed_to_access_secure_storage">Не удалось получить доступ к защищенному хранилищу данных</string>
     <string name="unencrypted">Не зашифровано</string>
     <string name="encrypted_unverified">Зашифровано неподтверждённой сессией</string>
