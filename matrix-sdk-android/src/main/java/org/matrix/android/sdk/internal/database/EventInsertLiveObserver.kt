@@ -16,13 +16,21 @@
 
 package org.matrix.android.sdk.internal.database
 
+import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.RealmResults
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -33,52 +41,56 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(
-        @SessionDatabase realmInstance: RealmInstance,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        @SessionDatabase private val realmInstance: RealmInstance,
+        coroutineDispatchers: MatrixCoroutineDispatchers,
         private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
-) :
-        RealmLiveEntityObserver<EventInsertEntity>(realmInstance, coroutineDispatchers.io) {
+) : SessionLifecycleObserver {
 
     private val lock = Mutex()
+    private val observerScope = CoroutineScope(Job() + coroutineDispatchers.io)
+
+    override fun onSessionStopped(session: Session) {
+        observerScope.cancel()
+    }
 
     init {
-        realmInstance.getRealmFlow().flatMapConcat { realm ->
-            realm.query(EventInsertEntity::class, "canBeProcessed == true").asFlow()
+        realmInstance.queryResults {
+            it.query(EventInsertEntity::class, "canBeProcessed == true")
         }.onEach { resultChange ->
-            onChange(resultChange.list)
+            // Use realmInstance scope as we want cancellation when cleared cached
+            realmInstance.coroutineScope.processResultChange(resultChange)
         }.launchIn(observerScope)
     }
 
-    private suspend fun onChange(results: RealmResults<EventInsertEntity>) {
-        fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
-            return processors.any {
-                it.shouldProcess(eventInsertEntity.eventId, eventInsertEntity.eventType, eventInsertEntity.insertType)
-            }
-        }
+    private fun CoroutineScope.processResultChange(resultsChange: ResultsChange<EventInsertEntity>) = launch {
+        onChange(resultsChange.list)
+    }
 
+    private suspend fun onChange(results: RealmResults<EventInsertEntity>) = coroutineScope {
         lock.withLock {
             if (results.isEmpty()) {
-                return@withLock
+                return@coroutineScope
             }
             Timber.v("EventInsertEntity updated with ${results.size} results in db")
             realmInstance.write { ->
-                results
-                        .filter(::shouldProcess)
-                        .forEach { eventInsert ->
-                            val eventId = eventInsert.eventId
-                            val event = EventEntity.where(this, eventId).first().find()
-                            if (event == null) {
-                                Timber.v("Event $eventId not found")
-                                return@forEach
-                            }
-                            val domainEvent = event.asDomain()
-                            processors.filter {
-                                it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
-                            }.forEach {
-                                it.process(this, domainEvent)
-                            }
-                            deleteNullable(findLatest(eventInsert))
-                        }
+                results.forEach { eventInsert ->
+                    deleteNullable(findLatest(eventInsert))
+                    val eventId = eventInsert.eventId
+                    val event = EventEntity.where(this, eventId).first().find()
+                    if (event == null) {
+                        Timber.v("Event $eventId not found")
+                        return@forEach
+                    }
+                    val domainEvent = event.asDomain()
+                    processors.filter {
+                        it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
+                    }.forEach {
+                        it.process(this, domainEvent)
+                    }
+                }
+            }
+            if (!isActive) {
+                return@withLock
             }
             processors.forEach { it.onPostProcess() }
         }
