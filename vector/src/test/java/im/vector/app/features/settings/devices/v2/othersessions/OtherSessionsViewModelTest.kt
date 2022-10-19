@@ -22,7 +22,9 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -37,8 +39,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 private const val A_TITLE_RES_ID = 1
+private const val A_DEVICE_ID = "device-id"
 
 class OtherSessionsViewModelTest {
 
@@ -69,6 +74,16 @@ class OtherSessionsViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
+    }
+
+    private fun givenVerificationService(): FakeVerificationService {
+        val fakeVerificationService = fakeActiveSessionHolder
+                .fakeSession
+                .fakeCryptoService
+                .fakeVerificationService
+        fakeVerificationService.givenAddListenerSucceeds()
+        fakeVerificationService.givenRemoveListenerSucceeds()
+        return fakeVerificationService
     }
 
     @After
@@ -128,6 +143,129 @@ class OtherSessionsViewModelTest {
         }
     }
 
+    @Test
+    fun `given enable select mode action when handling the action then viewState is updated with correct info`() {
+        // Given
+        val deviceFullInfo = givenDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo.copy(isSelected = true))),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = true,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.EnableSelectMode(A_DEVICE_ID))
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+    }
+
+    @Test
+    fun `given disable select mode action when handling the action then viewState is updated with correct info`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1.copy(isSelected = false), deviceFullInfo2.copy(isSelected = false))),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = false,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.DisableSelectMode)
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+    }
+
+    @Test
+    fun `given toggle selection for device action when handling the action then viewState is updated with correct info`() {
+        // Given
+        val deviceFullInfo = givenDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo.copy(isSelected = true))),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = false,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(A_DEVICE_ID))
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+    }
+
+    @Test
+    fun `given select all action when handling the action then viewState is updated with correct info`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1.copy(isSelected = true), deviceFullInfo2.copy(isSelected = true))),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = false,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.SelectAll)
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+    }
+
+    @Test
+    fun `given deselect all action when handling the action then viewState is updated with correct info`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1.copy(isSelected = false), deviceFullInfo2.copy(isSelected = false))),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = false,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.DeselectAll)
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+    }
+
     private fun givenGetDeviceFullInfoListReturns(
             filterType: DeviceManagerFilterType,
             devices: List<DeviceFullInfo>,
@@ -135,13 +273,20 @@ class OtherSessionsViewModelTest {
         every { fakeGetDeviceFullInfoListUseCase.execute(filterType, any()) } returns flowOf(devices)
     }
 
-    private fun givenVerificationService(): FakeVerificationService {
-        val fakeVerificationService = fakeActiveSessionHolder
-                .fakeSession
-                .fakeCryptoService
-                .fakeVerificationService
-        fakeVerificationService.givenAddListenerSucceeds()
-        fakeVerificationService.givenRemoveListenerSucceeds()
-        return fakeVerificationService
+    private fun givenDeviceFullInfo(deviceId: String, isSelected: Boolean): DeviceFullInfo {
+        return DeviceFullInfo(
+                deviceInfo = DeviceInfo(
+                        deviceId = deviceId,
+                ),
+                cryptoDeviceInfo = null,
+                roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
+                isInactive = true,
+                isCurrentDevice = true,
+                deviceExtendedInfo = DeviceExtendedInfo(
+                        deviceType = DeviceType.MOBILE,
+                ),
+                matrixClientInfo = null,
+                isSelected = isSelected,
+        )
     }
 }
