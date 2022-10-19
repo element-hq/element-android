@@ -22,8 +22,8 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
 
 /**
  * Realm module for Session.
+ * TODO Sort alphabetically to avoid mistake during merge conflict.
  */
-<<<<<<< HEAD
 internal val SESSION_REALM_SCHEMA = setOf(
         ChunkEntity::class,
         EventEntity::class,
@@ -33,6 +33,7 @@ internal val SESSION_REALM_SCHEMA = setOf(
         ReadReceiptEntity::class,
         RoomEntity::class,
         RoomSummaryEntity::class,
+        LocalRoomSummaryEntity::class,
         RoomTagEntity::class,
         SyncEntity::class,
         PendingThreePidEntity::class,
@@ -68,54 +69,4 @@ internal val SESSION_REALM_SCHEMA = setOf(
         SpaceParentSummaryEntity::class,
         UserPresenceEntity::class,
         ThreadSummaryEntity::class
-=======
-@RealmModule(
-        library = true,
-        classes = [
-            ChunkEntity::class,
-            EventEntity::class,
-            EventInsertEntity::class,
-            TimelineEventEntity::class,
-            FilterEntity::class,
-            ReadReceiptEntity::class,
-            RoomEntity::class,
-            RoomSummaryEntity::class,
-            LocalRoomSummaryEntity::class,
-            RoomTagEntity::class,
-            SyncEntity::class,
-            PendingThreePidEntity::class,
-            UserEntity::class,
-            IgnoredUserEntity::class,
-            BreadcrumbsEntity::class,
-            UserThreePidEntity::class,
-            EventAnnotationsSummaryEntity::class,
-            ReactionAggregatedSummaryEntity::class,
-            EditAggregatedSummaryEntity::class,
-            EditionOfEvent::class,
-            PollResponseAggregatedSummaryEntity::class,
-            LiveLocationShareAggregatedSummaryEntity::class,
-            ReferencesAggregatedSummaryEntity::class,
-            PushRulesEntity::class,
-            PushRuleEntity::class,
-            PushConditionEntity::class,
-            PreviewUrlCacheEntity::class,
-            PusherEntity::class,
-            PusherDataEntity::class,
-            ReadReceiptsSummaryEntity::class,
-            ReadMarkerEntity::class,
-            UserDraftsEntity::class,
-            DraftEntity::class,
-            HomeServerCapabilitiesEntity::class,
-            RoomMemberSummaryEntity::class,
-            CurrentStateEventEntity::class,
-            UserAccountDataEntity::class,
-            ScalarTokenEntity::class,
-            WellknownIntegrationManagerConfigEntity::class,
-            RoomAccountDataEntity::class,
-            SpaceChildSummaryEntity::class,
-            SpaceParentSummaryEntity::class,
-            UserPresenceEntity::class,
-            ThreadSummaryEntity::class
-        ]
->>>>>>> develop
 )

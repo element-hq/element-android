@@ -40,7 +40,6 @@ internal object PushersMapper {
     }
 
     fun map(pusher: JsonPusher): PusherEntity {
-<<<<<<< HEAD
         return PusherEntity().apply {
             pushKey = pusher.pushKey
             kind = pusher.kind
@@ -53,21 +52,9 @@ internal object PushersMapper {
                 url = pusher.data?.url
                 format = pusher.data?.format
             }
+            enabled = pusher.enabled
+            deviceId = pusher.deviceId
         }
-=======
-        return PusherEntity(
-                pushKey = pusher.pushKey,
-                kind = pusher.kind,
-                appId = pusher.appId,
-                appDisplayName = pusher.appDisplayName,
-                deviceDisplayName = pusher.deviceDisplayName,
-                profileTag = pusher.profileTag,
-                lang = pusher.lang,
-                data = PusherDataEntity(pusher.data?.url, pusher.data?.format),
-                enabled = pusher.enabled,
-                deviceId = pusher.deviceId,
-        )
->>>>>>> develop
     }
 }
 

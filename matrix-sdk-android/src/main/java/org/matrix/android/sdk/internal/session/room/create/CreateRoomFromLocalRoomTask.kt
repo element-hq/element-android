@@ -16,19 +16,17 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
-import com.zhuinden.monarchy.Monarchy
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.LocalRoomCreationState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -47,13 +45,10 @@ internal interface CreateRoomFromLocalRoomTask : Task<CreateRoomFromLocalRoomTas
 }
 
 internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val createRoomTask: CreateRoomTask,
         private val roomSummaryDataSource: RoomSummaryDataSource,
 ) : CreateRoomFromLocalRoomTask {
-
-    private val realmConfiguration
-        get() = monarchy.realmConfiguration
 
     override suspend fun execute(params: CreateRoomFromLocalRoomTask.Params): String {
         val localRoomSummary = roomSummaryDataSource.getLocalRoomSummary(params.localRoomId)
@@ -105,19 +100,19 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
      */
     private suspend fun waitForRoomEvents(replacementRoomId: String, localRoomSummary: RoomSummary) {
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, replacementRoomId)
-                        .equalTo(RoomSummaryEntityFields.INVITED_MEMBERS_COUNT, localRoomSummary.invitedMembersCount)
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                RoomSummaryEntity.where(realm)
+                        .query("roomId == $0", replacementRoomId)
+                        .query("invitedMembersCount == $0", localRoomSummary.invitedMembersCount)
             }
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+            awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 EventEntity.whereRoomId(realm, replacementRoomId)
-                        .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_HISTORY_VISIBILITY)
+                        .query("type == $0", EventType.STATE_ROOM_HISTORY_VISIBILITY)
             }
             if (localRoomSummary.isEncrypted) {
-                awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                awaitNotEmptyResult(realmInstance, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                     EventEntity.whereRoomId(realm, replacementRoomId)
-                            .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
+                            .query("type == $0", EventType.STATE_ROOM_ENCRYPTION)
                 }
             }
         } catch (exception: TimeoutCancellationException) {
@@ -127,14 +122,14 @@ internal class DefaultCreateRoomFromLocalRoomTask @Inject constructor(
     }
 
     private fun updateCreationState(roomId: String, creationState: LocalRoomCreationState) {
-        monarchy.runTransactionSync { realm ->
-            LocalRoomSummaryEntity.where(realm, roomId).findFirst()?.creationState = creationState
+        realmInstance.blockingWrite {
+            LocalRoomSummaryEntity.where(this, roomId).first().find()?.creationState = creationState
         }
     }
 
     private fun updateReplacementRoomId(localRoomId: String, replacementRoomId: String) {
-        monarchy.runTransactionSync { realm ->
-            LocalRoomSummaryEntity.where(realm, localRoomId).findFirst()?.replacementRoomId = replacementRoomId
+        realmInstance.blockingWrite {
+            LocalRoomSummaryEntity.where(this, localRoomId).first().find()?.replacementRoomId = replacementRoomId
         }
     }
 }

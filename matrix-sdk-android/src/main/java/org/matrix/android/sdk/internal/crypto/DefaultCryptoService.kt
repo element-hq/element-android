@@ -489,7 +489,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
 
                 unrequestedForwardManager.postSyncProcessParkedKeysIfNeeded(clock.epochMillis()) { events ->
-                    cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                    sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
                         events.forEach {
                             onRoomKeyEvent(it, true)
                         }

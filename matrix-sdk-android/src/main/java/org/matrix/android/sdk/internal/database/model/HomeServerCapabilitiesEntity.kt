@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.kotlin.types.RealmObject
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
-<<<<<<< HEAD
 internal class HomeServerCapabilitiesEntity : RealmObject {
     var canChangePassword: Boolean = true
     var canChangeDisplayName: Boolean = true
@@ -32,22 +31,7 @@ internal class HomeServerCapabilitiesEntity : RealmObject {
     var lastUpdatedTimestamp: Long = 0L
     var canUseThreading: Boolean = false
     var canControlLogoutDevices: Boolean = false
-=======
-internal open class HomeServerCapabilitiesEntity(
-        var canChangePassword: Boolean = true,
-        var canChangeDisplayName: Boolean = true,
-        var canChangeAvatar: Boolean = true,
-        var canChange3pid: Boolean = true,
-        var roomVersionsJson: String? = null,
-        var maxUploadFileSize: Long = HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN,
-        var lastVersionIdentityServerSupported: Boolean = false,
-        var defaultIdentityServerUrl: String? = null,
-        var lastUpdatedTimestamp: Long = 0L,
-        var canUseThreading: Boolean = false,
-        var canControlLogoutDevices: Boolean = false,
-        var canLoginWithQrCode: Boolean = false,
-) : RealmObject() {
->>>>>>> develop
+    var canLoginWithQrCode: Boolean = false
 
     companion object
 }

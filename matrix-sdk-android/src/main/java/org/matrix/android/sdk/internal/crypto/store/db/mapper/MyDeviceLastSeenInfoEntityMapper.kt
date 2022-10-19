@@ -33,12 +33,12 @@ internal class MyDeviceLastSeenInfoEntityMapper @Inject constructor() {
     }
 
     fun map(deviceInfo: DeviceInfo): MyDeviceLastSeenInfoEntity {
-        return MyDeviceLastSeenInfoEntity(
-                deviceId = deviceInfo.deviceId,
-                lastSeenIp = deviceInfo.lastSeenIp,
-                lastSeenTs = deviceInfo.lastSeenTs,
-                displayName = deviceInfo.displayName,
-                lastSeenUserAgent = deviceInfo.getBestLastSeenUserAgent(),
-        )
+        return MyDeviceLastSeenInfoEntity().apply {
+            deviceId = deviceInfo.deviceId
+            lastSeenIp = deviceInfo.lastSeenIp
+            lastSeenTs = deviceInfo.lastSeenTs
+            displayName = deviceInfo.displayName
+            lastSeenUserAgent = deviceInfo.getBestLastSeenUserAgent()
+        }
     }
 }

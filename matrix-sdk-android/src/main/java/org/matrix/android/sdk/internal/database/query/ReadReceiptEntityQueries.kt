@@ -31,9 +31,9 @@ internal fun ReadReceiptEntity.Companion.whereUserId(realm: TypedRealm, userId: 
             .query("userId == $0", userId)
 }
 
-internal fun ReadReceiptEntity.Companion.whereRoomId(realm: Realm, roomId: String): RealmQuery<ReadReceiptEntity> {
-    return realm.where<ReadReceiptEntity>()
-            .equalTo(ReadReceiptEntityFields.ROOM_ID, roomId)
+internal fun ReadReceiptEntity.Companion.whereRoomId(realm: TypedRealm, roomId: String): RealmQuery<ReadReceiptEntity> {
+    return realm.query(ReadReceiptEntity::class)
+            .query("roomId == $0", roomId)
 }
 
 internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId: String, userId: String, originServerTs: Double): ReadReceiptEntity {

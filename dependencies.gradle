@@ -24,10 +24,6 @@ def mavericks = "3.0.1"
 def glide = "4.14.2"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
-<<<<<<< HEAD
-def vanniktechEmoji = "0.15.0"
-def fragment = "1.5.2"
-=======
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
@@ -35,7 +31,6 @@ def vanniktechEmoji = "0.16.0-SNAPSHOT"
 def sentry = "6.4.3"
 
 def fragment = "1.5.3"
->>>>>>> develop
 
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
@@ -168,13 +163,11 @@ ext.libs = [
         apache      : [
                 'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
         ],
-<<<<<<< HEAD
         realm      : [
                 'base'                   : "io.realm.kotlin:library-base:${realmKotlinVersion}"
-=======
+        ],
         sentry: [
                 'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
->>>>>>> develop
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",

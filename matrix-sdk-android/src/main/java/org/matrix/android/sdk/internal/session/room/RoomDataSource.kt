@@ -44,7 +44,7 @@ internal class RoomDataSource @Inject constructor(
         }.mapOptional { roomEntity ->
             roomEntity.membersLoadStatus == RoomMembersLoadStatusType.LOADED
         }.map {
-            it.getOrElse { false }
+            it.orElse { false }
         }.asLiveData()
     }
 }

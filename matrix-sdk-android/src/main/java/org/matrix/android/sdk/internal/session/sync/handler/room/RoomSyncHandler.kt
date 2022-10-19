@@ -39,11 +39,8 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.clearWith
-=======
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
->>>>>>> develop
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate

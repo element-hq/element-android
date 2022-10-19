@@ -18,13 +18,11 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import timber.log.Timber
 
-/**
- * This migration adds a new field into MyDeviceLastSeenInfoEntity corresponding to the last seen user agent.
- */
-internal class MigrateCryptoTo020(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 20) {
+internal class MigrateCryptoTo021(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 21) {
 
     override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
-        // Nothing to do, this is an automatic migration now.
+        Timber.d("Migrate to realm-kotlin")
     }
 }

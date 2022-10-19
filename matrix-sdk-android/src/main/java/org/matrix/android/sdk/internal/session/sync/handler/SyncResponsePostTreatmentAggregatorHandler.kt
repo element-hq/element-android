@@ -16,15 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
-<<<<<<< HEAD
-import io.realm.kotlin.UpdatePolicy
-import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.internal.database.RealmInstance
-import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
-=======
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -33,34 +24,25 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
->>>>>>> develop
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-<<<<<<< HEAD
-=======
 import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
->>>>>>> develop
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-<<<<<<< HEAD
-        private val getProfileInfoTask: GetProfileInfoTask,
-        @SessionDatabase private val realmInstance: RealmInstance,
-=======
         private val crossSigningService: DefaultCrossSigningService,
         private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
->>>>>>> develop
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
@@ -123,17 +105,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 .enqueue()
     }
 
-<<<<<<< HEAD
-    private suspend fun List<User>.saveLocally() {
-        realmInstance.write {
-            forEach { user ->
-                val userEntity = UserEntityFactory.create(user)
-                copyToRealm(userEntity, updatePolicy = UpdatePolicy.ALL)
-            }
-        }
-=======
     private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Iterable<String>) {
         crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
->>>>>>> develop
     }
 }

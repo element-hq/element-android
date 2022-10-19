@@ -16,12 +16,19 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import io.realm.kotlin.MutableRealm
+import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.query.RealmQuery
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
 
-internal fun LocalRoomSummaryEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<LocalRoomSummaryEntity> {
-    return realm.where<LocalRoomSummaryEntity>().equalTo(LocalRoomSummaryEntityFields.ROOM_ID, roomId)
+internal fun LocalRoomSummaryEntity.Companion.where(realm: TypedRealm, roomId: String): RealmQuery<LocalRoomSummaryEntity> {
+    return realm.query(LocalRoomSummaryEntity::class)
+            .query("roomId == $0", roomId)
+}
+
+internal fun LocalRoomSummaryEntity.Companion.create(realm: MutableRealm, roomId: String): LocalRoomSummaryEntity {
+    val localRoomSummaryEntity = LocalRoomSummaryEntity().apply {
+        this.roomId = roomId
+    }
+    return realm.copyToRealm(localRoomSummaryEntity)
 }

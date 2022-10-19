@@ -16,14 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.pushers
 
-import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.RequestExecutor
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface TogglePusherTask : Task<TogglePusherTask.Params, Unit> {
@@ -32,7 +31,7 @@ internal interface TogglePusherTask : Task<TogglePusherTask.Params, Unit> {
 
 internal class DefaultTogglePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
         private val requestExecutor: RequestExecutor,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : TogglePusherTask {
@@ -44,9 +43,9 @@ internal class DefaultTogglePusherTask @Inject constructor(
             pushersAPI.setPusher(pusher)
         }
 
-        monarchy.awaitTransaction { realm ->
-            val entity = PusherEntity.where(realm, params.pusher.pushKey).findFirst()
-            entity?.apply { enabled = params.enable }?.let { realm.insertOrUpdate(it) }
+        realmInstance.write {
+            PusherEntity.where(this, params.pusher.pushKey).first().find()
+                    ?.enabled = params.enable
         }
     }
 }

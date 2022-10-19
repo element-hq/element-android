@@ -150,11 +150,8 @@ ext.groups = [
                         'io.perfmark',
                         'io.reactivex.rxjava2',
                         'io.realm',
-<<<<<<< HEAD
                         'io.realm.kotlin',
-=======
                         'io.sentry',
->>>>>>> develop
                         'it.unimi.dsi',
                         'jakarta.activation',
                         'jakarta.xml.bind',

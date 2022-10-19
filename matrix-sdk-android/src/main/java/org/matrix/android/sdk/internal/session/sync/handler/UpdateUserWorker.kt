@@ -18,17 +18,16 @@ package org.matrix.android.sdk.internal.session.sync.handler
 
 import android.content.Context
 import androidx.work.WorkerParameters
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import timber.log.Timber
@@ -41,7 +40,7 @@ internal class UpdateUserWorker(context: Context, params: WorkerParameters, sess
         SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, UpdateTrustWorker.Params::class.java) {
 
     @SessionDatabase
-    @Inject lateinit var monarchy: Monarchy
+    @Inject lateinit var realmInstance: RealmInstance
     @Inject lateinit var updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository
     @Inject lateinit var getProfileInfoTask: GetProfileInfoTask
 
@@ -81,9 +80,11 @@ internal class UpdateUserWorker(context: Context, params: WorkerParameters, sess
     private suspend fun List<User>.saveLocally() {
         val userEntities = map { user -> UserEntityFactory.create(user) }
         Timber.d("## saveLocally()")
-        monarchy.awaitTransaction {
+        realmInstance.write {
             Timber.d("## saveLocally() - in transaction")
-            it.insertOrUpdate(userEntities)
+            userEntities.forEach {
+                copyToRealm(it)
+            }
         }
         Timber.d("## saveLocally() - END")
     }

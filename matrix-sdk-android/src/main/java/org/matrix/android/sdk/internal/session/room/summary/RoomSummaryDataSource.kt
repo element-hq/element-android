@@ -43,13 +43,9 @@ import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
-<<<<<<< HEAD
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.RealmQueryBuilder
-=======
-import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.LocalRoomSummaryMapper
->>>>>>> develop
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -104,22 +100,18 @@ internal class RoomSummaryDataSource @Inject constructor(
     }
 
     fun getLocalRoomSummary(roomId: String): LocalRoomSummary? {
-        return monarchy
-                .fetchCopyMap({
-                    LocalRoomSummaryEntity.where(it, roomId).findFirst()
-                }, { entity, _ ->
-                    localRoomSummaryMapper.map(entity)
-                })
+        val realm = realmInstance.getBlockingRealm()
+        return LocalRoomSummaryEntity.where(realm, roomId).first().find()?.let { entity ->
+            localRoomSummaryMapper.map(entity)
+        }
     }
 
     fun getLocalRoomSummaryLive(roomId: String): LiveData<Optional<LocalRoomSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> LocalRoomSummaryEntity.where(realm, roomId) },
-                { localRoomSummaryMapper.map(it) }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
+        return realmInstance.queryFirst {
+            LocalRoomSummaryEntity.where(it, roomId).first()
+        }.mapOptional {
+            localRoomSummaryMapper.map(it)
+        }.asLiveData()
     }
 
     fun getRoomSummariesLive(
@@ -270,12 +262,8 @@ internal class RoomSummaryDataSource @Inject constructor(
     private fun roomSummariesQuery(realm: TypedRealm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         var query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
-<<<<<<< HEAD
                     .process("roomId", QueryStringValue.IsNotEmpty)
-=======
-                    .process(RoomSummaryEntityFields.ROOM_ID, QueryStringValue.IsNotEmpty)
-                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
->>>>>>> develop
+                    .process("roomId", queryParams.roomId)
                     .process(queryParams.displayName.toDisplayNameField(), queryParams.displayName)
                     .process("canonicalAlias", queryParams.canonicalAlias)
                     .process("membershipStr", queryParams.memberships)

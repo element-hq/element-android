@@ -50,10 +50,6 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
-<<<<<<< HEAD
-=======
-        @SessionDatabase private val realmConfiguration: RealmConfiguration,
->>>>>>> develop
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,

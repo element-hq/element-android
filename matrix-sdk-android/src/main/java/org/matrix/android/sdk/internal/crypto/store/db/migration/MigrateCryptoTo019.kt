@@ -16,13 +16,12 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
-import io.realm.DynamicRealm
-import io.realm.DynamicRealmObject
+import io.realm.kotlin.migration.AutomaticSchemaMigration
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
-import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
+import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
+import org.matrix.android.sdk.internal.database.KotlinRealmMigrator
+import org.matrix.android.sdk.internal.database.safeEnumerate
 
 /**
  * This migration is adding support for trusted flags on megolm sessions.
@@ -30,30 +29,30 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
  * mark existing keys as safe.
  * This migration can take long depending on the account
  */
-internal class MigrateCryptoTo019(realm: DynamicRealm) : RealmMigrator(realm, 19) {
+internal class MigrateCryptoTo019(context: AutomaticSchemaMigration.MigrationContext) : KotlinRealmMigrator(context, 19) {
 
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("CrossSigningInfoEntity")
-                ?.addField(CrossSigningInfoEntityFields.WAS_USER_VERIFIED_ONCE, Boolean::class.java)
-                ?.transform { dynamicObject ->
+    override fun doMigrate(migrationContext: AutomaticSchemaMigration.MigrationContext) {
+        migrationContext.safeEnumerate("CrossSigningInfoEntity") { oldObject, newObject ->
+            if (newObject == null) return@safeEnumerate
 
-                    val knowKeys = dynamicObject.getList(CrossSigningInfoEntityFields.CROSS_SIGNING_KEYS.`$`)
-                    val msk = knowKeys.firstOrNull {
-                        it.getList(KeyInfoEntityFields.USAGES.`$`, String::class.java).orEmpty().contains(KeyUsage.MASTER.value)
-                    }
-                    val ssk = knowKeys.firstOrNull {
-                        it.getList(KeyInfoEntityFields.USAGES.`$`, String::class.java).orEmpty().contains(KeyUsage.SELF_SIGNING.value)
-                    }
-                    val isTrusted = isDynamicKeyInfoTrusted(msk?.get<DynamicRealmObject>(KeyInfoEntityFields.TRUST_LEVEL_ENTITY.`$`)) &&
-                            isDynamicKeyInfoTrusted(ssk?.get<DynamicRealmObject>(KeyInfoEntityFields.TRUST_LEVEL_ENTITY.`$`))
+            // Will be a list of `KeyInfoEntity`
+            val knowKeys = oldObject.getValueList("crossSigningKeys", KeyInfoEntity::class)
+            val msk = knowKeys.firstOrNull {
+                it.usages.contains(KeyUsage.MASTER.value)
+            }
+            val ssk = knowKeys.firstOrNull {
+                it.usages.contains(KeyUsage.SELF_SIGNING.value)
+            }
+            val isTrusted = isDynamicKeyInfoTrusted(msk?.trustLevelEntity) &&
+                    isDynamicKeyInfoTrusted(ssk?.trustLevelEntity)
 
-                    dynamicObject.setBoolean(CrossSigningInfoEntityFields.WAS_USER_VERIFIED_ONCE, isTrusted)
-                }
+            newObject.set("wasUserVerifiedOnce", isTrusted)
+        }
     }
 
-    private fun isDynamicKeyInfoTrusted(keyInfo: DynamicRealmObject?): Boolean {
+    private fun isDynamicKeyInfoTrusted(keyInfo: TrustLevelEntity?): Boolean {
         if (keyInfo == null) return false
-        return !keyInfo.isNull(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED) && keyInfo.getBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED) &&
-                !keyInfo.isNull(TrustLevelEntityFields.LOCALLY_VERIFIED) && keyInfo.getBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED)
+        return keyInfo.crossSignedVerified == true &&
+                keyInfo.locallyVerified == true
     }
 }

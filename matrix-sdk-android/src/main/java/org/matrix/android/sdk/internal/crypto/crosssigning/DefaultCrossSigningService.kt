@@ -557,13 +557,8 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
-<<<<<<< HEAD
         sessionCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.d("## CrossSigning - Mark user $userId as trusted ")
-=======
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.d("## CrossSigning - Mark user $otherUserId as trusted ")
->>>>>>> develop
             // We should have this user keys
             val otherMasterKeys = getUserCrossSigningKeys(otherUserId)?.masterKey()
             if (otherMasterKeys == null) {
