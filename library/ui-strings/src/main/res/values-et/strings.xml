@@ -2796,4 +2796,6 @@
     <string name="permissions_rationale_msg_notification">${app_name} vajab teavituste näitamiseks õigusi. Teavituste sisuks võivad olla sulle saadetud sõnumid, kutsed ja muud olulist.
 \n
 \nJärgmistes vaadetes palun anna sellele rakendusele teavituste kuvamiseks vajalikud õigused.</string>
+    <string name="labs_enable_voice_broadcast_summary">Võimalus salvestada ja postitada ringhäälingukõnesid jututoa ajajoonele.</string>
+    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned (aktiivses arenduses)</string>
 </resources>

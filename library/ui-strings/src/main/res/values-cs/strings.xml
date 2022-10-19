@@ -2859,4 +2859,6 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocí tohoto zařízení se můžete přihlásit do mobilního nebo webového zařízení pomocí QR kódu. Můžete to provést dvěma způsoby:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Přihlásit se pomocí QR kódu</string>
     <string name="login_scan_qr_code">Naskenovat QR kód</string>
+    <string name="labs_enable_voice_broadcast_summary">Možnost nahrávat a odesílat hlasové vysílání na časové ose místnosti.</string>
+    <string name="labs_enable_voice_broadcast_title">Povolit hlasové vysílání (v aktivním vývoji)</string>
 </resources>
