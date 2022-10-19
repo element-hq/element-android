@@ -22,11 +22,12 @@ import io.realm.kotlin.query.RealmSingleQuery
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.database.queryIn
 
-// TODO Do we really need `: TypedRealm by realm`?
-internal class UserEntityQueries(realm: TypedRealm) : TypedRealm by realm {
+internal class UserEntityQueries(
+        private val realm: TypedRealm,
+) {
 
     fun all(): RealmQuery<UserEntity> {
-        return query(UserEntity::class)
+        return realm.query(UserEntity::class)
     }
 
     fun byUserId(userId: String): RealmQuery<UserEntity> {
