@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login.qr
+package org.matrix.android.sdk.api.rendezvous.model
 
-import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+import com.squareup.moshi.JsonClass
 
-sealed class QrCodeLoginConnectionStatus {
-    object ConnectingToDevice : QrCodeLoginConnectionStatus()
-    data class Connected(val securityCode: String, val canConfirmSecurityCode: Boolean) : QrCodeLoginConnectionStatus()
-    object SigningIn : QrCodeLoginConnectionStatus()
-    data class Failed(val errorType: RendezvousFailureReason, val canTryAgain: Boolean) : QrCodeLoginConnectionStatus()
-}
+@JsonClass(generateAdapter = true)
+open class RendezvousTransportDetails(
+    val type: RendezvousTransportType
+)

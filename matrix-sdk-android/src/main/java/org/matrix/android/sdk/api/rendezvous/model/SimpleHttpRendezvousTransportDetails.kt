@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login.qr
+package org.matrix.android.sdk.api.rendezvous.model
 
-enum class QrCodeLoginErrorType {
-    DEVICE_IS_NOT_SUPPORTED,
-    TIMEOUT,
-    REQUEST_WAS_DENIED,
-}
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class SimpleHttpRendezvousTransportDetails(
+        val uri: String
+) : RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1)
