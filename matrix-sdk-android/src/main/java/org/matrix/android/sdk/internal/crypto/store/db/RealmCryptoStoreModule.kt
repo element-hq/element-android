@@ -36,23 +36,24 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 
 /**
  * Realm module for Crypto store classes.
+ * Please respect the order (alphabetically) to avoid mistake during merge conflict, and avoid duplication.
  */
 internal val CRYPTO_REALM_SCHEMA = setOf(
+        AuditTrailEntity::class,
+        CrossSigningInfoEntity::class,
         CryptoMetadataEntity::class,
         CryptoRoomEntity::class,
         DeviceInfoEntity::class,
+        KeyInfoEntity::class,
+        KeyRequestReplyEntity::class,
         KeysBackupDataEntity::class,
+        MyDeviceLastSeenInfoEntity::class,
         OlmInboundGroupSessionEntity::class,
         OlmSessionEntity::class,
-        UserEntity::class,
-        KeyInfoEntity::class,
-        CrossSigningInfoEntity::class,
-        TrustLevelEntity::class,
-        AuditTrailEntity::class,
+        OutboundGroupSessionInfoEntity::class,
         OutgoingKeyRequestEntity::class,
-        KeyRequestReplyEntity::class,
-        MyDeviceLastSeenInfoEntity::class,
-        WithHeldSessionEntity::class,
         SharedSessionEntity::class,
-        OutboundGroupSessionInfoEntity::class
+        TrustLevelEntity::class,
+        UserEntity::class,
+        WithHeldSessionEntity::class,
 )

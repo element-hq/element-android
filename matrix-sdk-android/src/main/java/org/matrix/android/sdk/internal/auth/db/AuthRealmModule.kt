@@ -18,8 +18,9 @@ package org.matrix.android.sdk.internal.auth.db
 
 /**
  * Realm module for authentication classes.
+ * Please respect the order (alphabetically) to avoid mistake during merge conflict, and avoid duplication.
  */
 internal val AUTH_REALM_SCHEMA = setOf(
+        PendingSessionEntity::class,
         SessionParamsEntity::class,
-        PendingSessionEntity::class
 )

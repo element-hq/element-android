@@ -18,5 +18,5 @@ package org.matrix.android.sdk.internal.session.contentscanner.db
 
 internal val CONTENT_SCANNER_REALM_SCHEMA = setOf(
         ContentScannerInfoEntity::class,
-        ContentScanResultEntity::class
+        ContentScanResultEntity::class,
 )

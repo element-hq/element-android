@@ -21,8 +21,9 @@ import org.matrix.android.sdk.internal.raw.db.model.RawCacheEntity
 
 /**
  * Realm module for global classes.
+ * Please respect the order (alphabetically) to avoid mistake during merge conflict, and avoid duplication.
  */
 internal val GLOBAL_REALM_SCHEMA = setOf(
+        KnownServerUrlEntity::class,
         RawCacheEntity::class,
-        KnownServerUrlEntity::class
 )
