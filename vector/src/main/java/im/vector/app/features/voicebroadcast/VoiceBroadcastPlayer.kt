@@ -51,8 +51,8 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentPlayingIndex: Int = -1
 
     private var playlist = emptyList<MessageAudioEvent>()
-    private val currentVoiceBroadcastEventId
-        get() = playlist.firstOrNull()?.root?.getRelationContent()?.eventId
+    private val currentVoiceBroadcastId
+        get() = playlist.getOrNull(currentPlayingIndex)?.root?.getRelationContent()?.eventId
 
     private val mediaPlayerListener = MediaPlayerListener()
 
@@ -60,7 +60,7 @@ class VoiceBroadcastPlayer @Inject constructor(
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
 
         when {
-            currentVoiceBroadcastEventId != eventId -> {
+            currentVoiceBroadcastId != eventId -> {
                 stop()
                 updatePlaylist(room, eventId)
                 startPlayback()
@@ -72,12 +72,12 @@ class VoiceBroadcastPlayer @Inject constructor(
 
     fun pause() {
         currentMediaPlayer?.pause()
-        currentVoiceBroadcastEventId?.let { playbackTracker.pausePlayback(it) }
+        currentVoiceBroadcastId?.let { playbackTracker.pausePlayback(it) }
     }
 
     fun stop() {
         currentMediaPlayer?.stop()
-        currentVoiceBroadcastEventId?.let { playbackTracker.stopPlayback(it) }
+        currentVoiceBroadcastId?.let { playbackTracker.stopPlayback(it) }
         release(currentMediaPlayer)
         playlist = emptyList()
         currentPlayingIndex = -1
@@ -96,7 +96,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 currentMediaPlayer = prepareMediaPlayer(content)
                 currentMediaPlayer?.start()
                 currentPlayingIndex = 0
-                currentVoiceBroadcastEventId?.let { playbackTracker.startPlayback(it) }
+                currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
                 prepareNextFile()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Unable to start playback")
@@ -107,7 +107,7 @@ class VoiceBroadcastPlayer @Inject constructor(
 
     private fun resumePlayback() {
         currentMediaPlayer?.start()
-        currentVoiceBroadcastEventId?.let { playbackTracker.startPlayback(it) }
+        currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
     }
 
     private suspend fun prepareNextFile() {
