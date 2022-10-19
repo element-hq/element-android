@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
@@ -101,7 +101,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun setUserItem() {
-        setState { copy(userItem = session.getUser(session.myUserId)?.toMatrixItem()) }
+        setState { copy(userItem = session.getUserOrDefault(session.myUserId).toMatrixItem()) }
     }
 
     private fun updatePin(isUserPin: Boolean? = true) {

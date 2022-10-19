@@ -16,7 +16,8 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 class ResumeVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -39,7 +41,7 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
         Timber.d("## ResumeVoiceBroadcastUseCase: Resume voice broadcast requested")
 
         val lastVoiceBroadcastEvent = room.stateService().getStateEvent(
-                STATE_ROOM_VOICE_BROADCAST_INFO,
+                VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 QueryStringValue.Equals(session.myUserId)
         )?.asVoiceBroadcastEvent()
         when (val voiceBroadcastState = lastVoiceBroadcastEvent?.content?.voiceBroadcastState) {
@@ -57,7 +59,7 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
     private suspend fun resumeVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## ResumeVoiceBroadcastUseCase: Send new voice broadcast info state event")
         room.stateService().sendStateEvent(
-                eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
                         relatesTo = reference,
@@ -65,6 +67,10 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
                 ).toContent(),
         )
 
-        // TODO resume recording audio files
+        resumeRecording()
+    }
+
+    private fun resumeRecording() {
+        voiceBroadcastRecorder?.resumeRecord()
     }
 }

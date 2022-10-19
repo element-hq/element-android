@@ -987,7 +987,7 @@
     <string name="settings_troubleshoot_test_push_loop_title">プッシュ通知のテスト</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCMトークンのホームサーバーへの登録に失敗しました:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCMトークンのホームサーバーへの登録が成功しました。</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCMトークンがホームサーバーに登録されました。</string>
     <string name="settings_troubleshoot_test_token_registration_title">トークンの登録</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">アカウントを追加</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -1233,7 +1233,7 @@
     <string name="login_terms_title">続行するには利用規約を承認してください</string>
     <string name="error_terms_not_accepted">ホームサーバーの利用規約を承認したら、再試行してください。</string>
     <string name="login_signup_submit">次に</string>
-    <string name="login_msisdn_confirm_submit">次に</string>
+    <string name="login_msisdn_confirm_submit">次へ</string>
     <string name="login_set_msisdn_submit">次に</string>
     <string name="login_set_email_submit">次に</string>
     <string name="login_reset_password_submit">次に</string>
@@ -1282,9 +1282,9 @@
     <string name="send_suggestion_failed">提案の送信に失敗しました(%s)</string>
     <string name="send_suggestion_sent">ありがとうございます、提案は正常に送信されました</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">トークンの登録</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">アプリケーションの表示名:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Push Key:</string>
     <string name="settings_push_gateway_no_pushers">登録されたプッシュゲートウェイはありません</string>
     <string name="settings_push_rules_no_rules">プッシュ通知に関するルールが定義されていません</string>
     <string name="settings_push_rules">プッシュ通知に関するルール</string>
@@ -1383,8 +1383,8 @@
     <string name="settings_discovery_consent_action_revoke">同意を撤回</string>
     <string name="settings_discovery_consent_notice_on">あなたの連絡先から他のユーザーを発見するために、メールアドレスや電話番号をこのIDサーバーに送信することに同意しています。</string>
     <string name="settings_discovery_consent_title">メールと電話番号を送信</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">%sに確認メールを送りました。まず、メールを確認してリンクをクリックしてください</string>
-    <string name="settings_discovery_confirm_mail">%sに確認のためのメールを送りました。メールにて確認リンクをクリックしてください</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">%sにメールを送りました。メールを確認してリンクをクリックしてください</string>
+    <string name="settings_discovery_confirm_mail">%sにメールを送りました。メールの確認リンクをクリックしてください</string>
     <string name="settings_discovery_msisdn_title">発見可能な電話番号</string>
     <string name="settings_discovery_disconnect_identity_server_info">IDサーバーとの接続を解除すると、他のユーザーによって発見されなくなり、また、メールアドレスや電話で他のユーザーを招待することができなくなります。</string>
     <string name="settings_discovery_no_msisdn">電話番号を追加すると、発見可能に設定する電話番号を選択できるようになります。</string>
@@ -1412,7 +1412,7 @@
     <string name="send_suggestion">提案する</string>
     <string name="push_gateway_item_format">フォーマット:</string>
     <string name="push_gateway_item_url">URL:</string>
-    <string name="push_gateway_item_device_name">セッション名:</string>
+    <string name="push_gateway_item_device_name">セッションの表示名:</string>
     <string name="verify_not_me_self_verification">以下のうちいずれかが流出、あるいはハッキングされた恐れがあります。
 \n
 \n- あなたのパスワード
@@ -1696,7 +1696,7 @@
     <string name="room_message_placeholder">メッセージを送る…</string>
     <string name="error_file_too_big_simple">このファイルは大きすぎてアップロードできません。</string>
     <string name="identity_server_consent_dialog_content_question">この情報の送信に同意しますか？</string>
-    <string name="identity_server_consent_dialog_content_3">連絡先を発見するには、連絡先のデータ（電話番号や電子メール）をあなたのIDサーバーに送信する必要があります。プライバシーの保護のため、データは送信前にハッシュ化されます。</string>
+    <string name="identity_server_consent_dialog_content_3">連絡先を発見するには、連絡先のデータ（メールアドレスと電話番号）をあなたのIDサーバーに送信する必要があります。プライバシーの保護のため、データは送信前にハッシュ化されます。</string>
     <string name="identity_server_consent_dialog_title_2">メールアドレスと電話番号を%sに送信</string>
     <string name="settings_discovery_no_policy_provided">このIDサーバーは運営方針を提供していません</string>
     <string name="settings_discovery_hide_identity_server_policy_title">IDサーバーの運営方針を隠す</string>
@@ -2359,4 +2359,104 @@
     <string name="beta_title_bottom_sheet_action">ベータ版</string>
     <string name="beta">ベータ版</string>
     <string name="action_try_it_out">試す</string>
+    <string name="settings_presence_user_always_appears_offline">オフラインモード</string>
+    <string name="invites_empty_title">新着はありません。</string>
+    <string name="initial_sync_request_reason_unignored_users">- ユーザーの無視が解除されました</string>
+    <string name="onboarding_new_app_layout_button_try">試してみる</string>
+    <string name="onboarding_new_app_layout_feedback_message">右上をタップするとフィードバックを送信するオプションが表示されます。</string>
+    <string name="onboarding_new_app_layout_feedback_title">フィードバックを送信</string>
+    <string name="onboarding_new_app_layout_spaces_message">右下からスペースにより早く簡単にアクセスできます。</string>
+    <string name="onboarding_new_app_layout_spaces_title">スペースにアクセス</string>
+    <string name="onboarding_new_app_layout_welcome_message">${app_name}をシンプルにするために、タブはオプションになりました。右上のメニューから管理できます。</string>
+    <string name="onboarding_new_app_layout_welcome_title">新しいレイアウトにようこそ！</string>
+    <string name="settings_autoplay_animated_images_title">アニメーション画像を自動再生</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">エンドポイントのホームサーバーへの登録に失敗しました:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">エンドポイントがホームサーバーに登録されました。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">エンドポイントの登録</string>
+    <string name="grant_permission">権限を与える</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name}は通知の表示に権限が必要です。
+\n権限を与えてください。</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="other">%1$sと他%2$d名</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$sと%2$s</string>
+    <string name="threads_labs_enable_notice_message">ホームサーバーがサポートしていないため、スレッド機能は不安定かもしれません。スレッドのメッセージは安定して表示されないおそれがあります。%sスレッド機能を有効にしてよろしいですか？</string>
+    <string name="threads_labs_enable_notice_title">スレッド（ベータ版）</string>
+    <string name="threads_beta_enable_notice_message">スレッドを用いると、会話のテーマを保ったり、会話を追跡したりするのが容易になります。%sスレッドを有効にするとアプリケーションが再起動します。再起動には時間がかかる可能性があります。</string>
+    <string name="threads_beta_enable_notice_title">スレッド（ベータ版）</string>
+    <string name="permissions_rationale_msg_notification">${app_name}は通知を表示するために許可を必要としています。通知にはメッセージや招待などが表示されます。
+\n
+\n通知を表示するには、次のポップアップでアクセスを許可してください。</string>
+    <string name="auth_reset_password_error_unverified">メールアドレスが認証されていません。メールボックスを確認してください</string>
+    <string name="call_stop_screen_sharing">画面共有を停止</string>
+    <string name="call_start_screen_sharing">画面を共有</string>
+    <string name="invites_title">招待</string>
+    <string name="device_manager_push_notifications_title">プッシュ通知</string>
+    <string name="device_manager_session_rename_edit_hint">セッション名</string>
+    <string name="device_manager_session_rename">セッションを改名</string>
+    <string name="device_manager_session_details_device_ip_address">IPアドレス</string>
+    <string name="device_manager_session_details_device_operating_system">オペレーティングシステム</string>
+    <string name="device_manager_session_details_device_model">形式</string>
+    <string name="device_manager_session_details_device_browser">ブラウザー</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">バージョン</string>
+    <string name="device_manager_session_details_application_name">名称</string>
+    <string name="device_manager_session_details_application">アプリケーション</string>
+    <string name="ftue_personalize_skip_this_step">このステップをスキップ</string>
+    <string name="ftue_personalize_complete_title">問題ありません！</string>
+    <string name="ftue_personalize_lets_go">進みましょう</string>
+    <string name="ftue_auth_login_username_entry">ユーザー名 / メールアドレス / 電話番号</string>
+    <string name="ftue_auth_captcha_title">あなたは人間ですか？</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">%sに送信された手順に従ってください</string>
+    <string name="ftue_auth_password_reset_confirmation">パスワードを再設定</string>
+    <string name="ftue_auth_forgot_password">パスワードを忘れた場合</string>
+    <string name="ftue_auth_email_resend_email">電子メールを再送信</string>
+    <string name="ftue_auth_email_verification_footer">電子メールが届いていませんか？</string>
+    <string name="ftue_auth_email_verification_subtitle">%sに送信された手順に従ってください</string>
+    <string name="ftue_auth_email_verification_title">メールアドレスを認証</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">コードを再送信</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">コードが%sに送信されました</string>
+    <string name="ftue_auth_phone_confirmation_title">電話番号を確認してください</string>
+    <string name="ftue_auth_sign_out_all_devices">全ての端末からサインアウト</string>
+    <string name="ftue_auth_reset_password">パスワードを再設定</string>
+    <string name="ftue_auth_new_password_subtitle">パスワードは8文字以上に設定してください。</string>
+    <string name="ftue_auth_new_password_title">パスワードを選択</string>
+    <string name="ftue_auth_new_password_entry_title">新しいパスワード</string>
+    <string name="ftue_auth_reset_password_breaker_title">電子メールを確認してください。</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%sは認証リンクを送信します</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">確認コード</string>
+    <string name="ftue_auth_phone_entry_title">電話番号</string>
+    <string name="ftue_auth_phone_subtitle">%sはアカウントの認証が必要です</string>
+    <string name="ftue_auth_phone_title">電話番号を入力してください</string>
+    <string name="ftue_auth_email_entry_title">メールアドレス</string>
+    <string name="ftue_auth_email_subtitle">%sはアカウントの認証が必要です</string>
+    <string name="labs_enable_rich_text_editor_title">リッチテキストエディターを有効にする</string>
+    <string name="labs_enable_deferred_dm_summary">最初のメッセージを送信する際にダイレクトメッセージを作成</string>
+    <string name="labs_enable_deferred_dm_title">遅延DMを有効にする</string>
+    <string name="space_list_empty_title">スペースがありません。</string>
+    <string name="labs_enable_new_app_layout_title">新しいレイアウトを有効にする</string>
+    <string name="home_layout_preferences_sort_activity">アクティビティー順</string>
+    <string name="home_layout_preferences_sort_name">アルファベット順</string>
+    <string name="home_layout_preferences_sort_by">並び替え</string>
+    <string name="home_layout_preferences_filters">フィルターを表示</string>
+    <string name="home_layout_preferences">レイアウトの設定</string>
+    <string name="action_got_it">了解</string>
+    <string name="action_next">次へ</string>
+    <string name="action_learn_more">詳しく知る</string>
+    <string name="time_unit_second_short">秒</string>
+    <string name="time_unit_minute_short">分</string>
+    <string name="time_unit_hour_short">時</string>
+    <string name="initial_sync_request_content">${app_name}は以下の理由で、キャッシュを消去して最新の状態にする必要があります。
+\n%s
+\n
+\nアプリケーションが再起動します。再起動には時間がかかる可能性があります。</string>
+    <string name="initial_sync_request_title">初期同期のリクエスト</string>
+    <string name="a11y_collapse_space_children">%sの子スペースを折りたたむ</string>
+    <string name="a11y_expand_space_children">%sの子スペースを展開</string>
+    <string name="explore_rooms">ルームを探索</string>
+    <string name="change_space">スペースを変更</string>
+    <string name="create_room">ルームを作成</string>
+    <string name="start_chat">チャットを開始</string>
+    <string name="all_chats">全ての会話</string>
 </resources>

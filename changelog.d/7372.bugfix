@@ -1,0 +1,1 @@
+Handle properly when getUser returns null - prefer using getUserOrDefault

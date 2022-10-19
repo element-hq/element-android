@@ -16,7 +16,8 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.test.fakes.FakeRoom
@@ -25,6 +26,7 @@ import im.vector.app.test.fakes.FakeSession
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
@@ -44,7 +46,8 @@ class PauseVoiceBroadcastUseCaseTest {
 
     private val fakeRoom = FakeRoom()
     private val fakeSession = FakeSession(fakeRoomService = FakeRoomService(fakeRoom))
-    private val pauseVoiceBroadcastUseCase = PauseVoiceBroadcastUseCase(fakeSession)
+    private val fakeVoiceBroadcastRecorder = mockk<VoiceBroadcastRecorder>(relaxed = true)
+    private val pauseVoiceBroadcastUseCase = PauseVoiceBroadcastUseCase(fakeSession, fakeVoiceBroadcastRecorder)
 
     @Test
     fun `given a room id with a potential existing voice broadcast state when calling execute then the voice broadcast is paused or not`() = runTest {
@@ -80,7 +83,7 @@ class PauseVoiceBroadcastUseCaseTest {
         // Then
         coVerify {
             fakeRoom.stateService().sendStateEvent(
-                    eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                    eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                     stateKey = fakeSession.myUserId,
                     body = any(),
             )
@@ -114,7 +117,7 @@ class PauseVoiceBroadcastUseCaseTest {
         val event = state?.let {
             Event(
                     eventId = if (state == VoiceBroadcastState.STARTED) A_STARTED_VOICE_BROADCAST_EVENT_ID else AN_EVENT_ID,
-                    type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                    type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                     stateKey = fakeSession.myUserId,
                     content = MessageVoiceBroadcastInfoContent(
                             voiceBroadcastStateStr = state.value,

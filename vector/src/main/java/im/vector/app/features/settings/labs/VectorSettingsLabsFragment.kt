@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.labs
 
+import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
@@ -88,6 +89,11 @@ class VectorSettingsLabsFragment :
                 onNewLayoutPreferenceClicked()
                 true
             }
+        }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_VOICE_BROADCAST_KEY)?.let { pref ->
+            // Voice Broadcast recording is not available on Android < 10
+            pref.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorFeatures.isVoiceBroadcastEnabled()
         }
 
         configureUnreadNotificationsAsTabPreference()

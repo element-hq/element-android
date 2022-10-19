@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -74,7 +73,7 @@ internal class WidgetFactory @Inject constructor(
     // Ref: https://github.com/matrix-org/matrix-widget-api/blob/master/src/templating/url-template.ts#L29-L33
     fun computeURL(widget: Widget, isLightTheme: Boolean): String? {
         var computedUrl = widget.widgetContent.url ?: return null
-        val myUser = userDataSource.getUser(userId) ?: User(userId)
+        val myUser = userDataSource.getUserOrDefault(userId)
 
         val keyValue = widget.widgetContent.data.mapKeys { "\$${it.key}" }.toMutableMap()
 

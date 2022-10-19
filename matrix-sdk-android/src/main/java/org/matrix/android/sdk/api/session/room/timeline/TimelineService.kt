@@ -55,4 +55,9 @@ interface TimelineService {
      * Returns a snapshot list of TimelineEvent with EventType.MESSAGE and MessageType.MSGTYPE_IMAGE or MessageType.MSGTYPE_VIDEO.
      */
     fun getAttachmentMessages(): List<TimelineEvent>
+
+    /**
+     * Returns a snapshot list of TimelineEvent with a content relation of the given type to the given eventId.
+     */
+    fun getTimelineEventsRelatedTo(relationType: String, eventId: String): List<TimelineEvent>
 }

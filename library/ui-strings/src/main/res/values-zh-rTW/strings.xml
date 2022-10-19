@@ -873,10 +873,10 @@
     <string name="settings_push_rules">推送規則</string>
     <string name="settings_push_rules_no_rules">未定義通送規則</string>
     <string name="settings_push_gateway_no_pushers">沒有已註冊的推送閘道</string>
-    <string name="push_gateway_item_app_id">app_id：</string>
-    <string name="push_gateway_item_push_key">push_key：</string>
-    <string name="push_gateway_item_app_display_name">app_display_name：</string>
-    <string name="push_gateway_item_device_name">session_name：</string>
+    <string name="push_gateway_item_app_id">App ID：</string>
+    <string name="push_gateway_item_push_key">推送金鑰：</string>
+    <string name="push_gateway_item_app_display_name">應用程式顯示名稱：</string>
+    <string name="push_gateway_item_device_name">工作階段顯示名稱：</string>
     <string name="push_gateway_item_url">Url：</string>
     <string name="push_gateway_item_format">格式：</string>
     <string name="preference_voice_and_video">音訊與視訊</string>
@@ -1092,7 +1092,7 @@
 \n
 \n停止密碼變更流程？</string>
     <string name="login_set_email_title">設定電子郵件地址</string>
-    <string name="login_set_email_notice">設定電子郵件地址以復原您的帳號。之後您也可以選擇性地讓您認識的人透過您的這個地址找到您。</string>
+    <string name="login_set_email_notice">設定電子郵件地址以復原您的帳號。之後您也可以選擇性地讓您認識的人透過此地址找到您。</string>
     <string name="login_set_email_mandatory_hint">電子郵件</string>
     <string name="login_set_email_optional_hint">電子郵件（選擇性）</string>
     <string name="login_set_email_submit">下一個</string>
@@ -2688,4 +2688,67 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ 此聊天室中有未驗證的裝置，它們將無法解密您傳送的訊息。</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">切莫向此聊天室中未經驗證的工作階段傳送加密訊息。</string>
     <string name="action_got_it">知道了</string>
+    <string name="rich_text_editor_format_underline">套用底線格式</string>
+    <string name="rich_text_editor_format_strikethrough">套用刪除線格式</string>
+    <string name="rich_text_editor_format_italic">套用義式斜體格式</string>
+    <string name="rich_text_editor_format_bold">套用粗體格式</string>
+    <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與 URL，以便在工作階段管理程式中可以更簡單地辨認工作階段。</string>
+    <string name="labs_enable_client_info_recording_title">啟用客戶端資訊記錄</string>
+    <string name="labs_enable_session_manager_summary">對所有工作階段有更大的能見度與控制。</string>
+    <string name="labs_enable_session_manager_title">啟用新的工作階段管理程式</string>
+    <string name="device_manager_session_details_device_operating_system">作業系統</string>
+    <string name="device_manager_session_details_device_model">模型</string>
+    <string name="device_manager_session_details_device_browser">瀏覽器</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">版本</string>
+    <string name="device_manager_session_details_application_name">名稱</string>
+    <string name="device_manager_session_details_application">應用程式</string>
+    <string name="device_manager_push_notifications_description">接收關於此工作階段的推播通知。</string>
+    <string name="device_manager_push_notifications_title">推播通知</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">驗證您目前的工作階段以顯示此工作階段的驗證狀態。</string>
+    <string name="device_manager_verification_status_unknown">未知的驗證狀態</string>
+    <string name="push_gateway_item_enabled">已啟用：</string>
+    <string name="push_gateway_item_device_id">工作階段 ID：</string>
+    <string name="error_check_network">發生了一些問題。請檢查您的網路連線並再試一次。</string>
+    <string name="grant_permission">授予權限</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} 需要權限以顯示通知。
+\n請授予權限。</string>
+    <string name="permissions_rationale_msg_notification">${app_name} 需要權限才能顯示通知。通知可以顯示您的訊息、您的邀請等等。
+\n
+\n請在下一個彈出式視窗允許存取以檢視通知。</string>
+    <string name="labs_enable_rich_text_editor_summary">試用格式化文字編輯器（純文字模式即將推出）</string>
+    <string name="labs_enable_rich_text_editor_title">啟用格式化文字編輯器</string>
+    <string name="qr_code_login_confirm_security_code_description">請確保您知道此驗證碼的來源。透過連結裝置，您將為某人提供對您帳號的完整存取權限。</string>
+    <string name="qr_code_login_confirm_security_code">確認</string>
+    <string name="qr_code_login_try_again">再試一次</string>
+    <string name="qr_code_login_status_no_match">不相符？</string>
+    <string name="qr_code_login_signing_in">登入</string>
+    <string name="qr_code_login_connecting_to_device">連線至裝置</string>
+    <string name="qr_code_login_scan_qr_code_button">掃描 QR code</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">正在使用行動裝置登入？</string>
+    <string name="qr_code_login_show_qr_code_button">在此裝置顯示 QR code</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">選取「掃描 QR code」</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">從登入畫面開始</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">選取「使用 QR code 登入」</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">從登入畫面開始</string>
+    <string name="qr_code_login_new_device_instruction_3">選取「在此裝置上顯示 QR code」</string>
+    <string name="qr_code_login_new_device_instruction_2">到「設定」→「安全與隱私」→「顯示所有工作階段」</string>
+    <string name="qr_code_login_new_device_instruction_1">在您的其他裝置上開啟 ${app_name}</string>
+    <string name="qr_code_login_header_failed_denied_description">請求在另一台裝置上被拒絕。</string>
+    <string name="qr_code_login_header_failed_timeout_description">連結未在規定時間內完成。</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">不支援與其裝置連結。</string>
+    <string name="qr_code_login_header_failed_title">連線不成功</string>
+    <string name="qr_code_login_header_connected_description">請檢查您已登入的裝置，應該會顯示以下驗證碼。請確認以下驗證碼與該裝置相符：</string>
+    <string name="qr_code_login_header_connected_title">已建立安全連線</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用您已登出的裝置掃描以下 QR code。</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">使用您已登入的裝置來掃描下方的 QR code：</string>
+    <string name="qr_code_login_header_show_qr_code_title">使用 QR code 登入</string>
+    <string name="qr_code_login_header_scan_qr_code_description">使用此裝置的相機掃描您其他裝置上顯示的 QR code：</string>
+    <string name="qr_code_login_header_scan_qr_code_title">掃描 QR code</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">您可以使用此裝置透過 QR code 登入移動裝置或網路裝置。有兩種方法可以作到：</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">使用 QR code 登入</string>
+    <string name="login_scan_qr_code">掃描 QR code</string>
 </resources>

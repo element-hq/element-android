@@ -51,6 +51,8 @@ internal class UserDataSource @Inject constructor(
                 ?.asDomain()
     }
 
+    fun getUserOrDefault(userId: String): User = getUser(userId) ?: User(userId)
+
     fun getUserLive(userId: String): LiveData<Optional<User>> {
         return realmInstance.queryFirst {
             UserEntity.where(it, userId).first()

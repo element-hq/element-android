@@ -30,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
@@ -46,10 +46,10 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
 
     init {
-        val user = session.getUser(initialState.userId)
+        val user = session.getUserOrDefault(initialState.userId)
         setState {
             copy(
-                    matrixItem = user?.toMatrixItem(),
+                    matrixItem = user.toMatrixItem(),
                     shareLink = session.permalinkService().createPermalink(initialState.userId)
             )
         }
