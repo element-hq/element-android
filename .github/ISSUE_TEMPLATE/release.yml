@@ -20,7 +20,6 @@ body:
         - [ ] Check the update of the store descriptions (using Google Translate if necessary) to ensure that the changes are acceptable to be published to the stores.
         - [ ] While Weblate is locked, and after the PR from Weblate has been merged, handle all the TODOs in the main `strings.xml` file
         - [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
-
         - [ ] Ensure all [the required PRs](https://github.com/vector-im/element-android/pulls?q=is%3Aopen+is%3Apr+label%3AZ-NextRelease) have been merged
 
         ### Do the release
@@ -32,7 +31,6 @@ body:
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
         - [ ] Create an account on matrix.org and do some smoke tests that the sanity test does not cover like: 1-1 call, 1-1 video call, Jitsi call for instance
         - [ ] Run towncrier: `towncrier build --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
-        - [ ] Check that the folder `changelog.d` is empty. It can happen that some remaining files stay here
         - [ ] Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things
         - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs
         - [ ] (optional) Push the branch and start a draft PR (will not be merged), to check that the CI is happy with all the changes.
