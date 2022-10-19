@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.lib.core.utils.compat.getParcelableCompat
@@ -66,7 +67,7 @@ class QrCodeLoginActivity : SimpleFragmentActivity() {
     }
 
     private fun showInstructionsFragment(qrCodeLoginArgs: QrCodeLoginArgs) {
-        addFragment(
+        replaceFragment(
                 views.container,
                 QrCodeLoginInstructionsFragment::class.java,
                 qrCodeLoginArgs,

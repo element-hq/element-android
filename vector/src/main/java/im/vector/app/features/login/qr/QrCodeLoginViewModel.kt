@@ -59,6 +59,11 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleTryAgain() {
+        setState {
+            copy(
+                    connectionStatus = null
+            )
+        }
         _viewEvents.post(QrCodeLoginViewEvents.NavigateToInitialScreen)
     }
 
