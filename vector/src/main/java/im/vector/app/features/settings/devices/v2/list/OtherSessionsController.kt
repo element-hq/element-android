@@ -73,6 +73,7 @@ class OtherSessionsController @Inject constructor(
                     sessionDescriptionDrawable(descriptionDrawable)
                     sessionDescriptionColor(descriptionColor)
                     stringProvider(this@OtherSessionsController.stringProvider)
+                    selected(device.isSelected)
                     clickListener { device.deviceInfo.deviceId?.let { host.callback?.onItemClicked(it) } }
                     onLongClickListener(View.OnLongClickListener {
                         device.deviceInfo.deviceId?.let { host.callback?.onItemLongClicked(it) }

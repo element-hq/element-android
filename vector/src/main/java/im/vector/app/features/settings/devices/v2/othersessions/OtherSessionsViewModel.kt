@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.othersessions
 
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -69,7 +70,8 @@ class OtherSessionsViewModel @AssistedInject constructor(
         when (action) {
             is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
             OtherSessionsAction.DisableSelectMode -> handleDisableSelectMode()
-            OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode()
+            is OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode(action.deviceId)
+            is OtherSessionsAction.ToggleSelectionForDevice -> handleToggleSelectionForDevice(action.deviceId)
         }
     }
 
@@ -83,10 +85,37 @@ class OtherSessionsViewModel @AssistedInject constructor(
     }
 
     private fun handleDisableSelectMode() {
+        // TODO deselect all selected sessions
         setState { copy(isSelectModeEnabled = false) }
     }
 
-    private fun handleEnableSelectMode() {
-        setState { copy(isSelectModeEnabled = true) }
+    private fun handleEnableSelectMode(deviceId: String?) {
+        toggleSelectionForDevice(deviceId, true)
+    }
+
+    private fun handleToggleSelectionForDevice(deviceId: String) = withState { state ->
+        toggleSelectionForDevice(deviceId, state.isSelectModeEnabled)
+    }
+
+    private fun toggleSelectionForDevice(deviceId: String?, enableSelectMode: Boolean) = withState { state ->
+        val updatedDevices = if (state.devices is Success) {
+            val devices = state.devices.invoke().toMutableList()
+            val indexToUpdate = devices.indexOfFirst { it.deviceInfo.deviceId == deviceId }
+            if (indexToUpdate >= 0) {
+                val currentInfo = devices[indexToUpdate]
+                val updatedInfo = currentInfo.copy(isSelected = !currentInfo.isSelected)
+                devices[indexToUpdate] = updatedInfo
+            }
+            Success(devices)
+        } else {
+            state.devices
+        }
+
+        setState {
+            copy(
+                    devices = updatedDevices,
+                    isSelectModeEnabled = enableSelectMode
+            )
+        }
     }
 }

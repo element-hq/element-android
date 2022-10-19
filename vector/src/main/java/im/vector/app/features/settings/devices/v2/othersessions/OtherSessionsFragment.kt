@@ -89,8 +89,8 @@ class OtherSessionsFragment :
         }
     }
 
-    private fun enableSelectMode(isEnabled: Boolean) {
-        val action = if (isEnabled) OtherSessionsAction.EnableSelectMode else OtherSessionsAction.DisableSelectMode
+    private fun enableSelectMode(isEnabled: Boolean, deviceId: String? = null) {
+        val action = if (isEnabled) OtherSessionsAction.EnableSelectMode(deviceId) else OtherSessionsAction.DisableSelectMode
         viewModel.handle(action)
     }
 
@@ -153,23 +153,25 @@ class OtherSessionsFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        updateToolbar(state.isSelectModeEnabled)
         if (state.devices is Success) {
-            renderDevices(state.devices(), state.currentFilter)
+            val devices = state.devices().orEmpty()
+            renderDevices(devices, state.currentFilter)
+            updateToolbar(devices, state.isSelectModeEnabled)
         }
     }
 
-    private fun updateToolbar(isSelectModeEnabled: Boolean) {
+    private fun updateToolbar(devices: List<DeviceFullInfo>, isSelectModeEnabled: Boolean) {
         invalidateOptionsMenu()
         val title = if (isSelectModeEnabled) {
-            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_selected, 0, 0)
+            val selection = devices.count { it.isSelected }
+            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_selected, selection, selection)
         } else {
             getString(args.titleResourceId)
         }
         toolbar?.title = title
     }
 
-    private fun renderDevices(devices: List<DeviceFullInfo>?, currentFilter: DeviceManagerFilterType) {
+    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType) {
         views.otherSessionsFilterBadgeImageView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.otherSessionsSecurityRecommendationView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.deviceListHeaderOtherSessions.isVisible = currentFilter == DeviceManagerFilterType.ALL_SESSIONS
@@ -222,7 +224,7 @@ class OtherSessionsFragment :
             }
         }
 
-        if (devices.isNullOrEmpty()) {
+        if (devices.isEmpty()) {
             views.deviceListOtherSessions.isVisible = false
             views.otherSessionsNotFoundLayout.isVisible = true
         } else {
@@ -254,15 +256,19 @@ class OtherSessionsFragment :
 
     override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
         if (!state.isSelectModeEnabled) {
-            enableSelectMode(true)
+            enableSelectMode(true, deviceId)
         }
     }
 
-    override fun onOtherSessionClicked(deviceId: String) {
-        viewNavigator.navigateToSessionOverview(
-                context = requireActivity(),
-                deviceId = deviceId
-        )
+    override fun onOtherSessionClicked(deviceId: String) = withState(viewModel) { state ->
+        if (state.isSelectModeEnabled) {
+            viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(deviceId))
+        } else {
+            viewNavigator.navigateToSessionOverview(
+                    context = requireActivity(),
+                    deviceId = deviceId
+            )
+        }
     }
 
     override fun onViewAllOtherSessionsClicked() {

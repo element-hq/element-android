@@ -17,10 +17,12 @@
 package im.vector.app.features.settings.devices.v2.list
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.view.View.OnLongClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -57,6 +59,9 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute
     lateinit var stringProvider: StringProvider
 
+    @EpoxyAttribute
+    var selected: Boolean = false
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
@@ -81,6 +86,9 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
             holder.otherSessionDescriptionTextView.setTextColor(it)
         }
         holder.otherSessionDescriptionTextView.setCompoundDrawablesWithIntrinsicBounds(sessionDescriptionDrawable, null, null, null)
+        // TODO set drawable with correct color and corners
+        val color = if (selected) R.color.alert_default_error_background else android.R.color.transparent
+        holder.otherSessionItemBackgroundView.setBackgroundColor(ContextCompat.getColor(holder.view.context, color))
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -88,5 +96,6 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
         val otherSessionVerificationStatusImageView by bind<ShieldImageView>(R.id.otherSessionVerificationStatusImageView)
         val otherSessionNameTextView by bind<TextView>(R.id.otherSessionNameTextView)
         val otherSessionDescriptionTextView by bind<TextView>(R.id.otherSessionDescriptionTextView)
+        val otherSessionItemBackgroundView by bind<View>(R.id.otherSessionItemBackground)
     }
 }
