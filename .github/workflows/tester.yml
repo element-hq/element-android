@@ -1,0 +1,37 @@
+name: "tests"
+on:
+  push:
+    branches:
+      - michaelk/dont_look_now
+jobs:
+  test:
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    steps:
+    - name: report cpu
+      run: 'echo "INITIAL_CPU=`cat /proc/stat | grep "cpu "`" >> $GITHUB_ENV'
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.x"
+    - name: Run synapse
+      uses: michaelkaye/setup-matrix-synapse@v1.0.3
+      with: 
+        uploadLogs: true
+        httpPort: 8008
+        customConfig: |
+          registration_shared_secret: RegistrationSharedSecret
+    - name: timed test setup
+      run: synapse/env/bin/pip install -r requirements.txt
+    - name: create user
+      run: synapse/env/bin/register_new_matrix_user -u tester -p password --no-admin -k RegistrationSharedSecret http://localhost:8008
+    - name: timed One
+      run: synapse/env/bin/python ./timed_test.py
+    - name: timed Two
+      run: synapse/env/bin/python ./timed_test.py
+    - name: timed Three
+      run: synapse/env/bin/python ./timed_test.py
+    - name: timed Four
+      run: synapse/env/bin/python ./timed_test.py
+    - name: report cpu after
+      run: "./eval_cpu.sh"
+
