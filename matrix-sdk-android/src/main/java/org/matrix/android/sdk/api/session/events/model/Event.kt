@@ -401,7 +401,7 @@ fun Event.getRelationContent(): RelationDefaultContent? {
             when (getClearType()) {
                 EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
                 in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
-                else -> null
+                else -> getClearContent()?.get("m.relates_to")?.toContent().toModel()
             }
         }
     }
