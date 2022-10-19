@@ -47,11 +47,10 @@ data class RoomSync(
          */
         @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null,
 
-
         /**
          * The count of threads with unread notifications (not the total # of notifications in all threads)
          */
-        @Json(name = "org.matrix.msc3773.unread_thread_notifications") val unreadThreadNotifications: Map<String, RoomSyncUnreadThreadNotifications>? = null,
+        @Json(name = "unread_thread_notifications") val unreadThreadNotifications: Map<String, RoomSyncUnreadThreadNotifications>? = null,
 
         /**
          * The room summary.

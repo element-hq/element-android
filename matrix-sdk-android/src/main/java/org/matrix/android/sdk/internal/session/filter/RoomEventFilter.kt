@@ -81,7 +81,7 @@ internal data class RoomEventFilter(
         /**
          * If true, this will opt-in for the server to return unread threads notifications in [RoomSync]
          */
-        @Json(name = "org.matrix.msc3773.unread_thread_notifications") val enableUnreadThreadNotifications: Boolean? = null,
+        @Json(name = "unread_thread_notifications") val enableUnreadThreadNotifications: Boolean? = null,
 ) {
 
     fun toJSONString(): String {

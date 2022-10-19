@@ -110,8 +110,7 @@ internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEvent
         endGroup()
     }
     if (filters.filterUseless) {
-        not()
-                .equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
+        not().equalTo(TimelineEventEntityFields.ROOT.IS_USELESS, true)
     }
     if (filters.filterEdits) {
         not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
