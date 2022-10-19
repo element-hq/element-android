@@ -1701,7 +1701,7 @@
     <string name="auth_msisdn_already_defined">Этот номер телефона уже используется.</string>
     <string name="settings_phone_number_empty">В ваш аккаунт не добавлен номер телефона</string>
     <string name="settings_emails">Адрес электронной почты</string>
-    <string name="settings_emails_empty">В ваш аккаунт не добавлен адрес электронной почты</string>
+    <string name="settings_emails_empty">В вашу учётную запись не добавлен адрес электронной почты</string>
     <string name="settings_phone_numbers">Телефонные номера</string>
     <string name="settings_remove_three_pid_confirmation_content">Удалить %s\?</string>
     <string name="error_threepid_auth_failed">Убедитесь, что вы перешли по ссылке в электронном письме, которое мы вам отправили.</string>
@@ -2777,4 +2777,19 @@
     <string name="device_manager_session_details_device_model">Модель</string>
     <string name="device_manager_session_details_device_operating_system">Операционная система</string>
     <string name="labs_enable_session_manager_title">Новый менеджер сессий</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Рассмотрите возможность выхода из старых сессий (%1$d день или дольше), которые вы более не используете.</item>
+        <item quantity="few">Рассмотрите возможность выхода из старых сессий (%1$d дня или дольше), которые вы более не используете.</item>
+        <item quantity="many">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
+        <item quantity="other">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
+    </plurals>
+    <string name="poll_undisclosed_not_ended">Результаты будут видны после завершения опроса</string>
+    <string name="onboarding_new_app_layout_spaces_message">Доступ к пространствам (внизу справа) быстрее и проще, чем когда-либо прежде.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Доступ к пространствам</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Рассмотрите возможность выхода из старых сессий (%1$d день или дольше), которые вы более не используете.</item>
+        <item quantity="few">Рассмотрите возможность выхода из старых сессий (%1$d дня или дольше), которые вы более не используете.</item>
+        <item quantity="many">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
+        <item quantity="other">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
+    </plurals>
 </resources>
