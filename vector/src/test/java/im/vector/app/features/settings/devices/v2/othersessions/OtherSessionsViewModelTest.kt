@@ -80,7 +80,7 @@ class OtherSessionsViewModelTest {
     fun `given the viewModel has been initialized then viewState is updated with devices list`() {
         // Given
         val devices = mockk<List<DeviceFullInfo>>()
-        givenGetDeviceFullInfoListReturns(devices)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
                 devices = Success(devices),
                 currentFilter = defaultArgs.defaultFilter,
@@ -98,8 +98,41 @@ class OtherSessionsViewModelTest {
         verifyAll { fakeGetDeviceFullInfoListUseCase.execute(defaultArgs.defaultFilter, defaultArgs.excludeCurrentDevice) }
     }
 
-    private fun givenGetDeviceFullInfoListReturns(devices: List<DeviceFullInfo>) {
-        every { fakeGetDeviceFullInfoListUseCase.execute(any(), any()) } returns flowOf(devices)
+    @Test
+    fun `given filter devices action when handling the action then viewState is updated with filter option and devices are filtered`() {
+        // Given
+        val filterType = DeviceManagerFilterType.UNVERIFIED
+        val devices = mockk<List<DeviceFullInfo>>()
+        val filteredDevices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        givenGetDeviceFullInfoListReturns(filterType = filterType, filteredDevices)
+        val expectedState = OtherSessionsViewState(
+                devices = Success(filteredDevices),
+                currentFilter = filterType,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = false,
+        )
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.FilterDevices(filterType))
+
+        // Then
+        viewModelTest
+                .assertLatestState { state -> state == expectedState }
+                .finish()
+        verifyAll {
+            fakeGetDeviceFullInfoListUseCase.execute(defaultArgs.defaultFilter, defaultArgs.excludeCurrentDevice)
+            fakeGetDeviceFullInfoListUseCase.execute(filterType, defaultArgs.excludeCurrentDevice)
+        }
+    }
+
+    private fun givenGetDeviceFullInfoListReturns(
+            filterType: DeviceManagerFilterType,
+            devices: List<DeviceFullInfo>,
+    ) {
+        every { fakeGetDeviceFullInfoListUseCase.execute(filterType, any()) } returns flowOf(devices)
     }
 
     private fun givenVerificationService(): FakeVerificationService {
