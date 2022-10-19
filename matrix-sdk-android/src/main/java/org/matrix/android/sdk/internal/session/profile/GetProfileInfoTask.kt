@@ -17,15 +17,15 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
-import com.zhuinden.monarchy.Monarchy
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal abstract class GetProfileInfoTask : Task<GetProfileInfoTask.Params, JsonDict> {
@@ -38,7 +38,7 @@ internal abstract class GetProfileInfoTask : Task<GetProfileInfoTask.Params, Jso
 internal class DefaultGetProfileInfoTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy,
+        @SessionDatabase private val realmInstance: RealmInstance,
 ) : GetProfileInfoTask() {
 
     override suspend fun execute(params: Params): JsonDict {
@@ -47,8 +47,11 @@ internal class DefaultGetProfileInfoTask @Inject constructor(
         }.also { user ->
             if (params.storeInDatabase) {
                 // Insert into DB
-                monarchy.awaitTransaction {
-                    it.insertOrUpdate(UserEntityFactory.create(User.fromJson(params.userId, user)))
+                realmInstance.write {
+                    copyToRealm(
+                            instance = UserEntityFactory.create(User.fromJson(params.userId, user)),
+                            updatePolicy = UpdatePolicy.ALL
+                    )
                 }
             }
         }

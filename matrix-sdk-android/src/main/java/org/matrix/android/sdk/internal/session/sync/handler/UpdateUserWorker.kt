@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync.handler
 
 import android.content.Context
 import androidx.work.WorkerParameters
+import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.SessionManager
@@ -89,7 +90,7 @@ internal class UpdateUserWorker(context: Context, params: WorkerParameters, sess
         realmInstance.write {
             Timber.d("## saveLocally() - in transaction")
             userEntities.forEach {
-                copyToRealm(it)
+                copyToRealm(it, updatePolicy = UpdatePolicy.ALL)
             }
         }
         Timber.d("## saveLocally() - END")
