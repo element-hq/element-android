@@ -27,7 +27,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -186,11 +186,11 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     private fun renderEvents(session: Session, eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
-        val user = session.getUser(session.myUserId)
+        val user = session.getUserOrDefault(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
+        val myUserDisplayName = user.toMatrixItem().getBestName()
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
-                contentUrl = user?.avatarUrl,
+                contentUrl = user.avatarUrl,
                 width = avatarSize,
                 height = avatarSize,
                 method = ContentUrlResolver.ThumbnailMethod.SCALE

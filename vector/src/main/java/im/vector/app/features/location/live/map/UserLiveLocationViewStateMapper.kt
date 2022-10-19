@@ -20,7 +20,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.toLocationData
 import kotlinx.coroutines.suspendCancellableCoroutine
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -45,19 +45,17 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                     else -> {
                         locationPinProvider.create(userId) { pinDrawable ->
                             val session = activeSessionHolder.getActiveSession()
-                            session.getUser(userId)?.toMatrixItem()?.let { matrixItem ->
-                                val locationTimestampMillis = liveLocationShareAggregatedSummary.lastLocationDataContent?.getBestTimestampMillis()
-                                val viewState = UserLiveLocationViewState(
-                                        matrixItem = matrixItem,
-                                        pinDrawable = pinDrawable,
-                                        locationData = locationData,
-                                        endOfLiveTimestampMillis = liveLocationShareAggregatedSummary.endOfLiveTimestampMillis,
-                                        locationTimestampMillis = locationTimestampMillis,
-                                        showStopSharingButton = userId == session.myUserId
-                                )
-                                continuation.resume(viewState) {
-                                    // do nothing on cancellation
-                                }
+                            val locationTimestampMillis = liveLocationShareAggregatedSummary.lastLocationDataContent?.getBestTimestampMillis()
+                            val viewState = UserLiveLocationViewState(
+                                    matrixItem = session.getUserOrDefault(userId).toMatrixItem(),
+                                    pinDrawable = pinDrawable,
+                                    locationData = locationData,
+                                    endOfLiveTimestampMillis = liveLocationShareAggregatedSummary.endOfLiveTimestampMillis,
+                                    locationTimestampMillis = locationTimestampMillis,
+                                    showStopSharingButton = userId == session.myUserId
+                            )
+                            continuation.resume(viewState) {
+                                // do nothing on cancellation
                             }
                         }
                     }
