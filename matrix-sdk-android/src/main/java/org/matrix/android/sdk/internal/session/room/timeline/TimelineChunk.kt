@@ -465,21 +465,22 @@ internal class TimelineChunk(
 
     private fun handleChunkObjectChange(chunkChanged: ObjectChange<ChunkEntity>) {
         fun onChunkUpdated(updatedObject: UpdatedObject<ChunkEntity>) {
-            Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${updatedObject.changedFields.joinToString(",")}")
+            val updatedChunkEntity = updatedObject.obj
+            Timber.v("on chunk (${updatedChunkEntity.identifier()}) changed: ${updatedObject.changedFields.joinToString(",")}")
             if (updatedObject.isFieldChanged("isLastForward")) {
-                isLastForward.set(chunkEntity.isLastForward)
+                isLastForward.set(updatedChunkEntity.isLastForward)
             }
             if (updatedObject.isFieldChanged("isLastBackward")) {
-                isLastBackward.set(chunkEntity.isLastBackward)
+                isLastBackward.set(updatedChunkEntity.isLastBackward)
             }
             if (updatedObject.isFieldChanged("nextChunk")) {
-                nextChunk = createTimelineChunk(chunkEntity.nextChunk).also {
+                nextChunk = createTimelineChunk(updatedChunkEntity.nextChunk).also {
                     it?.prevChunk = this
                 }
                 nextChunkLatch?.complete(Unit)
             }
             if (updatedObject.isFieldChanged("prevChunk")) {
-                prevChunk = createTimelineChunk(chunkEntity.prevChunk).also {
+                prevChunk = createTimelineChunk(updatedChunkEntity.prevChunk).also {
                     it?.nextChunk = this
                 }
                 prevChunkLatch?.complete(Unit)
