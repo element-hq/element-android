@@ -82,7 +82,7 @@ ext.libs = [
                 'transition'              : "androidx.transition:transition:1.2.0",
         ],
         google      : [
-                'material'                : "com.google.android.material:material:1.6.1",
+                'material'                : "com.google.android.material:material:1.7.0",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
