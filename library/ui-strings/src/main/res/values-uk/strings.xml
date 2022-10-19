@@ -2892,9 +2892,9 @@
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Виберіть «Увійти за допомогою QR-коду»</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Почніть з екрана входу</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Почніть з екрана входу</string>
-    <string name="qr_code_login_new_device_instruction_3">Виберіть «Показати QR-код на цьому пристрої»</string>
-    <string name="qr_code_login_new_device_instruction_2">Перейдіть до Налаштування -&gt; Безпека й приватність -&gt; Показати всі сеанси</string>
-    <string name="qr_code_login_new_device_instruction_1">Відкрийте ${app_name} на іншому своєму пристрої</string>
+    <string name="qr_code_login_new_device_instruction_3">Виберіть «Показати QR-код»</string>
+    <string name="qr_code_login_new_device_instruction_2">Перейдіть до Налаштування -&gt; Безпека й приватність</string>
+    <string name="qr_code_login_new_device_instruction_1">Відкрийте застосунок на іншому своєму пристрої</string>
     <string name="qr_code_login_header_failed_denied_description">Запит на іншому пристрої було відхилено.</string>
     <string name="qr_code_login_header_failed_timeout_description">Пов\'язування не було завершено у встановлені терміни.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Пов\'язування з цим пристроєм не підтримується.</string>
@@ -2913,4 +2913,13 @@
     <string name="qr_code_login_scan_qr_code_button">Сканувати QR-код</string>
     <string name="qr_code_login_header_scan_qr_code_title">Сканувати QR-код</string>
     <string name="login_scan_qr_code">Сканувати QR-код</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Домашній сервер не підтримує вхід за допомогою QR-коду.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Вхід на іншому пристрої було скасовано.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Цей QR-код недійсний.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Повинен бути виконаний вхід з іншого пристрою.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Вхід з іншого пристрою вже виконано.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Під час налаштування захищеного обміну повідомленнями виникла проблема з безпекою. Можливо, порушено одне з таких налаштувань: Ваш домашній сервер; Ваше інтернет-з\'єднання; Ваш пристрій;</string>
+    <string name="qr_code_login_header_failed_other_description">Запит не виконаний.</string>
+    <string name="labs_enable_voice_broadcast_summary">Можливість записувати та надсилати голосові записи до стрічки кімнати.</string>
+    <string name="labs_enable_voice_broadcast_title">Увімкнути голосове мовлення (в активній розробці)</string>
 </resources>
