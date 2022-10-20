@@ -27,6 +27,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadca
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
+import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
@@ -42,6 +43,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         private val colorProvider: ColorProvider,
         private val drawableProvider: DrawableProvider,
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
+        private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
 ) {
 
     fun create(
@@ -53,7 +55,8 @@ class VoiceBroadcastItemFactory @Inject constructor(
     ): VectorEpoxyModel<out VectorEpoxyHolder>? {
         // Only display item of the initial event with updated data
         if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
-        val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
+        val eventsGroup = params.eventsGroup ?: return null
+        val voiceBroadcastEventsGroup = VoiceBroadcastEventsGroup(eventsGroup)
         val mostRecentTimelineEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent()
         val mostRecentEvent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()
         val mostRecentMessageContent = mostRecentEvent?.content ?: return null
@@ -61,7 +64,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         return if (isRecording) {
             createRecordingItem(params.event.roomId, highlight, callback, attributes)
         } else {
-            createListeningItem(params.event.roomId, highlight, callback, attributes)
+            createListeningItem(params.event.roomId, eventsGroup.groupId, highlight, callback, attributes)
         }
     }
 
@@ -85,6 +88,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
 
     private fun createListeningItem(
             roomId: String,
+            voiceBroadcastId: String,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
@@ -96,7 +100,8 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 .roomItem(roomSummary?.toMatrixItem())
                 .colorProvider(colorProvider)
                 .drawableProvider(drawableProvider)
-                .voiceBroadcastRecorder(voiceBroadcastRecorder)
+                .voiceBroadcastPlayer(voiceBroadcastPlayer)
+                .voiceBroadcastId(voiceBroadcastId)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }

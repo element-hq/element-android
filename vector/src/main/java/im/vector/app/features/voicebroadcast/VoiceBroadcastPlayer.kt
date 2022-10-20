@@ -73,15 +73,17 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentSequence: Int? = null
 
     private var playlist = emptyList<MessageAudioEvent>()
-    private val currentVoiceBroadcastId
+    val currentVoiceBroadcastId
         get() = playlist.firstOrNull()?.root?.getRelationContent()?.eventId
 
     private var state: State = State.IDLE
         set(value) {
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
+            listeners.forEach { it.onStateChanged(value) }
         }
     private var currentRoomId: String? = null
+    private var listeners = mutableListOf<Listener>()
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId
@@ -126,6 +128,15 @@ class VoiceBroadcastPlayer @Inject constructor(
         playlist = emptyList()
         currentSequence = null
         currentRoomId = null
+    }
+
+    fun addListener(listener: Listener) {
+        listeners.add(listener)
+        listener.onStateChanged(state)
+    }
+
+    fun removeListener(listener: Listener) {
+        listeners.remove(listener)
     }
 
     private fun startPlayback(roomId: String, eventId: String) {
@@ -315,5 +326,9 @@ class VoiceBroadcastPlayer @Inject constructor(
         PAUSED,
         BUFFERING,
         IDLE
+    }
+
+    fun interface Listener {
+        fun onStateChanged(state: State)
     }
 }
