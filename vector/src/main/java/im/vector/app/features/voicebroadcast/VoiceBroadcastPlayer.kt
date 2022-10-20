@@ -23,16 +23,12 @@ import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlayb
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.getRoom
@@ -43,8 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -53,7 +47,7 @@ import javax.inject.Singleton
 class VoiceBroadcastPlayer @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
-        private val getVoiceBroadcastStateUseCase: GetVoiceBroadcastStateUseCase,
+        private val getVoiceBroadcastUseCase: GetVoiceBroadcastUseCase,
 ) {
     private val session
         get() = sessionHolder.getActiveSession()
@@ -87,6 +81,7 @@ class VoiceBroadcastPlayer @Inject constructor(
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
         }
+    private var currentRoomId: String? = null
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId
@@ -132,17 +127,19 @@ class VoiceBroadcastPlayer @Inject constructor(
         // Clear playlist
         playlist = emptyList()
         currentSequence = null
+        currentRoomId = null
     }
 
     private fun startPlayback(roomId: String, eventId: String) {
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
+        currentRoomId = roomId
 
         // Stop listening previous voice broadcast if any
         if (state != State.IDLE) stop()
 
         state = State.BUFFERING
 
-        val voiceBroadcastState = getVoiceBroadcastStateUseCase.execute(roomId, eventId)
+        val voiceBroadcastState = getVoiceBroadcastUseCase.execute(roomId, eventId)?.content?.voiceBroadcastState
         if (voiceBroadcastState == VoiceBroadcastState.STOPPED) {
             // Get static playlist
             updatePlaylist(getExistingChunks(room, eventId))
@@ -172,33 +169,10 @@ class VoiceBroadcastPlayer @Inject constructor(
     }
 
     private fun playLiveVoiceBroadcast(room: Room, eventId: String) {
-        val voiceBroadcastEvent = room.timelineService().getTimelineEvent(eventId)?.root?.asVoiceBroadcastEvent()
-                ?: error("Cannot retrieve voice broadcast $eventId")
+        room.timelineService().getTimelineEvent(eventId)?.root?.asVoiceBroadcastEvent() ?: error("Cannot retrieve voice broadcast $eventId")
         updatePlaylist(getExistingChunks(room, eventId))
         startPlayback(true)
-        room.flow()
-                .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(voiceBroadcastEvent.root.stateKey!!))
-                .unwrap()
-                .mapNotNull { event ->
-                    event.asVoiceBroadcastEvent()
-                            ?.takeIf { it.reference?.eventId == eventId }
-                            ?.content?.voiceBroadcastState
-                }
-                .onEach { state ->
-                    when (state) {
-                        VoiceBroadcastState.STARTED,
-                        VoiceBroadcastState.PAUSED,
-                        VoiceBroadcastState.RESUMED -> {
-                            observeIncomingChunks(room, eventId)
-                        }
-                        VoiceBroadcastState.STOPPED -> {
-                            currentTimeline?.dispose()
-                            currentTimeline?.removeAllListeners()
-                            currentTimeline = null
-                        }
-                    }
-                }
-                .launchIn(coroutineScope)
+        observeIncomingEvents(room, eventId)
     }
 
     private fun getExistingChunks(room: Room, eventId: String): List<MessageAudioEvent> {
@@ -207,10 +181,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 .filter { it.isVoiceBroadcast() }
     }
 
-    private fun observeIncomingChunks(room: Room, eventId: String) {
-        // Fixme this is probably not necessary here
-        currentTimeline?.dispose()
-        currentTimeline?.removeAllListeners()
+    private fun observeIncomingEvents(room: Room, eventId: String) {
         currentTimeline = room.timelineService().createTimeline(null, TimelineSettings(5)).also { timeline ->
             timelineListener = TimelineListener(eventId).also { timeline.addListener(it) }
             timeline.start()
@@ -321,13 +292,17 @@ class VoiceBroadcastPlayer @Inject constructor(
         }
 
         override fun onCompletion(mp: MediaPlayer) {
-            when {
-                timelineListener == null && nextMediaPlayer == null -> {
-                    stop()
-                }
-                nextMediaPlayer == null -> {
-                    state = State.BUFFERING
-                }
+            if (nextMediaPlayer != null) return
+            val roomId = currentRoomId ?: return
+            val voiceBroadcastId = currentVoiceBroadcastId ?: return
+            val voiceBroadcastEventContent = getVoiceBroadcastUseCase.execute(roomId, voiceBroadcastId)?.content ?: return
+            val isLive = voiceBroadcastEventContent.voiceBroadcastState != null && voiceBroadcastEventContent.voiceBroadcastState != VoiceBroadcastState.STOPPED
+
+            if (!isLive && voiceBroadcastEventContent.lastChunkSequence == currentSequence) {
+                // We'll not receive new chunks anymore so we can stop the live listening
+                stop()
+            } else {
+                state = State.BUFFERING
             }
         }
 
