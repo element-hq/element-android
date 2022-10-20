@@ -915,9 +915,7 @@ internal class RealmCryptoStore @Inject constructor(
         realmInstance.blockingWrite {
             if (keysBackupData == null) {
                 // Clear the table
-                delete(
-                        query(KeysBackupDataEntity::class).find()
-                )
+                delete(KeysBackupDataEntity::class)
             } else {
                 // Only one object
                 copyToRealm(keysBackupData, updatePolicy = UpdatePolicy.ALL)
