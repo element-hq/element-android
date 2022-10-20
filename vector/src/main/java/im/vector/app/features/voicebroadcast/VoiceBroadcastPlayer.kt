@@ -30,7 +30,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -73,8 +72,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentSequence: Int? = null
 
     private var playlist = emptyList<MessageAudioEvent>()
-    val currentVoiceBroadcastId
-        get() = playlist.firstOrNull()?.root?.getRelationContent()?.eventId
+    var currentVoiceBroadcastId: String? = null
 
     private var state: State = State.IDLE
         set(value) {
@@ -128,6 +126,7 @@ class VoiceBroadcastPlayer @Inject constructor(
         playlist = emptyList()
         currentSequence = null
         currentRoomId = null
+        currentVoiceBroadcastId = null
     }
 
     fun addListener(listener: Listener) {
@@ -141,10 +140,11 @@ class VoiceBroadcastPlayer @Inject constructor(
 
     private fun startPlayback(roomId: String, eventId: String) {
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
-        currentRoomId = roomId
-
         // Stop listening previous voice broadcast if any
         if (state != State.IDLE) stop()
+
+        currentRoomId = roomId
+        currentVoiceBroadcastId = eventId
 
         state = State.BUFFERING
 
