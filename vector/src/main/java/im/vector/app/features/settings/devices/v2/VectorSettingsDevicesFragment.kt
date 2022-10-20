@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
+import im.vector.app.core.extensions.setTextColor
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
@@ -91,6 +92,7 @@ class VectorSettingsDevicesFragment :
         super.onViewCreated(view, savedInstanceState)
 
         initWaitingView()
+        initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
         initQrLoginView()
@@ -129,6 +131,11 @@ class VectorSettingsDevicesFragment :
     private fun initWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun initOtherSessionsHeaderView() {
+        val color = colorProvider.getColorFromAttribute(R.attr.colorError)
+        views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout).setTextColor(color)
     }
 
     private fun initOtherSessionsView() {

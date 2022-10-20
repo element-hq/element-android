@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.annotation.StringRes
-import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
@@ -33,14 +32,13 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.orEmpty
+import im.vector.app.core.extensions.setTextColor
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
@@ -94,10 +92,7 @@ class OtherSessionsFragment :
 
     private fun changeTextColorOfDestructiveAction(menuItem: MenuItem) {
         val titleColor = colorProvider.getColorFromAttribute(R.attr.colorError)
-        val currentTitle = menuItem.title.orEmpty().toString()
-        menuItem.title = currentTitle
-                .toSpannable()
-                .colorizeMatchingText(currentTitle, titleColor)
+        menuItem.setTextColor(titleColor)
     }
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {

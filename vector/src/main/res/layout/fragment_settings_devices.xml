@@ -98,6 +98,7 @@
             app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession"
             app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
             app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderMenu="@menu/menu_other_sessions_header"
             app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title" />
 
         <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -117,8 +118,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deviceListOtherSessions"
-            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderDescription="@string/device_manager_sessions_sign_in_with_qr_code_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
             app:sessionsListHeaderTitle="@string/device_manager_sessions_sign_in_with_qr_code_title"
             tools:visibility="visible" />
 
