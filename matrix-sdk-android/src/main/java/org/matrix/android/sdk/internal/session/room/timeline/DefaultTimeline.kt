@@ -61,6 +61,7 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
+        sessionCoroutineScope: CoroutineScope,
         stateEventDataSource: StateEventDataSource,
         paginationTask: PaginationTask,
         getEventTask: GetContextOfEventTask,
@@ -85,7 +86,7 @@ internal class DefaultTimeline(
     private val backwardState = AtomicReference(Timeline.PaginationState())
 
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
-    private val timelineScope = CoroutineScope(SupervisorJob() + timelineDispatcher)
+    private val timelineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + SupervisorJob() + timelineDispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
     private val postSnapshotSignalFlow = MutableSharedFlow<Unit>(0)
 
