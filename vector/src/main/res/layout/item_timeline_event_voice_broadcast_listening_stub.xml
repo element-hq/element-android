@@ -78,14 +78,18 @@
         app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
         app:tint="?vctr_content_secondary" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
+
+    <ProgressBar
         android:id="@+id/bufferingView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/a11y_voice_broadcast_buffering"
+        android:indeterminate="true"
+        android:indeterminateTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/playPauseButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
