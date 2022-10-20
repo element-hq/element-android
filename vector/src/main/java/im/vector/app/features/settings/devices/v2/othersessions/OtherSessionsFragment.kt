@@ -46,6 +46,7 @@ import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,7 +76,7 @@ class OtherSessionsFragment :
             val isSelectModeEnabled = state.isSelectModeEnabled
             menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
-            menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
         }
     }
 
