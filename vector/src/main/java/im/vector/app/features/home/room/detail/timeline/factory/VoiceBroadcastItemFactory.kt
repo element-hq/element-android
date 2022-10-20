@@ -15,12 +15,16 @@
  */
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
@@ -46,7 +50,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceBroadcastRecordingItem? {
+    ): VectorEpoxyModel<out VectorEpoxyHolder>? {
         // Only display item of the initial event with updated data
         if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
         val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
@@ -57,7 +61,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         return if (isRecording) {
             createRecordingItem(params.event.roomId, highlight, callback, attributes)
         } else {
-            createRecordingItem(params.event.roomId, highlight, callback, attributes)
+            createListeningItem(params.event.roomId, highlight, callback, attributes)
         }
     }
 
@@ -66,9 +70,27 @@ class VoiceBroadcastItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceBroadcastRecordingItem? {
+    ): MessageVoiceBroadcastRecordingItem {
         val roomSummary = session.getRoom(roomId)?.roomSummary()
         return MessageVoiceBroadcastRecordingItem_()
+                .attributes(attributes)
+                .highlighted(highlight)
+                .roomItem(roomSummary?.toMatrixItem())
+                .colorProvider(colorProvider)
+                .drawableProvider(drawableProvider)
+                .voiceBroadcastRecorder(voiceBroadcastRecorder)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
+    }
+
+    private fun createListeningItem(
+            roomId: String,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): MessageVoiceBroadcastListeningItem {
+        val roomSummary = session.getRoom(roomId)?.roomSummary()
+        return MessageVoiceBroadcastListeningItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
                 .roomItem(roomSummary?.toMatrixItem())

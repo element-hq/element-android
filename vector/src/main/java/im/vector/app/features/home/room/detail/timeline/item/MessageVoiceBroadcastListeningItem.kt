@@ -32,7 +32,7 @@ import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
-abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceBroadcastRecordingItem.Holder>() {
+abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceBroadcastListeningItem.Holder>() {
 
     @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
@@ -132,6 +132,6 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
     }
 
     companion object {
-        private val STUB_ID = R.id.messageVoiceBroadcastRecordingStub
+        private val STUB_ID = R.id.messageVoiceBroadcastListeningStub
     }
 }
