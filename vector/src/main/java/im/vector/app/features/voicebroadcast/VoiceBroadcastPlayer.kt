@@ -18,6 +18,7 @@ package im.vector.app.features.voicebroadcast
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
@@ -29,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
@@ -75,6 +77,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     var currentVoiceBroadcastId: String? = null
 
     private var state: State = State.IDLE
+        @MainThread
         set(value) {
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
@@ -168,7 +171,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 currentMediaPlayer?.start()
                 currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
                 currentSequence = sequence
-                state = State.PLAYING
+                withContext(Dispatchers.Main) { state = State.PLAYING }
                 nextMediaPlayer = prepareNextMediaPlayer()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Unable to start playback")
