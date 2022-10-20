@@ -64,7 +64,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         return if (isRecording) {
             createRecordingItem(params.event.roomId, highlight, callback, attributes)
         } else {
-            createListeningItem(params.event.roomId, eventsGroup.groupId, highlight, callback, attributes)
+            createListeningItem(params.event.roomId, eventsGroup.groupId, mostRecentMessageContent.voiceBroadcastState, highlight, callback, attributes)
         }
     }
 
@@ -89,6 +89,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
     private fun createListeningItem(
             roomId: String,
             voiceBroadcastId: String,
+            voiceBroadcastState: VoiceBroadcastState?,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
@@ -102,6 +103,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 .drawableProvider(drawableProvider)
                 .voiceBroadcastPlayer(voiceBroadcastPlayer)
                 .voiceBroadcastId(voiceBroadcastId)
+                .voiceBroadcastState(voiceBroadcastState)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }

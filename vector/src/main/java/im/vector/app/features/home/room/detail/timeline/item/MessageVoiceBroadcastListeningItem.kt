@@ -24,11 +24,13 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.extensions.tintBackground
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -42,6 +44,9 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
 
     @EpoxyAttribute
     lateinit var voiceBroadcastId: String
+
+    @EpoxyAttribute
+    var voiceBroadcastState: VoiceBroadcastState? = null
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
@@ -70,6 +75,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
         }
         voiceBroadcastPlayer?.addListener(playerListener)
         renderHeader(holder)
+        renderLiveIcon(holder)
     }
 
     private fun renderHeader(holder: Holder) {
@@ -77,6 +83,25 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
             roomItem?.let {
                 attributes.avatarRenderer.render(it, roomAvatarImageView)
                 titleText.text = it.displayName
+            }
+        }
+    }
+
+    private fun renderLiveIcon(holder: Holder) {
+        with(holder) {
+            when (voiceBroadcastState) {
+                VoiceBroadcastState.STARTED,
+                VoiceBroadcastState.RESUMED -> {
+                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
+                    liveIndicator.isVisible = true
+                }
+                VoiceBroadcastState.PAUSED -> {
+                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
+                    liveIndicator.isVisible = true
+                }
+                VoiceBroadcastState.STOPPED, null -> {
+                    liveIndicator.isVisible = false
+                }
             }
         }
     }
@@ -94,8 +119,6 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
         with(holder) {
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
             playPauseButton.isVisible = state != VoiceBroadcastPlayer.State.BUFFERING
-            liveIndicator.isVisible = false
-//            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorOnError))
 
             when (state) {
                 VoiceBroadcastPlayer.State.PLAYING -> {
@@ -118,7 +141,6 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
 
     private fun renderInactiveMedia(holder: Holder) {
         with(holder) {
-            liveIndicator.isVisible = false
             bufferingView.isVisible = false
             playPauseButton.isVisible = true
             playPauseButton.setImageResource(R.drawable.ic_play_pause_play)

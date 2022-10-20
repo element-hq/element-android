@@ -87,7 +87,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
                     stopRecordButton.isEnabled = true
 
                     liveIndicator.isVisible = true
-                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorOnError))
+                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
 
                     val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                     val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
