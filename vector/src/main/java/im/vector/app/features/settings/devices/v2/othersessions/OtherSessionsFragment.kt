@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.annotation.StringRes
+import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
@@ -32,12 +33,14 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
@@ -77,7 +80,24 @@ class OtherSessionsFragment :
             menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
+            val multiSignoutItem = menu.findItem(R.id.otherSessionsMultiSignout)
+            multiSignoutItem.title = if (isSelectModeEnabled) {
+                getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
+            } else {
+                getString(R.string.device_manager_other_sessions_multi_signout_all)
+            }
+            val showAsActionFlag = if (isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_ALWAYS else MenuItem.SHOW_AS_ACTION_NEVER
+            multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
+            changeTextColorOfDestructiveAction(multiSignoutItem)
         }
+    }
+
+    private fun changeTextColorOfDestructiveAction(menuItem: MenuItem) {
+        val titleColor = colorProvider.getColorFromAttribute(R.attr.colorError)
+        val currentTitle = menuItem.title.orEmpty().toString()
+        menuItem.title = currentTitle
+                .toSpannable()
+                .colorizeMatchingText(currentTitle, titleColor)
     }
 
     override fun handleMenuItemSelected(item: MenuItem): Boolean {

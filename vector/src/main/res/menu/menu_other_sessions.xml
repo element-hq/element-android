@@ -10,6 +10,11 @@
         app:showAsAction="withText|never" />
 
     <item
+        android:id="@+id/otherSessionsMultiSignout"
+        android:title="@string/device_manager_other_sessions_multi_signout_all"
+        app:showAsAction="withText|never" />
+
+    <item
         android:id="@+id/otherSessionsSelectAll"
         android:title="@string/action_select_all"
         app:showAsAction="withText|never" />

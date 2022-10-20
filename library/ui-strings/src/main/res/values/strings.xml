@@ -3345,6 +3345,8 @@
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
     <string name="device_manager_other_sessions_select">Select sessions</string>
+    <string name="device_manager_other_sessions_multi_signout_all">Sign out of these sessions</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">Sign out</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
