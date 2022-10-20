@@ -18,6 +18,7 @@ package im.vector.app.features.voicebroadcast
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
@@ -29,8 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -73,15 +75,17 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentSequence: Int? = null
 
     private var playlist = emptyList<MessageAudioEvent>()
-    private val currentVoiceBroadcastId
-        get() = playlist.firstOrNull()?.root?.getRelationContent()?.eventId
+    var currentVoiceBroadcastId: String? = null
 
     private var state: State = State.IDLE
+        @MainThread
         set(value) {
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
+            listeners.forEach { it.onStateChanged(value) }
         }
     private var currentRoomId: String? = null
+    private var listeners = CopyOnWriteArrayList<Listener>()
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId
@@ -126,14 +130,25 @@ class VoiceBroadcastPlayer @Inject constructor(
         playlist = emptyList()
         currentSequence = null
         currentRoomId = null
+        currentVoiceBroadcastId = null
+    }
+
+    fun addListener(listener: Listener) {
+        listeners.add(listener)
+        listener.onStateChanged(state)
+    }
+
+    fun removeListener(listener: Listener) {
+        listeners.remove(listener)
     }
 
     private fun startPlayback(roomId: String, eventId: String) {
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
-        currentRoomId = roomId
-
         // Stop listening previous voice broadcast if any
         if (state != State.IDLE) stop()
+
+        currentRoomId = roomId
+        currentVoiceBroadcastId = eventId
 
         state = State.BUFFERING
 
@@ -157,7 +172,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 currentMediaPlayer?.start()
                 currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
                 currentSequence = sequence
-                state = State.PLAYING
+                withContext(Dispatchers.Main) { state = State.PLAYING }
                 nextMediaPlayer = prepareNextMediaPlayer()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Unable to start playback")
@@ -315,5 +330,9 @@ class VoiceBroadcastPlayer @Inject constructor(
         PAUSED,
         BUFFERING,
         IDLE
+    }
+
+    fun interface Listener {
+        fun onStateChanged(state: State)
     }
 }
