@@ -20,6 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -49,7 +50,7 @@ internal fun interface RealmObjectMapper<T : RealmObject, R> {
 internal class RealmInstance(
         val coroutineScope: CoroutineScope,
         val realmConfiguration: RealmConfiguration,
-        coroutineDispatcher: CoroutineDispatcher
+        private val coroutineDispatcher: CoroutineDispatcher
 ) {
 
     private val realm =
@@ -72,7 +73,7 @@ internal class RealmInstance(
     ): Flow<ResultsChange<T>> {
         return getRealmFlow().flatMapConcat {
             realmQueryBuilder.build(it).asFlow()
-        }
+        }.flowOn(coroutineDispatcher)
     }
 
     fun <T : RealmObject, R> queryList(
@@ -83,7 +84,7 @@ internal class RealmInstance(
             resultChange.list.map { realmObject ->
                 mapper.map(realmObject)
             }
-        }
+        }.flowOn(coroutineDispatcher)
     }
 
     fun <T : RealmObject> queryFirst(
@@ -93,7 +94,7 @@ internal class RealmInstance(
             realmQueryBuilder.build(it).asFlow()
         }.map {
             Optional.from(it.obj)
-        }
+        }.flowOn(coroutineDispatcher)
     }
 
     fun <T : RealmObject, R> queryPagedList(
@@ -129,7 +130,7 @@ internal class RealmInstance(
                 setBoundaryCallback(boundaryCallback)
             }.build()
             livePagedList.asFlow()
-        }
+        }.flowOn(coroutineDispatcher)
     }
 
     suspend fun <R> write(block: MutableRealm.() -> R): R {
