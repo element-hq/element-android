@@ -78,16 +78,25 @@ class OtherSessionsFragment :
             menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
-            val multiSignoutItem = menu.findItem(R.id.otherSessionsMultiSignout)
-            multiSignoutItem.title = if (isSelectModeEnabled) {
-                getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
-            } else {
-                getString(R.string.device_manager_other_sessions_multi_signout_all)
-            }
-            val showAsActionFlag = if (isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_ALWAYS else MenuItem.SHOW_AS_ACTION_NEVER
-            multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
-            changeTextColorOfDestructiveAction(multiSignoutItem)
+            updateMultiSignoutMenuItem(menu, state)
         }
+    }
+
+    private fun updateMultiSignoutMenuItem(menu: Menu, viewState: OtherSessionsViewState) {
+        val multiSignoutItem = menu.findItem(R.id.otherSessionsMultiSignout)
+        multiSignoutItem.title = if (viewState.isSelectModeEnabled) {
+            getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
+        } else {
+            getString(R.string.device_manager_other_sessions_multi_signout_all)
+        }
+        multiSignoutItem.isVisible = if (viewState.isSelectModeEnabled) {
+            viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+        } else {
+            viewState.devices.invoke()?.isNotEmpty().orFalse()
+        }
+        val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_ALWAYS else MenuItem.SHOW_AS_ACTION_NEVER
+        multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
+        changeTextColorOfDestructiveAction(multiSignoutItem)
     }
 
     private fun changeTextColorOfDestructiveAction(menuItem: MenuItem) {
@@ -107,6 +116,10 @@ class OtherSessionsFragment :
             }
             R.id.otherSessionsDeselectAll -> {
                 viewModel.handle(OtherSessionsAction.DeselectAll)
+                true
+            }
+            R.id.otherSessionsMultiSignout -> {
+                viewModel.handle(OtherSessionsAction.MultiSignout)
                 true
             }
             else -> false

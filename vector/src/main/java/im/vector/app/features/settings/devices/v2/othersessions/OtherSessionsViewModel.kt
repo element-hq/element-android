@@ -65,6 +65,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
                 }
     }
 
+    // TODO update unit tests
     override fun handle(action: OtherSessionsAction) {
         when (action) {
             is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
@@ -73,6 +74,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
             is OtherSessionsAction.ToggleSelectionForDevice -> handleToggleSelectionForDevice(action.deviceId)
             OtherSessionsAction.DeselectAll -> handleDeselectAll()
             OtherSessionsAction.SelectAll -> handleSelectAll()
+            OtherSessionsAction.MultiSignout -> handleMultiSignout()
         }
     }
 
@@ -141,5 +143,9 @@ class OtherSessionsViewModel @AssistedInject constructor(
                     isSelectModeEnabled = enableSelectMode
             )
         }
+    }
+
+    private fun handleMultiSignout() {
+        // TODO call multi signout use case with all or only selected devices depending on the ViewState
     }
 }

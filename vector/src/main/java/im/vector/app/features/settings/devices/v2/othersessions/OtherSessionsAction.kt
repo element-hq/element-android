@@ -26,4 +26,5 @@ sealed class OtherSessionsAction : VectorViewModelAction {
     data class ToggleSelectionForDevice(val deviceId: String) : OtherSessionsAction()
     object SelectAll : OtherSessionsAction()
     object DeselectAll : OtherSessionsAction()
+    object MultiSignout : OtherSessionsAction()
 }
