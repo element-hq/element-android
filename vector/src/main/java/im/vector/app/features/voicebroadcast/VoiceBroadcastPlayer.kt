@@ -179,7 +179,11 @@ class VoiceBroadcastPlayer @Inject constructor(
         room.flow()
                 .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(voiceBroadcastEvent.root.stateKey!!))
                 .unwrap()
-                .mapNotNull { it.asVoiceBroadcastEvent()?.content?.voiceBroadcastState }
+                .mapNotNull { event ->
+                    event.asVoiceBroadcastEvent()
+                            ?.takeIf { it.reference?.eventId == eventId }
+                            ?.content?.voiceBroadcastState
+                }
                 .onEach { state ->
                     when (state) {
                         VoiceBroadcastState.STARTED,
