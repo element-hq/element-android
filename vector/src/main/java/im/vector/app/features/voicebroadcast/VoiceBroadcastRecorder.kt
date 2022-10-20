@@ -23,6 +23,7 @@ import java.io.File
 interface VoiceBroadcastRecorder : VoiceRecorder {
 
     var listener: Listener?
+    var currentSequence: Int
 
     fun startRecord(roomId: String, chunkLength: Int)
 

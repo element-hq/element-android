@@ -30,8 +30,8 @@ class VoiceBroadcastRecorderQ(
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
     private var maxFileSize = 0L // zero or negative for no limit
-    private var currentSequence = 0
     private var currentRoomId: String? = null
+    override var currentSequence = 0
 
     override var listener: VoiceBroadcastRecorder.Listener? = null
 
