@@ -989,14 +989,14 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
-        realmInstance.blockingWrite {
-            queryCryptoMetadataEntity().find()?.globalBlacklistUnverifiedDevices = block
+        updateCryptoMetadata {
+            it.globalBlacklistUnverifiedDevices = block
         }
     }
 
     override fun enableKeyGossiping(enable: Boolean) {
-        realmInstance.blockingWrite {
-            queryCryptoMetadataEntity().find()?.globalEnableKeyGossiping = enable
+        updateCryptoMetadata {
+            it.globalEnableKeyGossiping = enable
         }
     }
 
@@ -1019,14 +1019,14 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun enableShareKeyOnInvite(enable: Boolean) {
-        realmInstance.blockingWrite {
-            queryCryptoMetadataEntity().find()?.enableKeyForwardingOnInvite = enable
+        updateCryptoMetadata {
+            it.enableKeyForwardingOnInvite = enable
         }
     }
 
     override fun setDeviceKeysUploaded(uploaded: Boolean) {
-        realmInstance.blockingWrite {
-            queryCryptoMetadataEntity().find()?.deviceKeysSentToServer = uploaded
+        updateCryptoMetadata {
+            it.deviceKeysSentToServer = uploaded
         }
     }
 
