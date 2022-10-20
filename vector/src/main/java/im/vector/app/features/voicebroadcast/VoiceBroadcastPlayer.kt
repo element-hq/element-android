@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -84,7 +85,7 @@ class VoiceBroadcastPlayer @Inject constructor(
             listeners.forEach { it.onStateChanged(value) }
         }
     private var currentRoomId: String? = null
-    private var listeners = mutableListOf<Listener>()
+    private var listeners = CopyOnWriteArrayList<Listener>()
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId

@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import java.util.concurrent.CopyOnWriteArrayList
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceBroadcastRecorderQ(
@@ -38,7 +39,7 @@ class VoiceBroadcastRecorderQ(
             listeners.forEach { it.onStateUpdated(value) }
         }
 
-    private val listeners = mutableListOf<VoiceBroadcastRecorder.Listener>()
+    private val listeners = CopyOnWriteArrayList<VoiceBroadcastRecorder.Listener>()
 
     override val outputFormat = MediaRecorder.OutputFormat.MPEG_4
     override val audioEncoder = MediaRecorder.AudioEncoder.HE_AAC
