@@ -654,6 +654,9 @@ internal class RealmCryptoStore @Inject constructor(
     override fun storeRoomAlgorithm(roomId: String, algorithm: String?) = upsertCryptoRoomEntity(roomId) { roomEntity ->
         roomEntity.algorithm = algorithm
         if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+            // store anyway the new algorithm, but mark the room
+            // as having been encrypted once whatever, this can never
+            // go back to false
             roomEntity.wasEncryptedOnce = true
         }
     }
