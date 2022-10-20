@@ -62,9 +62,15 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val mostRecentEvent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()
         val mostRecentMessageContent = mostRecentEvent?.content ?: return null
         val isRecording = mostRecentMessageContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && mostRecentEvent.root.stateKey == session.myUserId
-        val recorderName = mostRecentTimelineEvent.root.stateKey?.let {  session.getUser(it) }?.displayName ?: mostRecentTimelineEvent.root.stateKey
+        val recorderName = mostRecentTimelineEvent.root.stateKey?.let { session.getUser(it) }?.displayName ?: mostRecentTimelineEvent.root.stateKey
         return if (isRecording) {
-            createRecordingItem(params.event.roomId, highlight, callback, attributes)
+            createRecordingItem(
+                    params.event.roomId,
+                    eventsGroup.groupId,
+                    highlight,
+                    callback,
+                    attributes
+            )
         } else {
             createListeningItem(
                     params.event.roomId,
@@ -80,12 +86,14 @@ class VoiceBroadcastItemFactory @Inject constructor(
 
     private fun createRecordingItem(
             roomId: String,
+            voiceBroadcastId: String,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): MessageVoiceBroadcastRecordingItem {
         val roomSummary = session.getRoom(roomId)?.roomSummary()
         return MessageVoiceBroadcastRecordingItem_()
+                .id("voice_broadcast_$voiceBroadcastId")
                 .attributes(attributes)
                 .highlighted(highlight)
                 .roomItem(roomSummary?.toMatrixItem())
@@ -107,6 +115,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
     ): MessageVoiceBroadcastListeningItem {
         val roomSummary = session.getRoom(roomId)?.roomSummary()
         return MessageVoiceBroadcastListeningItem_()
+                .id("voice_broadcast_$voiceBroadcastId")
                 .attributes(attributes)
                 .highlighted(highlight)
                 .roomItem(roomSummary?.toMatrixItem())
