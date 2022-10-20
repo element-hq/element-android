@@ -95,10 +95,12 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
+    // TODO update unit tests
     override fun handle(action: DevicesAction) {
         when (action) {
             is DevicesAction.VerifyCurrentSession -> handleVerifyCurrentSessionAction()
             is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
+            DevicesAction.MultiSignoutOtherSessions -> handleMultiSignoutOtherSessions()
         }
     }
 
@@ -115,5 +117,9 @@ class DevicesViewModel @AssistedInject constructor(
 
     private fun handleMarkAsManuallyVerifiedAction() {
         // TODO implement when needed
+    }
+
+    private fun handleMultiSignoutOtherSessions() {
+        // TODO call multi signout use case with all other devices than the current one
     }
 }

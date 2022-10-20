@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
@@ -105,5 +106,9 @@ class SessionsListHeaderView @JvmOverloads constructor(
             val menuBuilder = binding.sessionsListHeaderMenu.menu as? MenuBuilder
             menuBuilder?.let { MenuInflater(context).inflate(menuResId, it) }
         }
+    }
+
+    fun setOnMenuItemClickListener(listener: OnMenuItemClickListener) {
+        binding.sessionsListHeaderMenu.setOnMenuItemClickListener(listener)
     }
 }

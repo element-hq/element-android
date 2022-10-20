@@ -19,9 +19,11 @@ package im.vector.app.features.settings.devices.v2
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -48,6 +50,7 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsAction
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -136,6 +139,15 @@ class VectorSettingsDevicesFragment :
     private fun initOtherSessionsHeaderView() {
         val color = colorProvider.getColorFromAttribute(R.attr.colorError)
         views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout).setTextColor(color)
+        views.deviceListHeaderOtherSessions.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.otherSessionsHeaderMultiSignout -> {
+                    viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initOtherSessionsView() {
