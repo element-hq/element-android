@@ -21,6 +21,7 @@ import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -30,6 +31,7 @@ class VoiceBroadcastRecorderQ(
 
     private var maxFileSize = 0L // zero or negative for no limit
     private var currentSequence = 0
+    private var currentRoomId: String? = null
 
     override var listener: VoiceBroadcastRecorder.Listener? = null
 
@@ -51,9 +53,21 @@ class VoiceBroadcastRecorderQ(
     }
 
     override fun startRecord(roomId: String, chunkLength: Int) {
+        currentRoomId = roomId
         maxFileSize = (chunkLength * audioEncodingBitRate / 8).toLong()
         currentSequence = 1
         startRecord(roomId)
+    }
+
+    override fun pauseRecord() {
+        tryOrNull { mediaRecorder?.stop() }
+        mediaRecorder?.reset()
+        notifyOutputFileCreated()
+    }
+
+    override fun resumeRecord() {
+        currentSequence++
+        currentRoomId?.let { startRecord(it) }
     }
 
     override fun stopRecord() {
