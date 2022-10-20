@@ -15,46 +15,66 @@
  */
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class VoiceBroadcastItemFactory @Inject constructor(
         private val session: Session,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
+        private val colorProvider: ColorProvider,
+        private val drawableProvider: DrawableProvider,
+        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
 ) {
 
     fun create(
+            params: TimelineItemFactoryParams,
             messageContent: MessageVoiceBroadcastInfoContent,
-            eventsGroup: TimelineEventsGroup?,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceBroadcastItem? {
+    ): MessageVoiceBroadcastRecordingItem? {
         // Only display item of the initial event with updated data
         if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
-        val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
+        val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
         val mostRecentTimelineEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent()
         val mostRecentEvent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()
         val mostRecentMessageContent = mostRecentEvent?.content ?: return null
         val isRecording = mostRecentMessageContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && mostRecentEvent.root.stateKey == session.myUserId
-        return MessageVoiceBroadcastItem_()
+        return if (isRecording) {
+            createRecordingItem(params.event.roomId, highlight, callback, attributes)
+        } else {
+            createRecordingItem(params.event.roomId, highlight, callback, attributes)
+        }
+    }
+
+    private fun createRecordingItem(
+            roomId: String,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): MessageVoiceBroadcastRecordingItem? {
+        val roomSummary = session.getRoom(roomId)?.roomSummary()
+        return MessageVoiceBroadcastRecordingItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
-                .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
-                .recording(isRecording)
-                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
+                .roomItem(roomSummary?.toMatrixItem())
+                .colorProvider(colorProvider)
+                .drawableProvider(drawableProvider)
+                .voiceBroadcastRecorder(voiceBroadcastRecorder)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }
