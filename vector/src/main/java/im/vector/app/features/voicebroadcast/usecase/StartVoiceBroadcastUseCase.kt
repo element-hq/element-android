@@ -55,7 +55,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
 
         if (onGoingVoiceBroadcastEvents.isEmpty()) {
             startVoiceBroadcast(room)
