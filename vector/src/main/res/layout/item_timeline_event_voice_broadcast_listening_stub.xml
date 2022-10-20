@@ -24,7 +24,7 @@
         android:singleLine="true"
         android:text="@string/voice_broadcast_live"
         android:textColor="?colorOnError"
-        app:drawableStartCompat="@drawable/ic_live_broadcast_16"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_16"
         app:drawableTint="?colorOnError"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:contentDescription="@string/avatar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/user_round_avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/avatarRightBarrier"
@@ -54,7 +54,59 @@
         android:contentDescription="@string/avatar"
         app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/users.json/data/displayName" />
+        tools:src="@sample/rooms.json/data/name" />
+
+    <LinearLayout
+        android:id="@+id/broadcasterViewGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toBottomOf="@id/titleText">
+
+        <ImageView
+            android:id="@+id/broadcasterIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_microphone"
+            app:tint="?vctr_content_secondary" />
+
+        <TextView
+            android:id="@+id/broadcasterNameText"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@sample/users.json/data/displayName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/voiceBroadcastViewGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toBottomOf="@id/broadcasterViewGroup">
+
+        <ImageView
+            android:id="@+id/voiceBroadcastIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_voice_broadcast_16"
+            app:tint="?vctr_content_secondary" />
+
+        <TextView
+            android:id="@+id/voiceBroadcastText"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/attachment_type_voice_broadcast" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBottomBarrier"
@@ -62,7 +114,7 @@
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:barrierMargin="12dp"
-        app:constraint_referenced_ids="roomAvatarImageView,titleText" />
+        app:constraint_referenced_ids="roomAvatarImageView,titleText,broadcasterViewGroup,voiceBroadcastViewGroup" />
 
     <ImageButton
         android:id="@+id/playPauseButton"

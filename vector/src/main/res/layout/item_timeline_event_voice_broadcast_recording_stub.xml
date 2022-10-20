@@ -24,7 +24,7 @@
         android:singleLine="true"
         android:text="@string/voice_broadcast_live"
         android:textColor="?colorOnError"
-        app:drawableStartCompat="@drawable/ic_live_broadcast_16"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_16"
         app:drawableTint="?colorOnError"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -34,6 +34,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -61,10 +62,19 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val mostRecentEvent = mostRecentTimelineEvent.root.asVoiceBroadcastEvent()
         val mostRecentMessageContent = mostRecentEvent?.content ?: return null
         val isRecording = mostRecentMessageContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && mostRecentEvent.root.stateKey == session.myUserId
+        val recorderName = mostRecentTimelineEvent.root.stateKey?.let {  session.getUser(it) }?.displayName ?: mostRecentTimelineEvent.root.stateKey
         return if (isRecording) {
             createRecordingItem(params.event.roomId, highlight, callback, attributes)
         } else {
-            createListeningItem(params.event.roomId, eventsGroup.groupId, mostRecentMessageContent.voiceBroadcastState, highlight, callback, attributes)
+            createListeningItem(
+                    params.event.roomId,
+                    eventsGroup.groupId,
+                    mostRecentMessageContent.voiceBroadcastState,
+                    recorderName,
+                    highlight,
+                    callback,
+                    attributes
+            )
         }
     }
 
@@ -90,6 +100,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             roomId: String,
             voiceBroadcastId: String,
             voiceBroadcastState: VoiceBroadcastState?,
+            broadcasterName: String?,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
@@ -104,6 +115,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 .voiceBroadcastPlayer(voiceBroadcastPlayer)
                 .voiceBroadcastId(voiceBroadcastId)
                 .voiceBroadcastState(voiceBroadcastState)
+                .broadcasterName(broadcasterName)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }

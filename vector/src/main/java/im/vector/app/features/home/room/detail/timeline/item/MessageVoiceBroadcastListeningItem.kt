@@ -49,6 +49,9 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
     var voiceBroadcastState: VoiceBroadcastState? = null
 
     @EpoxyAttribute
+    var broadcasterName: String? = null
+
+    @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
 
     @EpoxyAttribute
@@ -84,6 +87,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
                 attributes.avatarRenderer.render(it, roomAvatarImageView)
                 titleText.text = it.displayName
             }
+            broadcasterNameText.text = broadcasterName
         }
     }
 
@@ -114,7 +118,6 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
     private fun renderActiveMedia(holder: Holder, state: VoiceBroadcastPlayer.State) {
         with(holder) {
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
@@ -166,6 +169,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageItem<MessageVoiceB
         val titleText by bind<TextView>(R.id.titleText)
         val playPauseButton by bind<ImageButton>(R.id.playPauseButton)
         val bufferingView by bind<View>(R.id.bufferingView)
+        val broadcasterNameText by bind<TextView>(R.id.broadcasterNameText)
     }
 
     companion object {
