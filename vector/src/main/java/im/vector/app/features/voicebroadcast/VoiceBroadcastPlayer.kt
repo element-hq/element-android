@@ -116,8 +116,6 @@ class VoiceBroadcastPlayer @Inject constructor(
         voiceBroadcastStateJob = null
 
         // In case of live broadcast, stop observing new chunks
-        currentTimeline?.dispose()
-        currentTimeline?.removeAllListeners()
         currentTimeline = null
         timelineListener = null
 
