@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.tintBackground
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
@@ -93,8 +94,8 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
                     val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
                     recordButton.setImageDrawable(drawable)
                     recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_pause_voice_broadcast_record)
-                    recordButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
-                    stopRecordButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+                    recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
+                    stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
                 }
                 VoiceBroadcastRecorder.State.Paused -> {
                     stopRecordButton.isEnabled = true
@@ -104,8 +105,8 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
 
                     recordButton.setImageResource(R.drawable.ic_recording_dot)
                     recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
-                    recordButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
-                    stopRecordButton.setOnClickListener { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+                    recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
+                    stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
                 }
                 VoiceBroadcastRecorder.State.Idle -> {
                     recordButton.isEnabled = false
