@@ -50,6 +50,20 @@ internal class ChunkEntity : RealmObject {
 
     // If true, then this chunk was previously a last forward chunk
     fun hasBeenALastForwardChunk() = nextToken == null && !isLastForward
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ChunkEntity
+
+        if (chunkId != other.chunkId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return chunkId.hashCode()
+    }
 
     companion object
 }

@@ -32,12 +32,26 @@ internal class TimelineEventEntity : RealmObject {
     var senderName: String? = null
     var isUniqueDisplayName: Boolean = false
     var senderAvatar: String? = null
-    var senderMembershipEventId: String? = null
 
     // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
     // to a thread chunk and is a temporarily event.
     var ownedByThreadChunk: Boolean = false
     var readReceipts: ReadReceiptsSummaryEntity? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TimelineEventEntity
+
+        if (localId != other.localId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return localId.hashCode()
+    }
 
     companion object
 }

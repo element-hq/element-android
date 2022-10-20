@@ -21,6 +21,7 @@ import io.realm.kotlin.UpdatePolicy
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
+import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
@@ -100,12 +101,7 @@ internal class ReadReceiptHandler @Inject constructor(
             }
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val receiptEntity = ReadReceiptEntity().apply {
-                    this.roomId = roomId
-                    this.eventId = eventId
-                    this.userId = userId
-                    this.originServerTs = ts
-                }
+                val receiptEntity = ReadReceiptEntity.createUnmanaged(roomId, eventId, userId, ts)
                 readReceiptsSummary.readReceipts.add(receiptEntity)
             }
             realm.copyToRealm(readReceiptsSummary, updatePolicy = UpdatePolicy.ALL)

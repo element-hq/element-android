@@ -26,5 +26,22 @@ internal class ReadReceiptEntity : RealmObject {
     var userId: String = ""
     var originServerTs: Double = 0.0
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ReadReceiptEntity
+
+        if (primaryKey != other.primaryKey) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return primaryKey.hashCode()
+    }
+
     companion object
+
+
 }

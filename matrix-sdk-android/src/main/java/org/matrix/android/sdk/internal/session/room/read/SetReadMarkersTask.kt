@@ -115,7 +115,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         }
     }
 
-    private suspend fun latestSyncedEventId(realm: TypedRealm, roomId: String): String? =
+    private fun latestSyncedEventId(realm: TypedRealm, roomId: String): String? =
             TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId
 
     private suspend fun updateDatabase(roomId: String, markers: Map<String, String>, shouldUpdateRoomSummary: Boolean) {
