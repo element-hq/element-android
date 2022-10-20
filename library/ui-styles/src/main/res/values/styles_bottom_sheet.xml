@@ -14,6 +14,7 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/element_content_primary_light</item>
         <item name="android:textColorLink">@color/element_link_light</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
     <style name="Theme.Vector.BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
@@ -28,6 +29,7 @@
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/element_content_primary_dark</item>
         <item name="android:textColorLink">@color/element_link_dark</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
     <style name="Theme.Vector.BottomSheetDialog.Black" parent="Theme.Vector.BottomSheetDialog.Dark">
@@ -35,6 +37,15 @@
     </style>
 
     <!-- BottomSheet style -->
+    <style name="BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/BottomSheetShapeAppearance</item>
+    </style>
+
+    <style name="BottomSheetShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
     <style name="BottomSheetItemTextMain">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:layout_width">0dp</item>
