@@ -38,6 +38,11 @@ class BottomSheetActionButton @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     val views: ViewBottomSheetActionButtonBinding
 
+    override fun setOnClickListener(l: OnClickListener?) {
+        super.setOnClickListener(l)
+        views.bottomSheetActionClickableZone.setOnClickListener(l)
+    }
+
     var title: String? = null
         set(value) {
             field = value
