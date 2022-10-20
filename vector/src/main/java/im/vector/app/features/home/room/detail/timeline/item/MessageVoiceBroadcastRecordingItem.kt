@@ -86,6 +86,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
             when (state) {
                 VoiceBroadcastRecorder.State.Recording -> {
                     stopRecordButton.isEnabled = true
+                    recordButton.isEnabled = true
 
                     liveIndicator.isVisible = true
                     liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
@@ -99,6 +100,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
                 }
                 VoiceBroadcastRecorder.State.Paused -> {
                     stopRecordButton.isEnabled = true
+                    recordButton.isEnabled = true
 
                     liveIndicator.isVisible = true
                     liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
