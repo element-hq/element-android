@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -86,7 +87,7 @@ internal class DefaultTimeline(
     private val backwardState = AtomicReference(Timeline.PaginationState())
 
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
-    private val timelineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + SupervisorJob() + timelineDispatcher)
+    private val timelineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + SupervisorJob() + timelineDispatcher + CoroutineName("Timeline"))
     private val sequencer = SemaphoreCoroutineSequencer()
     private val postSnapshotSignalFlow = MutableSharedFlow<Unit>(0)
 
