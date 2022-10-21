@@ -175,7 +175,6 @@ internal class RealmCryptoStore @Inject constructor(
     override fun open() = Unit
 
     override fun close() {
-        // Ensure no async request will be run later
         olmAccount?.releaseAccount()
     }
 
@@ -1639,9 +1638,7 @@ internal class RealmCryptoStore @Inject constructor(
             val userId = userIdQuery(this) ?: return@blockingWrite null
             if (info == null) {
                 // Delete known if needed
-                crossSigningInfoEntityQueries().firstUserId(userId).find()?.also {
-                    delete(it)
-                }
+                deleteNullable(crossSigningInfoEntityQueries().firstUserId(userId).find())
                 null
                 // TODO notify, we might need to untrust things?
             } else {
