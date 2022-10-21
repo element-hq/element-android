@@ -42,34 +42,41 @@ class VectorFlipperProxy @Inject constructor(
 ) : FlipperProxy {
     private val networkFlipperPlugin = NetworkFlipperPlugin()
 
+    private val isEnabled: Boolean
+        get() {
+            // https://github.com/facebook/flipper/issues/3572
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                return false
+            }
+
+            return FlipperUtils.shouldEnableFlipper(context)
+        }
+
     override fun init(matrix: Matrix) {
+        if (!isEnabled) return
+
         SoLoader.init(context, false)
 
-        // https://github.com/facebook/flipper/issues/3572
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            return
-        }
-
-        if (FlipperUtils.shouldEnableFlipper(context)) {
-            val client = AndroidFlipperClient.getInstance(context)
-            client.addPlugin(CrashReporterPlugin.getInstance())
-            client.addPlugin(SharedPreferencesFlipperPlugin(context))
-            client.addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
-            client.addPlugin(networkFlipperPlugin)
-            client.addPlugin(
-                    DatabasesFlipperPlugin(
-                            RealmDatabaseDriver(
-                                    context = context,
-                                    realmDatabaseProvider = object : RealmDatabaseProvider {
-                                        override fun getRealmConfigurations(): List<RealmConfiguration> {
-                                            return matrix.debugService().getAllRealmConfigurations()
-                                        }
-                                    })
-                    )
-            )
-            client.start()
-        }
+        val client = AndroidFlipperClient.getInstance(context)
+        client.addPlugin(CrashReporterPlugin.getInstance())
+        client.addPlugin(SharedPreferencesFlipperPlugin(context))
+        client.addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
+        client.addPlugin(networkFlipperPlugin)
+        client.addPlugin(
+                DatabasesFlipperPlugin(
+                        RealmDatabaseDriver(
+                                context = context,
+                                realmDatabaseProvider = object : RealmDatabaseProvider {
+                                    override fun getRealmConfigurations(): List<RealmConfiguration> {
+                                        return matrix.debugService().getAllRealmConfigurations()
+                                    }
+                                })
+                )
+        )
+        client.start()
     }
 
-    override fun networkInterceptor() = FlipperOkhttpInterceptor(networkFlipperPlugin)
+    override fun networkInterceptor() =
+            FlipperOkhttpInterceptor(networkFlipperPlugin)
+                    .takeIf { isEnabled }
 }
