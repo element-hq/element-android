@@ -27,6 +27,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.pagedlist.RealmTiledDataSource
+import org.matrix.android.sdk.internal.util.mapOptional
 
 internal fun interface RealmQueryBuilder<T : RealmObject> {
     fun build(realm: TypedRealm): RealmQuery<T>
@@ -95,6 +96,15 @@ internal class RealmInstance(
         }.map {
             Optional.from(it.obj)
         }.flowOn(coroutineDispatcher)
+    }
+
+    fun <T : RealmObject, U : Any> queryFirstMapped(
+            mapper: (T) -> U?,
+            realmQueryBuilder: RealmSingleQueryBuilder<T>
+    ): Flow<Optional<U>> {
+        return queryFirst(realmQueryBuilder)
+                .mapOptional(mapper)
+                .flowOn(coroutineDispatcher)
     }
 
     fun <T : RealmObject, R> queryPagedList(

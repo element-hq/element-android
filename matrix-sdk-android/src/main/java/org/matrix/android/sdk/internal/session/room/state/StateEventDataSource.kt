@@ -50,10 +50,11 @@ internal class StateEventDataSource @Inject constructor(
     }
 
     fun getStateEventLive(roomId: String, eventType: String, stateKey: QueryStateEventValue): LiveData<Optional<Event>> {
-        return realmInstance.queryFirst {
+
+        fun map(entity: CurrentStateEventEntity) = entity.root?.asDomain()
+
+        return realmInstance.queryFirstMapped(::map) {
             buildStateEventQuery(it, roomId, setOf(eventType), stateKey).first()
-        }.mapOptional {
-            it.root?.asDomain()
         }.asLiveData()
     }
 

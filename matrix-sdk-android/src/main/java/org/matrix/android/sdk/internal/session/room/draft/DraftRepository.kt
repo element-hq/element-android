@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.UserDraftsEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.util.mapOptional
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,11 +56,9 @@ internal class DraftRepository @Inject constructor(
     }
 
     fun getDraftsLive(roomId: String): LiveData<Optional<UserDraft>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(::mapUserDrafts) {
             UserDraftsEntity.where(it, roomId).first()
-        }
-                .mapOptional(::mapUserDrafts)
-                .asLiveData()
+        }.asLiveData()
     }
 
     private fun mapUserDrafts(userDraftsEntity: UserDraftsEntity): UserDraft? {

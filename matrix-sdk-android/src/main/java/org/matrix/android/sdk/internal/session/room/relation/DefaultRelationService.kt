@@ -36,7 +36,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDataSource
-import org.matrix.android.sdk.internal.util.mapOptional
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
@@ -157,11 +156,12 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
-        return realmInstance.queryFirst {
+
+        fun map(entity: EventAnnotationsSummaryEntity): EventAnnotationsSummary = entity.asDomain()
+
+        return realmInstance.queryFirstMapped(::map) {
             EventAnnotationsSummaryEntity.where(it, roomId, eventId).first()
-        }
-                .mapOptional { it.asDomain() }
-                .asLiveData()
+        }.asLiveData()
     }
 
     override fun replyInThread(

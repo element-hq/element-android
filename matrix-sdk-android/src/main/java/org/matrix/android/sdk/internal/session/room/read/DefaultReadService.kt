@@ -98,10 +98,10 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(readReceiptsSummaryMapper::map) {
             ReadReceiptsSummaryEntity.where(it, eventId)
         }.map {
-            readReceiptsSummaryMapper.map(it.getOrNull())
+            it.getOrNull().orEmpty()
         }.asLiveData()
     }
 

@@ -48,11 +48,9 @@ internal class LiveTimelineEvent(
     private var initialLiveData: LiveData<Optional<TimelineEvent>>? = null
 
     private fun buildAndObserveQuery() {
-        val liveData = realmInstance.queryFirst {
+        val liveData = realmInstance.queryFirstMapped(timelineEventMapper::map) {
             TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).first()
-        }
-                .mapOptional(timelineEventMapper::map)
-                .asLiveData()
+        }.asLiveData()
 
         addSource(liveData) { newValue ->
             value = newValue
@@ -64,11 +62,9 @@ internal class LiveTimelineEvent(
     }
 
     private fun observeTimelineEventWithTxId() {
-        val liveData = realmInstance.queryFirst {
+        val liveData = realmInstance.queryFirstMapped(timelineEventMapper::map) {
             it.queryTimelineEventWithTxId().first()
-        }
-                .mapOptional(timelineEventMapper::map)
-                .asLiveData()
+        }.asLiveData()
         addSource(liveData) { newValue ->
             if (newValue.hasValue()) {
                 initialLiveData?.also { removeSource(it) }

@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.database.model.UserEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.queryNotIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.util.mapOptional
 import javax.inject.Inject
 
 internal class UserDataSource @Inject constructor(
@@ -54,11 +53,9 @@ internal class UserDataSource @Inject constructor(
     fun getUserOrDefault(userId: String): User = getUser(userId) ?: User(userId)
 
     fun getUserLive(userId: String): LiveData<Optional<User>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(this::mapUser) {
             UserEntity.where(it, userId).first()
-        }
-                .mapOptional(this::mapUser)
-                .asLiveData()
+        }.asLiveData()
     }
 
     fun getUsersLive(): LiveData<List<User>> {

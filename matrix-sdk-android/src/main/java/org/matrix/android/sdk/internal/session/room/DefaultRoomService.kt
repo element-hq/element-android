@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmInstance
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
@@ -56,7 +57,6 @@ import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
-import org.matrix.android.sdk.internal.util.mapOptional
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(
@@ -227,14 +227,15 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>> {
-        return realmInstance.queryFirst { realm ->
+
+        fun map(roomMemberSummaryEntity: RoomMemberSummaryEntity) = roomMemberSummaryEntity.asDomain()
+
+        return realmInstance.queryFirstMapped(::map) { realm ->
             RoomMemberHelper(realm, roomId)
                     .queryRoomMembersEvent()
                     .query("userId == $0", userId)
                     .first()
-        }
-                .mapOptional { it.asDomain() }
-                .asLiveData()
+        }.asLiveData()
     }
 
     override suspend fun getRoomState(roomId: String): List<Event> {

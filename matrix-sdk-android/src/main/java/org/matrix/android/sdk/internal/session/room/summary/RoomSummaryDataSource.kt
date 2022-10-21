@@ -56,7 +56,6 @@ import org.matrix.android.sdk.internal.database.queryIn
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
-import org.matrix.android.sdk.internal.util.mapOptional
 import javax.inject.Inject
 
 internal class RoomSummaryDataSource @Inject constructor(
@@ -80,10 +79,8 @@ internal class RoomSummaryDataSource @Inject constructor(
     }
 
     fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(roomSummaryMapper::map) {
             RoomSummaryEntity.where(it, roomId).first()
-        }.mapOptional {
-            roomSummaryMapper.map(it)
         }.asLiveData()
     }
 
@@ -107,10 +104,8 @@ internal class RoomSummaryDataSource @Inject constructor(
     }
 
     fun getLocalRoomSummaryLive(roomId: String): LiveData<Optional<LocalRoomSummary>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(localRoomSummaryMapper::map) {
             LocalRoomSummaryEntity.where(it, roomId).first()
-        }.mapOptional {
-            localRoomSummaryMapper.map(it)
         }.asLiveData()
     }
 
@@ -136,13 +131,11 @@ internal class RoomSummaryDataSource @Inject constructor(
     }
 
     fun getSpaceSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
-        return realmInstance.queryFirst { realm ->
+        return realmInstance.queryFirstMapped(roomSummaryMapper::map) { realm ->
             RoomSummaryEntity.where(realm, roomId)
                     .query("displayName != ''")
                     .query("roomType == $0", RoomType.SPACE)
                     .first()
-        }.mapOptional {
-            roomSummaryMapper.map(it)
         }.asLiveData()
     }
 

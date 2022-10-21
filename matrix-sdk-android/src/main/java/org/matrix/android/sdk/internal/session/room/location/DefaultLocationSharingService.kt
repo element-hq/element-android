@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationS
 import org.matrix.android.sdk.internal.database.query.findRunningLiveInRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.util.mapOptional
 
 internal class DefaultLocationSharingService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -119,10 +118,9 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     }
 
     override fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>> {
-        return realmInstance.queryFirst {
+        return realmInstance.queryFirstMapped(liveLocationShareAggregatedSummaryMapper::map) {
             LiveLocationShareAggregatedSummaryEntity.where(it, roomId = roomId, eventId = beaconInfoEventId).first()
         }
-                .mapOptional(liveLocationShareAggregatedSummaryMapper::map)
                 .asLiveData()
     }
 }
