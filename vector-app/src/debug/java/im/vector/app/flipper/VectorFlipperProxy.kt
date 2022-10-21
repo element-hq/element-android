@@ -32,6 +32,7 @@ import com.kgurgul.flipper.RealmDatabaseDriver
 import com.kgurgul.flipper.RealmDatabaseProvider
 import im.vector.app.core.debug.FlipperProxy
 import io.realm.RealmConfiguration
+import okhttp3.Interceptor
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -76,7 +77,9 @@ class VectorFlipperProxy @Inject constructor(
         client.start()
     }
 
-    override fun networkInterceptor() =
-            FlipperOkhttpInterceptor(networkFlipperPlugin)
-                    .takeIf { isEnabled }
+    override fun networkInterceptor(): Interceptor? {
+        if (!isEnabled) return null
+
+        return FlipperOkhttpInterceptor(networkFlipperPlugin)
+    }
 }
