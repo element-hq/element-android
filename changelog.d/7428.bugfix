@@ -1,0 +1,1 @@
+Fix crash by disabling Flipper on Android API 22 and below - only affects debug version of the application.
