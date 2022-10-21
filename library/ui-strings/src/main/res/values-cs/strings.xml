@@ -971,7 +971,7 @@
     <string name="preference_voice_and_video">Hlas a video</string>
     <string name="preference_root_help_about">Nápověda a O aplikaci</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrovat token</string>
-    <string name="send_suggestion">Učinit návrh</string>
+    <string name="send_suggestion">Poslat návrh</string>
     <string name="send_suggestion_content">Prosím, zapište svůj návrh níže.</string>
     <string name="send_suggestion_report_placeholder">Popište svůj návrh tady</string>
     <string name="send_suggestion_sent">Děkujeme, návrh byl úspěšně odeslán</string>
@@ -2762,7 +2762,7 @@
     <string name="labs_enable_deferred_dm_summary">Vytvořit přímou zprávu pouze při první zprávě</string>
     <string name="labs_enable_deferred_dm_title">Povolit odložené přímé zprávy</string>
     <string name="labs_enable_new_app_layout_summary">Zjednodušený Element s volitelnými kartami</string>
-    <string name="labs_enable_new_app_layout_title">Povolit nový vzhled</string>
+    <string name="labs_enable_new_app_layout_title">Zapnout nové uspořádání</string>
     <string name="device_manager_learn_more_session_rename">Ostatní uživatelé v přímých zprávách a místnostech, ke kterým se připojíte, si mohou prohlédnout úplný seznam vašich relací.
 \n
 \nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
