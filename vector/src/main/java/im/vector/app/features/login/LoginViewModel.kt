@@ -684,7 +684,7 @@ class LoginViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     safeLoginWizard.login(
-                            action.username,
+                            action.username.trim(),
                             action.password,
                             action.initialDeviceName
                     )
