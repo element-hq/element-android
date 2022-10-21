@@ -52,8 +52,8 @@ jobs:
       (contains(github.event.issue.labels.*.name, 'S-Critical') &&
        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
         contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-       contains(github.event.issue.labels.*.name, 'S-Major') &&
-       contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+       (contains(github.event.issue.labels.*.name, 'S-Major') &&
+        contains(github.event.issue.labels.*.name, 'O-Frequent')) ||
        contains(github.event.issue.labels.*.name, 'A11y'))
     steps:
       - uses: octokit/graphql-action@v2.x
