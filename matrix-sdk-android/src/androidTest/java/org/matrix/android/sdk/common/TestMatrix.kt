@@ -23,7 +23,6 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.impl.WorkManagerImpl
 import androidx.work.impl.utils.taskexecutor.WorkManagerTaskExecutor
-import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -61,7 +60,6 @@ internal class TestMatrix(context: Context, matrixConfiguration: MatrixConfigura
 
     init {
         val appContext = context.applicationContext
-        Monarchy.init(appContext)
         DaggerTestMatrixComponent.factory().create(appContext, matrixConfiguration).inject(this)
         val configuration = Configuration.Builder()
                 .setExecutor(Executors.newCachedThreadPool())

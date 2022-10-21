@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.Log
 import androidx.test.filters.LargeTest
 import org.amshove.kluent.internal.assertEquals
+import org.amshove.kluent.shouldBe
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -56,6 +57,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     fun ensureKeysAreNotSharedIfOptionDisabled() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
+        aliceSession.cryptoService().isShareKeysOnInviteEnabled() shouldBe false
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
             historyVisibility = RoomHistoryVisibility.SHARED
             name = "MyRoom"
@@ -71,6 +73,13 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val withSession1 = commonTestHelper.sendTextMessage(roomAlice, "Hello", 1)
         aliceSession.cryptoService().discardOutboundSession(roomId)
         val withSession2 = commonTestHelper.sendTextMessage(roomAlice, "World", 1)
+
+        // Check that the session was rotated
+        Assert.assertNotEquals(
+                "Session should have been rotated, because it was discarded",
+                withSession1.first().root.content?.get("session_id")!!,
+                withSession2.first().root.content?.get("session_id")!!
+        )
 
         // Create bob account
         val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(withInitialSync = true))
@@ -92,11 +101,12 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Now let's enable history key sharing on alice side
         aliceSession.cryptoService().enableShareKeyOnInvite(true)
+        aliceSession.cryptoService().isShareKeysOnInviteEnabled() shouldBe true
 
         // let's add a new message first
         val afterFlagOn = commonTestHelper.sendTextMessage(roomAlice, "After", 1)
 
-        // Worth nothing to check that the session was rotated
+        // Worth nothing to check that the session was rotated (because Bob's device has left)
         Assert.assertNotEquals(
                 "Session should have been rotated",
                 withSession2.first().root.content?.get("session_id")!!,
