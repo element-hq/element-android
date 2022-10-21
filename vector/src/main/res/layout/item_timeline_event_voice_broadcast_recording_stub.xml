@@ -64,6 +64,15 @@
         app:barrierMargin="12dp"
         app:constraint_referenced_ids="roomAvatarImageView,titleText" />
 
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/controllerButtonsFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:constraint_referenced_ids="recordButton,stopRecordButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+
     <ImageButton
         android:id="@+id/recordButton"
         android:layout_width="@dimen/voice_broadcast_controller_button_size"
@@ -71,11 +80,7 @@
         android:background="@drawable/bg_rounded_button"
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_resume_voice_broadcast_record"
-        android:src="@drawable/ic_recording_dot"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/stopRecordButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+        android:src="@drawable/ic_recording_dot" />
 
     <ImageButton
         android:id="@+id/stopRecordButton"
@@ -84,10 +89,6 @@
         android:background="@drawable/bg_rounded_button"
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_stop_voice_broadcast_record"
-        android:src="@drawable/ic_stop"
-        app:layout_constraintBottom_toBottomOf="@id/recordButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/recordButton"
-        app:layout_constraintTop_toTopOf="@id/recordButton" />
+        android:src="@drawable/ic_stop" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -118,6 +118,15 @@
         app:barrierMargin="12dp"
         app:constraint_referenced_ids="roomAvatarImageView,titleText,broadcasterViewGroup,voiceBroadcastViewGroup" />
 
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/controllerButtonsFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:constraint_referenced_ids="playPauseButton,bufferingView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+
     <ImageButton
         android:id="@+id/playPauseButton"
         android:layout_width="@dimen/voice_broadcast_controller_button_size"
@@ -126,12 +135,7 @@
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_play_voice_broadcast"
         android:src="@drawable/ic_play_pause_play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
         app:tint="?vctr_content_secondary" />
-
 
     <ProgressBar
         android:id="@+id/bufferingView"
@@ -139,11 +143,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/a11y_voice_broadcast_buffering"
         android:indeterminate="true"
-        android:indeterminateTint="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
-
+        android:indeterminateTint="?vctr_content_secondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
