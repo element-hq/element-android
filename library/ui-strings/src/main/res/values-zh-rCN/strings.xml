@@ -2625,4 +2625,11 @@
     <string name="labs_enable_new_app_layout_summary">简化的Element，带有可选的标签</string>
     <string name="settings_security_incognito_keyboard_title">无痕键盘</string>
     <string name="settings_security_incognito_keyboard_summary">要求键盘不要基于你在对话中的输入更新任何个性化数据，如输入历史和字典。请注意，某些键盘可能不会遵守此设置。</string>
+    <string name="permissions_rationale_msg_notification">${app_name}需要权限来显示通知。通知可以显示消息、邀请等。
+\n
+\n请在下个弹窗允许访问以便查看通知。</string>
+    <string name="labs_enable_rich_text_editor_summary">试用富文本编辑器（纯文本模式即将到来）</string>
+    <string name="labs_enable_rich_text_editor_title">启用富文本编辑器</string>
+    <string name="a11y_collapse_space_children">折叠%s孩子</string>
+    <string name="a11y_expand_space_children">展开%s孩子</string>
 </resources>
