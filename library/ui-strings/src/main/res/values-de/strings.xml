@@ -2813,4 +2813,11 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Das andere Gerät ist bereits angemeldet.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Es ist ein Problem bei der Herstellung der sicheren Kommunikation aufgetreten. Eines der folgenden Dinge könnte kompromittiert sein: Dein Heim-Server; deine Internetverbindung(en); dein(e) Gerät(e);</string>
     <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
+    <string name="a11y_play_voice_broadcast">Abspielen oder fortsetzen der Sprachübertragung</string>
+    <string name="a11y_resume_voice_broadcast_record">Fortsetzen der Sprachübertragung</string>
+    <string name="a11y_voice_broadcast_buffering">Puffere</string>
+    <string name="a11y_pause_voice_broadcast">Pausiere Sprachübertragung</string>
+    <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
+    <string name="voice_broadcast_live">Live</string>
 </resources>
