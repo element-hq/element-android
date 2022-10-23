@@ -2814,4 +2814,11 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="qr_code_login_header_failed_other_description">A kérés sikertelen.</string>
     <string name="labs_enable_voice_broadcast_summary">Hang közvetítés felvételéhez és a szoba idővonalára küldéséhez.</string>
     <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése (aktív fejlesztés alatt)</string>
+    <string name="a11y_voice_broadcast_buffering">Pufferelés</string>
+    <string name="a11y_pause_voice_broadcast">Hang közvetítés szüneteltetése</string>
+    <string name="a11y_play_voice_broadcast">Hang közvetítés lejátszása vagy lejátszás folytatása</string>
+    <string name="a11y_stop_voice_broadcast_record">Hang közvetítés felvétel leállítása</string>
+    <string name="a11y_pause_voice_broadcast_record">Hang közvetítés felvétel megállítása</string>
+    <string name="a11y_resume_voice_broadcast_record">Hang közvetítés felvétel újraindítása</string>
+    <string name="voice_broadcast_live">Élő</string>
 </resources>
