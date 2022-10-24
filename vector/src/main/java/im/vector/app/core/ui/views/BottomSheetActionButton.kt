@@ -39,7 +39,6 @@ class BottomSheetActionButton @JvmOverloads constructor(
     val views: ViewBottomSheetActionButtonBinding
 
     override fun setOnClickListener(l: OnClickListener?) {
-        super.setOnClickListener(l)
         views.bottomSheetActionClickableZone.setOnClickListener(l)
     }
 
