@@ -2868,4 +2868,11 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zařízení je již přihlášeno.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Při nastavování zabezpečeného zasílání zpráv se vyskytl problém se zabezpečením. Může být napadena jedna z následujících věcí: váš domovský server; vaše internetové připojení; vaše zařízení;</string>
     <string name="qr_code_login_header_failed_other_description">Žádost se nezdařila.</string>
+    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti</string>
+    <string name="a11y_pause_voice_broadcast">Pozastavit hlasové vysílání</string>
+    <string name="a11y_play_voice_broadcast">Přehrát nebo obnovit hlasové vysílání</string>
+    <string name="a11y_stop_voice_broadcast_record">Ukončit záznam hlasového vysílání</string>
+    <string name="a11y_pause_voice_broadcast_record">Pozastavit záznam hlasového vysílání</string>
+    <string name="a11y_resume_voice_broadcast_record">Obnovit záznam hlasového vysílání</string>
+    <string name="voice_broadcast_live">Živě</string>
 </resources>
