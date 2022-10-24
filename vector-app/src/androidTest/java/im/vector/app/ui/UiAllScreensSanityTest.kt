@@ -135,6 +135,14 @@ class UiAllScreensSanityTest {
 
         elementRobot.space { selectSpace(spaceName) }
 
+        elementRobot.layoutPreferences {
+            crawl()
+        }
+
+        elementRobot.roomList {
+            crawlTabs()
+        }
+
         elementRobot.withDeveloperMode {
             settings {
                 advancedSettings { crawlDeveloperOptions() }
