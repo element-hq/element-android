@@ -21,19 +21,38 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import timber.log.Timber
+import javax.net.ssl.HttpsURLConnection
+import kotlin.coroutines.Continuation
 
 class OtherSessionsViewModel @AssistedInject constructor(
         @Assisted private val initialState: OtherSessionsViewState,
         activeSessionHolder: ActiveSessionHolder,
+        private val stringProvider: StringProvider,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
+        private val signoutSessionsUseCase: SignoutSessionsUseCase,
+        private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
+        private val pendingAuthHandler: PendingAuthHandler,
         refreshDevicesUseCase: RefreshDevicesUseCase
 ) : VectorSessionsListViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(
         initialState, activeSessionHolder, refreshDevicesUseCase
@@ -68,6 +87,9 @@ class OtherSessionsViewModel @AssistedInject constructor(
     // TODO update unit tests
     override fun handle(action: OtherSessionsAction) {
         when (action) {
+            is OtherSessionsAction.PasswordAuthDone -> handlePasswordAuthDone(action)
+            OtherSessionsAction.ReAuthCancelled -> handleReAuthCancelled()
+            OtherSessionsAction.SsoAuthDone -> handleSsoAuthDone()
             is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
             OtherSessionsAction.DisableSelectMode -> handleDisableSelectMode()
             is OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode(action.deviceId)
@@ -145,7 +167,80 @@ class OtherSessionsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleMultiSignout() {
-        // TODO call multi signout use case with all or only selected devices depending on the ViewState
+    private fun handleMultiSignout() = withState { state ->
+        viewModelScope.launch {
+            setLoading(true)
+            val deviceIds = getDeviceIdsToSignout(state)
+            if (deviceIds.isEmpty()) {
+                return@launch
+            }
+            val signoutResult = signout(deviceIds)
+            setLoading(false)
+
+            if (signoutResult.isSuccess) {
+                onSignoutSuccess()
+            } else {
+                when (val failure = signoutResult.exceptionOrNull()) {
+                    null -> onSignoutSuccess()
+                    else -> onSignoutFailure(failure)
+                }
+            }
+        }
+    }
+
+    private fun getDeviceIdsToSignout(state: OtherSessionsViewState): List<String> {
+        return if (state.isSelectModeEnabled) {
+            state.devices()?.filter { it.isSelected }.orEmpty()
+        } else {
+            state.devices().orEmpty()
+        }.mapNotNull { it.deviceInfo.deviceId }
+    }
+
+    private suspend fun signout(deviceIds: List<String>) = signoutSessionsUseCase.execute(deviceIds, object : UserInteractiveAuthInterceptor {
+        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+            when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
+                is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
+                is SignoutSessionResult.Completed -> Unit
+            }
+        }
+    })
+
+    private fun onReAuthNeeded(reAuthNeeded: SignoutSessionResult.ReAuthNeeded) {
+        Timber.d("onReAuthNeeded")
+        pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
+        pendingAuthHandler.uiaContinuation = reAuthNeeded.uiaContinuation
+        _viewEvents.post(OtherSessionsViewEvents.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode))
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        setState { copy(isLoading = isLoading) }
+    }
+
+    private fun onSignoutSuccess() {
+        Timber.d("signout success")
+        refreshDeviceList()
+        _viewEvents.post(OtherSessionsViewEvents.SignoutSuccess)
+    }
+
+    private fun onSignoutFailure(failure: Throwable) {
+        Timber.e("signout failure", failure)
+        val failureMessage = if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+            stringProvider.getString(R.string.authentication_error)
+        } else {
+            stringProvider.getString(R.string.matrix_error)
+        }
+        _viewEvents.post(OtherSessionsViewEvents.SignoutError(Exception(failureMessage)))
+    }
+
+    private fun handleSsoAuthDone() {
+        pendingAuthHandler.ssoAuthDone()
+    }
+
+    private fun handlePasswordAuthDone(action: OtherSessionsAction.PasswordAuthDone) {
+        pendingAuthHandler.passwordAuthDone(action.password)
+    }
+
+    private fun handleReAuthCancelled() {
+        pendingAuthHandler.reAuthCancelled()
     }
 }

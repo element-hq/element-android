@@ -20,6 +20,12 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 
 sealed class OtherSessionsAction : VectorViewModelAction {
+    // ReAuth
+    object SsoAuthDone : OtherSessionsAction()
+    data class PasswordAuthDone(val password: String) : OtherSessionsAction()
+    object ReAuthCancelled : OtherSessionsAction()
+
+    // Others
     data class FilterDevices(val filterType: DeviceManagerFilterType) : OtherSessionsAction()
     data class EnableSelectMode(val deviceId: String?) : OtherSessionsAction()
     object DisableSelectMode : OtherSessionsAction()

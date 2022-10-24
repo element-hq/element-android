@@ -22,21 +22,22 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
 /**
- * Use case to signout a single session.
+ * Use case to signout several sessions.
  */
-class SignoutSessionUseCase @Inject constructor(
+class SignoutSessionsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    suspend fun execute(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor): Result<Unit> {
-        return deleteDevice(deviceId, userInteractiveAuthInterceptor)
+    // TODO add unit tests
+    suspend fun execute(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor): Result<Unit> {
+        return deleteDevices(deviceIds, userInteractiveAuthInterceptor)
     }
 
-    private suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) = runCatching {
+    private suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) = runCatching {
         awaitCallback { matrixCallback ->
             activeSessionHolder.getActiveSession()
                     .cryptoService()
-                    .deleteDevice(deviceId, userInteractiveAuthInterceptor, matrixCallback)
+                    .deleteDevices(deviceIds, userInteractiveAuthInterceptor, matrixCallback)
         }
     }
 }

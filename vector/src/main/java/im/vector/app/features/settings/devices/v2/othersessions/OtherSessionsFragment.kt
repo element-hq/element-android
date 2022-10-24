@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.othersessions
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -32,6 +33,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextColor
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
@@ -40,6 +42,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
@@ -47,6 +50,7 @@ import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
@@ -158,8 +162,9 @@ class OtherSessionsFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is OtherSessionsViewEvents.Loading -> showLoading(it.message)
-                is OtherSessionsViewEvents.Failure -> showFailure(it.throwable)
+                is OtherSessionsViewEvents.SignoutError -> showFailure(it.error)
+                is OtherSessionsViewEvents.RequestReAuth -> askForReAuthentication(it)
+                OtherSessionsViewEvents.SignoutSuccess -> enableSelectMode(false)
             }
         }
     }
@@ -191,10 +196,19 @@ class OtherSessionsFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        updateLoading(state.isLoading)
         if (state.devices is Success) {
             val devices = state.devices.invoke()
             renderDevices(devices, state.currentFilter)
             updateToolbar(devices, state.isSelectModeEnabled)
+        }
+    }
+
+    private fun updateLoading(isLoading: Boolean) {
+        if (isLoading) {
+            showLoading(null)
+        } else {
+            dismissLoadingDialog()
         }
     }
 
@@ -311,5 +325,38 @@ class OtherSessionsFragment :
 
     override fun onViewAllOtherSessionsClicked() {
         // NOOP. We don't have this button in this screen
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(OtherSessionsAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(OtherSessionsAction.PasswordAuthDone(password))
+                }
+                else -> {
+                    viewModel.handle(OtherSessionsAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(OtherSessionsAction.ReAuthCancelled)
+        }
+    }
+
+    /**
+     * Launch the re auth activity to get credentials.
+     */
+    private fun askForReAuthentication(reAuthReq: OtherSessionsViewEvents.RequestReAuth) {
+        ReAuthActivity.newIntent(
+                requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
+        }
     }
 }
