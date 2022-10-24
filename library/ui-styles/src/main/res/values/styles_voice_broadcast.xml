@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VoiceBroadcastLiveIndicator" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:backgroundTint">?colorError</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">?colorOnError</item>
+        <item name="drawableTint">?colorOnError</item>
+    </style>
+
+</resources>

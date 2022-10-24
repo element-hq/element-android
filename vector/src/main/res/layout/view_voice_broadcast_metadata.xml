@@ -15,7 +15,7 @@
         android:layout_marginEnd="4dp"
         android:contentDescription="@null"
         app:tint="?vctr_content_secondary"
-        tools:src="@drawable/ic_attachment_voice_broadcast" />
+        tools:src="@drawable/ic_voice_broadcast" />
 
     <TextView
         android:id="@+id/metadata_value"

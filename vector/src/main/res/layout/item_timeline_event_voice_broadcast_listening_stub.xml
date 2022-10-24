@@ -11,20 +11,10 @@
 
     <TextView
         android:id="@+id/liveIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        style="@style/VoiceBroadcastLiveIndicator"
         android:background="@drawable/rounded_rect_shape_2"
-        android:backgroundTint="?colorError"
-        android:drawablePadding="4dp"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:maxWidth="100dp"
-        android:paddingHorizontal="4dp"
-        android:singleLine="true"
         android:text="@string/voice_broadcast_live"
-        android:textColor="?colorOnError"
-        app:drawableStartCompat="@drawable/ic_attachment_voice_broadcast"
-        app:drawableTint="?colorOnError"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,7 +68,7 @@
         android:id="@+id/voiceBroadcastMetadata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:metadataIcon="@drawable/ic_attachment_voice_broadcast"
+        app:metadataIcon="@drawable/ic_voice_broadcast"
         app:metadataValue="@string/attachment_type_voice_broadcast" />
 
     <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
