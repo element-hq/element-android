@@ -45,7 +45,7 @@ class AttachmentTypeSelectorViewModel @AssistedInject constructor(
 
     init {
         setState {
-            this.copy(
+            copy(
                     isLocationVisible = vectorFeatures.isLocationSharingEnabled(),
                     isVoiceBroadcastVisible = vectorFeatures.isVoiceBroadcastEnabled(),
             )
