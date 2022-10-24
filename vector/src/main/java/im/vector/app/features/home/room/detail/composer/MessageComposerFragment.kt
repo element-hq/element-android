@@ -252,13 +252,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         messageComposerViewModel.endAllVoiceActions()
     }
 
-    override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
-        if (mainState.tombstoneEvent != null) return@withState
-
-        composer.setInvisible(!messageComposerState.isComposerVisible)
-        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-    }
-
     private fun setupComposer() {
         val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
