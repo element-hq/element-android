@@ -25,9 +25,7 @@ import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
-import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -43,6 +41,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val context: Context,
         private val buildMeta: BuildMeta,
+        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -50,12 +49,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 
-        val onGoingVoiceBroadcastEvents = room.stateService().getStateEvents(
-                setOf(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO),
-                QueryStringValue.IsNotEmpty
-        )
-                .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+        val onGoingVoiceBroadcastEvents = getOngoingVoiceBroadcastsUseCase.execute(roomId)
 
         if (onGoingVoiceBroadcastEvents.isEmpty()) {
             startVoiceBroadcast(room)

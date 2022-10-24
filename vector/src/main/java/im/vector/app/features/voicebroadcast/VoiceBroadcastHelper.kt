@@ -16,6 +16,7 @@
 
 package im.vector.app.features.voicebroadcast
 
+import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
 import im.vector.app.features.voicebroadcast.usecase.PauseVoiceBroadcastUseCase
 import im.vector.app.features.voicebroadcast.usecase.ResumeVoiceBroadcastUseCase
 import im.vector.app.features.voicebroadcast.usecase.StartVoiceBroadcastUseCase
@@ -30,6 +31,7 @@ class VoiceBroadcastHelper @Inject constructor(
         private val pauseVoiceBroadcastUseCase: PauseVoiceBroadcastUseCase,
         private val resumeVoiceBroadcastUseCase: ResumeVoiceBroadcastUseCase,
         private val stopVoiceBroadcastUseCase: StopVoiceBroadcastUseCase,
+        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
         private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
 ) {
     suspend fun startVoiceBroadcast(roomId: String) = startVoiceBroadcastUseCase.execute(roomId)
@@ -45,4 +47,6 @@ class VoiceBroadcastHelper @Inject constructor(
     fun pausePlayback() = voiceBroadcastPlayer.pause()
 
     fun stopPlayback() = voiceBroadcastPlayer.stop()
+
+    fun getOngoingVoiceBroadcasts(roomId: String) = getOngoingVoiceBroadcastsUseCase.execute(roomId)
 }
