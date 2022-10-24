@@ -2623,4 +2623,6 @@
     <string name="labs_enable_deferred_dm_summary">仅在首条消息创建私聊消息</string>
     <string name="labs_enable_deferred_dm_title">启用延迟的私聊消息</string>
     <string name="labs_enable_new_app_layout_summary">简化的Element，带有可选的标签</string>
+    <string name="settings_security_incognito_keyboard_title">无痕键盘</string>
+    <string name="settings_security_incognito_keyboard_summary">要求键盘不要基于你在对话中的输入更新任何个性化数据，如输入历史和字典。请注意，某些键盘可能不会遵守此设置。</string>
 </resources>

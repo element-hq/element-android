@@ -22,11 +22,21 @@ import java.io.File
 
 interface VoiceBroadcastRecorder : VoiceRecorder {
 
-    var listener: Listener?
+    val currentSequence: Int
+    val state: State
 
     fun startRecord(roomId: String, chunkLength: Int)
+    fun addListener(listener: Listener)
+    fun removeListener(listener: Listener)
 
-    fun interface Listener {
-        fun onVoiceMessageCreated(file: File, @IntRange(from = 1) sequence: Int)
+    interface Listener {
+        fun onVoiceMessageCreated(file: File, @IntRange(from = 1) sequence: Int) = Unit
+        fun onStateUpdated(state: State) = Unit
+    }
+
+    enum class State {
+        Recording,
+        Paused,
+        Idle,
     }
 }

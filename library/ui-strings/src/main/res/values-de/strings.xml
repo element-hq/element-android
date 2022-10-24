@@ -708,10 +708,10 @@
     <string name="unexpected_error">Unerwarteter Fehler</string>
     <string name="keys_backup_setup_skip_title">Bist du sicher\?</string>
     <string name="keys_backup_restore_key_enter_hint">Wiederherstellungsschlüssel eingeben</string>
-    <string name="keys_backup_restoring_waiting_message">Stelle Backup wieder her:</string>
+    <string name="keys_backup_restoring_waiting_message">Stelle Sicherung wieder her:</string>
     <string name="keys_backup_unlock_button">Historie entschlüsseln</string>
     <string name="keys_backup_settings_restore_backup_button">Von Sicherung wiederherstellen</string>
-    <string name="keys_backup_settings_delete_backup_button">Sicherung löschen</string>
+    <string name="keys_backup_settings_delete_backup_button">Lösche Sicherung</string>
     <string name="keys_backup_settings_deleting_backup">Lösche Sicherung …</string>
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
@@ -722,7 +722,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDieser Fehler ist außerhalb von ${app_name} passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verwaltung der Kryptoschlüssel</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Schlüsselsicherung verwalten</string>
     <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
 \n
 \nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
@@ -763,7 +763,7 @@
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüsselsicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel …</string>
-    <string name="are_you_sure">Sicher\?</string>
+    <string name="are_you_sure">Bist du sicher\?</string>
     <string name="backup">Sicherung</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich abmeldest ohne die Schlüssel gesichert zu haben.</string>
     <string name="action_sign_out_confirmation_simple">Bist du sicher, dass du dich abmelden möchtest\?</string>
@@ -783,7 +783,7 @@
     <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
     <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
 \nVerwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Bewahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort auf, wie z.B. einem Passwortmanager (oder Tresor) auf</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Bewahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe) auf</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Teilen</string>
     <string name="keys_backup_banner_recover_line1">Verliere nie wieder verschlüsselte Nachrichten</string>
@@ -1495,11 +1495,11 @@
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
     <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben dem Raum wieder beizutreten.</string>
-    <string name="settings_secure_backup_section_title">Sicheres Backup</string>
-    <string name="settings_secure_backup_setup">Backup einrichten</string>
-    <string name="settings_secure_backup_reset">Backup zurücksetzen</string>
+    <string name="settings_secure_backup_section_title">Verschlüsselte Sicherung</string>
+    <string name="settings_secure_backup_setup">Sicherung einrichten</string>
+    <string name="settings_secure_backup_reset">Sicherung zurücksetzen</string>
     <string name="settings_secure_backup_enter_to_setup">Auf diesem Gerät einrichten</string>
-    <string name="settings_secure_backup_section_info">Verlust verschlüsselter Nachrichten und Daten verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
+    <string name="settings_secure_backup_section_info">Verhindere, den Zugriff auf verschlüsselte Nachrichten und Daten zu verlieren, indem du die Verschlüsselungs-Schlüssel auf deinem Server sicherst.</string>
     <string name="reset_secure_backup_title">Generiere einen neuen Sicherheitsschlüssel oder setze eine neue Sicherheitspassphrase für dein existierendes Backup.</string>
     <string name="reset_secure_backup_warning">Dieses wird deinen aktuellen Schlüssel oder deine aktuelle Phrase ersetzen.</string>
     <string name="disabled_integration_dialog_title">Integrationen sind deaktiviert</string>
@@ -1512,9 +1512,9 @@
     <string name="active_widget_view_action">ANSICHT</string>
     <string name="active_widgets_title">Aktive Widgets</string>
     <string name="recovery_key_export_saved">Der Sicherheitsschlüssel ist gespeichert worden.</string>
-    <string name="secure_backup_banner_setup_line1">Backup</string>
+    <string name="secure_backup_banner_setup_line1">Verschlüsselte Sicherung</string>
     <string name="secure_backup_banner_setup_line2">Absicherung gegen den Verlust verschlüsselter Nachrichten</string>
-    <string name="secure_backup_setup">Richte Backup ein</string>
+    <string name="secure_backup_setup">Sicherung einrichten</string>
     <string name="event_redacted">Nachricht entfernt</string>
     <string name="settings_show_redacted">Gelöschte Nachrichten zeigen</string>
     <string name="settings_show_redacted_summary">Zeigt einen Platzhalter für gelöschte Nachrichten an</string>
@@ -1534,7 +1534,7 @@
     <string name="login_server_url_form_common_notice">Gib die Adresse des Servers ein, den du benutzen möchtest</string>
     <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix-ID</string>
     <string name="login_signin_matrix_id_title">Einloggen mit Matrix-ID</string>
-    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Homeserver eingerichtet hast, benutze deine Matrix-ID (z.B. @benutzer:domain.com) und Passwort.</string>
+    <string name="login_signin_matrix_id_notice">Falls du ein Konto auf einem Heim-Server eingerichtet hast, verwende nachstehend deine Matrix-ID (z. B. @benutzer:domain.com) und dein Passwort.</string>
     <string name="login_signin_matrix_id_hint">Matrix-ID</string>
     <string name="login_signin_matrix_id_password_notice">Wenn du dein Passwort nicht weißt, gehe zurück um es zurücksetzen zu lassen.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dies ist keine gültige Benutzerkennung. Erwartetes Format: \'@benutzer:homeserver.org\'</string>
@@ -1547,7 +1547,7 @@
     <string name="bootstrap_info_text_2">Gib eine Sicherheitsphrase ein, die nur du kennst. Diese wird benutzt um deine Daten auf dem Server geheim zu halten.</string>
     <string name="bootstrap_cancel_text">Wenn du jetzt abbrichst und den Zugriff zu deinen Sitzungen verlierst, kannst du verschlüsselte Nachrichten und Daten verlieren.
 \n
-\nDu kannst auch ein Backup einrichten und deine Schlüssel in den Einstellungen verwalten.</string>
+\nDu kannst auch eine Sicherung einrichten und deine Schlüssel in den Einstellungen verwalten.</string>
     <string name="room_created_summary_item_by_you">Du hast den Raum erstellt und konfiguriert.</string>
     <string name="auth_invalid_login_deactivated_account">Dieser Account ist deaktiviert worden.</string>
     <string name="error_saving_media_file">Konnte Mediendatei nicht speichern</string>
@@ -1575,14 +1575,14 @@
     <string name="a11y_unmute_microphone">Aktiviere Mikrophon</string>
     <string name="a11y_stop_camera">Stoppe Kamera</string>
     <string name="a11y_start_camera">Starte Kamera</string>
-    <string name="bottom_sheet_setup_secure_backup_title">Backup</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Verlust verschlüsselter Nachrichten und Daten verhindern, indem die Schlüssel für die Entschlüsselung am Server gesichert werden.</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Verschlüsselte Sicherung</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Verhindere, den Zugriff auf verschlüsselte Nachrichten und Daten zu verlieren, indem du die Verschlüsselungs-Schlüssel auf deinem Server sicherst.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Sicherheitsschlüssel benutzen</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generiere einen Sicherheitsschlüssel, welcher z.B. in einem Passwortmanager oder in einem Tresor sicher aufbewahrt werden sollte.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generiere einen Sicherheitsschlüssel, den du in einem Passwort-Manager oder Tresor sicher aufbewahren solltest.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Eine Sicherheitsphrase benutzen</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Gib eine geheime Phrase ein, die nur du kennst und generiere einen Schlüssel als Backup.</string>
     <string name="bottom_sheet_save_your_recovery_key_title">Speichere deinen Sicherheitsschlüssel</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Bewahre deinen Sicherheitsschlüssel irgendwo sicher auf, wie z.B. in einem Passwortmanager oder in einem Tresor.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Bewahre deinen Sicherheitsschlüssel in einem Passwort-Manager oder Tresor sicher auf.</string>
     <string name="set_a_security_phrase_title">Sicherheitsphrase setzen</string>
     <string name="set_a_security_phrase_notice">Gib eine Sicherheitsphrase ein, welche nur du kennst und deine Daten auf dem Server geheim halten soll.</string>
     <string name="set_a_security_phrase_hint">Sicherheitsphrase</string>
@@ -1810,7 +1810,7 @@
     <string name="room_alias_local_address_empty">Dieser Raum hat keine lokalen Adressen</string>
     <string name="room_alias_local_address_subtitle">Füge Adressen für diesen Raum hinzu, damit andere Nutzer ihn auf %1$s finden können</string>
     <string name="room_alias_local_address_title">Lokale Adresse</string>
-    <string name="room_alias_address_hint">Neue öffentliche Adresse (z.B. #alias:server)</string>
+    <string name="room_alias_address_hint">Neue öffentliche Adresse (z. B. #alias:server)</string>
     <string name="room_alias_address_empty">Noch keine weiteren öffentlichen Adressen vorhanden.</string>
     <string name="room_alias_address_empty_can_add">Noch keine weiteren öffentlichen Adressen vorhanden, füge unten eine hinzu.</string>
     <string name="room_alias_delete_confirmation">Die Adresse \"%1$s\" löschen\?</string>
@@ -2741,4 +2741,67 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Es befinden sich nicht verifizierte Geräte in diesem Raum. Sie werden deine Nachrichten nicht entschlüsseln können.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Niemals verschlüsselte Nachrichten zu unverifizierten Sitzungen in diesem Raum senden.</string>
     <string name="action_got_it">Verstanden</string>
+    <string name="labs_enable_rich_text_editor_summary">Probiere den Rich-Text-Editor aus (bald auch mit Plain-Text-Modus)</string>
+    <string name="labs_enable_rich_text_editor_title">Aktiviere Rich-Text-Editor</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="rich_text_editor_format_strikethrough">Durchgestrichen formatieren</string>
+    <string name="rich_text_editor_format_italic">Kursiv formatieren</string>
+    <string name="rich_text_editor_format_bold">Fett formatieren</string>
+    <string name="rich_text_editor_format_underline">Unterstrichen formatieren</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} benötigt die Berechtigung zur Anzeige von Benachrichtigungen.
+\nBitte gewähre diese Berechtigung.</string>
+    <string name="labs_enable_client_info_recording_summary">Bezeichnung, Version und URL der Anwendung registrieren, damit diese Sitzung in der Sitzungsverwaltung besser erkennbar ist.</string>
+    <string name="labs_enable_client_info_recording_title">Anwendungsinformationen erfassen</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="labs_enable_session_manager_summary">Bessere Übersicht und Kontrolle über all deine Sitzungen.</string>
+    <string name="labs_enable_session_manager_title">Aktiviere neue Sitzungsverwaltung</string>
+    <string name="device_manager_session_details_device_operating_system">Betriebssystem</string>
+    <string name="device_manager_session_details_device_model">Modell</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application">Anwendung</string>
+    <string name="device_manager_push_notifications_description">Erhalte Push-Benachrichtigungen in dieser Sitzung.</string>
+    <string name="device_manager_push_notifications_title">Push-Benachrichtigungen</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifiziere deine aktuelle Sitzung, um den Verifizierungsstatus dieser Sitzung anzuzeigen.</string>
+    <string name="device_manager_verification_status_unknown">Unbekannter Verifizierungsstatus</string>
+    <string name="push_gateway_item_device_id">Sitzungs-ID:</string>
+    <string name="push_gateway_item_enabled">Aktiviert:</string>
+    <string name="error_check_network">Etwas ist schiefgelaufen. Bitte überprüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="grant_permission">Berechtigung geben</string>
+    <string name="permissions_rationale_msg_notification">${app_name} braucht die Berechtigung, um Benachrichtigungen anzuzeigen. Benachrichtigungen können deine Nachrichten, Einladungen etc. anzeigen.
+\n
+\nBitte erlaube den Zugriff im nächsten Dialog, damit Benachrichtigungen angezeigt werden können.</string>
+    <string name="qr_code_login_confirm_security_code_description">Bitte vergewissere dich, dass du den Ursprung dieses Codes kennst. Durch Verbindung neuer Geräte gewährst du vollen Zugriff auf dein Konto.</string>
+    <string name="qr_code_login_confirm_security_code">Bestätigen</string>
+    <string name="qr_code_login_try_again">Erneut versuchen</string>
+    <string name="qr_code_login_status_no_match">Keine Übereinstimmung\?</string>
+    <string name="qr_code_login_signing_in">Du wirst angemeldet</string>
+    <string name="qr_code_login_connecting_to_device">Verbinde mit Gerät</string>
+    <string name="qr_code_login_scan_qr_code_button">QR-Code einlesen</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Mobiles Gerät anmelden\?</string>
+    <string name="qr_code_login_show_qr_code_button">QR-Code auf diesem Gerät anzeigen</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Wähle „QR-Code einlesen“</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Wähle „Mit QR-Code anmelden“</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
+    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code auf diesem Gerät anzeigen\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre -&gt; Alle Sitzungen anzeigen</string>
+    <string name="qr_code_login_new_device_instruction_1">Öffne ${app_name} auf deinem anderen Gerät</string>
+    <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
+    <string name="qr_code_login_header_failed_title">Verbindung fehlgeschlagen</string>
+    <string name="qr_code_login_header_connected_description">Überprüfe dein angemeldetes Gerät. Der unten gezeigte Code sollte angezeigt werden. Bestätige, dass beide Codes übereinstimmen:</string>
+    <string name="qr_code_login_header_connected_title">Sichere Verbindung hergestellt</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Lese den unten angezeigten QR-Code mit deinem nicht angemeldeten Gerät ein.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Benutze dein angemeldetes Gerät um den unten angezeigten QR-Code einzulesen:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Mit QR-Code anmelden</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Benutze die Kamera auf diesem Gerät um den vom anderen Gerät angezeigten QR-Code zu scannen:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR-Code scannen</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kannst dieses Gerät benutzen um ein anderes Gerät per QR-Code anzumelden. Dafür gibt es zwei Wege:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
+    <string name="login_scan_qr_code">QR-Code scannen</string>
 </resources>

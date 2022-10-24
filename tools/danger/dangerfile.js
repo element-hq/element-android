@@ -81,6 +81,7 @@ const allowList = [
     "Florian14",
     "ganfra",
     "jmartinesp",
+    "jonnyandrew",
     "langleyd",
     "MadLittleMods",
     "manuroe",

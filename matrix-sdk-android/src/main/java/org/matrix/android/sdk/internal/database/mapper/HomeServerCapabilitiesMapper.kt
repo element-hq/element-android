@@ -45,6 +45,7 @@ internal object HomeServerCapabilitiesMapper {
                 canUseThreading = entity.canUseThreading,
                 canControlLogoutDevices = entity.canControlLogoutDevices,
                 canLoginWithQrCode = entity.canLoginWithQrCode,
+                canUseThreadReadReceiptsAndNotifications = entity.canUseThreadReadReceiptsAndNotifications
         )
     }
 

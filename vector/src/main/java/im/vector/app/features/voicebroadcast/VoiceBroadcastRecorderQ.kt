@@ -21,7 +21,9 @@ import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import java.util.concurrent.CopyOnWriteArrayList
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceBroadcastRecorderQ(
@@ -29,9 +31,15 @@ class VoiceBroadcastRecorderQ(
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
     private var maxFileSize = 0L // zero or negative for no limit
-    private var currentSequence = 0
+    private var currentRoomId: String? = null
+    override var currentSequence = 0
+    override var state = VoiceBroadcastRecorder.State.Idle
+        set(value) {
+            field = value
+            listeners.forEach { it.onStateUpdated(value) }
+        }
 
-    override var listener: VoiceBroadcastRecorder.Listener? = null
+    private val listeners = CopyOnWriteArrayList<VoiceBroadcastRecorder.Listener>()
 
     override val outputFormat = MediaRecorder.OutputFormat.MPEG_4
     override val audioEncoder = MediaRecorder.AudioEncoder.HE_AAC
@@ -51,21 +59,46 @@ class VoiceBroadcastRecorderQ(
     }
 
     override fun startRecord(roomId: String, chunkLength: Int) {
+        currentRoomId = roomId
         maxFileSize = (chunkLength * audioEncodingBitRate / 8).toLong()
         currentSequence = 1
         startRecord(roomId)
+        state = VoiceBroadcastRecorder.State.Recording
+    }
+
+    override fun pauseRecord() {
+        tryOrNull { mediaRecorder?.stop() }
+        mediaRecorder?.reset()
+        notifyOutputFileCreated()
+        state = VoiceBroadcastRecorder.State.Paused
+    }
+
+    override fun resumeRecord() {
+        currentSequence++
+        currentRoomId?.let { startRecord(it) }
+        state = VoiceBroadcastRecorder.State.Recording
     }
 
     override fun stopRecord() {
         super.stopRecord()
         notifyOutputFileCreated()
-        listener = null
+        listeners.clear()
         currentSequence = 0
+        state = VoiceBroadcastRecorder.State.Idle
     }
 
     override fun release() {
         mediaRecorder?.setOnInfoListener(null)
         super.release()
+    }
+
+    override fun addListener(listener: VoiceBroadcastRecorder.Listener) {
+        listeners.add(listener)
+        listener.onStateUpdated(state)
+    }
+
+    override fun removeListener(listener: VoiceBroadcastRecorder.Listener) {
+        listeners.remove(listener)
     }
 
     private fun onMaxFileSizeApproaching(roomId: String) {
@@ -78,8 +111,8 @@ class VoiceBroadcastRecorderQ(
     }
 
     private fun notifyOutputFileCreated() {
-        outputFile?.let {
-            listener?.onVoiceMessageCreated(it, currentSequence)
+        outputFile?.let { file ->
+            listeners.forEach { it.onVoiceMessageCreated(file, currentSequence) }
             outputFile = nextOutputFile
             nextOutputFile = null
         }

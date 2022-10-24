@@ -82,6 +82,33 @@ internal abstract class SASDefaultVerificationTransaction(
         // older devices have limited support of emoji but SDK offers images for the 64 verification emojis
         // so always send that we support EMOJI
         val KNOWN_SHORT_CODES = listOf(SasMode.EMOJI, SasMode.DECIMAL)
+
+        /**
+         * decimal: generate five bytes by using HKDF.
+         * Take the first 13 bits and convert it to a decimal number (which will be a number between 0 and 8191 inclusive),
+         * and add 1000 (resulting in a number between 1000 and 9191 inclusive).
+         * Do the same with the second 13 bits, and the third 13 bits, giving three 4-digit numbers.
+         * In other words, if the five bytes are B0, B1, B2, B3, and B4, then the first number is (B0 << 5 | B1 >> 3) + 1000,
+         * the second number is ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000, and the third number is ((B3 & 0x3f) << 7 | B4 >> 1) + 1000.
+         * (This method of converting 13 bits at a time is used to avoid requiring 32-bit clients to do big-number arithmetic,
+         * and adding 1000 to the number avoids having clients to worry about properly zero-padding the number when displaying to the user.)
+         * The three 4-digit numbers are displayed to the user either with dashes (or another appropriate separator) separating the three numbers,
+         * or with the three numbers on separate lines.
+         */
+        fun getDecimalCodeRepresentation(byteArray: ByteArray, separator: String = " "): String {
+            val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
+            val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
+            val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
+            val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
+            val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
+            // (B0 << 5 | B1 >> 3) + 1000
+            val first = (b0.shl(5) or b1.shr(3)) + 1000
+            // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
+            val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
+            // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
+            val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
+            return "$first$separator$second$separator$third"
+        }
     }
 
     override var state: VerificationTxState = VerificationTxState.None
@@ -369,33 +396,6 @@ internal abstract class SASDefaultVerificationTransaction(
 
     override fun getDecimalCodeRepresentation(): String {
         return getDecimalCodeRepresentation(shortCodeBytes!!)
-    }
-
-    /**
-     * decimal: generate five bytes by using HKDF.
-     * Take the first 13 bits and convert it to a decimal number (which will be a number between 0 and 8191 inclusive),
-     * and add 1000 (resulting in a number between 1000 and 9191 inclusive).
-     * Do the same with the second 13 bits, and the third 13 bits, giving three 4-digit numbers.
-     * In other words, if the five bytes are B0, B1, B2, B3, and B4, then the first number is (B0 << 5 | B1 >> 3) + 1000,
-     * the second number is ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000, and the third number is ((B3 & 0x3f) << 7 | B4 >> 1) + 1000.
-     * (This method of converting 13 bits at a time is used to avoid requiring 32-bit clients to do big-number arithmetic,
-     * and adding 1000 to the number avoids having clients to worry about properly zero-padding the number when displaying to the user.)
-     * The three 4-digit numbers are displayed to the user either with dashes (or another appropriate separator) separating the three numbers,
-     * or with the three numbers on separate lines.
-     */
-    fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-        val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
-        val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
-        val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
-        val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
-        val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
-        // (B0 << 5 | B1 >> 3) + 1000
-        val first = (b0.shl(5) or b1.shr(3)) + 1000
-        // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
-        val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
-        // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
-        val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
-        return "$first $second $third"
     }
 
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {

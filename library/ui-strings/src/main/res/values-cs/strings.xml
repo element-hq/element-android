@@ -962,10 +962,10 @@
     <string name="settings_push_rules">Push pravidla</string>
     <string name="settings_push_rules_no_rules">Žádná push pravidla nejsou definována</string>
     <string name="settings_push_gateway_no_pushers">Žádné push brány nejsou registrovány</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">ID aplikace:</string>
+    <string name="push_gateway_item_push_key">Klíč push:</string>
+    <string name="push_gateway_item_app_display_name">Zobrazovaný název aplikace:</string>
+    <string name="push_gateway_item_device_name">Název relace:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formát:</string>
     <string name="preference_voice_and_video">Hlas a video</string>
@@ -1136,7 +1136,7 @@
 \n
 \nZastavit proces změny hesla\?</string>
     <string name="login_set_email_title">Nastavit emailovou adresu</string>
-    <string name="login_set_email_notice">Nastavte emailovou adresu pro obnovu svého účtu. Později můžete volitelně dovolit lidem, které znáte, aby Vás podle emailu nalezli.</string>
+    <string name="login_set_email_notice">Nastavte e-mailovou adresu pro obnovení účtu. Později můžete volitelně povolit svým známým, aby vás podle této adresy nalezli.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (volitelné)</string>
     <string name="login_set_email_submit">Dále</string>
@@ -1305,7 +1305,7 @@
 \nKlíče nejsou důvěryhodné</string>
     <string name="encryption_information_dg_xsigning_disabled">Křížové podpisování není zapnuto</string>
     <string name="settings_active_sessions_list">Aktivní relace</string>
-    <string name="settings_active_sessions_show_all">Ukázat všechny relace</string>
+    <string name="settings_active_sessions_show_all">Zobrazit všechny relace</string>
     <string name="settings_active_sessions_manage">Správa relací</string>
     <string name="settings_active_sessions_signout_device">Odhlásit se z této relace</string>
     <string name="settings_failed_to_get_crypto_device_info">Žádná kryptografická informace není k dispozici</string>
@@ -2796,4 +2796,67 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ V této místnosti jsou neověřená zařízení, která nebudou schopna dešifrovat odeslané zprávy.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Nikdy neodesílat šifrované zprávy do neověřených relací v této místnosti.</string>
     <string name="action_got_it">Rozumím</string>
+    <string name="rich_text_editor_format_underline">Použít podtržení</string>
+    <string name="rich_text_editor_format_strikethrough">Použít přeškrtnutí</string>
+    <string name="rich_text_editor_format_bold">Použít tučný text</string>
+    <string name="rich_text_editor_format_italic">Použít kurzívu</string>
+    <string name="labs_enable_client_info_recording_summary">Zaznamenávat název, verzi a url pro snadnější rozpoznání relací ve správci relací.</string>
+    <string name="labs_enable_client_info_recording_title">Povolit záznamenávání informací o klientu</string>
+    <string name="labs_enable_session_manager_summary">Získejte lepší přehled a kontrolu nad všemi relacemi.</string>
+    <string name="labs_enable_session_manager_title">Použít nový správce relací</string>
+    <string name="device_manager_session_details_device_operating_system">Operační systém</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Prohlížeč</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Verze</string>
+    <string name="device_manager_session_details_application_name">Název</string>
+    <string name="device_manager_session_details_application">Aplikace</string>
+    <string name="device_manager_push_notifications_description">Přijímat push oznámení v této relaci.</string>
+    <string name="device_manager_push_notifications_title">Push oznámení</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Ověřením aktuální relace zjistíte stav ověření této relace.</string>
+    <string name="device_manager_verification_status_unknown">Neznámý stav ověření</string>
+    <string name="push_gateway_item_enabled">Zapnuto:</string>
+    <string name="push_gateway_item_device_id">ID relace:</string>
+    <string name="error_check_network">Něco se pokazilo. Zkontrolujte prosím síťové připojení a zkuste to znovu.</string>
+    <string name="grant_permission">Udělit oprávnění</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potřebuje oprávnění k zobrazování oznámení.
+\nUdělte prosím toto oprávnění.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potřebuje oprávnění k zobrazování oznámení. Oznámení mohou zobrazovat vaše zprávy, pozvánky atd.
+\n
+\nPro zobrazování oznámení povolte přístup na dalších vyskakovacích oknech.</string>
+    <string name="labs_enable_rich_text_editor_summary">Vyzkoušejte rozšířený textový editor (textový režim již brzy)</string>
+    <string name="labs_enable_rich_text_editor_title">Povolit rozšířený textový editor</string>
+    <string name="qr_code_login_confirm_security_code_description">Ujistěte se, že znáte původ tohoto kódu. Propojením zařízení poskytnete někomu plný přístup ke svému účtu.</string>
+    <string name="qr_code_login_confirm_security_code">Potvrdit</string>
+    <string name="qr_code_login_try_again">Zkuste to znovu</string>
+    <string name="qr_code_login_status_no_match">Neshoduje se\?</string>
+    <string name="qr_code_login_signing_in">Probíhá přihlašování</string>
+    <string name="qr_code_login_connecting_to_device">Připojování k zařízení</string>
+    <string name="qr_code_login_scan_qr_code_button">Naskenujte QR kód</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Přihlašování na mobilním zařízením\?</string>
+    <string name="qr_code_login_show_qr_code_button">Zobrazit QR kód na tomto zařízení</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Vyberte možnost \"Naskenovat QR kód\"</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vyberte možnost \"Přihlásit se pomocí QR kódu\"</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
+    <string name="qr_code_login_new_device_instruction_3">Vyberte možnost \"Zobrazit QR kód na tomto zařízení\"</string>
+    <string name="qr_code_login_new_device_instruction_2">Přejděte do Nastavení -&gt; Zabezpečení a soukromí -&gt; Zobrazit všechny relace</string>
+    <string name="qr_code_login_new_device_instruction_1">Otevřete ${app_name} na vašem druhém zařízení</string>
+    <string name="qr_code_login_header_failed_denied_description">Žádost byla na druhém zařízení zamítnuta.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Propojení nebylo dokončeno v požadovaném čase.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Propojení s tímto zařízením není podporováno.</string>
+    <string name="qr_code_login_header_failed_title">Neúspěšné připojení</string>
+    <string name="qr_code_login_header_connected_description">Zkontrolujte vaše přihlášené zařízení, měl by se zobrazit níže uvedený kód. Zkontrolujte, zda níže uvedený kód odpovídá danému zařízení:</string>
+    <string name="qr_code_login_header_connected_title">Zabezpečené připojení navázáno</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Pomocí odhlášeného zařízení naskenujte níže uvedený QR kód.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Pomocí přihlášeného zařízení naskenujte níže uvedený QR kód:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Přihlásit se pomocí QR kódu</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Pomocí fotoaparátu na tomto zařízení naskenujte QR kód zobrazený na druhém zařízení:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Naskenovat QR kód</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocí tohoto zařízení se můžete přihlásit do mobilního nebo webového zařízení pomocí QR kódu. Můžete to provést dvěma způsoby:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Přihlásit se pomocí QR kódu</string>
+    <string name="login_scan_qr_code">Naskenovat QR kód</string>
 </resources>

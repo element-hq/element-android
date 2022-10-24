@@ -55,7 +55,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
 
         if (onGoingVoiceBroadcastEvents.isEmpty()) {
             startVoiceBroadcast(room)
@@ -81,9 +81,11 @@ class StartVoiceBroadcastUseCase @Inject constructor(
     }
 
     private fun startRecording(room: Room, eventId: String, chunkLength: Int) {
-        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file, sequence ->
-            sendVoiceFile(room, file, eventId, sequence)
-        }
+        voiceBroadcastRecorder?.addListener(object : VoiceBroadcastRecorder.Listener {
+            override fun onVoiceMessageCreated(file: File, sequence: Int) {
+                sendVoiceFile(room, file, eventId, sequence)
+            }
+        })
         voiceBroadcastRecorder?.startRecord(room.roomId, chunkLength)
     }
 
