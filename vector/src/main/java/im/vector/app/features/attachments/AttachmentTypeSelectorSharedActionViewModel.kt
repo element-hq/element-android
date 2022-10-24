@@ -23,8 +23,8 @@ import javax.inject.Inject
 class AttachmentTypeSelectorSharedActionViewModel @Inject constructor() :
         VectorSharedActionViewModel<AttachmentTypeSelectorSharedAction>()
 
-sealed class AttachmentTypeSelectorSharedAction : VectorSharedAction {
+sealed interface AttachmentTypeSelectorSharedAction : VectorSharedAction {
     data class SelectAttachmentTypeAction(
             val attachmentType: AttachmentType
-    ) : AttachmentTypeSelectorSharedAction()
+    ) : AttachmentTypeSelectorSharedAction
 }
