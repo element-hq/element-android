@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
@@ -32,7 +33,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     @EpoxyAttribute
     var voiceBroadcastRecorder: VoiceBroadcastRecorder? = null
 
-    private lateinit var recorderListener: VoiceBroadcastRecorder.Listener
+    private var recorderListener: VoiceBroadcastRecorder.Listener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -40,12 +41,15 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        recorderListener = object : VoiceBroadcastRecorder.Listener {
-            override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
-                renderRecordingState(holder, state)
-            }
+        if (voiceBroadcastRecorder != null && voiceBroadcastRecorder?.state != VoiceBroadcastRecorder.State.Idle) {
+            recorderListener = object : VoiceBroadcastRecorder.Listener {
+                override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
+                    renderRecordingState(holder, state)
+                }
+            }.also { voiceBroadcastRecorder?.addListener(it) }
+        } else {
+            renderVoiceBroadcastState(holder)
         }
-        voiceBroadcastRecorder?.addListener(recorderListener)
     }
 
     override fun renderMetadata(holder: Holder) {
@@ -56,39 +60,54 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun renderRecordingState(holder: Holder, state: VoiceBroadcastRecorder.State) {
-        with(holder) {
-            when (state) {
-                VoiceBroadcastRecorder.State.Recording -> {
-                    stopRecordButton.isEnabled = true
-                    recordButton.isEnabled = true
-
-                    val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                    val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
-                    recordButton.setImageDrawable(drawable)
-                    recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_pause_voice_broadcast_record)
-                    recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
-                    stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
-                }
-                VoiceBroadcastRecorder.State.Paused -> {
-                    stopRecordButton.isEnabled = true
-                    recordButton.isEnabled = true
-
-                    recordButton.setImageResource(R.drawable.ic_recording_dot)
-                    recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
-                    recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
-                    stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
-                }
-                VoiceBroadcastRecorder.State.Idle -> {
-                    recordButton.isEnabled = false
-                    stopRecordButton.isEnabled = false
-                }
-            }
+        when (state) {
+            VoiceBroadcastRecorder.State.Recording -> renderPlayingState(holder)
+            VoiceBroadcastRecorder.State.Paused -> renderPausedState(holder)
+            VoiceBroadcastRecorder.State.Idle -> renderStoppedState(holder)
         }
+    }
+
+    private fun renderVoiceBroadcastState(holder: Holder) {
+        when (voiceBroadcastState) {
+            VoiceBroadcastState.STARTED,
+            VoiceBroadcastState.RESUMED -> renderPlayingState(holder)
+            VoiceBroadcastState.PAUSED -> renderPausedState(holder)
+            VoiceBroadcastState.STOPPED,
+            null -> renderStoppedState(holder)
+        }
+    }
+
+    private fun renderPlayingState(holder: Holder) = with(holder) {
+        stopRecordButton.isEnabled = true
+        recordButton.isEnabled = true
+
+        val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+        val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
+        recordButton.setImageDrawable(drawable)
+        recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_pause_voice_broadcast_record)
+        recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
+        stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+    }
+
+    private fun renderPausedState(holder: Holder) = with(holder) {
+        stopRecordButton.isEnabled = true
+        recordButton.isEnabled = true
+
+        recordButton.setImageResource(R.drawable.ic_recording_dot)
+        recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
+        recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
+        stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+    }
+
+    private fun renderStoppedState(holder: Holder) = with(holder) {
+        recordButton.isEnabled = false
+        stopRecordButton.isEnabled = false
     }
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        voiceBroadcastRecorder?.removeListener(recorderListener)
+        recorderListener?.let { voiceBroadcastRecorder?.removeListener(it) }
+        recorderListener = null
     }
 
     override fun getViewStubId() = STUB_ID
