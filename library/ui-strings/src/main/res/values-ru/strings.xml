@@ -434,14 +434,14 @@
     <string name="encryption_information_device_name">Публичное название</string>
     <string name="device_manager_session_details_session_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
-    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей от комнат</string>
-    <string name="encryption_export_room_keys">Экспорт ключей от комнат</string>
+    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей</string>
+    <string name="encryption_export_room_keys">Экспорт ключей</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
     <string name="passphrase_enter_passphrase">Введите мнемоническую фразу</string>
     <string name="passphrase_confirm_passphrase">Подтвердите мнемоническую фразу</string>
-    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей от комнат</string>
-    <string name="encryption_import_room_keys">Импорт ключей от комнат</string>
+    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей</string>
+    <string name="encryption_import_room_keys">Импорт ключей</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
@@ -618,7 +618,7 @@
     <string name="system_alerts_header">Системные оповещения</string>
     <string name="dialog_title_error">Ошибка</string>
     <string name="passphrase_create_passphrase">Создать мнемоническую фразу</string>
-    <string name="passphrase_passphrase_does_not_match">Парольные фразы не совпадают</string>
+    <string name="passphrase_passphrase_does_not_match">Мнемонические фразы не совпадают</string>
     <string name="resource_limit_contact_admin">свяжитесь с вашим администратором</string>
     <string name="resource_limit_soft_default">Превышен один из ресурсных лимитов сервера, по этому <b>некоторые пользователи не смогут авторизоваться</b>.</string>
     <string name="resource_limit_hard_default">Превышен один из ресурсных лимитов сервера.</string>
@@ -726,7 +726,7 @@
     <string name="encryption_settings_manage_message_recovery_summary">Управление резервным копированием ключей</string>
     <string name="notification_silent">Беззвучный</string>
     <string name="passphrase_empty_error_message">Введите мнемоническую фразу</string>
-    <string name="passphrase_passphrase_too_weak">Парольная фраза слишком простая</string>
+    <string name="passphrase_passphrase_too_weak">Мнемоническая фраза слишком проста</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите мнемоническую фразу, если хотите, чтобы ${app_name} сгенерировал бумажный ключ.</string>
     <string name="keys_backup_setup_step1_title">Никогда не теряйте зашифрованных сообщений</string>
     <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Ключи для прочтения этих сообщений есть только у вас и получателя(ей).
@@ -744,7 +744,7 @@
     <string name="keys_backup_settings_delete_confirm_message">Удалить резервную копию ключей шифрования с сервера\? Вы больше не сможете использовать бумажный ключ для чтения истории зашифрованных сообщений.</string>
     <string name="keys_backup_settings_delete_confirm_title">Удалить резервную копию</string>
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этой сессии, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
+    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервное копирование ключей в этой сессии, восстановите их с помощью мнемонической фразы или бумажного ключа.</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Резервная копия имеет действительную подпись из неподтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительную подпись из подтверждённой сессии %s.</string>
@@ -1520,9 +1520,9 @@
 \n
 \nМы рекомендуем вам немедленно изменить свой пароль и ключ восстановления в настройках.</string>
     <string name="verification_cancelled">Подтверждение отменено</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Генерация ключа безопасности из парольной фразы</string>
-    <string name="bootstrap_progress_generating_ssss">Генерация ключа SSSS из парольной фразы</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">Генерация ключа SSSS из парольной фразы (%s)</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Создание бумажного ключа из мнемонической фразы</string>
+    <string name="bootstrap_progress_generating_ssss">Создание ключа SSSS из мнемонической фразы</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Создание ключа SSSS из мнемонической фразы (%s)</string>
     <string name="bootstrap_migration_enter_backup_password">Чтобы продолжить работу, введите парольную фразу для резервного копирования ключа.</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Если вы не знаете вашу парольную фразу для резервного копирования ключей, вы можете %s.</string>
     <string name="power_level_edit_title">Задать роль</string>
