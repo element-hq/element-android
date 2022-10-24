@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/otherSessionsMultiSignout"
-        android:title="@string/device_manager_other_sessions_multi_signout_all"
+        android:title="@plurals/device_manager_other_sessions_multi_signout_all"
         app:showAsAction="withText|never" />
 
     <item

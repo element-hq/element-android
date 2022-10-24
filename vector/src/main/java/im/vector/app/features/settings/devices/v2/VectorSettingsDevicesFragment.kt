@@ -19,11 +19,9 @@ package im.vector.app.features.settings.devices.v2
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -50,7 +48,6 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
-import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsAction
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -137,10 +134,8 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initOtherSessionsHeaderView() {
-        val color = colorProvider.getColorFromAttribute(R.attr.colorError)
-        views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout).setTextColor(color)
         views.deviceListHeaderOtherSessions.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId) {
+            when (menuItem.itemId) {
                 R.id.otherSessionsHeaderMultiSignout -> {
                     viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
                     true
@@ -290,6 +285,11 @@ class VectorSettingsDevicesFragment :
             hideOtherSessionsView()
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
+            val color = colorProvider.getColorFromAttribute(R.attr.colorError)
+            val multiSignoutItem = views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout)
+            val nbDevices = otherDevices.size
+            multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
+            multiSignoutItem.setTextColor(color)
             views.deviceListOtherSessions.isVisible = true
             views.deviceListOtherSessions.render(
                     devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),

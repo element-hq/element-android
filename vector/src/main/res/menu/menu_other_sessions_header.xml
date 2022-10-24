@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/otherSessionsHeaderMultiSignout"
-        android:title="@string/device_manager_other_sessions_multi_signout_all"
+        android:title="@plurals/device_manager_other_sessions_multi_signout_all"
         app:showAsAction="withText|never" />
 
 </menu>

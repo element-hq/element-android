@@ -87,7 +87,8 @@ class OtherSessionsFragment :
         multiSignoutItem.title = if (viewState.isSelectModeEnabled) {
             getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
         } else {
-            getString(R.string.device_manager_other_sessions_multi_signout_all)
+            val nbDevices = viewState.devices()?.size ?: 0
+            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
         }
         multiSignoutItem.isVisible = if (viewState.isSelectModeEnabled) {
             viewState.devices.invoke()?.any { it.isSelected }.orFalse()
