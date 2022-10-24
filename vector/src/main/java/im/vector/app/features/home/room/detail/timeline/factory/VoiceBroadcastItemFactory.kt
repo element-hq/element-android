@@ -67,6 +67,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             createRecordingItem(
                     params.event.roomId,
                     eventsGroup.groupId,
+                    mostRecentMessageContent.voiceBroadcastState,
                     highlight,
                     callback,
                     attributes
@@ -87,6 +88,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
     private fun createRecordingItem(
             roomId: String,
             voiceBroadcastId: String,
+            voiceBroadcastState: VoiceBroadcastState?,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
@@ -100,6 +102,8 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 .colorProvider(colorProvider)
                 .drawableProvider(drawableProvider)
                 .voiceBroadcastRecorder(voiceBroadcastRecorder)
+                .voiceBroadcastId(voiceBroadcastId)
+                .voiceBroadcastState(voiceBroadcastState)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
     }

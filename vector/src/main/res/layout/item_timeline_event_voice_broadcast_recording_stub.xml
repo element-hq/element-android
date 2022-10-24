@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_rect_shape_8"
     android:backgroundTint="?vctr_content_quinary"
-    android:padding="@dimen/layout_vertical_margin"
-    tools:viewBindingIgnore="true">
+    android:padding="@dimen/layout_vertical_margin">
 
     <TextView
         android:id="@+id/liveIndicator"
@@ -24,7 +23,7 @@
         android:singleLine="true"
         android:text="@string/voice_broadcast_live"
         android:textColor="?colorOnError"
-        app:drawableStartCompat="@drawable/ic_voice_broadcast_16"
+        app:drawableStartCompat="@drawable/ic_attachment_voice_broadcast"
         app:drawableTint="?colorOnError"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +53,34 @@
         android:contentDescription="@string/avatar"
         app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/users.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/metadataFlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="listenersCountMetadata,remainingTimeMetadata"
+        app:flow_horizontalAlign="start"
+        app:flow_verticalGap="4dp"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toBottomOf="@id/titleText" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+        android:id="@+id/listenersCountMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:metadataIcon="@drawable/ic_member_small"
+        app:metadataValue="@string/no_value_placeholder"
+        tools:metadataValue="5 listening" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+        android:id="@+id/remainingTimeMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:metadataIcon="@drawable/ic_timer"
+        tools:metadataValue="3h 2m 50s left" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBottomBarrier"
@@ -62,7 +88,7 @@
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:barrierMargin="12dp"
-        app:constraint_referenced_ids="roomAvatarImageView,titleText" />
+        app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataFlow" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/controllerButtonsFlow"

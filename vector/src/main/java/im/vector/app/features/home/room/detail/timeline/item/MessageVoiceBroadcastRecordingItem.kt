@@ -17,45 +17,22 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.tintBackground
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
-import org.matrix.android.sdk.api.util.MatrixItem
+import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
-abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceBroadcastRecordingItem.Holder>() {
-
-    @EpoxyAttribute
-    var callback: TimelineEventController.Callback? = null
+abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastRecordingItem.Holder>() {
 
     @EpoxyAttribute
     var voiceBroadcastRecorder: VoiceBroadcastRecorder? = null
 
-    @EpoxyAttribute
-    lateinit var colorProvider: ColorProvider
-
-    @EpoxyAttribute
-    lateinit var drawableProvider: DrawableProvider
-
-    @EpoxyAttribute
-    var roomItem: MatrixItem? = null
-
-    @EpoxyAttribute
-    var title: String? = null
-
     private lateinit var recorderListener: VoiceBroadcastRecorder.Listener
-
-    override fun isCacheable(): Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -65,31 +42,25 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
     private fun bindVoiceBroadcastItem(holder: Holder) {
         recorderListener = object : VoiceBroadcastRecorder.Listener {
             override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
-                renderState(holder, state)
+                renderRecordingState(holder, state)
             }
         }
         voiceBroadcastRecorder?.addListener(recorderListener)
-        renderHeader(holder)
     }
 
-    private fun renderHeader(holder: Holder) {
+    override fun renderMetadata(holder: Holder) {
         with(holder) {
-            roomItem?.let {
-                attributes.avatarRenderer.render(it, roomAvatarImageView)
-                titleText.text = it.displayName
-            }
+            listenersCountMetadata.isVisible = false
+            remainingTimeMetadata.isVisible = false
         }
     }
 
-    private fun renderState(holder: Holder, state: VoiceBroadcastRecorder.State) {
+    private fun renderRecordingState(holder: Holder, state: VoiceBroadcastRecorder.State) {
         with(holder) {
             when (state) {
                 VoiceBroadcastRecorder.State.Recording -> {
                     stopRecordButton.isEnabled = true
                     recordButton.isEnabled = true
-
-                    liveIndicator.isVisible = true
-                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
 
                     val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                     val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
@@ -102,9 +73,6 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
                     stopRecordButton.isEnabled = true
                     recordButton.isEnabled = true
 
-                    liveIndicator.isVisible = true
-                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
-
                     recordButton.setImageResource(R.drawable.ic_recording_dot)
                     recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
                     recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
@@ -113,7 +81,6 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
                 VoiceBroadcastRecorder.State.Idle -> {
                     recordButton.isEnabled = false
                     stopRecordButton.isEnabled = false
-                    liveIndicator.isVisible = false
                 }
             }
         }
@@ -126,10 +93,9 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageItem<MessageVoiceB
 
     override fun getViewStubId() = STUB_ID
 
-    class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val liveIndicator by bind<TextView>(R.id.liveIndicator)
-        val roomAvatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
-        val titleText by bind<TextView>(R.id.titleText)
+    class Holder : AbsMessageVoiceBroadcastItem.Holder(STUB_ID) {
+        val listenersCountMetadata by bind<VoiceBroadcastMetadataView>(R.id.listenersCountMetadata)
+        val remainingTimeMetadata by bind<VoiceBroadcastMetadataView>(R.id.remainingTimeMetadata)
         val recordButton by bind<ImageButton>(R.id.recordButton)
         val stopRecordButton by bind<ImageButton>(R.id.stopRecordButton)
     }
