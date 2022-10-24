@@ -23,6 +23,7 @@ import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
@@ -54,7 +55,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
 
         if (onGoingVoiceBroadcastEvents.isEmpty()) {
             startVoiceBroadcast(room)
@@ -70,6 +71,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 stateKey = session.myUserId,
                 body = MessageVoiceBroadcastInfoContent(
+                        deviceId = session.sessionParams.deviceId,
                         voiceBroadcastStateStr = VoiceBroadcastState.STARTED.value,
                         chunkLength = chunkLength,
                 ).toContent()
@@ -79,25 +81,30 @@ class StartVoiceBroadcastUseCase @Inject constructor(
     }
 
     private fun startRecording(room: Room, eventId: String, chunkLength: Int) {
-        voiceBroadcastRecorder?.listener = VoiceBroadcastRecorder.Listener { file ->
-            sendVoiceFile(room, file, eventId)
-        }
+        voiceBroadcastRecorder?.addListener(object : VoiceBroadcastRecorder.Listener {
+            override fun onVoiceMessageCreated(file: File, sequence: Int) {
+                sendVoiceFile(room, file, eventId, sequence)
+            }
+        })
         voiceBroadcastRecorder?.startRecord(room.roomId, chunkLength)
     }
 
-    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String) {
+    private fun sendVoiceFile(room: Room, voiceMessageFile: File, referenceEventId: String, sequence: Int) {
         val outputFileUri = FileProvider.getUriForFile(
                 context,
                 buildMeta.applicationId + ".fileProvider",
                 voiceMessageFile,
-                "Voice message.${voiceMessageFile.extension}"
+                "Voice Broadcast Part ($sequence).${voiceMessageFile.extension}"
         )
         val audioType = outputFileUri.toMultiPickerAudioType(context) ?: return
         room.sendService().sendMedia(
                 attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
                 compressBeforeSending = false,
                 roomIds = emptySet(),
-                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId)
+                relatesTo = RelationDefaultContent(RelationType.REFERENCE, referenceEventId),
+                additionalContent = mapOf(
+                        VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY to VoiceBroadcastChunk(sequence = sequence).toContent()
+                )
         )
     }
 }

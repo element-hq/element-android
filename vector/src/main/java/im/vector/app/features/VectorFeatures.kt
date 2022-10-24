@@ -62,5 +62,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isQrCodeLoginEnabled(): Boolean = true
     override fun isQrCodeLoginForAllServers(): Boolean = false
     override fun isReciprocateQrCodeLogin(): Boolean = false
-    override fun isVoiceBroadcastEnabled(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = true
 }

@@ -1492,10 +1492,10 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت ژتون</string>
     <string name="push_gateway_item_format">فرمت:</string>
     <string name="push_gateway_item_url">آدرس:</string>
-    <string name="push_gateway_item_device_name">نام نشست:</string>
-    <string name="push_gateway_item_app_display_name">نام برنامه:</string>
-    <string name="push_gateway_item_push_key">کلید push:</string>
-    <string name="push_gateway_item_app_id">شناسه برنامه:</string>
+    <string name="push_gateway_item_device_name">نام نمایشی نشست:</string>
+    <string name="push_gateway_item_app_display_name">نام نمایشی کاره:</string>
+    <string name="push_gateway_item_push_key">کلید ارسال:</string>
+    <string name="push_gateway_item_app_id">شناسهٔ کاره:</string>
     <string name="settings_push_gateway_no_pushers">هیچ push gateway‌ای ثبت نشده است</string>
     <string name="settings_push_rules_no_rules">هیچ قانونی برای push تعریف نشده است</string>
     <string name="navigate_to_room_when_already_in_the_room">شما در حال مشاهده این اتاق هستید!</string>
@@ -2720,4 +2720,10 @@
     <string name="command_description_devtools">گشودن صفحهٔ ابزارهای توسعه‌دهنده</string>
     <string name="labs_enable_deferred_dm_title">به کار انداختن پیام‌های مستقیم تعویقی</string>
     <string name="action_got_it">گرفتم</string>
+    <string name="tooltip_attachment_voice_broadcast">آغاز یک پخش همگانی صوتی</string>
+    <string name="command_description_table_flip">(╯°□°）╯︵ ┻━┻ را به ابتدای پیام متنی خام می‌افزاید</string>
+    <string name="attachment_type_voice_broadcast">پخش همگانی صدا</string>
+    <string name="grant_permission">اعطای دسترسی</string>
+    <string name="labs_enable_rich_text_editor_summary">ویرایشگر متن غنی را بیازمایید (حالت متن خام به زودی)</string>
+    <string name="labs_enable_rich_text_editor_title">به کار انداختن ویرایشگر متن غنی</string>
 </resources>

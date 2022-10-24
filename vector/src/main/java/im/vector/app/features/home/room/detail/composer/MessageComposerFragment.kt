@@ -234,8 +234,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 }
                 // TODO remove this when there will be a recording indicator outside of the timeline
                 // Pause voice broadcast if the timeline is not shown anymore
-                it.isVoiceBroadcasting && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Pause)
+                it.isVoiceBroadcasting && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
                 else -> {
+                    timelineViewModel.handle(VoiceBroadcastAction.Listening.Pause)
                     messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
                 }
             }
@@ -309,7 +310,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     )
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
-                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
+                            vectorPreferences.isVoiceBroadcastEnabled(), // TODO check user permission
                     )
                 }
                 attachmentTypeSelector.show(composer.attachmentButton)
@@ -684,7 +685,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 locationOwnerId = session.myUserId
                         )
             }
-            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(VoiceBroadcastAction.Start)
+            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Start)
         }
     }
 

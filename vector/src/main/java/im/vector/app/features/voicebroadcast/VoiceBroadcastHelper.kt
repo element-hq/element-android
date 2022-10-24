@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ class VoiceBroadcastHelper @Inject constructor(
         private val pauseVoiceBroadcastUseCase: PauseVoiceBroadcastUseCase,
         private val resumeVoiceBroadcastUseCase: ResumeVoiceBroadcastUseCase,
         private val stopVoiceBroadcastUseCase: StopVoiceBroadcastUseCase,
+        private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
 ) {
     suspend fun startVoiceBroadcast(roomId: String) = startVoiceBroadcastUseCase.execute(roomId)
 
@@ -38,4 +39,10 @@ class VoiceBroadcastHelper @Inject constructor(
     suspend fun resumeVoiceBroadcast(roomId: String) = resumeVoiceBroadcastUseCase.execute(roomId)
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
+
+    fun playOrResumePlayback(roomId: String, eventId: String) = voiceBroadcastPlayer.playOrResume(roomId, eventId)
+
+    fun pausePlayback() = voiceBroadcastPlayer.pause()
+
+    fun stopPlayback() = voiceBroadcastPlayer.stop()
 }

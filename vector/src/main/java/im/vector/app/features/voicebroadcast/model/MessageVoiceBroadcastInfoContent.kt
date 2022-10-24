@@ -38,10 +38,14 @@ data class MessageVoiceBroadcastInfoContent(
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
+        /** The device from which the broadcast has been started. */
+        @Json(name = "device_id") val deviceId: String? = null,
         /** The [VoiceBroadcastState] value. **/
         @Json(name = "state") val voiceBroadcastStateStr: String = "",
         /** The length of the voice chunks in seconds. **/
         @Json(name = "chunk_length") val chunkLength: Int? = null,
+        /** The sequence of the last sent chunk. **/
+        @Json(name = "last_chunk_sequence") val lastChunkSequence: Int? = null,
 ) : MessageContent {
 
     val voiceBroadcastState: VoiceBroadcastState? = VoiceBroadcastState.values()

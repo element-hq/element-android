@@ -117,4 +117,11 @@
         android:title="@string/labs_enable_client_info_recording_title"
         app:isPreferenceVisible="@bool/settings_labs_client_info_recording_visible" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_enable_voice_broadcast_default"
+        android:key="SETTINGS_LABS_VOICE_BROADCAST_KEY"
+        android:summary="@string/labs_enable_voice_broadcast_summary"
+        android:title="@string/labs_enable_voice_broadcast_title"
+        app:isPreferenceVisible="@bool/settings_labs_enable_voice_broadcast_visible" />
+
 </androidx.preference.PreferenceScreen>
