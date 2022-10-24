@@ -408,11 +408,12 @@ class TimelineViewModel @AssistedInject constructor(
      * Observe local unread threads.
      */
     private fun observeLocalThreadNotifications() {
+        if (room == null) return
         val threadNotificationsSupported = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
         if (threadNotificationsSupported) {
-            room?.getRoomSummaryLive()
-                    ?.asFlow()
-                    ?.onEach {
+            room.getRoomSummaryLive()
+                    .asFlow()
+                    .onEach {
                         it.getOrNull()?.let {
                             setState {
                                 copy(
@@ -424,15 +425,15 @@ class TimelineViewModel @AssistedInject constructor(
                             }
                         }
                     }
-                    ?.launchIn(viewModelScope)
+                    .launchIn(viewModelScope)
         } else {
-            room?.flow()
-                    ?.liveLocalUnreadThreadList()
-                    ?.execute {
+            room.flow()
+                    .liveLocalUnreadThreadList()
+                    .execute {
                         val threadList = it.invoke()
                         val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
                             threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
-                        }?.let { true } ?: false
+                        } != null
                         val numberOfLocalUnreadThreads = threadList?.size ?: 0
                         copy(
                                 threadNotificationBadgeState = ThreadNotificationBadgeState(

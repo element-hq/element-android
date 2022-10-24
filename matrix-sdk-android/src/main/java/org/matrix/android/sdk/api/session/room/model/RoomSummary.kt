@@ -98,11 +98,11 @@ data class RoomSummary(
          */
         val highlightCount: Int = 0,
         /**
-         * Number of threads with unread messages in this room
+         * Number of threads with unread messages in this room.
          */
         val threadNotificationCount: Int = 0,
         /**
-         * Number of threads with highlighted messages in this room
+         * Number of threads with highlighted messages in this room.
          */
         val threadHighlightCount: Int = 0,
         /**

@@ -75,7 +75,9 @@ internal data class RoomEventFilter(
          */
         @Json(name = "contains_url") val containsUrl: Boolean? = null,
         /**
-         * If true, enables lazy-loading of membership events. See Lazy-loading room members for more information. Defaults to false.
+         * If true, enables lazy-loading of membership events.
+         * See Lazy-loading room members for more information.
+         * Defaults to false.
          */
         @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null,
         /**
