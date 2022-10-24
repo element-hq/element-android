@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.airbnb.mvrx.fragmentViewModel
@@ -47,9 +48,9 @@ class AttachmentTypeSelectorBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
 
     override fun invalidate() = withState(viewModel, timelineViewModel) { viewState, timelineState ->
         super.invalidate()
-        views.location.visibility = if (viewState.isLocationVisible) View.VISIBLE else View.GONE
-        views.voiceBroadcast.visibility = if (viewState.isVoiceBroadcastVisible) View.VISIBLE else View.GONE
-        views.poll.visibility = if (!timelineState.isThreadTimeline()) View.VISIBLE else View.GONE
+        views.location.isVisible = viewState.isLocationVisible
+        views.voiceBroadcast.isVisible = viewState.isVoiceBroadcastVisible
+        views.poll.isVisible = !timelineState.isThreadTimeline()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
