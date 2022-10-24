@@ -28,7 +28,7 @@ def jjwt = "0.11.5"
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
 
-def sentry = "6.4.3"
+def sentry = "6.6.0"
 
 def fragment = "1.5.3"
 
