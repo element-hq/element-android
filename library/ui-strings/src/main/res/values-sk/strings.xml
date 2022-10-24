@@ -2868,4 +2868,11 @@
     <string name="qr_code_login_header_failed_other_description">Žiadosť zlyhala.</string>
     <string name="labs_enable_voice_broadcast_summary">Možnosť nahrávania a odosielania hlasového vysielania v časovej osi miestnosti.</string>
     <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie (v štádiu aktívneho vývoja)</string>
+    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte</string>
+    <string name="a11y_pause_voice_broadcast">Pozastaviť hlasové vysielanie</string>
+    <string name="a11y_play_voice_broadcast">Prehrať alebo pokračovať v nahrávaní hlasového vysielania</string>
+    <string name="a11y_stop_voice_broadcast_record">Zastaviť nahrávanie hlasového vysielania</string>
+    <string name="a11y_pause_voice_broadcast_record">Pozastaviť nahrávanie hlasového vysielania</string>
+    <string name="a11y_resume_voice_broadcast_record">Pokračovať v nahrávaní hlasového vysielania</string>
+    <string name="voice_broadcast_live">Naživo</string>
 </resources>
