@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
@@ -51,7 +50,6 @@ class VoiceBroadcastItemFactory @Inject constructor(
             params: TimelineItemFactoryParams,
             messageContent: MessageVoiceBroadcastInfoContent,
             highlight: Boolean,
-            callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): AbsMessageVoiceBroadcastItem<*>? {
         // Only display item of the initial event with updated data
@@ -64,72 +62,47 @@ class VoiceBroadcastItemFactory @Inject constructor(
 
         val isRecording = voiceBroadcastContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && voiceBroadcastEvent.root.stateKey == session.myUserId
 
+        val voiceBroadcastAttributes = AbsMessageVoiceBroadcastItem.Attributes(
+                voiceBroadcastId = voiceBroadcastId,
+                voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
+                recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
+                recorder = voiceBroadcastRecorder,
+                player = voiceBroadcastPlayer,
+                roomItem = session.getRoom(params.event.roomId)?.roomSummary()?.toMatrixItem(),
+                colorProvider = colorProvider,
+                drawableProvider = drawableProvider,
+        )
+
         return if (isRecording) {
-            createRecordingItem(
-                    params,
-                    voiceBroadcastId,
-                    voiceBroadcastContent.voiceBroadcastState,
-                    highlight,
-                    callback,
-                    attributes
-            )
+            createRecordingItem(highlight, attributes, voiceBroadcastAttributes)
         } else {
-            createListeningItem(
-                    params,
-                    voiceBroadcastId,
-                    voiceBroadcastContent.voiceBroadcastState,
-                    highlight,
-                    callback,
-                    attributes
-            )
+            createListeningItem(highlight, attributes, voiceBroadcastAttributes)
         }
     }
 
     private fun createRecordingItem(
-            params: TimelineItemFactoryParams,
-            voiceBroadcastId: String,
-            voiceBroadcastState: VoiceBroadcastState?,
             highlight: Boolean,
-            callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastRecordingItem {
-        val roomSummary = session.getRoom(params.event.roomId)?.roomSummary()
         return MessageVoiceBroadcastRecordingItem_()
-                .id("voice_broadcast_$voiceBroadcastId")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
                 .attributes(attributes)
+                .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)
-                .roomItem(roomSummary?.toMatrixItem())
-                .colorProvider(colorProvider)
-                .drawableProvider(drawableProvider)
-                .voiceBroadcastRecorder(voiceBroadcastRecorder)
-                .voiceBroadcastId(voiceBroadcastId)
-                .voiceBroadcastState(voiceBroadcastState)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(callback)
     }
 
     private fun createListeningItem(
-            params: TimelineItemFactoryParams,
-            voiceBroadcastId: String,
-            voiceBroadcastState: VoiceBroadcastState?,
             highlight: Boolean,
-            callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastListeningItem {
-        val roomSummary = session.getRoom(params.event.roomId)?.roomSummary()
-        val recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName()
         return MessageVoiceBroadcastListeningItem_()
-                .id("voice_broadcast_$voiceBroadcastId")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
                 .attributes(attributes)
+                .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)
-                .roomItem(roomSummary?.toMatrixItem())
-                .colorProvider(colorProvider)
-                .drawableProvider(drawableProvider)
-                .voiceBroadcastPlayer(voiceBroadcastPlayer)
-                .voiceBroadcastId(voiceBroadcastId)
-                .voiceBroadcastState(voiceBroadcastState)
-                .broadcasterName(recorderName)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(callback)
     }
 }

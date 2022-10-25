@@ -25,29 +25,26 @@ import im.vector.app.R
 import im.vector.app.core.extensions.tintBackground
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Holder> : AbsMessageItem<H>() {
 
     @EpoxyAttribute
-    var callback: TimelineEventController.Callback? = null
+    lateinit var voiceBroadcastAttributes: Attributes
 
-    @EpoxyAttribute
-    lateinit var colorProvider: ColorProvider
-
-    @EpoxyAttribute
-    lateinit var drawableProvider: DrawableProvider
-
-    @EpoxyAttribute
-    lateinit var voiceBroadcastId: String
-
-    @EpoxyAttribute
-    var voiceBroadcastState: VoiceBroadcastState? = null
-
-    @EpoxyAttribute
-    var roomItem: MatrixItem? = null
+    protected val voiceBroadcastId get() = voiceBroadcastAttributes.voiceBroadcastId
+    protected val voiceBroadcastState get() = voiceBroadcastAttributes.voiceBroadcastState
+    protected val recorderName get() = voiceBroadcastAttributes.recorderName
+    protected val recorder get() = voiceBroadcastAttributes.recorder
+    protected val player get() = voiceBroadcastAttributes.player
+    protected val roomItem get() = voiceBroadcastAttributes.roomItem
+    protected val colorProvider get() = voiceBroadcastAttributes.colorProvider
+    protected val drawableProvider get() = voiceBroadcastAttributes.drawableProvider
+    protected val avatarRenderer get() = attributes.avatarRenderer
+    protected val callback get() = attributes.callback
 
     override fun isCacheable(): Boolean = false
 
@@ -59,7 +56,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     private fun renderHeader(holder: H) {
         with(holder) {
             roomItem?.let {
-                attributes.avatarRenderer.render(it, roomAvatarImageView)
+                avatarRenderer.render(it, roomAvatarImageView)
                 titleText.text = it.displayName
             }
         }
@@ -93,4 +90,15 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
         val roomAvatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val titleText by bind<TextView>(R.id.titleText)
     }
+
+    data class Attributes(
+            val voiceBroadcastId: String,
+            val voiceBroadcastState: VoiceBroadcastState?,
+            val recorderName: String,
+            val recorder: VoiceBroadcastRecorder?,
+            val player: VoiceBroadcastPlayer,
+            val roomItem: MatrixItem?,
+            val colorProvider: ColorProvider,
+            val drawableProvider: DrawableProvider,
+    )
 }

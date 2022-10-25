@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.ImageButton
 import androidx.core.view.isVisible
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
@@ -30,9 +29,6 @@ import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 @EpoxyModelClass
 abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastRecordingItem.Holder>() {
 
-    @EpoxyAttribute
-    var voiceBroadcastRecorder: VoiceBroadcastRecorder? = null
-
     private var recorderListener: VoiceBroadcastRecorder.Listener? = null
 
     override fun bind(holder: Holder) {
@@ -41,12 +37,12 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        if (voiceBroadcastRecorder != null && voiceBroadcastRecorder?.state != VoiceBroadcastRecorder.State.Idle) {
+        if (recorder != null && recorder?.state != VoiceBroadcastRecorder.State.Idle) {
             recorderListener = object : VoiceBroadcastRecorder.Listener {
                 override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
                     renderRecordingState(holder, state)
                 }
-            }.also { voiceBroadcastRecorder?.addListener(it) }
+            }.also { recorder?.addListener(it) }
         } else {
             renderVoiceBroadcastState(holder)
         }
@@ -85,8 +81,8 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
         recordButton.setImageDrawable(drawable)
         recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_pause_voice_broadcast_record)
-        recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
-        stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+        recordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
+        stopRecordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
     }
 
     private fun renderPausedState(holder: Holder) = with(holder) {
@@ -95,8 +91,8 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
 
         recordButton.setImageResource(R.drawable.ic_recording_dot)
         recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
-        recordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
-        stopRecordButton.onClick { attributes.callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
+        recordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
+        stopRecordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
     }
 
     private fun renderStoppedState(holder: Holder) = with(holder) {
@@ -106,7 +102,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        recorderListener?.let { voiceBroadcastRecorder?.removeListener(it) }
+        recorderListener?.let { recorder?.removeListener(it) }
         recorderListener = null
     }
 

@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageButton
 import androidx.core.view.isVisible
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
@@ -29,12 +28,6 @@ import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
 abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastListeningItem.Holder>() {
-
-    @EpoxyAttribute
-    var voiceBroadcastPlayer: VoiceBroadcastPlayer? = null
-
-    @EpoxyAttribute
-    var broadcasterName: String? = null
 
     private lateinit var playerListener: VoiceBroadcastPlayer.Listener
 
@@ -47,12 +40,12 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         playerListener = VoiceBroadcastPlayer.Listener { state ->
             renderPlayingState(holder, state)
         }
-        voiceBroadcastPlayer?.addListener(voiceBroadcastId, playerListener)
+        player.addListener(voiceBroadcastId, playerListener)
     }
 
     override fun renderMetadata(holder: Holder) {
         with(holder) {
-            broadcasterNameMetadata.value = broadcasterName.orEmpty()
+            broadcasterNameMetadata.value = recorderName
             voiceBroadcastMetadata.isVisible = true
             listenersCountMetadata.isVisible = false
         }
@@ -67,14 +60,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
-                    playPauseButton.onClick { attributes.callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.Pause) }
+                    playPauseButton.onClick { callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.Pause) }
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                     playPauseButton.onClick {
-                        attributes.callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId))
+                        callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId))
                     }
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> Unit
@@ -84,7 +77,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        voiceBroadcastPlayer?.removeListener(voiceBroadcastId, playerListener)
+        player.removeListener(voiceBroadcastId, playerListener)
     }
 
     override fun getViewStubId() = STUB_ID
