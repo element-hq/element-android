@@ -2814,4 +2814,11 @@
     <string name="labs_enable_rich_text_editor_title">Activa l\'editor de text enriquit</string>
     <string name="device_manager_push_notifications_description">Rep notificacions en aquesta sessió.</string>
     <string name="device_manager_push_notifications_title">Notificacions</string>
+    <string name="a11y_voice_broadcast_buffering">Carregant</string>
+    <string name="a11y_pause_voice_broadcast">Pausa l\'emissió de veu</string>
+    <string name="a11y_play_voice_broadcast">Reprodueix o reprèn l\'emissió de veu</string>
+    <string name="a11y_stop_voice_broadcast_record">Atura l\'enregistrament d\'emissió de veu</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausa l\'enregistrament d\'emissió de veu</string>
+    <string name="a11y_resume_voice_broadcast_record">Reprèn l\'enregistrament d\'emissió de veu</string>
+    <string name="voice_broadcast_live">En directe</string>
 </resources>
