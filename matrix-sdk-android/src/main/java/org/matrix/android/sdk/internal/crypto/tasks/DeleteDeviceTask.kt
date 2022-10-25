@@ -37,7 +37,6 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     )
 }
 
-// TODO add unit tests
 internal class DefaultDeleteDeviceTask @Inject constructor(
         private val cryptoApi: CryptoApi,
         private val globalErrorReceiver: GlobalErrorReceiver

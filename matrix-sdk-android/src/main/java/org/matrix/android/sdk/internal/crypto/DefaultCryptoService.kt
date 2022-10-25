@@ -241,12 +241,10 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    // TODO add unit test
     override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor, callback)
     }
 
-    // TODO add unit test
     override fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
                 .configureWith(DeleteDeviceTask.Params(deviceIds, userInteractiveAuthInterceptor, null)) {
