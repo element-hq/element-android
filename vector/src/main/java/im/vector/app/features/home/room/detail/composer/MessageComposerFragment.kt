@@ -43,6 +43,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -69,6 +70,7 @@ import im.vector.app.features.attachments.AttachmentTypeSelectorBottomSheet
 import im.vector.app.features.attachments.AttachmentTypeSelectorSharedAction
 import im.vector.app.features.attachments.AttachmentTypeSelectorSharedActionViewModel
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
+import im.vector.app.features.attachments.AttachmentTypeSelectorViewModel
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
@@ -167,7 +169,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private val timelineViewModel: TimelineViewModel by parentFragmentViewModel()
     private val messageComposerViewModel: MessageComposerViewModel by parentFragmentViewModel()
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-    private val attachmentViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
+    private val attachmentViewModel: AttachmentTypeSelectorViewModel by fragmentViewModel()
+    private val attachmentActionsViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
 
     private val composer: MessageComposerView get() {
         return if (vectorPreferences.isRichTextEditorEnabled()) {
@@ -226,14 +229,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
         }
 
-        attachmentViewModel.stream()
+        attachmentActionsViewModel.stream()
                 .filterIsInstance<AttachmentTypeSelectorSharedAction.SelectAttachmentTypeAction>()
                 .onEach { onTypeSelected(it.attachmentType) }
-                .launchIn(lifecycleScope)
-
-        attachmentViewModel.stream()
-                .filterIsInstance<AttachmentTypeSelectorSharedAction.ToggleTextFormatting>()
-                .onEach { toggleTextFormatting() }
                 .launchIn(lifecycleScope)
 
         if (savedInstanceState != null) {
@@ -269,11 +267,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         messageComposerViewModel.endAllVoiceActions()
     }
 
-    override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
+    override fun invalidate() = withState(
+            timelineViewModel, messageComposerViewModel, attachmentViewModel
+    ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
         composer.setInvisible(!messageComposerState.isComposerVisible)
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
     }
 
     private fun setupComposer() {
@@ -716,11 +717,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         } else {
             attachmentsHelper.pendingType = type
         }
-    }
-
-    private fun toggleTextFormatting() {
-        val richTextComposer = composer as? RichTextComposerLayout ?: return
-         richTextComposer.isTextFormattingEnabled = !richTextComposer.isTextFormattingEnabled
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
