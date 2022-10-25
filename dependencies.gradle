@@ -1,5 +1,4 @@
 ext.versions = [
-
         'minSdk'            : 21,
         'compileSdk'        : 33,
         'targetSdk'         : 33,
@@ -27,22 +26,20 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-
 def sentry = "6.6.0"
-
 def fragment = "1.5.4"
-
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
 def espresso = "3.4.0"
 def androidxTest = "1.4.0"
 def androidxOrchestrator = "1.4.1"
+def paparazzi = "1.1.0"
+
 ext.libs = [
         gradle      : [
                 'gradlePlugin'            : "com.android.tools.build:gradle:$gradle",
                 'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin",
                 'hiltPlugin'              : "com.google.dagger:hilt-android-gradle-plugin:$dagger"
-
         ],
         jetbrains   : [
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
@@ -108,6 +105,8 @@ ext.libs = [
                 'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
                 'moshiAdapters'          : "com.squareup.moshi:moshi-adapters:$moshi",
+                'paparazzi'              : "app.cash.paparazzi:paparazzi:$paparazzi",
+                'paparazziPlugin'        : "app.cash.paparazzi:paparazzi-gradle-plugin:$paparazzi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
         ],
