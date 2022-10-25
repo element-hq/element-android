@@ -69,4 +69,11 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$s üçün dəvəti qəbul etdi. Səbəb: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s %2$s dəvətini geri götürdü. Səbəb: %3$s</string>
     <string name="notice_room_created_by_you">Otağ yaratdınız</string>
+    <string name="denied_permission_camera">Bu əməliyyatı yerinə yetirmək üçün sistem tənzimləmələrindən Kameraya icazə verin.</string>
+    <string name="title_activity_settings">Tənzimləmələr</string>
+    <string name="notice_direct_room_join">%1$s qoşuldu</string>
+    <string name="notice_room_join_by_you">Otağa qoşuldunuz</string>
+    <string name="notice_room_invite_by_you">%1$s-ı dəvət etdiniz</string>
+    <string name="notice_direct_room_created_by_you">Müzakirə yaratdınız</string>
+    <string name="notice_room_created">%1$s otağı yaratdı</string>
 </resources>
