@@ -2482,7 +2482,7 @@
     <string name="ftue_auth_use_case_join_existing_server">想要加入已有的服务器？</string>
     <string name="ftue_auth_use_case_skip_partial">跳过此问题</string>
     <string name="ftue_auth_use_case_option_one">家人和朋友</string>
-    <string name="ftue_auth_carousel_secure_title">拥有你的对话。</string>
+    <string name="ftue_auth_carousel_secure_title">拥有你的数据</string>
     <string name="attachment_type_location">位置</string>
     <string name="send_feedback_threads_title">Threads Beta反馈</string>
     <string name="beta_title_bottom_sheet_action">BETA</string>
