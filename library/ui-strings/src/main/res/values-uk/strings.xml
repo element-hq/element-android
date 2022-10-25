@@ -2922,4 +2922,11 @@
     <string name="qr_code_login_header_failed_other_description">Запит не виконаний.</string>
     <string name="labs_enable_voice_broadcast_summary">Можливість записувати та надсилати голосові повідомлення до стрічки кімнати.</string>
     <string name="labs_enable_voice_broadcast_title">Увімкнути голосові повідомлення (в активній розробці)</string>
+    <string name="a11y_voice_broadcast_buffering">Буферизація</string>
+    <string name="a11y_pause_voice_broadcast">Призупинити голосове повідомлення</string>
+    <string name="a11y_play_voice_broadcast">Відтворити або поновити відтворення голосового повідомлення</string>
+    <string name="a11y_stop_voice_broadcast_record">Припинити запис голосового повідомлення</string>
+    <string name="a11y_pause_voice_broadcast_record">Призупинити запис голосового повідомлення</string>
+    <string name="a11y_resume_voice_broadcast_record">Відновити запис голосового повідомлення</string>
+    <string name="voice_broadcast_live">Наживо</string>
 </resources>
