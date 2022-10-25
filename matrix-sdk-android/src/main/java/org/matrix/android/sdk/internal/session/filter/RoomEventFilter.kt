@@ -81,7 +81,7 @@ internal data class RoomEventFilter(
          */
         @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null,
         /**
-         * If true, this will opt-in for the server to return unread threads notifications in [RoomSync]
+         * If true, this will opt-in for the server to return unread threads notifications in [RoomSync].
          */
         @Json(name = "unread_thread_notifications") val enableUnreadThreadNotifications: Boolean? = null,
 ) {
