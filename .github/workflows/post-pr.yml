@@ -52,7 +52,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v1.0.3
+        uses: michaelkaye/setup-matrix-synapse@v1.0.4
         with:
           uploadLogs: true
           httpPort: 8080
