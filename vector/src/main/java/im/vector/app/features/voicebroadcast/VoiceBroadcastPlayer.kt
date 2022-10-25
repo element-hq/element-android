@@ -90,7 +90,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentRoomId: String? = null
 
     /**
-     * Map voiceBroadcastId to listeners
+     * Map voiceBroadcastId to listeners.
      */
     private var listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
