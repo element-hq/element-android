@@ -104,13 +104,26 @@
         android:background="@drawable/bg_composer_rich_edit_text_single_line" />
 
     <io.element.android.wysiwyg.EditorEditText
-        android:id="@+id/composerEditText"
+        android:id="@+id/richTextComposerEditText"
         style="@style/Widget.Vector.EditText.RichTextComposer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="top"
-        android:nextFocusLeft="@id/composerEditText"
-        android:nextFocusUp="@id/composerEditText"
+        android:nextFocusLeft="@id/richTextComposerEditText"
+        android:nextFocusUp="@id/richTextComposerEditText"
+        tools:hint="@string/room_message_placeholder"
+        tools:text="@tools:sample/lorem/random"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Use a separate EditText for plain text editing while the rich text editor doesn't support this mode -->
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/plainTextComposerEditText"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:nextFocusLeft="@id/plainTextComposerEditText"
+        android:nextFocusUp="@id/plainTextComposerEditText"
         tools:hint="@string/room_message_placeholder"
         tools:text="@tools:sample/lorem/random"
         tools:ignore="MissingConstraints" />

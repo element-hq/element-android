@@ -3213,6 +3213,7 @@
     <string name="attachment_type_selector_location">Location</string>
     <string name="attachment_type_selector_camera">Camera</string>
     <string name="attachment_type_selector_contact">Contact</string>
+    <string name="attachment_type_selector_rich_text">Toggle rich text</string>
 
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">

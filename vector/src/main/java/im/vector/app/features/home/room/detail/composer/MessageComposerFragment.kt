@@ -239,6 +239,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 .onEach { onTypeSelected(it.attachmentType) }
                 .launchIn(lifecycleScope)
 
+        attachmentViewModel.stream()
+                .filterIsInstance<AttachmentTypeSelectorSharedAction.ToggleTextFormatting>()
+                .onEach { toggleTextFormatting() }
+                .launchIn(lifecycleScope)
+
         if (savedInstanceState != null) {
             handleShareData()
         }
@@ -727,6 +732,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         } else {
             attachmentsHelper.pendingType = type
         }
+    }
+
+    private fun toggleTextFormatting() {
+        val richTextComposer = composer as? RichTextComposerLayout ?: return
+         richTextComposer.isTextFormattingEnabled = !richTextComposer.isTextFormattingEnabled
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
