@@ -38,7 +38,7 @@ import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
-import io.element.android.wysiwyg.InlineFormat
+import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import uniffi.wysiwyg_composer.ComposerAction
 import uniffi.wysiwyg_composer.MenuState
 
@@ -141,6 +141,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
             views.composerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
 
         views.composerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
             if (state is MenuState.Update) {
