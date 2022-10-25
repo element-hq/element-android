@@ -260,7 +260,7 @@ class VoiceMessageViews(
 
     fun resetMicButtonUi() {
         views.voiceMessageMicButton.isVisible = true
-        views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        views.voiceMessageMicButton.setImageResource(R.drawable.ic_microphone)
         views.voiceMessageMicButton.setAttributeBackground(android.R.attr.selectableItemBackgroundBorderless)
         views.voiceMessageMicButton.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             if (rtlXMultiplier == -1) {

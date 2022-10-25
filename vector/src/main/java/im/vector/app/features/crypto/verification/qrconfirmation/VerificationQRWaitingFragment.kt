@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -49,7 +50,7 @@ class VerificationQRWaitingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        (arguments?.getParcelable(Mavericks.KEY_ARG) as? Args)?.let {
+        (arguments?.getParcelableCompat<Args>(Mavericks.KEY_ARG))?.let {
             controller.update(it)
         }
     }

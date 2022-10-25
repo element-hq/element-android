@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content
 
-class FakeSessionAccountDataService : SessionAccountDataService by mockk() {
+class FakeSessionAccountDataService : SessionAccountDataService by mockk(relaxed = true) {
 
     fun givenGetUserAccountDataEventReturns(type: String, content: Content) {
         every { getUserAccountDataEvent(type) } returns UserAccountDataEvent(type, content)

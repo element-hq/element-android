@@ -24,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,14 +41,12 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
 /**
@@ -180,12 +177,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.pushers.invoke().orEmpty())
-        if (state.deviceInfo is Success) {
-            renderSessionInfo(state.isCurrentSessionTrusted, state.deviceInfo.invoke())
-        } else {
-            hideSessionInfo()
-        }
+        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -214,7 +206,7 @@ class SessionOverviewFragment :
                     deviceFullInfo = deviceInfo,
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
-                    isLearnMoreLinkVisible = true,
+                    isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
                     isLastSeenDetailsVisible = !isCurrentSession,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
@@ -226,33 +218,16 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, pushers: List<Pusher>) {
+    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
         views.sessionOverviewPushNotifications.apply {
-            if (pushers.isEmpty()) {
-                isVisible = false
-            } else {
-                val allPushersAreEnabled = pushers.all { it.enabled }
-                setOnCheckedChangeListener(null)
-                setChecked(allPushersAreEnabled)
-                post {
-                    setOnCheckedChangeListener { _, isChecked ->
-                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
-                    }
+            setOnCheckedChangeListener(null)
+            setChecked(enabled)
+            post {
+                setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
                 }
             }
         }
-    }
-
-    private fun renderSessionInfo(isCurrentSession: Boolean, deviceFullInfo: DeviceFullInfo) {
-        views.sessionOverviewInfo.isVisible = true
-        val viewState = SessionInfoViewState(
-                isCurrentSession = isCurrentSession,
-                deviceFullInfo = deviceFullInfo,
-                isDetailsButtonVisible = false,
-                isLearnMoreLinkVisible = true,
-                isLastSeenDetailsVisible = true,
-        )
-        views.sessionOverviewInfo.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
     }
 
     private fun updateLoading(isLoading: Boolean) {
@@ -312,9 +287,5 @@ class SessionOverviewFragment :
                 description = getString(descriptionResId),
         )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
-    }
-
-    private fun hideSessionInfo() {
-        views.sessionOverviewInfo.isGone = true
     }
 }

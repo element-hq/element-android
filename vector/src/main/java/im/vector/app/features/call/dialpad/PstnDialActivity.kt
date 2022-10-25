@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -39,7 +38,6 @@ class PstnDialActivity : SimpleFragmentActivity() {
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var directRoomHelper: DirectRoomHelper
     @Inject lateinit var session: Session
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     private var progress: AppCompatDialog? = null
 

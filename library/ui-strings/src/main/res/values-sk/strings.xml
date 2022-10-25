@@ -1040,8 +1040,8 @@
     <string name="settings_discovery_no_msisdn">Možnosti objavovania sa zobrazia, až keď pridáte telefónne číslo.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Odpojením sa od servera totožností znemožníte ostatným, aby vás našli a tiež nebudete môcť kontakty pozývať zadaním emailovej adresy alebo telefónneho čísla.</string>
     <string name="settings_discovery_msisdn_title">Telefónne čísla, podľa ktorých je vás možné nájsť</string>
-    <string name="settings_discovery_confirm_mail">Odoslali sme vám potvrdzujúci e-mail na adresu %s, skontrolujte svoj e-mail a kliknite na potvrdzujúci odkaz</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Odoslali sme vám potvrdzujúci e-mail na adresu %s, najskôr si prosím skontrolujte svoj e-mail a kliknite na potvrdzujúci odkaz</string>
+    <string name="settings_discovery_confirm_mail">Odoslali sme vám e-mail na adresu %s, skontrolujte svoj e-mail a kliknite na potvrdzujúci odkaz</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Odoslali sme vám e-mail na adresu %s, najskôr si prosím skontrolujte svoj e-mail a kliknite na potvrdzujúci odkaz</string>
     <string name="settings_discovery_enter_identity_server">Zadajte URL adresu servera totožností</string>
     <string name="settings_discovery_bad_identity_server">Nie je možné sa pripojiť k serveru totožností</string>
     <string name="settings_discovery_please_enter_server">Prosím, zadajte URL adresu servera totožností</string>
@@ -1700,7 +1700,7 @@
     <string name="login_set_msisdn_notice2">Prosím, použite medzinárodný formát.</string>
     <string name="login_set_msisdn_notice">Nastavte si telefónne číslo, aby ste voliteľne umožnili ľuďom, ktorých poznáte, aby vás objavili.</string>
     <string name="does_not_look_like_valid_email">Toto nevyzerá ako platná e-mailová adresa</string>
-    <string name="login_set_email_notice">Nastavte si e-mail na obnovenie konta. Neskôr môžete voliteľne povoliť známym, aby vás objavili podľa vášho e-mailu.</string>
+    <string name="login_set_email_notice">Nastavte si e-mail na obnovenie konta. Neskôr môžete voliteľne povoliť svojim známym, aby vás objavili podľa tohto e-mailu.</string>
     <string name="login_set_email_title">Nastaviť e-mailovú adresu</string>
     <string name="login_reset_password_success_submit">Späť na prihlásenie</string>
     <string name="login_reset_password_success_notice">Vaše heslo bolo obnovené.</string>
@@ -1846,7 +1846,7 @@
     <string name="settings_notification_keyword_contains_dot">Kľúčové slová nemôžu začínať na \".\"</string>
     <string name="settings_notification_new_keyword">Pridať nové kľúčové slovo</string>
     <string name="settings_notification_emails_enable_for_email">Povoliť e-mailové oznámenia pre %s</string>
-    <string name="settings_notification_emails_no_emails">Ak chcete dostávať e-mail s upozornením, priraďte e-mail k svojmu kontu Matrix</string>
+    <string name="settings_notification_emails_no_emails">Ak chcete dostávať e-mail s upozornením, priraďte e-mail k svojmu Matrix účtu</string>
     <string name="settings_notification_emails_category">E-mailové oznámenie</string>
     <string name="room_settings_room_notifications_notify_me">Upozorniť ma na</string>
     <string name="settings_notification_notify_me_for">Upozorniť ma na</string>
@@ -1856,10 +1856,10 @@
     <string name="room_settings_mention_and_keyword_only">Iba zmienky a kľúčové slová</string>
     <string name="login_msisdn_error_not_international">Medzinárodné telefónne čísla musia začínať znakom \"+\"</string>
     <string name="identity_server_consent_dialog_content_3">Ak chcete zistiť existujúce kontakty, potrebujete odoslať kontaktné informácie (e-maily a telefónne čísla) na server totožností. Pred odoslaním vaše údaje zahašujeme kvôli ochrane osobných údajov.</string>
-    <string name="identity_server_consent_dialog_title_2">Odoslať e-maily a telefónne čísla na %s</string>
+    <string name="identity_server_consent_dialog_title_2">Odoslať emailové adresy a telefónne čísla na %s</string>
     <string name="settings_discovery_consent_notice_on">Dali ste súhlas na odosielanie e-mailov a telefónnych čísel na tento server totožností na objavenie ďalších používateľov z vašich kontaktov.</string>
     <string name="settings_discovery_consent_title">Odoslať e-maily a telefónne čísla</string>
-    <string name="settings_emails_and_phone_numbers_summary">Spravovať e-maily a telefónne čísla prepojené s vaším účtom Matrix</string>
+    <string name="settings_emails_and_phone_numbers_summary">Spravujte e-maily a telefónne čísla prepojené s vaším účtom Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Emaily a telefónne čísla</string>
     <string name="change_password_summary">Nastaviť nové heslo k účtu…</string>
     <string name="bootstrap_dont_reuse_pwd">Nepoužívajte heslo k svojmu účtu.</string>
@@ -2650,8 +2650,7 @@
 \nTento domovský server nemusí byť nakonfigurovaný na zobrazovanie máp.</string>
     <string name="a11y_open_settings">Otvoriť nastavenia</string>
     <string name="all_chats">Všetky konverzácie</string>
-    <string name="device_manager_settings_active_sessions_show_all">Zobraziť všetky relácie (V2, WIP)</string>
-    <string name="device_manager_sessions_other_description">V záujme čo najlepšieho zabezpečenia overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
+    <string name="device_manager_sessions_other_description">V záujme čo najlepšieho zabezpečenia, overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
     <string name="device_manager_sessions_other_title">Iné relácie</string>
     <string name="settings_sessions_list">Relácie</string>
     <string name="a11y_open_spaces">Otvoriť zoznam priestorov</string>
@@ -2764,4 +2763,100 @@
     <string name="labs_enable_deferred_dm_title">Povoliť odložené priame správy</string>
     <string name="labs_enable_new_app_layout_summary">Zjednodušený Element s voliteľnými kartami</string>
     <string name="labs_enable_new_app_layout_title">Zapnúť nové usporiadanie</string>
+    <string name="device_manager_learn_more_session_rename">Ostatní používatelia v priamych správach a miestnostiach, do ktorých sa pripojíte, si môžu pozrieť úplný zoznam vašich relácií.
+\n
+\nTo im poskytuje istotu, že sa s vami naozaj rozprávajú, ale zároveň to znamená, že vidia názov relácie, ktorý sem zadáte.</string>
+    <string name="device_manager_learn_more_session_rename_title">Premenovanie relácií</string>
+    <string name="device_manager_learn_more_sessions_verified">Overené relácie, do ktorých ste sa prihlásili pomocou svojich prihlasovacích údajov a ktoré boli následne overené buď pomocou vašej bezpečnostnej prístupovej frázy, alebo krížovým overením.
+\n
+\nTo znamená, že majú šifrovacie kľúče pre vaše predchádzajúce správy a potvrdzujú ostatným používateľom, s ktorými komunikujete, že tieto relácie ste skutočne vy.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Overené relácie</string>
+    <string name="device_manager_learn_more_sessions_unverified">Neoverené relácie sú relácie, do ktorých ste sa prihlásili pomocou svojich prístupových údajov, ale ktoré neboli krížovo overené.
+\n
+\nMali by ste si byť obzvlášť istí, že tieto relácie poznáte, pretože by mohli predstavovať neoprávnené použitie vášho konta.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Neoverené relácie</string>
+    <string name="device_manager_learn_more_sessions_inactive">Neaktívne relácie sú relácie, ktoré ste určitý čas nepoužívali, ale naďalej dostávajú šifrovacie kľúče.
+\n
+\nOdstránenie neaktívnych relácií zvyšuje bezpečnosť a výkon a uľahčuje identifikáciu podozrivých nových relácií.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Neaktívne relácie</string>
+    <string name="device_manager_session_rename_warning">Uvedomte si, že názvy relácií sú viditeľné aj pre ľudí, s ktorými komunikujete.</string>
+    <string name="device_manager_session_rename_description">Vlastné názvy relácií vám pomôžu ľahšie rozpoznať vaše zariadenia.</string>
+    <string name="device_manager_session_rename_edit_hint">Názov relácie</string>
+    <string name="device_manager_session_rename">Premenovať reláciu</string>
+    <string name="device_manager_session_overview_signout">Odhlásiť sa z tejto relácie</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Neoverená - Vaša aktuálna relácia</string>
+    <string name="tooltip_attachment_voice_broadcast">Spustiť hlasové vysielanie</string>
+    <string name="key_authenticity_not_guaranteed">Vierohodnosť tejto zašifrovanej správy nie je možné zaručiť na tomto zariadení.</string>
+    <string name="settings_security_incognito_keyboard_summary">Požiadajte, aby klávesnica neaktualizovala žiadne personalizované údaje, napríklad históriu písania a slovník, na základe toho, čo ste napísali v konverzáciách. Upozorňujeme, že niektoré klávesnice nemusia toto nastavenie rešpektovať.</string>
+    <string name="settings_security_incognito_keyboard_title">Inkognito klávesnica</string>
+    <string name="command_description_table_flip">Pridá znaky (╯°□°）╯︵ ┻━┻ pred správy vo formáte obyčajného textu</string>
+    <string name="attachment_type_voice_broadcast">Hlasové vysielanie</string>
+    <string name="command_description_devtools">Otvoriť obrazovku vývojárskych nástrojov</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 V Nastaveniach zabezpečenia ste povolili šifrovanie len pre overené relácie pre všetky miestnosti.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ V tejto miestnosti sa nachádzajú neoverené zariadenia, ktoré nebudú schopné dešifrovať odoslané správy.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nikdy neposielať šifrované správy do neoverených relácií v tejto miestnosti.</string>
+    <string name="action_got_it">Rozumiem</string>
+    <string name="rich_text_editor_format_underline">Použiť formát podčiarknutia</string>
+    <string name="rich_text_editor_format_strikethrough">Použiť formát prečiarknutia</string>
+    <string name="rich_text_editor_format_italic">Použiť formát kurzívou</string>
+    <string name="rich_text_editor_format_bold">Použiť tučný formát</string>
+    <string name="labs_enable_client_info_recording_summary">Zaznamenať názov klienta, verziu a url, aby bolo možné ľahšie rozpoznať relácie v správcovi relácií.</string>
+    <string name="labs_enable_client_info_recording_title">Povoliť zaznamenanie informácií o klientovi</string>
+    <string name="labs_enable_session_manager_summary">Majte lepší prehľad a kontrolu nad všetkými reláciami.</string>
+    <string name="labs_enable_session_manager_title">Použiť nového správcu relácií</string>
+    <string name="device_manager_session_details_device_operating_system">Operačný systém</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Prehliadač</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Verzia</string>
+    <string name="device_manager_session_details_application_name">Názov</string>
+    <string name="device_manager_session_details_application">Aplikácia</string>
+    <string name="device_manager_push_notifications_description">Prijímať push oznámenia v tejto relácii.</string>
+    <string name="device_manager_push_notifications_title">Push oznámenia</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Overením aktuálnej relácie zistíte stav overenia tejto relácie.</string>
+    <string name="device_manager_verification_status_unknown">Neznámy stav overenia</string>
+    <string name="push_gateway_item_enabled">Zapnuté:</string>
+    <string name="push_gateway_item_device_id">ID relácie:</string>
+    <string name="error_check_network">Niečo sa pokazilo. Skontrolujte, prosím, svoje sieťové pripojenie a skúste to znova.</string>
+    <string name="grant_permission">Udeliť oprávnenie</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potrebuje povolenie na zobrazovanie oznámení.
+\nProsím, udeľte toto povolenie.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potrebuje povolenie na zobrazovanie oznámení. Oznámenia môžu zobrazovať vaše správy, pozvánky atď.
+\n
+\nPovoľte prístup na ďalších vyskakovacích oknách, aby ste mohli zobrazovať oznámenia.</string>
+    <string name="labs_enable_rich_text_editor_summary">Vyskúšajte rozšírený textový editor (čistý textový režim sa objaví čoskoro)</string>
+    <string name="labs_enable_rich_text_editor_title">Povoliť rozšírený textový editor</string>
+    <string name="qr_code_login_confirm_security_code_description">Uistite sa prosím, že poznáte pôvod tohto kódu. Prepojením zariadení poskytnete niekomu plný prístup k svojmu účtu.</string>
+    <string name="qr_code_login_confirm_security_code">Potvrdiť</string>
+    <string name="qr_code_login_try_again">Skúste to znova</string>
+    <string name="qr_code_login_status_no_match">Nezhoduje sa\?</string>
+    <string name="qr_code_login_signing_in">Prebieha prihlasovanie</string>
+    <string name="qr_code_login_connecting_to_device">Pripájanie k zariadeniu</string>
+    <string name="qr_code_login_scan_qr_code_button">Skenovať QR kód</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Prihlasovanie do mobilného zariadenia\?</string>
+    <string name="qr_code_login_show_qr_code_button">Zobraziť QR kód na tomto zariadení</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Vyberte možnosť \"Skenovať QR kód\"</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Začnite na prihlasovacej obrazovke</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vyberte možnosť \"Prihlásiť sa pomocou QR kódu\"</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Začnite na prihlasovacej obrazovke</string>
+    <string name="qr_code_login_new_device_instruction_3">Vyberte možnosť \"Zobraziť QR kód na tomto zariadení\"</string>
+    <string name="qr_code_login_new_device_instruction_2">Prejdite do Nastavenia -&gt; Zabezpečenie a súkromie -&gt; Zobraziť všetky relácie</string>
+    <string name="qr_code_login_new_device_instruction_1">Otvorte ${app_name} na vašom druhom zariadení</string>
+    <string name="qr_code_login_header_failed_denied_description">Žiadosť bola na druhom zariadení zamietnutá.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Prepojenie nebolo dokončené v požadovanom čase.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Prepojenie s týmto zariadením nie je podporované.</string>
+    <string name="qr_code_login_header_failed_title">Neúspešné pripojenie</string>
+    <string name="qr_code_login_header_connected_description">Skontrolujte svoje prihlásené zariadenie, mal by sa zobraziť nasledujúci kód. Skontrolujte, či sa nižšie uvedený kód zhoduje s daným zariadením:</string>
+    <string name="qr_code_login_header_connected_title">Zabezpečené pripojenie bolo vytvorené</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Naskenujte nižšie uvedený QR kód pomocou zariadenia, ktoré je odhlásené.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Pomocou prihláseného zariadenia naskenujte nižšie uvedený QR kód:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Prihlásiť sa pomocou QR kódu</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Pomocou fotoaparátu na tomto zariadení naskenujte QR kód zobrazený na vašom druhom zariadení:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Skenovať QR kód</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocou tohto zariadenia sa môžete prihlásiť do mobilného alebo webového zariadenia pomocou QR kódu. Môžete to urobiť dvoma spôsobmi:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Prihlásiť sa pomocou QR kódu</string>
+    <string name="login_scan_qr_code">Skenovať QR kód</string>
 </resources>

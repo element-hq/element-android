@@ -147,6 +147,7 @@ ext.groups = [
                         'io.netty',
                         'io.noties.markwon',
                         'io.opencensus',
+                        'io.perfmark',
                         'io.reactivex.rxjava2',
                         'io.realm',
                         'io.sentry',

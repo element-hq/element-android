@@ -28,6 +28,7 @@ project.android.buildTypes.all { buildType ->
 initScreenshotTests(project)
 
 android {
+    namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -53,6 +54,8 @@ android {
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     testOptions {
@@ -236,7 +239,7 @@ dependencies {
     implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
+    implementation 'com.github.UnifiedPush:android-connector:2.1.1'
 
     implementation "androidx.emoji2:emoji2:1.2.0"
 

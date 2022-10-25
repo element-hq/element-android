@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,8 +41,12 @@ import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -80,6 +85,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val audioMessageHelper: AudioMessageHelper,
         private val analyticsTracker: AnalyticsTracker,
+        private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -90,6 +96,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     init {
         loadDraftIfAny()
         observePowerLevelAndEncryption()
+        observeVoiceBroadcast()
         subscribeToStateInternal()
     }
 
@@ -151,7 +158,8 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
         room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
+            val formatted = vectorPreferences.isRichTextEditorEnabled()
+            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent(formatted))) }
         }
     }
 
@@ -179,6 +187,16 @@ class MessageComposerViewModel @AssistedInject constructor(
         }.setOnEach {
             copy(canSendMessage = it)
         }
+    }
+
+    private fun observeVoiceBroadcast() {
+        room.stateService().getStateEventLive(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(session.myUserId))
+                .asFlow()
+                .unwrap()
+                .mapNotNull { it.asVoiceBroadcastEvent()?.content?.voiceBroadcastState }
+                .setOnEach {
+                    copy(voiceBroadcastState = it)
+                }
     }
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
@@ -552,7 +570,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                     state.sendMode.timelineEvent,
                                     messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
-                                    (messageContent as? MessageContentWithFormattedBody)?.formattedBody,
+                                    action.formattedText,
                                     action.autoMarkdown
                             )
                         } else {
@@ -942,7 +960,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
-        audioMessageHelper.initializeRecorder(attachmentData)
+        audioMessageHelper.initializeRecorder(room.roomId, attachmentData)
         setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Draft) }
     }
 
@@ -965,6 +983,8 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun handleEntersBackground(composerText: String) {
         // Always stop all voice actions. It may be playing in timeline or active recording
         val playingAudioContent = audioMessageHelper.stopAllVoiceActions(deleteRecord = false)
+        // TODO remove this when there will be a listening indicator outside of the timeline
+        voiceBroadcastHelper.pausePlayback()
 
         val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
         if (isVoiceRecording) {

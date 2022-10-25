@@ -114,6 +114,6 @@ class PushersManagerTest {
 
         pushersManager.togglePusherForCurrentSession(true)
 
-        pushersService.verifyOnlyGetPushersAndTogglePusherCalled(pusher, true)
+        pushersService.verifyTogglePusherCalled(pusher, true)
     }
 }

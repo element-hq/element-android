@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="im.vector.app">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Needed for VOIP call to detect and switch to headset-->
     <uses-permission
@@ -16,6 +15,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- https://developer.android.com/develop/ui/views/notifications/notification-permission#exemptions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Call feature -->
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
@@ -321,6 +323,7 @@
         <activity android:name=".features.settings.devices.v2.othersessions.OtherSessionsActivity" />
         <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity" />
         <activity android:name=".features.settings.devices.v2.rename.RenameSessionActivity" />
+        <activity android:name=".features.login.qr.QrCodeLoginActivity" />
 
         <!-- Services -->
 

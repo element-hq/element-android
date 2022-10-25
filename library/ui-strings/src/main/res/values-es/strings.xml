@@ -2548,7 +2548,6 @@
     <string name="a11y_device_manager_device_type_desktop">Escritorio</string>
     <string name="a11y_device_manager_device_type_web">Web</string>
     <string name="a11y_device_manager_device_type_mobile">Móvil</string>
-    <string name="device_manager_settings_active_sessions_show_all">Mostrar todas las sesiones (V2, WIP)</string>
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto aprovar widgets de Element Call y dar permisos de cámara y micrófono</string>
     <plurals name="room_removed_messages">
         <item quantity="one">%d mensaje borrado</item>

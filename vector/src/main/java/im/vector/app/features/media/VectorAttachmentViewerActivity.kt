@@ -47,6 +47,8 @@ import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.attachmentviewer.AttachmentCommands
 import im.vector.lib.attachmentviewer.AttachmentViewerActivity
+import im.vector.lib.core.utils.compat.getParcelableArrayListExtraCompat
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -67,14 +69,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             val sharedTransitionName: String?
     ) : Parcelable
 
-    @Inject
-    lateinit var sessionHolder: ActiveSessionHolder
-
-    @Inject
-    lateinit var dataSourceFactory: AttachmentProviderFactory
-
-    @Inject
-    lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var dataSourceFactory: AttachmentProviderFactory
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
     private val viewModel: VectorAttachmentViewerViewModel by viewModel()
     private val errorFormatter by lazy(LazyThreadSafetyMode.NONE) { singletonEntryPoint().errorFormatter() }
@@ -105,7 +102,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
                 transitionImageContainer.isVisible = true
 
                 // Postpone transaction a bit until thumbnail is loaded
-                val mediaData: Parcelable? = intent.getParcelableExtra(EXTRA_IMAGE_DATA)
+                val mediaData: Parcelable? = intent.getParcelableExtraCompat(EXTRA_IMAGE_DATA)
                 if (mediaData is ImageContentRenderer.Data) {
                     // will be shown at end of transition
                     pager2.isInvisible = true
@@ -126,11 +123,11 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             }
         }
 
-        val session = sessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
+        val session = activeSessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
 
         val room = args.roomId?.let { session.getRoom(it) }
 
-        val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
+        val inMemoryData = intent.getParcelableArrayListExtraCompat<AttachmentData>(EXTRA_IN_MEMORY_DATA)
         val sourceProvider = if (inMemoryData != null) {
             initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             dataSourceFactory.createProvider(inMemoryData, room, lifecycleScope)
@@ -173,6 +170,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             transitionImageContainer.isVisible = true
         }
         isAnimatingOut = true
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 
@@ -227,7 +225,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         return false
     }
 
-    private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
+    private fun args() = intent.getParcelableExtraCompat<Args>(EXTRA_ARGS)
 
     private fun scheduleStartPostponedTransition(sharedElement: View) {
         sharedElement.viewTreeObserver.addOnPreDrawListener(

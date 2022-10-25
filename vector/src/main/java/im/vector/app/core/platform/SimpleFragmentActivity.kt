@@ -83,6 +83,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
             // ignore
             return
         }
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
 }

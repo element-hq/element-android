@@ -22,7 +22,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -32,7 +31,6 @@ import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
@@ -52,10 +50,9 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun onBackPressed() {
         hideWaitingView()
+        @Suppress("DEPRECATION")
         super.onBackPressed()
     }
-
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     override fun initUiAndData() {
         super.initUiAndData()

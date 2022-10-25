@@ -17,7 +17,6 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.liveData
-import io.mockk.Ordering
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
@@ -38,16 +37,8 @@ class FakePushersService : PushersService by mockk(relaxed = true) {
         every { getPushersLive() } returns liveData { emit(pushers) }
     }
 
-    fun verifyOnlyGetPushersAndTogglePusherCalled(pusher: Pusher, enable: Boolean) {
-        coVerify(ordering = Ordering.ALL) {
-            getPushers()
-            togglePusher(pusher, enable)
-        }
-    }
-
-    fun verifyOnlyTogglePusherCalled(pusher: Pusher, enable: Boolean) {
-        coVerify(ordering = Ordering.ALL) {
-            getPushersLive() // verifies only getPushersLive and the following togglePusher was called
+    fun verifyTogglePusherCalled(pusher: Pusher, enable: Boolean) {
+        coVerify {
             togglePusher(pusher, enable)
         }
     }

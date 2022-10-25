@@ -24,6 +24,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
 import im.vector.app.features.location.preview.LocationPreviewFragment
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -40,7 +41,7 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
-        val locationSharingArgs: LocationSharingArgs? = intent?.extras?.getParcelable(EXTRA_LOCATION_SHARING_ARGS)
+        val locationSharingArgs: LocationSharingArgs? = intent?.extras?.getParcelableCompat(EXTRA_LOCATION_SHARING_ARGS)
         if (locationSharingArgs == null) {
             finish()
             return

@@ -20,6 +20,8 @@ plugins {
 }
 
 android {
+    namespace "im.vector.lib.core.utils"
+
     compileSdk versions.compileSdk
     defaultConfig {
         minSdk versions.minSdk

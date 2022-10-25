@@ -16,5 +16,16 @@
 
 package im.vector.app.features.voicebroadcast
 
-/** Voice Broadcast State Event. */
-const val STATE_ROOM_VOICE_BROADCAST_INFO = "io.element.voice_broadcast_info"
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+
+object VoiceBroadcastConstants {
+
+    /** Voice Broadcast State Event. */
+    const val STATE_ROOM_VOICE_BROADCAST_INFO = "io.element.voice_broadcast_info"
+
+    /** Custom key passed to the [MessageAudioContent] with Voice Broadcast information. */
+    const val VOICE_BROADCAST_CHUNK_KEY = "io.element.voice_broadcast_chunk"
+
+    /** Default voice broadcast chunk duration, in seconds. */
+    const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 120
+}

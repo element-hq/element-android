@@ -23,6 +23,7 @@ import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.lib.core.utils.compat.getParcelableCompat
 
 @AndroidEntryPoint
 class CreatePollActivity : SimpleFragmentActivity() {
@@ -31,7 +32,7 @@ class CreatePollActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
-        val createPollArgs: CreatePollArgs? = intent?.extras?.getParcelable(EXTRA_CREATE_POLL_ARGS)
+        val createPollArgs: CreatePollArgs? = intent?.extras?.getParcelableCompat(EXTRA_CREATE_POLL_ARGS)
 
         if (isFirstCreation()) {
             addFragment(

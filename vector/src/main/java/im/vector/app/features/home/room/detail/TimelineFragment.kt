@@ -168,6 +168,7 @@ import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
+import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
@@ -247,6 +248,7 @@ class TimelineFragment :
     @Inject lateinit var clock: Clock
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
+    @Inject lateinit var permalinkFactory: PermalinkFactory
 
     companion object {
         const val MAX_TYPING_MESSAGE_USERS_COUNT = 4
@@ -772,7 +774,7 @@ class TimelineFragment :
         }
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView.debouncedClicks {
+            menuItem.actionView?.debouncedClicks {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -783,7 +785,7 @@ class TimelineFragment :
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView.debouncedClicks {
+            menuItem.actionView?.debouncedClicks {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -812,16 +814,16 @@ class TimelineFragment :
                 // icon should be default color no badge
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
-                        .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
-                actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
+                        ?.findViewById<ImageView>(R.id.action_view_icon_image)
+                        ?.setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
+                actionView?.findViewById<TextView>(R.id.cart_badge)?.isVisible = false
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             } else {
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
-                        .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                        ?.findViewById<ImageView>(R.id.action_view_icon_image)
+                        ?.setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                actionView?.findViewById<TextView>(R.id.cart_badge)?.setTextOrHide("$widgetsCount")
                 @Suppress("AlwaysShowAction")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
@@ -867,7 +869,7 @@ class TimelineFragment :
             }
             R.id.menu_thread_timeline_copy_link -> {
                 getRootThreadEventId()?.let {
-                    val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, it)
+                    val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, it)
                     copyToClipboard(requireContext(), permalink, false)
                     showSnackWithMessage(getString(R.string.copied_to_clipboard))
                 }
@@ -879,7 +881,7 @@ class TimelineFragment :
             }
             R.id.menu_thread_timeline_share -> {
                 getRootThreadEventId()?.let {
-                    val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, it)
+                    val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, it)
                     shareText(requireContext(), permalink)
                 }
                 true
@@ -893,7 +895,7 @@ class TimelineFragment :
      */
     private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
         val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
-        val badgeFrameLayout = menuThreadList.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout)
+        val badgeFrameLayout = menuThreadList?.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout) ?: return
         val badgeTextView = menuThreadList.findViewById<TextView>(R.id.threadNotificationBadgeTextView)
 
         val unreadThreadMessages = state.threadNotificationBadgeState.numberOfLocalUnreadThreads
@@ -1788,7 +1790,7 @@ class TimelineFragment :
                 }
             }
             is EventSharedAction.CopyPermalink -> {
-                val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, action.eventId)
+                val permalink = permalinkFactory.createPermalink(timelineArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(getString(R.string.copied_to_clipboard))
             }

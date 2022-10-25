@@ -26,7 +26,6 @@ import androidx.core.view.isInvisible
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.databinding.FragmentFtueProfilePictureBinding
@@ -42,7 +41,6 @@ class FtueAuthChooseProfilePictureFragment :
         AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(),
         GalleryOrCameraDialogHelper.Listener {
 
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
@@ -85,10 +83,9 @@ class FtueAuthChooseProfilePictureFragment :
         views.profilePictureSubmit.isEnabled = hasSetPicture
         views.changeProfilePictureIcon.setImageResource(if (hasSetPicture) R.drawable.ic_edit else R.drawable.ic_camera_plain)
 
-        val session = activeSessionHolder.getActiveSession()
         val matrixItem = MatrixItem.UserItem(
-                id = session.myUserId,
-                displayName = state.personalizationState.displayName ?: ""
+                id = state.personalizationState.userId,
+                displayName = state.personalizationState.displayName.orEmpty()
         )
         avatarRenderer.render(matrixItem, localUri = state.personalizationState.selectedPictureUri, imageView = views.profilePictureView)
     }

@@ -118,6 +118,35 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
+    private fun checkQrCodeLoginCapability(homeServerUrl: String) {
+        if (!vectorFeatures.isQrCodeLoginEnabled()) {
+            setState {
+                copy(
+                        canLoginWithQrCode = false
+                )
+            }
+        } else if (vectorFeatures.isQrCodeLoginForAllServers()) {
+            // allow for all servers
+            setState {
+                copy(
+                        canLoginWithQrCode = true
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                // check if selected server supports MSC3882 first
+                homeServerConnectionConfigFactory.create(homeServerUrl)?.let {
+                    val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
+                    setState {
+                        copy(
+                                canLoginWithQrCode = canLoginWithQrCode
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
     private val defaultHomeserverUrl = matrixOrgUrl
 
@@ -641,6 +670,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
                 val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
                 state.personalizationState.copy(
+                        userId = session.myUserId,
                         displayName = state.registrationState.selectedMatrixId?.let { MatrixPatterns.extractUserNameFromId(it) },
                         supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
                         supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
@@ -680,6 +710,7 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, postAction)
+            checkQrCodeLoginCapability(homeServerConnectionConfig.homeServerUri.toString())
         }
     }
 
