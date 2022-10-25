@@ -62,12 +62,24 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private val animationDuration = 100L
 
+    var isTextFormattingEnabled = true
+        set(value) {
+            if (field == value) return
+            syncEditTexts()
+            field = value
+            updateEditTextVisibility()
+        }
+
     override val text: Editable?
-        get() = views.composerEditText.text
+        get() = editText.text
     override val formattedText: String?
-        get() = views.composerEditText.getHtmlOutput()
+        get() = (editText as? EditorEditText)?.getHtmlOutput()
     override val editText: EditText
-        get() = views.composerEditText
+        get() = if (isTextFormattingEnabled) {
+            views.richTextComposerEditText
+        } else {
+            views.plainTextComposerEditText
+        }
     override val emojiButton: ImageButton?
         get() = null
     override val sendButton: ImageButton
@@ -94,21 +106,12 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
         collapse(false)
 
-        views.composerEditText.addTextChangedListener(object : TextWatcher {
-            private var previousTextWasExpanded = false
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable) {
-                callback?.onTextChanged(s)
-
-                val isExpanded = s.lines().count() > 1
-                if (previousTextWasExpanded != isExpanded) {
-                    updateTextFieldBorder(isExpanded)
-                }
-                previousTextWasExpanded = isExpanded
-            }
-        })
+        views.richTextComposerEditText.addTextChangedListener(
+                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+        )
+        views.plainTextComposerEditText.addTextChangedListener(
+                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+        )
 
         views.composerRelatedMessageCloseButton.setOnClickListener {
             collapse()
@@ -129,23 +132,23 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun setupRichTextMenu() {
         addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.Bold) {
-            views.composerEditText.toggleInlineFormat(InlineFormat.Bold)
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
         addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.Italic) {
-            views.composerEditText.toggleInlineFormat(InlineFormat.Italic)
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
         addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.Underline) {
-            views.composerEditText.toggleInlineFormat(InlineFormat.Underline)
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
         addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
-            views.composerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        views.composerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
+        views.richTextComposerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
             if (state is MenuState.Update) {
                 updateMenuStateFor(ComposerAction.Bold, state)
                 updateMenuStateFor(ComposerAction.Italic, state)
@@ -153,7 +156,25 @@ class RichTextComposerLayout @JvmOverloads constructor(
                 updateMenuStateFor(ComposerAction.StrikeThrough, state)
             }
         }
+
+        updateEditTextVisibility()
     }
+
+    private fun updateEditTextVisibility() {
+        views.richTextComposerEditText.isVisible = isTextFormattingEnabled
+        views.richTextMenu.isVisible = isTextFormattingEnabled
+        views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
+    }
+
+    /**
+     * Updates the non-active input with the contents of the active input.
+     */
+    private fun syncEditTexts() =
+        if (isTextFormattingEnabled) {
+            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getPlainText())
+        } else {
+            views.richTextComposerEditText.setText(views.plainTextComposerEditText.text.toString())
+        }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
         val inflater = LayoutInflater.from(context)
@@ -184,7 +205,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     override fun replaceFormattedContent(text: CharSequence) {
-        views.composerEditText.setHtml(text.toString())
+        views.richTextComposerEditText.setHtml(text.toString())
     }
 
     override fun collapse(animate: Boolean, transitionComplete: (() -> Unit)?) {
@@ -206,7 +227,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     override fun setTextIfDifferent(text: CharSequence?): Boolean {
-        return views.composerEditText.setTextIfDifferent(text)
+        return editText.setTextIfDifferent(text)
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
@@ -239,5 +260,24 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     override fun setInvisible(isInvisible: Boolean) {
         this.isInvisible = isInvisible
+    }
+
+    private class TextChangeListener(
+            private val onTextChanged: (s: Editable) -> Unit,
+            private val onExpandedChanged: (isExpanded: Boolean) -> Unit,
+    ) : TextWatcher {
+        private var previousTextWasExpanded = false
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable) {
+            onTextChanged.invoke(s)
+
+            val isExpanded = s.lines().count() > 1
+            if (previousTextWasExpanded != isExpanded) {
+                onExpandedChanged(isExpanded)
+            }
+            previousTextWasExpanded = isExpanded
+        }
     }
 }

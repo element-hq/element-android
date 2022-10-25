@@ -63,10 +63,17 @@ class AttachmentTypeSelectorBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
         views.location.debouncedClicks { onAttachmentSelected(AttachmentType.LOCATION) }
         views.camera.debouncedClicks { onAttachmentSelected(AttachmentType.CAMERA) }
         views.contact.debouncedClicks { onAttachmentSelected(AttachmentType.CONTACT) }
+        views.textFormatting.debouncedClicks { onTextFormattingToggled() }
     }
 
     private fun onAttachmentSelected(attachmentType: AttachmentType) {
         val action = AttachmentTypeSelectorSharedAction.SelectAttachmentTypeAction(attachmentType)
+        sharedActionViewModel.post(action)
+        dismiss()
+    }
+
+    private fun onTextFormattingToggled() {
+        val action = AttachmentTypeSelectorSharedAction.ToggleTextFormatting
         sharedActionViewModel.post(action)
         dismiss()
     }

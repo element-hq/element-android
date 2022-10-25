@@ -82,5 +82,13 @@
             app:tint="?colorPrimary"
             app:titleTextColor="?vctr_content_primary" />
 
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/textFormatting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_rich_text"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
