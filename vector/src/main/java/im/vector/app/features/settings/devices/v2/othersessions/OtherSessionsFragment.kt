@@ -173,7 +173,7 @@ class OtherSessionsFragment :
         invalidateOptionsMenu()
         val title = if (isSelectModeEnabled) {
             val selection = devices.count { it.isSelected }
-            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_selected, selection, selection)
+            stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
         } else {
             getString(args.titleResourceId)
         }
