@@ -134,7 +134,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             if (isExpanded) {
                 addRule(RelativeLayout.ALIGN_BOTTOM, holder.threadSummaryConstraintLayout.id)
             } else {
-                addRule(RelativeLayout.ALIGN_BOTTOM, holder.informationBottom.id)
+                addRule(RelativeLayout.ALIGN_BOTTOM, holder.informationBottom.id).also { println() }
             }
         }
     }
