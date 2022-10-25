@@ -2421,7 +2421,7 @@
     <string name="ftue_auth_carousel_workplace_body">${app_name}也非常适合工作场所。受到世界上最安全的组织信任。</string>
     <string name="ftue_auth_carousel_control_body">聊天消息存储位置一律由您掌控，不受外来因素干扰。技术由 Matrix 提供。</string>
     <string name="ftue_auth_carousel_secure_body">安全且独立的通信，为你提供和在家中面对面对话同样等级的隐私。</string>
-    <string name="ftue_auth_carousel_encrypted_title">安全传递信息</string>
+    <string name="ftue_auth_carousel_encrypted_title">安全传送消息。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">向主服务器注册端点token失败：
 \n%1$s</string>
     <string name="threads_beta_enable_notice_message">Threads帮助保持你的对话不离题且易于跟踪。%s启用消息列会刷新应用。这对一些账户可能需要更长时间。</string>
