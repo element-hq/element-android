@@ -19,32 +19,43 @@ package im.vector.app.features.settings.devices.v2.othersessions
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.fixtures.aDeviceFullInfo
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import javax.net.ssl.HttpsURLConnection
 
 private const val A_TITLE_RES_ID = 1
-private const val A_DEVICE_ID = "device-id"
+private const val A_DEVICE_ID_1 = "device-id-1"
+private const val A_DEVICE_ID_2 = "device-id-2"
+private const val A_PASSWORD = "password"
+private const val AUTH_ERROR_MESSAGE = "auth-error-message"
+private const val AN_ERROR_MESSAGE = "error-message"
 
 class OtherSessionsViewModelTest {
 
@@ -60,18 +71,18 @@ class OtherSessionsViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
     private val fakeGetDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
-    private val fakeRefreshDevicesUseCaseUseCase = mockk<RefreshDevicesUseCase>()
-    private val fakeSignoutSessionsUseCase = mockk<SignoutSessionsUseCase>()
+    private val fakeRefreshDevicesUseCaseUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
+    private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
 
-    private fun createViewModel(args: OtherSessionsArgs = defaultArgs) =
+    private fun createViewModel(viewState: OtherSessionsViewState = OtherSessionsViewState(defaultArgs)) =
             OtherSessionsViewModel(
-                    initialState = OtherSessionsViewState(args),
+                    initialState = viewState,
                     stringProvider = fakeStringProvider.instance,
                     activeSessionHolder = fakeActiveSessionHolder.instance,
                     getDeviceFullInfoListUseCase = fakeGetDeviceFullInfoListUseCase,
-                    signoutSessionsUseCase = fakeSignoutSessionsUseCase,
+                    signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
                     interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                     pendingAuthHandler = fakePendingAuthHandler.instance,
                     refreshDevicesUseCase = fakeRefreshDevicesUseCaseUseCase,
@@ -99,6 +110,39 @@ class OtherSessionsViewModelTest {
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun `given the viewModel when initializing it then verification listener is added`() {
+        // Given
+        val fakeVerificationService = givenVerificationService()
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+
+        // When
+        val viewModel = createViewModel()
+
+        // Then
+        verify {
+            fakeVerificationService.addListener(viewModel)
+        }
+    }
+
+    @Test
+    fun `given the viewModel when clearing it then verification listener is removed`() {
+        // Given
+        val fakeVerificationService = givenVerificationService()
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+
+        // When
+        val viewModel = createViewModel()
+        viewModel.onCleared()
+
+        // Then
+        verify {
+            fakeVerificationService.removeListener(viewModel)
+        }
     }
 
     @Test
@@ -156,7 +200,7 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given enable select mode action when handling the action then viewState is updated with correct info`() {
         // Given
-        val deviceFullInfo = aDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val deviceFullInfo = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
@@ -169,7 +213,7 @@ class OtherSessionsViewModelTest {
         // When
         val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
-        viewModel.handle(OtherSessionsAction.EnableSelectMode(A_DEVICE_ID))
+        viewModel.handle(OtherSessionsAction.EnableSelectMode(A_DEVICE_ID_1))
 
         // Then
         viewModelTest
@@ -180,8 +224,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given disable select mode action when handling the action then viewState is updated with correct info`() {
         // Given
-        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID, isSelected = true)
-        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = true)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
@@ -205,7 +249,7 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given toggle selection for device action when handling the action then viewState is updated with correct info`() {
         // Given
-        val deviceFullInfo = aDeviceFullInfo(A_DEVICE_ID, isSelected = false)
+        val deviceFullInfo = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
@@ -218,7 +262,7 @@ class OtherSessionsViewModelTest {
         // When
         val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
-        viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(A_DEVICE_ID))
+        viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(A_DEVICE_ID_1))
 
         // Then
         viewModelTest
@@ -229,8 +273,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given select all action when handling the action then viewState is updated with correct info`() {
         // Given
-        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID, isSelected = false)
-        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
@@ -254,8 +298,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given deselect all action when handling the action then viewState is updated with correct info`() {
         // Given
-        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID, isSelected = false)
-        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val expectedState = OtherSessionsViewState(
@@ -274,6 +318,223 @@ class OtherSessionsViewModelTest {
         viewModelTest
                 .assertLatestState { state -> state == expectedState }
                 .finish()
+    }
+
+    @Test
+    fun `given no reAuth is needed and in selectMode when handling multiSignout action then signout process is performed`() {
+        // Given
+        val isSelectModeEnabled = true
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        // signout only selected devices
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        val expectedViewState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = isSelectModeEnabled,
+        )
+
+        // When
+        val viewModel = createViewModel(OtherSessionsViewState(defaultArgs).copy(isSelectModeEnabled = isSelectModeEnabled))
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.MultiSignout)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is OtherSessionsViewEvents.SignoutSuccess }
+                .finish()
+        verify {
+            fakeRefreshDevicesUseCaseUseCase.execute()
+        }
+    }
+
+    @Test
+    fun `given no reAuth is needed and NOT in selectMode when handling multiSignout action then signout process is performed`() {
+        // Given
+        val isSelectModeEnabled = false
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        // signout all devices
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        val expectedViewState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+                isSelectModeEnabled = isSelectModeEnabled,
+        )
+
+        // When
+        val viewModel = createViewModel(OtherSessionsViewState(defaultArgs).copy(isSelectModeEnabled = isSelectModeEnabled))
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.MultiSignout)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is OtherSessionsViewEvents.SignoutSuccess }
+                .finish()
+        verify {
+            fakeRefreshDevicesUseCaseUseCase.execute()
+        }
+    }
+
+    @Test
+    fun `given server error during multiSignout when handling multiSignout action then signout process is performed`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
+        fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), serverError)
+        val expectedViewState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+        )
+        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.MultiSignout)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is OtherSessionsViewEvents.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
+                .finish()
+    }
+
+    @Test
+    fun `given unexpected error during multiSignout when handling multiSignout action then signout process is performed`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val error = Exception()
+        fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), error)
+        val expectedViewState = OtherSessionsViewState(
+                devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
+                currentFilter = defaultArgs.defaultFilter,
+                excludeCurrentDevice = defaultArgs.excludeCurrentDevice,
+        )
+        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.MultiSignout)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is OtherSessionsViewEvents.SignoutError && it.error.message == AN_ERROR_MESSAGE }
+                .finish()
+    }
+
+    @Test
+    fun `given reAuth is needed during multiSignout when handling multiSignout action then requestReAuth is sent and pending auth is stored`() {
+        // Given
+        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
+        val expectedReAuthEvent = OtherSessionsViewEvents.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.MultiSignout)
+
+        // Then
+        viewModelTest
+                .assertEvent { it == expectedReAuthEvent }
+                .finish()
+        fakePendingAuthHandler.instance.pendingAuth shouldBeEqualTo expectedPendingAuth
+        fakePendingAuthHandler.instance.uiaContinuation shouldBeEqualTo reAuthNeeded.uiaContinuation
+    }
+
+    @Test
+    fun `given SSO auth has been done when handling ssoAuthDone action then corresponding method of pending auth handler is called`() {
+        // Given
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        justRun { fakePendingAuthHandler.instance.ssoAuthDone() }
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.SsoAuthDone)
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.ssoAuthDone()
+        }
+    }
+
+    @Test
+    fun `given password auth has been done when handling passwordAuthDone action then corresponding method of pending auth handler is called`() {
+        // Given
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        justRun { fakePendingAuthHandler.instance.passwordAuthDone(any()) }
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.PasswordAuthDone(A_PASSWORD))
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.passwordAuthDone(A_PASSWORD)
+        }
+    }
+
+    @Test
+    fun `given reAuth has been cancelled when handling reAuthCancelled action then corresponding method of pending auth handler is called`() {
+        // Given
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+        justRun { fakePendingAuthHandler.instance.reAuthCancelled() }
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(OtherSessionsAction.ReAuthCancelled)
+
+        // Then
+        viewModelTest.finish()
+        verifyAll {
+            fakePendingAuthHandler.instance.reAuthCancelled()
+        }
     }
 
     private fun givenGetDeviceFullInfoListReturns(
