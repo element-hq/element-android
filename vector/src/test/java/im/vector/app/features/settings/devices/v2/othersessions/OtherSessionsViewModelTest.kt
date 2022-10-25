@@ -71,7 +71,7 @@ class OtherSessionsViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakeStringProvider = FakeStringProvider()
     private val fakeGetDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
-    private val fakeRefreshDevicesUseCaseUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
+    private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
@@ -85,7 +85,7 @@ class OtherSessionsViewModelTest {
                     signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
                     interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                     pendingAuthHandler = fakePendingAuthHandler.instance,
-                    refreshDevicesUseCase = fakeRefreshDevicesUseCaseUseCase,
+                    refreshDevicesUseCase = fakeRefreshDevicesUseCase,
             )
 
     @Before
@@ -352,7 +352,7 @@ class OtherSessionsViewModelTest {
                 .assertEvent { it is OtherSessionsViewEvents.SignoutSuccess }
                 .finish()
         verify {
-            fakeRefreshDevicesUseCaseUseCase.execute()
+            fakeRefreshDevicesUseCase.execute()
         }
     }
 
@@ -388,7 +388,7 @@ class OtherSessionsViewModelTest {
                 .assertEvent { it is OtherSessionsViewEvents.SignoutSuccess }
                 .finish()
         verify {
-            fakeRefreshDevicesUseCaseUseCase.execute()
+            fakeRefreshDevicesUseCase.execute()
         }
     }
 
