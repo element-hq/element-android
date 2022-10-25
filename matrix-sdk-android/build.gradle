@@ -204,7 +204,6 @@ dependencies {
     implementation libs.google.phonenumber
 
     testImplementation libs.tests.junit
-    // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
     testImplementation libs.tests.kluent
     testImplementation libs.jetbrains.coroutinesTest
