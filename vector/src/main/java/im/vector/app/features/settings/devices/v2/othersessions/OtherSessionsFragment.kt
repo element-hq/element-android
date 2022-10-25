@@ -49,6 +49,7 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -69,6 +70,8 @@ class OtherSessionsFragment :
     @Inject lateinit var stringProvider: StringProvider
 
     @Inject lateinit var viewNavigator: OtherSessionsViewNavigator
+
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
@@ -124,11 +127,22 @@ class OtherSessionsFragment :
                 true
             }
             R.id.otherSessionsMultiSignout -> {
-                viewModel.handle(OtherSessionsAction.MultiSignout)
+                confirmMultiSignout()
                 true
             }
             else -> false
         }
+    }
+
+    private fun confirmMultiSignout() {
+        activity?.let {
+            buildConfirmSignoutDialogUseCase.execute(it, this::multiSignout)
+                    .show()
+        }
+    }
+
+    private fun multiSignout() {
+        viewModel.handle(OtherSessionsAction.MultiSignout)
     }
 
     private fun enableSelectMode(isEnabled: Boolean, deviceId: String? = null) {

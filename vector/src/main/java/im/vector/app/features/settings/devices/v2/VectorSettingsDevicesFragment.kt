@@ -51,6 +51,7 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
@@ -74,6 +75,8 @@ class VectorSettingsDevicesFragment :
     @Inject lateinit var vectorFeatures: VectorFeatures
 
     @Inject lateinit var stringProvider: StringProvider
+
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
@@ -140,13 +143,23 @@ class VectorSettingsDevicesFragment :
         views.deviceListHeaderOtherSessions.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.otherSessionsHeaderMultiSignout -> {
-                    // TODO ask for confirmation
-                    viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
+                    confirmMultiSignoutOtherSessions()
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun confirmMultiSignoutOtherSessions() {
+        activity?.let {
+            buildConfirmSignoutDialogUseCase.execute(it, this::multiSignoutOtherSessions)
+                    .show()
+        }
+    }
+
+    private fun multiSignoutOtherSessions() {
+        viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
     }
 
     private fun initOtherSessionsView() {
