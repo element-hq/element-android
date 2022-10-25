@@ -113,7 +113,6 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
-    // TODO update unit tests
     override fun handle(action: DevicesAction) {
         when (action) {
             is DevicesAction.PasswordAuthDone -> handlePasswordAuthDone(action)
