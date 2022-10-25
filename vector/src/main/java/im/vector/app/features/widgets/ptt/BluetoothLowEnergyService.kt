@@ -30,7 +30,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.services.VectorService
+import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber
 import java.util.UUID
@@ -38,7 +38,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class BluetoothLowEnergyService : VectorService() {
+class BluetoothLowEnergyService : VectorAndroidService() {
 
     interface Callback {
         fun onCharacteristicRead(data: ByteArray)
@@ -66,27 +66,33 @@ class BluetoothLowEnergyService : VectorService() {
             }
         }
 
+        @Suppress("DEPRECATION")
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             gatt.services.forEach { service ->
                 service.characteristics.forEach { characteristic ->
                     if (characteristic.uuid.equals(UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb"))) {
                         gatt.setCharacteristicNotification(characteristic, true)
                         val descriptor = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
-                        descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                        gatt.writeDescriptor(descriptor)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            gatt.writeDescriptor(descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+                        } else {
+                            descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                            gatt.writeDescriptor(descriptor)
+                        }
                     }
                 }
             }
         }
 
-        override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, status: Int) {
+        override fun onCharacteristicRead(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, value: ByteArray, status: Int) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                onCharacteristicRead(characteristic)
+                onCharacteristicRead(value)
             }
         }
 
-        override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
-            onCharacteristicRead(characteristic)
+        @Suppress("DEPRECATION")
+        override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, value: ByteArray) {
+            onCharacteristicRead(characteristic.value)
         }
     }
 
@@ -102,7 +108,12 @@ class BluetoothLowEnergyService : VectorService() {
     }
 
     fun stopService() {
-        stopForeground(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
         stopSelf()
     }
 
@@ -131,11 +142,10 @@ class BluetoothLowEnergyService : VectorService() {
         }
     }
 
-    private fun onCharacteristicRead(characteristic: BluetoothGattCharacteristic) {
-        val data = characteristic.value
-        Timber.d("### BluetoothLowEnergyService. $data")
-        if (data.isNotEmpty()) {
-            callback?.onCharacteristicRead(data)
+    private fun onCharacteristicRead(value: ByteArray) {
+        Timber.d("### BluetoothLowEnergyService. $value")
+        if (value.isNotEmpty()) {
+            callback?.onCharacteristicRead(value)
         }
     }
 
