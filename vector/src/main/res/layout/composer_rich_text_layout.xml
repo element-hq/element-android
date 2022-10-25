@@ -123,7 +123,8 @@
         app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
         app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
         android:src="@drawable/ic_composer_full_screen"
-        android:background="?android:attr/selectableItemBackgroundBorderless" />
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/rich_text_editor_full_screen_toggle" />
 
     <ImageButton
         android:id="@+id/sendButton"
