@@ -84,5 +84,19 @@ class FakeCryptoService(
         }
     }
 
+    fun givenDeleteDevicesSucceeds(deviceIds: List<String>) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { deleteDevices(deviceIds, any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        }
+    }
+
+    fun givenDeleteDevicesFailsWithError(deviceIds: List<String>, error: Exception) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { deleteDevices(deviceIds, any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onFailure(error)
+        }
+    }
+
     override fun getMyDevice() = cryptoDeviceInfo
 }

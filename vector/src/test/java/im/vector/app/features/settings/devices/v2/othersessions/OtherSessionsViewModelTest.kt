@@ -23,7 +23,11 @@ import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.fixtures.aDeviceFullInfo
 import im.vector.app.test.test
@@ -54,15 +58,24 @@ class OtherSessionsViewModelTest {
     )
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeStringProvider = FakeStringProvider()
     private val fakeGetDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
     private val fakeRefreshDevicesUseCaseUseCase = mockk<RefreshDevicesUseCase>()
+    private val fakeSignoutSessionsUseCase = mockk<SignoutSessionsUseCase>()
+    private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
+    private val fakePendingAuthHandler = FakePendingAuthHandler()
 
-    private fun createViewModel(args: OtherSessionsArgs = defaultArgs) = OtherSessionsViewModel(
-            initialState = OtherSessionsViewState(args),
-            activeSessionHolder = fakeActiveSessionHolder.instance,
-            getDeviceFullInfoListUseCase = fakeGetDeviceFullInfoListUseCase,
-            refreshDevicesUseCase = fakeRefreshDevicesUseCaseUseCase,
-    )
+    private fun createViewModel(args: OtherSessionsArgs = defaultArgs) =
+            OtherSessionsViewModel(
+                    initialState = OtherSessionsViewState(args),
+                    stringProvider = fakeStringProvider.instance,
+                    activeSessionHolder = fakeActiveSessionHolder.instance,
+                    getDeviceFullInfoListUseCase = fakeGetDeviceFullInfoListUseCase,
+                    signoutSessionsUseCase = fakeSignoutSessionsUseCase,
+                    interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
+                    pendingAuthHandler = fakePendingAuthHandler.instance,
+                    refreshDevicesUseCase = fakeRefreshDevicesUseCaseUseCase,
+            )
 
     @Before
     fun setup() {

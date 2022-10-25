@@ -28,7 +28,6 @@ class SignoutSessionsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor): Result<Unit> {
         return deleteDevices(deviceIds, userInteractiveAuthInterceptor)
     }

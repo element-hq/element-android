@@ -22,10 +22,14 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
+import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -53,21 +57,29 @@ class DevicesViewModelTest {
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeStringProvider = FakeStringProvider()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
     private val getDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
-    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
+    private val fakeSignoutSessionsUseCase = mockk<SignoutSessionsUseCase>()
+    private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
+    private val fakePendingAuthHandler = FakePendingAuthHandler()
+    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
-                DevicesViewState(),
-                fakeActiveSessionHolder.instance,
-                getCurrentSessionCrossSigningInfoUseCase,
-                getDeviceFullInfoListUseCase,
-                refreshDevicesOnCryptoDevicesChangeUseCase,
-                checkIfCurrentSessionCanBeVerifiedUseCase,
-                refreshDevicesUseCase,
+                initialState = DevicesViewState(),
+                activeSessionHolder = fakeActiveSessionHolder.instance,
+                stringProvider = fakeStringProvider.instance,
+                getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
+                getDeviceFullInfoListUseCase = getDeviceFullInfoListUseCase,
+                refreshDevicesOnCryptoDevicesChangeUseCase = refreshDevicesOnCryptoDevicesChangeUseCase,
+                checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
+                signoutSessionsUseCase = fakeSignoutSessionsUseCase,
+                interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
+                pendingAuthHandler = fakePendingAuthHandler.instance,
+                refreshDevicesUseCase = refreshDevicesUseCase,
         )
     }
 
