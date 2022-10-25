@@ -78,7 +78,7 @@ class DevicesViewModelTest {
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
-    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
+    private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
@@ -92,7 +92,7 @@ class DevicesViewModelTest {
                 signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
                 interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                 pendingAuthHandler = fakePendingAuthHandler.instance,
-                refreshDevicesUseCase = refreshDevicesUseCase,
+                refreshDevicesUseCase = fakeRefreshDevicesUseCase,
         )
     }
 
@@ -232,11 +232,37 @@ class DevicesViewModelTest {
     }
 
     @Test
+    fun `given no reAuth is needed when handling multiSignout other sessions action then signout process is performed`() {
+        // Given
+        val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_CURRENT_DEVICE_ID)
+        // signout all devices except the current device
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1), fakeInterceptSignoutFlowResponseUseCase)
+
+        // When
+        val viewModel = createViewModel()
+        val viewModelTest = viewModel.test()
+        viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
+
+        // Then
+        viewModelTest
+                .assertStatesChanges(
+                        expectedViewState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvent { it is DevicesViewEvent.SignoutSuccess }
+                .finish()
+        verify {
+            fakeRefreshDevicesUseCase.execute()
+        }
+    }
+
+    @Test
     fun `given server error during multiSignout when handling multiSignout other sessions action then signout process is performed`() {
         // Given
         val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
         fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), serverError)
-        val expectedViewState = givenInitialViewState()
+        val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
         fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
 
         // When
@@ -260,7 +286,7 @@ class DevicesViewModelTest {
         // Given
         val error = Exception()
         fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), error)
-        val expectedViewState = givenInitialViewState()
+        val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
         fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
         // When
@@ -395,9 +421,9 @@ class DevicesViewModelTest {
         return deviceFullInfoList
     }
 
-    private fun givenInitialViewState(): DevicesViewState {
+    private fun givenInitialViewState(deviceId1: String, deviceId2: String): DevicesViewState {
         val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
-        val deviceFullInfoList = givenDeviceFullInfoList(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
+        val deviceFullInfoList = givenDeviceFullInfoList(deviceId1, deviceId2)
         return DevicesViewState(
                 currentSessionCrossSigningInfo = currentSessionCrossSigningInfo,
                 devices = Success(deviceFullInfoList),
