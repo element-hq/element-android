@@ -63,11 +63,11 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
                 titleText.text = it.displayName
             }
         }
-        renderLiveIcon(holder)
+        renderLiveIndicator(holder)
         renderMetadata(holder)
     }
 
-    private fun renderLiveIcon(holder: H) {
+    private fun renderLiveIndicator(holder: H) {
         with(holder) {
             when (voiceBroadcastState) {
                 VoiceBroadcastState.STARTED,
