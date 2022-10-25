@@ -80,4 +80,3 @@ class SignoutSessionsUseCaseTest {
 
     private fun givenAuthInterceptor() = mockk<UserInteractiveAuthInterceptor>()
 }
-

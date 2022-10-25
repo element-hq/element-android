@@ -17,10 +17,8 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.core.platform.VectorViewEvents
-import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 sealed class DevicesViewEvent : VectorViewEvents {
     data class RequestReAuth(
