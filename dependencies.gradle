@@ -167,7 +167,7 @@ ext.libs = [
                 'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
         ],
         tests       : [
-                'kluent'                 : "org.amshove.kluent:kluent-android:1.68",
+                'kluent'                 : "org.amshove.kluent:kluent-android:1.72",
                 'timberJunitRule'        : "net.lachlanmckee:timber-junit-rule:1.0.1",
                 'junit'                  : "junit:junit:4.13.2",
         ]
