@@ -30,7 +30,7 @@ cd jitsi-meet
 
 # Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
 
-git checkout android-sdk-5.0.2
+git checkout android-sdk-6.2.2
 
 echo
 echo "##################################################"
