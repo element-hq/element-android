@@ -25,12 +25,12 @@ import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
+import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,8 +53,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 CheckFactoryWorker(appContext, workerParameters, true)
             AddPusherWorker::class.java.name ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
-            GetGroupDataWorker::class.java.name ->
-                GetGroupDataWorker(appContext, workerParameters, sessionManager)
             MultipleEventSendingDispatcherWorker::class.java.name ->
                 MultipleEventSendingDispatcherWorker(appContext, workerParameters, sessionManager)
             RedactEventWorker::class.java.name ->
@@ -65,6 +63,8 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 SyncWorker(appContext, workerParameters, sessionManager)
             UpdateTrustWorker::class.java.name ->
                 UpdateTrustWorker(appContext, workerParameters, sessionManager)
+            UpdateUserWorker::class.java.name ->
+                UpdateUserWorker(appContext, workerParameters, sessionManager)
             UploadContentWorker::class.java.name ->
                 UploadContentWorker(appContext, workerParameters, sessionManager)
             DeactivateLiveLocationShareWorker::class.java.name ->

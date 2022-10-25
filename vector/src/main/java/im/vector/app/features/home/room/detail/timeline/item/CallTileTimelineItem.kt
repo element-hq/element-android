@@ -246,7 +246,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageCallStub
+        private val STUB_ID = R.id.messageCallStub
     }
 
     data class Attributes(

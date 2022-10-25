@@ -16,6 +16,7 @@
 
 package im.vector.app.core.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
@@ -39,7 +40,6 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
@@ -182,7 +182,7 @@ fun openUri(activity: Activity, uri: String) {
  */
 fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     val file = File(savedMediaPath)
-    val uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    val uri = FileProvider.getUriForFile(activity, activity.packageName + ".fileProvider", file)
 
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -214,7 +214,7 @@ fun openLocation(activity: Activity, latitude: Double, longitude: Double) {
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val mediaUri = try {
-        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+        FileProvider.getUriForFile(context, context.packageName + ".fileProvider", file)
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
         return
@@ -257,6 +257,7 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
+@SuppressLint("Recycle")
 suspend fun saveMedia(
         context: Context,
         file: File,
@@ -310,7 +311,6 @@ suspend fun saveMedia(
     }
 }
 
-@Suppress("DEPRECATION")
 private fun saveMediaLegacy(
         context: Context,
         mediaMimeType: String?,
@@ -341,6 +341,7 @@ private fun saveMediaLegacy(
         val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, currentTimeMillis)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
+            @Suppress("DEPRECATION")
             downloadManager?.addCompletedDownload(
                     savedFile.name,
                     title,
@@ -376,7 +377,7 @@ private fun addToGallery(savedFile: File, mediaMimeType: String?, context: Conte
 /**
  * Open the play store to the provided application Id, default to this app.
  */
-fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID) {
+fun openPlayStore(activity: Activity, appId: String) {
     try {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
     } catch (activityNotFoundException: ActivityNotFoundException) {
@@ -431,7 +432,6 @@ fun selectTxtFileToWrite(
  * @param currentTimeMillis the current time in milliseconds
  * @return               the created file
  */
-@Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, currentTimeMillis: Long): File? {
     // defines another name for the external media
     var dstFileName: String

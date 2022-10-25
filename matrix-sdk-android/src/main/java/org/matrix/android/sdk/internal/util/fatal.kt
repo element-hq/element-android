@@ -22,7 +22,7 @@ import timber.log.Timber
 /**
  * Throws in debug, only log in production.
  * As this method does not always throw, next statement should be a return.
-*/
+ */
 internal fun fatalError(message: String) {
     if (BuildConfig.DEBUG) {
         error(message)

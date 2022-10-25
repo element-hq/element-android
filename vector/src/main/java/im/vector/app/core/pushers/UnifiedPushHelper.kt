@@ -28,7 +28,6 @@ import im.vector.app.core.utils.getApplicationLabel
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.cache.CacheStrategy
@@ -47,6 +46,9 @@ class UnifiedPushHelper @Inject constructor(
         private val vectorFeatures: VectorFeatures,
         private val fcmHelper: FcmHelper,
 ) {
+
+    // Called when the home activity starts
+    // or when notifications are enabled
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -57,7 +59,14 @@ class UnifiedPushHelper @Inject constructor(
         )
     }
 
-    fun reRegister(
+    // If registration is forced:
+    // * the current distributor (if any) is removed
+    // * The dialog is opened
+    //
+    // The registration is forced in 2 cases :
+    // * in the settings
+    // * in the troubleshoot list (doFix)
+    fun forceRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
             onDoneRunnable: Runnable? = null
@@ -87,48 +96,35 @@ class UnifiedPushHelper @Inject constructor(
                 // Un-register first
                 unregister(pushersManager)
             }
-            if (UnifiedPush.getDistributor(context).isNotEmpty()) {
+            // the !force should not be needed
+            if (!force && UnifiedPush.getDistributor(context).isNotEmpty()) {
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
                 return@launch
             }
 
-            // By default, use internal solution (fcm/background sync)
-            UnifiedPush.saveDistributor(context, context.packageName)
             val distributors = UnifiedPush.getDistributors(context)
 
-            if (distributors.size == 1 && !force) {
+            if (!force && distributors.size == 1) {
                 UnifiedPush.saveDistributor(context, distributors.first())
                 UnifiedPush.registerApp(context)
                 onDoneRunnable?.run()
             } else {
-                openDistributorDialogInternal(activity, pushersManager, onDoneRunnable, distributors, !force, !force)
+                openDistributorDialogInternal(
+                        activity = activity,
+                        onDoneRunnable = onDoneRunnable,
+                        distributors = distributors
+                )
             }
         }
     }
 
-    fun openDistributorDialog(
-            activity: FragmentActivity,
-            pushersManager: PushersManager,
-            onDoneRunnable: Runnable,
-    ) {
-        val distributors = UnifiedPush.getDistributors(activity)
-        openDistributorDialogInternal(
-                activity,
-                pushersManager,
-                onDoneRunnable, distributors,
-                unregisterFirst = true,
-                cancellable = true,
-        )
-    }
-
+    // There is no case where this function is called
+    // with a saved distributor and/or a pusher
     private fun openDistributorDialogInternal(
             activity: FragmentActivity,
-            pushersManager: PushersManager?,
             onDoneRunnable: Runnable?,
-            distributors: List<String>,
-            unregisterFirst: Boolean,
-            cancellable: Boolean,
+            distributors: List<String>
     ) {
         val internalDistributorName = stringProvider.getString(
                 if (fcmHelper.isFirebaseAvailable()) {
@@ -150,23 +146,21 @@ class UnifiedPushHelper @Inject constructor(
                 .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
                 .setItems(distributorsName.toTypedArray()) { _, which ->
                     val distributor = distributors[which]
-                    if (distributor == UnifiedPush.getDistributor(context)) {
-                        Timber.d("Same distributor selected again, no action")
-                        return@setItems
-                    }
 
                     activity.lifecycleScope.launch {
-                        if (unregisterFirst) {
-                            // Un-register first
-                            unregister(pushersManager)
-                        }
                         UnifiedPush.saveDistributor(context, distributor)
                         Timber.i("Saving distributor: $distributor")
                         UnifiedPush.registerApp(context)
                         onDoneRunnable?.run()
                     }
                 }
-                .setCancelable(cancellable)
+                .setOnCancelListener {
+                    // By default, use internal solution (fcm/background sync)
+                    UnifiedPush.saveDistributor(context, context.packageName)
+                    UnifiedPush.registerApp(context)
+                    onDoneRunnable?.run()
+                }
+                .setCancelable(true)
                 .show()
     }
 
@@ -174,7 +168,10 @@ class UnifiedPushHelper @Inject constructor(
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
         try {
-            pushersManager?.unregisterPusher(unifiedPushStore.getEndpointOrToken().orEmpty())
+            getEndpointOrToken()?.let {
+                Timber.d("Removing $it")
+                pushersManager?.unregisterPusher(it)
+            }
         } catch (e: Exception) {
             Timber.d(e, "Probably unregistering a non existing pusher")
         }
@@ -243,15 +240,20 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun isEmbeddedDistributor(): Boolean {
-        return UnifiedPush.getDistributor(context) == context.packageName && fcmHelper.isFirebaseAvailable()
+        return isInternalDistributor() && fcmHelper.isFirebaseAvailable()
     }
 
     fun isBackgroundSync(): Boolean {
-        return UnifiedPush.getDistributor(context) == context.packageName && !fcmHelper.isFirebaseAvailable()
+        return isInternalDistributor() && !fcmHelper.isFirebaseAvailable()
+    }
+
+    private fun isInternalDistributor(): Boolean {
+        return UnifiedPush.getDistributor(context).isEmpty() ||
+                UnifiedPush.getDistributor(context) == context.packageName
     }
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
-        val endpoint = unifiedPushStore.getEndpointOrToken()
+        val endpoint = getEndpointOrToken()
         if (endpoint.isNullOrEmpty()) return null
         if (isEmbeddedDistributor()) {
             return endpoint
@@ -263,5 +265,15 @@ class UnifiedPushHelper @Inject constructor(
             Timber.e(e, "Error parsing unifiedpush endpoint")
             null
         }
+    }
+
+    fun getEndpointOrToken(): String? {
+        return if (isEmbeddedDistributor()) fcmHelper.getFcmToken()
+        else unifiedPushStore.getEndpoint()
+    }
+
+    fun getPushGateway(): String? {
+        return if (isEmbeddedDistributor()) stringProvider.getString(R.string.pusher_http_url)
+        else unifiedPushStore.getPushGateway()
     }
 }

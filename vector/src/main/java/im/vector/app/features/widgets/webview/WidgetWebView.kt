@@ -16,7 +16,6 @@
 
 package im.vector.app.features.widgets.webview
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.ViewGroup
 import android.webkit.CookieManager
@@ -24,13 +23,15 @@ import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import im.vector.app.R
-import im.vector.app.core.utils.checkWebViewPermissions
+import im.vector.app.core.utils.CheckWebViewPermissionsUseCase
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.webview.VectorWebViewClient
 import im.vector.app.features.webview.WebEventListener
 
-@SuppressLint("NewApi")
-fun WebView.setupForWidget(activity: Activity, eventListener: WebEventListener) {
+fun WebView.setupForWidget(activity: Activity,
+                           checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase,
+                           eventListener: WebEventListener,
+) {
     // xml value seems ignored
     setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
 
@@ -63,7 +64,7 @@ fun WebView.setupForWidget(activity: Activity, eventListener: WebEventListener) 
     // Permission requests
     webChromeClient = object : WebChromeClient() {
         override fun onPermissionRequest(request: PermissionRequest) {
-            if (checkWebViewPermissions(activity, request)) {
+            if (checkWebViewPermissionsUseCase.execute(activity, request)) {
                 request.grant(request.resources)
             } else {
                 eventListener.onPermissionRequest(request)

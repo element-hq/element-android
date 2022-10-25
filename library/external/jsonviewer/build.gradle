@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
+
+buildscript {
+    repositories {
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+        }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
+    }
+}
+
+android {
+    namespace "org.billcarsonfr.jsonviewer"
+
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    implementation project(":library:core-utils")
+
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.core
+    implementation libs.androidx.recyclerview
+
+    implementation libs.airbnb.epoxy
+    ksp libs.airbnb.epoxyProcessor
+
+    implementation libs.airbnb.mavericks
+    // Span utils
+    implementation('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    implementation libs.jetbrains.coroutinesCore
+    implementation libs.jetbrains.coroutinesAndroid
+
+    testImplementation 'org.json:json:20220924'
+    testImplementation libs.tests.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espressoCore
+}

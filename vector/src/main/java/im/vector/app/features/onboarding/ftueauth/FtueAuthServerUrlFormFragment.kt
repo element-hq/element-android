@@ -27,9 +27,10 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
@@ -47,7 +48,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is prompted to enter a homeserver url.
  */
-class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginServerUrlFormBinding>() {
+@AndroidEntryPoint
+class FtueAuthServerUrlFormFragment :
+        AbstractFtueAuthFragment<FragmentLoginServerUrlFormBinding>() {
+
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerUrlFormBinding {
         return FragmentLoginServerUrlFormBinding.inflate(inflater, container, false)
@@ -103,7 +108,7 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
                 views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
         }
-        val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
+        val completions = state.knownCustomHomeServersUrls + if (buildMeta.isDebug) listOf("http://10.0.2.2:8080") else emptyList()
         views.loginServerUrlFormHomeServerUrl.setAdapter(
                 ArrayAdapter(
                         requireContext(),

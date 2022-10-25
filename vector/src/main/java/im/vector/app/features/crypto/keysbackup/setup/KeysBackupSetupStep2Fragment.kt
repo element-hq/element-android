@@ -24,22 +24,27 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import com.nulabinc.zxcvbn.Zxcvbn
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
+@AndroidEntryPoint
+class KeysBackupSetupStep2Fragment :
+        VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep2Binding {
         return FragmentKeysBackupSetupStep2Binding.inflate(inflater, container, false)
     }
 
     private val zxcvbn = Zxcvbn()
+
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     private fun onPassphraseChanged() {
         viewModel.passphrase.value = views.keysBackupSetupStep2PassphraseEnterEdittext.text.toString()
@@ -76,12 +81,12 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
                 views.keysBackupSetupStep2PassphraseStrengthLevel.strength = score
 
                 if (score in 1..3) {
-                    val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
+                    val warning = strength.feedback?.getWarning(vectorLocale.applicationLocale)
                     if (warning != null) {
                         views.keysBackupSetupStep2PassphraseEnterTil.error = warning
                     }
 
-                    val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
+                    val suggestions = strength.feedback?.getSuggestions(vectorLocale.applicationLocale)
                     if (suggestions != null) {
                         views.keysBackupSetupStep2PassphraseEnterTil.error = suggestions.firstOrNull()
                     }

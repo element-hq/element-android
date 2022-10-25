@@ -119,4 +119,19 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object StopLiveLocationSharing : RoomDetailAction()
 
     object OpenElementCallWidget : RoomDetailAction()
+
+    sealed class VoiceBroadcastAction : RoomDetailAction() {
+        sealed class Recording : VoiceBroadcastAction() {
+            object Start : Recording()
+            object Pause : Recording()
+            object Resume : Recording()
+            object Stop : Recording()
+        }
+
+        sealed class Listening : VoiceBroadcastAction() {
+            data class PlayOrResume(val eventId: String) : Listening()
+            object Pause : Listening()
+            object Stop : Listening()
+        }
+    }
 }

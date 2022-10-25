@@ -70,6 +70,9 @@ object EventType {
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
     const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
+    // This type is for local purposes, it should never be processed by the server
+    const val LOCAL_STATE_ROOM_THIRD_PARTY_INVITE = "local.room.third_party_invite"
+
     // Call Events
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
@@ -87,7 +90,10 @@ object EventType {
     // Key share events
     const val ROOM_KEY_REQUEST = "m.room_key_request"
     const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
-    const val ROOM_KEY_WITHHELD = "org.matrix.room_key.withheld"
+    val ROOM_KEY_WITHHELD = StableUnstableId(
+            stable = "m.room_key.withheld",
+            unstable = "org.matrix.room_key.withheld"
+    )
 
     const val REQUEST_SECRET = "m.secret.request"
     const val SEND_SECRET = "m.secret.send"
@@ -121,5 +127,18 @@ object EventType {
                 type == CALL_NEGOTIATE ||
                 type == CALL_REJECT ||
                 type == CALL_REPLACES
+    }
+
+    fun isVerificationEvent(type: String): Boolean {
+        return when (type) {
+            KEY_VERIFICATION_START,
+            KEY_VERIFICATION_ACCEPT,
+            KEY_VERIFICATION_KEY,
+            KEY_VERIFICATION_MAC,
+            KEY_VERIFICATION_CANCEL,
+            KEY_VERIFICATION_DONE,
+            KEY_VERIFICATION_READY -> true
+            else -> false
+        }
     }
 }

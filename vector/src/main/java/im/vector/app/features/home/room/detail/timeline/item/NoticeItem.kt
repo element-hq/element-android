@@ -28,7 +28,6 @@ import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 @EpoxyModelClass
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timeline_event_base_noinfo) {
@@ -43,16 +42,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timel
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
-        when (attributes.informationData.e2eDecoration) {
-            E2EDecoration.NONE -> {
-                holder.e2EDecorationView.render(null)
-            }
-            E2EDecoration.WARN_IN_CLEAR,
-            E2EDecoration.WARN_SENT_BY_UNVERIFIED,
-            E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
-                holder.e2EDecorationView.render(RoomEncryptionTrustLevel.Warning)
-            }
-        }
+        holder.e2EDecorationView.renderE2EDecoration(attributes.informationData.e2eDecoration)
     }
 
     override fun unbind(holder: Holder) {
@@ -83,6 +73,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>(R.layout.item_timel
     )
 
     companion object {
-        private const val STUB_ID = R.id.messageContentNoticeStub
+        private val STUB_ID = R.id.messageContentNoticeStub
     }
 }

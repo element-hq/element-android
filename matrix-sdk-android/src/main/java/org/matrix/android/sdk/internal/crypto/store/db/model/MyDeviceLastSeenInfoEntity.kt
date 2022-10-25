@@ -27,7 +27,9 @@ internal open class MyDeviceLastSeenInfoEntity(
         /** The last time this device has been seen. */
         var lastSeenTs: Long? = null,
         /** The last ip address. */
-        var lastSeenIp: String? = null
+        var lastSeenIp: String? = null,
+        /** The last user agent. */
+        var lastSeenUserAgent: String? = null,
 ) : RealmObject() {
 
     companion object

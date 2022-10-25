@@ -21,16 +21,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueResetPasswordEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewState
 
 @AndroidEntryPoint
-class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordEmailInputBinding>() {
+class FtueAuthResetPasswordEmailEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtueResetPasswordEmailInputBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueResetPasswordEmailInputBinding {
         return FragmentFtueResetPasswordEmailInputBinding.inflate(inflater, container, false)
@@ -51,6 +55,13 @@ class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<Fragmen
     private fun startPasswordReset() {
         val email = views.emailEntryInput.content()
         viewModel.handle(OnboardingAction.ResetPassword(email = email, newPassword = null))
+    }
+
+    override fun updateWithState(state: OnboardingViewState) {
+        views.emailEntryHeaderSubtitle.text = getString(
+                R.string.ftue_auth_reset_password_email_subtitle,
+                state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        )
     }
 
     override fun onError(throwable: Throwable) {

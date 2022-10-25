@@ -22,7 +22,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -30,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -37,21 +37,27 @@ import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.core.utils.startNotificationSettingsIntent
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.home.NotificationPermissionManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -62,20 +68,35 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
-class VectorSettingsNotificationPreferenceFragment @Inject constructor(
-        private val unifiedPushHelper: UnifiedPushHelper,
-        private val pushersManager: PushersManager,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter,
-        private val vectorFeatures: VectorFeatures,
-) : VectorSettingsBaseFragment(),
+@AndroidEntryPoint
+class VectorSettingsNotificationPreferenceFragment :
+        VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
+
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var pushersManager: PushersManager
+    @Inject lateinit var fcmHelper: FcmHelper
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var guardServiceStarter: GuardServiceStarter
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
+
+    private val notificationStartForActivityResult = registerStartForActivityResult { _ ->
+        // No op
+    }
+
+    private val postPermissionLauncher = registerForPermissionsResult { _, deniedPermanently ->
+        if (deniedPermanently) {
+            // Open System setting, to give a chance to the user to enable notification. Sometimes the permission dialog is not displayed
+            startNotificationSettingsIntent(requireContext(), notificationStartForActivityResult)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,16 +120,44 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            pushersManager.getPusherForCurrentSession()?.let { pusher ->
+                it.isChecked = pusher.enabled
+            }
+
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
                     unifiedPushHelper.register(requireActivity()) {
                         // Update the summary
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
                                 ?.summary = unifiedPushHelper.getCurrentDistributorName()
+                        lifecycleScope.launch {
+                            val result = runCatching {
+                                pushersManager.togglePusherForCurrentSession(true)
+                            }
+
+                            result.exceptionOrNull()?.let { _ ->
+                                Toast.makeText(context, R.string.error_check_network, Toast.LENGTH_SHORT).show()
+                                it.isChecked = false
+                            }
+                        }
                     }
+                    notificationPermissionManager.eventuallyRequestPermission(
+                            requireActivity(),
+                            postPermissionLauncher,
+                            showRationale = false,
+                            ignorePreference = true
+                    )
                 } else {
                     unifiedPushHelper.unregister(pushersManager)
                     session.pushersService().refreshPushers()
+                    notificationPermissionManager.eventuallyRevokePermission(requireActivity())
                 }
             }
         }
@@ -155,7 +204,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    unifiedPushHelper.openDistributorDialog(requireActivity(), pushersManager) {
+                    unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
+                        if (unifiedPushHelper.isEmbeddedDistributor()) {
+                            fcmHelper.ensureFcmTokenIsRetrieved(
+                                    requireActivity(),
+                                    pushersManager,
+                                    vectorPreferences.areNotificationEnabledForDevice()
+                            )
+                        }
                         it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
@@ -323,7 +379,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     private val ringtoneStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            vectorPreferences.setNotificationRingTone(activityResult.data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
+            vectorPreferences.setNotificationRingTone(activityResult.data?.getParcelableExtraCompat<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI))
 
             // test if the selected ring tone can be played
             val notificationRingToneName = vectorPreferences.getNotificationRingToneName()

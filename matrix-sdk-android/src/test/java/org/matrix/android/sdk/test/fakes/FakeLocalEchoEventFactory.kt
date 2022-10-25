@@ -46,24 +46,6 @@ internal class FakeLocalEchoEventFactory {
         return event
     }
 
-    fun givenCreateLiveLocationEvent(withLocalEcho: Boolean): Event {
-        val event = Event()
-        every {
-            instance.createLiveLocationEvent(
-                    beaconInfoEventId = any(),
-                    roomId = any(),
-                    latitude = any(),
-                    longitude = any(),
-                    uncertainty = any()
-            )
-        } returns event
-
-        if (withLocalEcho) {
-            every { instance.createLocalEcho(event) } just runs
-        }
-        return event
-    }
-
     fun verifyCreateStaticLocationEvent(
             roomId: String,
             latitude: Double,
@@ -82,6 +64,24 @@ internal class FakeLocalEchoEventFactory {
         }
     }
 
+    fun givenCreateLiveLocationEvent(withLocalEcho: Boolean): Event {
+        val event = Event()
+        every {
+            instance.createLiveLocationEvent(
+                    beaconInfoEventId = any(),
+                    roomId = any(),
+                    latitude = any(),
+                    longitude = any(),
+                    uncertainty = any()
+            )
+        } returns event
+
+        if (withLocalEcho) {
+            every { instance.createLocalEcho(event) } just runs
+        }
+        return event
+    }
+
     fun verifyCreateLiveLocationEvent(
             roomId: String,
             beaconInfoEventId: String,
@@ -96,6 +96,36 @@ internal class FakeLocalEchoEventFactory {
                     latitude = latitude,
                     longitude = longitude,
                     uncertainty = uncertainty
+            )
+        }
+    }
+
+    fun givenCreateRedactEvent(eventId: String, withLocalEcho: Boolean): Event {
+        val event = Event()
+        every {
+            instance.createRedactEvent(
+                    roomId = any(),
+                    eventId = eventId,
+                    reason = any()
+            )
+        } returns event
+
+        if (withLocalEcho) {
+            every { instance.createLocalEcho(event) } just runs
+        }
+        return event
+    }
+
+    fun verifyCreateRedactEvent(
+            roomId: String,
+            eventId: String,
+            reason: String?
+    ) {
+        verify {
+            instance.createRedactEvent(
+                    roomId = roomId,
+                    eventId = eventId,
+                    reason = reason
             )
         }
     }

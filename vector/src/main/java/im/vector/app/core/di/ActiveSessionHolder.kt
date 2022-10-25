@@ -16,16 +16,22 @@
 
 package im.vector.app.core.di
 
-import arrow.core.Option
+import android.content.Context
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
+import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOption
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -41,7 +47,11 @@ class ActiveSessionHolder @Inject constructor(
         private val sessionListener: SessionListener,
         private val imageManager: ImageManager,
         private val unifiedPushHelper: UnifiedPushHelper,
-        private val guardServiceStarter: GuardServiceStarter
+        private val guardServiceStarter: GuardServiceStarter,
+        private val sessionInitializer: SessionInitializer,
+        private val applicationContext: Context,
+        private val authenticationService: AuthenticationService,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -49,7 +59,7 @@ class ActiveSessionHolder @Inject constructor(
     fun setActiveSession(session: Session) {
         Timber.w("setActiveSession of ${session.myUserId}")
         activeSessionReference.set(session)
-        activeSessionDataSource.post(Option.just(session))
+        activeSessionDataSource.post(session.toOption())
 
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
@@ -62,14 +72,14 @@ class ActiveSessionHolder @Inject constructor(
 
     suspend fun clearActiveSession() {
         // Do some cleanup first
-        getSafeActiveSession()?.let {
+        getSafeActiveSession(startSync = false)?.let {
             Timber.w("clearActiveSession of ${it.myUserId}")
             it.callSignalingService().removeCallListener(callManager)
             it.removeListener(sessionListener)
         }
 
         activeSessionReference.set(null)
-        activeSessionDataSource.post(Option.empty())
+        activeSessionDataSource.post(Optional.empty())
 
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
@@ -80,17 +90,34 @@ class ActiveSessionHolder @Inject constructor(
     }
 
     fun hasActiveSession(): Boolean {
-        return activeSessionReference.get() != null
+        return activeSessionReference.get() != null || authenticationService.hasAuthenticatedSessions()
     }
 
-    fun getSafeActiveSession(): Session? {
-        return activeSessionReference.get()
+    fun getSafeActiveSession(startSync: Boolean = true): Session? {
+        return runBlocking { getOrInitializeSession(startSync = startSync) }
     }
 
     fun getActiveSession(): Session {
-        return activeSessionReference.get()
+        return getSafeActiveSession()
                 ?: throw IllegalStateException("You should authenticate before using this")
     }
+
+    suspend fun getOrInitializeSession(startSync: Boolean): Session? {
+        return activeSessionReference.get()
+                ?.also {
+                    if (startSync && !it.syncService().isSyncThreadAlive()) {
+                        it.startSyncing(applicationContext)
+                    }
+                }
+                ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
+                    setActiveSession(session)
+                    runBlocking {
+                        configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
+                    }
+                }
+    }
+
+    fun isWaitingForSessionInitialization() = activeSessionReference.get() == null && authenticationService.hasAuthenticatedSessions()
 
     // TODO Stop sync ?
 //    fun switchToSession(sessionParams: SessionParams) {

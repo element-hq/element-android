@@ -25,6 +25,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -60,7 +61,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.api.session.room.timeline.isPoll
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
@@ -82,6 +82,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val vectorPreferences: VectorPreferences,
         private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
+        private val checkIfCanRedactEventUseCase: CheckIfCanRedactEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -186,7 +187,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 when (timelineEvent.root.getClearType()) {
                     EventType.MESSAGE,
                     EventType.STICKER -> {
-                        val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
+                        val messageContent: MessageContent? = timelineEvent.getVectorLastMessageContent()
                         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                             val html = messageContent.formattedBody
                                     ?.takeIf { it.isNotBlank() }
@@ -252,7 +253,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
-        val messageContent = timelineEvent.getLastMessageContent()
+        val messageContent = timelineEvent.getVectorLastMessageContent()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
@@ -518,12 +519,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
-        // Message sent by the current user can always be redacted
-        if (event.root.senderId == session.myUserId) return true
-        // Check permission for messages sent by other users
-        return actionPermissions.canRedact
+        return checkIfCanRedactEventUseCase.execute(event, actionPermissions)
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {

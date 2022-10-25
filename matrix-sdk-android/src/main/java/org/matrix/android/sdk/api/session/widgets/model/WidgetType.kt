@@ -29,7 +29,7 @@ private val DEFINED_TYPES by lazy {
             WidgetType.Grafana,
             WidgetType.Custom,
             WidgetType.IntegrationManager,
-            WidgetType.ElementCall
+            WidgetType.ElementCall,
     )
 }
 

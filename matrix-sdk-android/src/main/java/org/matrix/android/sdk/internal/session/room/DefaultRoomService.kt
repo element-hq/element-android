@@ -29,10 +29,12 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -43,7 +45,9 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFie
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
+import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
@@ -60,6 +64,8 @@ import javax.inject.Inject
 internal class DefaultRoomService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val createRoomTask: CreateRoomTask,
+        private val createLocalRoomTask: CreateLocalRoomTask,
+        private val deleteLocalRoomTask: DeleteLocalRoomTask,
         private val joinRoomTask: JoinRoomTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
@@ -78,6 +84,14 @@ internal class DefaultRoomService @Inject constructor(
         return createRoomTask.executeRetry(createRoomParams, 3)
     }
 
+    override suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String {
+        return createLocalRoomTask.execute(createRoomParams)
+    }
+
+    override suspend fun deleteLocalRoom(roomId: String) {
+        deleteLocalRoomTask.execute(DeleteLocalRoomTask.Params(roomId))
+    }
+
     override fun getRoom(roomId: String): Room? {
         return roomGetter.getRoom(roomId)
     }
@@ -92,6 +106,10 @@ internal class DefaultRoomService @Inject constructor(
 
     override fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummaryLive(roomId)
+    }
+
+    override fun getLocalRoomSummaryLive(roomId: String): LiveData<Optional<LocalRoomSummary>> {
+        return roomSummaryDataSource.getLocalRoomSummaryLive(roomId)
     }
 
     override fun getRoomSummaries(
@@ -140,9 +158,8 @@ internal class DefaultRoomService @Inject constructor(
             queryParams: RoomSummaryQueryParams,
             pagedListConfig: PagedList.Config,
             sortOrder: RoomSortOrder,
-            getFlattenParents: Boolean
     ): UpdatableLivePageResult {
-        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder, getFlattenParents)
+        return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
     override fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
@@ -162,7 +179,10 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override suspend fun onRoomDisplayed(roomId: String) {
-        updateBreadcrumbsTask.execute(UpdateBreadcrumbsTask.Params(roomId))
+        // Do not add local rooms to the recent rooms list as they should not be known by the server
+        if (!RoomLocalEcho.isLocalEchoId(roomId)) {
+            updateBreadcrumbsTask.execute(UpdateBreadcrumbsTask.Params(roomId))
+        }
     }
 
     override suspend fun joinRoom(roomIdOrAlias: String, reason: String?, viaServers: List<String>) {

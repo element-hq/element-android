@@ -69,6 +69,7 @@
                     android:textAlignment="center"
                     android:textColor="?vctr_content_tertiary"
                     app:layout_constraintTop_toBottomOf="@id/showUserCodeCardNameText"
+                    app:layout_goneMarginTop="54dp"
                     tools:text="@sample/users.json/data/id" />
 
                 <!--                android:id="@+id/itemShareQrCodeImage"-->

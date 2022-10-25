@@ -22,16 +22,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-class VerificationQRWaitingFragment @Inject constructor(
-        val controller: VerificationQRWaitingController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>() {
+@AndroidEntryPoint
+class VerificationQRWaitingFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>() {
+
+    @Inject lateinit var controller: VerificationQRWaitingController
 
     @Parcelize
     data class Args(
@@ -46,7 +50,7 @@ class VerificationQRWaitingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        (arguments?.getParcelable(Mavericks.KEY_ARG) as? Args)?.let {
+        (arguments?.getParcelableCompat<Args>(Mavericks.KEY_ARG))?.let {
             controller.update(it)
         }
     }

@@ -27,4 +27,5 @@ sealed class RoomProfileAction : VectorViewModelAction {
     object ShareRoomProfile : RoomProfileAction()
     object CreateShortcut : RoomProfileAction()
     object RestoreEncryptionState : RoomProfileAction()
+    data class SetEncryptToVerifiedDeviceOnly(val enabled: Boolean) : RoomProfileAction()
 }

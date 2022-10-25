@@ -20,9 +20,11 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
-    data class CreateRoomAndInviteSelectedUsers(
+    data class PrepareRoomWithSelectedUsers(
             val selections: Set<PendingSelection>
     ) : CreateDirectRoomAction()
+
+    object CreateRoomAndInviteSelectedUsers : CreateDirectRoomAction()
 
     data class QrScannedAction(
             val result: String

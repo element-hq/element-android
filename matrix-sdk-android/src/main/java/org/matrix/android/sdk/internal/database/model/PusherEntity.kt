@@ -18,15 +18,6 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.RealmObject
 import org.matrix.android.sdk.api.session.pushers.PusherState
 
-// TODO
-//        at java.lang.Thread.run(Thread.java:764)
-//     Caused by: java.lang.IllegalArgumentException: 'value' is not a valid managed object.
-//        at io.realm.ProxyState.checkValidObject(ProxyState.java:213)
-//        at io.realm.im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy
-//            .realmSet$data(im_vector_matrix_android_internal_database_model_PusherEntityRealmProxy.java:413)
-//        at org.matrix.android.sdk.internal.database.model.PusherEntity.setData(PusherEntity.kt:16)
-//        at org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
-//        at io.realm.Realm.executeTransaction(Realm.java:1493)
 internal open class PusherEntity(
         var pushKey: String = "",
         var kind: String? = null,
@@ -35,7 +26,9 @@ internal open class PusherEntity(
         var deviceDisplayName: String? = null,
         var profileTag: String? = null,
         var lang: String? = null,
-        var data: PusherDataEntity? = null
+        var data: PusherDataEntity? = null,
+        var enabled: Boolean = true,
+        var deviceId: String? = null,
 ) : RealmObject() {
     private var stateStr: String = PusherState.UNREGISTERED.name
 

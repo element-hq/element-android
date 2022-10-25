@@ -35,6 +35,10 @@ class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
         every { isOnboardingCombinedLoginEnabled() } returns true
     }
 
+    fun givenOnboardingUseCaseEnabled() {
+        every { isOnboardingUseCaseEnabled() } returns true
+    }
+
     fun givenCombinedLoginDisabled() {
         every { isOnboardingCombinedLoginEnabled() } returns false
     }

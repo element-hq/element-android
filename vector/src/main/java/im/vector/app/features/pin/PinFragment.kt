@@ -24,7 +24,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.asMavericksArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -33,7 +35,7 @@ import im.vector.app.databinding.FragmentPinBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
-import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguratorProvider
+import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import im.vector.app.features.pin.lockscreen.ui.AuthMethod
 import im.vector.app.features.pin.lockscreen.ui.LockScreenFragment
@@ -48,11 +50,13 @@ data class PinArgs(
         val pinMode: PinMode
 ) : Parcelable
 
-class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val vectorPreferences: VectorPreferences,
-        private val configuratorProvider: LockScreenConfiguratorProvider,
-) : VectorBaseFragment<FragmentPinBinding>() {
+@AndroidEntryPoint
+class PinFragment :
+        VectorBaseFragment<FragmentPinBinding>() {
+
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var defaultConfiguration: LockScreenConfiguration
 
     private val fragmentArgs: PinArgs by args()
 
@@ -81,21 +85,17 @@ class PinFragment @Inject constructor(
                 vectorBaseActivity.finish()
             }
         }
-
-        configuratorProvider.updateDefaultConfiguration {
-            copy(
-                    mode = LockScreenMode.CREATE,
-                    title = getString(R.string.create_pin_title),
-                    needsNewCodeValidation = true,
-                    newCodeConfirmationTitle = getString(R.string.create_pin_confirm_title),
-            )
-        }
+        createFragment.arguments = defaultConfiguration.copy(
+                mode = LockScreenMode.CREATE,
+                title = getString(R.string.create_pin_title),
+                needsNewCodeValidation = true,
+                newCodeConfirmationTitle = getString(R.string.create_pin_confirm_title),
+        ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, createFragment)
     }
 
     private fun showAuthFragment() {
         val authFragment = LockScreenFragment()
-        val canUseBiometrics = vectorPreferences.useBiometricsToUnlock()
         authFragment.onLeftButtonClickedListener = View.OnClickListener { displayForgotPinWarningDialog() }
         authFragment.lockScreenListener = object : LockScreenListener {
             override fun onAuthenticationFailure(authMethod: AuthMethod) {
@@ -133,18 +133,12 @@ class PinFragment @Inject constructor(
                         .show()
             }
         }
-        configuratorProvider.updateDefaultConfiguration {
-            copy(
-                    mode = LockScreenMode.VERIFY,
-                    title = getString(R.string.auth_pin_title),
-                    isStrongBiometricsEnabled = isStrongBiometricsEnabled && canUseBiometrics,
-                    isWeakBiometricsEnabled = isWeakBiometricsEnabled && canUseBiometrics,
-                    isDeviceCredentialUnlockEnabled = isDeviceCredentialUnlockEnabled && canUseBiometrics,
-                    autoStartBiometric = canUseBiometrics,
-                    leftButtonTitle = getString(R.string.auth_pin_forgot),
-                    clearCodeOnError = true,
-            )
-        }
+        authFragment.arguments = defaultConfiguration.copy(
+                mode = LockScreenMode.VERIFY,
+                title = getString(R.string.auth_pin_title),
+                leftButtonTitle = getString(R.string.auth_pin_forgot),
+                clearCodeOnError = true,
+        ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, authFragment)
     }
 

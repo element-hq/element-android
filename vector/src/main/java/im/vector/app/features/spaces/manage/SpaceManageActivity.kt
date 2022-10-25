@@ -40,6 +40,7 @@ import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -90,7 +91,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                 }
                 .launchIn(lifecycleScope)
 
-        val args = intent?.getParcelableExtra<SpaceManageArgs>(Mavericks.KEY_ARG)
+        val args = intent?.getParcelableExtraCompat<SpaceManageArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             withState(sharedViewModel) {
                 when (it.manageType) {

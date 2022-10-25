@@ -19,24 +19,24 @@ package im.vector.app.features.pin.lockscreen.crypto
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.annotation.RequiresApi
-import im.vector.app.features.settings.VectorPreferences
-import timber.log.Timber
+import androidx.biometric.BiometricPrompt
+import im.vector.app.features.pin.lockscreen.di.BiometricKeyAlias
+import im.vector.app.features.pin.lockscreen.di.PinCodeKeyAlias
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class in charge of managing both the PIN code key and the system authentication keys.
  */
-class LockScreenKeyRepository(
-        baseName: String,
-        private val pinCodeMigrator: PinCodeMigrator,
-        private val vectorPreferences: VectorPreferences,
+@Singleton
+class LockScreenKeyRepository @Inject constructor(
+        @PinCodeKeyAlias private val pinCodeKeyAlias: String,
+        @BiometricKeyAlias private val systemKeyAlias: String,
         private val keyStoreCryptoFactory: KeyStoreCrypto.Factory,
 ) {
 
-    private val pinCodeKeyAlias = "$baseName.pin_code"
-    private val systemKeyAlias = "$baseName.system"
-
     private val pinCodeCrypto: KeyStoreCrypto by lazy {
-        keyStoreCryptoFactory.provide(pinCodeKeyAlias,  keyNeedsUserAuthentication = false)
+        keyStoreCryptoFactory.provide(pinCodeKeyAlias, keyNeedsUserAuthentication = false)
     }
     private val systemKeyCrypto: KeyStoreCrypto by lazy {
         keyStoreCryptoFactory.provide(systemKeyAlias, keyNeedsUserAuthentication = true)
@@ -86,19 +86,7 @@ class LockScreenKeyRepository(
     fun isSystemKeyValid() = systemKeyCrypto.hasValidKey()
 
     /**
-     * Migrates the PIN code key and encrypted value to use a more secure cipher, also creates a new system key if needed.
+     * Returns a [BiometricPrompt.CryptoObject] for the system key.
      */
-    suspend fun migrateKeysIfNeeded() {
-        if (pinCodeMigrator.isMigrationNeeded()) {
-            pinCodeMigrator.migrate(pinCodeKeyAlias)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && vectorPreferences.useBiometricsToUnlock()) {
-                try {
-                    ensureSystemKey()
-                } catch (e: KeyPermanentlyInvalidatedException) {
-                    Timber.e("Could not automatically create biometric key.", e)
-                }
-            }
-        }
-    }
+    fun getSystemKeyAuthCryptoObject() = systemKeyCrypto.getAuthCryptoObject()
 }

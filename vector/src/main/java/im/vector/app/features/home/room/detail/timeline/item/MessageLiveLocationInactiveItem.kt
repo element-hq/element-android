@@ -42,11 +42,11 @@ abstract class MessageLiveLocationInactiveItem :
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val bannerImageView by bind<ImageView>(R.id.locationLiveInactiveBanner)
-        val noLocationMapImageView by bind<ImageView>(R.id.locationLiveInactiveMap)
+        val bannerImageView by bind<ImageView>(R.id.liveLocationEndedBannerBackground)
+        val noLocationMapImageView by bind<ImageView>(R.id.liveLocationInactiveMap)
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationInactiveStub
+        private val STUB_ID = R.id.messageContentLiveLocationInactiveStub
     }
 }

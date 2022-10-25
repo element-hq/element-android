@@ -22,8 +22,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentFtueAuthSplashBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -34,10 +35,13 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application.
  */
-class FtueAuthSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures
-) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
+@AndroidEntryPoint
+class FtueAuthSplashFragment :
+        AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
         return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
@@ -59,12 +63,12 @@ class FtueAuthSplashFragment @Inject constructor(
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
-        if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
+        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
-            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
-                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
-                    "Build: ${BuildConfig.BUILD_NUMBER}"
+            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
+                    "Branch: ${buildMeta.gitBranchName}\n" +
+                    "Build: ${buildMeta.buildNumber}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }

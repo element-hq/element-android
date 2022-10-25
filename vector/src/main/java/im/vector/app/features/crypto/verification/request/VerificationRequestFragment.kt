@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -29,10 +30,12 @@ import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import javax.inject.Inject
 
-class VerificationRequestFragment @Inject constructor(
-        val controller: VerificationRequestController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+@AndroidEntryPoint
+class VerificationRequestFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationRequestController.Listener {
+
+    @Inject lateinit var controller: VerificationRequestController
 
     private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
@@ -61,9 +64,7 @@ class VerificationRequestFragment @Inject constructor(
     }
 
     override fun onClickOnVerificationStart(): Unit = withState(viewModel) { state ->
-        state.otherUserMxItem?.id?.let { otherUserId ->
-            viewModel.handle(VerificationAction.RequestVerificationByDM(otherUserId, state.roomId))
-        }
+        viewModel.handle(VerificationAction.RequestVerificationByDM(state.otherUserId, state.roomId))
     }
 
     override fun onClickRecoverFromPassphrase() {

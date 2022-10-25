@@ -29,6 +29,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.getResTintedDrawable
 import im.vector.app.core.extensions.getTintedDrawable
@@ -45,10 +46,12 @@ import javax.inject.Inject
 private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
 private const val LIGHT_MODE_ICON_BACKGROUND_ALPHA = 0.15f
 
-class FtueAuthUseCaseFragment @Inject constructor(
-        private val themeProvider: ThemeProvider,
-        private val vectorFeatures: VectorFeatures,
-) : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
+@AndroidEntryPoint
+class FtueAuthUseCaseFragment :
+        AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
+
+    @Inject lateinit var themeProvider: ThemeProvider
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {
         return FragmentFtueAuthUseCaseBinding.inflate(inflater, container, false)

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.location
 
-import im.vector.app.BuildConfig
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
@@ -25,9 +24,10 @@ import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
         private val session: Session,
-        private val rawService: RawService
+        private val rawService: RawService,
+        locationSharingConfig: LocationSharingConfig,
 ) {
-    private val keyParam = "?key=${BuildConfig.mapTilerKey}"
+    private val keyParam = "?key=${locationSharingConfig.mapTilerKey}"
 
     private val fallbackMapUrl = buildString {
         append(MAP_BASE_URL)

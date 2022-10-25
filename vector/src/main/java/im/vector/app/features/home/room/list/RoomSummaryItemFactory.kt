@@ -51,7 +51,8 @@ class RoomSummaryItemFactory @Inject constructor(
             roomChangeMembershipStates: Map<String, ChangeMembershipState>,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
-            listener: RoomListListener?
+            listener: RoomListListener?,
+            singleLineLastEvent: Boolean = false
     ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
@@ -59,7 +60,7 @@ class RoomSummaryItemFactory @Inject constructor(
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
             else -> createRoomItem(
-                    roomSummary, selectedRoomIds, displayMode, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
+                    roomSummary, selectedRoomIds, displayMode, singleLineLastEvent, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
             )
         }
     }
@@ -118,8 +119,9 @@ class RoomSummaryItemFactory @Inject constructor(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
-            onLongClick: ((RoomSummary) -> Boolean)?
+            onLongClick: ((RoomSummary) -> Boolean)?,
     ): VectorEpoxyModel<*> {
         val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
@@ -140,7 +142,7 @@ class RoomSummaryItemFactory @Inject constructor(
         } else {
             createRoomSummaryItem(
                     roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
-                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, singleLineLastEvent, onClick, onLongClick
             )
         }
     }
@@ -155,6 +157,7 @@ class RoomSummaryItemFactory @Inject constructor(
             showHighlighted: Boolean,
             showSelected: Boolean,
             unreadCount: Int,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ) = RoomSummaryItem_()
@@ -164,7 +167,7 @@ class RoomSummaryItemFactory @Inject constructor(
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
             .subtitle(subtitle)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
@@ -177,6 +180,7 @@ class RoomSummaryItemFactory @Inject constructor(
             .unreadNotificationCount(unreadCount)
             .hasUnreadMessage(roomSummary.hasUnreadMessages)
             .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .useSingleLineForLastEvent(singleLineLastEvent)
             .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
             .itemClickListener { onClick?.invoke(roomSummary) }
 
@@ -187,13 +191,13 @@ class RoomSummaryItemFactory @Inject constructor(
             unreadCount: Int,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
-    ) = RoomSummaryItemCentered_()
+    ) = RoomSummaryCenteredItem_()
             .id(roomSummary.roomId)
             .avatarRenderer(avatarRenderer)
             // We do not display shield in the room list anymore
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
@@ -207,9 +211,18 @@ class RoomSummaryItemFactory @Inject constructor(
 
     private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
         val userId = roomSummary.directUserId
-        val spaceName = roomSummary.flattenParents.lastOrNull()?.name
+        val directParent = joinParentNames(roomSummary)
         val canonicalAlias = roomSummary.canonicalAlias
 
-        return (userId ?: spaceName ?: canonicalAlias).orEmpty()
+        return (userId ?: directParent ?: canonicalAlias).orEmpty()
+    }
+
+    private fun joinParentNames(roomSummary: RoomSummary) = with(roomSummary) {
+        when (val size = directParentNames.size) {
+            0 -> null
+            1 -> directParentNames.first()
+            2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
+            else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
+        }
     }
 }

@@ -19,6 +19,7 @@ package im.vector.app.features.settings
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.preference.VectorPreferenceCategory
@@ -26,7 +27,9 @@ import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.rageshake.RageShake
 
-class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsAdvancedSettingsFragment :
+        VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings

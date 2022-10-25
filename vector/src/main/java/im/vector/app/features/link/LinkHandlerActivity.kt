@@ -18,18 +18,21 @@ package im.vector.app.features.link
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
+import im.vector.app.features.MainActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.start.StartAppViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
@@ -41,14 +44,33 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
-    @Inject lateinit var sessionHolder: ActiveSessionHolder
-    @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
+
+    private val startAppViewModel: StartAppViewModel by viewModel()
 
     override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         handleIntent()
+    }
+
+    private val launcher = registerStartForActivityResult {
+        if (it.resultCode == RESULT_OK) {
+            handleIntent()
+        } else {
+            // User has pressed back on the MainActivity, so finish also this one.
+            finish()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (startAppViewModel.shouldStartApp()) {
+            launcher.launch(MainActivity.getIntentToInitSession(this))
+        } else {
+            handleIntent()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -77,7 +99,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     private fun handleConfigUrl(uri: Uri) {
-        if (sessionHolder.hasActiveSession()) {
+        if (activeSessionHolder.hasActiveSession()) {
             displayAlreadyLoginPopup(uri)
         } else {
             // user is not yet logged in, this is the nominal case
@@ -88,7 +110,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     private fun handleSupportedHostUrl() {
         // If we are not logged in, open login screen.
         // In the future, we might want to relaunch the process after login.
-        if (!sessionHolder.hasActiveSession()) {
+        if (!activeSessionHolder.hasActiveSession()) {
             startLoginActivity()
             return
         }
@@ -126,7 +148,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     private fun safeSignout(uri: Uri) {
-        val session = sessionHolder.getSafeActiveSession()
+        val session = activeSessionHolder.getSafeActiveSession()
         if (session == null) {
             // Should not happen
             startLoginActivity(uri)
@@ -135,7 +157,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
                 try {
                     session.signOutService().signOut(true)
                     Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
-                    sessionHolder.clearActiveSession()
+                    activeSessionHolder.clearActiveSession()
                     startLoginActivity(uri)
                 } catch (failure: Throwable) {
                     displayError(failure)

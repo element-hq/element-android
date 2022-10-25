@@ -53,6 +53,9 @@ private const val FEATURE_ID_ACCESS_TOKEN = "m.id_access_token"
 private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 private const val FEATURE_THREADS_MSC3440 = "org.matrix.msc3440"
 private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
+private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
+private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
+private const val FEATURE_THREADS_MSC3773 = "org.matrix.msc3773"
 
 /**
  * Return true if the SDK supports this homeserver version.
@@ -76,6 +79,19 @@ internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
 internal fun Versions.doesServerSupportThreads(): Boolean {
     // TODO Check for v1.3 or whichever spec version formally specifies MSC3440.
     return unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
+}
+
+/**
+ * Indicate if the homeserver support MSC3771 and MSC3773 for threaded read receipts and unread notifications.
+ */
+internal fun Versions.doesServerSupportThreadUnreadNotifications(): Boolean {
+    val msc3771 = unstableFeatures?.get(FEATURE_THREADS_MSC3771) ?: false
+    val msc3773 = unstableFeatures?.get(FEATURE_THREADS_MSC3773) ?: false
+    return getMaxVersion() >= HomeServerVersion.v1_4_0 || (msc3771 && msc3773)
+}
+
+internal fun Versions.doesServerSupportQrCodeLogin(): Boolean {
+    return unstableFeatures?.get(FEATURE_QR_CODE_LOGIN) ?: false
 }
 
 /**

@@ -24,7 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.view.doOnLayout
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -55,8 +55,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     var waveform: List<Int> = emptyList()
 
     @EpoxyAttribute
-    @JvmField
-    var isLocalFile = false
+    var izLocalFile = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -77,14 +76,14 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         super.bind(holder)
         renderSendState(holder.voiceLayout, null)
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
         } else {
             holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_cross)
             holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_voice_message_unable_to_play)
             holder.progressLayout.isVisible = false
         }
 
-        holder.voicePlaybackWaveform.doOnLayout {
+        holder.voicePlaybackWaveform.doOnPreDraw {
             onWaveformViewReady(holder)
         }
 
@@ -179,6 +178,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentVoiceStub
+        private val STUB_ID = R.id.messageContentVoiceStub
     }
 }

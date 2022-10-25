@@ -151,6 +151,7 @@ class WidgetViewModel @AssistedInject constructor(
             WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
             is WidgetAction.ConnectToBluetoothDevice -> handleConnectToBluetoothDevice(action)
             WidgetAction.HangupElementCall -> handleHangupElementCall()
+            WidgetAction.CloseWidget -> handleCloseWidget()
         }
     }
 
@@ -161,6 +162,10 @@ class WidgetViewModel @AssistedInject constructor(
 
     private fun handleConnectToBluetoothDevice(action: WidgetAction.ConnectToBluetoothDevice) {
         bluetoothLowEnergyServiceConnection.bind(action.device, this)
+    }
+
+    private fun handleCloseWidget() {
+        _viewEvents.post(WidgetViewEvents.Close())
     }
 
     private fun handleRevokeWidget() {

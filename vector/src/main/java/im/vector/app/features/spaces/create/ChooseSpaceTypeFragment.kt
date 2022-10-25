@@ -21,17 +21,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceCreateChooseTypeBinding
-import javax.inject.Inject
+import im.vector.app.features.analytics.plan.MobileScreen
 
-class ChooseSpaceTypeFragment @Inject constructor() : VectorBaseFragment<FragmentSpaceCreateChooseTypeBinding>() {
+@AndroidEntryPoint
+class ChooseSpaceTypeFragment :
+        VectorBaseFragment<FragmentSpaceCreateChooseTypeBinding>() {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceCreateChooseTypeBinding.inflate(layoutInflater, container, false)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.CreateSpace
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

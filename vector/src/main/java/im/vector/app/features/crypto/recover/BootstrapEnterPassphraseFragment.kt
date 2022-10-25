@@ -24,10 +24,11 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -35,12 +36,15 @@ import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class BootstrapEnterPassphraseFragment @Inject constructor() :
+@AndroidEntryPoint
+class BootstrapEnterPassphraseFragment :
         VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
     }
+
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
@@ -104,8 +108,8 @@ class BootstrapEnterPassphraseFragment @Inject constructor() :
                 views.ssssPassphraseSecurityProgress.strength = score
                 if (score in 1..3) {
                     val hint =
-                            strength.feedback?.getWarning(VectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
-                                    ?: strength.feedback?.getSuggestions(VectorLocale.applicationLocale)?.firstOrNull()
+                            strength.feedback?.getWarning(vectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
+                                    ?: strength.feedback?.getSuggestions(vectorLocale.applicationLocale)?.firstOrNull()
                     if (hint != null && hint != views.ssssPassphraseEnterTil.error.toString()) {
                         views.ssssPassphraseEnterTil.error = hint
                     }

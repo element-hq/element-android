@@ -17,10 +17,10 @@
 
 package im.vector.app.features.settings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,8 +34,8 @@ import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -51,6 +51,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
@@ -78,14 +79,18 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
-class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val pinCodeStore: PinCodeStore,
-        private val keysExporter: KeysExporter,
-        private val keysImporter: KeysImporter,
-        private val rawService: RawService,
-        private val navigator: Navigator
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsSecurityPrivacyFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var keysExporter: KeysExporter
+    @Inject lateinit var keysImporter: KeysImporter
+    @Inject lateinit var rawService: RawService
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var analyticsConfig: AnalyticsConfig
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -134,6 +139,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY)!!
     }
 
+    private val showDevicesListV2Pref by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY)!!
+    }
+
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
@@ -149,6 +158,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private val analyticsConsent by lazy {
         findPreference<VectorSwitchPreference>("SETTINGS_USER_ANALYTICS_CONSENT_KEY")!!
+    }
+
+    private val incognitoKeyboardPref by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY)!!
     }
 
     override fun onCreateRecyclerView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): RecyclerView {
@@ -266,6 +279,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // Analytics
         setUpAnalytics()
 
+        // Incognito Keyboard
+        setUpIncognitoKeyboard()
+
         // Pin code
         openPinCodeSettingsPref.setOnPreferenceClickListener {
             openPinCodePreferenceScreen()
@@ -326,6 +342,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
             true
         }
+    }
+
+    private fun setUpIncognitoKeyboard() {
+        incognitoKeyboardPref.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
 
     // Todo this should be refactored and use same state as 4S section
@@ -438,7 +458,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     /**
      * Manage the e2e keys import.
      */
-    @SuppressLint("NewApi")
     private fun importKeys() {
         openFileSelection(
                 requireActivity(),
@@ -542,8 +561,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
      * Build the cryptography preference section.
      */
     private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+        showDeviceListPref.isVisible = !vectorPreferences.isNewSessionManagerEnabled()
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+
+        showDevicesListV2Pref.isVisible = vectorPreferences.isNewSessionManagerEnabled()
+        showDevicesListV2Pref.isEnabled = devices.isNotEmpty()
+        showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId
         val deviceId = session.sessionParams.deviceId
@@ -571,7 +595,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         // crypto section: device key (fingerprint)
-        val deviceInfo = session.cryptoService().getDeviceInfo(userId, deviceId)
+        val deviceInfo = session.cryptoService().getCryptoDeviceInfo(userId, deviceId)
 
         val fingerprint = deviceInfo?.fingerprint()
         if (fingerprint?.isNotEmpty() == true) {

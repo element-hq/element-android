@@ -21,14 +21,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.setOnImeDoneListener
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtuePhoneInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,9 +39,11 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class FtueAuthPhoneEntryFragment @Inject constructor(
-        private val phoneNumberParser: PhoneNumberParser
-) : AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+@AndroidEntryPoint
+class FtueAuthPhoneEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+
+    @Inject lateinit var phoneNumberParser: PhoneNumberParser
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneInputBinding {
         return FragmentFtuePhoneInputBinding.inflate(inflater, container, false)
@@ -75,6 +80,10 @@ class FtueAuthPhoneEntryFragment @Inject constructor(
                 viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
             }
         }
+    }
+
+    override fun updateWithState(state: OnboardingViewState) {
+        views.phoneEntryHeaderSubtitle.text = getString(R.string.ftue_auth_phone_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
     }
 
     override fun onError(throwable: Throwable) {

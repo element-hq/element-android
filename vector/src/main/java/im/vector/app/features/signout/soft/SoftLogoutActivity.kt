@@ -25,7 +25,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -45,7 +44,6 @@ class SoftLogoutActivity : LoginActivity() {
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
 
     @Inject lateinit var session: Session
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun initUiAndData() {
         super.initUiAndData()

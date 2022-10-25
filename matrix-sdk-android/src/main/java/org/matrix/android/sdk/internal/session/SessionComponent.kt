@@ -35,8 +35,6 @@ import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
-import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
@@ -57,6 +55,7 @@ import org.matrix.android.sdk.internal.session.space.SpaceModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
+import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
 import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
@@ -74,10 +73,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SyncModule::class,
             HomeServerCapabilitiesModule::class,
             SignOutModule::class,
-            GroupModule::class,
             UserModule::class,
             FilterModule::class,
-            GroupModule::class,
             ContentModule::class,
             CacheModule::class,
             MediaModule::class,
@@ -124,8 +121,6 @@ internal interface SessionComponent {
 
     fun inject(worker: RedactEventWorker)
 
-    fun inject(worker: GetGroupDataWorker)
-
     fun inject(worker: UploadContentWorker)
 
     fun inject(worker: SyncWorker)
@@ -133,6 +128,8 @@ internal interface SessionComponent {
     fun inject(worker: AddPusherWorker)
 
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: UpdateUserWorker)
 
     fun inject(worker: DeactivateLiveLocationShareWorker)
 

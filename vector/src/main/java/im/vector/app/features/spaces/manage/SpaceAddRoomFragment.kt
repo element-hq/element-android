@@ -32,10 +32,12 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
@@ -46,12 +48,16 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpaceAddRoomFragment @Inject constructor(
-        private val spaceEpoxyController: AddRoomListController,
-        private val roomEpoxyController: AddRoomListController,
-        private val dmEpoxyController: AddRoomListController,
-) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        OnBackPressed, AddRoomListController.Listener {
+@AndroidEntryPoint
+class SpaceAddRoomFragment :
+        VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
+        OnBackPressed,
+        AddRoomListController.Listener,
+        VectorMenuProvider {
+
+    @Inject lateinit var spaceEpoxyController: AddRoomListController
+    @Inject lateinit var roomEpoxyController: AddRoomListController
+    @Inject lateinit var dmEpoxyController: AddRoomListController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)
@@ -151,17 +157,18 @@ class SpaceAddRoomFragment @Inject constructor(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+    override fun handlePrepareMenu(menu: Menu) {
         menu.findItem(R.id.spaceAddRoomSaveItem).isVisible = saveNeeded
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.spaceAddRoomSaveItem) {
-            viewModel.handle(SpaceAddRoomActions.Save)
-            return true
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.spaceAddRoomSaveItem -> {
+                viewModel.handle(SpaceAddRoomActions.Save)
+                true
+            }
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -207,7 +214,7 @@ class SpaceAddRoomFragment @Inject constructor(
             roomEpoxyController.submitList(it)
         }
         listenItemCount(viewModel.roomCountFlow) { roomEpoxyController.totalSize = it }
-        views.roomList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        views.roomList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         views.roomList.setHasFixedSize(true)
     }
 

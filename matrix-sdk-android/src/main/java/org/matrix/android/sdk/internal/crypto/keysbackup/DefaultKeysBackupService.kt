@@ -652,14 +652,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
                 val recoveryKey = computeRecoveryKey(secret.fromBase64())
                 if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
-                    awaitCallback<Unit> {
-                        trustKeysBackupVersion(keysBackupVersion, true, it)
-                    }
                     // we don't want to start immediately downloading all as it can take very long
-
-//                    val importResult = awaitCallback<ImportRoomKeysResult> {
-//                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
-//                    }
                     withContext(coroutineDispatchers.crypto) {
                         cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
                     }
@@ -1349,6 +1342,8 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                                         // Mark keys as backed up
                                         cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
+                                        // we can release the sessions now
+                                        olmInboundGroupSessionWrappers.onEach { it.session.releaseSession() }
 
                                         if (olmInboundGroupSessionWrappers.size < KEY_BACKUP_SEND_KEYS_MAX_COUNT) {
                                             Timber.v("backupKeys: All keys have been backed up")

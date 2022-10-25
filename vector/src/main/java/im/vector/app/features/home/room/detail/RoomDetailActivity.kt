@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
+import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
@@ -45,6 +46,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -98,12 +100,7 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val timelineArgs: TimelineArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-            TimelineArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
-        } else {
-            intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-        }
-        if (timelineArgs == null) return
+        val timelineArgs: TimelineArgs = intent?.extras?.getParcelableCompat(EXTRA_ROOM_DETAIL_ARGS) ?: return
         intent.putExtra(Mavericks.KEY_ARG, timelineArgs)
         currentRoomId = timelineArgs.roomId
 
@@ -181,27 +178,22 @@ class RoomDetailActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
 
     companion object {
-
         const val EXTRA_ROOM_DETAIL_ARGS = "EXTRA_ROOM_DETAIL_ARGS"
-        const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
-        const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, timelineArgs: TimelineArgs): Intent {
-            return Intent(context, RoomDetailActivity::class.java).apply {
+        fun newIntent(context: Context, timelineArgs: TimelineArgs, firstStartMainActivity: Boolean): Intent {
+            val intent = Intent(context, RoomDetailActivity::class.java).apply {
                 putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
             }
-        }
-
-        // Shortcuts can't have intents with parcelables
-        fun shortcutIntent(context: Context, roomId: String): Intent {
-            return Intent(context, RoomDetailActivity::class.java).apply {
-                action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
-                putExtra(EXTRA_ROOM_ID, roomId)
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
             }
         }
     }

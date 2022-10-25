@@ -24,12 +24,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -42,6 +44,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.live.LiveLocationLabsFlagPromotionBottomSheet
 import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
+import im.vector.app.features.location.live.tracking.LocationSharingAndroidService
 import im.vector.app.features.location.option.LocationSharingOption
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -51,14 +54,16 @@ import javax.inject.Inject
 /**
  * We should consider using SupportMapFragment for a out of the box lifecycle handling.
  */
-class LocationSharingFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorPreferences: VectorPreferences,
-) : VectorBaseFragment<FragmentLocationSharingBinding>(),
+@AndroidEntryPoint
+class LocationSharingFragment :
+        VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
         VectorBaseBottomSheetDialogFragment.ResultListener {
+
+    @Inject lateinit var urlMapProvider: UrlMapProvider
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -68,6 +73,7 @@ class LocationSharingFragment @Inject constructor(
     private var mapView: WeakReference<MapView>? = null
 
     private var hasRenderedUserAvatar = false
+    private var mapLoadingErrorListener: MapView.OnDidFailLoadingMapListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -86,6 +92,9 @@ class LocationSharingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         mapView = WeakReference(views.mapView)
+        mapLoadingErrorListener = MapView.OnDidFailLoadingMapListener {
+            viewModel.handle(LocationSharingAction.ShowMapLoadingError)
+        }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
@@ -104,8 +113,17 @@ class LocationSharingFragment @Inject constructor(
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
                 is LocationSharingViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
+                LocationSharingViewEvents.ChooseLiveLocationDuration -> handleChooseLiveLocationDuration()
+                LocationSharingViewEvents.ShowLabsFlagPromotion -> handleShowLabsFlagPromotion()
+                LocationSharingViewEvents.LiveLocationSharingNotEnoughPermission -> handleLiveLocationSharingNotEnoughPermission()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        mapLoadingErrorListener?.let { mapView?.get()?.removeOnDidFailLoadingMapListener(it) }
+        mapLoadingErrorListener = null
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -168,6 +186,14 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
+    private fun handleLiveLocationSharingNotEnoughPermission() {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.live_location_not_enough_permission_dialog_title)
+                .setMessage(R.string.live_location_not_enough_permission_dialog_description)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
     private fun initLocateButton() {
         views.mapView.locateButton.setOnClickListener {
             viewModel.handle(LocationSharingAction.ZoomToUserLocation)
@@ -179,10 +205,10 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
-        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
+        val args = LocationSharingAndroidService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
 
-        Intent(requireContext(), LocationSharingService::class.java)
-                .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
+        Intent(requireContext(), LocationSharingAndroidService::class.java)
+                .putExtra(LocationSharingAndroidService.EXTRA_ROOM_ARGS, args)
                 .also {
                     ContextCompat.startForegroundService(requireContext(), it)
                 }
@@ -201,7 +227,7 @@ class LocationSharingFragment @Inject constructor(
             viewModel.handle(LocationSharingAction.CurrentUserLocationSharing)
         }
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
-            tryStartLiveLocationSharing()
+            viewModel.handle(LocationSharingAction.LiveLocationSharingRequested)
         }
     }
 
@@ -212,13 +238,13 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    private fun tryStartLiveLocationSharing() {
-        if (vectorPreferences.labsEnableLiveLocation()) {
-            startLiveLocationSharing()
-        } else {
-            LiveLocationLabsFlagPromotionBottomSheet.newInstance()
-                    .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
-        }
+    private fun handleChooseLiveLocationDuration() {
+        startLiveLocationSharing()
+    }
+
+    private fun handleShowLabsFlagPromotion() {
+        LiveLocationLabsFlagPromotionBottomSheet.newInstance()
+                .show(requireActivity().supportFragmentManager, "DISPLAY_LIVE_LOCATION_LABS_FLAG_PROMOTION")
     }
 
     private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
@@ -244,20 +270,27 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun updateMap(state: LocationSharingViewState) {
-        // first, update the options view
-        val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true -> setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
-            false -> setOf(LocationSharingOption.PINNED)
-            else -> emptySet()
-        }
-        views.shareLocationOptionsPicker.render(options)
+        if (state.loadingMapHasFailed) {
+            views.shareLocationOptionsPicker.render(emptySet())
+            views.shareLocationMapLoadingError.isVisible = true
+        } else {
+            // first, update the options view
+            val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
+                true -> setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
+                false -> setOf(LocationSharingOption.PINNED)
+                else -> emptySet()
+            }
+            views.shareLocationOptionsPicker.render(options)
 
-        // then, update the map using the height of the options view after it has been rendered
-        views.shareLocationOptionsPicker.post {
-            val mapState = state
-                    .toMapState()
-                    .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
-            views.mapView.render(mapState)
+            // then, update the map using the height of the options view after it has been rendered
+            views.shareLocationOptionsPicker.post {
+                val mapState = state
+                        .toMapState()
+                        .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
+                views.mapView.render(mapState)
+            }
+
+            views.shareLocationMapLoadingError.isGone = true
         }
     }
 

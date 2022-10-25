@@ -61,27 +61,29 @@ object PermalinkParser {
         val params = safeFragment
                 .split(MatrixPatterns.SEP_REGEX)
                 .filter { it.isNotEmpty() }
-                .map { URLDecoder.decode(it, "UTF-8") }
                 .take(2)
 
+        val decodedParams = params
+                .map { URLDecoder.decode(it, "UTF-8") }
+
         val identifier = params.getOrNull(0)
-        val extraParameter = params.getOrNull(1)
+        val decodedIdentifier = decodedParams.getOrNull(0)
+        val extraParameter = decodedParams.getOrNull(1)
         return when {
-            identifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
-            MatrixPatterns.isUserId(identifier) -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier) -> {
-                handleRoomIdCase(fragment, identifier, matrixToUri, extraParameter, viaQueryParameters)
+            identifier.isNullOrEmpty() || decodedIdentifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isUserId(decodedIdentifier) -> PermalinkData.UserLink(userId = decodedIdentifier)
+            MatrixPatterns.isRoomId(decodedIdentifier) -> {
+                handleRoomIdCase(fragment, decodedIdentifier, matrixToUri, extraParameter, viaQueryParameters)
             }
-            MatrixPatterns.isRoomAlias(identifier) -> {
+            MatrixPatterns.isRoomAlias(decodedIdentifier) -> {
                 PermalinkData.RoomLink(
-                        roomIdOrAlias = identifier,
+                        roomIdOrAlias = decodedIdentifier,
                         isRoomAlias = true,
                         eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
                         viaParameters = viaQueryParameters
                 )
             }
-            else -> PermalinkData.FallbackLink(uri)
+            else -> PermalinkData.FallbackLink(uri, MatrixPatterns.isGroupId(identifier))
         }
     }
 

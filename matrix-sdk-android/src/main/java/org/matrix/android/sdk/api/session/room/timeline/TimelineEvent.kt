@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isLiveLocation
 import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.events.model.isSticker
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -165,6 +167,10 @@ fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
 }
 
+fun TimelineEvent.isLiveLocation(): Boolean {
+    return root.isLiveLocation()
+}
+
 /**
  * Returns whether or not the event is a root thread event.
  */
@@ -175,8 +181,13 @@ fun TimelineEvent.isRootThread(): Boolean {
 /**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
  */
-fun TimelineEvent.getTextEditableContent(): String {
-    val lastContentBody = getLastMessageContent()?.body ?: return ""
+fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
+    val lastMessageContent = getLastMessageContent()
+    val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
+        lastMessageContent.formattedBody
+    } else {
+        lastMessageContent?.body
+    } ?: return ""
     return if (isReply()) {
         extractUsefulTextFromReply(lastContentBody)
     } else {

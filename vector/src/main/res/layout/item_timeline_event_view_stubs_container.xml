@@ -48,6 +48,20 @@
         tools:visibility="gone" />
 
     <ViewStub
+        android:id="@+id/messageVoiceBroadcastRecordingStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_timeline_event_voice_broadcast_recording_stub"
+        tools:visibility="gone" />
+
+    <ViewStub
+        android:id="@+id/messageVoiceBroadcastListeningStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_timeline_event_voice_broadcast_listening_stub"
+        tools:visibility="gone" />
+
+    <ViewStub
         android:id="@+id/messageContentPollStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

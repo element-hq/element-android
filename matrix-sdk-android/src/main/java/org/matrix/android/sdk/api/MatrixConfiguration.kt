@@ -70,4 +70,8 @@ data class MatrixConfiguration(
          * List of network interceptors, they will be added when building an OkHttp client.
          */
         val networkInterceptors: List<Interceptor> = emptyList(),
+        /**
+         * Sync configuration.
+         */
+        val syncConfig: SyncConfig = SyncConfig(),
 )

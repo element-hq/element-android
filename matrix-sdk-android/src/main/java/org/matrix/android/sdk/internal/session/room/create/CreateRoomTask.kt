@@ -54,19 +54,13 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val otherUserId = if (params.isDirect()) {
-            params.getFirstInvitedUserId()
-                    ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
-        } else null
-
         if (params.preset == CreateRoomPreset.PRESET_PUBLIC_CHAT) {
             try {
                 aliasAvailabilityChecker.check(params.roomAliasName)
@@ -76,7 +70,6 @@ internal class DefaultCreateRoomTask @Inject constructor(
         }
 
         val createRoomBody = createRoomBodyBuilder.build(params)
-
         val createRoomResponse = try {
             executeRequest(globalErrorReceiver) {
                 roomAPI.createRoom(createRoomBody)
@@ -95,6 +88,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             }
             throw throwable
         }
+
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {
@@ -111,14 +105,13 @@ internal class DefaultCreateRoomTask @Inject constructor(
             RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = clock.epochMillis()
         }
 
-        if (otherUserId != null) {
-            handleDirectChatCreation(roomId, otherUserId)
-        }
+        handleDirectChatCreation(roomId, createRoomBody.getDirectUserId())
         setReadMarkers(roomId)
         return roomId
     }
 
-    private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String) {
+    private suspend fun handleDirectChatCreation(roomId: String, otherUserId: String?) {
+        otherUserId ?: return // This is not a direct room
         monarchy.awaitTransaction { realm ->
             RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                 this.directUserId = otherUserId
@@ -132,22 +125,5 @@ internal class DefaultCreateRoomTask @Inject constructor(
     private suspend fun setReadMarkers(roomId: String) {
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, forceReadReceipt = true, forceReadMarker = true)
         return readMarkersTask.execute(setReadMarkerParams)
-    }
-
-    /**
-     * Tells if the created room can be a direct chat one.
-     *
-     * @return true if it is a direct chat
-     */
-    private fun CreateRoomParams.isDirect(): Boolean {
-        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT &&
-                isDirect == true
-    }
-
-    /**
-     * @return the first invited user id
-     */
-    private fun CreateRoomParams.getFirstInvitedUserId(): String? {
-        return invitedUserIds.firstOrNull() ?: invite3pids.firstOrNull()?.value
     }
 }

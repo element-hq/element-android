@@ -23,6 +23,7 @@ import android.net.Uri
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
@@ -30,6 +31,7 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.login.qr.QrCodeLoginArgs
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -68,19 +70,23 @@ interface Navigator {
         data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
     }
 
-    fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)
+    fun switchToSpace(
+            context: Context,
+            spaceId: String,
+            postSwitchSpaceAction: PostSwitchSpaceAction,
+    )
 
     fun openSpacePreview(context: Context, spaceId: String)
 
-    fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
+    fun performDeviceVerification(fragmentActivity: FragmentActivity, otherUserId: String, sasTransactionId: String)
 
-    fun requestSessionVerification(context: Context, otherSessionId: String)
+    fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String)
 
-    fun requestSelfSessionVerification(context: Context)
+    fun requestSelfSessionVerification(fragmentActivity: FragmentActivity)
 
-    fun waitSessionVerification(context: Context)
+    fun waitSessionVerification(fragmentActivity: FragmentActivity)
 
-    fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean)
+    fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean)
 
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
@@ -88,13 +94,13 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
-    fun openMatrixToBottomSheet(context: Context, link: String, origin: OriginOfMatrixTo)
+    fun openMatrixToBottomSheet(fragmentActivity: FragmentActivity, link: String, origin: OriginOfMatrixTo)
 
     fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 
     fun openCreateDirectRoom(context: Context)
 
-    fun openInviteUsersToRoom(context: Context, roomId: String)
+    fun openInviteUsersToRoom(fragmentActivity: FragmentActivity, roomId: String)
 
     fun openRoomDirectory(context: Context, initialFilter: String = "")
 
@@ -106,13 +112,13 @@ interface Navigator {
 
     fun openDebug(context: Context)
 
-    fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
+    fun openKeysBackupSetup(fragmentActivity: FragmentActivity, showManualExport: Boolean)
 
-    fun open4SSetup(context: Context, setupMode: SetupMode)
+    fun open4SSetup(fragmentActivity: FragmentActivity, setupMode: SetupMode)
 
     fun openKeysBackupManager(context: Context)
 
-    fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
+    fun showGroupsUnsupportedWarning(context: Context)
 
     fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
@@ -186,7 +192,7 @@ interface Navigator {
             locationOwnerId: String?
     )
 
-    fun openLocationLiveMap(context: Context, roomId: String)
+    fun openLiveLocationMap(context: Context, roomId: String)
 
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
@@ -195,5 +201,10 @@ interface Navigator {
     fun openScreenSharingPermissionDialog(
             screenCaptureIntent: Intent,
             activityResultLauncher: ActivityResultLauncher<Intent>
+    )
+
+    fun openLoginWithQrCode(
+            context: Context,
+            qrCodeLoginArgs: QrCodeLoginArgs,
     )
 }

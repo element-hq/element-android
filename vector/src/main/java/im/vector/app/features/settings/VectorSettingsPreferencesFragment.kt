@@ -16,34 +16,37 @@
 
 package im.vector.app.features.settings
 
-import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.widget.CheckedTextView
-import androidx.core.view.children
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.databinding.DialogSelectTextSizeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.configuration.VectorConfiguration
+import im.vector.app.features.settings.font.FontScaleSettingActivity
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
 
-class VectorSettingsPreferencesFragment @Inject constructor(
-        private val vectorConfiguration: VectorConfiguration,
-        private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsPreferencesFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var vectorLocale: VectorLocale
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
@@ -97,6 +100,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
                 true
             }
+        }
+
+        findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
         }
 
         // Url preview
@@ -191,41 +199,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
     private fun setUserInterfacePreferences() {
         // Selected language
-        selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
+        selectedLanguagePreference.summary = vectorLocale.localeToLocalisedString(vectorLocale.applicationLocale)
 
         // Text size
-        textSizePreference.summary = getString(FontScale.getFontScaleValue(requireActivity()).nameResId)
+        textSizePreference.summary = getString(fontScalePreferences.getResolvedFontScaleValue().nameResId)
 
         textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let { displayTextSizeSelection(it) }
+            startActivity(Intent(activity, FontScaleSettingActivity::class.java))
             true
         }
-    }
-
-    private fun displayTextSizeSelection(activity: Activity) {
-        val layout = layoutInflater.inflate(R.layout.dialog_select_text_size, null)
-        val views = DialogSelectTextSizeBinding.bind(layout)
-
-        val dialog = MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.font_size)
-                .setView(layout)
-                .setPositiveButton(R.string.ok, null)
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
-
-        val index = FontScale.getFontScaleValue(activity).index
-
-        views.textSelectionGroupView.children
-                .filterIsInstance(CheckedTextView::class.java)
-                .forEachIndexed { i, v ->
-                    v.isChecked = i == index
-
-                    v.debouncedClicks {
-                        dialog.dismiss()
-                        FontScale.updateFontScale(activity, i)
-                        vectorConfiguration.applyToApplicationContext()
-                        activity.restart()
-                    }
-                }
     }
 }

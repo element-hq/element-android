@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -602,22 +603,28 @@ internal class MXOlmDevice @Inject constructor(
      * @param keysClaimed Other keys the sender claims.
      * @param exportFormat true if the megolm keys are in export format
      * @param sharedHistory MSC3061, this key is sharable on invite
+     * @param trusted True if the key is coming from a trusted source
      * @return true if the operation succeeds.
      */
-    fun addInboundGroupSession(sessionId: String,
-                               sessionKey: String,
-                               roomId: String,
-                               senderKey: String,
-                               forwardingCurve25519KeyChain: List<String>,
-                               keysClaimed: Map<String, String>,
-                               exportFormat: Boolean,
-                               sharedHistory: Boolean): AddSessionResult {
+    fun addInboundGroupSession(
+            sessionId: String,
+            sessionKey: String,
+            roomId: String,
+            senderKey: String,
+            forwardingCurve25519KeyChain: List<String>,
+            keysClaimed: Map<String, String>,
+            exportFormat: Boolean,
+            sharedHistory: Boolean,
+            trusted: Boolean
+    ): AddSessionResult {
         val candidateSession = tryOrNull("Failed to create inbound session in room $roomId") {
             if (exportFormat) {
                 OlmInboundGroupSession.importSession(sessionKey)
             } else {
                 OlmInboundGroupSession(sessionKey)
             }
+        } ?: return AddSessionResult.NotImported.also {
+            Timber.tag(loggerTag.value).d("## addInboundGroupSession() : failed to import key candidate $senderKey/$sessionId")
         }
 
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
@@ -629,30 +636,48 @@ internal class MXOlmDevice @Inject constructor(
                 val existingFirstKnown = tryOrNull { existingSession.session.firstKnownIndex } ?: return AddSessionResult.NotImported.also {
                     // This is quite unexpected, could throw if native was released?
                     Timber.tag(loggerTag.value).e("## addInboundGroupSession() null firstKnownIndex on existing session")
-                    candidateSession?.releaseSession()
+                    candidateSession.releaseSession()
                     // Probably should discard it?
                 }
-                val newKnownFirstIndex = tryOrNull("Failed to get candidate first known index") { candidateSession?.firstKnownIndex }
-                // If our existing session is better we keep it
-                if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
-                    Timber.tag(loggerTag.value).d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
-                    candidateSession?.releaseSession()
-                    return AddSessionResult.NotImportedHigherIndex(newKnownFirstIndex.toInt())
+                val newKnownFirstIndex = tryOrNull("Failed to get candidate first known index") { candidateSession.firstKnownIndex }
+                        ?: return AddSessionResult.NotImported.also {
+                            candidateSession.releaseSession()
+                            Timber.tag(loggerTag.value).d("## addInboundGroupSession() : Failed to get new session index")
+                        }
+
+                val keyConnects = existingSession.session.connects(candidateSession)
+                if (!keyConnects) {
+                    Timber.tag(loggerTag.value)
+                            .e("## addInboundGroupSession() Unconnected key")
+                    if (!trusted) {
+                        // Ignore the not connecting unsafe, keep existing
+                        Timber.tag(loggerTag.value)
+                                .e("## addInboundGroupSession() Received unsafe unconnected key")
+                        return AddSessionResult.NotImported
+                    }
+                    // else if the new one is safe and does not connect with existing, import the new one
+                } else {
+                    // If our existing session is better we keep it
+                    if (existingFirstKnown <= newKnownFirstIndex) {
+                        val shouldUpdateTrust = trusted && (existingSession.sessionData.trusted != true)
+                        Timber.tag(loggerTag.value).d("## addInboundGroupSession() : updateTrust for $sessionId")
+                        if (shouldUpdateTrust) {
+                            // the existing as a better index but the new one is trusted so update trust
+                            inboundGroupSessionStore.updateToSafe(existingSessionHolder, sessionId, senderKey)
+                        }
+                        Timber.tag(loggerTag.value).d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
+                        candidateSession.releaseSession()
+                        return AddSessionResult.NotImportedHigherIndex(newKnownFirstIndex.toInt())
+                    }
                 }
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
-                candidateSession?.releaseSession()
+                candidateSession.releaseSession()
                 return AddSessionResult.NotImported
             }
         }
 
         Timber.tag(loggerTag.value).d("## addInboundGroupSession() : Candidate session should be added $senderKey/$sessionId")
-
-        // sanity check on the new session
-        if (null == candidateSession) {
-            Timber.tag(loggerTag.value).e("## addInboundGroupSession : invalid session <null>")
-            return AddSessionResult.NotImported
-        }
 
         try {
             if (candidateSession.sessionIdentifier() != sessionId) {
@@ -672,6 +697,7 @@ internal class MXOlmDevice @Inject constructor(
                 keysClaimed = keysClaimed,
                 forwardingCurve25519KeyChain = forwardingCurve25519KeyChain,
                 sharedHistory = sharedHistory,
+                trusted = trusted
         )
 
         val wrapper = MXInboundMegolmSessionWrapper(
@@ -685,6 +711,16 @@ internal class MXOlmDevice @Inject constructor(
         }
 
         return AddSessionResult.Imported(candidateSession.firstKnownIndex.toInt())
+    }
+
+    fun OlmInboundGroupSession.connects(other: OlmInboundGroupSession): Boolean {
+        return try {
+            val lowestCommonIndex = this.firstKnownIndex.coerceAtLeast(other.firstKnownIndex)
+            this.export(lowestCommonIndex) == other.export(lowestCommonIndex)
+        } catch (failure: Throwable) {
+            // native error? key disposed?
+            false
+        }
     }
 
     /**
@@ -701,8 +737,8 @@ internal class MXOlmDevice @Inject constructor(
             val senderKey = megolmSessionData.senderKey ?: continue
             val roomId = megolmSessionData.roomId
 
-            val candidateSessionToImport =  try {
-                 MXInboundMegolmSessionWrapper.newFromMegolmData(megolmSessionData, true)
+            val candidateSessionToImport = try {
+                MXInboundMegolmSessionWrapper.newFromMegolmData(megolmSessionData, true)
             } catch (e: Throwable) {
                 Timber.tag(loggerTag.value).e(e, "## importInboundGroupSession() : Failed to import session $senderKey/$sessionId")
                 continue
@@ -806,7 +842,6 @@ internal class MXOlmDevice @Inject constructor(
             }
             replayAttackMap[messageIndexKey] = eventId
         }
-        inboundGroupSessionStore.storeInBoundGroupSession(sessionHolder, sessionId, senderKey)
         val payload = try {
             val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
             val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
@@ -820,7 +855,8 @@ internal class MXOlmDevice @Inject constructor(
                 payload,
                 wrapper.sessionData.keysClaimed,
                 senderKey,
-                wrapper.sessionData.forwardingCurve25519KeyChain
+                wrapper.sessionData.forwardingCurve25519KeyChain,
+                isSafe = sessionHolder.wrapper.sessionData.trusted.orFalse()
         )
     }
 

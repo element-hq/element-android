@@ -17,14 +17,30 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.MutableLiveData
+import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.util.Optional
 
-class FakeCryptoService : CryptoService by mockk() {
+class FakeCryptoService(
+        val fakeCrossSigningService: FakeCrossSigningService = FakeCrossSigningService(),
+        val fakeVerificationService: FakeVerificationService = FakeVerificationService(),
+) : CryptoService by mockk() {
 
     var roomKeysExport = ByteArray(size = 1)
     var cryptoDeviceInfos = mutableMapOf<String, CryptoDeviceInfo>()
+    var cryptoDeviceInfoWithIdLiveData: MutableLiveData<Optional<CryptoDeviceInfo>> = MutableLiveData()
+    var myDevicesInfoWithIdLiveData: MutableLiveData<Optional<DeviceInfo>> = MutableLiveData()
+    var cryptoDeviceInfo = aCryptoDeviceInfo()
+
+    override fun crossSigningService() = fakeCrossSigningService
+
+    override fun verificationService() = fakeVerificationService
 
     override suspend fun exportRoomKeys(password: String) = roomKeysExport
 
@@ -35,4 +51,38 @@ class FakeCryptoService : CryptoService by mockk() {
     override fun getLiveCryptoDeviceInfo(userIds: List<String>) = MutableLiveData(
             cryptoDeviceInfos.filterKeys { userIds.contains(it) }.values.toList()
     )
+
+    override fun getLiveCryptoDeviceInfoWithId(deviceId: String) = cryptoDeviceInfoWithIdLiveData
+
+    override fun getMyDevicesInfoLive(deviceId: String) = myDevicesInfoWithIdLiveData
+
+    fun givenSetDeviceNameSucceeds() {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        }
+    }
+
+    fun givenSetDeviceNameFailsWithError(error: Exception) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onFailure(error)
+        }
+    }
+
+    fun givenDeleteDeviceSucceeds(deviceId: String) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { deleteDevice(deviceId, any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        }
+    }
+
+    fun givenDeleteDeviceFailsWithError(deviceId: String, error: Exception) {
+        val matrixCallback = slot<MatrixCallback<Unit>>()
+        every { deleteDevice(deviceId, any(), capture(matrixCallback)) } answers {
+            thirdArg<MatrixCallback<Unit>>().onFailure(error)
+        }
+    }
+
+    override fun getMyDevice() = cryptoDeviceInfo
 }

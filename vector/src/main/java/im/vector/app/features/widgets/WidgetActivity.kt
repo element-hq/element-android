@@ -18,17 +18,19 @@ package im.vector.app.features.widgets
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
 import androidx.annotation.RequiresApi
+import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -40,6 +42,9 @@ import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
+import im.vector.lib.core.utils.compat.getSerializableCompat
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 
@@ -63,7 +68,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
         @Suppress("UNCHECKED_CAST")
         fun getOutput(intent: Intent): Content? {
-            return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
+            return intent.extras?.getSerializableCompat(EXTRA_RESULT) as? Content
         }
 
         private fun createResultIntent(content: Content): Intent {
@@ -78,12 +83,10 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
-    override fun getMenuRes() = R.menu.menu_widget
-
     override fun getTitleRes() = R.string.room_widget_activity_title
 
     override fun initUiAndData() {
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
         if (widgetArgs == null) {
             finish()
             return
@@ -99,8 +102,9 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         }
 
         // Trust element call widget by default
-        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL) {
+        if (widgetArgs.kind == WidgetKind.ELEMENT_CALL && vectorPreferences.labsEnableElementCallPermissionShortcuts()) {
             if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
+                addOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
                 addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
             }
         } else {
@@ -144,10 +148,15 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
-        if (widgetArgs?.kind == WidgetKind.ELEMENT_CALL) {
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG)
+        if (widgetArgs?.kind?.supportsPictureInPictureMode().orFalse()) {
             enterPictureInPicture()
         }
+    }
+
+    override fun onDestroy() {
+        removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
+        super.onDestroy()
     }
 
     private fun enterPictureInPicture() {
@@ -162,7 +171,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private fun createElementCallPipParams(): PictureInPictureParams? {
         val actions = mutableListOf<RemoteAction>()
         val intent = Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_HANGUP)
-        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE_HANGUP, intent, FLAG_IMMUTABLE)
         val icon = Icon.createWithResource(this, R.drawable.ic_call_hangup)
         actions.add(RemoteAction(icon, getString(R.string.call_notification_hangup), getString(R.string.call_notification_hangup), pendingIntent))
 
@@ -174,8 +183,9 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     }
 
     private var hangupBroadcastReceiver: BroadcastReceiver? = null
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return@Consumer
+
         if (isInPictureInPictureMode) {
             hangupBroadcastReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {

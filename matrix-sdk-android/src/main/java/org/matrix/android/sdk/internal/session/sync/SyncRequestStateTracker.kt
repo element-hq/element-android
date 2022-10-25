@@ -16,23 +16,26 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class SyncRequestStateTracker @Inject constructor() :
-        ProgressReporter {
+internal class SyncRequestStateTracker @Inject constructor(
+        private val coroutineScope: CoroutineScope
+) : ProgressReporter {
 
-    val syncRequestState = MutableLiveData<SyncRequestState>()
+    val syncRequestState = MutableSharedFlow<SyncRequestState>()
 
     private var rootTask: TaskInfo? = null
 
     // Only to be used for incremental sync
     fun setSyncRequestState(newSyncRequestState: SyncRequestState.IncrementalSyncRequestState) {
-        syncRequestState.postValue(newSyncRequestState)
+        emitSyncState(newSyncRequestState)
     }
 
     /**
@@ -42,7 +45,9 @@ internal class SyncRequestStateTracker @Inject constructor() :
             initialSyncStep: InitialSyncStep,
             totalProgress: Int
     ) {
-        endAll()
+        if (rootTask != null) {
+            endAll()
+        }
         rootTask = TaskInfo(initialSyncStep, totalProgress, null, 1F)
         reportProgress(0F)
     }
@@ -71,7 +76,7 @@ internal class SyncRequestStateTracker @Inject constructor() :
                 // Update the progress of the leaf and all its parents
                 leaf.setProgress(progress)
                 // Then update the live data using leaf wording and root progress
-                syncRequestState.postValue(SyncRequestState.InitialSyncProgressing(leaf.initialSyncStep, root.currentProgress.toInt()))
+                emitSyncState(SyncRequestState.InitialSyncProgressing(leaf.initialSyncStep, root.currentProgress.toInt()))
             }
         }
     }
@@ -86,13 +91,19 @@ internal class SyncRequestStateTracker @Inject constructor() :
                 // And close it
                 endedTask.parent.child = null
             } else {
-                syncRequestState.postValue(SyncRequestState.Idle)
+                emitSyncState(SyncRequestState.Idle)
             }
         }
     }
 
     fun endAll() {
         rootTask = null
-        syncRequestState.postValue(SyncRequestState.Idle)
+        emitSyncState(SyncRequestState.Idle)
+    }
+
+    private fun emitSyncState(state: SyncRequestState) {
+        coroutineScope.launch {
+            syncRequestState.emit(state)
+        }
     }
 }
