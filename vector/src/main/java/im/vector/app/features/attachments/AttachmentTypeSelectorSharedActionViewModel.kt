@@ -27,6 +27,4 @@ sealed interface AttachmentTypeSelectorSharedAction : VectorSharedAction {
     data class SelectAttachmentTypeAction(
             val attachmentType: AttachmentType
     ) : AttachmentTypeSelectorSharedAction
-
-    object ToggleTextFormatting : AttachmentTypeSelectorSharedAction
 }
