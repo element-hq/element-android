@@ -92,7 +92,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     /**
      * Map voiceBroadcastId to listeners.
      */
-    private var listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
+    private val listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId
