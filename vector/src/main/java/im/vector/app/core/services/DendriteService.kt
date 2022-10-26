@@ -62,6 +62,7 @@ import androidx.core.app.NotificationCompat
 import gobind.Conduit
 import gobind.DendriteMonolith
 import gobind.Gobind
+import gobind.InterfaceInfo
 import im.vector.app.R
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.settings.VectorPreferences
@@ -106,6 +107,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     private var conduits: MutableMap<String, Conduit> = mutableMapOf<String, Conduit>()
 
     private lateinit var multicastLock: WifiManager.MulticastLock
+    private var networkCallback = NetworkCallback()
 
     private val bleReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -471,18 +473,8 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
         }
 
-        for (iface in NetworkInterface.getNetworkInterfaces()) {
-            val addrs = StringBuilder("")
-            for (ia in iface.interfaceAddresses) {
-                val parts: List<String> = ia.toString().split("/")
-                if (parts.size > 1) {
-                    addrs.append(java.lang.String.format(Locale.ROOT, "%s/%d ", parts[1], ia.networkPrefixLength))
-                }
-            }
+        monolith?.registerNetworkCallback(networkCallback)
 
-            monolith!!.registerNetworkInterface(iface.name, iface.index.toLong(), iface.mtu.toLong(), iface.isUp,
-                    iface.supportsMulticast(), iface.isLoopback, iface.isPointToPoint, iface.supportsMulticast(), addrs.toString())
-        }
         val wifi = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         multicastLock = wifi.createMulticastLock("Element.P2P")
         val enabled = vectorPreferences.p2pEnableMulticast()
@@ -802,5 +794,45 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         buffer.put(bytes.sliceArray(0 until java.lang.Short.BYTES))
         buffer.flip()
         return buffer.short
+    }
+}
+
+class NetworkCallback : gobind.InterfaceRetriever {
+    private var interfaceCache: MutableList<gobind.InterfaceInfo> = mutableListOf<gobind.InterfaceInfo>()
+
+    override public fun cacheCurrentInterfaces(): Long {
+        interfaceCache.clear()
+
+        for (iface in NetworkInterface.getNetworkInterfaces()) {
+            val addrs = StringBuilder("")
+            for (ia in iface.interfaceAddresses) {
+                val parts: List<String> = ia.toString().split("/")
+                if (parts.size > 1) {
+                    addrs.append(java.lang.String.format(Locale.ROOT, "%s/%d ", parts[1], ia.networkPrefixLength))
+                }
+            }
+
+            var ifaceInfo = gobind.InterfaceInfo()
+            ifaceInfo.setName(iface.name)
+            ifaceInfo.setIndex(iface.index.toLong())
+            ifaceInfo.setMtu(iface.mtu.toLong())
+            ifaceInfo.setUp(iface.isUp)
+            ifaceInfo.setBroadcast(iface.supportsMulticast())
+            ifaceInfo.setLoopback(iface.isLoopback)
+            ifaceInfo.setPointToPoint(iface.isPointToPoint)
+            ifaceInfo.setMulticast(iface.supportsMulticast())
+            ifaceInfo.setAddrs(addrs.toString())
+
+            interfaceCache.add(ifaceInfo)
+        }
+        return interfaceCache.size.toLong()
+    }
+
+    override public fun getCachedInterface(index: Long): InterfaceInfo? {
+        if (index >= interfaceCache.size) {
+            return null
+        }
+
+        return interfaceCache[index.toInt()]
     }
 }
