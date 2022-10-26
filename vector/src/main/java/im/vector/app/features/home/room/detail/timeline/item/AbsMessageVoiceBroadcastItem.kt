@@ -25,9 +25,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.tintBackground
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
-import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
-import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Holder> : AbsMessageItem<H>() {

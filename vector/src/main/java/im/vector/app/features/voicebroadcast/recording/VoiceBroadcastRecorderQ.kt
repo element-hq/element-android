@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voicebroadcast
+package im.vector.app.features.voicebroadcast.recording
 
 import android.content.Context
 import android.media.MediaRecorder

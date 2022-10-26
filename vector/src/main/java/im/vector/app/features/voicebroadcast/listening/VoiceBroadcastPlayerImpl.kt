@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voicebroadcast
+package im.vector.app.features.voicebroadcast.listening
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -22,8 +22,14 @@ import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
+import im.vector.app.features.voicebroadcast.getVoiceBroadcastChunk
+import im.vector.app.features.voicebroadcast.getVoiceBroadcastEventId
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Listener
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.State
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.sequence
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,14 +49,13 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
-class VoiceBroadcastPlayer @Inject constructor(
+class VoiceBroadcastPlayerImpl @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
         private val getVoiceBroadcastUseCase: GetVoiceBroadcastUseCase,
-) {
+) : VoiceBroadcastPlayer {
     private val session
         get() = sessionHolder.getActiveSession()
 
@@ -75,9 +80,9 @@ class VoiceBroadcastPlayer @Inject constructor(
     private var currentSequence: Int? = null
 
     private var playlist = emptyList<MessageAudioEvent>()
-    var currentVoiceBroadcastId: String? = null
+    override var currentVoiceBroadcastId: String? = null
 
-    private var state: State = State.IDLE
+    override var playingState = State.IDLE
         @MainThread
         set(value) {
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
@@ -94,22 +99,22 @@ class VoiceBroadcastPlayer @Inject constructor(
      */
     private val listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
-    fun playOrResume(roomId: String, eventId: String) {
-        val hasChanged = currentVoiceBroadcastId != eventId
+    override fun playOrResume(roomId: String, voiceBroadcastId: String) {
+        val hasChanged = currentVoiceBroadcastId != voiceBroadcastId
         when {
-            hasChanged -> startPlayback(roomId, eventId)
-            state == State.PAUSED -> resumePlayback()
+            hasChanged -> startPlayback(roomId, voiceBroadcastId)
+            playingState == State.PAUSED -> resumePlayback()
             else -> Unit
         }
     }
 
-    fun pause() {
+    override fun pause() {
         currentMediaPlayer?.pause()
         currentVoiceBroadcastId?.let { playbackTracker.pausePlayback(it) }
-        state = State.PAUSED
+        playingState = State.PAUSED
     }
 
-    fun stop() {
+    override fun stop() {
         // Stop playback
         currentMediaPlayer?.stop()
         currentVoiceBroadcastId?.let { playbackTracker.stopPlayback(it) }
@@ -131,7 +136,7 @@ class VoiceBroadcastPlayer @Inject constructor(
         timelineListener = null
 
         // Update state
-        state = State.IDLE
+        playingState = State.IDLE
 
         // Clear playlist
         playlist = emptyList()
@@ -143,29 +148,29 @@ class VoiceBroadcastPlayer @Inject constructor(
     /**
      * Add a [Listener] to the given voice broadcast id.
      */
-    fun addListener(voiceBroadcastId: String, listener: Listener) {
+    override fun addListener(voiceBroadcastId: String, listener: Listener) {
         listeners[voiceBroadcastId]?.add(listener) ?: run {
             listeners[voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
-        if (voiceBroadcastId == currentVoiceBroadcastId) listener.onStateChanged(state) else listener.onStateChanged(State.IDLE)
+        if (voiceBroadcastId == currentVoiceBroadcastId) listener.onStateChanged(playingState) else listener.onStateChanged(State.IDLE)
     }
 
     /**
      * Remove a [Listener] from the given voice broadcast id.
      */
-    fun removeListener(voiceBroadcastId: String, listener: Listener) {
+    override fun removeListener(voiceBroadcastId: String, listener: Listener) {
         listeners[voiceBroadcastId]?.remove(listener)
     }
 
     private fun startPlayback(roomId: String, eventId: String) {
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
         // Stop listening previous voice broadcast if any
-        if (state != State.IDLE) stop()
+        if (playingState != State.IDLE) stop()
 
         currentRoomId = roomId
         currentVoiceBroadcastId = eventId
 
-        state = State.BUFFERING
+        playingState = State.BUFFERING
 
         val voiceBroadcastState = getVoiceBroadcastUseCase.execute(roomId, eventId)?.content?.voiceBroadcastState
         if (voiceBroadcastState == VoiceBroadcastState.STOPPED) {
@@ -187,7 +192,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 currentMediaPlayer?.start()
                 currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
                 currentSequence = sequence
-                withContext(Dispatchers.Main) { state = State.PLAYING }
+                withContext(Dispatchers.Main) { playingState = State.PLAYING }
                 nextMediaPlayer = prepareNextMediaPlayer()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Unable to start playback")
@@ -219,7 +224,7 @@ class VoiceBroadcastPlayer @Inject constructor(
     private fun resumePlayback() {
         currentMediaPlayer?.start()
         currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
-        state = State.PLAYING
+        playingState = State.PLAYING
     }
 
     private fun updatePlaylist(playlist: List<MessageAudioEvent>) {
@@ -285,7 +290,7 @@ class VoiceBroadcastPlayer @Inject constructor(
             if (newChunks.isEmpty()) return
             updatePlaylist(playlist + newChunks)
 
-            when (state) {
+            when (playingState) {
                 State.PLAYING -> {
                     if (nextMediaPlayer == null) {
                         coroutineScope.launch { nextMediaPlayer = prepareNextMediaPlayer() }
@@ -330,7 +335,7 @@ class VoiceBroadcastPlayer @Inject constructor(
                 // We'll not receive new chunks anymore so we can stop the live listening
                 stop()
             } else {
-                state = State.BUFFERING
+                playingState = State.BUFFERING
             }
         }
 
@@ -338,16 +343,5 @@ class VoiceBroadcastPlayer @Inject constructor(
             stop()
             return true
         }
-    }
-
-    enum class State {
-        PLAYING,
-        PAUSED,
-        BUFFERING,
-        IDLE
-    }
-
-    fun interface Listener {
-        fun onStateChanged(state: State)
     }
 }

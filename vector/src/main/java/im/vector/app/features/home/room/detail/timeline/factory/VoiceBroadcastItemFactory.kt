@@ -26,11 +26,11 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadca
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
-import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
-import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault

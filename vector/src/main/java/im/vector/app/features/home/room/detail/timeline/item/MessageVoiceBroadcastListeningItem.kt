@@ -23,7 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction
-import im.vector.app.features.voicebroadcast.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
