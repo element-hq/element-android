@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ========================
+        /!\ Constraints for this layout are defined in external layout files that are used as constraint set for animation.
+        /!\ These 2 files must be modified to stay coherent!
+    ======================== -->
+
     <View android:id="@+id/scrim"
         android:layout_width="0dp"
         android:layout_height="0dp"
