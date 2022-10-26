@@ -59,13 +59,13 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             when (state) {
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
-                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
+                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                     playPauseButton.onClick { callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.Pause) }
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
-                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
+                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
                     playPauseButton.onClick {
                         callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId))
                     }
