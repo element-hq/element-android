@@ -17,21 +17,19 @@
 package im.vector.app.features.settings.devices.v2.signout
 
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import javax.inject.Inject
 
 class BuildConfirmSignoutDialogUseCase @Inject constructor() {
 
-    fun execute(context: Context, onConfirm: () -> Unit): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.action_sign_out)
-                .setMessage(R.string.action_sign_out_confirmation_simple)
-                .setPositiveButton(R.string.action_sign_out) { _, _ ->
-                    onConfirm()
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .create()
-    }
+    fun execute(context: Context, onConfirm: () -> Unit) =
+            MaterialAlertDialogBuilder(context)
+                    .setTitle(R.string.action_sign_out)
+                    .setMessage(R.string.action_sign_out_confirmation_simple)
+                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
+                        onConfirm()
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .create()
 }
