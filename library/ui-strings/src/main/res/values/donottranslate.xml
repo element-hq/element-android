@@ -2,6 +2,7 @@
 <resources>
 
     <string name="ellipsis" translatable="false">…</string>
+    <string name="no_value_placeholder" translatable="false">–</string>
 
     <!-- Temporary string -->
     <string name="not_implemented" translatable="false">Not implemented yet in ${app_name}</string>

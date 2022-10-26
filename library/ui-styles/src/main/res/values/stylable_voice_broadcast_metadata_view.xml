@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="VoiceBroadcastMetadataView">
+        <attr name="metadataIcon" format="reference" />
+        <attr name="metadataValue" format="string" />
+    </declare-styleable>
+
+</resources>

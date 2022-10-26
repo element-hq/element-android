@@ -82,10 +82,17 @@ class VoiceBroadcastPlayer @Inject constructor(
         set(value) {
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
-            listeners.forEach { it.onStateChanged(value) }
+            // Notify state change to all the listeners attached to the current voice broadcast id
+            currentVoiceBroadcastId?.let { voiceBroadcastId ->
+                listeners[voiceBroadcastId]?.forEach { listener -> listener.onStateChanged(value) }
+            }
         }
     private var currentRoomId: String? = null
-    private var listeners = CopyOnWriteArrayList<Listener>()
+
+    /**
+     * Map voiceBroadcastId to listeners.
+     */
+    private val listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
     fun playOrResume(roomId: String, eventId: String) {
         val hasChanged = currentVoiceBroadcastId != eventId
@@ -133,13 +140,21 @@ class VoiceBroadcastPlayer @Inject constructor(
         currentVoiceBroadcastId = null
     }
 
-    fun addListener(listener: Listener) {
-        listeners.add(listener)
-        listener.onStateChanged(state)
+    /**
+     * Add a [Listener] to the given voice broadcast id.
+     */
+    fun addListener(voiceBroadcastId: String, listener: Listener) {
+        listeners[voiceBroadcastId]?.add(listener) ?: run {
+            listeners[voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
+        }
+        if (voiceBroadcastId == currentVoiceBroadcastId) listener.onStateChanged(state) else listener.onStateChanged(State.IDLE)
     }
 
-    fun removeListener(listener: Listener) {
-        listeners.remove(listener)
+    /**
+     * Remove a [Listener] from the given voice broadcast id.
+     */
+    fun removeListener(voiceBroadcastId: String, listener: Listener) {
+        listeners[voiceBroadcastId]?.remove(listener)
     }
 
     private fun startPlayback(roomId: String, eventId: String) {
