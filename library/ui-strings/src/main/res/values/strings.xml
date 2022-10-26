@@ -3205,6 +3205,16 @@
     <string name="tooltip_attachment_location">Share location</string>
     <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
+    <string name="attachment_type_selector_gallery">Photo library</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_file">Attachments</string>
+    <string name="attachment_type_selector_voice_broadcast">Voice broadcast</string>
+    <string name="attachment_type_selector_poll">Polls</string>
+    <string name="attachment_type_selector_location">Location</string>
+    <string name="attachment_type_selector_camera">Camera</string>
+    <string name="attachment_type_selector_contact">Contact</string>
+    <string name="attachment_type_selector_text_formatting">Text formatting</string>
+
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
         <item quantity="one">"%1$d more"</item>
