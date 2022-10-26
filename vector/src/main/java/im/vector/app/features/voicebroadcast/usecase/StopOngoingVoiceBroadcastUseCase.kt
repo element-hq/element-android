@@ -31,6 +31,7 @@ import javax.inject.Inject
  */
 class StopOngoingVoiceBroadcastUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
+        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
         private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) {
 
@@ -51,7 +52,7 @@ class StopOngoingVoiceBroadcastUseCase @Inject constructor(
 
         recentRooms
                 .forEach { room ->
-                    val ongoingVoiceBroadcasts = voiceBroadcastHelper.getOngoingVoiceBroadcasts(room.roomId)
+                    val ongoingVoiceBroadcasts = getOngoingVoiceBroadcastsUseCase.execute(room.roomId)
                     val myOngoingVoiceBroadcastId = ongoingVoiceBroadcasts.find { it.root.stateKey == session.myUserId }?.reference?.eventId
                     val initialEvent = myOngoingVoiceBroadcastId?.let { room.timelineService().getTimelineEvent(it)?.root?.asVoiceBroadcastEvent() }
                     if (myOngoingVoiceBroadcastId != null && initialEvent?.content?.deviceId == session.sessionParams.deviceId) {
