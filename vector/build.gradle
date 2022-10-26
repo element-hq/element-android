@@ -246,10 +246,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
-
+    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12039821@aar')
     // Jitsi
-    api('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
+    // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
+    api('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
