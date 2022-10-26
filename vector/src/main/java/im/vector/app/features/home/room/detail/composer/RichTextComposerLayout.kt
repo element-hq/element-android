@@ -21,7 +21,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -33,13 +32,8 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.transition.ChangeBounds
-import androidx.transition.Fade
-import androidx.transition.Transition
-import androidx.transition.TransitionManager
-import androidx.transition.TransitionSet
 import im.vector.app.R
-import im.vector.app.core.animations.SimpleTransitionListener
+import im.vector.app.core.extensions.animateLayoutChange
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
@@ -56,11 +50,12 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private val views: ComposerRichTextLayoutBinding
 
-    override var callback: PlainTextComposerLayout.Callback? = null
+    override var callback: Callback? = null
 
     private var currentConstraintSetId: Int = -1
-
     private val animationDuration = 100L
+
+    private var isFullScreen = false
 
     override val text: Editable?
         get() = views.composerEditText.text
@@ -74,6 +69,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
         get() = views.sendButton
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
+    override val fullScreenButton: ImageButton?
+        get() = views.composerFullScreenButton
     override val composerRelatedMessageActionIcon: ImageView
         get() = views.composerRelatedMessageActionIcon
     override val composerRelatedMessageAvatar: ImageView
@@ -122,6 +119,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
         views.attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
+        }
+
+        views.composerFullScreenButton.setOnClickListener {
+            callback?.onFullScreenModeChanged()
         }
 
         setupRichTextMenu()
@@ -205,32 +206,28 @@ class RichTextComposerLayout @JvmOverloads constructor(
         return views.composerEditText.setTextIfDifferent(text)
     }
 
+    override fun toggleFullScreen(newValue: Boolean) {
+        val constraintSetId = if (newValue) R.layout.composer_rich_text_layout_constraint_set_fullscreen else currentConstraintSetId
+        ConstraintSet().also {
+            it.clone(context, constraintSetId)
+            it.applyTo(this)
+        }
+
+        updateTextFieldBorder(newValue)
+    }
+
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
         // val wasSendButtonInvisible = views.sendButton.isInvisible
         if (animate) {
-            configureAndBeginTransition(transitionComplete)
+            animateLayoutChange(animationDuration, transitionComplete)
         }
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
             it.applyTo(this)
         }
+
         // Might be updated by view state just after, but avoid blinks
         // views.sendButton.isInvisible = wasSendButtonInvisible
-    }
-
-    private fun configureAndBeginTransition(transitionComplete: (() -> Unit)? = null) {
-        val transition = TransitionSet().apply {
-            ordering = TransitionSet.ORDERING_SEQUENTIAL
-            addTransition(ChangeBounds())
-            addTransition(Fade(Fade.IN))
-            duration = animationDuration
-            addListener(object : SimpleTransitionListener() {
-                override fun onTransitionEnd(transition: Transition) {
-                    transitionComplete?.invoke()
-                }
-            })
-        }
-        TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
     override fun setInvisible(isInvisible: Boolean) {

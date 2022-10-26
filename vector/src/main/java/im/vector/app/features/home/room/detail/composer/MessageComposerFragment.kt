@@ -92,6 +92,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.voice.VoiceFailure
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -219,6 +220,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
         }
 
+        messageComposerViewModel.stateFlow.map { it.isFullScreen }
+                .distinctUntilChanged()
+                .onEach { isFullScreen ->
+                    composer.toggleFullScreen(isFullScreen)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
         if (savedInstanceState != null) {
             handleShareData()
         }
@@ -297,7 +305,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             // Show keyboard when the user started a thread
             composerEditText.showKeyboard(andRequestFocus = true)
         }
-        composer.callback = object : PlainTextComposerLayout.Callback {
+        composer.callback = object : Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@MessageComposerFragment)
@@ -320,8 +328,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 composer.emojiButton?.isVisible = isEmojiKeyboardVisible
             }
 
-            override fun onSendMessage(text: CharSequence) {
+            override fun onSendMessage(text: CharSequence) = withState(messageComposerViewModel) { state ->
                 sendTextMessage(text, composer.formattedText)
+
+                if (state.isFullScreen) {
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
+                }
             }
 
             override fun onCloseRelatedMessage() {
@@ -334,6 +346,10 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
             override fun onTextChanged(text: CharSequence) {
                 messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
+            }
+
+            override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
+                messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(!state.isFullScreen))
             }
         }
     }
@@ -461,7 +477,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             composer.sendButton.alpha = 0f
             composer.sendButton.isVisible = true
             composer.sendButton.animate().alpha(1f).setDuration(150).start()
-        } else {
+        } else if (!event.isVisible) {
             composer.sendButton.isInvisible = true
         }
     }

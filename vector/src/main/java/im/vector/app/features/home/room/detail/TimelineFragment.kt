@@ -32,7 +32,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
@@ -64,6 +66,7 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
+import im.vector.app.core.extensions.animateLayoutChange
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.containsRtLOverride
@@ -183,7 +186,9 @@ import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -337,6 +342,7 @@ class TimelineFragment :
         setupJumpToBottomView()
         setupRemoveJitsiWidgetView()
         setupLiveLocationIndicator()
+        setupBackPressHandling()
 
         views.includeRoomToolbar.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
@@ -413,6 +419,31 @@ class TimelineFragment :
 
         if (savedInstanceState == null) {
             handleSpaceShare()
+        }
+
+        views.scrim.setOnClickListener {
+            messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
+        }
+
+        messageComposerViewModel.stateFlow.map { it.isFullScreen }
+                .distinctUntilChanged()
+                .onEach { isFullScreen ->
+                    toggleFullScreenEditor(isFullScreen)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun setupBackPressHandling() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            withState(messageComposerViewModel) { state ->
+                if (state.isFullScreen) {
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
+                } else {
+                    remove() // Remove callback to avoid infinite loop
+                    @Suppress("DEPRECATION")
+                    requireActivity().onBackPressed()
+                }
+            }
         }
     }
 
@@ -1016,7 +1047,13 @@ class TimelineFragment :
             override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
-                jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
+                withState(messageComposerViewModel) { composerState ->
+                    if (!composerState.isFullScreen) {
+                        jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
+                    } else {
+                        jumpToBottomViewVisibilityManager.hideAndPreventVisibilityChangesWithScrolling()
+                    }
+                }
             }
         }.apply {
             // For local rooms, pin the view's content to the top edge (the layout is reversed)
@@ -2000,6 +2037,19 @@ class TimelineFragment :
                 startActivity(it)
             }
         }
+    }
+
+    private fun toggleFullScreenEditor(isFullScreen: Boolean) {
+        views.composerContainer.animateLayoutChange(200)
+
+        val constraintSet = ConstraintSet()
+        val constraintSetId = if (isFullScreen) {
+            R.layout.fragment_timeline_fullscreen
+        } else {
+            R.layout.fragment_timeline
+        }
+        constraintSet.clone(requireContext(), constraintSetId)
+        constraintSet.applyTo(views.rootConstraintLayout)
     }
 
     /**
