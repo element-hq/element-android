@@ -80,9 +80,8 @@ data class MessageComposerViewState(
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true
     }
 
-    val isVoiceBroadcasting = when (voiceBroadcastState) {
+    val isRecordingVoiceBroadcast = when (voiceBroadcastState) {
         VoiceBroadcastState.STARTED,
-        VoiceBroadcastState.PAUSED,
         VoiceBroadcastState.RESUMED -> true
         else -> false
     }
