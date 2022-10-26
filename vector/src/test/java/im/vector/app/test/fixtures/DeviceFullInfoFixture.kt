@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.test.fixtures
 
-import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
-data class DeviceFullInfo(
-        val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
-        val isInactive: Boolean,
-        val isCurrentDevice: Boolean,
-        val deviceExtendedInfo: DeviceExtendedInfo,
-        val matrixClientInfo: MatrixClientInfoContent?,
-        val isSelected: Boolean = false,
-)
+fun aDeviceFullInfo(deviceId: String, isSelected: Boolean): DeviceFullInfo {
+    return DeviceFullInfo(
+            deviceInfo = DeviceInfo(
+                    deviceId = deviceId,
+            ),
+            cryptoDeviceInfo = null,
+            roomEncryptionTrustLevel = RoomEncryptionTrustLevel.Trusted,
+            isInactive = true,
+            isCurrentDevice = true,
+            deviceExtendedInfo = DeviceExtendedInfo(
+                    deviceType = DeviceType.MOBILE,
+            ),
+            matrixClientInfo = null,
+            isSelected = isSelected,
+    )
+}
