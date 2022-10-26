@@ -57,7 +57,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
 
     private fun renderRecordingState(holder: Holder, state: VoiceBroadcastRecorder.State) {
         when (state) {
-            VoiceBroadcastRecorder.State.Recording -> renderPlayingState(holder)
+            VoiceBroadcastRecorder.State.Recording -> renderRecordingState(holder)
             VoiceBroadcastRecorder.State.Paused -> renderPausedState(holder)
             VoiceBroadcastRecorder.State.Idle -> renderStoppedState(holder)
         }
@@ -66,14 +66,14 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     private fun renderVoiceBroadcastState(holder: Holder) {
         when (voiceBroadcastState) {
             VoiceBroadcastState.STARTED,
-            VoiceBroadcastState.RESUMED -> renderPlayingState(holder)
+            VoiceBroadcastState.RESUMED -> renderRecordingState(holder)
             VoiceBroadcastState.PAUSED -> renderPausedState(holder)
             VoiceBroadcastState.STOPPED,
             null -> renderStoppedState(holder)
         }
     }
 
-    private fun renderPlayingState(holder: Holder) = with(holder) {
+    private fun renderRecordingState(holder: Holder) = with(holder) {
         stopRecordButton.isEnabled = true
         recordButton.isEnabled = true
 
