@@ -60,7 +60,9 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val voiceBroadcastContent = voiceBroadcastEvent.content ?: return null
         val voiceBroadcastId = voiceBroadcastEventsGroup.voiceBroadcastId
 
-        val isRecording = voiceBroadcastContent.voiceBroadcastState != VoiceBroadcastState.STOPPED && voiceBroadcastEvent.root.stateKey == session.myUserId
+        val isRecording = voiceBroadcastContent.voiceBroadcastState != VoiceBroadcastState.STOPPED &&
+                voiceBroadcastEvent.root.stateKey == session.myUserId &&
+                messageContent.deviceId == session.sessionParams.deviceId
 
         val voiceBroadcastAttributes = AbsMessageVoiceBroadcastItem.Attributes(
                 voiceBroadcastId = voiceBroadcastId,
