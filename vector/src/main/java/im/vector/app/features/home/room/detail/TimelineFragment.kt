@@ -1047,7 +1047,13 @@ class TimelineFragment :
             override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
-                jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
+                withState(messageComposerViewModel) { composerState ->
+                    if (!composerState.isFullScreen) {
+                        jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
+                    } else {
+                        jumpToBottomViewVisibilityManager.hideAndPreventVisibilityChangesWithScrolling()
+                    }
+                }
             }
         }.apply {
             // For local rooms, pin the view's content to the top edge (the layout is reversed)

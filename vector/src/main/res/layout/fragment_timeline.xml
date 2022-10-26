@@ -177,6 +177,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/ic_expand_more"
+        android:visibility="gone"
         app:backgroundTint="#FFFFFF"
         app:badgeBackgroundColor="?colorPrimary"
         app:badgeTextColor="?colorOnPrimary"
