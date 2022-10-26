@@ -176,7 +176,6 @@ ext.groups = [
                         'org.apache.ant',
                         'org.apache.commons',
                         'org.apache.httpcomponents',
-                        'org.apache.sanselan',
                         'org.bouncycastle',
                         'org.ccil.cowan.tagsoup',
                         'org.checkerframework',
