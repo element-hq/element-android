@@ -31,8 +31,11 @@ class GetOngoingVoiceBroadcastsUseCase @Inject constructor(
 ) {
 
     fun execute(roomId: String): List<VoiceBroadcastEvent> {
-        val session = activeSessionHolder.getSafeActiveSession()
-        val room = session?.getRoom(roomId) ?: error("Unknown roomId: $roomId")
+        val session = activeSessionHolder.getSafeActiveSession() ?: run {
+            Timber.d("## GetOngoingVoiceBroadcastsUseCase: no active session")
+            return emptyList()
+        }
+        val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
 
         Timber.d("## GetLastVoiceBroadcastUseCase: get last voice broadcast in $roomId")
 
