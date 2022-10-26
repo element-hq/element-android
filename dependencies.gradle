@@ -160,7 +160,7 @@ ext.libs = [
                 'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
         ],
         apache      : [
-                'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
+                'commonsImaging'         : "org.apache.commons:commons-imaging:1.0-alpha3"
         ],
         sentry: [
                 'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
