@@ -50,10 +50,7 @@ internal class ImageExifTagRemover @Inject constructor(
         } ?: return@withContext jpegImageFile
 
         tryOrNull("Unable to remove ExifData") {
-            outputSet.removeField(ExifTagConstants.EXIF_TAG_GPSINFO)
-            outputSet.removeField(ExifTagConstants.EXIF_TAG_SUBJECT_LOCATION)
-            outputSet.removeField(ExifTagConstants.EXIF_TAG_USER_COMMENT)
-            GpsTagConstants.ALL_GPS_TAGS.forEach { tagInfo ->
+            tagsToRemove.forEach { tagInfo ->
                 outputSet.removeField(tagInfo)
             }
         } ?: return@withContext jpegImageFile
@@ -74,4 +71,12 @@ internal class ImageExifTagRemover @Inject constructor(
                 }
         )
     }
+
+    private val tagsToRemove
+        get() = GpsTagConstants.ALL_GPS_TAGS +
+                listOf(
+                        ExifTagConstants.EXIF_TAG_GPSINFO,
+                        ExifTagConstants.EXIF_TAG_SUBJECT_LOCATION,
+                        ExifTagConstants.EXIF_TAG_USER_COMMENT,
+                )
 }
