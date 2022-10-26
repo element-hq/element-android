@@ -111,7 +111,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
         if (attributes.areThreadMessagesEnabled) {
             holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
             attributes.threadDetails?.let { threadDetails ->
-                holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
+                holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread && threadDetails.threadSummarySenderInfo != null
                 holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
                 holder.threadSummaryInfoTextView.text = attributes.threadSummaryFormatted ?: attributes.decryptionErrorMessage
 
