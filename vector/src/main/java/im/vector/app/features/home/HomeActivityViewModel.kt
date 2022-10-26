@@ -503,10 +503,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
         // FIXME Iterate only on recent rooms for the moment, improve this
-        val recentRooms = session.roomService().getBreadcrumbs(roomSummaryQueryParams {
-            displayName = QueryStringValue.NoCondition
-            memberships = listOf(Membership.JOIN)
-        }).mapNotNull { session.getRoom(it.roomId) }
+        val recentRooms = session.roomService()
+                .getBreadcrumbs(roomSummaryQueryParams {
+                    displayName = QueryStringValue.NoCondition
+                    memberships = listOf(Membership.JOIN)
+                })
+                .mapNotNull { session.getRoom(it.roomId) }
 
         recentRooms
                 .forEach { room ->
