@@ -324,8 +324,8 @@ class OtherSessionsViewModelTest {
     fun `given no reAuth is needed and in selectMode when handling multiSignout action then signout process is performed`() {
         // Given
         val isSelectModeEnabled = true
-        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
-        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         // signout only selected devices
@@ -360,8 +360,8 @@ class OtherSessionsViewModelTest {
     fun `given no reAuth is needed and NOT in selectMode when handling multiSignout action then signout process is performed`() {
         // Given
         val isSelectModeEnabled = false
-        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
-        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         // signout all devices
@@ -395,8 +395,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given server error during multiSignout when handling multiSignout action then signout process is performed`() {
         // Given
-        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
-        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
@@ -427,8 +427,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given unexpected error during multiSignout when handling multiSignout action then signout process is performed`() {
         // Given
-        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
-        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val error = Exception()
@@ -459,8 +459,8 @@ class OtherSessionsViewModelTest {
     @Test
     fun `given reAuth is needed during multiSignout when handling multiSignout action then requestReAuth is sent and pending auth is stored`() {
         // Given
-        val deviceFullInfo1 = givenDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
-        val deviceFullInfo2 = givenDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
+        val deviceFullInfo1 = aDeviceFullInfo(A_DEVICE_ID_1, isSelected = false)
+        val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
