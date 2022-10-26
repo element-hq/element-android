@@ -173,7 +173,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.UNVERIFIED,
-                        excludeCurrentDevice = false
+                        excludeCurrentDevice = true
                 )
             }
         }
@@ -183,7 +183,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.INACTIVE,
-                        excludeCurrentDevice = false
+                        excludeCurrentDevice = true
                 )
             }
         }
