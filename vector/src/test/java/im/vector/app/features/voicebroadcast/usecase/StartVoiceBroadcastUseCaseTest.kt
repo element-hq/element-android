@@ -49,10 +49,11 @@ class StartVoiceBroadcastUseCaseTest {
     private val fakeSession = FakeSession(fakeRoomService = FakeRoomService(fakeRoom))
     private val fakeVoiceBroadcastRecorder = mockk<VoiceBroadcastRecorder>(relaxed = true)
     private val startVoiceBroadcastUseCase = StartVoiceBroadcastUseCase(
-            fakeSession,
-            fakeVoiceBroadcastRecorder,
-            FakeContext().instance,
-            mockk()
+            session = fakeSession,
+            voiceBroadcastRecorder = fakeVoiceBroadcastRecorder,
+            context = FakeContext().instance,
+            buildMeta = mockk(),
+            getOngoingVoiceBroadcastsUseCase = GetOngoingVoiceBroadcastsUseCase(fakeSession),
     )
 
     @Test
