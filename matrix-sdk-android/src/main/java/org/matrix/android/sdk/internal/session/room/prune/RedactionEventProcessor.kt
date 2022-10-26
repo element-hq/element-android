@@ -46,7 +46,7 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         return eventType == EventType.REDACTION
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         pruneEvent(realm, event)
     }
 

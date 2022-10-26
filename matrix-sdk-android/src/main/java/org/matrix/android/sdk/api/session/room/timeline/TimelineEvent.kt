@@ -30,12 +30,8 @@ import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -140,13 +136,12 @@ fun TimelineEvent.getEditedEventId(): String? {
  * Get last MessageContent, after a possible edition.
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
-    return when (root.getClearType()) {
-        EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
-        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
-        in EventType.BEACON_LOCATION_DATA -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
-        else -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
-    }
+    return (
+            annotations?.editSummary?.latestEdit
+                    ?.getClearContent()?.toModel<MessageContent>()?.newContent
+                    ?: root.getClearContent()
+            )
+            .toModel<MessageContent>()
 }
 
 /**

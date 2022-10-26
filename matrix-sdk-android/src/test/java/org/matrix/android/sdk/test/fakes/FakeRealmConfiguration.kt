@@ -33,7 +33,7 @@ internal class FakeRealmConfiguration {
     val instance = mockk<RealmConfiguration>()
 
     fun <T> givenAwaitTransaction(realm: Realm) {
-        val transaction = slot<suspend (Realm) -> T>()
+        val transaction = slot<(Realm) -> T>()
         coEvery { awaitTransaction(instance, capture(transaction)) } coAnswers {
             secondArg<suspend (Realm) -> T>().invoke(realm)
         }

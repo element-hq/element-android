@@ -40,7 +40,7 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
         return eventType == EventType.REDACTION && insertType != EventInsertType.LOCAL_ECHO
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         if (event.redacts.isNullOrBlank() || LocalEcho.isLocalEchoId(event.eventId.orEmpty())) {
             return
         }

@@ -24,7 +24,7 @@ internal interface EventInsertLiveProcessor {
 
     fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean
 
-    suspend fun process(realm: Realm, event: Event)
+    fun process(realm: Realm, event: Event)
 
     /**
      * Called after transaction.

@@ -19,10 +19,12 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 data class TimelineItemFactoryParams(
         val event: TimelineEvent,
+        val lastEdit: Event? = null,
         val prevEvent: TimelineEvent? = null,
         val prevDisplayableEvent: TimelineEvent? = null,
         val nextEvent: TimelineEvent? = null,
