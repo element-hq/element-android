@@ -102,7 +102,7 @@ class OtherSessionsFragment :
         } else {
             viewState.devices.invoke()?.isNotEmpty().orFalse()
         }
-        val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_ALWAYS else MenuItem.SHOW_AS_ACTION_NEVER
+        val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_IF_ROOM else MenuItem.SHOW_AS_ACTION_NEVER
         multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
         changeTextColorOfDestructiveAction(multiSignoutItem)
     }
