@@ -42,8 +42,7 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
-import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.usecase.StopOngoingVoiceBroadcastUseCase
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -62,14 +61,12 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -96,7 +93,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
         private val vectorFeatures: VectorFeatures,
-        private val voiceBroadcastHelper: VoiceBroadcastHelper,
+        private val stopOngoingVoiceBroadcastUseCase: StopOngoingVoiceBroadcastUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -128,7 +125,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeReleaseNotes()
         observeLocalNotificationsSilenced()
         initThreadsMigration()
-        stopOngoingVoiceBroadcast()
+        viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
     }
 
     private fun observeReleaseNotes() = withState { state ->
@@ -494,32 +491,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                 }
             }
         }
-    }
-
-    /**
-     * Stop ongoing voice broadcast if any.
-     */
-    private fun stopOngoingVoiceBroadcast() {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
-
-        // FIXME Iterate only on recent rooms for the moment, improve this
-        val recentRooms = session.roomService()
-                .getBreadcrumbs(roomSummaryQueryParams {
-                    displayName = QueryStringValue.NoCondition
-                    memberships = listOf(Membership.JOIN)
-                })
-                .mapNotNull { session.getRoom(it.roomId) }
-
-        recentRooms
-                .forEach { room ->
-                    val ongoingVoiceBroadcasts = voiceBroadcastHelper.getOngoingVoiceBroadcasts(room.roomId)
-                    val myOngoingVoiceBroadcastId = ongoingVoiceBroadcasts.find { it.root.stateKey == session.myUserId }?.reference?.eventId
-                    val initialEvent = myOngoingVoiceBroadcastId?.let { room.timelineService().getTimelineEvent(it)?.root?.asVoiceBroadcastEvent() }
-                    if (myOngoingVoiceBroadcastId != null && initialEvent?.content?.deviceId == session.sessionParams.deviceId) {
-                        viewModelScope.launch { voiceBroadcastHelper.stopVoiceBroadcast(room.roomId) }
-                        return // No need to iterate more as we should not have more than one recording VB
-                    }
-                }
     }
 
     override fun handle(action: HomeActivityViewActions) {
