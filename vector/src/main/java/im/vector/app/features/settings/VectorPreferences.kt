@@ -109,6 +109,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY"
         private const val SETTINGS_SEND_TYPING_NOTIF_KEY = "SETTINGS_SEND_TYPING_NOTIF_KEY"
         private const val SETTINGS_ENABLE_MARKDOWN_KEY = "SETTINGS_ENABLE_MARKDOWN_KEY"
+        private const val SETTINGS_ENABLE_RICH_TEXT_FORMATTING_KEY = "SETTINGS_ENABLE_RICH_TEXT_FORMATTING_KEY"
         private const val SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
         private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
         private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
@@ -758,6 +759,24 @@ class VectorPreferences @Inject constructor(
             putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, isEnabled)
         }
     }
+
+    /**
+     * Tells if text formatting is enabled within the rich text editor.
+     *
+     * @return true if the text formatting is enabled
+     */
+    fun isTextFormattingEnabled(): Boolean =
+        defaultPrefs.getBoolean(SETTINGS_ENABLE_RICH_TEXT_FORMATTING_KEY, true)
+
+    /**
+     * Update whether text formatting is enabled within the rich text editor.
+     *
+     * @param isEnabled true to enable the text formatting
+     */
+    fun setTextFormattingEnabled(isEnabled: Boolean) =
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_ENABLE_RICH_TEXT_FORMATTING_KEY, isEnabled)
+        }
 
     /**
      * Tells if a confirmation dialog should be displayed before staring a call.
