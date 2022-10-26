@@ -16,21 +16,22 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
 
 class GetOngoingVoiceBroadcastsUseCase @Inject constructor(
-        private val session: Session,
+        private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
     fun execute(roomId: String): List<VoiceBroadcastEvent> {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return emptyList()
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
 
         Timber.d("## GetLastVoiceBroadcastUseCase: get last voice broadcast in $roomId")
