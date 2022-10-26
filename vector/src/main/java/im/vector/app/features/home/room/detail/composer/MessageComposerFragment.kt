@@ -91,8 +91,8 @@ import im.vector.app.features.poll.PollMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.voice.VoiceFailure
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -207,6 +207,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
         }
 
+        messageComposerViewModel.stateFlow.map { it.isFullScreen }
+                .distinctUntilChanged()
+                .onEach { isFullScreen ->
+                    composer.toggleFullScreen(isFullScreen)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
         messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
             if (!canSend.boolean()) {
                 return@onEach
@@ -219,13 +226,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 is SendMode.Voice -> renderVoiceMessageMode(mode.text)
             }
         }
-
-        messageComposerViewModel.stateFlow.map { it.isFullScreen }
-                .distinctUntilChanged()
-                .onEach { isFullScreen ->
-                    composer.toggleFullScreen(isFullScreen)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         if (savedInstanceState != null) {
             handleShareData()
