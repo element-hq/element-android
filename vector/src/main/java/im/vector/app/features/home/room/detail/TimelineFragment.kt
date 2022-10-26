@@ -422,7 +422,7 @@ class TimelineFragment :
         }
 
         views.scrim.setOnClickListener {
-            messageComposerViewModel.handle(MessageComposerAction.ToggleFullScreen)
+            messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
         }
 
         messageComposerViewModel.stateFlow.map { it.isFullScreen }
@@ -437,7 +437,7 @@ class TimelineFragment :
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             withState(messageComposerViewModel) { state ->
                 if (state.isFullScreen) {
-                    messageComposerViewModel.handle(MessageComposerAction.ToggleFullScreen)
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
                 } else {
                     remove() // Remove callback to avoid infinite loop
                     @Suppress("DEPRECATION")

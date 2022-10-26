@@ -122,7 +122,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
 
         views.composerFullScreenButton.setOnClickListener {
-            callback?.onFullScreenModeChanged(!isFullScreen)
+            callback?.onFullScreenModeChanged()
         }
 
         setupRichTextMenu()
@@ -207,15 +207,13 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     override fun toggleFullScreen(newValue: Boolean) {
-        isFullScreen = newValue
-
-        val constraintSetId = if (isFullScreen) R.layout.composer_rich_text_layout_constraint_set_fullscreen else currentConstraintSetId
+        val constraintSetId = if (newValue) R.layout.composer_rich_text_layout_constraint_set_fullscreen else currentConstraintSetId
         ConstraintSet().also {
             it.clone(context, constraintSetId)
             it.applyTo(this)
         }
 
-        updateTextFieldBorder(isFullScreen)
+        updateTextFieldBorder(newValue)
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {

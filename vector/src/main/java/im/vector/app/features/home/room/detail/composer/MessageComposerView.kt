@@ -55,5 +55,5 @@ interface Callback : ComposerEditText.Callback {
     fun onSendMessage(text: CharSequence)
     fun onAddAttachment()
     fun onExpandOrCompactChange()
-    fun onFullScreenModeChanged(isFullScreen: Boolean)
+    fun onFullScreenModeChanged()
 }

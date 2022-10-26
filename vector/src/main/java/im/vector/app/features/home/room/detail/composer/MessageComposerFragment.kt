@@ -93,7 +93,6 @@ import im.vector.app.features.share.SharedData
 import im.vector.app.features.voice.VoiceFailure
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -329,11 +328,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 composer.emojiButton?.isVisible = isEmojiKeyboardVisible
             }
 
-            override fun onSendMessage(text: CharSequence) {
+            override fun onSendMessage(text: CharSequence) = withState(messageComposerViewModel) { state ->
                 sendTextMessage(text, composer.formattedText)
 
-                if (withState(messageComposerViewModel) { it.isFullScreen }) {
-                    messageComposerViewModel.handle(MessageComposerAction.ToggleFullScreen)
+                if (state.isFullScreen) {
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
                 }
             }
 
@@ -349,8 +348,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
             }
 
-            override fun onFullScreenModeChanged(isFullScreen: Boolean) {
-                messageComposerViewModel.handle(MessageComposerAction.ToggleFullScreen)
+            override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
+                messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(!state.isFullScreen))
             }
         }
     }
