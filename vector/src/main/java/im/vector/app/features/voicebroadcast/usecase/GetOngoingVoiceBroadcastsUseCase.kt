@@ -31,12 +31,11 @@ class GetOngoingVoiceBroadcastsUseCase @Inject constructor(
 ) {
 
     fun execute(roomId: String): List<VoiceBroadcastEvent> {
-        println("## GetOngoingVoiceBroadcastsUseCase")
-        println("## GetOngoingVoiceBroadcastsUseCase activeSessionHolder $activeSessionHolder")
-        val session = activeSessionHolder.getSafeActiveSession()
-        println("## GetOngoingVoiceBroadcastsUseCase session $session")
-        val room = session?.getRoom(roomId) ?: error("Unknown roomId: $roomId")
-        println("## GetOngoingVoiceBroadcastsUseCase room $room")
+        val session = activeSessionHolder.getSafeActiveSession() ?: run {
+            Timber.d("## GetOngoingVoiceBroadcastsUseCase: no active session")
+            return emptyList()
+        }
+        val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
 
         Timber.d("## GetLastVoiceBroadcastUseCase: get last voice broadcast in $roomId")
 
