@@ -53,16 +53,9 @@ internal class ImageExifTagRemover @Inject constructor(
             outputSet.removeField(ExifTagConstants.EXIF_TAG_GPSINFO)
             outputSet.removeField(ExifTagConstants.EXIF_TAG_SUBJECT_LOCATION)
             outputSet.removeField(ExifTagConstants.EXIF_TAG_USER_COMMENT)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_ALTITUDE)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_ALTITUDE_REF)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_LONGITUDE)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_LONGITUDE_REF)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_DEST_LONGITUDE)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_DEST_LONGITUDE_REF)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_LATITUDE)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_LATITUDE_REF)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_DEST_LATITUDE)
-            outputSet.removeField(GpsTagConstants.GPS_TAG_GPS_DEST_LATITUDE_REF)
+            GpsTagConstants.ALL_GPS_TAGS.forEach { tagInfo ->
+                outputSet.removeField(tagInfo)
+            }
         } ?: return@withContext jpegImageFile
 
         val scrubbedFile = temporaryFileCreator.create()
