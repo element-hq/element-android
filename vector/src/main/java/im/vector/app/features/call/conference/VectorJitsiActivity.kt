@@ -28,6 +28,7 @@ import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
@@ -40,6 +41,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.parcelize.Parcelize
+import org.jitsi.meet.sdk.BroadcastIntentHelper
 import org.jitsi.meet.sdk.JitsiMeet
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
@@ -105,7 +107,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onDestroy() {
         val currentConf = JitsiMeet.getCurrentConference()
-        jitsiMeetView?.leave()
         jitsiMeetView?.dispose()
         // Fake emitting CONFERENCE_TERMINATED event when currentConf is not null (probably when closing the PiP screen).
         if (currentConf != null) {
@@ -128,7 +129,8 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     }
 
     private fun handleLeaveConference() {
-        jitsiMeetView?.leave()
+        val leaveBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent()
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(leaveBroadcastIntent)
     }
 
     private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
