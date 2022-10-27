@@ -57,7 +57,7 @@ private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
 private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
 private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
 private const val FEATURE_THREADS_MSC3773 = "org.matrix.msc3773"
-private const val FEATURE_PUSH_NOTIFICATIONS_MSC3881 = "org.matrix.msc3881"
+private const val FEATURE_REMOTE_TOGGLE_PUSH_NOTIFICATIONS_MSC3881 = "org.matrix.msc3881"
 
 /**
  * Return true if the SDK supports this homeserver version.
@@ -151,5 +151,5 @@ private fun Versions.getMaxVersion(): HomeServerVersion {
  * @return true if remote toggle of push notifications is supported
  */
 internal fun Versions.doesServerSupportRemoteToggleOfPushNotifications(): Boolean {
-    return unstableFeatures?.get(FEATURE_PUSH_NOTIFICATIONS_MSC3881).orFalse()
+    return unstableFeatures?.get(FEATURE_REMOTE_TOGGLE_PUSH_NOTIFICATIONS_MSC3881).orFalse()
 }
