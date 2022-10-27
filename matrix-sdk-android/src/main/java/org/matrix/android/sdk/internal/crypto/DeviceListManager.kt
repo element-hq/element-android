@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.extensions.measureMetric
-import org.matrix.android.sdk.api.metrics.MetricsPlugin
+import org.matrix.android.sdk.api.metrics.DownloadDeviceKeysMetricsPlugin
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
@@ -53,7 +53,7 @@ internal class DeviceListManager @Inject constructor(
         matrixConfiguration: MatrixConfiguration
 ) {
 
-    private val metricsPlugin = matrixConfiguration.metricsPlugin
+    private val metricPlugins = matrixConfiguration.metricPlugins
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)
@@ -351,12 +351,12 @@ internal class DeviceListManager @Inject constructor(
             return MXUsersDevicesMap()
         }
         val params = DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken())
+        val relevantPlugins = metricPlugins.filterIsInstance<DownloadDeviceKeysMetricsPlugin>()
 
-        val response = measureMetric(metricsPlugin) {
+        val response = measureMetric(relevantPlugins) {
             val result = try {
                 downloadKeysForUsersTask.execute(params)
-            }
-            catch (throwable: Throwable) {
+            } catch (throwable: Throwable) {
                 Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
                 if (throwable is CancellationException) {
                     // the crypto module is getting closed, so we cannot access the DB anymore
@@ -364,7 +364,7 @@ internal class DeviceListManager @Inject constructor(
                 } else {
                     onKeysDownloadFailed(filteredUsers)
                 }
-                metricsPlugin.onError(throwable)
+                relevantPlugins.forEach { plugin -> plugin.onError(throwable) }
                 throw throwable
             }
             Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")

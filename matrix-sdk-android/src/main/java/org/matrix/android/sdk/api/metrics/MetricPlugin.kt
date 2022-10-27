@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.metrics
 /**
  * A plugin that can be used to capture metrics in Client.
  */
-interface MetricsPlugin {
+interface MetricPlugin {
     /**
      * Start the measurement of the metrics as soon as task is started.
      */
@@ -30,5 +30,17 @@ interface MetricsPlugin {
      */
     fun finishTransaction()
 
+    /**
+     * Invoked when there is any error in the ongoing task. The metrics tool can use this information to attach to the ongoing transaction.
+     *
+     * @param throwable Exception thrown in the running task.
+     */
     fun onError(throwable: Throwable)
+
+    /**
+     * Can be used to log this transaction.
+     */
+    fun logTransaction(message: String? = "") {
+        // no-op
+    }
 }

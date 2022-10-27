@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.extensions
 
-import org.matrix.android.sdk.api.metrics.MetricsPlugin
+import org.matrix.android.sdk.api.metrics.MetricPlugin
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -25,12 +25,12 @@ import kotlin.contracts.contract
  * Executes the given [block] while measuring the transaction.
  */
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> measureMetric(metricMeasurementPlugin: MetricsPlugin, block: () -> T): T {
+public inline fun <T> measureMetric(metricMeasurementPlugins: List<MetricPlugin>, block: () -> T): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
-    metricMeasurementPlugin.startTransaction()
+    metricMeasurementPlugins.forEach { plugin -> plugin.startTransaction() }
     val answer = block()
-    metricMeasurementPlugin.finishTransaction()
+    metricMeasurementPlugins.forEach { plugin -> plugin.finishTransaction() }
     return answer
 }

@@ -19,8 +19,7 @@ package org.matrix.android.sdk.api
 import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.api.metrics.MetricsPlugin
-import org.matrix.android.sdk.api.metrics.impl.NoOpMetricsPlugin
+import org.matrix.android.sdk.api.metrics.MetricPlugin
 import java.net.Proxy
 
 data class MatrixConfiguration(
@@ -80,5 +79,5 @@ data class MatrixConfiguration(
         /**
          * Metrics plugin that can be used to capture metrics from matrix-sdk-android.
          */
-        val metricsPlugin: MetricsPlugin = NoOpMetricsPlugin()
+        val metricPlugins: List<MetricPlugin> = emptyList()
 )

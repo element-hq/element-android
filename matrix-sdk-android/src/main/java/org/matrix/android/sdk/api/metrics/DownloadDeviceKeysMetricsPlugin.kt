@@ -16,4 +16,14 @@
 
 package org.matrix.android.sdk.api.metrics
 
-interface DownloadDeviceKeysMetricsPlugin: MetricsPlugin
+import timber.log.Timber
+
+/**
+ * Extension of MetricPlugin for download_device_keys task.
+ */
+interface DownloadDeviceKeysMetricsPlugin : MetricPlugin {
+
+    override fun logTransaction(message: String?) {
+        Timber.v("## CRYPTO | downloadDeviceKeysMetricPlugin() : $message")
+    }
+}

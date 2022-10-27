@@ -47,7 +47,7 @@ import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
-import im.vector.app.features.analytics.metrics.VectorMetricsPlugin
+import im.vector.app.features.analytics.metrics.VectorPlugins
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -71,15 +71,12 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
-import org.matrix.android.sdk.api.metrics.MetricsPlugin
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class VectorBindModule {
+@InstallIn(SingletonComponent::class) @Module abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
@@ -119,14 +116,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindGetDeviceInfoUseCase(getDeviceInfoUseCase: DefaultGetDeviceInfoUseCase): GetDeviceInfoUseCase
-
-    @Binds
-    abstract fun bindMetricsPlugin(vectorMetricsPlugin: VectorMetricsPlugin): MetricsPlugin
 }
 
-@InstallIn(SingletonComponent::class)
-@Module
-object VectorStaticModule {
+@InstallIn(SingletonComponent::class) @Module object VectorStaticModule {
 
     @Provides
     fun providesContext(application: Application): Context {
@@ -148,7 +140,7 @@ object VectorStaticModule {
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
-            metricsPlugin: MetricsPlugin,
+            vectorPlugins: VectorPlugins,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -157,7 +149,7 @@ object VectorStaticModule {
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
-                metricsPlugin = metricsPlugin
+                metricPlugins = vectorPlugins.plugins()
         )
     }
 

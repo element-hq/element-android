@@ -17,14 +17,19 @@
 package im.vector.app.features.analytics.metrics
 
 import im.vector.app.features.analytics.metrics.sentry.SentryDownloadDeviceKeysMetrics
-import org.matrix.android.sdk.api.metrics.DownloadDeviceKeysMetricsPlugin
+import org.matrix.android.sdk.api.metrics.MetricPlugin
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Default implementation of MetricsPlugin.
+ * Class that contains the all plugins which can be used for tracking.
  */
 @Singleton
-class VectorMetricsPlugin @Inject constructor(
-        private val sentryDownloadDeviceKeysMetrics: SentryDownloadDeviceKeysMetrics
-) : DownloadDeviceKeysMetricsPlugin by sentryDownloadDeviceKeysMetrics
+data class VectorPlugins @Inject constructor(
+        val sentryDownloadDeviceKeysMetrics: SentryDownloadDeviceKeysMetrics,
+) {
+    /**
+     * Returns [List] of all [MetricPlugin] hold by this class.
+     */
+    fun plugins(): List<MetricPlugin> = listOf(sentryDownloadDeviceKeysMetrics)
+}
