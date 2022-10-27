@@ -970,7 +970,7 @@
     <string name="downloaded_file">文件%1$s 已被下载！</string>
     <string name="message_edits">消息编辑</string>
     <string name="no_message_edits_found">未找到编辑</string>
-    <string name="room_filtering_filter_hint">过滤对话…</string>
+    <string name="room_filtering_filter_hint">过滤对话……</string>
     <string name="room_filtering_footer_title">找不到你要找的？</string>
     <string name="room_filtering_footer_create_new_room">创建新房间</string>
     <string name="room_filtering_footer_create_new_direct_message">发送新私聊消息</string>
@@ -1714,7 +1714,7 @@
     <string name="direct_room_user_list_suggestions_title">建议</string>
     <string name="direct_room_user_list_known_title">已知用户</string>
     <string name="qr_code">二维码</string>
-    <string name="add_by_qr_code">通过二维码添加</string>
+    <string name="add_by_qr_code">通过QR码添加</string>
     <string name="create_room_settings_section">房间设置</string>
     <string name="create_room_topic_hint">主题</string>
     <string name="create_room_topic_section">房间话题（可选）</string>
@@ -2419,7 +2419,7 @@
     <string name="ftue_auth_use_case_subtitle">我们会帮你建立连接</string>
     <string name="ftue_auth_use_case_title">你会与谁聊最多？</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name}也非常适合工作场所。受到世界上最安全的组织信任。</string>
-    <string name="ftue_auth_carousel_control_body">聊天消息存储位置一律由您掌控，不受外来因素干扰。技术由 Matrix 提供。</string>
+    <string name="ftue_auth_carousel_control_body">选择保存你的对话的位置，给你控制权和独立性。通过Matrix连接。</string>
     <string name="ftue_auth_carousel_secure_body">安全且独立的通信，为你提供和在家中面对面对话同样等级的隐私。</string>
     <string name="ftue_auth_carousel_encrypted_title">安全传送消息。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">向主服务器注册端点token失败：
@@ -2632,4 +2632,9 @@
     <string name="labs_enable_rich_text_editor_title">启用富文本编辑器</string>
     <string name="a11y_collapse_space_children">折叠%s孩子</string>
     <string name="a11y_expand_space_children">展开%s孩子</string>
+    <string name="labs_enable_session_manager_title">启用新的会话管理器</string>
+    <string name="onboarding_new_app_layout_spaces_title">访问空间</string>
+    <string name="onboarding_new_app_layout_welcome_title">欢迎使用新视图！</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ 此房间里有未经验证的设备，它们将无法解密你发送的消息。</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">永远不要向这个房间里未经验证的会话发送加密的消息。</string>
 </resources>
