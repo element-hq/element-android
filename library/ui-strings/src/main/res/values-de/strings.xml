@@ -42,7 +42,7 @@
     <string name="notice_room_update">%s hat diesen Raum aufgewertet.</string>
     <string name="event_status_sending_message">Sende eine Nachricht …</string>
     <string name="initial_sync_start_importing_account">Erste Synchronisation:
-\nImportiere Benutzerkonto …</string>
+\nImportiere Konto …</string>
     <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation:
 \nImportiere Kryptoschlüssel</string>
     <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation:
@@ -263,13 +263,13 @@
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <string name="rooms_header">Räume</string>
-    <string name="send_bug_report_include_logs">Logdateien übermitteln</string>
+    <string name="send_bug_report_include_logs">Sende Protokolle</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Bildschirmfoto übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
     <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht\? Was sollte passieren\? Was ist tatsächlich passiert\?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle der Anwendung zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und das Bildschirmfoto, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle der Anwendung zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, inklusive der Protokolle und des Bildschirmfotos, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, entferne die Häkchen:</string>
     <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du das Fenster zum Senden eines Fehlerberichts öffnen\?</string>
     <string name="send_bug_report_sent">Dein Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
@@ -353,7 +353,7 @@
     <string name="settings_add_phone_number">Telefonnummer hinzufügen</string>
     <string name="settings_app_info_link_summary">Anwendungsinformationen in den Systemeinstellungen anzeigen.</string>
     <string name="settings_app_info_link_title">Anwendungsinformationen</string>
-    <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account</string>
+    <string name="settings_enable_all_notif">Benachrichtigungen für dieses Konto</string>
     <string name="settings_enable_this_device">Benachrichtigungen für diese Sitzung</string>
     <string name="settings_messages_in_one_to_one">Direktnachrichten</string>
     <string name="settings_messages_in_group_chat">Gruppenunterhaltungen</string>
@@ -609,7 +609,7 @@
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
     <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
-    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen (*), um kursiven Text anzuzeigen.</string>
+    <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen, um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Lesebestätigungen zeigen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
     <string name="settings_show_join_leave_messages_summary">Einladungen, Entfernungen und Verbannungen bleiben sichtbar.</string>
@@ -637,7 +637,7 @@
 \nBitte überprüfe die Systemeinstellungen.</string>
     <string name="open_settings">Öffne Einstellungen</string>
     <string name="settings_troubleshoot_test_account_settings_title">Kontoeinstellungen.</string>
-    <string name="settings_troubleshoot_test_account_settings_success">Benachrichtigungen sind für dein Konto eingeschaltet.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Benachrichtigungen sind für dein Konto aktiviert.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Benachrichtigungen sind für dein Konto deaktiviert.
 \nBitte überprüfe die Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktiviere</string>
@@ -686,7 +686,7 @@
     <string name="done">Fertig</string>
     <string name="settings_notification_advanced">Erweiterte Benachrichtigungseinstellungen</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Angepasste Einstellungen.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Beachte, dass einige Nachrichtentypen leise sind (erzeugen eine Benachrichtigung aber keinen Ton).</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Beachte, dass einige Nachrichtentypen leise sind (erzeugen eine Benachrichtigung, aber keinen Ton).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Einige Benachrichtigungen sind in deinen erweiterten Einstellungen deaktiviert.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Konto hinzufügen</string>
     <string name="settings_noisy_notifications_preferences">Laute Benachrichtigungen einstellen</string>
@@ -721,7 +721,7 @@
 \nDieser Fehler liegt nicht unter der Kontrolle von ${app_name}. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google-Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDieser Fehler ist außerhalb von ${app_name} passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
-    <string name="settings_cryptography_manage_keys">Verwaltung der Kryptoschlüssel</string>
+    <string name="settings_cryptography_manage_keys">Verwaltung der Verschlüsselungs-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüsselsicherung verwalten</string>
     <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der Empfänger haben die Schlüssel um diese Nachrichten zu lesen.
 \n
@@ -759,7 +759,7 @@
     <string name="keys_backup_settings_untrusted_backup">Um die Schlüsselsicherung für diese Sitzung zu verwenden, stelle sie jetzt mit deiner Passphrase oder deinem Wiederherstellungsschlüssel wieder her.</string>
     <string name="keys_backup_settings_delete_confirm_message">Deine gesicherten Schlüssel vom Server löschen\? Du wirst deinen Wiederherstellungsschlüssel nicht mehr nutzen können, um deinen verschlüsselten Nachrichtenverlauf zu lesen.</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Abmelden gehen deine verschlüsselten Nachrichten verloren</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn du dich jetzt abmeldest, gehen deine verschlüsselten Nachrichten verloren.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Schlüsselsicherung läuft. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüsselsicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel …</string>
@@ -781,7 +781,7 @@
     <string name="keys_backup_setup_step2_skip_button_title">(Erweitert) Wiederherstellungsschlüssel einrichten</string>
     <string name="keys_backup_setup_step3_success_title">Erfolg!</string>
     <string name="keys_backup_setup_step3_text_line1">Deine Schlüssel wurden gesichert.</string>
-    <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz - du kannst es benutzen um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
+    <string name="keys_backup_setup_step3_text_line2">Dein Wiederherstellungsschlüssel ist ein Sicherungsnetz – du kannst es benutzen, um den Zugriff auf deine verschlüsselten Nachrichten wiederherzustellen, falls du deine Passphrase vergisst.
 \nVerwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Bewahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie einem Passwortmanager (oder Safe) auf</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ich habe eine Kopie angefertigt</string>
@@ -1024,7 +1024,7 @@
     <string name="report_content_inappropriate">Es ist unangebracht</string>
     <string name="report_content_custom">Benutzerdefinierte Meldung …</string>
     <string name="report_content_custom_title">Diesen Inhalt melden</string>
-    <string name="report_content_custom_hint">Meldegrund</string>
+    <string name="report_content_custom_hint">Grund für Meldung des Inhalts</string>
     <string name="report_content_custom_submit">MELDEN</string>
     <string name="block_user">NUTZER IGNORIEREN</string>
     <string name="content_reported_title">Inhalt gemeldet</string>
@@ -1374,7 +1374,7 @@
     <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
     <string name="settings_messages_at_room">Nachrichten mit \"@room\"</string>
     <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Gruppenunterhaltungen</string>
-    <string name="command_description_plain">Sendet eine Nachricht als einfachen Text, ohne sie als Markdown zu interpretieren</string>
+    <string name="command_description_plain">Sendet eine Nachricht als Klartext, ohne sie als Markdown darzustellen</string>
     <string name="auth_invalid_login_param_space_in_password">Inkorrekter Benutzername und/oder Passwort. Das eingegebene Passwort beginnt oder endet mit Leerzeichen, bitte kontrolliere es.</string>
     <string name="message_key">Nachrichtenschlüssel</string>
     <string name="recovery_passphrase">Wiederherstellungs-Passphrase</string>
@@ -1620,7 +1620,7 @@
     <string name="auth_pin_new_pin_action">Neue PIN</string>
     <string name="auth_pin_reset_content">Um deine PIN zurückzusetzen, musst du dich erneut anmelden und eine neue erstellen.</string>
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
-    <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe \"PIN vergessen\" um dich abzumelden und sie anschließend zurückzusetzen.</string>
+    <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe auf „PIN vergessen“, um dich abzumelden und sie zurückzusetzen.</string>
     <string name="settings_call_show_confirmation_dialog_title">Versehentliche Anrufe verhindern</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
@@ -1661,7 +1661,7 @@
     <string name="settings_emails_and_phone_numbers_title">E-Mail und Telefon</string>
     <string name="settings_emails_and_phone_numbers_summary">Verwalte E-Mail-Adressen und Telefonnummern, die mit deinem Matrix-Konto verknüpft sind</string>
     <string name="settings_text_message_sent_hint">Code</string>
-    <string name="login_msisdn_notice">Verwende das internationale Format (Telefonnummer muss mit \'+\' beginnen)</string>
+    <string name="login_msisdn_notice">Bitte nutze das internationale Format (muss mit ‚+‘ beginnen)</string>
     <string name="confirm_your_identity_quad_s">Bestätige deine Identität, indem du dieses Login verifizierst, um Zugriff auf verschlüsselte Nachrichten zu erhalten.</string>
     <string name="error_opening_banned_room">Raum, indem du gebannt wurdest, kann nicht geöffnet werden.</string>
     <string name="room_error_not_found">Raum kann nicht gefunden werden. Stelle sicher, dass er existiert.</string>
@@ -1688,7 +1688,7 @@
     <string name="settings_security_pin_code_notifications_summary_on">Details wie Raumnamen und Nachrichteninhalt zeigen.</string>
     <string name="settings_security_pin_code_notifications_title">Inhalt in Benachrichtigungen anzeigen</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit ${app_name} zu entsperren.</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiviere Gerät-spezifische Biometrie wie Fingerabdrücke und Gesichtserkennung.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiviere gerätespezifische Biometrie wie Fingerabdrücke und Gesichtserkennung.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Biometrie aktivieren</string>
     <string name="settings_security_application_protection_screen_title">Schutz konfigurieren</string>
     <string name="settings_security_application_protection_title">Zugriffsschutz</string>
@@ -1726,10 +1726,10 @@
     <string name="settings_troubleshoot_test_push_notification_content">Du siehst die Benachrichtigung! Klick mich!</string>
     <string name="settings_troubleshoot_test_notification_title">Benachrichtigungsanzeige</string>
     <string name="settings_security_pin_code_grace_period_summary_off">Bei jedem Öffnen von ${app_name} ist der PIN-Code erforderlich.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem ${app_name} 2 Minuten lang nicht verwendet wurde.</string>
-    <string name="settings_security_pin_code_grace_period_title">Fordere PIN nach 2 Minuten an</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem ${app_name} zwei Minuten lang nicht verwendet wurde.</string>
+    <string name="settings_security_pin_code_grace_period_title">Erfrage PIN nach zwei Minuten</string>
     <string name="settings_security_pin_code_notifications_summary_off">Nur die Anzahl ungelesener Nachrichten in der Benachrichtigung zeigen.</string>
-    <string name="attachment_type_dialog_title">Bild hinzufügen mit</string>
+    <string name="attachment_type_dialog_title">Füge Bild hinzu per</string>
     <string name="warning_room_not_created_yet">Der Raum ist noch nicht erstellt. Raumerstellung abbrechen\?</string>
     <string name="room_list_quick_actions_low_priority_add">Zu niedrige Priorität hinzufügen</string>
     <string name="create_room_topic_hint">Thema</string>
@@ -1742,7 +1742,7 @@
     <string name="create_room_name_section">Raumname</string>
     <string name="settings_export_trail">Prüfung exportieren</string>
     <string name="room_member_open_or_create_dm">Direktnachricht</string>
-    <string name="send_bug_report_include_key_share_history">Verlauf der Anfragen von Schlüsselfreigaben senden</string>
+    <string name="send_bug_report_include_key_share_history">Schlüsselfreigabe-Anfragen übermitteln</string>
     <string name="no_more_results">Keine weiteren Ergebnisse</string>
     <string name="start_chatting">Beginne eine Unterhaltung</string>
     <string name="settings_discovery_consent_action_give_consent">Autorisieren</string>
@@ -1762,7 +1762,7 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Änderungen daran, wer die Chronik lesen kann, gelten nur für kommende Nachrichten in diesem Raum. Die Sichtbarkeit der bestehenden Chronik bleibt unverändert.</string>
     <string name="action_unpublish">Zurückziehen</string>
     <string name="action_add">Hinzufügen</string>
-    <string name="share_by_text">Mit Nachricht teilen</string>
+    <string name="share_by_text">Per Nachricht teilen</string>
     <string name="hide_advanced">Erweiterte Optionen ausblenden</string>
     <string name="show_advanced">Erweiterte Optionen anzeigen</string>
     <string name="room_alias_publish_to_directory_error">Die Sichtbarkeit des Raums konnte nicht abgerufen werden (%1$s).</string>
@@ -1820,9 +1820,9 @@
     <string name="room_permissions_change_room_name">Raumname ändern</string>
     <string name="room_permissions_change_history_visibility">Sichtbarkeit des Verlaufs ändern</string>
     <string name="room_permissions_enable_room_encryption">Raum-Verschlüsselung aktivieren</string>
-    <string name="room_permissions_change_main_address_for_the_room">Haupt-Adresse des Raums ändern</string>
+    <string name="room_permissions_change_main_address_for_the_room">Hauptadresse des Raums ändern</string>
     <string name="room_permissions_change_room_avatar">Raumbild ändern</string>
-    <string name="room_permissions_modify_widgets">Widgets verändern</string>
+    <string name="room_permissions_modify_widgets">Widgets ändern</string>
     <string name="room_permissions_notify_everyone">Jeden benachrichtigen</string>
     <string name="room_permissions_remove_messages_sent_by_others">Von anderen gesendete Nachrichten entfernen</string>
     <string name="room_permissions_ban_users">Nutzer verbannen</string>
@@ -1830,7 +1830,7 @@
     <string name="room_permissions_change_settings">Einstellungen ändern</string>
     <string name="room_permissions_invite_users">Nutzer einladen</string>
     <string name="room_permissions_send_messages">Nachrichten senden</string>
-    <string name="room_permissions_default_role">Standard Rolle</string>
+    <string name="room_permissions_default_role">Standard-Rolle</string>
     <string name="room_permissions_title">Berechtigungen</string>
     <string name="room_settings_permissions_title">Berechtigungen</string>
     <string name="room_permissions_notice_read_only">Du hast nicht die Berechtigung zum Aktualisieren der Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind</string>
@@ -1918,9 +1918,9 @@
     </plurals>
     <string name="settings_server_upload_size_unknown">Die Obergrenze ist nicht bekannt.</string>
     <string name="settings_server_upload_size_content">Dein Heim-Server akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
-    <string name="settings_server_upload_size_title">Datei-Upload-Obergrenze des Servers</string>
+    <string name="settings_server_upload_size_title">Dateigrößenlimit des Servers</string>
     <string name="settings_server_version">Serverversion</string>
-    <string name="settings_server_name">Servername</string>
+    <string name="settings_server_name">Server-Name</string>
     <string name="room_list_quick_actions_room_settings">Raumeinstellungen</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">Derzeitige Konferenz verlassen und zu einer anderen wechseln\?</string>
     <string name="room_settings_room_version_title">Raum-Version</string>
@@ -1957,8 +1957,8 @@
     <string name="spaces_header">Spaces</string>
     <string name="room_settings_room_access_entry_knock">Jeder kann im Raum anklopfen, Mitglieder können dann zustimmen oder ablehnen</string>
     <string name="invite_people_to_your_space_desc">Momentan bist nur du hier. Mit anderen Leuten wird %s noch viel besser.</string>
-    <string name="invite_to_space_with_name_desc">Diese werden in der Lage sein, %s zu durchsuchen</string>
-    <string name="invite_just_to_this_room_desc">Diese werden kein Teil von %s sein</string>
+    <string name="invite_to_space_with_name_desc">Sie wird in der Lage sein, %s zu durchsuchen</string>
+    <string name="invite_just_to_this_room_desc">Sie wird kein Teil von %s sein</string>
     <string name="share_space_link_message">Tritt meinem Space %1$s %2$s bei</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces sind eine neue Möglichkeit, Räume und Personen zu gruppieren.</string>
     <string name="space_add_existing_rooms">Räume oder Spaces hinzufügen</string>
@@ -1979,7 +1979,7 @@
     <string name="join_space">Space beitreten</string>
     <string name="create_space">Space erstellen</string>
     <string name="invite_just_to_this_room">Nur zu diesem Raum</string>
-    <string name="invite_to_space_with_name">In Space \"%s\" einladen</string>
+    <string name="invite_to_space_with_name">Zu %s einladen</string>
     <string name="invite_by_link">Link teilen</string>
     <string name="invite_by_email">Mithilfe einer E-Mail-Adresse einladen</string>
     <string name="invite_people_menu">Personen einladen</string>
@@ -2067,7 +2067,7 @@
     <string name="error_failed_to_join_room">Beim Versuch %s beizutreten, ist leider ein Fehler aufgetreten</string>
     <string name="room_upgrade_to_recommended_version">Zur empfohlenen Raumversion upgraden</string>
     <string name="joining_replacement_room">Ersatzraum betreten</string>
-    <string name="command_description_upgrade_room">Raum zu neuer Version upgraden</string>
+    <string name="command_description_upgrade_room">Aktualisiert den Raum auf eine neue Version</string>
     <string name="settings_server_room_version_stable">stabil</string>
     <string name="settings_server_room_version_unstable">instabil</string>
     <string name="settings_server_room_versions">Raumversionen 👓</string>
@@ -2108,7 +2108,7 @@
     <string name="select_spaces">Spaces wählen</string>
     <string name="room_create_member_of_space_name_can_join">Mitglieder von %s können Räume finden, betrachten und betreten.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privat (Zutritt nur mit Einladung)</string>
-    <string name="settings_room_upgrades">Raumupgrades</string>
+    <string name="settings_room_upgrades">Raumaktualisierungen</string>
     <string name="settings_messages_by_bot">Nachrichten von Bots</string>
     <string name="settings_room_invitations">Raumeinladungen</string>
     <string name="settings_encrypted_group_messages">Verschlüsselte Gruppennachrichten</string>
@@ -2192,9 +2192,9 @@
     <string name="create_new_space">Neuen Space erstellen</string>
     <string name="room_settings_space_access_title">Zugriff</string>
     <string name="room_settings_access_rules_pref_dialog_title">Wer hat Zugriff\?</string>
-    <string name="settings_notification_emails_enable_for_email">Benachrichtigungen per Email für %s aktivieren</string>
+    <string name="settings_notification_emails_enable_for_email">Benachrichtigungen per E-Mail für %s aktivieren</string>
     <string name="settings_notification_emails_no_emails">Um Benachrichtigungen per E-Mail zu empfangen, musst du eine E-Mail-Adresse hinzufügen</string>
-    <string name="settings_notification_emails_category">Emailbenachrichtigungen</string>
+    <string name="settings_notification_emails_category">E-Mail-Benachrichtigungen</string>
     <string name="room_permissions_upgrade_the_space">Space upgraden</string>
     <string name="room_permissions_change_space_name">Namen vom Space ändern</string>
     <string name="room_permissions_enable_space_encryption">Space verschlüsseln</string>
@@ -2224,7 +2224,7 @@
     <string name="command_description_ignore_user">Blockiert eine Person und versteckt deren Nachrichten</string>
     <string name="room_settings_space_access_public_description">Jeder kann den Space finden und beitreten</string>
     <string name="room_settings_room_notifications_manage_notifications">Du kannst deine Benachrichtigungen in den %1$s verwalten.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Beachte, dass Benachrichtigungen zu Erwähnungen und Schlüsselwörtern in verschlüsselten Räumen momentan nicht verfügbar sind.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Bitte beachte, dass Benachrichtigungen zu Erwähnungen und Schlüsselwörtern in verschlüsselten Räumen mobil nicht verfügbar sind.</string>
     <string name="space_permissions_notice">Wähle die Berechtigungen der Rollen aus</string>
     <string name="space_settings_permissions_subtitle">Rollen deren Berechtigungen einsehen und bearbeiten.</string>
     <plurals name="create_poll_not_enough_options_error">
@@ -2253,7 +2253,7 @@
     <string name="legals_third_party_notices">Externe Bibliotheken</string>
     <string name="analytics_opt_in_list_item_3">Du kannst dies jederzeit in den Einstellungen deaktivieren</string>
     <string name="analytics_opt_in_list_item_2">Wir teilen <b>keine</b> Informationen mit Drittpersonen</string>
-    <string name="analytics_opt_in_list_item_1">Wir erfassen und analysieren <b>keine</b> Accountdaten</string>
+    <string name="analytics_opt_in_list_item_1">Wir erfassen und analysieren <b>keine</b> Kontodaten</string>
     <string name="analytics_opt_in_content">Hilf uns dabei Probleme zu identifizieren und ${app_name} zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte benutzen, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.
 \n
 \n%s kannst du alle unsere Bedingungen lesen.</string>
@@ -2269,7 +2269,7 @@
     <string name="preference_help">Hilfe</string>
     <string name="preference_root_legals">Rechtliches</string>
     <string name="decide_which_spaces_can_access">Entscheide, welche Spaces Zugriff auf den Raum haben sollen. Die Mitglieder der Spaces können diesen Räumen betreten.</string>
-    <string name="analytics_opt_in_content_link">hier</string>
+    <string name="analytics_opt_in_content_link">Hier</string>
     <string name="analytics_opt_in_title">Hilf mit, ${app_name} zu verbessern</string>
     <string name="action_enable">Aktivieren</string>
     <string name="room_member_override_nick_color">Farbe des Anzeigenamens ändern</string>
@@ -2741,8 +2741,8 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Es befinden sich nicht verifizierte Geräte in diesem Raum. Sie werden deine Nachrichten nicht entschlüsseln können.</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">Niemals verschlüsselte Nachrichten zu unverifizierten Sitzungen in diesem Raum senden.</string>
     <string name="action_got_it">Verstanden</string>
-    <string name="labs_enable_rich_text_editor_summary">Probiere den Rich-Text-Editor aus (bald auch mit Plain-Text-Modus)</string>
-    <string name="labs_enable_rich_text_editor_title">Aktiviere Rich-Text-Editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Probiere den Textverarbeitungs-Editor (bald auch mit Klartext-Modus)</string>
+    <string name="labs_enable_rich_text_editor_title">Textverarbeitungs-Editor aktivieren</string>
     <string name="device_manager_session_details_device_browser">Browser</string>
     <string name="rich_text_editor_format_strikethrough">Durchgestrichen formatieren</string>
     <string name="rich_text_editor_format_italic">Kursiv formatieren</string>
@@ -2784,9 +2784,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Wähle „Mit QR-Code anmelden“</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Beginne auf dem Anmeldebildschirm</string>
-    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code auf diesem Gerät anzeigen\'</string>
-    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre -&gt; Alle Sitzungen anzeigen</string>
-    <string name="qr_code_login_new_device_instruction_1">Öffne ${app_name} auf deinem anderen Gerät</string>
+    <string name="qr_code_login_new_device_instruction_3">Wähle \'QR-Code anzeigen\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gehe zu Einstellungen -&gt; Sicherheit und Privatsphäre</string>
+    <string name="qr_code_login_new_device_instruction_1">Öffne die App auf deinem anderen Gerät</string>
     <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
     <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
@@ -2797,11 +2797,27 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Benutze dein angemeldetes Gerät um den unten angezeigten QR-Code einzulesen:</string>
     <string name="qr_code_login_header_show_qr_code_title">Mit QR-Code anmelden</string>
     <string name="qr_code_login_header_scan_qr_code_description">Benutze die Kamera auf diesem Gerät um den vom anderen Gerät angezeigten QR-Code zu scannen:</string>
-    <string name="qr_code_login_header_scan_qr_code_title">QR-Code scannen</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QR-Code einlesen</string>
     <string name="three">3</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kannst dieses Gerät benutzen um ein anderes Gerät per QR-Code anzumelden. Dafür gibt es zwei Wege:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
-    <string name="login_scan_qr_code">QR-Code scannen</string>
+    <string name="login_scan_qr_code">QR-Code einlesen</string>
+    <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Der Heim-Server unterstützt Anmelden per QR-Code nicht.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Die Anmeldung wurde vom anderen Gerät abgebrochen.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Das andere Gerät muss angemeldet sein.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Das andere Gerät ist bereits angemeldet.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Es ist ein Problem bei der Herstellung der sicheren Kommunikation aufgetreten. Eines der folgenden Dinge könnte kompromittiert sein: Dein Heim-Server; deine Internetverbindung(en); dein(e) Gerät(e);</string>
+    <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
+    <string name="a11y_play_voice_broadcast">Abspielen oder fortsetzen der Sprachübertragung</string>
+    <string name="a11y_resume_voice_broadcast_record">Fortsetzen der Sprachübertragung</string>
+    <string name="a11y_voice_broadcast_buffering">Puffere</string>
+    <string name="a11y_pause_voice_broadcast">Pausiere Sprachübertragung</string>
+    <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
+    <string name="voice_broadcast_live">Live</string>
 </resources>

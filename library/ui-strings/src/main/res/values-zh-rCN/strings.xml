@@ -970,7 +970,7 @@
     <string name="downloaded_file">文件%1$s 已被下载！</string>
     <string name="message_edits">消息编辑</string>
     <string name="no_message_edits_found">未找到编辑</string>
-    <string name="room_filtering_filter_hint">过滤对话…</string>
+    <string name="room_filtering_filter_hint">过滤对话……</string>
     <string name="room_filtering_footer_title">找不到你要找的？</string>
     <string name="room_filtering_footer_create_new_room">创建新房间</string>
     <string name="room_filtering_footer_create_new_direct_message">发送新私聊消息</string>
@@ -1714,7 +1714,7 @@
     <string name="direct_room_user_list_suggestions_title">建议</string>
     <string name="direct_room_user_list_known_title">已知用户</string>
     <string name="qr_code">二维码</string>
-    <string name="add_by_qr_code">通过二维码添加</string>
+    <string name="add_by_qr_code">通过QR码添加</string>
     <string name="create_room_settings_section">房间设置</string>
     <string name="create_room_topic_hint">主题</string>
     <string name="create_room_topic_section">房间话题（可选）</string>
@@ -2481,7 +2481,7 @@
     <string name="ftue_auth_use_case_connect_to_server">连接服务器</string>
     <string name="ftue_auth_use_case_join_existing_server">想要加入已有的服务器？</string>
     <string name="ftue_auth_use_case_skip_partial">跳过此问题</string>
-    <string name="ftue_auth_use_case_option_one">朋友和家人</string>
+    <string name="ftue_auth_use_case_option_one">家人和朋友</string>
     <string name="ftue_auth_carousel_secure_title">拥有你的对话。</string>
     <string name="attachment_type_location">位置</string>
     <string name="send_feedback_threads_title">Threads Beta反馈</string>
@@ -2625,4 +2625,16 @@
     <string name="labs_enable_new_app_layout_summary">简化的Element，带有可选的标签</string>
     <string name="settings_security_incognito_keyboard_title">无痕键盘</string>
     <string name="settings_security_incognito_keyboard_summary">要求键盘不要基于你在对话中的输入更新任何个性化数据，如输入历史和字典。请注意，某些键盘可能不会遵守此设置。</string>
+    <string name="permissions_rationale_msg_notification">${app_name}需要权限来显示通知。通知可以显示消息、邀请等。
+\n
+\n请在下个弹窗允许访问以便查看通知。</string>
+    <string name="labs_enable_rich_text_editor_summary">试用富文本编辑器（纯文本模式即将到来）</string>
+    <string name="labs_enable_rich_text_editor_title">启用富文本编辑器</string>
+    <string name="a11y_collapse_space_children">折叠%s孩子</string>
+    <string name="a11y_expand_space_children">展开%s孩子</string>
+    <string name="labs_enable_session_manager_title">启用新的会话管理器</string>
+    <string name="onboarding_new_app_layout_spaces_title">访问空间</string>
+    <string name="onboarding_new_app_layout_welcome_title">欢迎使用新视图！</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ 此房间里有未经验证的设备，它们将无法解密你发送的消息。</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">永远不要向这个房间里未经验证的会话发送加密的消息。</string>
 </resources>
