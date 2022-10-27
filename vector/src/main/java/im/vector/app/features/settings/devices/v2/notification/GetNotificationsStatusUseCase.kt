@@ -18,7 +18,6 @@ package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.core.di.ActiveSessionHolder
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
@@ -34,11 +33,10 @@ class GetNotificationsStatusUseCase @Inject constructor(
         private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
 ) {
 
-    // TODO add unit tests
     fun execute(deviceId: String): Flow<NotificationsStatus> {
         val session = activeSessionHolder.getSafeActiveSession()
         return when {
-            session == null -> emptyFlow()
+            session == null -> flowOf(NotificationsStatus.NOT_SUPPORTED)
             checkIfCanTogglePushNotificationsViaPusherUseCase.execute() -> {
                 session.flow()
                         .livePushers()
