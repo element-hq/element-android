@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.core.di.ActiveSessionHolder
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
@@ -43,6 +44,7 @@ class GetNotificationsStatusUseCase @Inject constructor(
                         .map { it.filter { pusher -> pusher.deviceId == deviceId } }
                         .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
                         .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
+                        .distinctUntilChanged()
             }
             checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(deviceId) -> {
                 session.flow()
@@ -50,6 +52,7 @@ class GetNotificationsStatusUseCase @Inject constructor(
                         .unwrap()
                         .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
                         .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
+                        .distinctUntilChanged()
             }
             else -> flowOf(NotificationsStatus.NOT_SUPPORTED)
         }

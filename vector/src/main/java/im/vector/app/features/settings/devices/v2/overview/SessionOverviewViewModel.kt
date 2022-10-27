@@ -30,7 +30,6 @@ import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
-import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
@@ -220,9 +219,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
             togglePushNotificationUseCase.execute(action.deviceId, action.enabled)
-            // TODO should not be needed => test without
-            val status = if (action.enabled) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED
-            setState { copy(notificationsStatus = status) }
         }
     }
 }
