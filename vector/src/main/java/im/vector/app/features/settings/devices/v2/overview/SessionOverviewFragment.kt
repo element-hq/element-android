@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -43,6 +44,7 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -177,7 +179,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
+        updatePushNotificationToggle(state.deviceId, state.notificationsStatus)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -218,15 +220,19 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
-        views.sessionOverviewPushNotifications.apply {
-            setOnCheckedChangeListener(null)
-            setChecked(enabled)
-            post {
-                setOnCheckedChangeListener { _, isChecked ->
-                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+    private fun updatePushNotificationToggle(deviceId: String, notificationsStatus: NotificationsStatus) {
+        views.sessionOverviewPushNotifications.isGone = notificationsStatus == NotificationsStatus.NOT_SUPPORTED
+        when (notificationsStatus) {
+            NotificationsStatus.ENABLED, NotificationsStatus.DISABLED -> {
+                views.sessionOverviewPushNotifications.setOnCheckedChangeListener(null)
+                views.sessionOverviewPushNotifications.setChecked(notificationsStatus == NotificationsStatus.ENABLED)
+                views.sessionOverviewPushNotifications.post {
+                    views.sessionOverviewPushNotifications.setOnCheckedChangeListener { _, isChecked ->
+                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                    }
                 }
             }
+            else -> Unit
         }
     }
 
