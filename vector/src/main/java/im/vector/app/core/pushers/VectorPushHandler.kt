@@ -28,6 +28,7 @@ import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.model.PushData
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.notifications.NotifiableEventResolver
+import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.settings.VectorDataStore
@@ -142,11 +143,6 @@ class VectorPushHandler @Inject constructor(
         pushData.roomId ?: return
         pushData.eventId ?: return
 
-        // If the room is currently displayed, we will not show a notification, so no need to get the Event faster
-        if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(pushData.roomId)) {
-            return
-        }
-
         if (wifiDetector.isConnectedToWifi().not()) {
             Timber.tag(loggerTag.value).d("No WiFi network, do not get Event")
             return
@@ -156,6 +152,13 @@ class VectorPushHandler @Inject constructor(
         val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return
 
         val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
+
+        if (resolvedEvent is NotifiableMessageEvent) {
+            // If the room is currently displayed, we will not show a notification, so no need to get the Event faster
+            if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(resolvedEvent)) {
+                return
+            }
+        }
 
         resolvedEvent
                 ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }

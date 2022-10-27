@@ -148,6 +148,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 body = message,
                 imageUriString = null,
                 roomId = room.roomId,
+                threadId = null, // needs to be changed: https://github.com/vector-im/element-android/issues/7475
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
                 outGoingMessage = true,
