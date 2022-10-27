@@ -19,6 +19,7 @@ package im.vector.app.features.call.conference
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -46,6 +47,7 @@ import org.jitsi.meet.sdk.JitsiMeet
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
+import org.jitsi.meet.sdk.JitsiMeetOngoingConferenceService
 import org.jitsi.meet.sdk.JitsiMeetView
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
@@ -67,6 +69,13 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     private var jitsiMeetView: JitsiMeetView? = null
 
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val intent = Intent("onConfigurationChanged")
+        intent.putExtra("newConfig", newConfig)
+        this.sendBroadcast(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,14 +116,24 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onDestroy() {
         val currentConf = JitsiMeet.getCurrentConference()
+        handleLeaveConference()
         jitsiMeetView?.dispose()
         // Fake emitting CONFERENCE_TERMINATED event when currentConf is not null (probably when closing the PiP screen).
         if (currentConf != null) {
             ConferenceEventEmitter(this).emitConferenceEnded()
         }
+        JitsiMeetOngoingConferenceService.abort(this)
         JitsiMeetActivityDelegate.onHostDestroy(this)
         removeOnPictureInPictureModeChangedListener(pictureInPictureModeChangedInfoConsumer)
         super.onDestroy()
+    }
+
+    // Activity lifecycle methods
+    //
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        JitsiMeetActivityDelegate.onActivityResult(this, requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
@@ -224,8 +243,15 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         Timber.v("Broadcast received: $event")
         when (event) {
             is ConferenceEvent.Terminated -> onConferenceTerminated(event.data)
-            else -> Unit
+            is ConferenceEvent.Joined -> onConferenceJoined(event.data)
+            is ConferenceEvent.ReadyToClose -> onReadyToClose()
+            is ConferenceEvent.WillJoin -> Unit
         }
+    }
+
+    private fun onConferenceJoined(extraData: Map<String, Any>) {
+        // Launch the service for the ongoing notification.
+        JitsiMeetOngoingConferenceService.launch(this, HashMap(extraData))
     }
 
     private fun onConferenceTerminated(data: JsonDict) {
@@ -234,6 +260,11 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         if (data["error"] == null) {
             jitsiViewModel.handle(JitsiCallViewActions.OnConferenceLeft)
         }
+    }
+
+    private fun onReadyToClose() {
+        Timber.v("SDK is ready to close")
+        finish()
     }
 
     companion object {
