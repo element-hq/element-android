@@ -2875,4 +2875,20 @@
     <string name="a11y_pause_voice_broadcast_record">Pozastaviť nahrávanie hlasového vysielania</string>
     <string name="a11y_resume_voice_broadcast_record">Pokračovať v nahrávaní hlasového vysielania</string>
     <string name="voice_broadcast_live">Naživo</string>
+    <string name="device_manager_other_sessions_select">Vyberte relácie</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Poloha</string>
+    <string name="attachment_type_selector_poll">Ankety</string>
+    <string name="attachment_type_selector_voice_broadcast">Hlasové vysielanie</string>
+    <string name="attachment_type_selector_file">Prílohy</string>
+    <string name="attachment_type_selector_sticker">Nálepky</string>
+    <string name="attachment_type_selector_gallery">Knižnica fotografií</string>
+    <string name="action_deselect_all">Zrušiť výber všetkých</string>
+    <string name="action_select_all">Vybrať všetko</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vybraté</item>
+        <item quantity="few">%1$d vybraté</item>
+        <item quantity="other">%1$d vybraných</item>
+    </plurals>
 </resources>
