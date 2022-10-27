@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.auth.version
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Model for https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions.
@@ -56,6 +57,7 @@ private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
 private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
 private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
 private const val FEATURE_THREADS_MSC3773 = "org.matrix.msc3773"
+private const val FEATURE_PUSH_NOTIFICATIONS_MSC3881 = "org.matrix.msc3881"
 
 /**
  * Return true if the SDK supports this homeserver version.
@@ -141,4 +143,13 @@ private fun Versions.getMaxVersion(): HomeServerVersion {
             ?.mapNotNull { HomeServerVersion.parse(it) }
             ?.maxOrNull()
             ?: HomeServerVersion.r0_0_0
+}
+
+/**
+ * Indicate if the server supports MSC3881: https://github.com/matrix-org/matrix-spec-proposals/pull/3881.
+ *
+ * @return true if remote toggle of push notifications is supported
+ */
+internal fun Versions.doesServerSupportRemoteToggleOfPushNotifications(): Boolean {
+    return unstableFeatures?.get(FEATURE_PUSH_NOTIFICATIONS_MSC3881).orFalse()
 }
