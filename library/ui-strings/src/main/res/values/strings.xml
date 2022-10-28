@@ -3094,6 +3094,8 @@
     <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
     <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
     <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
+    <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
     <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
     <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>

@@ -18,6 +18,9 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.view.View
 import android.widget.ImageButton
+import android.widget.SeekBar
+import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -56,6 +59,9 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
             playPauseButton.isVisible = state != VoiceBroadcastPlayer.State.BUFFERING
 
+            fastBackwardButton.isInvisible = true
+            fastForwardButton.isInvisible = true
+
             when (state) {
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
@@ -85,6 +91,10 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     class Holder : AbsMessageVoiceBroadcastItem.Holder(STUB_ID) {
         val playPauseButton by bind<ImageButton>(R.id.playPauseButton)
         val bufferingView by bind<View>(R.id.bufferingView)
+        val fastBackwardButton by bind<ImageButton>(R.id.fastBackwardButton)
+        val fastForwardButton by bind<ImageButton>(R.id.fastForwardButton)
+        val seekBar by bind<SeekBar>(R.id.seekBar)
+        val durationView by bind<TextView>(R.id.playbackDuration)
         val broadcasterNameMetadata by bind<VoiceBroadcastMetadataView>(R.id.broadcasterNameMetadata)
         val voiceBroadcastMetadata by bind<VoiceBroadcastMetadataView>(R.id.voiceBroadcastMetadata)
         val listenersCountMetadata by bind<VoiceBroadcastMetadataView>(R.id.listenersCountMetadata)

@@ -84,22 +84,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:barrierMargin="12dp"
+        app:barrierMargin="10dp"
         app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataFlow" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/controllerButtonsFlow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:constraint_referenced_ids="playPauseButton,bufferingView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        app:constraint_referenced_ids="fastBackwardButton,playPauseButton,bufferingView,fastForwardButton"
+        app:layout_constraintBottom_toTopOf="@id/seekBar"
         app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
 
     <ImageButton
+        android:id="@+id/fastBackwardButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/a11y_voice_broadcast_fast_backward"
+        android:src="@drawable/ic_player_backward_30"
+        app:tint="?vctr_content_secondary" />
+
+    <ImageButton
         android:id="@+id/playPauseButton"
-        android:layout_width="@dimen/voice_broadcast_controller_button_size"
-        android:layout_height="@dimen/voice_broadcast_controller_button_size"
+        android:layout_width="@dimen/voice_broadcast_player_button_size"
+        android:layout_height="@dimen/voice_broadcast_player_button_size"
         android:background="@drawable/bg_rounded_button"
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_play_voice_broadcast"
@@ -108,10 +117,43 @@
 
     <ProgressBar
         android:id="@+id/bufferingView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/voice_broadcast_player_button_size"
+        android:layout_height="@dimen/voice_broadcast_player_button_size"
         android:contentDescription="@string/a11y_voice_broadcast_buffering"
         android:indeterminate="true"
         android:indeterminateTint="?vctr_content_secondary" />
+
+    <ImageButton
+        android:id="@+id/fastForwardButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/a11y_voice_broadcast_fast_forward"
+        android:src="@drawable/ic_player_forward_30"
+        app:tint="?vctr_content_secondary" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:progressDrawable="@drawable/bg_seek_bar"
+        android:thumbTint="?vctr_content_tertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playbackDuration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/controllerButtonsFlow"
+        tools:progress="40" />
+
+    <TextView
+        android:id="@+id/playbackDuration"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?vctr_content_tertiary"
+        app:layout_constraintBottom_toBottomOf="@id/seekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/seekBar"
+        tools:text="0:23" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

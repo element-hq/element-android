@@ -91,8 +91,8 @@
 
     <ImageButton
         android:id="@+id/recordButton"
-        android:layout_width="@dimen/voice_broadcast_controller_button_size"
-        android:layout_height="@dimen/voice_broadcast_controller_button_size"
+        android:layout_width="@dimen/voice_broadcast_recorder_button_size"
+        android:layout_height="@dimen/voice_broadcast_recorder_button_size"
         android:background="@drawable/bg_rounded_button"
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_resume_voice_broadcast_record"
@@ -100,8 +100,8 @@
 
     <ImageButton
         android:id="@+id/stopRecordButton"
-        android:layout_width="@dimen/voice_broadcast_controller_button_size"
-        android:layout_height="@dimen/voice_broadcast_controller_button_size"
+        android:layout_width="@dimen/voice_broadcast_recorder_button_size"
+        android:layout_height="@dimen/voice_broadcast_recorder_button_size"
         android:background="@drawable/bg_rounded_button"
         android:backgroundTint="?vctr_system"
         android:contentDescription="@string/a11y_stop_voice_broadcast_record"
