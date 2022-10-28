@@ -161,38 +161,13 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         val voiceBroadcastState = getVoiceBroadcastUseCase.execute(roomId, eventId)?.content?.voiceBroadcastState
         isLive = voiceBroadcastState != null && voiceBroadcastState != VoiceBroadcastState.STOPPED
-        observeIncomingEvents(roomId, eventId)
+        fetchPlaylistAndStartPlayback(roomId, eventId)
     }
 
-    private fun startPlayback() {
-        val event = if (isLive) playlist.lastOrNull() else playlist.firstOrNull()
-        val content = event?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
-        val sequence = event.getVoiceBroadcastChunk()?.sequence
-        coroutineScope.launch {
-            try {
-                currentMediaPlayer = prepareMediaPlayer(content)
-                currentMediaPlayer?.start()
-                currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
-                currentSequence = sequence
-                withContext(Dispatchers.Main) { playingState = State.PLAYING }
-                nextMediaPlayer = prepareNextMediaPlayer()
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Unable to start playback")
-                throw VoiceFailure.UnableToPlay(failure)
-            }
-        }
-    }
-
-    private fun observeIncomingEvents(roomId: String, voiceBroadcastId: String) {
+    private fun fetchPlaylistAndStartPlayback(roomId: String, voiceBroadcastId: String) {
         fetchPlaylistJob = getLiveVoiceBroadcastChunksUseCase.execute(roomId, voiceBroadcastId)
                 .onEach(this::updatePlaylist)
                 .launchIn(coroutineScope)
-    }
-
-    private fun resumePlayback() {
-        currentMediaPlayer?.start()
-        currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
-        playingState = State.PLAYING
     }
 
     private fun updatePlaylist(playlist: List<MessageAudioEvent>) {
@@ -218,6 +193,31 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             }
             State.IDLE -> startPlayback()
         }
+    }
+
+    private fun startPlayback() {
+        val event = if (isLive) playlist.lastOrNull() else playlist.firstOrNull()
+        val content = event?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
+        val sequence = event.getVoiceBroadcastChunk()?.sequence
+        coroutineScope.launch {
+            try {
+                currentMediaPlayer = prepareMediaPlayer(content)
+                currentMediaPlayer?.start()
+                currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
+                currentSequence = sequence
+                withContext(Dispatchers.Main) { playingState = State.PLAYING }
+                nextMediaPlayer = prepareNextMediaPlayer()
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Unable to start playback")
+                throw VoiceFailure.UnableToPlay(failure)
+            }
+        }
+    }
+
+    private fun resumePlayback() {
+        currentMediaPlayer?.start()
+        currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
+        playingState = State.PLAYING
     }
 
     private fun getNextAudioContent(): MessageAudioContent? {
