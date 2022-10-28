@@ -467,12 +467,12 @@
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
-    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine Raum-ID.</string>
+    <string name="widget_integration_missing_room_id">room_id fehlt in der Anfrage.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Integrationen hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
-    <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
+    <string name="widget_integration_missing_user_id">user_id fehlt in der Anfrage.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
     <string name="black_theme">Schwarzes Design</string>
@@ -1625,8 +1625,8 @@
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
     <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
-    <string name="video_meeting">Starte eine Videokonferenz</string>
-    <string name="audio_meeting">Starte eine Audiokonferenz</string>
+    <string name="video_meeting">Beginne eine Videokonferenz</string>
+    <string name="audio_meeting">Beginne eine Audiokonferenz</string>
     <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi-Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwesenden können während der Konferenz beitreten.</string>
     <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
     <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
@@ -1672,7 +1672,7 @@
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
-    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu beginnen</string>
     <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
@@ -1683,7 +1683,7 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
     <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu beginnen</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Details wie Raumnamen und Nachrichteninhalt zeigen.</string>
     <string name="settings_security_pin_code_notifications_title">Inhalt in Benachrichtigungen anzeigen</string>
@@ -2332,12 +2332,12 @@
     <string name="location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
     <string name="location_activity_title_preview">Standort</string>
-    <string name="closed_poll_option_description">Ergebnisse werden erst angezeigt, wenn du die Umfrage beendest</string>
-    <string name="closed_poll_option_title">Geschlossene Umfrage</string>
-    <string name="open_poll_option_description">Ergebnisse werden direkt nach Stimmabgabe angezeigt</string>
-    <string name="open_poll_option_title">Offene Umfrage</string>
-    <string name="poll_type_title">Umfragetyp</string>
-    <string name="edit_poll_title">Umfrage bearbeiten</string>
+    <string name="closed_poll_option_description">Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest</string>
+    <string name="closed_poll_option_title">Abgeschlossene Abstimmung</string>
+    <string name="open_poll_option_description">Abstimmende können die Ergebnisse nach Stimmabgabe sehen</string>
+    <string name="open_poll_option_title">Laufende Abstimmung</string>
+    <string name="poll_type_title">Abstimmungsart</string>
+    <string name="edit_poll_title">Abstimmung bearbeiten</string>
     <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
     <string name="login_splash_create_account">Konto erstellen</string>
     <string name="ftue_auth_carousel_workplace_title">Kommunikation für dein Team.</string>
@@ -2820,4 +2820,19 @@
     <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
     <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
     <string name="voice_broadcast_live">Live</string>
+    <string name="attachment_type_selector_sticker">Sticker</string>
+    <string name="device_manager_other_sessions_select">Sitzungen auswählen</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Standort</string>
+    <string name="attachment_type_selector_poll">Umfragen</string>
+    <string name="attachment_type_selector_voice_broadcast">Sprachübertragung</string>
+    <string name="attachment_type_selector_file">Anhänge</string>
+    <string name="attachment_type_selector_gallery">Fotobibliothek</string>
+    <string name="action_deselect_all">Alle abwählen</string>
+    <string name="action_select_all">Alle auswählen</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d ausgewählt</item>
+        <item quantity="other">%1$d ausgewählt</item>
+    </plurals>
 </resources>
