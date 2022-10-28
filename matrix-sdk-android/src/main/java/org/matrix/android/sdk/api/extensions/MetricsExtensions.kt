@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,7 @@ import kotlin.contracts.contract
  * Executes the given [block] while measuring the transaction.
  */
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> measureMetric(metricMeasurementPlugins: List<MetricPlugin>, block: () -> T): T {
+inline fun <T> measureMetric(metricMeasurementPlugins: List<MetricPlugin>, block: () -> T): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
