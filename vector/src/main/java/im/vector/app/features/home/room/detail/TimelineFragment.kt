@@ -33,6 +33,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.addCallback
+import androidx.annotation.StringRes
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
@@ -1320,8 +1321,12 @@ class TimelineFragment :
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
+        @StringRes val titleResId = when(result.action) {
+            RoomDetailAction.VoiceBroadcastAction.Recording.Start -> R.string.error_voice_broadcast_unauthorized_title
+            else -> R.string.dialog_title_error
+        }
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(titleResId)
                 .setMessage(errorFormatter.toHumanReadable(result.throwable))
                 .setPositiveButton(R.string.ok, null)
                 .show()
