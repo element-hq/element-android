@@ -74,7 +74,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         super.onConfigurationChanged(newConfig)
         val intent = Intent("onConfigurationChanged")
         intent.putExtra("newConfig", newConfig)
-        this.sendBroadcast(intent)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
