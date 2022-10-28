@@ -2299,7 +2299,7 @@
     <string name="room_member_override_nick_color">覆盖显示名称颜色</string>
     <string name="ftue_auth_reset_password_breaker_title">检查你的电子邮件。</string>
     <string name="ftue_auth_email_entry_title">电子邮件</string>
-    <string name="ftue_auth_carousel_control_title">一切由您掌控</string>
+    <string name="ftue_auth_carousel_control_title">一切由您掌控。</string>
     <string name="beta">BETA</string>
     <string name="location_share_live_select_duration_title">分享你的实时位置</string>
     <string name="a11y_location_share_locate_button">缩放到当前位置</string>
