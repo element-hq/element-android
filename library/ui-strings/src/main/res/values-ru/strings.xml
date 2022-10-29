@@ -2797,4 +2797,12 @@
     <string name="labs_enable_voice_broadcast_title">Голосовые трансляции (в активной разработке)</string>
     <string name="labs_enable_client_info_recording_summary">Записывает название клиента, версию и URL-адрес для более лёгкого распознавания сессий в менеджере сессий.</string>
     <string name="labs_enable_client_info_recording_title">Записывать информацию о клиенте</string>
+    <string name="attachment_type_selector_gallery">Галерея</string>
+    <string name="attachment_type_selector_sticker">Наклейки</string>
+    <string name="attachment_type_selector_file">Вложения</string>
+    <string name="attachment_type_selector_voice_broadcast">Голосовая трансляция</string>
+    <string name="attachment_type_selector_poll">Опрос</string>
+    <string name="attachment_type_selector_location">Местоположение</string>
+    <string name="attachment_type_selector_camera">Камера</string>
+    <string name="attachment_type_selector_contact">Контакт</string>
 </resources>
