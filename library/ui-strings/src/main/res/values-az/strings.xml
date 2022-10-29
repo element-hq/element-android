@@ -129,4 +129,8 @@
         <item quantity="one">%1$d seçildi</item>
         <item quantity="other">%1$d seçildi</item>
     </plurals>
+    <string name="notice_direct_room_third_party_invite">%1$s, %2$s-ı dəvət etdi</string>
+    <string name="notice_room_third_party_invite_by_you">Otağa qoşulmaq üçün %1$s-a dəvət göndərdiniz</string>
+    <string name="notice_room_server_acl_updated_title">%s, bu otaq üçün server ACL-lərini dəyişdi.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s ilə uyğunlaşan serverlərə icazə verildi.</string>
 </resources>
