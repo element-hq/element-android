@@ -2692,7 +2692,7 @@
     <string name="home_empty_no_unreads_message">Tu sa zobrazia neprečítané správy, ak nejaké máte.</string>
     <string name="home_empty_no_unreads_title">Nič, o čom by bolo potrebné podať správu.</string>
     <string name="home_empty_no_rooms_message">Kompletná zabezpečená aplikácia na komunikáciu pre tímy, priateľov a organizácie. Začnite konverzáciu alebo sa pridajte k existujúcej miestnosti.</string>
-    <string name="home_empty_no_rooms_title">Vitajte v aplikácii ${názov_aplikácie},
+    <string name="home_empty_no_rooms_title">Vitajte v aplikácii ${app_name},
 \n%s.</string>
     <string name="home_empty_space_no_rooms_message">Priestory sú novým spôsobom zoskupovania miestností a ľudí. Pomocou tlačidla vpravo dole môžete pridať existujúcu miestnosť alebo vytvoriť novú.</string>
     <string name="home_empty_space_no_rooms_title">%s
