@@ -55,7 +55,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
     private var currentConstraintSetId: Int = -1
     private val animationDuration = 100L
 
-    private var isFullScreen = false
+    private val isFullScreen: Boolean get() = currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_fullscreen
 
     var isTextFormattingEnabled = true
         set(value) {
@@ -104,10 +104,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
         collapse(false)
 
         views.richTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
         )
         views.plainTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
         )
 
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -196,8 +196,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
         button.isSelected = menuState.reversedActions.contains(action)
     }
 
-    private fun updateTextFieldBorder(isExpanded: Boolean) {
-        val borderResource = if (isExpanded) {
+    private fun updateTextFieldBorder() {
+        val isExpanded = editText.editableText.lines().count() > 1
+        val borderResource = if (isExpanded || isFullScreen) {
             R.drawable.bg_composer_rich_edit_text_expanded
         } else {
             R.drawable.bg_composer_rich_edit_text_single_line
@@ -240,8 +241,27 @@ class RichTextComposerLayout @JvmOverloads constructor(
             it.applyTo(this)
         }
 
-        updateTextFieldBorder(newValue)
+        updateTextFieldBorder()
         updateEditTextVisibility()
+
+        if (newValue) {
+            views.richTextComposerEditText.maxLines = Int.MAX_VALUE
+            views.plainTextComposerEditText.maxLines = Int.MAX_VALUE
+            // This is a workaround to fix incorrect scroll position when maximised
+            post {
+                views.richTextComposerEditText.apply {
+                    requestLayout()
+                    invalidate()
+                }
+                views.plainTextComposerEditText.apply {
+                    requestLayout()
+                    invalidate()
+                }
+            }
+        } else {
+            views.richTextComposerEditText.maxLines = 12
+            views.plainTextComposerEditText.maxLines = 12
+        }
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
