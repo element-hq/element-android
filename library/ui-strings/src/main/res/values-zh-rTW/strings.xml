@@ -942,7 +942,7 @@
     <string name="settings_discovery_no_msisdn">在您新增電話號碼後，探索選項將會出現。</string>
     <string name="settings_discovery_disconnect_identity_server_info">與您的身份識別伺服器斷線代表您無法被其他使用者探索，且您將無法透過電子郵件或電話邀請其他人。</string>
     <string name="settings_discovery_msisdn_title">可探索的電話號碼</string>
-    <string name="settings_discovery_confirm_mail">我們將會傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
+    <string name="settings_discovery_confirm_mail">我們已傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
     <string name="settings_discovery_enter_identity_server">輸入身份識別伺服器 URL</string>
     <string name="settings_discovery_bad_identity_server">無法連線到身份識別伺服器</string>
     <string name="settings_discovery_please_enter_server">請輸入身份識別伺服器 URL</string>
