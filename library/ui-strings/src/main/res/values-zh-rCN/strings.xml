@@ -815,10 +815,10 @@
     <string name="settings_push_rules">推送规则</string>
     <string name="settings_push_rules_no_rules">尚未定义任何推送规则</string>
     <string name="settings_push_gateway_no_pushers">没有已注册的推送通道</string>
-    <string name="push_gateway_item_app_id">app_id：</string>
-    <string name="push_gateway_item_push_key">push_key：</string>
-    <string name="push_gateway_item_app_display_name">app_display_name：</string>
-    <string name="push_gateway_item_device_name">device_name：</string>
+    <string name="push_gateway_item_app_id">应用ID：</string>
+    <string name="push_gateway_item_push_key">推送密钥：</string>
+    <string name="push_gateway_item_app_display_name">应用显示名称：</string>
+    <string name="push_gateway_item_device_name">会话显示名称：</string>
     <string name="push_gateway_item_url">URL：</string>
     <string name="push_gateway_item_format">格式：</string>
     <string name="preference_voice_and_video">音频与视频</string>
@@ -991,12 +991,12 @@
     <string name="settings_discovery_identity_server_info">你正在使用 %1$s 与你知道的现有联系人相互发现。</string>
     <string name="settings_discovery_identity_server_info_none">你当前未使用身份服务器。若要与你知道的现有联系人相互发现，请在下方配置。</string>
     <string name="settings_discovery_emails_title">可发现电子邮件地址</string>
-    <string name="settings_discovery_no_mails">发现选项将在你添加电子邮件后出现。</string>
+    <string name="settings_discovery_no_mails">发现选项将在你添加电子邮件地址后出现。</string>
     <string name="settings_discovery_no_msisdn">发现选项将在你添加电话号码后出现。</string>
     <string name="settings_discovery_disconnect_identity_server_info">与你的身份服务器断开意味着你将无法被其它用户发现并且无法通过电子邮件和电话邀请他人。</string>
     <string name="settings_discovery_msisdn_title">可发现电话号码</string>
-    <string name="settings_discovery_confirm_mail">我们向 %s 给你发送了确认电子邮件，检查你的电子邮件并点击确认链接</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">我们向 %s 给你发送了确认电子邮件，请先检查你的电子邮件并点击确认链接</string>
+    <string name="settings_discovery_confirm_mail">我们向%s发送了一封电子邮件，请检查你的电子邮件并点击确认链接</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">我们向%s发送了电子邮件，请先检查你的电子邮件并点击确认链接</string>
     <string name="settings_discovery_enter_identity_server">输入身份服务器 URL</string>
     <string name="settings_discovery_bad_identity_server">无法连接到身份服务器</string>
     <string name="settings_discovery_please_enter_server">请输入身份服务器 url</string>
@@ -1105,16 +1105,16 @@
     <string name="login_registration_not_supported">应用无法在此服务器上创建账户。
 \n
 \n你想要通过网页客户端注册吗？</string>
-    <string name="login_login_with_email_error">电子邮件未关联到任何账户。</string>
+    <string name="login_login_with_email_error">此电子邮件地址未关联到任何账户。</string>
     <string name="login_reset_password_on">在 %1$s 上重置密码</string>
     <string name="login_reset_password_notice">验证邮件将发送到你的收件箱以确认设置你的新密码。</string>
     <string name="login_reset_password_submit">下一个</string>
     <string name="login_reset_password_email_hint">电子邮件</string>
     <string name="login_reset_password_password_hint">新密码</string>
-    <string name="login_reset_password_warning_title">注意！</string>
+    <string name="login_reset_password_warning_title">警告！</string>
     <string name="login_reset_password_warning_content">更改你的密码将重置所有会话上的端到端加密密钥，从而使加密聊天记录无法读取。在重设密码之前，请设置“密钥备份”或从另一个会话中导出房间密钥。</string>
     <string name="login_reset_password_warning_submit">继续</string>
-    <string name="login_reset_password_error_not_found">电子邮件未链接到任何账户</string>
+    <string name="login_reset_password_error_not_found">此电子邮件地址未链接到任何账户</string>
     <string name="login_reset_password_mail_confirmation_title">检查你的收件箱</string>
     <string name="login_reset_password_mail_confirmation_notice">验证电子邮件已发送到 %1$s。</string>
     <string name="login_reset_password_mail_confirmation_notice_2">点击链接以确认你的新密码。跟随包含的链接验证后，请点击下方。</string>
@@ -1123,12 +1123,12 @@
     <string name="login_reset_password_success_notice">你的密码已重置。</string>
     <string name="login_reset_password_success_notice_2">你已登出全部会话，不会再接收到推送通知。若要重新启用通知，请在每个设备上再次登录。</string>
     <string name="login_reset_password_success_submit">返回登录</string>
-    <string name="login_reset_password_cancel_confirmation_title">注意</string>
+    <string name="login_reset_password_cancel_confirmation_title">警告</string>
     <string name="login_reset_password_cancel_confirmation_content">你的密码尚未更改。
 \n
 \n是否中止密码更改过程？</string>
     <string name="login_set_email_title">设置电子邮件地址</string>
-    <string name="login_set_email_notice">设置电子邮件用于恢复你的账户。之后，你可以选择允许你认识的人通过电子邮件发现你。</string>
+    <string name="login_set_email_notice">设置电子邮件地址以用于恢复你的账户。之后，你可以选择允许你认识的人通过此地址发现你。</string>
     <string name="login_set_email_mandatory_hint">电子邮件</string>
     <string name="login_set_email_optional_hint">电子邮件（可选）</string>
     <string name="login_set_email_submit">下一个</string>
@@ -1151,7 +1151,7 @@
     <string name="login_signup_password_hint">密码</string>
     <string name="login_signup_submit">下一个</string>
     <string name="login_signup_error_user_in_use">用户名已占用</string>
-    <string name="login_signup_cancel_confirmation_title">注意</string>
+    <string name="login_signup_cancel_confirmation_title">警告</string>
     <string name="login_signup_cancel_confirmation_content">你的账户尚未创建。是否中止注册过程？</string>
     <string name="login_a11y_choose_matrix_org">选择 matrix.org</string>
     <string name="login_a11y_choose_modular">选择 Element Matrix Services</string>
@@ -1189,7 +1189,7 @@
     <string name="soft_logout_signin_submit">登录</string>
     <string name="soft_logout_signin_password_hint">密码</string>
     <string name="soft_logout_clear_data_title">清除个人数据</string>
-    <string name="soft_logout_clear_data_notice">注意：你的个人数据（包括加密密钥）仍存储在此设备上。
+    <string name="soft_logout_clear_data_notice">警告：你的个人数据（包括加密密钥）仍存储在此设备上。
 \n
 \n如果你不再使用此设备，或想登录另一个账户，请清除它。</string>
     <string name="soft_logout_clear_data_submit">清除全部数据</string>
@@ -1235,7 +1235,7 @@
     <string name="sent_a_file">文件</string>
     <string name="send_a_sticker">贴纸</string>
     <string name="verification_request_waiting">正在等待……</string>
-    <string name="verification_request_other_cancelled">%s 已取消</string>
+    <string name="verification_request_other_cancelled">%s已取消</string>
     <string name="verification_request_you_cancelled">你已取消</string>
     <string name="verification_request_other_accepted">%s 已接受</string>
     <string name="verification_request_you_accepted">你已接受</string>
@@ -1318,7 +1318,7 @@
     <string name="verification_open_other_to_verify">使用现有会话来验证此会话，并授予其访问加密消息的权限。</string>
     <string name="verification_profile_verify">验证</string>
     <string name="verification_profile_verified">已验证</string>
-    <string name="verification_profile_warning">注意</string>
+    <string name="verification_profile_warning">警告</string>
     <string name="room_member_profile_failed_to_get_devices">无法获取会话</string>
     <string name="room_member_profile_sessions_section_title">会话</string>
     <string name="trusted">可信任</string>
@@ -1492,7 +1492,7 @@
     <string name="identity_server_error_outdated_home_server">无法执行此操作。主服务器已过期。</string>
     <string name="identity_server_error_no_identity_server_configured">请先配置身份服务器。</string>
     <string name="identity_server_error_terms_not_signed">请先在设置中接受身份服务器的条款。</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">为了你的隐私，${app_name} 仅支持发送用户电子邮件和电话号码的哈希值。</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">为了你的隐私，${app_name}仅支持发送经过哈希处理的用户电子邮件的和电话号码。</string>
     <string name="identity_server_error_binding_error">关联失败。</string>
     <string name="identity_server_error_no_current_binding_error">当前与此标识符没有关联。</string>
     <string name="identity_server_set_default_notice">你的主服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
@@ -1709,7 +1709,7 @@
     <string name="attachment_type_dialog_title">添加图像自</string>
     <string name="settings_discovery_consent_action_give_consent">授予许可</string>
     <string name="settings_discovery_consent_action_revoke">撤销我的许可</string>
-    <string name="settings_discovery_consent_notice_on">你已同意发送电子邮件和电话号码到身份服务器以从你的联系人发现其他用户。</string>
+    <string name="settings_discovery_consent_notice_on">你已同意发送电子邮件地址和电话号码到身份服务器以从你的联系人发现其他用户。</string>
     <string name="settings_discovery_consent_title">发送电子邮件和电话号码</string>
     <string name="direct_room_user_list_suggestions_title">建议</string>
     <string name="direct_room_user_list_known_title">已知用户</string>
@@ -2217,12 +2217,12 @@
     <string name="create_poll_question_title">投票问题或主题</string>
     <string name="create_poll_title">创建投票</string>
     <string name="attachment_type_poll">投票</string>
-    <string name="identity_server_consent_dialog_title_2">向 %s 发送电子邮件和电话号码</string>
+    <string name="identity_server_consent_dialog_title_2">向%s发送电子邮件地址和电话号码</string>
     <string name="settings_discovery_consent_notice_off_2">您的联系人是私密的。 要从您的联系人中发现用户，我们需要您的许可才能将联系信息发送到您的身份服务器。</string>
     <string name="shortcut_disabled_reason_sign_out">已登出此会话！</string>
     <string name="shortcut_disabled_reason_room_left">已离开此房间！</string>
     <string name="identity_server_consent_dialog_content_question">你同意发送此信息吗？</string>
-    <string name="identity_server_consent_dialog_content_3">要发现现有的联系人，您需要将联系人信息(电子邮件和电话号码)发送到您的身份服务器。出乎隐私考量，我们会在发送前对您的数据进行散列处理。</string>
+    <string name="identity_server_consent_dialog_content_3">要发现现有的联系人，你需要将联系人信息（电子邮件地址和电话号码）发送到你的身份服务器。出乎隐私考量，我们会在发送前对您的数据进行散列处理。</string>
     <string name="action_not_now">不是现在</string>
     <string name="delete_poll_dialog_content">您确定要删除此投票吗？一旦移除，就无法恢复。</string>
     <string name="delete_poll_dialog_title">删除投票</string>
@@ -2756,4 +2756,15 @@
     <string name="command_description_table_flip">将 (╯°□°)╯︵ ┻━┻ 添加到纯文本消息中</string>
     <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} 需要显示通知的权限。
 \n请授予权限。</string>
+    <string name="command_description_devtools">打开开发者工具屏幕</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 你已在安全设置中为所有房间启用了仅对已验证会话加密。</string>
+    <string name="grant_permission">授予权限</string>
+    <string name="a11y_stop_voice_broadcast_record">停止语音广播录制</string>
+    <string name="a11y_pause_voice_broadcast_record">暂停语音广播录制</string>
+    <string name="a11y_resume_voice_broadcast_record">继续语音广播录制</string>
+    <string name="login_scan_qr_code">扫描QR码</string>
+    <string name="attachment_type_voice_broadcast">语音广播</string>
+    <string name="push_gateway_item_enabled">已启用：</string>
+    <string name="push_gateway_item_device_id">会话ID：</string>
+    <string name="error_check_network">出了点差错。请检查您的网络连接并重试。</string>
 </resources>
