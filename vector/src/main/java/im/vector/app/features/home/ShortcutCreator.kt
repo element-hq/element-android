@@ -29,6 +29,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.MainActivity
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -55,6 +56,7 @@ class ShortcutCreator @Inject constructor(
             dimensionConverter.dpToPx(72)
         }
     }
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     fun canCreateShortcut(): Boolean {
         return ShortcutManagerCompat.isRequestPinShortcutSupported(context)
@@ -73,10 +75,12 @@ class ShortcutCreator @Inject constructor(
         } catch (failure: Throwable) {
             null
         }
-        val categories = if (Build.VERSION.SDK_INT >= 25) {
-            setOf(directShareCategory, ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
-        } else {
-            setOf(directShareCategory)
+        val categories = mutableSetOf<String>()
+        if (vectorPreferences.directShareEnabled()) {
+            categories.add(directShareCategory)
+        }
+        if (Build.VERSION.SDK_INT >= 25) {
+            categories.add(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
         }
 
         return ShortcutInfoCompat.Builder(context, roomSummary.roomId)

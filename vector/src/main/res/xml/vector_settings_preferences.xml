@@ -147,6 +147,12 @@
             android:title="@string/settings_vibrate_on_mention"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_DIRECT_SHARE"
+            android:summary="@string/settings_enable_direct_share_summary"
+            android:title="@string/settings_enable_direct_share_title" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
