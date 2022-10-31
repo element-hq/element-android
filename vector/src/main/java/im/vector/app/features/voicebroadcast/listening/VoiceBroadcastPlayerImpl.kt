@@ -22,7 +22,7 @@ import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
-import im.vector.app.features.voicebroadcast.getVoiceBroadcastChunk
+import im.vector.app.features.voicebroadcast.duration
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Listener
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.State
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 import timber.log.Timber
@@ -69,7 +70,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private var currentSequence: Int? = null
 
     private var fetchPlaylistJob: Job? = null
-    private var playlist = emptyList<MessageAudioEvent>()
+    private var playlist = emptyList<PlaylistItem>()
+
     private var isLive: Boolean = false
 
     override var currentVoiceBroadcastId: String? = null
@@ -170,8 +172,18 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 .launchIn(coroutineScope)
     }
 
-    private fun updatePlaylist(playlist: List<MessageAudioEvent>) {
-        this.playlist = playlist.sortedBy { it.getVoiceBroadcastChunk()?.sequence?.toLong() ?: it.root.originServerTs }
+    private fun updatePlaylist(audioEvents: List<MessageAudioEvent>) {
+        val sorted = audioEvents.sortedBy { it.sequence?.toLong() ?: it.root.originServerTs }
+        val chunkPositions = sorted
+                .map { it.duration }
+                .runningFold(0) { acc, i -> acc + i }
+                .dropLast(1)
+        this.playlist = sorted.mapIndexed { index, messageAudioEvent ->
+            PlaylistItem(
+                    audioEvent = messageAudioEvent,
+                    startTime = chunkPositions.getOrNull(index) ?: 0
+            )
+        }
         onPlaylistUpdated()
     }
 
@@ -195,16 +207,23 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private fun startPlayback() {
-        val event = if (isLive) playlist.lastOrNull() else playlist.firstOrNull()
-        val content = event?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
-        val sequence = event.getVoiceBroadcastChunk()?.sequence
+    private fun startPlayback(sequence: Int? = null, position: Int = 0) {
+        val playlistItem = when {
+            sequence != null -> playlist.find { it.audioEvent.sequence == sequence }
+            isLive -> playlist.lastOrNull()
+            else -> playlist.firstOrNull()
+        }
+        val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
+        val computedSequence = playlistItem.audioEvent.sequence
         coroutineScope.launch {
             try {
                 currentMediaPlayer = prepareMediaPlayer(content)
                 currentMediaPlayer?.start()
+                if (position > 0) {
+                    currentMediaPlayer?.seekTo(position)
+                }
                 currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
-                currentSequence = sequence
+                currentSequence = computedSequence
                 withContext(Dispatchers.Main) { playingState = State.PLAYING }
                 nextMediaPlayer = prepareNextMediaPlayer()
             } catch (failure: Throwable) {
@@ -220,11 +239,27 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         playingState = State.PLAYING
     }
 
+    override fun seekTo(positionMillis: Int) {
+        val duration = getVoiceBroadcastDuration()
+        val playlistItem = playlist.lastOrNull { it.startTime <= positionMillis } ?: return
+        val chunk = playlistItem.audioEvent
+        val chunkPosition = positionMillis - playlistItem.startTime
+
+        Timber.d("## Voice Broadcast | seekTo - duration=$duration, position=$positionMillis, sequence=${chunk.sequence}, sequencePosition=$chunkPosition")
+
+        tryOrNull { currentMediaPlayer?.stop() }
+        release(currentMediaPlayer)
+        tryOrNull { nextMediaPlayer?.stop() }
+        release(nextMediaPlayer)
+
+        startPlayback(chunk.sequence, chunkPosition)
+    }
+
     private fun getNextAudioContent(): MessageAudioContent? {
         val nextSequence = currentSequence?.plus(1)
-                ?: playlist.lastOrNull()?.sequence
+                ?: playlist.lastOrNull()?.audioEvent?.sequence
                 ?: 1
-        return playlist.find { it.getVoiceBroadcastChunk()?.sequence == nextSequence }?.content
+        return playlist.find { it.audioEvent.sequence == nextSequence }?.audioEvent?.content
     }
 
     private suspend fun prepareNextMediaPlayer(): MediaPlayer? {
@@ -302,4 +337,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             return true
         }
     }
+
+    private fun getVoiceBroadcastDuration() = playlist.lastOrNull()?.let { it.startTime + it.audioEvent.duration } ?: 0
+
+    private data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int)
 }
+

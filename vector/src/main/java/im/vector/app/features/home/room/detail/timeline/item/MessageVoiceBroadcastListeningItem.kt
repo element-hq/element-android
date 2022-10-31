@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.ImageButton
 import android.widget.SeekBar
@@ -25,7 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.features.home.room.detail.RoomDetailAction
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
@@ -44,6 +45,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             renderPlayingState(holder, state)
         }
         player.addListener(voiceBroadcastId, playerListener)
+        bindSeekBar(holder)
     }
 
     override fun renderMetadata(holder: Holder) {
@@ -66,24 +68,39 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.Pause) }
+                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
-                    playPauseButton.onClick {
-                        callback?.onTimelineItemAction(RoomDetailAction.VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId))
-                    }
+                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId)) }
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
         }
     }
 
+    private fun bindSeekBar(holder: Holder) {
+        holder.durationView.text = formatPlaybackTime(voiceBroadcastAttributes.duration)
+        holder.seekBar.max = voiceBroadcastAttributes.duration
+        holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcastId, seekBar.progress))
+            }
+        })
+    }
+
+    private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
+
     override fun unbind(holder: Holder) {
         super.unbind(holder)
         player.removeListener(voiceBroadcastId, playerListener)
+        holder.seekBar.setOnSeekBarChangeListener(null)
     }
 
     override fun getViewStubId() = STUB_ID

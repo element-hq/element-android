@@ -129,9 +129,10 @@ sealed class RoomDetailAction : VectorViewModelAction {
         }
 
         sealed class Listening : VoiceBroadcastAction() {
-            data class PlayOrResume(val eventId: String) : Listening()
+            data class PlayOrResume(val voiceBroadcastId: String) : Listening()
             object Pause : Listening()
             object Stop : Listening()
+            data class SeekTo(val voiceBroadcastId: String, val positionMillis: Int) : Listening()
         }
     }
 }

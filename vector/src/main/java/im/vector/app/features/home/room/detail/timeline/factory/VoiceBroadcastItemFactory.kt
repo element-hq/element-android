@@ -67,6 +67,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val voiceBroadcastAttributes = AbsMessageVoiceBroadcastItem.Attributes(
                 voiceBroadcastId = voiceBroadcastId,
                 voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
+                duration = voiceBroadcastEventsGroup.getDuration(),
                 recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
                 recorder = voiceBroadcastRecorder,
                 player = voiceBroadcastPlayer,

@@ -94,6 +94,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     data class Attributes(
             val voiceBroadcastId: String,
             val voiceBroadcastState: VoiceBroadcastState?,
+            val duration: Int,
             val recorderName: String,
             val recorder: VoiceBroadcastRecorder?,
             val player: VoiceBroadcastPlayer,

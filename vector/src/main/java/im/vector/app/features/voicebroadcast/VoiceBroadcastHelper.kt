@@ -41,9 +41,15 @@ class VoiceBroadcastHelper @Inject constructor(
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
 
-    fun playOrResumePlayback(roomId: String, eventId: String) = voiceBroadcastPlayer.playOrResume(roomId, eventId)
+    fun playOrResumePlayback(roomId: String, voiceBroadcastId: String) = voiceBroadcastPlayer.playOrResume(roomId, voiceBroadcastId)
 
     fun pausePlayback() = voiceBroadcastPlayer.pause()
 
     fun stopPlayback() = voiceBroadcastPlayer.stop()
+
+    fun seekTo(voiceBroadcastId: String, positionMillis: Int) {
+        if (voiceBroadcastPlayer.currentVoiceBroadcastId == voiceBroadcastId) {
+            voiceBroadcastPlayer.seekTo(positionMillis)
+        }
+    }
 }
