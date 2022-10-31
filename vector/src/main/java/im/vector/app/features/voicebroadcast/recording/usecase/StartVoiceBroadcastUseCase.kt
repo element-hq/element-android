@@ -28,6 +28,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
+import org.jetbrains.annotations.VisibleForTesting
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -57,28 +58,8 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
         Timber.d("## StartVoiceBroadcastUseCase: Start voice broadcast requested")
 
-        val powerLevelsHelper = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                ?.content
-                ?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
-
-        when {
-            powerLevelsHelper?.isUserAllowedToSend(session.myUserId, true, VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO) != true -> {
-                Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: no permission")
-                throw VoiceBroadcastFailure.RecordingError.NoPermission
-            }
-            voiceBroadcastRecorder?.state == VoiceBroadcastRecorder.State.Recording || voiceBroadcastRecorder?.state == VoiceBroadcastRecorder.State.Paused -> {
-                Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: another voice broadcast")
-                throw VoiceBroadcastFailure.RecordingError.UserAlreadyBroadcasting
-            }
-            getOngoingVoiceBroadcastsUseCase.execute(roomId).isNotEmpty() -> {
-                Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: user already broadcasting")
-                throw VoiceBroadcastFailure.RecordingError.BlockedBySomeoneElse
-            }
-            else -> {
-                startVoiceBroadcast(room)
-            }
-        }
+        assertCanStartVoiceBroadcast(room)
+        startVoiceBroadcast(room)
     }
 
     private suspend fun startVoiceBroadcast(room: Room) {
@@ -123,5 +104,37 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                         VoiceBroadcastConstants.VOICE_BROADCAST_CHUNK_KEY to VoiceBroadcastChunk(sequence = sequence).toContent()
                 )
         )
+    }
+
+    private fun assertCanStartVoiceBroadcast(room: Room) {
+        assertHasEnoughPowerLevels(room)
+        assertNoOngoingVoiceBroadcast(room)
+    }
+
+    @VisibleForTesting
+    fun assertHasEnoughPowerLevels(room: Room) {
+        val powerLevelsHelper = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+                ?.content
+                ?.toModel<PowerLevelsContent>()
+                ?.let { PowerLevelsHelper(it) }
+
+        if (powerLevelsHelper?.isUserAllowedToSend(session.myUserId, true, VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO) != true) {
+            Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: no permission")
+            throw VoiceBroadcastFailure.RecordingError.NoPermission
+        }
+    }
+
+    @VisibleForTesting
+    fun assertNoOngoingVoiceBroadcast(room: Room) {
+        when {
+            voiceBroadcastRecorder?.state == VoiceBroadcastRecorder.State.Recording || voiceBroadcastRecorder?.state == VoiceBroadcastRecorder.State.Paused -> {
+                Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: another voice broadcast")
+                throw VoiceBroadcastFailure.RecordingError.UserAlreadyBroadcasting
+            }
+            getOngoingVoiceBroadcastsUseCase.execute(room.roomId).isNotEmpty() -> {
+                Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: user already broadcasting")
+                throw VoiceBroadcastFailure.RecordingError.BlockedBySomeoneElse
+            }
+        }
     }
 }

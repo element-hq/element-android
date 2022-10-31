@@ -26,15 +26,17 @@ import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeRoom
 import im.vector.app.test.fakes.FakeRoomService
 import im.vector.app.test.fakes.FakeSession
-import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
+import io.mockk.spyk
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeNull
+import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -51,13 +53,22 @@ class StartVoiceBroadcastUseCaseTest {
     private val fakeSession = FakeSession(fakeRoomService = FakeRoomService(fakeRoom))
     private val fakeVoiceBroadcastRecorder = mockk<VoiceBroadcastRecorder>(relaxed = true)
     private val fakeGetOngoingVoiceBroadcastsUseCase = mockk<GetOngoingVoiceBroadcastsUseCase>()
-    private val startVoiceBroadcastUseCase = StartVoiceBroadcastUseCase(
-            session = fakeSession,
-            voiceBroadcastRecorder = fakeVoiceBroadcastRecorder,
-            context = FakeContext().instance,
-            buildMeta = mockk(),
-            getOngoingVoiceBroadcastsUseCase = fakeGetOngoingVoiceBroadcastsUseCase,
+    private val startVoiceBroadcastUseCase = spyk(
+            StartVoiceBroadcastUseCase(
+                    session = fakeSession,
+                    voiceBroadcastRecorder = fakeVoiceBroadcastRecorder,
+                    context = FakeContext().instance,
+                    buildMeta = mockk(),
+                    getOngoingVoiceBroadcastsUseCase = fakeGetOngoingVoiceBroadcastsUseCase,
+            )
     )
+
+    @Before
+    fun setup() {
+        every { fakeRoom.roomId } returns A_ROOM_ID
+        justRun { startVoiceBroadcastUseCase.assertHasEnoughPowerLevels(fakeRoom) }
+        every { fakeVoiceBroadcastRecorder.state } returns VoiceBroadcastRecorder.State.Idle
+    }
 
     @Test
     fun `given a room id with potential several existing voice broadcast states when calling execute then the voice broadcast is started or not`() = runTest {
@@ -83,7 +94,7 @@ class StartVoiceBroadcastUseCaseTest {
 
     private suspend fun testVoiceBroadcastStarted(voiceBroadcasts: List<VoiceBroadcast>) {
         // Given
-        clearAllMocks()
+        setup()
         givenVoiceBroadcasts(voiceBroadcasts)
         val voiceBroadcastInfoContentInterceptor = slot<Content>()
         coEvery { fakeRoom.stateService().sendStateEvent(any(), any(), capture(voiceBroadcastInfoContentInterceptor)) } coAnswers { AN_EVENT_ID }
@@ -106,7 +117,7 @@ class StartVoiceBroadcastUseCaseTest {
 
     private suspend fun testVoiceBroadcastNotStarted(voiceBroadcasts: List<VoiceBroadcast>) {
         // Given
-        clearAllMocks()
+        setup()
         givenVoiceBroadcasts(voiceBroadcasts)
 
         // When
