@@ -2767,4 +2767,18 @@
     <string name="a11y_pause_voice_broadcast_record">暫停語音廣播錄製</string>
     <string name="a11y_resume_voice_broadcast_record">繼續語音廣播錄製</string>
     <string name="voice_broadcast_live">直播</string>
+    <string name="device_manager_other_sessions_select">選取工作階段</string>
+    <string name="attachment_type_selector_contact">聯絡人</string>
+    <string name="attachment_type_selector_camera">相機</string>
+    <string name="attachment_type_selector_location">位置</string>
+    <string name="attachment_type_selector_poll">投票</string>
+    <string name="attachment_type_selector_voice_broadcast">音訊廣播</string>
+    <string name="attachment_type_selector_file">附件</string>
+    <string name="attachment_type_selector_sticker">貼圖</string>
+    <string name="attachment_type_selector_gallery">照片媒體庫</string>
+    <string name="action_deselect_all">取消選取全部</string>
+    <string name="action_select_all">選取全部</string>
+    <plurals name="x_selected">
+        <item quantity="other">已選取 %1$d</item>
+    </plurals>
 </resources>
