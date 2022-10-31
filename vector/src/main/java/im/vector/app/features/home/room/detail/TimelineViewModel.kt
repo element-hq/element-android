@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -408,21 +409,40 @@ class TimelineViewModel @AssistedInject constructor(
      */
     private fun observeLocalThreadNotifications() {
         if (room == null) return
-        room.flow()
-                .liveLocalUnreadThreadList()
-                .execute {
-                    val threadList = it.invoke()
-                    val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
-                        threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
-                    }?.let { true } ?: false
-                    val numberOfLocalUnreadThreads = threadList?.size ?: 0
-                    copy(
-                            threadNotificationBadgeState = ThreadNotificationBadgeState(
-                                    numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
-                                    isUserMentioned = isUserMentioned
-                            )
-                    )
-                }
+        val threadNotificationsSupported = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+        if (threadNotificationsSupported) {
+            room.getRoomSummaryLive()
+                    .asFlow()
+                    .onEach {
+                        it.getOrNull()?.let {
+                            setState {
+                                copy(
+                                        threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                                numberOfLocalUnreadThreads = it.threadNotificationCount + it.threadHighlightCount,
+                                                isUserMentioned = it.threadHighlightCount > 0,
+                                        )
+                                )
+                            }
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        } else {
+            room.flow()
+                    .liveLocalUnreadThreadList()
+                    .execute {
+                        val threadList = it.invoke()
+                        val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
+                            threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                        } != null
+                        val numberOfLocalUnreadThreads = threadList?.size ?: 0
+                        copy(
+                                threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                        numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                                        isUserMentioned = isUserMentioned
+                                )
+                        )
+                    }
+        }
     }
 
     override fun handle(action: RoomDetailAction) {

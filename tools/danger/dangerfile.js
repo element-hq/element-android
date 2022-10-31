@@ -82,6 +82,7 @@ const allowList = [
     "ganfra",
     "jmartinesp",
     "jonnyandrew",
+    "kittykat",
     "langleyd",
     "MadLittleMods",
     "manuroe",

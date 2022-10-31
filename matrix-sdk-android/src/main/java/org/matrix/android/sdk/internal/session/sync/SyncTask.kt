@@ -140,7 +140,7 @@ internal class DefaultSyncTask @Inject constructor(
                         executeRequest(globalErrorReceiver) {
                             syncAPI.sync(
                                     params = requestParams,
-                                    readTimeOut = readTimeOut
+                                    readTimeOut = readTimeOut,
                             )
                         }
                     }
@@ -178,7 +178,7 @@ internal class DefaultSyncTask @Inject constructor(
             syncRequestStateTracker.setSyncRequestState(
                     SyncRequestState.IncrementalSyncParsing(
                             rooms = nbRooms,
-                            toDevice = nbToDevice
+                            toDevice = nbToDevice,
                     )
             )
             syncResponseHandler.handleResponse(syncResponse, token, null)

@@ -9,7 +9,6 @@
         android:id="@+id/otherSessionsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="0dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="@id/otherSessionsRecyclerView"
         app:layout_constraintTop_toBottomOf="@id/otherSessionsRecyclerView"
         tools:text="@string/device_manager_other_sessions_view_all" />

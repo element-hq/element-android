@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Cross feature -->
+    <plurals name="x_selected">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+
+    <!-- Notice -->
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
@@ -407,6 +414,8 @@
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
     <string name="action_got_it">Got it</string>
+    <string name="action_select_all">Select all</string>
+    <string name="action_deselect_all">Deselect all</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -3205,6 +3214,15 @@
     <string name="tooltip_attachment_location">Share location</string>
     <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
+    <string name="attachment_type_selector_gallery">Photo library</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_file">Attachments</string>
+    <string name="attachment_type_selector_voice_broadcast">Voice broadcast</string>
+    <string name="attachment_type_selector_poll">Polls</string>
+    <string name="attachment_type_selector_location">Location</string>
+    <string name="attachment_type_selector_camera">Camera</string>
+    <string name="attachment_type_selector_contact">Contact</string>
+
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
         <item quantity="one">"%1$d more"</item>
@@ -3319,6 +3337,7 @@
     <string name="device_manager_other_sessions_no_unverified_sessions_found">No unverified sessions found.</string>
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
+    <string name="device_manager_other_sessions_select">Select sessions</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>

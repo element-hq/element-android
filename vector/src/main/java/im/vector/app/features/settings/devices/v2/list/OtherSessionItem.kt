@@ -17,6 +17,8 @@
 package im.vector.app.features.settings.devices.v2.list
 
 import android.graphics.drawable.Drawable
+import android.view.View
+import android.view.View.OnLongClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -27,6 +29,8 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.views.ShieldImageView
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -56,19 +60,39 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute
     lateinit var stringProvider: StringProvider
 
+    @EpoxyAttribute
+    lateinit var colorProvider: ColorProvider
+
+    @EpoxyAttribute
+    lateinit var drawableProvider: DrawableProvider
+
+    @EpoxyAttribute
+    var selected: Boolean = false
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onLongClickListener: OnLongClickListener? = null
 
     private val setDeviceTypeIconUseCase = SetDeviceTypeIconUseCase()
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.onClick(clickListener)
-        if (clickListener == null) {
+        holder.view.setOnLongClickListener(onLongClickListener)
+        if (clickListener == null && onLongClickListener == null) {
             holder.view.isClickable = false
         }
 
-        setDeviceTypeIconUseCase.execute(deviceType, holder.otherSessionDeviceTypeImageView, stringProvider)
+        holder.otherSessionDeviceTypeImageView.isSelected = selected
+        if (selected) {
+            val drawableColor = colorProvider.getColorFromAttribute(android.R.attr.colorBackground)
+            val drawable = drawableProvider.getDrawable(R.drawable.ic_check_on, drawableColor)
+            holder.otherSessionDeviceTypeImageView.setImageDrawable(drawable)
+        } else {
+            setDeviceTypeIconUseCase.execute(deviceType, holder.otherSessionDeviceTypeImageView, stringProvider)
+        }
         holder.otherSessionVerificationStatusImageView.render(roomEncryptionTrustLevel)
         holder.otherSessionNameTextView.text = sessionName
         holder.otherSessionDescriptionTextView.text = sessionDescription
@@ -76,6 +100,7 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
             holder.otherSessionDescriptionTextView.setTextColor(it)
         }
         holder.otherSessionDescriptionTextView.setCompoundDrawablesWithIntrinsicBounds(sessionDescriptionDrawable, null, null, null)
+        holder.otherSessionItemBackgroundView.isSelected = selected
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -83,5 +108,6 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
         val otherSessionVerificationStatusImageView by bind<ShieldImageView>(R.id.otherSessionVerificationStatusImageView)
         val otherSessionNameTextView by bind<TextView>(R.id.otherSessionNameTextView)
         val otherSessionDescriptionTextView by bind<TextView>(R.id.otherSessionDescriptionTextView)
+        val otherSessionItemBackgroundView by bind<View>(R.id.otherSessionItemBackground)
     }
 }
