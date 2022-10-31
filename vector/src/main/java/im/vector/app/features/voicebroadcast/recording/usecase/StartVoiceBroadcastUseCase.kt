@@ -21,10 +21,10 @@ import androidx.core.content.FileProvider
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
-import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType

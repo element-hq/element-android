@@ -1321,7 +1321,7 @@ class TimelineFragment :
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
-        @StringRes val titleResId = when(result.action) {
+        @StringRes val titleResId = when (result.action) {
             RoomDetailAction.VoiceBroadcastAction.Recording.Start -> R.string.error_voice_broadcast_unauthorized_title
             else -> R.string.dialog_title_error
         }
