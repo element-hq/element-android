@@ -178,7 +178,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 .map { it.duration }
                 .runningFold(0) { acc, i -> acc + i }
                 .dropLast(1)
-        this.playlist = sorted.mapIndexed { index, messageAudioEvent ->
+        playlist = sorted.mapIndexed { index, messageAudioEvent ->
             PlaylistItem(
                     audioEvent = messageAudioEvent,
                     startTime = chunkPositions.getOrNull(index) ?: 0
@@ -242,17 +242,17 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     override fun seekTo(positionMillis: Int) {
         val duration = getVoiceBroadcastDuration()
         val playlistItem = playlist.lastOrNull { it.startTime <= positionMillis } ?: return
-        val chunk = playlistItem.audioEvent
-        val chunkPosition = positionMillis - playlistItem.startTime
+        val audioEvent = playlistItem.audioEvent
+        val eventPosition = positionMillis - playlistItem.startTime
 
-        Timber.d("## Voice Broadcast | seekTo - duration=$duration, position=$positionMillis, sequence=${chunk.sequence}, sequencePosition=$chunkPosition")
+        Timber.d("## Voice Broadcast | seekTo - duration=$duration, position=$positionMillis, sequence=${audioEvent.sequence}, sequencePosition=$eventPosition")
 
         tryOrNull { currentMediaPlayer?.stop() }
         release(currentMediaPlayer)
         tryOrNull { nextMediaPlayer?.stop() }
         release(nextMediaPlayer)
 
-        startPlayback(chunk.sequence, chunkPosition)
+        startPlayback(audioEvent.sequence, eventPosition)
     }
 
     private fun getNextAudioContent(): MessageAudioContent? {
@@ -342,4 +342,3 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int)
 }
-
