@@ -54,6 +54,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private var currentConstraintSetId: Int = -1
     private val animationDuration = 100L
+    private val maxEditTextLinesWhenCollapsed = 12
 
     private val isFullScreen: Boolean get() = currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_fullscreen
 
@@ -244,23 +245,17 @@ class RichTextComposerLayout @JvmOverloads constructor(
         updateTextFieldBorder()
         updateEditTextVisibility()
 
-        if (newValue) {
-            views.richTextComposerEditText.maxLines = Int.MAX_VALUE
-            views.plainTextComposerEditText.maxLines = Int.MAX_VALUE
+        updateEditTextFullScreenState(views.richTextComposerEditText, newValue)
+        updateEditTextFullScreenState(views.plainTextComposerEditText, newValue)
+    }
+
+    private fun updateEditTextFullScreenState(editText: EditText, isFullScreen: Boolean) {
+        if (isFullScreen) {
+            editText.maxLines = Int.MAX_VALUE
             // This is a workaround to fix incorrect scroll position when maximised
-            post {
-                views.richTextComposerEditText.apply {
-                    requestLayout()
-                    invalidate()
-                }
-                views.plainTextComposerEditText.apply {
-                    requestLayout()
-                    invalidate()
-                }
-            }
+            post { editText.requestLayout() }
         } else {
-            views.richTextComposerEditText.maxLines = 12
-            views.plainTextComposerEditText.maxLines = 12
+            editText.maxLines = maxEditTextLinesWhenCollapsed
         }
     }
 
