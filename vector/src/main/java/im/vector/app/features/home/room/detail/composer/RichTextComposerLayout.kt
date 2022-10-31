@@ -54,8 +54,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private var currentConstraintSetId: Int = -1
     private val animationDuration = 100L
+    private val maxEditTextLinesWhenCollapsed = 12
 
-    private var isFullScreen = false
+    private val isFullScreen: Boolean get() = currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_fullscreen
 
     var isTextFormattingEnabled = true
         set(value) {
@@ -104,10 +105,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
         collapse(false)
 
         views.richTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
         )
         views.plainTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, ::updateTextFieldBorder)
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
         )
 
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -196,8 +197,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
         button.isSelected = menuState.reversedActions.contains(action)
     }
 
-    private fun updateTextFieldBorder(isExpanded: Boolean) {
-        val borderResource = if (isExpanded) {
+    private fun updateTextFieldBorder() {
+        val isExpanded = editText.editableText.lines().count() > 1
+        val borderResource = if (isExpanded || isFullScreen) {
             R.drawable.bg_composer_rich_edit_text_expanded
         } else {
             R.drawable.bg_composer_rich_edit_text_single_line
@@ -240,8 +242,21 @@ class RichTextComposerLayout @JvmOverloads constructor(
             it.applyTo(this)
         }
 
-        updateTextFieldBorder(newValue)
+        updateTextFieldBorder()
         updateEditTextVisibility()
+
+        updateEditTextFullScreenState(views.richTextComposerEditText, newValue)
+        updateEditTextFullScreenState(views.plainTextComposerEditText, newValue)
+    }
+
+    private fun updateEditTextFullScreenState(editText: EditText, isFullScreen: Boolean) {
+        if (isFullScreen) {
+            editText.maxLines = Int.MAX_VALUE
+            // This is a workaround to fix incorrect scroll position when maximised
+            post { editText.requestLayout() }
+        } else {
+            editText.maxLines = maxEditTextLinesWhenCollapsed
+        }
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
