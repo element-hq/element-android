@@ -141,7 +141,7 @@ class BluetoothLowEnergyService : VectorAndroidService() {
 
     private fun onCharacteristicRead(characteristic: BluetoothGattCharacteristic) {
         @Suppress("DEPRECATION") val data = characteristic.value
-        Timber.d("### BluetoothLowEnergyService. $data")
+        Timber.d("### BluetoothLowEnergyService.onCharacteristicRead ${String(data)}")
         if (data.isNotEmpty()) {
             callback?.onCharacteristicRead(data)
         }

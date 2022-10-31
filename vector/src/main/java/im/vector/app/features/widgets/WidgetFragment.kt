@@ -20,6 +20,8 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -32,8 +34,10 @@ import android.view.ViewGroup
 import android.webkit.PermissionRequest
 import android.webkit.WebMessage
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -120,6 +124,9 @@ class WidgetFragment :
             if (checkPermissions(PERMISSIONS_FOR_BLUETOOTH, requireActivity(), scanBluetoothResultLauncher)) {
                 startBluetoothScanning()
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                configureAudioDevice()
+            }
         }
 
         viewModel.observeViewEvents {
@@ -134,6 +141,18 @@ class WidgetFragment :
             }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun configureAudioDevice() {
+        requireContext().getSystemService<AudioManager>()?.let { audioManager ->
+            audioManager
+                    .availableCommunicationDevices
+                    .find { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO }
+                    ?.let { bluetoothAudioDevice ->
+                        audioManager.setCommunicationDevice(bluetoothAudioDevice)
+                    }
+        }
     }
 
     private val termsActivityResultLauncher = registerStartForActivityResult {
@@ -444,6 +463,7 @@ class WidgetFragment :
         activity?.let {
             val widgetUri = Uri.parse(fragmentArgs.baseUrl)
 
+            Timber.d("### WidgetFragment.handleBluetoothDeviceData: $event")
             if (event.data contentEquals byteArrayOf(0x00)) {
                 views.widgetWebView.postWebMessage(WebMessage("pttr"), widgetUri)
             } else if (event.data contentEquals byteArrayOf(0x01)) {
