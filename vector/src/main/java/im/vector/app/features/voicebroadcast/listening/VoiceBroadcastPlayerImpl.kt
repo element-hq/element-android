@@ -299,7 +299,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private inner class MediaPlayerListener : MediaPlayer.OnInfoListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+    private inner class MediaPlayerListener :
+            MediaPlayer.OnInfoListener,
+            MediaPlayer.OnPreparedListener,
+            MediaPlayer.OnCompletionListener,
+            MediaPlayer.OnErrorListener {
 
         override fun onInfo(mp: MediaPlayer, what: Int, extra: Int): Boolean {
             when (what) {
