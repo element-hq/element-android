@@ -294,11 +294,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     !keyEvent.isShiftPressed &&
                     keyEvent.keyCode == KeyEvent.KEYCODE_ENTER &&
                     resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS
-            val result = if (isSendAction || externalKeyboardPressedEnter) {
+            val sendMessageWithEnter = externalKeyboardPressedEnter && vectorPreferences.sendMessageWithEnter()
+            val result = if (isSendAction || sendMessageWithEnter) {
                 sendTextMessage(v.text)
                 true
             } else false
-            composer.setTextIfDifferent(null)
             result
         }
 
