@@ -63,10 +63,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private var currentMediaPlayer: MediaPlayer? = null
     private var nextMediaPlayer: MediaPlayer? = null
-        set(value) {
-            field = value
-            currentMediaPlayer?.setNextMediaPlayer(value)
-        }
     private var currentSequence: Int? = null
 
     private var fetchPlaylistJob: Job? = null
@@ -303,7 +299,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private inner class MediaPlayerListener : MediaPlayer.OnInfoListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+    private inner class MediaPlayerListener : MediaPlayer.OnInfoListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
         override fun onInfo(mp: MediaPlayer, what: Int, extra: Int): Boolean {
             when (what) {
@@ -315,6 +311,17 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 }
             }
             return false
+        }
+
+        override fun onPrepared(mp: MediaPlayer) {
+            when (mp) {
+                currentMediaPlayer -> {
+                    nextMediaPlayer?.let { mp.setNextMediaPlayer(it) }
+                }
+                nextMediaPlayer -> {
+                    tryOrNull { currentMediaPlayer?.setNextMediaPlayer(mp) }
+                }
+            }
         }
 
         override fun onCompletion(mp: MediaPlayer) {
