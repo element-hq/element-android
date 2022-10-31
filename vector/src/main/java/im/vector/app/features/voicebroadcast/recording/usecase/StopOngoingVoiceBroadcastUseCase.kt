@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voicebroadcast.usecase
+package im.vector.app.features.voicebroadcast.recording.usecase
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership

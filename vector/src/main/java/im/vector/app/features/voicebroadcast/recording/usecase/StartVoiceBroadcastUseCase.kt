@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voicebroadcast.usecase
+package im.vector.app.features.voicebroadcast.recording.usecase
 
 import android.content.Context
 import androidx.core.content.FileProvider
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
-import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
