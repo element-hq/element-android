@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
@@ -44,6 +45,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         private val drawableProvider: DrawableProvider,
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
+        private val playbackTracker: AudioMessagePlaybackTracker,
 ) {
 
     fun create(
@@ -71,6 +73,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
                 recorder = voiceBroadcastRecorder,
                 player = voiceBroadcastPlayer,
+                playbackTracker = playbackTracker,
                 roomItem = session.getRoom(params.event.roomId)?.roomSummary()?.toMatrixItem(),
                 colorProvider = colorProvider,
                 drawableProvider = drawableProvider,

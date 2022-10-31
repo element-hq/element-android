@@ -29,6 +29,7 @@ import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroad
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.sequence
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastUseCase
+import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
@@ -60,6 +62,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private var voiceBroadcastStateJob: Job? = null
 
     private val mediaPlayerListener = MediaPlayerListener()
+    private val playbackTicker = PlaybackTicker()
 
     private var currentMediaPlayer: MediaPlayer? = null
     private var nextMediaPlayer: MediaPlayer? = null
@@ -79,6 +82,24 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             field = value
             // Notify state change to all the listeners attached to the current voice broadcast id
             currentVoiceBroadcastId?.let { voiceBroadcastId ->
+                when (value) {
+                    State.PLAYING -> {
+                        playbackTracker.startPlayback(voiceBroadcastId)
+                        playbackTicker.startPlaybackTicker(voiceBroadcastId)
+                    }
+                    State.PAUSED -> {
+                        playbackTracker.pausePlayback(voiceBroadcastId)
+                        playbackTicker.stopPlaybackTicker()
+                    }
+                    State.BUFFERING -> {
+                        playbackTracker.pausePlayback(voiceBroadcastId)
+                        playbackTicker.stopPlaybackTicker()
+                    }
+                    State.IDLE -> {
+                        playbackTracker.stopPlayback(voiceBroadcastId)
+                        playbackTicker.stopPlaybackTicker()
+                    }
+                }
                 listeners[voiceBroadcastId]?.forEach { listener -> listener.onStateChanged(value) }
             }
         }
@@ -99,15 +120,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     override fun pause() {
-        currentMediaPlayer?.pause()
-        currentVoiceBroadcastId?.let { playbackTracker.pausePlayback(it) }
         playingState = State.PAUSED
+        currentMediaPlayer?.pause()
     }
 
     override fun stop() {
+        // Update state
+        playingState = State.IDLE
+
         // Stop playback
         currentMediaPlayer?.stop()
-        currentVoiceBroadcastId?.let { playbackTracker.stopPlayback(it) }
         isLive = false
 
         // Release current player
@@ -125,9 +147,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         // Do not fetch the playlist anymore
         fetchPlaylistJob?.cancel()
         fetchPlaylistJob = null
-
-        // Update state
-        playingState = State.IDLE
 
         // Clear playlist
         playlist = emptyList()
@@ -218,7 +237,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 if (position > 0) {
                     currentMediaPlayer?.seekTo(position)
                 }
-                currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
                 currentSequence = computedSequence
                 withContext(Dispatchers.Main) { playingState = State.PLAYING }
                 nextMediaPlayer = prepareNextMediaPlayer()
@@ -231,7 +249,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun resumePlayback() {
         currentMediaPlayer?.start()
-        currentVoiceBroadcastId?.let { playbackTracker.startPlayback(it) }
         playingState = State.PLAYING
     }
 
@@ -352,4 +369,45 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private fun getVoiceBroadcastDuration() = playlist.lastOrNull()?.let { it.startTime + it.audioEvent.duration } ?: 0
 
     private data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int)
+
+    private inner class PlaybackTicker(
+            private var playbackTicker: CountUpTimer? = null,
+    ) {
+
+        fun startPlaybackTicker(id: String) {
+            playbackTicker?.stop()
+            playbackTicker = CountUpTimer().apply {
+                tickListener = object : CountUpTimer.TickListener {
+                    override fun onTick(milliseconds: Long) {
+                        onPlaybackTick(id)
+                    }
+                }
+                resume()
+            }
+            onPlaybackTick(id)
+        }
+
+        private fun onPlaybackTick(id: String) {
+            if (currentMediaPlayer?.isPlaying.orFalse()) {
+                val itemStartPosition = currentSequence?.let { seq -> playlist.find { it.audioEvent.sequence == seq } }?.startTime
+                val currentVoiceBroadcastPosition = itemStartPosition?.plus(currentMediaPlayer?.currentPosition ?: 0)
+                if (currentVoiceBroadcastPosition != null) {
+                    val totalDuration = getVoiceBroadcastDuration()
+                    val percentage = currentVoiceBroadcastPosition.toFloat() / totalDuration
+                    playbackTracker.updatePlayingAtPlaybackTime(id, currentVoiceBroadcastPosition, percentage)
+                } else {
+                    playbackTracker.stopPlayback(id)
+                    stopPlaybackTicker()
+                }
+            } else {
+                playbackTracker.stopPlayback(id)
+                stopPlaybackTicker()
+            }
+        }
+
+        fun stopPlaybackTicker() {
+            playbackTicker?.stop()
+            playbackTicker = null
+        }
+    }
 }

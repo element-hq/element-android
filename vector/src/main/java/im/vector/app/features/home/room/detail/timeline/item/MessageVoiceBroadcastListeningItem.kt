@@ -27,6 +27,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
@@ -34,6 +35,7 @@ import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastListeningItem.Holder>() {
 
     private lateinit var playerListener: VoiceBroadcastPlayer.Listener
+    private var isUserSeeking = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -86,15 +88,36 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindSeekBar(holder: Holder) {
-        holder.durationView.text = formatPlaybackTime(voiceBroadcastAttributes.duration)
-        holder.seekBar.max = voiceBroadcastAttributes.duration
+        holder.durationView.text = formatPlaybackTime(duration)
+        holder.seekBar.max = duration
         holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                isUserSeeking = true
+            }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcastId, seekBar.progress))
+                isUserSeeking = false
+            }
+        })
+        playbackTracker.track(voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
+            override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
+                when (state) {
+                    is AudioMessagePlaybackTracker.Listener.State.Paused -> {
+                        if (!isUserSeeking) {
+                            holder.seekBar.progress = state.playbackTime
+                        }
+                    }
+                    is AudioMessagePlaybackTracker.Listener.State.Playing -> {
+                        if (!isUserSeeking) {
+                            holder.seekBar.progress = state.playbackTime
+                        }
+                    }
+                    AudioMessagePlaybackTracker.Listener.State.Idle -> Unit
+                    is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
+                }
             }
         })
     }
@@ -105,6 +128,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         super.unbind(holder)
         player.removeListener(voiceBroadcastId, playerListener)
         holder.seekBar.setOnSeekBarChangeListener(null)
+        playbackTracker.untrack(voiceBroadcastId)
     }
 
     override fun getViewStubId() = STUB_ID
