@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -353,8 +354,9 @@ internal class DeviceListManager @Inject constructor(
         val params = DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken())
         val relevantPlugins = metricPlugins.filterIsInstance<DownloadDeviceKeysMetricsPlugin>()
 
-        val response = measureMetric(relevantPlugins) {
-            val result = try {
+        val response: KeysQueryResponse
+        measureMetric(relevantPlugins) {
+            response = try {
                 downloadKeysForUsersTask.execute(params)
             } catch (throwable: Throwable) {
                 Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
@@ -364,11 +366,9 @@ internal class DeviceListManager @Inject constructor(
                 } else {
                     onKeysDownloadFailed(filteredUsers)
                 }
-                relevantPlugins.forEach { plugin -> plugin.onError(throwable) }
                 throw throwable
             }
             Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
-            return@measureMetric result
         }
 
         for (userId in filteredUsers) {

@@ -25,12 +25,17 @@ import kotlin.contracts.contract
  * Executes the given [block] while measuring the transaction.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <T> measureMetric(metricMeasurementPlugins: List<MetricPlugin>, block: () -> T): T {
+inline fun measureMetric(metricMeasurementPlugins: List<MetricPlugin>, block: () -> Unit) {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
-    metricMeasurementPlugins.forEach { plugin -> plugin.startTransaction() }
-    val answer = block()
-    metricMeasurementPlugins.forEach { plugin -> plugin.finishTransaction() }
-    return answer
+    try {
+        metricMeasurementPlugins.forEach { plugin -> plugin.startTransaction() } // Start the transaction.
+        block()
+    } catch (throwable: Throwable) {
+        metricMeasurementPlugins.forEach { plugin -> plugin.onError(throwable) } // Capture if there is any exception thrown.
+        throw throwable
+    } finally {
+        metricMeasurementPlugins.forEach { plugin -> plugin.finishTransaction() } // Finally, finish this transaction.
+    }
 }

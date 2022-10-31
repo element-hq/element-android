@@ -16,7 +16,10 @@
 
 package org.matrix.android.sdk.api.metrics
 
+import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
+
+private val loggerTag = LoggerTag("DownloadKeysMetricsPlugin", LoggerTag.CRYPTO)
 
 /**
  * Extension of MetricPlugin for download_device_keys task.
@@ -24,6 +27,6 @@ import timber.log.Timber
 interface DownloadDeviceKeysMetricsPlugin : MetricPlugin {
 
     override fun logTransaction(message: String?) {
-        Timber.v("## CRYPTO | downloadDeviceKeysMetricPlugin() : $message")
+        Timber.tag(loggerTag.value).v("## downloadDeviceKeysMetricPlugin() : $message")
     }
 }

@@ -149,7 +149,7 @@ import javax.inject.Singleton
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
-                metricPlugins = vectorPlugins.plugins()
+                metricPlugins = vectorPlugins.plugins(),
         )
     }
 
