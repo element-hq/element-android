@@ -132,7 +132,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
-    api "com.gabrielittner.threetenbp:lazythreetenbp:0.11.0"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
