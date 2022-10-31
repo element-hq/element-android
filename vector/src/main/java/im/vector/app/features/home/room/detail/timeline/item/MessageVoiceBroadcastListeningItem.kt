@@ -69,14 +69,18 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                     playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
+                    seekBar.isEnabled = true
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
                     playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId)) }
+                    seekBar.isEnabled = false
                 }
-                VoiceBroadcastPlayer.State.BUFFERING -> Unit
+                VoiceBroadcastPlayer.State.BUFFERING -> {
+                    seekBar.isEnabled = true
+                }
             }
         }
     }
