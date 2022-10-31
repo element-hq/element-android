@@ -151,6 +151,6 @@ class VoiceBroadcastEventsGroup(private val group: TimelineEventsGroup) {
     }
 
     fun getDuration(): Int {
-        return group.events.mapNotNull { it.root.asMessageAudioEvent()?.duration }.reduceOrNull { acc, duration -> acc + duration } ?: 0
+        return group.events.mapNotNull { it.root.asMessageAudioEvent()?.duration }.sum()
     }
 }
