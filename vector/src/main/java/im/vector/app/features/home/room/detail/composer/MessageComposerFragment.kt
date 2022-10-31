@@ -231,7 +231,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 .onEach { onTypeSelected(it.attachmentType) }
                 .launchIn(lifecycleScope)
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
             handleShareData()
         }
     }
