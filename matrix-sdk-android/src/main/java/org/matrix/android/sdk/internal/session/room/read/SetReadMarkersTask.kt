@@ -93,19 +93,18 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         val shouldCheckIfReadInEventsThread = readReceiptThreadId != null &&
                 homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
 
-        if (readReceiptEventId != null &&
+        if (readReceiptEventId != null &&d
                 !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId, shouldCheckIfReadInEventsThread)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
+                Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {
                 markers[READ_RECEIPT] = readReceiptEventId
             }
-        } else {
         }
 
         val shouldUpdateRoomSummary = readReceiptEventId != null && readReceiptEventId == latestSyncedEventId
         if (markers.isNotEmpty() || shouldUpdateRoomSummary) {
             updateDatabase(params.roomId, readReceiptThreadId, markers, shouldUpdateRoomSummary)
-        } else {
         }
         if (markers.isNotEmpty()) {
             executeRequest(
