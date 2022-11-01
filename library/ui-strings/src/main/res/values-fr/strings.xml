@@ -2821,4 +2821,19 @@
     <string name="a11y_pause_voice_broadcast_record">Mettre en pause l’enregistrement de la diffusion audio</string>
     <string name="a11y_resume_voice_broadcast_record">Continuer l’enregistrement de la diffusion audio</string>
     <string name="voice_broadcast_live">Direct</string>
+    <string name="device_manager_other_sessions_select">Sélectionner des sessions</string>
+    <string name="attachment_type_selector_contact">Contact</string>
+    <string name="attachment_type_selector_camera">Appareil photo</string>
+    <string name="attachment_type_selector_location">Position</string>
+    <string name="attachment_type_selector_poll">Sondages</string>
+    <string name="attachment_type_selector_voice_broadcast">Diffusion audio</string>
+    <string name="attachment_type_selector_file">Pièces jointes</string>
+    <string name="attachment_type_selector_sticker">Autocollants</string>
+    <string name="attachment_type_selector_gallery">Galerie photo</string>
+    <string name="action_deselect_all">Tout désélectionner</string>
+    <string name="action_select_all">Tout sélectionner</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d sélectionné</item>
+        <item quantity="other">%1$d sélectionnés</item>
+    </plurals>
 </resources>

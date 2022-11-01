@@ -2812,4 +2812,19 @@
     <string name="a11y_resume_voice_broadcast_record">Jätka ringhäälingukõne salvestamist</string>
     <string name="a11y_pause_voice_broadcast">Peata ringhäälingukõne esitamine</string>
     <string name="voice_broadcast_live">Otse eetris</string>
+    <string name="device_manager_other_sessions_select">Vali sessioonid</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kaamera</string>
+    <string name="attachment_type_selector_location">Asukoht</string>
+    <string name="attachment_type_selector_poll">Küsitlused</string>
+    <string name="attachment_type_selector_voice_broadcast">Ringhäälingukõne</string>
+    <string name="attachment_type_selector_file">Manused</string>
+    <string name="attachment_type_selector_sticker">Kleepsud</string>
+    <string name="attachment_type_selector_gallery">Fotode kogu</string>
+    <string name="action_deselect_all">Eemalda kõik valikud</string>
+    <string name="action_select_all">Vali kõik</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d valitud</item>
+        <item quantity="other">%1$d valitud</item>
+    </plurals>
 </resources>

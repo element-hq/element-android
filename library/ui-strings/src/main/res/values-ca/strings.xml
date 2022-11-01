@@ -2821,4 +2821,19 @@
     <string name="a11y_pause_voice_broadcast_record">Pausa l\'enregistrament d\'emissió de veu</string>
     <string name="a11y_resume_voice_broadcast_record">Reprèn l\'enregistrament d\'emissió de veu</string>
     <string name="voice_broadcast_live">En directe</string>
+    <string name="action_deselect_all">Deselecciona-ho tot</string>
+    <string name="action_select_all">Selecciona-ho tot</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d seleccionat</item>
+        <item quantity="other">%1$d seleccionats</item>
+    </plurals>
+    <string name="attachment_type_selector_poll">Enquestes</string>
+    <string name="device_manager_other_sessions_select">Selecciona sessions</string>
+    <string name="attachment_type_selector_contact">Contacte</string>
+    <string name="attachment_type_selector_camera">Càmera</string>
+    <string name="attachment_type_selector_location">Ubicació</string>
+    <string name="attachment_type_selector_voice_broadcast">Emissió de veu</string>
+    <string name="attachment_type_selector_file">Adjunts</string>
+    <string name="attachment_type_selector_sticker">Adhesius</string>
+    <string name="attachment_type_selector_gallery">Galeria</string>
 </resources>

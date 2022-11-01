@@ -67,7 +67,7 @@
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s hat die Einladung für %2$s angenommen. Grund: %3$s</string>
-    <string name="notice_room_withdraw_with_reason">%1$s hat Einladung für %2$s verworfen. Grund: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s hat die Einladung für %2$s zurückgezogen. Grund: %3$s</string>
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s fügt %2$s als eine Adresse für diesen Raum hinzu.</item>
         <item quantity="other">%1$s fügt %2$s als Adressen für diesen Raum hinzu.</item>
@@ -408,7 +408,7 @@
     <string name="room_settings_read_history_entry_anyone">Alle</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur Mitglieder</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur Mitglieder (ab Einladung)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab Beitreten)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab Betreten)</string>
     <string name="room_settings_banned_users_title">Verbannte Benutzer</string>
     <string name="room_settings_category_advanced_title">Erweitert</string>
     <string name="room_settings_room_internal_id">Interne ID dieses Raumes</string>
@@ -438,8 +438,8 @@
     <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des anderen Nutzers und bestätige:</string>
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="select_room_directory">Raumverzeichnis auswählen</string>
-    <string name="directory_server_placeholder">Server-Name</string>
-    <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
+    <string name="directory_server_placeholder">Name des Servers</string>
+    <string name="directory_server_all_rooms_on_server">Alle Räume auf %s</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
     <string name="settings_user_interface">Bedienoberfläche</string>
     <string name="settings_interface_language">Sprache</string>
@@ -467,12 +467,12 @@
     <string name="widget_integration_positive_power_level">Berechtigungslevel muss eine positive ganze Zahl sein.</string>
     <string name="widget_integration_must_be_in_room">Du bist nicht Mitglied in diesem Raum.</string>
     <string name="widget_integration_no_permission_in_room">Du hast keine Berechtigung, diese Aktion in diesem Raum auszuführen.</string>
-    <string name="widget_integration_missing_room_id">Anfrage beinhaltet keine Raum-ID.</string>
+    <string name="widget_integration_missing_room_id">room_id fehlt in der Anfrage.</string>
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Integrationen hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
     <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
-    <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
+    <string name="widget_integration_missing_user_id">user_id fehlt in der Anfrage.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
     <string name="black_theme">Schwarzes Design</string>
@@ -572,7 +572,7 @@
     <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
     <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
     <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
-    <string name="command_description_join_room">Raum mit angegebener Adresse beitreten</string>
+    <string name="command_description_join_room">Raum mit angegebener Adresse betreten</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
     <string name="command_description_remove_user">Entfernt die Person angegebener ID</string>
@@ -626,7 +626,7 @@
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
     <string name="action_accept">Akzeptieren</string>
-    <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Homeservers:</string>
+    <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Heim-Servers:</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft … (%1$d von %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
@@ -877,7 +877,7 @@
     <string name="create_room_action_create">ERSTELLEN</string>
     <string name="create_room_name_hint">Name</string>
     <string name="create_room_public_title">Öffentlich</string>
-    <string name="create_room_public_description">Jeder wird diesem Raum beitreten können</string>
+    <string name="create_room_public_description">Jeder wird diesen Raum betreten können</string>
     <string name="settings_integration_manager">Integrationsmanager</string>
     <string name="key_share_request">Schlüsselaustausch anfragen</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hättest du bereits ein Setup-Schlüssel-Backup von einer anderen Sitzung. Möchtest du es durch das, was du gerade erstellt hast, ersetzen\?</string>
@@ -1494,7 +1494,7 @@
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
-    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben dem Raum wieder beizutreten.</string>
+    <string name="room_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie den Raum wieder betreten.</string>
     <string name="settings_secure_backup_section_title">Verschlüsselte Sicherung</string>
     <string name="settings_secure_backup_setup">Sicherung einrichten</string>
     <string name="settings_secure_backup_reset">Sicherung zurücksetzen</string>
@@ -1625,8 +1625,8 @@
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
     <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
-    <string name="video_meeting">Starte eine Videokonferenz</string>
-    <string name="audio_meeting">Starte eine Audiokonferenz</string>
+    <string name="video_meeting">Beginne eine Videokonferenz</string>
+    <string name="audio_meeting">Beginne eine Audiokonferenz</string>
     <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi-Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwesenden können während der Konferenz beitreten.</string>
     <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
     <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
@@ -1672,7 +1672,7 @@
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
-    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu beginnen</string>
     <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
@@ -1683,7 +1683,7 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
     <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu beginnen</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Details wie Raumnamen und Nachrichteninhalt zeigen.</string>
     <string name="settings_security_pin_code_notifications_title">Inhalt in Benachrichtigungen anzeigen</string>
@@ -1752,7 +1752,7 @@
     <string name="direct_room_user_list_suggestions_title">Vorschläge</string>
     <string name="direct_room_user_list_known_title">Bekannte Personen</string>
     <string name="qr_code">QR-Code</string>
-    <string name="add_by_qr_code">Hinzufügen via QR-Code</string>
+    <string name="add_by_qr_code">Per QR-Code hinzufügen</string>
     <string name="permissions_denied_add_contact">Gib die Erlaubnis, um auf die Kamera zu zugreifen.</string>
     <string name="permissions_denied_qr_code">Um den QR-Code zu scannen, muss der Zugriff auf die Kamera erlaubt werden.</string>
     <string name="room_alias_published_alias_title">Öffentliche Adressen</string>
@@ -1797,7 +1797,7 @@
     <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Heim-Servers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
-    <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
+    <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du ihn betreten\?</string>
     <string name="room_preview_not_found">Der Raum ist gerade nicht zugänglich.
 \nVersuche es später nochmal, oder bitte einen Raum-Admin um Hilfe.</string>
     <string name="room_alias_published_alias_add_manually">Eine neue Adresse veröffentlichen</string>
@@ -1947,9 +1947,9 @@
     <string name="space_type_public">Öffentlich</string>
     <string name="create_spaces_you_can_change_later">Du kannst dies später ändern</string>
     <string name="a11y_unchecked">Ungeprüft</string>
-    <string name="room_settings_room_access_public_description">Jeder kann den Raum finden und beitreten</string>
+    <string name="room_settings_room_access_public_description">Jeder kann den Raum finden und betreten</string>
     <string name="room_settings_room_access_public_title">Öffentlich</string>
-    <string name="room_settings_room_access_private_description">Nur Eingeladene können es finden und beitreten</string>
+    <string name="room_settings_room_access_private_description">Nur sichtbar und zu betreten für Eingeladene</string>
     <string name="room_settings_room_access_private_title">Privat</string>
     <string name="room_settings_room_access_entry_unknown">Unbekannte Zugriffseinstellung (%s)</string>
     <string name="room_settings_guest_access_title">Gästen erlauben beizutreten</string>
@@ -1975,8 +1975,8 @@
     <string name="leave_space">Verlassen</string>
     <string name="space_add_child_title">Räume hinzufügen</string>
     <string name="space_explore_activity_title">Räume erkunden</string>
-    <string name="join_anyway">Trotzdem beitreten</string>
-    <string name="join_space">Space beitreten</string>
+    <string name="join_anyway">Dennoch betreten</string>
+    <string name="join_space">Space betreten</string>
     <string name="create_space">Space erstellen</string>
     <string name="invite_just_to_this_room">Nur zu diesem Raum</string>
     <string name="invite_to_space_with_name">Zu %s einladen</string>
@@ -2002,7 +2002,7 @@
     <string name="create_spaces_choose_type_label">Welche Art von Space möchtest du erstellen\?</string>
     <string name="add_space">Space erstellen</string>
     <string name="command_description_create_space">Space erstellen</string>
-    <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Admins des Raums können diesen zu einem Space hinzufügen.</string>
+    <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihn betreten. Nur die Administration des Raums kann diesen zu einem Space hinzufügen.</string>
     <string name="room_settings_room_access_restricted_title">Nur Space-Mitglieder</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d Person, die du kennst, ist bereits beigetreten</item>
@@ -2031,7 +2031,7 @@
     <string name="send_file_step_compressing_image">Komprimiere Bild …</string>
     <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
     <string name="option_always_ask">Jedes Mal fragen</string>
-    <string name="directory_add_a_new_server_prompt">Gib den Namen eines neuen Servers ein, den du erkunden möchtest.</string>
+    <string name="directory_add_a_new_server_prompt">Gib den Namen des neuen Servers ein, den du erkunden möchtest.</string>
     <string name="directory_add_a_new_server">Neuen Server hinzufügen</string>
     <string name="directory_your_server">Dein Server</string>
     <string name="send_feedback_space_info">Du verwendest die Betaversion von Spaces. Mit Feedback hilfst du uns, die nächsten Versionen zu verbessern. Dabei wird uns deine Platform übermittelt, damit wir deine Rückmeldung optimal nutzen können.</string>
@@ -2202,7 +2202,7 @@
     <string name="room_permissions_change_space_avatar">Space-Icon ändern</string>
     <string name="space_permissions_notice_read_only">Du hast nicht die Berechtigung, Rollenrechte zu bearbeiten</string>
     <string name="space_settings_permissions_title">Space-Berechtigungen</string>
-    <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
+    <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie den Space wieder betreten.</string>
     <string name="space_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Space und hindert sie am erneuten Beitritt.</string>
     <string name="space_participants_remove_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
@@ -2222,7 +2222,7 @@
     <string name="command_description_room_name">Ändert den Raumnamen</string>
     <string name="command_description_unignore_user">Entblockt eine Person und zeigt deren Nachrichten wieder an</string>
     <string name="command_description_ignore_user">Blockiert eine Person und versteckt deren Nachrichten</string>
-    <string name="room_settings_space_access_public_description">Jeder kann den Space finden und beitreten</string>
+    <string name="room_settings_space_access_public_description">Jeder kann den Space finden und betreten</string>
     <string name="room_settings_room_notifications_manage_notifications">Du kannst deine Benachrichtigungen in den %1$s verwalten.</string>
     <string name="room_settings_room_notifications_encryption_notice">Bitte beachte, dass Benachrichtigungen zu Erwähnungen und Schlüsselwörtern in verschlüsselten Räumen mobil nicht verfügbar sind.</string>
     <string name="space_permissions_notice">Wähle die Berechtigungen der Rollen aus</string>
@@ -2305,7 +2305,7 @@
     <string name="legals_no_policy_provided">Dieser Server stellt keine Richtlinie bereit.</string>
     <string name="legals_identity_server_title">Richtlinie deines Identitäts-Servers</string>
     <string name="legals_home_server_title">Richtlinie deines Heim-Servers</string>
-    <string name="legals_application_title">${app_name} Richtlinie</string>
+    <string name="legals_application_title">Richtlinie von ${app_name}</string>
     <string name="tooltip_attachment_poll">Abstimmung erstellen</string>
     <string name="tooltip_attachment_contact">Kontakte öffnen</string>
     <string name="tooltip_attachment_sticker">Sticker verschicken</string>
@@ -2332,12 +2332,12 @@
     <string name="location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
     <string name="location_activity_title_preview">Standort</string>
-    <string name="closed_poll_option_description">Ergebnisse werden erst angezeigt, wenn du die Umfrage beendest</string>
-    <string name="closed_poll_option_title">Geschlossene Umfrage</string>
-    <string name="open_poll_option_description">Ergebnisse werden direkt nach Stimmabgabe angezeigt</string>
-    <string name="open_poll_option_title">Offene Umfrage</string>
-    <string name="poll_type_title">Umfragetyp</string>
-    <string name="edit_poll_title">Umfrage bearbeiten</string>
+    <string name="closed_poll_option_description">Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest</string>
+    <string name="closed_poll_option_title">Abgeschlossene Abstimmung</string>
+    <string name="open_poll_option_description">Abstimmende können die Ergebnisse nach Stimmabgabe sehen</string>
+    <string name="open_poll_option_title">Laufende Abstimmung</string>
+    <string name="poll_type_title">Abstimmungsart</string>
+    <string name="edit_poll_title">Abstimmung bearbeiten</string>
     <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
     <string name="login_splash_create_account">Konto erstellen</string>
     <string name="ftue_auth_carousel_workplace_title">Kommunikation für dein Team.</string>
@@ -2523,7 +2523,7 @@
     <string name="send_feedback_threads_info">Threads sind noch in Arbeit, und es stehen neue, aufregende Funktionen an, wie z. B. verbesserte Benachrichtigungen. Wir würden uns sehr über Dein Feedback freuen!</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Nachrichten in dieser Unterhaltung werden Ende-zu-Ende-verschlüsselt.</string>
     <string name="ftue_auth_captcha_title">Bist du ein Mensch\?</string>
-    <string name="ftue_auth_terms_subtitle">Bitte lies dir %ss Bedingungen und Richtlinien durch</string>
+    <string name="ftue_auth_terms_subtitle">Bitte lies dir die Bedingungen und Richtlinien von %s durch</string>
     <string name="ftue_auth_terms_title">Server-Richtlinien</string>
     <string name="ftue_auth_email_verification_subtitle">Folge den Anweisungen, die an %s gesendet wurden</string>
     <string name="ftue_auth_email_verification_title">E-Mail bestätigen</string>
@@ -2820,4 +2820,19 @@
     <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
     <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
     <string name="voice_broadcast_live">Live</string>
+    <string name="attachment_type_selector_sticker">Sticker</string>
+    <string name="device_manager_other_sessions_select">Sitzungen auswählen</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Standort</string>
+    <string name="attachment_type_selector_poll">Umfragen</string>
+    <string name="attachment_type_selector_voice_broadcast">Sprachübertragung</string>
+    <string name="attachment_type_selector_file">Anhänge</string>
+    <string name="attachment_type_selector_gallery">Fotobibliothek</string>
+    <string name="action_deselect_all">Alle abwählen</string>
+    <string name="action_select_all">Alle auswählen</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d ausgewählt</item>
+        <item quantity="other">%1$d ausgewählt</item>
+    </plurals>
 </resources>
