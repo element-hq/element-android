@@ -2290,7 +2290,7 @@
     <string name="settings_troubleshoot_test_current_gateway">当前网关：%s</string>
     <string name="settings_troubleshoot_test_current_gateway_title">网关</string>
     <string name="give_feedback_threads">提供反馈</string>
-    <string name="ftue_auth_carousel_workplace_title">为您的团队服务</string>
+    <string name="ftue_auth_carousel_workplace_title">为您的团队发送消息。</string>
     <string name="threads_beta_enable_notice_title">消息列beta</string>
     <string name="thread_list_title">消息列</string>
     <string name="settings_show_latest_profile_description">为所有消息显示最新资料信息（头像和显示名称）。</string>
