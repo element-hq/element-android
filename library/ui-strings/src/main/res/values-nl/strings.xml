@@ -2765,15 +2765,15 @@
     <string name="rich_text_editor_format_strikethrough">Doorhaal formaat toepassen</string>
     <string name="rich_text_editor_format_italic">Cursief formaat toepassen</string>
     <string name="rich_text_editor_format_bold">Vet formaat toepassen</string>
-    <string name="qr_code_login_confirm_security_code_description">Zorg ervoor dat u de herkomst van deze code kent. Door apparaten te koppelen, geeft u iemand volledige toegang tot uw account.</string>
+    <string name="qr_code_login_confirm_security_code_description">Zorg ervoor dat je de herkomst van deze code kent. Door apparaten te koppelen, geef je iemand volledige toegang tot jouw account.</string>
     <string name="qr_code_login_status_no_match">Geen match\?</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Selecteer \'QR-code scannen\'</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Selecteer \'Aanmelden met QR-code\'</string>
     <string name="qr_code_login_new_device_instruction_3">Selecteer \'Toon QR-code\'</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">De server ondersteunt geen inloggen met QR-code.</string>
-    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Er is een beveiligingsprobleem opgetreden bij het instellen van beveiligde berichtenuitwisseling. Een van de volgende zaken kan in geschonden zijn: uw server; uw internetverbinding(en); uw apparaat(en);</string>
-    <string name="qr_code_login_header_connected_description">Controleer uw aangemelde apparaat, de onderstaande code zou moeten worden weergegeven. Bevestig dat de onderstaande code overeenkomt met dat apparaat:</string>
-    <string name="qr_code_login_header_show_qr_code_new_device_description">Gebruik uw aangemelde apparaat om de onderstaande QR-code te scannen:</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Er is een beveiligingsprobleem opgetreden bij het instellen van beveiligde berichtenuitwisseling. Een van de volgende zaken kan in geschonden zijn: je server; je internetverbinding(en); je apparaat(en);</string>
+    <string name="qr_code_login_header_connected_description">Controleer je aangemelde apparaat, de onderstaande code zou moeten worden weergegeven. Bevestig dat de onderstaande code overeenkomt met dat apparaat:</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Gebruik je aangemelde apparaat om de onderstaande QR-code te scannen:</string>
     <string name="three">3</string>
     <string name="two">2</string>
     <string name="one">1</string>
@@ -2781,19 +2781,19 @@
     <string name="labs_enable_voice_broadcast_title">Spraakuitzending inschakelen (in actieve ontwikkeling)</string>
     <string name="labs_enable_client_info_recording_summary">Noteer de naam, versie en url van de applicatie om sessies gemakkelijker te herkennen in sessiebeheer.</string>
     <string name="labs_enable_client_info_recording_title">Opname van applicatie informatie inschakelen</string>
-    <string name="labs_enable_session_manager_summary">Meer zichtbaarheid en controle over al uw sessies.</string>
+    <string name="labs_enable_session_manager_summary">Meer zichtbaarheid en controle over al je sessies.</string>
     <string name="labs_enable_session_manager_title">Nieuwe sessiemanager inschakelen</string>
-    <string name="device_manager_learn_more_session_rename">Andere gebruikers in privéchats en chatruimten waaraan u deelneemt, kunnen een volledige lijst van uw sessies bekijken.
+    <string name="device_manager_learn_more_session_rename">Andere gebruikers in privéchats en chatruimten waaraan jij deelneemt, kunnen een volledige lijst van je sessies bekijken.
 \n
-\nDit geeft ze het vertrouwen dat ze echt met u praten, maar het betekent ook dat ze de sessienaam kunnen zien die u hier invoert.</string>
+\nDit geeft ze het vertrouwen dat ze echt met jou praten, maar het betekent ook dat ze de sessienaam kunnen zien die je hier invoert.</string>
     <string name="device_manager_learn_more_session_rename_title">Sessies hernoemen</string>
-    <string name="device_manager_learn_more_sessions_verified">Geverifieerde sessies zijn ingelogd met uw inloggegevens en vervolgens geverifieerd, hetzij met uw veilige wachtwoordzin of door kruisverificatie.
+    <string name="device_manager_learn_more_sessions_verified">Geverifieerde sessies zijn ingelogd met jouw inloggegevens en vervolgens geverifieerd, hetzij met je veilige wachtwoordzin of door kruisverificatie.
 \n
-\nDit betekent dat ze coderingssleutels bevatten voor uw eerdere berichten en bevestigen aan andere gebruikers waarmee u communiceert dat deze sessies echt van u zijn.</string>
-    <string name="device_manager_learn_more_sessions_unverified">Niet-geverifieerde sessies zijn sessies die zijn aangemeld met uw inloggegevens, maar niet zijn geverifieerd.
+\nDit betekent dat ze coderingssleutels bevatten voor je eerdere berichten en bevestigen aan andere gebruikers waarmee je communiceert dat deze sessies echt van jou zijn.</string>
+    <string name="device_manager_learn_more_sessions_unverified">Niet-geverifieerde sessies zijn sessies die zijn aangemeld met jouw inloggegevens, maar niet zijn geverifieerd.
 \n
-\nU moet er vooral zeker van zijn dat u deze sessies herkent, omdat ze een ongeoorloofd gebruik van uw account kunnen vertegenwoordigen.</string>
-    <string name="device_manager_session_rename_description">Met aangepaste sessienamen kunt u uw apparaten gemakkelijker herkennen.</string>
+\nJe moet er vooral zeker van zijn dat je deze sessies herkent, omdat ze een ongeoorloofd gebruik van je account kunnen vertegenwoordigen.</string>
+    <string name="device_manager_session_rename_description">Met aangepaste sessienamen kan je jouw apparaten gemakkelijker herkennen.</string>
     <string name="device_manager_session_rename">Sessie hernoemen</string>
     <string name="device_manager_session_details_device_model">Model</string>
     <string name="device_manager_session_details_device_browser">Browser</string>
@@ -2802,16 +2802,16 @@
     <string name="device_manager_session_details_description">Informatie over toepassing, apparaat en activiteit.</string>
     <string name="device_manager_other_sessions_select">Sessies selecteren</string>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="one">Overweeg om u af te melden bij oude sessies (%1$d dag of meer) die u niet meer gebruikt.</item>
-        <item quantity="other">Overweeg om u af te melden bij oude sessies (%1$d dagen of meer) die u niet meer gebruikt.</item>
+        <item quantity="one">Overweeg om je af te melden bij oude sessies (%1$d dag of meer) die je niet meer gebruikt.</item>
+        <item quantity="other">Overweeg om je af te melden bij oude sessies (%1$d dagen of meer) die je niet meer gebruikt.</item>
     </plurals>
-    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifieer uw sessies voor verbeterde beveiligde berichtenuitwisseling of meld u af bij sessies die u niet meer herkent of gebruikt.</string>
-    <string name="device_manager_other_sessions_recommendation_description_verified">Voor de beste beveiliging logt u uit bij elke sessie die u niet meer herkent of gebruikt.</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifieer je sessies voor verbeterde beveiligde berichtenuitwisseling of meld je af bij sessies die je niet meer herkent of gebruikt.</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Voor de beste beveiliging log je uit bij elke sessie die je niet meer herkent of gebruikt.</string>
     <string name="a11y_device_manager_filter">Filter</string>
     <string name="device_manager_filter_bottom_sheet_title">Filter</string>
     <string name="device_manager_session_last_activity">Laatste activiteit %1$s</string>
-    <string name="device_manager_verification_status_detail_other_session_unknown">Verifieer uw huidige sessie om de verificatiestatus van deze sessie weer te geven.</string>
-    <string name="device_manager_verification_status_detail_other_session_unverified">Verifieer of meld u af bij deze sessie voor de beste beveiliging en betrouwbaarheid.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifieer je huidige sessie om de verificatiestatus van deze sessie weer te geven.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifieer of meld je af bij deze sessie voor de beste beveiliging en betrouwbaarheid.</string>
     <string name="attachment_type_selector_contact">Contact</string>
     <string name="attachment_type_selector_camera">Camera</string>
     <string name="attachment_type_selector_location">Locatie</string>
@@ -2826,9 +2826,9 @@
     <string name="a11y_stop_voice_broadcast_record">Opname van spraakuitzending stoppen</string>
     <string name="a11y_pause_voice_broadcast_record">Opname van spraakuitzending pauzeren</string>
     <string name="a11y_resume_voice_broadcast_record">Opname van spraakuitzending hervatten</string>
-    <string name="settings_security_incognito_keyboard_summary">Verzoek dat het toetsenbord geen gepersonaliseerde gegevens, zoals typgeschiedenis en woordenboek, bijwerkt op basis van wat u in gesprekken hebt getypt. Opgelet dat sommige toetsenborden deze instelling mogelijk niet respecteren.</string>
+    <string name="settings_security_incognito_keyboard_summary">Verzoek dat het toetsenbord geen gepersonaliseerde gegevens, zoals typgeschiedenis en woordenboek, bijwerkt op basis van wat je in gesprekken hebt getypt. Opgelet dat sommige toetsenborden deze instelling mogelijk niet respecteren.</string>
     <string name="command_description_devtools">Open het scherm met ontwikkelaarstools</string>
-    <string name="room_settings_global_block_unverified_info_text">🔒 U heeft de codering voor geverifieerde sessies enkel voor alle kamers ingeschakeld in Beveiligingsinstellingen.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Je hebt de codering voor geverifieerde sessies enkel voor alle kamers ingeschakeld in Beveiligingsinstellingen.</string>
     <string name="labs_enable_deferred_dm_summary">Maak directe chat alleen aan bij een bericht</string>
     <string name="action_deselect_all">Deselecteer alles</string>
     <string name="action_select_all">Selecteer alles</string>
