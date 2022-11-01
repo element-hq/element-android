@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBod
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 import org.matrix.android.sdk.internal.session.room.read.ReadBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
+import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadSummariesResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
@@ -451,4 +452,12 @@ internal interface RoomAPI {
             @Path("roomIdOrAlias") roomidOrAlias: String,
             @Query("via") viaServers: List<String>?
     ): RoomStrippedState
+
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_V1 + "rooms/{roomId}/threads")
+    suspend fun getThreadsList(
+            @Path("roomId") roomId: String,
+            @Query("include") include: String? = "all",
+            @Query("from") from: String? = null,
+            @Query("limit") limit: Int? = null
+    ): ThreadSummariesResponse
 }

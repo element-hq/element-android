@@ -16,6 +16,10 @@
 
 package im.vector.app.features.home.room.threads.list.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -34,17 +38,27 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
 class ThreadListViewModel @AssistedInject constructor(
         @Assisted val initialState: ThreadListViewState,
         private val analyticsTracker: AnalyticsTracker,
-        private val session: Session
-) :
-        VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        private val session: Session,
+) : VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
+
+    private var livePagedList: LiveData<PagedList<ThreadSummary>>? = null
+
+    private val _threadsLivePagedList = MutableLiveData<PagedList<ThreadSummary>>()
+    val threadsLivePagedList: LiveData<PagedList<ThreadSummary>> = _threadsLivePagedList
+
+    private val internalPagedListObserver = Observer<PagedList<ThreadSummary>> {
+        _threadsLivePagedList.postValue(it)
+        setLoading(false)
+    }
 
     @AssistedFactory
     interface Factory {
@@ -54,7 +68,7 @@ class ThreadListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<ThreadListViewModel, ThreadListViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ThreadListViewState): ThreadListViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: ThreadListViewState): ThreadListViewModel {
             val fragment: ThreadListFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.threadListViewModelFactory.create(state)
         }
@@ -72,7 +86,7 @@ class ThreadListViewModel @AssistedInject constructor(
     private fun fetchAndObserveThreads() {
         when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
             true -> {
-                fetchThreadList()
+                setLoading(true)
                 observeThreadSummaries()
             }
             false -> observeThreadsList()
@@ -82,14 +96,15 @@ class ThreadListViewModel @AssistedInject constructor(
     /**
      * Observing thread summaries when homeserver support threading.
      */
-    private fun observeThreadSummaries() {
-        room?.flow()
-                ?.liveThreadSummaries()
-                ?.map { room.threadsService().enhanceThreadWithEditions(it) }
-                ?.flowOn(room.coroutineDispatchers.io)
-                ?.execute { asyncThreads ->
-                    copy(threadSummaryList = asyncThreads)
-                }
+    private fun observeThreadSummaries() = withState { state ->
+        viewModelScope.launch {
+            livePagedList?.removeObserver(internalPagedListObserver)
+
+            livePagedList = room?.threadsService()
+                    ?.getPagedThreadsList(viewModelScope, state.shouldFilterThreads)
+
+            livePagedList?.observeForever(internalPagedListObserver)
+        }
     }
 
     /**
@@ -111,14 +126,6 @@ class ThreadListViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun fetchThreadList() {
-        viewModelScope.launch {
-            setLoading(true)
-            room?.threadsService()?.fetchThreadSummaries()
-            setLoading(false)
-        }
-    }
-
     private fun setLoading(isLoading: Boolean) {
         setState {
             copy(isLoading = isLoading)
@@ -132,5 +139,7 @@ class ThreadListViewModel @AssistedInject constructor(
         setState {
             copy(shouldFilterThreads = shouldFilterThreads)
         }
+
+        fetchAndObserveThreads()
     }
 }

@@ -16,6 +16,8 @@
 
 package im.vector.app.features.home.room.threads.list.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
@@ -24,7 +26,7 @@ import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 
 data class ThreadListViewState(
-        val threadSummaryList: Async<List<ThreadSummary>> = Uninitialized,
+        val pagedThreadSummaryList: LiveData<PagedList<ThreadSummary>>? = null,
         val rootThreadEventList: Async<List<ThreadTimelineEvent>> = Uninitialized,
         val shouldFilterThreads: Boolean = false,
         val isLoading: Boolean = false,

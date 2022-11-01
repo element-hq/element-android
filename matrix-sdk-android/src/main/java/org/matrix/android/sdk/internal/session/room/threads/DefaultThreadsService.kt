@@ -17,31 +17,29 @@
 package org.matrix.android.sdk.internal.session.room.threads
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.session.room.threads.ThreadsService
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.internal.database.helper.enhanceWithEditions
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
 import org.matrix.android.sdk.internal.database.mapper.ThreadSummaryMapper
-import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadSummariesTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 
 internal class DefaultThreadsService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @UserId private val userId: String,
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val fetchThreadSummariesTask: FetchThreadSummariesTask,
         @SessionDatabase private val monarchy: Monarchy,
-        private val timelineEventMapper: TimelineEventMapper,
-        private val threadSummaryMapper: ThreadSummaryMapper
+        private val threadSummaryMapper: ThreadSummaryMapper,
 ) : ThreadsService {
 
     @AssistedFactory
@@ -49,16 +47,17 @@ internal class DefaultThreadsService @AssistedInject constructor(
         fun create(roomId: String): DefaultThreadsService
     }
 
-    override fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                {
-                    threadSummaryMapper.map(it)
-                }
+    override suspend fun getPagedThreadsList(coroutineScope: CoroutineScope, userParticipating: Boolean): LiveData<PagedList<ThreadSummary>> {
+        return DefaultGetPagedThreadListTask(monarchy, threadSummaryMapper, fetchThreadSummariesTask).execute(
+                GetPagedThreadListTask.Params(
+                        roomId,
+                        coroutineScope,
+                        userParticipating
+                )
         )
     }
 
-    override fun getAllThreadSummaries(): List<ThreadSummary> {
+    override suspend fun getAllThreadSummaries(): List<ThreadSummary> {
         return monarchy.fetchAllMappedSync(
                 { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
                 { threadSummaryMapper.map(it) }
@@ -78,14 +77,6 @@ internal class DefaultThreadsService @AssistedInject constructor(
                         rootThreadEventId = rootThreadEventId,
                         from = from,
                         limit = limit
-                )
-        )
-    }
-
-    override suspend fun fetchThreadSummaries() {
-        fetchThreadSummariesTask.execute(
-                FetchThreadSummariesTask.Params(
-                        roomId = roomId
                 )
         )
     }
