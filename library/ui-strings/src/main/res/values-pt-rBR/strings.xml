@@ -2821,4 +2821,19 @@
     <string name="a11y_pause_voice_broadcast_record">Pausar gravação de broadcast de voz</string>
     <string name="a11y_resume_voice_broadcast_record">Retomar gravação de broadcast de voz</string>
     <string name="voice_broadcast_live">Ao vivo</string>
+    <string name="device_manager_other_sessions_select">Selecionar sessões</string>
+    <string name="attachment_type_selector_contact">Contato</string>
+    <string name="attachment_type_selector_camera">Câmera</string>
+    <string name="attachment_type_selector_location">Localização</string>
+    <string name="attachment_type_selector_poll">Sondagens</string>
+    <string name="attachment_type_selector_voice_broadcast">Broadcast de voz</string>
+    <string name="attachment_type_selector_file">Anexos</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_gallery">Biblioteca de fotos</string>
+    <string name="action_deselect_all">Desselecionar todas(os)</string>
+    <string name="action_select_all">Selecionar todas(os)</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d selecionada(o)</item>
+        <item quantity="other">%1$d selecionadas(os)</item>
+    </plurals>
 </resources>
