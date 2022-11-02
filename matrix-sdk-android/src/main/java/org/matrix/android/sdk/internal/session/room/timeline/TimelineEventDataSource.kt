@@ -22,6 +22,8 @@ import io.realm.Sort
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -74,7 +76,13 @@ internal class TimelineEventDataSource @Inject constructor(
                     .distinct(TimelineEventEntityFields.EVENT_ID)
                     .findAll()
                     .mapNotNull {
-                        timelineEventMapper.map(it).takeIf { it.root.getRelationContent()?.takeIf { it.type == eventType && it.eventId == eventId } != null }
+                        timelineEventMapper.map(it)
+                                .takeIf {
+                                    val isEventRelatedTo = it.root.getRelationContent()?.takeIf { it.type == eventType && it.eventId == eventId } != null
+                                    val isContentRelatedTo = it.root.getClearContent()?.toModel<MessageContent>()
+                                            ?.relatesTo?.takeIf { it.type == eventType && it.eventId == eventId } != null
+                                    isEventRelatedTo || isContentRelatedTo
+                                }
                     }
         }
     }

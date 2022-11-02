@@ -367,8 +367,8 @@
     <string name="settings_add_phone_number">Добавить телефон</string>
     <string name="settings_app_info_link_summary">Системные настройки приложения.</string>
     <string name="settings_app_info_link_title">Сведения о приложении</string>
-    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
+    <string name="settings_enable_all_notif">Уведомления для этой учётной записи</string>
+    <string name="settings_enable_this_device">Уведомления для этой сессии</string>
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
     <string name="settings_invited_to_room">Когда меня приглашают в комнату</string>
@@ -434,14 +434,14 @@
     <string name="encryption_information_device_name">Публичное название</string>
     <string name="device_manager_session_details_session_id">ID сессии</string>
     <string name="encryption_information_device_key">Ключ сессии</string>
-    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей комнаты</string>
-    <string name="encryption_export_room_keys">Экспорт ключей комнаты</string>
+    <string name="encryption_export_e2e_room_keys">Экспорт E2E ключей</string>
+    <string name="encryption_export_room_keys">Экспорт ключей</string>
     <string name="encryption_export_room_keys_summary">Экспорт ключей в локальный файл</string>
     <string name="encryption_export_export">Экспорт</string>
     <string name="passphrase_enter_passphrase">Введите мнемоническую фразу</string>
     <string name="passphrase_confirm_passphrase">Подтвердите мнемоническую фразу</string>
-    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
-    <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
+    <string name="encryption_import_e2e_room_keys">Импорт E2E ключей</string>
+    <string name="encryption_import_room_keys">Импорт ключей</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
@@ -618,7 +618,7 @@
     <string name="system_alerts_header">Системные оповещения</string>
     <string name="dialog_title_error">Ошибка</string>
     <string name="passphrase_create_passphrase">Создать мнемоническую фразу</string>
-    <string name="passphrase_passphrase_does_not_match">Парольные фразы не совпадают</string>
+    <string name="passphrase_passphrase_does_not_match">Мнемонические фразы не совпадают</string>
     <string name="resource_limit_contact_admin">свяжитесь с вашим администратором</string>
     <string name="resource_limit_soft_default">Превышен один из ресурсных лимитов сервера, по этому <b>некоторые пользователи не смогут авторизоваться</b>.</string>
     <string name="resource_limit_hard_default">Превышен один из ресурсных лимитов сервера.</string>
@@ -663,7 +663,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии.
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включены для этой сессии.
 \nПожалуйста, проверьте настройки ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
@@ -725,14 +725,14 @@
     <string name="settings_cryptography_manage_keys">Управление криптографическими ключами</string>
     <string name="encryption_settings_manage_message_recovery_summary">Управление резервным копированием ключей</string>
     <string name="notification_silent">Беззвучный</string>
-    <string name="passphrase_empty_error_message">Пожалуйста, введите мнемоническую фразу</string>
-    <string name="passphrase_passphrase_too_weak">Парольная фраза слишком простая</string>
+    <string name="passphrase_empty_error_message">Введите мнемоническую фразу</string>
+    <string name="passphrase_passphrase_too_weak">Мнемоническая фраза слишком проста</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите мнемоническую фразу, если хотите, чтобы ${app_name} сгенерировал бумажный ключ.</string>
     <string name="keys_backup_setup_step1_title">Никогда не теряйте зашифрованных сообщений</string>
     <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Ключи для прочтения этих сообщений есть только у вас и получателя(ей).
 \n
 \nНадёжно сохраните резервную копию ключей, чтобы не потерять их.</string>
-    <string name="keys_backup_setup_step2_button_title">Установите парольную фразу</string>
+    <string name="keys_backup_setup_step2_button_title">Задайте мнемоническую фразу</string>
     <string name="keys_backup_setup_step3_copy_button_title">Сохранить бумажный ключ</string>
     <string name="keys_backup_setup_step3_button_title">Готово</string>
     <string name="keys_backup_setup_step3_save_button_title">Сохранить как файл</string>
@@ -744,7 +744,7 @@
     <string name="keys_backup_settings_delete_confirm_message">Удалить резервную копию ключей шифрования с сервера\? Вы больше не сможете использовать бумажный ключ для чтения истории зашифрованных сообщений.</string>
     <string name="keys_backup_settings_delete_confirm_title">Удалить резервную копию</string>
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этой сессии, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
+    <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервное копирование ключей в этой сессии, восстановите их с помощью мнемонической фразы или бумажного ключа.</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Резервная копия имеет действительную подпись из неподтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительную подпись из подтверждённой сессии %s.</string>
@@ -782,7 +782,7 @@
     </plurals>
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого бумажного ключа: пожалуйста, убедитесь, что вы ввели правильный бумажный ключ.</string>
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью этой мнемонической фразы: пожалуйста, убедитесь, что вы ввели правильную мнемоническую фразу.</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Генерация бумажного ключа с использованием мнемонической фразы может занять несколько секунд.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Создание бумажного ключа с использованием мнемонической фразы может занять несколько секунд.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nЭта ошибка вне контроля ${app_name}. На телефоне нет учетной записи Google. Пожалуйста, добавьте аккаунт Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -830,8 +830,8 @@
     <string name="keys_backup_setup_step2_text_description">Зашифрованная копия ключей будет храниться на вашем сервере. Для безопасности защитите её мнемонической фразой.
 \n
 \nДля максимальной безопасности мнемоническая фраза должна отличаться от пароля вашей учётной записи.</string>
-    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете вашу парольную фразу. 
-\nХраните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
+    <string name="keys_backup_setup_step3_text_line2">Бумажный ключ — это подстраховка: вы можете использовать его для восстановления доступа к своим зашифрованным сообщениям, если забудете свою мнемоническую фразу.
+\nХраните свой бумажный ключ в очень надёжном месте, например, в менеджере паролей (или в сейфе)</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортирование ключей…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Скачивание ключей…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление бумажного ключа…</string>
@@ -1520,16 +1520,16 @@
 \n
 \nМы рекомендуем вам немедленно изменить свой пароль и ключ восстановления в настройках.</string>
     <string name="verification_cancelled">Подтверждение отменено</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Генерация ключа безопасности из парольной фразы</string>
-    <string name="bootstrap_progress_generating_ssss">Генерация ключа SSSS из парольной фразы</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">Генерация ключа SSSS из парольной фразы (%s)</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Создание бумажного ключа из мнемонической фразы</string>
+    <string name="bootstrap_progress_generating_ssss">Создание ключа SSSS из мнемонической фразы</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Создание ключа SSSS из мнемонической фразы (%s)</string>
     <string name="bootstrap_migration_enter_backup_password">Чтобы продолжить работу, введите парольную фразу для резервного копирования ключа.</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Если вы не знаете вашу парольную фразу для резервного копирования ключей, вы можете %s.</string>
     <string name="power_level_edit_title">Задать роль</string>
-    <string name="bootstrap_info_text_2">Введите секретную фразу, известную только вам, для защиты данных на вашем сервере.</string>
+    <string name="bootstrap_info_text_2">Введите мнемоническую фразу, известную только вам, которая используется для защиты данных на вашем сервере.</string>
     <string name="bootstrap_loading_title">Настройка восстановления.</string>
     <string name="bootstrap_finish_title">Готово!</string>
-    <string name="keep_it_safe">Храните его в безопасности</string>
+    <string name="keep_it_safe">Храните его в надёжном месте</string>
     <string name="finish">Завершить</string>
     <string name="bootstrap_crosssigning_progress_initializing">Публикация созданных ключей идентификации</string>
     <string name="bootstrap_crosssigning_progress_default_key">Определение ключа SSSS по умолчанию</string>
@@ -1572,8 +1572,8 @@
     <string name="or_other_mx_capable_client">или другой клиент Matrix поддерживающий перекрестную подпись</string>
     <string name="command_description_discard_session">Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату</string>
     <string name="enter_secret_storage_passphrase_or_key">Чтобы продолжить, используйте %1$s или %2$s.</string>
-    <string name="use_recovery_key">Используйте ключ восстановления</string>
-    <string name="enter_secret_storage_input_key">Выберите ключ восстановления или введите его вручную, введя или вставив из буфера обмена</string>
+    <string name="use_recovery_key">Используйте бумажный ключ</string>
+    <string name="enter_secret_storage_input_key">Выберите бумажный ключ или введите его вручную, введя или вставив из буфера обмена</string>
     <string name="failed_to_access_secure_storage">Не удалось получить доступ к защищенному хранилищу данных</string>
     <string name="unencrypted">Не зашифровано</string>
     <string name="encrypted_unverified">Зашифровано неподтверждённой сессией</string>
@@ -1625,13 +1625,13 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Используйте ключ безопасности</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Создайте ключ безопасности для хранения в надежном месте, например в менеджере паролей или сейфе.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Использовать мнемоническую фразу</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Введите секретную фразу, известную только вам, и создайте ключ для резервного копирования.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Введите мнемоническую фразу, известную только вам, и создайте ключ для резервного копирования.</string>
     <string name="bottom_sheet_save_your_recovery_key_title">Сохраните свой ключ безопасности</string>
     <string name="bottom_sheet_save_your_recovery_key_content">Храните бумажный ключ в надёжном месте, например, в менеджере паролей или в сейфе.</string>
-    <string name="set_a_security_phrase_title">Задайте секретную фразу</string>
-    <string name="set_a_security_phrase_notice">Введите секретную фразу, известную только вам, для защиты данных на вашем сервере.</string>
+    <string name="set_a_security_phrase_title">Задайте мнемоническую фразу</string>
+    <string name="set_a_security_phrase_notice">Введите мнемоническую фразу, известную только вам, которая используется для защиты данных на вашем сервере.</string>
     <string name="set_a_security_phrase_hint">Мнемоническая фраза</string>
-    <string name="set_a_security_phrase_again_notice">Для подтверждения введите вашу секретную фразу ещё раз.</string>
+    <string name="set_a_security_phrase_again_notice">Введите мнемоническую фразу ещё раз, чтобы подтвердить её.</string>
     <string name="room_settings_name_hint">Название комнаты</string>
     <string name="room_settings_topic_hint">Тема</string>
     <string name="room_settings_save_success">Вы успешно изменили настройки комнаты</string>
@@ -1679,7 +1679,8 @@
     <plurals name="encryption_import_room_keys_success">
         <item quantity="one">%1$d/%2$d ключ успешно импортирован.</item>
         <item quantity="few">%1$d/%2$d ключа успешно импортированы.</item>
-        <item quantity="many">%1$d/%2$d ключей успешно импортировано.</item>
+        <item quantity="many">%1$d/%2$d ключей успешно импортированы.</item>
+        <item quantity="other">%1$d/%2$d ключей успешно импортированы.</item>
     </plurals>
     <string name="room_manage_integrations">Управление интеграциями</string>
     <string name="room_no_active_widgets">Нет активных виджетов</string>
@@ -2765,7 +2766,7 @@
     <string name="device_manager_learn_more_session_rename">Другие пользователи в личных сообщениях и комнатах, к которым вы присоединились, могут просматривать весь список ваших сессий.
 \n
 \nЭто даёт им уверенность в том, что они действительно общаются с вами, но это также означает, что они могут видеть название сессии, которое вы ввели здесь.</string>
-    <string name="labs_enable_rich_text_editor_title">Визуальный редактор текста</string>
+    <string name="labs_enable_rich_text_editor_title">Наглядный текстовый редактор</string>
     <string name="push_gateway_item_device_id">ID сессии:</string>
     <string name="device_manager_push_notifications_title">Уведомления</string>
     <string name="device_manager_push_notifications_description">Получать push-уведомления в этой сессии.</string>
@@ -2792,4 +2793,16 @@
         <item quantity="many">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
         <item quantity="other">Рассмотрите возможность выхода из старых сессий (%1$d дней или дольше), которые вы более не используете.</item>
     </plurals>
+    <string name="attachment_type_voice_broadcast">Голосовая трансляция</string>
+    <string name="labs_enable_voice_broadcast_title">Голосовые трансляции (в активной разработке)</string>
+    <string name="labs_enable_client_info_recording_summary">Записывает название клиента, версию и URL-адрес для более лёгкого распознавания сессий в менеджере сессий.</string>
+    <string name="labs_enable_client_info_recording_title">Записывать информацию о клиенте</string>
+    <string name="attachment_type_selector_gallery">Галерея</string>
+    <string name="attachment_type_selector_sticker">Наклейки</string>
+    <string name="attachment_type_selector_file">Вложения</string>
+    <string name="attachment_type_selector_voice_broadcast">Голосовая трансляция</string>
+    <string name="attachment_type_selector_poll">Опрос</string>
+    <string name="attachment_type_selector_location">Местоположение</string>
+    <string name="attachment_type_selector_camera">Камера</string>
+    <string name="attachment_type_selector_contact">Контакт</string>
 </resources>

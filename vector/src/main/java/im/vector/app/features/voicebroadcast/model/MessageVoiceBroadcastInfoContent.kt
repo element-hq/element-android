@@ -44,6 +44,8 @@ data class MessageVoiceBroadcastInfoContent(
         @Json(name = "state") val voiceBroadcastStateStr: String = "",
         /** The length of the voice chunks in seconds. **/
         @Json(name = "chunk_length") val chunkLength: Int? = null,
+        /** The sequence of the last sent chunk. **/
+        @Json(name = "last_chunk_sequence") val lastChunkSequence: Int? = null,
 ) : MessageContent {
 
     val voiceBroadcastState: VoiceBroadcastState? = VoiceBroadcastState.values()

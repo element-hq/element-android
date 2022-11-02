@@ -942,7 +942,7 @@
     <string name="settings_discovery_no_msisdn">在您新增電話號碼後，探索選項將會出現。</string>
     <string name="settings_discovery_disconnect_identity_server_info">與您的身份識別伺服器斷線代表您無法被其他使用者探索，且您將無法透過電子郵件或電話邀請其他人。</string>
     <string name="settings_discovery_msisdn_title">可探索的電話號碼</string>
-    <string name="settings_discovery_confirm_mail">我們將會傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
+    <string name="settings_discovery_confirm_mail">我們已傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
     <string name="settings_discovery_enter_identity_server">輸入身份識別伺服器 URL</string>
     <string name="settings_discovery_bad_identity_server">無法連線到身份識別伺服器</string>
     <string name="settings_discovery_please_enter_server">請輸入身份識別伺服器 URL</string>
@@ -2731,9 +2731,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">從登入畫面開始</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">選取「使用 QR code 登入」</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">從登入畫面開始</string>
-    <string name="qr_code_login_new_device_instruction_3">選取「在此裝置上顯示 QR code」</string>
-    <string name="qr_code_login_new_device_instruction_2">到「設定」→「安全與隱私」→「顯示所有工作階段」</string>
-    <string name="qr_code_login_new_device_instruction_1">在您的其他裝置上開啟 ${app_name}</string>
+    <string name="qr_code_login_new_device_instruction_3">選取「顯示 QR code」</string>
+    <string name="qr_code_login_new_device_instruction_2">到「設定」→「安全與隱私」</string>
+    <string name="qr_code_login_new_device_instruction_1">在您的其他裝置上開啟應用程式</string>
     <string name="qr_code_login_header_failed_denied_description">請求在另一台裝置上被拒絕。</string>
     <string name="qr_code_login_header_failed_timeout_description">連結未在規定時間內完成。</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">不支援與其裝置連結。</string>
@@ -2751,4 +2751,34 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">您可以使用此裝置透過 QR code 登入移動裝置或網路裝置。有兩種方法可以作到：</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">使用 QR code 登入</string>
     <string name="login_scan_qr_code">掃描 QR code</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">家伺服器不支援使用 QR code 登入。</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">登入已在其他裝置上取消。</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">該 QR code 無效。</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">其他裝置必須登入。</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">其他裝置已登入。</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全問題。以下其中一項可能已被駭入：您的家伺服器、您的網際網路連線、您的裝置；</string>
+    <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
+    <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
+    <string name="labs_enable_voice_broadcast_title">啟用語音廣播（正在積極開發中）</string>
+    <string name="a11y_voice_broadcast_buffering">正在緩衝</string>
+    <string name="a11y_pause_voice_broadcast">暫停語音廣播</string>
+    <string name="a11y_play_voice_broadcast">播放或繼續語音廣播</string>
+    <string name="a11y_stop_voice_broadcast_record">停止語音廣播錄製</string>
+    <string name="a11y_pause_voice_broadcast_record">暫停語音廣播錄製</string>
+    <string name="a11y_resume_voice_broadcast_record">繼續語音廣播錄製</string>
+    <string name="voice_broadcast_live">直播</string>
+    <string name="device_manager_other_sessions_select">選取工作階段</string>
+    <string name="attachment_type_selector_contact">聯絡人</string>
+    <string name="attachment_type_selector_camera">相機</string>
+    <string name="attachment_type_selector_location">位置</string>
+    <string name="attachment_type_selector_poll">投票</string>
+    <string name="attachment_type_selector_voice_broadcast">音訊廣播</string>
+    <string name="attachment_type_selector_file">附件</string>
+    <string name="attachment_type_selector_sticker">貼圖</string>
+    <string name="attachment_type_selector_gallery">照片媒體庫</string>
+    <string name="action_deselect_all">取消選取全部</string>
+    <string name="action_select_all">選取全部</string>
+    <plurals name="x_selected">
+        <item quantity="other">已選取 %1$d</item>
+    </plurals>
 </resources>

@@ -59,6 +59,7 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
                 body = MessageVoiceBroadcastInfoContent(
                         relatesTo = reference,
                         voiceBroadcastStateStr = VoiceBroadcastState.PAUSED.value,
+                        lastChunkSequence = voiceBroadcastRecorder?.currentSequence,
                 ).toContent(),
         )
 

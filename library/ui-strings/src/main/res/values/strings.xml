@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Cross feature -->
+    <plurals name="x_selected">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+
+    <!-- Notice -->
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
@@ -407,6 +414,8 @@
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
     <string name="action_got_it">Got it</string>
+    <string name="action_select_all">Select all</string>
+    <string name="action_deselect_all">Deselect all</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -3078,6 +3087,14 @@
     <string name="audio_message_reply_content">%1$s (%2$s)</string>
     <string name="audio_message_file_size">(%1$s)</string>
 
+    <string name="voice_broadcast_live">Live</string>
+    <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
+    <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
+    <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
+    <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
+    <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
+    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
@@ -3197,6 +3214,15 @@
     <string name="tooltip_attachment_location">Share location</string>
     <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
+    <string name="attachment_type_selector_gallery">Photo library</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_file">Attachments</string>
+    <string name="attachment_type_selector_voice_broadcast">Voice broadcast</string>
+    <string name="attachment_type_selector_poll">Polls</string>
+    <string name="attachment_type_selector_location">Location</string>
+    <string name="attachment_type_selector_camera">Camera</string>
+    <string name="attachment_type_selector_contact">Contact</string>
+
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
         <item quantity="one">"%1$d more"</item>
@@ -3311,6 +3337,7 @@
     <string name="device_manager_other_sessions_no_unverified_sessions_found">No unverified sessions found.</string>
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
+    <string name="device_manager_other_sessions_select">Select sessions</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
@@ -3386,9 +3413,16 @@
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
     <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
     <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
-    <string name="qr_code_login_new_device_instruction_1">Open ${app_name} on your other device</string>
-    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy -> Show All Sessions</string>
-    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code in this device\'</string>
+    <string name="qr_code_login_header_failed_other_description">The request failed.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">A security issue was encountered setting up secure messaging. One of the following may be compromised: Your homeserver; Your internet connection(s); Your device(s);</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">The other device is already signed in.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">The other device must be signed in.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">That QR code is invalid.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">The sign in was cancelled on the other device.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">The homeserver doesn\'t support sign in with QR code.</string>
+    <string name="qr_code_login_new_device_instruction_1">Open the app on your other device</string>
+    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code\'</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Start at the sign in screen</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Select \'Sign in with QR code\'</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Start at the sign in screen</string>

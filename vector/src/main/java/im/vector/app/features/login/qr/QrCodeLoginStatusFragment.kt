@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginStatusBinding
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
 
 @AndroidEntryPoint
 class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBinding>() {
@@ -41,6 +42,13 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCancelButton()
+        initTryAgainButton()
+    }
+
+    private fun initTryAgainButton() {
+        views.qrCodeLoginStatusTryAgainButton.debouncedClicks {
+            viewModel.handle(QrCodeLoginAction.TryAgain)
+        }
     }
 
     private fun initCancelButton() {
@@ -58,18 +66,26 @@ class QrCodeLoginStatusFragment : VectorBaseFragment<FragmentQrCodeLoginStatusBi
         views.qrCodeLoginStatusCancelButton.isVisible = true
         views.qrCodeLoginStatusTryAgainButton.isVisible = connectionStatus.canTryAgain
         views.qrCodeLoginStatusHeaderView.setTitle(getString(R.string.qr_code_login_header_failed_title))
-        views.qrCodeLoginStatusHeaderView.setDescription(getErrorCode(connectionStatus.errorType))
+        views.qrCodeLoginStatusHeaderView.setDescription(getErrorDescription(connectionStatus.errorType))
         views.qrCodeLoginStatusHeaderView.setImage(
                 imageResource = R.drawable.ic_qr_code_login_failed,
                 backgroundTintColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
         )
     }
 
-    private fun getErrorCode(errorType: QrCodeLoginErrorType): String {
-        return when (errorType) {
-            QrCodeLoginErrorType.DEVICE_IS_NOT_SUPPORTED -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
-            QrCodeLoginErrorType.TIMEOUT -> getString(R.string.qr_code_login_header_failed_timeout_description)
-            QrCodeLoginErrorType.REQUEST_WAS_DENIED -> getString(R.string.qr_code_login_header_failed_denied_description)
+    private fun getErrorDescription(reason: RendezvousFailureReason): String {
+        return when (reason) {
+            RendezvousFailureReason.UnsupportedAlgorithm,
+            RendezvousFailureReason.UnsupportedTransport -> getString(R.string.qr_code_login_header_failed_device_is_not_supported_description)
+            RendezvousFailureReason.UnsupportedHomeserver -> getString(R.string.qr_code_login_header_failed_homeserver_is_not_supported_description)
+            RendezvousFailureReason.Expired -> getString(R.string.qr_code_login_header_failed_timeout_description)
+            RendezvousFailureReason.UserDeclined -> getString(R.string.qr_code_login_header_failed_denied_description)
+            RendezvousFailureReason.E2EESecurityIssue -> getString(R.string.qr_code_login_header_failed_e2ee_security_issue_description)
+            RendezvousFailureReason.OtherDeviceAlreadySignedIn -> getString(R.string.qr_code_login_header_failed_other_device_already_signed_in_description)
+            RendezvousFailureReason.OtherDeviceNotSignedIn -> getString(R.string.qr_code_login_header_failed_other_device_not_signed_in_description)
+            RendezvousFailureReason.InvalidCode -> getString(R.string.qr_code_login_header_failed_invalid_qr_code_description)
+            RendezvousFailureReason.UserCancelled -> getString(R.string.qr_code_login_header_failed_user_cancelled_description)
+            else -> getString(R.string.qr_code_login_header_failed_other_description)
         }
     }
 

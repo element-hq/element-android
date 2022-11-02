@@ -40,7 +40,7 @@ class VoiceBroadcastHelper @Inject constructor(
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
 
-    fun playOrResumePlayback(roomId: String, eventId: String) = voiceBroadcastPlayer.play(roomId, eventId)
+    fun playOrResumePlayback(roomId: String, eventId: String) = voiceBroadcastPlayer.playOrResume(roomId, eventId)
 
     fun pausePlayback() = voiceBroadcastPlayer.pause()
 

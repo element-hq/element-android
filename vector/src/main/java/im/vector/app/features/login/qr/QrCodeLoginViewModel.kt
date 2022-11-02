@@ -20,13 +20,24 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.rendezvous.Rendezvous
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import timber.log.Timber
 
 class QrCodeLoginViewModel @AssistedInject constructor(
         @Assisted private val initialState: QrCodeLoginViewState,
+        private val authenticationService: AuthenticationService,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
 ) : VectorViewModel<QrCodeLoginViewState, QrCodeLoginAction, QrCodeLoginViewEvents>(initialState) {
 
     @AssistedFactory
@@ -34,14 +45,26 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         override fun create(initialState: QrCodeLoginViewState): QrCodeLoginViewModel
     }
 
-    companion object : MavericksViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<QrCodeLoginViewModel, QrCodeLoginViewState> by hiltMavericksViewModelFactory() {
+        val TAG: String = QrCodeLoginViewModel::class.java.simpleName
+    }
 
     override fun handle(action: QrCodeLoginAction) {
         when (action) {
             is QrCodeLoginAction.OnQrCodeScanned -> handleOnQrCodeScanned(action)
             QrCodeLoginAction.GenerateQrCode -> handleQrCodeViewStarted()
             QrCodeLoginAction.ShowQrCode -> handleShowQrCode()
+            QrCodeLoginAction.TryAgain -> handleTryAgain()
         }
+    }
+
+    private fun handleTryAgain() {
+        setState {
+            copy(
+                    connectionStatus = null
+            )
+        }
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToInitialScreen)
     }
 
     private fun handleShowQrCode() {
@@ -58,20 +81,60 @@ class QrCodeLoginViewModel @AssistedInject constructor(
     }
 
     private fun handleOnQrCodeScanned(action: QrCodeLoginAction.OnQrCodeScanned) {
-        if (isValidQrCode(action.qrCode)) {
-            setState {
-                copy(
-                        connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
-                )
+        Timber.tag(TAG).d("Scanned code of length ${action.qrCode.length}")
+
+        val rendezvous = try { Rendezvous.buildChannelFromCode(action.qrCode) } catch (t: Throwable) {
+            Timber.tag(TAG).e(t, "Error occurred during sign in")
+            if (t is RendezvousError) {
+                onFailed(t.reason)
+            } else {
+                onFailed(RendezvousFailureReason.Unknown)
             }
-            _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+            return
+        }
+
+        setState {
+            copy(
+                    connectionStatus = QrCodeLoginConnectionStatus.ConnectingToDevice
+            )
+        }
+
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val confirmationCode = rendezvous.startAfterScanningCode()
+                Timber.tag(TAG).i("Established secure channel with checksum: $confirmationCode")
+
+                onConnectionEstablished(confirmationCode)
+
+                val session = rendezvous.waitForLoginOnNewDevice(authenticationService)
+                onSigningIn()
+
+                activeSessionHolder.setActiveSession(session)
+                authenticationService.reset()
+                configureAndStartSessionUseCase.execute(session)
+
+                rendezvous.completeVerificationOnNewDevice(session)
+
+                _viewEvents.post(QrCodeLoginViewEvents.NavigateToHomeScreen)
+            } catch (t: Throwable) {
+                Timber.tag(TAG).e(t, "Error occurred during sign in")
+                if (t is RendezvousError) {
+                    onFailed(t.reason)
+                } else {
+                    onFailed(RendezvousFailureReason.Unknown)
+                }
+            }
         }
     }
 
-    private fun onFailed(errorType: QrCodeLoginErrorType, canTryAgain: Boolean) {
+    private fun onFailed(reason: RendezvousFailureReason) {
+        _viewEvents.post(QrCodeLoginViewEvents.NavigateToStatusScreen)
+
         setState {
             copy(
-                    connectionStatus = QrCodeLoginConnectionStatus.Failed(errorType, canTryAgain)
+                    connectionStatus = QrCodeLoginConnectionStatus.Failed(reason, reason.canRetry)
             )
         }
     }
@@ -93,14 +156,11 @@ class QrCodeLoginViewModel @AssistedInject constructor(
         }
     }
 
-    // TODO. Implement in the logic related PR.
-    private fun isValidQrCode(qrCode: String): Boolean {
-        Timber.d("isValidQrCode: $qrCode")
-        return false
-    }
-
-    // TODO. Implement in the logic related PR.
+    /**
+     * QR code generation is not currently supported and this is a placeholder for future
+     * functionality.
+     */
     private fun generateQrCodeData(): String {
-        return "TODO"
+        return "NOT SUPPORTED"
     }
 }
