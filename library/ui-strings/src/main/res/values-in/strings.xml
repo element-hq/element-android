@@ -2769,4 +2769,18 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_pause_voice_broadcast_record">Jeda rekaman siaran suara</string>
     <string name="a11y_resume_voice_broadcast_record">Lanjutkan rekaman siaran suara</string>
     <string name="voice_broadcast_live">Langsung</string>
+    <string name="device_manager_other_sessions_select">Pilih sesi</string>
+    <string name="attachment_type_selector_contact">Kontak</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Lokasi</string>
+    <string name="attachment_type_selector_poll">Pemungutan suara</string>
+    <string name="attachment_type_selector_voice_broadcast">Siaran suara</string>
+    <string name="attachment_type_selector_file">Lampiran</string>
+    <string name="attachment_type_selector_sticker">Stiker</string>
+    <string name="attachment_type_selector_gallery">Pustaka foto</string>
+    <string name="action_deselect_all">Batalkan semua pilihan</string>
+    <string name="action_select_all">Pilih semua</string>
+    <plurals name="x_selected">
+        <item quantity="other">%1$d dipilih</item>
+    </plurals>
 </resources>

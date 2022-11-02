@@ -2821,4 +2821,19 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_pause_voice_broadcast_record">Hang közvetítés felvétel megállítása</string>
     <string name="a11y_resume_voice_broadcast_record">Hang közvetítés felvétel újraindítása</string>
     <string name="voice_broadcast_live">Élő</string>
+    <string name="device_manager_other_sessions_select">Munkamenetek kiválasztása</string>
+    <string name="attachment_type_selector_contact">Névjegy</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Földrajzi helyzet</string>
+    <string name="attachment_type_selector_poll">Szavazások</string>
+    <string name="attachment_type_selector_voice_broadcast">Hang közvetítés</string>
+    <string name="attachment_type_selector_file">Mellékletek</string>
+    <string name="attachment_type_selector_sticker">Matricák</string>
+    <string name="attachment_type_selector_gallery">Fénykép könyvtár</string>
+    <string name="action_deselect_all">Semmit nem jelöl ki</string>
+    <string name="action_select_all">Mindet kijelöli</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d kiválasztva</item>
+        <item quantity="other">%1$d kiválasztva</item>
+    </plurals>
 </resources>
