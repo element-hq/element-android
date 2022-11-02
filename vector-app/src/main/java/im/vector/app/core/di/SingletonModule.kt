@@ -47,6 +47,7 @@ import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
+import im.vector.app.features.analytics.metrics.VectorPlugins
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -75,9 +76,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class VectorBindModule {
+@InstallIn(SingletonComponent::class) @Module abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
@@ -119,9 +118,7 @@ abstract class VectorBindModule {
     abstract fun bindGetDeviceInfoUseCase(getDeviceInfoUseCase: DefaultGetDeviceInfoUseCase): GetDeviceInfoUseCase
 }
 
-@InstallIn(SingletonComponent::class)
-@Module
-object VectorStaticModule {
+@InstallIn(SingletonComponent::class) @Module object VectorStaticModule {
 
     @Provides
     fun providesContext(application: Application): Context {
@@ -143,6 +140,7 @@ object VectorStaticModule {
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
+            vectorPlugins: VectorPlugins,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -150,7 +148,8 @@ object VectorStaticModule {
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
-                )
+                ),
+                metricPlugins = vectorPlugins.plugins(),
         )
     }
 
