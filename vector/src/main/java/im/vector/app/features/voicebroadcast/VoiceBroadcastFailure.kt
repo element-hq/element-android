@@ -16,27 +16,10 @@
 
 package im.vector.app.features.voicebroadcast
 
-import androidx.annotation.IntRange
-import im.vector.app.features.voice.VoiceRecorder
-import java.io.File
-
-interface VoiceBroadcastRecorder : VoiceRecorder {
-
-    val currentSequence: Int
-    val state: State
-
-    fun startRecord(roomId: String, chunkLength: Int)
-    fun addListener(listener: Listener)
-    fun removeListener(listener: Listener)
-
-    interface Listener {
-        fun onVoiceMessageCreated(file: File, @IntRange(from = 1) sequence: Int) = Unit
-        fun onStateUpdated(state: State) = Unit
-    }
-
-    enum class State {
-        Recording,
-        Paused,
-        Idle,
+sealed class VoiceBroadcastFailure : Throwable() {
+    sealed class RecordingError : VoiceBroadcastFailure() {
+        object NoPermission : RecordingError()
+        object BlockedBySomeoneElse : RecordingError()
+        object UserAlreadyBroadcasting : RecordingError()
     }
 }

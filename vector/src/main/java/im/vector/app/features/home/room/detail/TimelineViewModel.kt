@@ -624,7 +624,12 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         viewModelScope.launch {
             when (action) {
-                RoomDetailAction.VoiceBroadcastAction.Recording.Start -> voiceBroadcastHelper.startVoiceBroadcast(room.roomId)
+                RoomDetailAction.VoiceBroadcastAction.Recording.Start -> {
+                    voiceBroadcastHelper.startVoiceBroadcast(room.roomId).fold(
+                            { _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action)) },
+                            { _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, it)) },
+                    )
+                }
                 RoomDetailAction.VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
                 RoomDetailAction.VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
                 RoomDetailAction.VoiceBroadcastAction.Recording.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/composerLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
@@ -149,20 +149,48 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <io.element.android.wysiwyg.EditorEditText
-        android:id="@+id/composerEditText"
+        android:id="@+id/richTextComposerEditText"
         style="@style/Widget.Vector.EditText.RichTextComposer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/room_message_placeholder"
-        android:nextFocusLeft="@id/composerEditText"
-        android:nextFocusUp="@id/composerEditText"
-        android:layout_marginHorizontal="12dp"
+        android:nextFocusLeft="@id/richTextComposerEditText"
+        android:nextFocusUp="@id/richTextComposerEditText"
+        android:layout_marginStart="12dp"
         android:layout_marginVertical="10dp"
         app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
-        app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
         app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
         app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
         tools:text="@tools:sample/lorem/random" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/plainTextComposerEditText"
+        style="@style/Widget.Vector.EditText.RichTextComposer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/room_message_placeholder"
+        android:nextFocusLeft="@id/plainTextComposerEditText"
+        android:nextFocusUp="@id/plainTextComposerEditText"
+        android:layout_marginStart="12dp"
+        android:layout_marginVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
+        app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
+        tools:text="@tools:sample/lorem/random" />
+
+    <ImageButton
+        android:id="@+id/composerFullScreenButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+        app:layout_constraintVertical_bias="0"
+        android:src="@drawable/ic_composer_full_screen"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/rich_text_editor_full_screen_toggle" />
 
     <ImageButton
         android:id="@+id/sendButton"
