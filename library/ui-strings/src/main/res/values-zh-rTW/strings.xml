@@ -942,7 +942,7 @@
     <string name="settings_discovery_no_msisdn">在您新增電話號碼後，探索選項將會出現。</string>
     <string name="settings_discovery_disconnect_identity_server_info">與您的身份識別伺服器斷線代表您無法被其他使用者探索，且您將無法透過電子郵件或電話邀請其他人。</string>
     <string name="settings_discovery_msisdn_title">可探索的電話號碼</string>
-    <string name="settings_discovery_confirm_mail">我們將會傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
+    <string name="settings_discovery_confirm_mail">我們已傳送電子郵件到 %s，請檢查您的電子郵件並在確認連結上點選</string>
     <string name="settings_discovery_enter_identity_server">輸入身份識別伺服器 URL</string>
     <string name="settings_discovery_bad_identity_server">無法連線到身份識別伺服器</string>
     <string name="settings_discovery_please_enter_server">請輸入身份識別伺服器 URL</string>
@@ -2767,4 +2767,18 @@
     <string name="a11y_pause_voice_broadcast_record">暫停語音廣播錄製</string>
     <string name="a11y_resume_voice_broadcast_record">繼續語音廣播錄製</string>
     <string name="voice_broadcast_live">直播</string>
+    <string name="device_manager_other_sessions_select">選取工作階段</string>
+    <string name="attachment_type_selector_contact">聯絡人</string>
+    <string name="attachment_type_selector_camera">相機</string>
+    <string name="attachment_type_selector_location">位置</string>
+    <string name="attachment_type_selector_poll">投票</string>
+    <string name="attachment_type_selector_voice_broadcast">音訊廣播</string>
+    <string name="attachment_type_selector_file">附件</string>
+    <string name="attachment_type_selector_sticker">貼圖</string>
+    <string name="attachment_type_selector_gallery">照片媒體庫</string>
+    <string name="action_deselect_all">取消選取全部</string>
+    <string name="action_select_all">選取全部</string>
+    <plurals name="x_selected">
+        <item quantity="other">已選取 %1$d</item>
+    </plurals>
 </resources>

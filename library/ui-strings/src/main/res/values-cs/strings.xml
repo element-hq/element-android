@@ -1023,7 +1023,7 @@
     <string name="labs_allow_extended_logging">Zapnout podrobné záznamy.</string>
     <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomohou vývojářům mnoha podrobnostmi, odešlete-li RageShake. I když jsou zapnuty, aplikace nezaznamenává obsah zpráv nebo jakákoli soukromá data.</string>
     <string name="error_terms_not_accepted">Prosím, opakujte, jakmile jste přijali všeobecné podmínky svého domovského serveru.</string>
-    <string name="error_network_timeout">Vypadá to, že serveru dlouho trvá odpovědět, to může být způsobeno buď slabým spojením nebo chybou na serveru. Prosím, opakujte za chvíli.</string>
+    <string name="error_network_timeout">Vypadá to, že serveru trvá příliš dlouho, než odpoví, což může být způsobeno buď špatným připojením, nebo chybou serveru. Zkuste to prosím za chvíli znovu.</string>
     <string name="send_attachment">Poslat přílohu</string>
     <string name="a11y_open_drawer">Otevřít navigační zásuvku</string>
     <string name="a11y_create_menu_open">Otevřít menu založení místnosti</string>
@@ -2109,8 +2109,8 @@
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
     <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
     <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %1$s na %2$s.</string>
-    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
-\nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
+    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje, pokud je místnost nestabilní kvůli chybám, chybějícím funkcím nebo bezpečnostním zranitelnostem.
+\nObvykle ovlivňuje pouze způsob zpracování místnosti na serveru.</string>
     <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>
     <string name="upgrade_public_room">Aktualizovat veřejnou místnost</string>
     <string name="upgrade">Aktualizace</string>
@@ -2875,4 +2875,20 @@
     <string name="a11y_pause_voice_broadcast_record">Pozastavit záznam hlasového vysílání</string>
     <string name="a11y_resume_voice_broadcast_record">Obnovit záznam hlasového vysílání</string>
     <string name="voice_broadcast_live">Živě</string>
+    <string name="device_manager_other_sessions_select">Vybrat relace</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Fotoaparát</string>
+    <string name="attachment_type_selector_location">Poloha</string>
+    <string name="attachment_type_selector_poll">Hlasování</string>
+    <string name="attachment_type_selector_voice_broadcast">Hlasové vysílání</string>
+    <string name="attachment_type_selector_file">Přílohy</string>
+    <string name="attachment_type_selector_sticker">Nálepky</string>
+    <string name="attachment_type_selector_gallery">Knihovna fotografií</string>
+    <string name="action_deselect_all">Zrušit výběr všech</string>
+    <string name="action_select_all">Vybrat všechny</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vybraný</item>
+        <item quantity="few">%1$d vybrané</item>
+        <item quantity="other">%1$d vybraných</item>
+    </plurals>
 </resources>

@@ -2766,7 +2766,7 @@
     <string name="device_manager_learn_more_session_rename">Другие пользователи в личных сообщениях и комнатах, к которым вы присоединились, могут просматривать весь список ваших сессий.
 \n
 \nЭто даёт им уверенность в том, что они действительно общаются с вами, но это также означает, что они могут видеть название сессии, которое вы ввели здесь.</string>
-    <string name="labs_enable_rich_text_editor_title">Визуальный редактор текста</string>
+    <string name="labs_enable_rich_text_editor_title">Наглядный текстовый редактор</string>
     <string name="push_gateway_item_device_id">ID сессии:</string>
     <string name="device_manager_push_notifications_title">Уведомления</string>
     <string name="device_manager_push_notifications_description">Получать push-уведомления в этой сессии.</string>
@@ -2797,4 +2797,12 @@
     <string name="labs_enable_voice_broadcast_title">Голосовые трансляции (в активной разработке)</string>
     <string name="labs_enable_client_info_recording_summary">Записывает название клиента, версию и URL-адрес для более лёгкого распознавания сессий в менеджере сессий.</string>
     <string name="labs_enable_client_info_recording_title">Записывать информацию о клиенте</string>
+    <string name="attachment_type_selector_gallery">Галерея</string>
+    <string name="attachment_type_selector_sticker">Наклейки</string>
+    <string name="attachment_type_selector_file">Вложения</string>
+    <string name="attachment_type_selector_voice_broadcast">Голосовая трансляция</string>
+    <string name="attachment_type_selector_poll">Опрос</string>
+    <string name="attachment_type_selector_location">Местоположение</string>
+    <string name="attachment_type_selector_camera">Камера</string>
+    <string name="attachment_type_selector_contact">Контакт</string>
 </resources>
