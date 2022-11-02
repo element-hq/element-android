@@ -1,3 +1,34 @@
+Changes in Element v1.5.6 (2022-11-02)
+======================================
+
+Features ✨
+----------
+ - Add new UI for selecting an attachment ([#7429](https://github.com/vector-im/element-android/issues/7429))
+ - Multi selection in sessions list ([#7396](https://github.com/vector-im/element-android/issues/7396))
+
+Bugfixes 🐛
+----------
+ - New line and Enter hardware key presses deleting existing text in some keyboards. ([#7357](https://github.com/vector-im/element-android/issues/7357))
+ - Fix share actions using share dialog. ([#7400](https://github.com/vector-im/element-android/issues/7400))
+ - Fix crash by disabling Flipper on Android API 22 and below - only affects debug version of the application. ([#7428](https://github.com/vector-im/element-android/issues/7428))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Live listening support ([#7419](https://github.com/vector-im/element-android/issues/7419))
+ - [Voice Broadcast] Improve rendering in the timeline ([#7421](https://github.com/vector-im/element-android/issues/7421))
+ - Add logic for sign in with QR code ([#7369](https://github.com/vector-im/element-android/issues/7369))
+
+SDK API changes ⚠️
+------------------
+ - Add MetricPlugin interface to implement metrics in SDK clients. ([#7438](https://github.com/vector-im/element-android/issues/7438))
+
+Other changes
+-------------
+ - Upgrade Jitsi SDK to 6.2.2 and WebRtc to 1.106.1-jitsi-12039821. ([#6195](https://github.com/vector-im/element-android/issues/6195))
+ - Gets thread notifications from sync response ([#7424](https://github.com/vector-im/element-android/issues/7424))
+ - Replace org.apache.sanselan:sanselan by org.apache.commons:commons-imaging ([#7454](https://github.com/vector-im/element-android/issues/7454))
+
+
 Changes in Element v1.5.4 (2022-10-19)
 ======================================
 
