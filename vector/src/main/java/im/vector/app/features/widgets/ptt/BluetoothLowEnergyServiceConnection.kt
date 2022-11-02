@@ -16,7 +16,6 @@
 
 package im.vector.app.features.widgets.ptt
 
-import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -34,12 +33,12 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
 
     private var isBound = false
     private var bluetoothLowEnergyService: BluetoothLowEnergyService? = null
-    private var bluetoothDevice: BluetoothDevice? = null
+    private var deviceAddress: String? = null
 
     var callback: Callback? = null
 
-    fun bind(device: BluetoothDevice, callback: Callback) {
-        this.bluetoothDevice = device
+    fun bind(deviceAddress: String, callback: Callback) {
+        this.deviceAddress = deviceAddress
         this.callback = callback
 
         if (!isBound) {
@@ -54,7 +53,7 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
             it.callback = this
         }
 
-        bluetoothDevice?.address?.let {
+        deviceAddress?.let {
             bluetoothLowEnergyService?.connect(it)
         }
         isBound = true

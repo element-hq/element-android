@@ -1,53 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <WebView
-        android:id="@+id/widgetWebView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        android:background="@android:color/transparent" />
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/widgetProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true" />
+        <WebView
+            android:id="@+id/widgetWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@android:color/transparent" />
 
-    <LinearLayout
-        android:id="@+id/widgetErrorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="?colorSurface"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/error" />
-
-        <TextView
-            android:id="@+id/widgetErrorText"
-            style="@style/Widget.Vector.TextView.Subtitle"
+        <ProgressBar
+            android:id="@+id/widgetProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:textColor="?vctr_content_primary"
-            android:textStyle="bold"
-            tools:text="Fail to load widget " />
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+
+        <LinearLayout
+            android:id="@+id/widgetErrorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="?colorSurface"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/error" />
+
+            <TextView
+                android:id="@+id/widgetErrorText"
+                style="@style/Widget.Vector.TextView.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/layout_horizontal_margin"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:textColor="?vctr_content_primary"
+                android:textStyle="bold"
+                tools:text="Fail to load widget " />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?vctr_system"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="200dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <TextView
+            style="@style/TextAppearance.Vector.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/push_to_talk_bottom_sheet_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?vctr_list_separator" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widgetBluetoothListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_bluetooth_device" />
+
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

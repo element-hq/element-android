@@ -161,7 +161,7 @@ class WidgetViewModel @AssistedInject constructor(
     }
 
     private fun handleConnectToBluetoothDevice(action: WidgetAction.ConnectToBluetoothDevice) {
-        bluetoothLowEnergyServiceConnection.bind(action.device, this)
+        bluetoothLowEnergyServiceConnection.bind(action.deviceAddress, this)
     }
 
     private fun handleCloseWidget() {

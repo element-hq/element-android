@@ -48,6 +48,7 @@ class BluetoothLowEnergyDeviceScanner @Inject constructor(
     }
 
     fun startScanning() {
+        stopScanning()
         bluetoothManager
                 ?.adapter
                 ?.bondedDevices

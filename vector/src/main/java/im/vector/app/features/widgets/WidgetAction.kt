@@ -16,7 +16,6 @@
 
 package im.vector.app.features.widgets
 
-import android.bluetooth.BluetoothDevice
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class WidgetAction : VectorViewModelAction {
@@ -27,7 +26,7 @@ sealed class WidgetAction : VectorViewModelAction {
     object DeleteWidget : WidgetAction()
     object RevokeWidget : WidgetAction()
     object OnTermsReviewed : WidgetAction()
-    data class ConnectToBluetoothDevice(val device: BluetoothDevice) : WidgetAction()
+    data class ConnectToBluetoothDevice(val deviceAddress: String) : WidgetAction()
     object HangupElementCall : WidgetAction()
     object CloseWidget : WidgetAction()
 }

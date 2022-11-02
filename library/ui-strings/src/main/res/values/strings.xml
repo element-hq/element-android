@@ -3247,6 +3247,11 @@
     <!-- Element Call Widget - Push to Talk -->
     <string name="push_to_talk_notification_title">${app_name} Push to Talk</string>
     <string name="push_to_talk_notification_description">A service is running to communicate with BLE device</string>
+    <string name="push_to_talk_activity_title">Walkie-Talkie Call</string>
+    <string name="action_push_to_talk_configure_device">Configure push to talk device</string>
+    <string name="push_to_talk_bottom_sheet_title">Bluetooth</string>
+    <string name="push_to_talk_device_connected">Connected</string>
+    <string name="push_to_talk_device_disconnected">Disconnected</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>

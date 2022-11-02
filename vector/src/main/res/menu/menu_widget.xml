@@ -27,4 +27,10 @@
         android:title="@string/room_widget_revoke_access"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_push_to_talk"
+        android:title="@string/action_push_to_talk_configure_device"
+        android:icon="@drawable/quantum_ic_bluetooth_audio_grey600_24"
+        app:showAsAction="ifRoom" />
+
 </menu>

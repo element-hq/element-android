@@ -34,7 +34,7 @@ enum class WidgetKind(@StringRes val nameRes: Int, val screenId: String?) {
     ROOM(R.string.room_widget_activity_title, null),
     STICKER_PICKER(R.string.title_activity_choose_sticker, WidgetType.StickerPicker.preferred),
     INTEGRATION_MANAGER(0, null),
-    ELEMENT_CALL(0, null);
+    ELEMENT_CALL(R.string.push_to_talk_activity_title, null);
 
     fun isAdmin(): Boolean {
         return this == STICKER_PICKER || this == INTEGRATION_MANAGER
