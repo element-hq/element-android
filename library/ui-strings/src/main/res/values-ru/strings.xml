@@ -2766,7 +2766,7 @@
     <string name="device_manager_learn_more_session_rename">Другие пользователи в личных сообщениях и комнатах, к которым вы присоединились, могут просматривать весь список ваших сессий.
 \n
 \nЭто даёт им уверенность в том, что они действительно общаются с вами, но это также означает, что они могут видеть название сессии, которое вы ввели здесь.</string>
-    <string name="labs_enable_rich_text_editor_title">Визуальный редактор текста</string>
+    <string name="labs_enable_rich_text_editor_title">Наглядный текстовый редактор</string>
     <string name="push_gateway_item_device_id">ID сессии:</string>
     <string name="device_manager_push_notifications_title">Уведомления</string>
     <string name="device_manager_push_notifications_description">Получать push-уведомления в этой сессии.</string>
