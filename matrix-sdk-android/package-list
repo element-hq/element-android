@@ -303,6 +303,7 @@ $dokka.location:org.matrix.android.sdk.api.extensions//appendNl/java.lang.String
 $dokka.location:org.matrix.android.sdk.api.extensions//ensureNotEmpty/kotlin.String#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/ensure-not-empty.html
 $dokka.location:org.matrix.android.sdk.api.extensions//ensurePrefix/kotlin.CharSequence#kotlin.CharSequence/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/ensure-prefix.html
 $dokka.location:org.matrix.android.sdk.api.extensions//getFingerprintHumanReadable/org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/get-fingerprint-human-readable.html
+$dokka.location:org.matrix.android.sdk.api.extensions//measureMetric/#kotlin.collections.List[org.matrix.android.sdk.api.metrics.MetricPlugin]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/measure-metric.html
 $dokka.location:org.matrix.android.sdk.api.extensions//orFalse/kotlin.Boolean?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/or-false.html
 $dokka.location:org.matrix.android.sdk.api.extensions//orTrue/kotlin.Boolean?#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/or-true.html
 $dokka.location:org.matrix.android.sdk.api.extensions//sortByLastSeen/kotlin.collections.List[org.matrix.android.sdk.api.session.crypto.model.DeviceInfo]#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/sort-by-last-seen.html
@@ -475,6 +476,14 @@ $dokka.location:org.matrix.android.sdk.api.logger/LoggerTag.VOIP///PointingToDec
 $dokka.location:org.matrix.android.sdk.api.logger/LoggerTag///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.logger/-logger-tag/index.html
 $dokka.location:org.matrix.android.sdk.api.logger/LoggerTag/LoggerTag/#kotlin.String#org.matrix.android.sdk.api.logger.LoggerTag?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.logger/-logger-tag/-logger-tag.html
 $dokka.location:org.matrix.android.sdk.api.logger/LoggerTag/value/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.logger/-logger-tag/value.html
+$dokka.location:org.matrix.android.sdk.api.metrics////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/index.html
+$dokka.location:org.matrix.android.sdk.api.metrics/DownloadDeviceKeysMetricsPlugin///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-download-device-keys-metrics-plugin/index.html
+$dokka.location:org.matrix.android.sdk.api.metrics/DownloadDeviceKeysMetricsPlugin/logTransaction/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-download-device-keys-metrics-plugin/log-transaction.html
+$dokka.location:org.matrix.android.sdk.api.metrics/MetricPlugin///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-metric-plugin/index.html
+$dokka.location:org.matrix.android.sdk.api.metrics/MetricPlugin/finishTransaction/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-metric-plugin/finish-transaction.html
+$dokka.location:org.matrix.android.sdk.api.metrics/MetricPlugin/logTransaction/#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-metric-plugin/log-transaction.html
+$dokka.location:org.matrix.android.sdk.api.metrics/MetricPlugin/onError/#kotlin.Throwable/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-metric-plugin/on-error.html
+$dokka.location:org.matrix.android.sdk.api.metrics/MetricPlugin/startTransaction/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.metrics/-metric-plugin/start-transaction.html
 $dokka.location:org.matrix.android.sdk.api.network.ssl////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.network.ssl/index.html
 $dokka.location:org.matrix.android.sdk.api.network.ssl/Fingerprint.HashType.SHA1///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}matrix-sdk-android/org.matrix.android.sdk.api.network.ssl/-fingerprint/-hash-type/-s-h-a1/index.html
 $dokka.location:org.matrix.android.sdk.api.network.ssl/Fingerprint.HashType.SHA256///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}matrix-sdk-android/org.matrix.android.sdk.api.network.ssl/-fingerprint/-hash-type/-s-h-a256/index.html
@@ -4819,7 +4828,7 @@ $dokka.location:org.matrix.android.sdk.api/MatrixCallback///PointingToDeclaratio
 $dokka.location:org.matrix.android.sdk.api/MatrixCallback/onFailure/#kotlin.Throwable/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-callback/on-failure.html
 $dokka.location:org.matrix.android.sdk.api/MatrixCallback/onSuccess/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-callback/on-success.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/index.html
-$dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/MatrixConfiguration/#kotlin.String#org.matrix.android.sdk.api.crypto.MXCryptoConfig#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.String?#java.net.Proxy?#okhttp3.ConnectionSpec#kotlin.Boolean#org.matrix.android.sdk.api.MatrixItemDisplayNameFallbackProvider?#org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider#kotlin.Boolean#kotlin.collections.List[okhttp3.Interceptor]#org.matrix.android.sdk.api.SyncConfig/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/-matrix-configuration.html
+$dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/MatrixConfiguration/#kotlin.String#org.matrix.android.sdk.api.crypto.MXCryptoConfig#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.String?#java.net.Proxy?#okhttp3.ConnectionSpec#kotlin.Boolean#org.matrix.android.sdk.api.MatrixItemDisplayNameFallbackProvider?#org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider#kotlin.Boolean#kotlin.collections.List[okhttp3.Interceptor]#org.matrix.android.sdk.api.SyncConfig#kotlin.collections.List[org.matrix.android.sdk.api.metrics.MetricPlugin]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/-matrix-configuration.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/applicationFlavor/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/application-flavor.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/clientPermalinkBaseUrl/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/client-permalink-base-url.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/connectionSpec/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/connection-spec.html
@@ -4828,6 +4837,7 @@ $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/integrationRestUr
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/integrationUIUrl/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/integration-u-i-url.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/integrationWidgetUrls/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/integration-widget-urls.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/matrixItemDisplayNameFallbackProvider/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/matrix-item-display-name-fallback-provider.html
+$dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/metricPlugins/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/metric-plugins.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/networkInterceptors/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/network-interceptors.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/proxy/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/proxy.html
 $dokka.location:org.matrix.android.sdk.api/MatrixConfiguration/roomDisplayNameFallbackProvider/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix-configuration/room-display-name-fallback-provider.html
@@ -4949,6 +4959,7 @@ org.matrix.android.sdk.api.interfaces
 org.matrix.android.sdk.api.legacy
 org.matrix.android.sdk.api.listeners
 org.matrix.android.sdk.api.logger
+org.matrix.android.sdk.api.metrics
 org.matrix.android.sdk.api.network
 org.matrix.android.sdk.api.network.ssl
 org.matrix.android.sdk.api.query
