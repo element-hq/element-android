@@ -16,6 +16,7 @@
 
 package im.vector.app.features.widgets
 
+import android.bluetooth.BluetoothDevice
 import android.net.Uri
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -29,6 +30,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDevice
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
 import im.vector.app.features.widgets.ptt.BluetoothLowEnergyServiceConnection
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -47,6 +50,7 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
+import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 class WidgetViewModel @AssistedInject constructor(
@@ -55,10 +59,12 @@ class WidgetViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val session: Session,
         private val bluetoothLowEnergyServiceConnection: BluetoothLowEnergyServiceConnection,
+        private val bluetoothLowEnergyDeviceScanner: BluetoothLowEnergyDeviceScanner,
 ) :
         VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
-        IntegrationManagerService.Listener, BluetoothLowEnergyServiceConnection.Callback {
+        IntegrationManagerService.Listener, BluetoothLowEnergyServiceConnection.Callback,
+        BluetoothLowEnergyDeviceScanner.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
@@ -93,6 +99,7 @@ class WidgetViewModel @AssistedInject constructor(
         observePowerLevel()
         observeWidgetIfNeeded()
         subscribeToWidget()
+        bluetoothLowEnergyDeviceScanner.callback = this
     }
 
     private fun subscribeToWidget() {
@@ -152,7 +159,12 @@ class WidgetViewModel @AssistedInject constructor(
             is WidgetAction.ConnectToBluetoothDevice -> handleConnectToBluetoothDevice(action)
             WidgetAction.HangupElementCall -> handleHangupElementCall()
             WidgetAction.CloseWidget -> handleCloseWidget()
+            WidgetAction.StartBluetoothScan -> handleStartBluetoothScan()
         }
+    }
+
+    private fun handleStartBluetoothScan() {
+        bluetoothLowEnergyDeviceScanner.startScanning()
     }
 
     private fun handleHangupElementCall() {
@@ -318,5 +330,41 @@ class WidgetViewModel @AssistedInject constructor(
 
     override fun onCharacteristicRead(data: ByteArray) {
         _viewEvents.post(WidgetViewEvents.OnBluetoothDeviceData(data))
+    }
+
+    override fun onPairedDeviceFound(device: BluetoothDevice) {
+        bluetoothLowEnergyServiceConnection.bind(device.address, this)
+    }
+
+    override fun onConnectedToDevice(device: BluetoothDevice) {
+        handleNewBluetoothDevice(device, isConnected = true)
+    }
+
+    override fun onScanResult(device: BluetoothDevice) = withState {
+        handleNewBluetoothDevice(device, isConnected = false)
+    }
+
+    private fun handleNewBluetoothDevice(device: BluetoothDevice, isConnected: Boolean) = withState { state ->
+        if (device.name == null || device.address == null) {
+            return@withState
+        }
+        val bluetoothLowEnergyDevice = BluetoothLowEnergyDevice(
+                name = device.name,
+                macAddress = device.address,
+                isConnected = isConnected
+        )
+        val currentDevices = state.bluetoothDeviceList
+        val newList = currentDevices.toMutableList()
+        val index = currentDevices.indexOfFirst { it.macAddress == bluetoothLowEnergyDevice.macAddress }
+        if (index > -1) {
+            newList[index] = bluetoothLowEnergyDevice
+        } else {
+            newList.add(bluetoothLowEnergyDevice)
+        }
+        setState {
+            copy(
+                    bluetoothDeviceList = newList
+            )
+        }
     }
 }

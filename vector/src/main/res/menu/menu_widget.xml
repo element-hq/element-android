@@ -30,7 +30,7 @@
     <item
         android:id="@+id/action_push_to_talk"
         android:title="@string/action_push_to_talk_configure_device"
-        android:icon="@drawable/quantum_ic_bluetooth_audio_grey600_24"
+        android:icon="@drawable/ic_ptt_bluetooth"
         app:showAsAction="ifRoom" />
 
 </menu>

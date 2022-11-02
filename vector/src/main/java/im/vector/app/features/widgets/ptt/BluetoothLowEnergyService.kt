@@ -42,6 +42,7 @@ class BluetoothLowEnergyService : VectorAndroidService() {
 
     interface Callback {
         fun onCharacteristicRead(data: ByteArray)
+        fun onConnectedToDevice(device: BluetoothDevice)
     }
 
     @Inject lateinit var notificationUtils: NotificationUtils
@@ -59,7 +60,10 @@ class BluetoothLowEnergyService : VectorAndroidService() {
                 BluetoothProfile.STATE_CONNECTING -> Timber.d("### BluetoothLowEnergyService.newState: STATE_CONNECTING")
                 BluetoothProfile.STATE_CONNECTED -> {
                     Timber.d("### BluetoothLowEnergyService.newState: STATE_CONNECTED")
-                    bluetoothGatt?.discoverServices()
+                    bluetoothGatt?.let {
+                        it.discoverServices()
+                        callback?.onConnectedToDevice(it.device)
+                    }
                 }
                 BluetoothProfile.STATE_DISCONNECTING -> Timber.d("### BluetoothLowEnergyService.newState: STATE_DISCONNECTING")
                 BluetoothProfile.STATE_DISCONNECTED -> Timber.d("### BluetoothLowEnergyService.newState: STATE_DISCONNECTED")

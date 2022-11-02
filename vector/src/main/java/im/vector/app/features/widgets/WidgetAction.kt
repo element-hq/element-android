@@ -27,6 +27,7 @@ sealed class WidgetAction : VectorViewModelAction {
     object RevokeWidget : WidgetAction()
     object OnTermsReviewed : WidgetAction()
     data class ConnectToBluetoothDevice(val deviceAddress: String) : WidgetAction()
+    object StartBluetoothScan : WidgetAction()
     object HangupElementCall : WidgetAction()
     object CloseWidget : WidgetAction()
 }

@@ -98,7 +98,6 @@ class WidgetFragment :
     @Inject lateinit var permissionUtils: WebviewPermissionUtils
     @Inject lateinit var checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase
     @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var bluetoothLowEnergyDeviceScanner: BluetoothLowEnergyDeviceScanner
     @Inject lateinit var bluetoothLowEnergyDevicesBottomSheetController: BluetoothLowEnergyDevicesBottomSheetController
 
     private val fragmentArgs: WidgetArgs by args()
@@ -322,6 +321,10 @@ class WidgetFragment :
                 setStateError(state.formattedURL.error.message)
             }
         }
+
+        if (state.bluetoothDeviceList.isNotEmpty()) {
+            handleBluetoothDeviceList(state.bluetoothDeviceList)
+        }
     }
 
     override fun shouldOverrideUrlLoading(url: String): Boolean {
@@ -430,37 +433,15 @@ class WidgetFragment :
     }
 
     private fun startBluetoothScanning() {
-        val bluetoothDevices = mutableListOf<BluetoothDevice>()
+        viewModel.handle(WidgetAction.StartBluetoothScan)
+    }
 
-        bluetoothLowEnergyDeviceScanner.callback = object : BluetoothLowEnergyDeviceScanner.Callback {
-            override fun onPairedDeviceFound(device: BluetoothDevice) {
-                onBluetoothDeviceSelected(device.address)
-            }
-
-            override fun onScanResult(device: BluetoothDevice) {
-                Timber.d("### WidgetFragment. New BLE device found: " + device.name + " - " + device.address)
-                if (device.name == null || bluetoothDevices.map { it.address }.contains(device.address)) {
-                    return
-                }
-
-                bluetoothDevices.add(device)
-
-                bluetoothLowEnergyDevicesBottomSheetController.setData(
-                                bluetoothDevices.map {
-                                    BluetoothLowEnergyDevice(
-                                            name = it.name,
-                                            macAddress = it.address,
-                                            isConnected = it.bondState == BluetoothDevice.BOND_BONDED
-                                    )
-                                }
-                        )
-            }
-        }
-        bluetoothLowEnergyDeviceScanner.startScanning()
+    private fun handleBluetoothDeviceList(bluetoothDeviceList: List<BluetoothLowEnergyDevice>) {
+        bluetoothLowEnergyDevicesBottomSheetController.setData(bluetoothDeviceList)
     }
 
     private fun showBluetoothLowEnergyDevicesBottomSheet() {
-        bluetoothLowEnergyDeviceScanner.startScanning()
+        viewModel.handle(WidgetAction.StartBluetoothScan)
         views.bottomSheet.isVisible = true
         BottomSheetBehavior.from(views.bottomSheet).state = BottomSheetBehavior.STATE_HALF_EXPANDED
     }

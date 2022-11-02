@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDevice
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
@@ -56,7 +57,8 @@ data class WidgetViewState(
         val webviewLoadedUrl: Async<String> = Uninitialized,
         val widgetName: String = "",
         val canManageWidgets: Boolean = false,
-        val asyncWidget: Async<Widget> = Uninitialized
+        val asyncWidget: Async<Widget> = Uninitialized,
+        val bluetoothDeviceList: List<BluetoothLowEnergyDevice> = emptyList(),
 ) : MavericksState {
 
     constructor(widgetArgs: WidgetArgs) : this(

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.widgets.ptt
 
+import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,7 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
 
     interface Callback {
         fun onCharacteristicRead(data: ByteArray)
+        fun onConnectedToDevice(device: BluetoothDevice)
     }
 
     private var isBound = false
@@ -62,6 +64,10 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
     override fun onServiceDisconnected(name: ComponentName?) {
         isBound = false
         bluetoothLowEnergyService = null
+    }
+
+    override fun onConnectedToDevice(device: BluetoothDevice) {
+        callback?.onConnectedToDevice(device)
     }
 
     override fun onCharacteristicRead(data: ByteArray) {
