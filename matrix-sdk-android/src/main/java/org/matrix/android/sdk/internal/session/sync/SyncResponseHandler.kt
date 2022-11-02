@@ -17,6 +17,10 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.extensions.measureMetric
+import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
@@ -52,8 +56,11 @@ internal class SyncResponseHandler @Inject constructor(
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
-        private val presenceSyncHandler: PresenceSyncHandler
+        private val presenceSyncHandler: PresenceSyncHandler,
+        matrixConfiguration: MatrixConfiguration,
 ) {
+
+    private val metricPlugins = matrixConfiguration.metricPlugins
 
     suspend fun handleResponse(
             syncResponse: SyncResponse,
@@ -63,96 +70,128 @@ internal class SyncResponseHandler @Inject constructor(
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        measureTimeMillis {
-            if (!cryptoService.isStarted()) {
-                Timber.v("Should start cryptoService")
-                cryptoService.start()
-            }
-            cryptoService.onSyncWillProcess(isInitialSync)
-        }.also {
-            Timber.v("Finish handling start cryptoService in $it ms")
-        }
-
-        // Handle the to device events before the room ones
-        // to ensure to decrypt them properly
-        measureTimeMillis {
-            Timber.v("Handle toDevice")
-            reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
-                if (syncResponse.toDevice != null) {
-                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+        val relevantPlugins = metricPlugins.filterIsInstance<SyncDurationMetricPlugin>()
+        measureMetric(relevantPlugins) {
+            // "start_crypto_service" span
+            measureSpan(relevantPlugins, "task", "start_crypto_service") {
+                measureTimeMillis {
+                    if (!cryptoService.isStarted()) {
+                        Timber.v("Should start cryptoService")
+                        cryptoService.start()
+                    }
+                    cryptoService.onSyncWillProcess(isInitialSync)
+                }.also {
+                    Timber.v("Finish handling start cryptoService in $it ms")
                 }
             }
-        }.also {
-            Timber.v("Finish handling toDevice in $it ms")
-        }
-        val aggregator = SyncResponsePostTreatmentAggregator()
 
-        // Prerequisite for thread events handling in RoomSyncHandler
+            // Handle the to device events before the room ones
+            // to ensure to decrypt them properly
+
+            // "handle_to_device" span
+            measureSpan(relevantPlugins, "task", "handle_to_device") {
+                measureTimeMillis {
+                    Timber.v("Handle toDevice")
+                    reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
+                        if (syncResponse.toDevice != null) {
+                            cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                        }
+                    }
+                }.also {
+                    Timber.v("Finish handling toDevice in $it ms")
+                }
+            }
+
+            val aggregator = SyncResponsePostTreatmentAggregator()
+
+            // Prerequisite for thread events handling in RoomSyncHandler
 // Disabled due to the new fallback
 //        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
 //            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
 //        }
 
-        // Start one big transaction
-        monarchy.awaitTransaction { realm ->
-            // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
-            measureTimeMillis {
-                Timber.v("Handle rooms")
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
-                    if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
+            // Start one big transaction
+            // Big "monarchy_transaction" span
+            measureSpan(relevantPlugins, "task", "monarchy_transaction") {
+                monarchy.awaitTransaction { realm ->
+                    // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
+                    // Child "handle_rooms" span
+                    measureSpan(relevantPlugins, "task", "handle_rooms") {
+                        measureTimeMillis {
+                            Timber.v("Handle rooms")
+                            reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
+                                if (syncResponse.rooms != null) {
+                                    roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
+                                }
+                            }
+                        }.also {
+                            Timber.v("Finish handling rooms in $it ms")
+                        }
                     }
+
+                    // Child "handle_account_data" span
+                    measureSpan(relevantPlugins, "task", "handle_account_data") {
+                        measureTimeMillis {
+                            reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
+                                Timber.v("Handle accountData")
+                                userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
+                            }
+                        }.also {
+                            Timber.v("Finish handling accountData in $it ms")
+                        }
+                    }
+
+                    // Child "handle_presence" span
+                    measureSpan(relevantPlugins, "task", "handle_presence") {
+                        measureTimeMillis {
+                            Timber.v("Handle Presence")
+                            presenceSyncHandler.handle(realm, syncResponse.presence)
+                        }.also {
+                            Timber.v("Finish handling Presence in $it ms")
+                        }
+                    }
+                    tokenStore.saveToken(realm, syncResponse.nextBatch)
                 }
-            }.also {
-                Timber.v("Finish handling rooms in $it ms")
             }
 
-            measureTimeMillis {
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
-                    Timber.v("Handle accountData")
-                    userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
+            // "aggregator_management" span
+            measureSpan(relevantPlugins, "task", "aggregator_management") {
+                // Everything else we need to do outside the transaction
+                measureTimeMillis {
+                    aggregatorHandler.handle(aggregator)
+                }.also {
+                    Timber.v("Aggregator management took $it ms")
                 }
-            }.also {
-                Timber.v("Finish handling accountData in $it ms")
             }
 
-            measureTimeMillis {
-                Timber.v("Handle Presence")
-                presenceSyncHandler.handle(realm, syncResponse.presence)
-            }.also {
-                Timber.v("Finish handling Presence in $it ms")
+            // "sync_response_post_treatment" span
+            measureSpan(relevantPlugins, "task", "sync_response_post_treatment") {
+                measureTimeMillis {
+                    syncResponse.rooms?.let {
+                        checkPushRules(it, isInitialSync)
+                        userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
+                        dispatchInvitedRoom(it)
+                    }
+                }.also {
+                    Timber.v("SyncResponse.rooms post treatment took $it ms")
+                }
             }
-            tokenStore.saveToken(realm, syncResponse.nextBatch)
-        }
 
-        // Everything else we need to do outside the transaction
-        measureTimeMillis {
-            aggregatorHandler.handle(aggregator)
-        }.also {
-            Timber.v("Aggregator management took $it ms")
-        }
-
-        measureTimeMillis {
-            syncResponse.rooms?.let {
-                checkPushRules(it, isInitialSync)
-                userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
-                dispatchInvitedRoom(it)
+            // "crypto_sync_handler_onSyncCompleted" span
+            measureSpan(relevantPlugins, "task", "crypto_sync_handler_onSyncCompleted") {
+                measureTimeMillis {
+                    cryptoSyncHandler.onSyncCompleted(syncResponse)
+                }.also {
+                    Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
+                }
             }
-        }.also {
-            Timber.v("SyncResponse.rooms post treatment took $it ms")
-        }
 
-        measureTimeMillis {
-            cryptoSyncHandler.onSyncCompleted(syncResponse)
-        }.also {
-            Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
+            // post sync stuffs
+            monarchy.writeAsync {
+                roomSyncHandler.postSyncSpaceHierarchyHandle(it)
+            }
+            Timber.v("On sync completed")
         }
-
-        // post sync stuffs
-        monarchy.writeAsync {
-            roomSyncHandler.postSyncSpaceHierarchyHandle(it)
-        }
-        Timber.v("On sync completed")
     }
 
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
