@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningReduce
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
@@ -106,6 +107,7 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
                 }
             }
                     .runningReduce { accumulator: List<MessageAudioEvent>, value: List<MessageAudioEvent> -> accumulator.plus(value) }
+                    .map { events -> events.distinctBy { it.sequence } }
         }
     }
 
