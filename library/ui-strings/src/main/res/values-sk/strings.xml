@@ -2692,7 +2692,7 @@
     <string name="home_empty_no_unreads_message">Tu sa zobrazia neprečítané správy, ak nejaké máte.</string>
     <string name="home_empty_no_unreads_title">Nič, o čom by bolo potrebné podať správu.</string>
     <string name="home_empty_no_rooms_message">Kompletná zabezpečená aplikácia na komunikáciu pre tímy, priateľov a organizácie. Začnite konverzáciu alebo sa pridajte k existujúcej miestnosti.</string>
-    <string name="home_empty_no_rooms_title">Vitajte v aplikácii ${názov_aplikácie},
+    <string name="home_empty_no_rooms_title">Vitajte v aplikácii ${app_name},
 \n%s.</string>
     <string name="home_empty_space_no_rooms_message">Priestory sú novým spôsobom zoskupovania miestností a ľudí. Pomocou tlačidla vpravo dole môžete pridať existujúcu miestnosť alebo vytvoriť novú.</string>
     <string name="home_empty_space_no_rooms_title">%s
@@ -2839,9 +2839,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Začnite na prihlasovacej obrazovke</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vyberte možnosť \"Prihlásiť sa pomocou QR kódu\"</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Začnite na prihlasovacej obrazovke</string>
-    <string name="qr_code_login_new_device_instruction_3">Vyberte možnosť \"Zobraziť QR kód na tomto zariadení\"</string>
-    <string name="qr_code_login_new_device_instruction_2">Prejdite do Nastavenia -&gt; Zabezpečenie a súkromie -&gt; Zobraziť všetky relácie</string>
-    <string name="qr_code_login_new_device_instruction_1">Otvorte ${app_name} na vašom druhom zariadení</string>
+    <string name="qr_code_login_new_device_instruction_3">Vyberte možnosť \"Zobraziť QR kód\"</string>
+    <string name="qr_code_login_new_device_instruction_2">Prejdite do Nastavenia -&gt; Zabezpečenie a súkromie</string>
+    <string name="qr_code_login_new_device_instruction_1">Otvorte aplikáciu na vašom druhom zariadení</string>
     <string name="qr_code_login_header_failed_denied_description">Žiadosť bola na druhom zariadení zamietnutá.</string>
     <string name="qr_code_login_header_failed_timeout_description">Prepojenie nebolo dokončené v požadovanom čase.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Prepojenie s týmto zariadením nie je podporované.</string>
@@ -2859,4 +2859,36 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocou tohto zariadenia sa môžete prihlásiť do mobilného alebo webového zariadenia pomocou QR kódu. Môžete to urobiť dvoma spôsobmi:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Prihlásiť sa pomocou QR kódu</string>
     <string name="login_scan_qr_code">Skenovať QR kód</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Domovský server nepodporuje prihlásenie pomocou QR kódu.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Prihlasovanie bolo zrušené na druhom zariadení.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">QR kód nie je platný.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Druhé zariadenie musí byť prihlásené.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zariadenie je už prihlásené.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Pri nastavovaní zabezpečeného zasielania správ sa vyskytol bezpečnostný problém. Jedna z nasledujúcich možností môže byť kompromitovaná: Váš domovský server; Vaše internetové pripojenie (pripojenia); Vaše zariadenie (zariadenia);</string>
+    <string name="qr_code_login_header_failed_other_description">Žiadosť zlyhala.</string>
+    <string name="labs_enable_voice_broadcast_summary">Možnosť nahrávania a odosielania hlasového vysielania v časovej osi miestnosti.</string>
+    <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie (v štádiu aktívneho vývoja)</string>
+    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte</string>
+    <string name="a11y_pause_voice_broadcast">Pozastaviť hlasové vysielanie</string>
+    <string name="a11y_play_voice_broadcast">Prehrať alebo pokračovať v nahrávaní hlasového vysielania</string>
+    <string name="a11y_stop_voice_broadcast_record">Zastaviť nahrávanie hlasového vysielania</string>
+    <string name="a11y_pause_voice_broadcast_record">Pozastaviť nahrávanie hlasového vysielania</string>
+    <string name="a11y_resume_voice_broadcast_record">Pokračovať v nahrávaní hlasového vysielania</string>
+    <string name="voice_broadcast_live">Naživo</string>
+    <string name="device_manager_other_sessions_select">Vyberte relácie</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Poloha</string>
+    <string name="attachment_type_selector_poll">Ankety</string>
+    <string name="attachment_type_selector_voice_broadcast">Hlasové vysielanie</string>
+    <string name="attachment_type_selector_file">Prílohy</string>
+    <string name="attachment_type_selector_sticker">Nálepky</string>
+    <string name="attachment_type_selector_gallery">Knižnica fotografií</string>
+    <string name="action_deselect_all">Zrušiť výber všetkých</string>
+    <string name="action_select_all">Vybrať všetko</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vybraté</item>
+        <item quantity="few">%1$d vybraté</item>
+        <item quantity="other">%1$d vybraných</item>
+    </plurals>
 </resources>

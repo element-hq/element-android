@@ -2544,7 +2544,7 @@
     <string name="ftue_auth_email_resend_email">Skicka e-brev igen</string>
     <string name="ftue_auth_email_verification_footer">Fick du inget e-brev\?</string>
     <string name="ftue_auth_email_verification_subtitle">För att bekräfta din e-post, tryck på knappen i e-brevet vi just skickade till %s</string>
-    <string name="ftue_auth_email_verification_title">Kolla din e-post för att verifiera.</string>
+    <string name="ftue_auth_email_verification_title">Verifiera din e-post</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Skicka kod igen</string>
     <string name="ftue_auth_phone_confirmation_subtitle">En kod skickades till %s</string>
     <string name="ftue_auth_phone_confirmation_title">Bekräfta ditt telefonnummer</string>
@@ -2718,4 +2718,122 @@
 \nVänligen ge åtkomst på nästa pop-uper för att kunna se aviseringar.</string>
     <string name="labs_enable_rich_text_editor_title">Aktivera rik-text-redigerare</string>
     <string name="labs_enable_rich_text_editor_summary">Testa den nya rik-text-redigeraren</string>
+    <string name="onboarding_new_app_layout_welcome_title">Välkommen till en ny vy!</string>
+    <string name="home_empty_no_unreads_message">Det här är vart dina olästa meddelanden hamnar, när du har några.</string>
+    <string name="home_empty_no_unreads_title">Inget att rapportera.</string>
+    <string name="home_empty_no_rooms_message">Den säkra allt-i-ett-chattappen för teams, vänner och organisationer. Skapa en chatt eller gå med i ett existerande rum för att komma igång.</string>
+    <string name="home_empty_no_rooms_title">Välkommen till ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Utrymmen är ett nytt sätt att gruppera rum och personer. Lägg till ett existerande rum, eller skapa ett nytt, med knappen nere till höger.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nser lite tom ut.</string>
+    <string name="labs_enable_voice_broadcast_summary">Möjliggör att spela in och skicka röstsändning i rummets tidslinje.</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning (under aktiv utveckling)</string>
+    <string name="labs_enable_client_info_recording_summary">Spara klientnamnet, versionen, och URL:en för att enklare känna igen sessioner i sessionehanteraren.</string>
+    <string name="labs_enable_client_info_recording_title">Aktivera klientinforapportering</string>
+    <string name="labs_enable_session_manager_summary">Ha bättre insyn i och kontroll över alla dina sessioner.</string>
+    <string name="labs_enable_session_manager_title">Aktivera den nya sessionshanteraren</string>
+    <string name="device_manager_learn_more_session_rename">Andra användare i direktmeddelanden och rum du går med in kan se en full lista över dina sessioner.
+\n
+\nDet försäkrar dem om att de verkligen pratar med dig, men det betyder också att de kan se sessionsnamnet du anger här.</string>
+    <string name="device_manager_learn_more_session_rename_title">Döper om sessioner</string>
+    <string name="device_manager_learn_more_sessions_verified">Verifierade sessioner har loggat in med dina uppgifter och har sedan verifierats, antingen med din säkra lösenfras eller genom att kors-verifiera.
+\n
+\nDet betyder att det har krypteringsnycklar för dina tidigare meddelanden, bekräftar för andra användare du kommunicerar med att dessa sessioner verkligen är du.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verifierade sessioner</string>
+    <string name="device_manager_learn_more_sessions_unverified">Overifierade sessioner är sessioner som har loggat in med dina uppgifter men som inte har kors-verifierats.
+\n
+\nDu bör speciellt försäkra dig om att du känner igen dessa sessioner eftersom att de kan utgöra otillåten användning av ditt konto.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Overifierade sessioner</string>
+    <string name="device_manager_learn_more_sessions_inactive">Inaktiva sessioner är sessioner du inte har använt på länge, men de tar fortfarande emot krypteringsnycklar.
+\n
+\nBorttagning av inaktiva sessioner förbättrar säkerhet och prestanda, och gör det lättare för dig att se om en ny session ser misstänkt ut.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Inaktiva sessioner</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kan använda den här enheten för att logga in på en mobil- eller webbenhet med en QR-kod. Det finns två sätt att göra detta:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Logga in med QR-kod</string>
+    <string name="device_manager_session_rename_warning">Observera att sessionsnamnen också kan ses av folk du kommunicerar med.</string>
+    <string name="device_manager_session_rename_description">Anpassade namn kan hjälpa dig att känna igen dina enheter lättare.</string>
+    <string name="device_manager_session_rename_edit_hint">Sessionsnamn</string>
+    <string name="device_manager_session_rename">Döp om session</string>
+    <string name="device_manager_session_details_device_ip_address">IP-adress</string>
+    <string name="device_manager_session_details_device_operating_system">Operativsystem</string>
+    <string name="device_manager_session_details_device_model">Modell</string>
+    <string name="device_manager_session_details_device_browser">Webbläsare</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_name">Namn</string>
+    <string name="device_manager_session_details_application">Applikation</string>
+    <string name="device_manager_session_details_session_last_activity">Senaste aktiviteten</string>
+    <string name="device_manager_session_details_session_name">Sessionsnamn</string>
+    <string name="device_manager_push_notifications_description">Ta emot pushnotiser i den här sessionen.</string>
+    <string name="login_scan_qr_code">Skanna QR-kod</string>
+    <string name="rich_text_editor_format_underline">Använd understrykning</string>
+    <string name="rich_text_editor_format_strikethrough">Använd överstrykning</string>
+    <string name="rich_text_editor_format_italic">Använd kursiv stil</string>
+    <string name="rich_text_editor_format_bold">Använd fetstil</string>
+    <string name="qr_code_login_confirm_security_code_description">Se till att du känner till ursprunget till denna kod. Genom att länka enheter ger du någon full åtkomst till ditt konto.</string>
+    <string name="qr_code_login_confirm_security_code">Bekräfta</string>
+    <string name="qr_code_login_try_again">Pröva igen</string>
+    <string name="qr_code_login_status_no_match">Ingen match\?</string>
+    <string name="qr_code_login_signing_in">Loggar in dig</string>
+    <string name="qr_code_login_connecting_to_device">Ansluter till enhet</string>
+    <string name="qr_code_login_scan_qr_code_button">Skanna QR-kod</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Loggar du in en mobil\?</string>
+    <string name="qr_code_login_show_qr_code_button">Visa QR-kod på den här enheten</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Välj \'Skanna QR-kod\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Börja på inloggningsskärmen</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Välj \'Logga in med QR-kod\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Börja på inloggningsskärmen</string>
+    <string name="qr_code_login_new_device_instruction_3">Välj \'Visa QR-kod\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gå till Inställningar -&gt; Säkerhet och sekretess</string>
+    <string name="qr_code_login_new_device_instruction_1">Öppna appen på din andra enhet</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Hemservern stöder inte inloggning med QR-kod.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Inloggningen avbröts på den andra enheten.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Den QR-koden är ogiltig.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Den andra enheten måste vara inloggad.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Den andra enheten är redan inloggad.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Ett säkerhetsproblem påträffades vid konfigurering av säker meddelandehantering. En av följande kan vara äventyrad: Din hemserver; Din internetuppkoppling Din enhet;</string>
+    <string name="qr_code_login_header_failed_other_description">Begäran misslyckades.</string>
+    <string name="qr_code_login_header_failed_denied_description">Begäran nekades på den andra enheten.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Länkningen slutfördes inte inom den krävda tiden.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Länkning med den här enheten stöds inte.</string>
+    <string name="qr_code_login_header_failed_title">Misslyckad anslutning</string>
+    <string name="qr_code_login_header_connected_description">Kolla din inloggade enhet, koden nedan borde visas. Bekräfta att koden nedan matchar den enheten:</string>
+    <string name="qr_code_login_header_connected_title">Säker anslutning etablerad</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Skanna QR-koden nedan med din utloggade enhet.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Använd din inloggade enhet för att skanna QR-koden nedan:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Logga in med QR-kod</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Använd den här enhetens kamera för att skanna QR-koden på din andra enhet:</string>
+    <string name="a11y_voice_broadcast_buffering">Buffrar</string>
+    <string name="a11y_pause_voice_broadcast">Pausa röstsändning</string>
+    <string name="a11y_play_voice_broadcast">Spela eller återuppta röstsändning</string>
+    <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausa inspelning av röstsändning</string>
+    <string name="a11y_resume_voice_broadcast_record">Återuppta inspelning av röstsändning</string>
+    <string name="voice_broadcast_live">Live</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Skanna QR-kod</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="onboarding_new_app_layout_button_try">Pröva</string>
+    <string name="onboarding_new_app_layout_feedback_message">Tryck uppe till höger för att se alternativet att ge återkoppling.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Ge återkoppling</string>
+    <string name="onboarding_new_app_layout_spaces_message">Kom åt dina utrymmen (nere till höger) snabbare och enklare än någonsin förut.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Kom åt utrymmen</string>
+    <string name="onboarding_new_app_layout_welcome_message">För att förenkla din ${app_name} så är flikar nu valfria. Hantera dem i menyn uppe till höger.</string>
+    <string name="device_manager_other_sessions_select">Välj sessioner</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Plats</string>
+    <string name="attachment_type_selector_poll">Omröstningar</string>
+    <string name="attachment_type_selector_voice_broadcast">Röstsändning</string>
+    <string name="attachment_type_selector_file">Bilagor</string>
+    <string name="attachment_type_selector_sticker">Dekaler</string>
+    <string name="attachment_type_selector_gallery">Fotobibliotek</string>
+    <string name="action_deselect_all">Avmarkera alla</string>
+    <string name="action_select_all">Välj alla</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vald</item>
+        <item quantity="other">%1$d valda</item>
+    </plurals>
 </resources>

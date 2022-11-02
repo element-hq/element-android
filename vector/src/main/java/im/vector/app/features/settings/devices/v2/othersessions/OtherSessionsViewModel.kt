@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.othersessions
 
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -67,6 +68,11 @@ class OtherSessionsViewModel @AssistedInject constructor(
     override fun handle(action: OtherSessionsAction) {
         when (action) {
             is OtherSessionsAction.FilterDevices -> handleFilterDevices(action)
+            OtherSessionsAction.DisableSelectMode -> handleDisableSelectMode()
+            is OtherSessionsAction.EnableSelectMode -> handleEnableSelectMode(action.deviceId)
+            is OtherSessionsAction.ToggleSelectionForDevice -> handleToggleSelectionForDevice(action.deviceId)
+            OtherSessionsAction.DeselectAll -> handleDeselectAll()
+            OtherSessionsAction.SelectAll -> handleSelectAll()
         }
     }
 
@@ -77,5 +83,63 @@ class OtherSessionsViewModel @AssistedInject constructor(
             )
         }
         observeDevices(action.filterType)
+    }
+
+    private fun handleDisableSelectMode() {
+        setSelectionForAllDevices(isSelected = false, enableSelectMode = false)
+    }
+
+    private fun handleEnableSelectMode(deviceId: String?) {
+        toggleSelectionForDevice(deviceId, enableSelectMode = true)
+    }
+
+    private fun handleToggleSelectionForDevice(deviceId: String) = withState { state ->
+        toggleSelectionForDevice(deviceId, enableSelectMode = state.isSelectModeEnabled)
+    }
+
+    private fun toggleSelectionForDevice(deviceId: String?, enableSelectMode: Boolean) = withState { state ->
+        val updatedDevices = if (state.devices is Success) {
+            val devices = state.devices.invoke().toMutableList()
+            val indexToUpdate = devices.indexOfFirst { it.deviceInfo.deviceId == deviceId }
+            if (indexToUpdate >= 0) {
+                val currentInfo = devices[indexToUpdate]
+                val updatedInfo = currentInfo.copy(isSelected = !currentInfo.isSelected)
+                devices[indexToUpdate] = updatedInfo
+            }
+            Success(devices)
+        } else {
+            state.devices
+        }
+
+        setState {
+            copy(
+                    devices = updatedDevices,
+                    isSelectModeEnabled = enableSelectMode
+            )
+        }
+    }
+
+    private fun handleSelectAll() = withState { state ->
+        setSelectionForAllDevices(isSelected = true, enableSelectMode = state.isSelectModeEnabled)
+    }
+
+    private fun handleDeselectAll() = withState { state ->
+        setSelectionForAllDevices(isSelected = false, enableSelectMode = state.isSelectModeEnabled)
+    }
+
+    private fun setSelectionForAllDevices(isSelected: Boolean, enableSelectMode: Boolean) = withState { state ->
+        val updatedDevices = if (state.devices is Success) {
+            val updatedDevices = state.devices.invoke().map { it.copy(isSelected = isSelected) }
+            Success(updatedDevices)
+        } else {
+            state.devices
+        }
+
+        setState {
+            copy(
+                    devices = updatedDevices,
+                    isSelectModeEnabled = enableSelectMode
+            )
+        }
     }
 }

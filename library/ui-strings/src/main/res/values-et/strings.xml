@@ -2754,9 +2754,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Alusta sisselogimisvaatest</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vali „Logi võrku QR-koodi abil“</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Alusta sisselogimisvaatest</string>
-    <string name="qr_code_login_new_device_instruction_3">Vali „Näita selles seadmes QR-koodi“</string>
-    <string name="qr_code_login_new_device_instruction_2">Ava Seadistused -&gt; Turvalisus ja privaatsus -&gt; Näita kõiki sessioone</string>
-    <string name="qr_code_login_new_device_instruction_1">Ava ${app_name} oma teises seades</string>
+    <string name="qr_code_login_new_device_instruction_3">Vali „Näita QR-koodi“</string>
+    <string name="qr_code_login_new_device_instruction_2">Ava Seadistused -&gt; Turvalisus ja privaatsus</string>
+    <string name="qr_code_login_new_device_instruction_1">Ava sama rakendus oma teises seades</string>
     <string name="qr_code_login_header_failed_denied_description">Teine seade lükkas päringu tagasi.</string>
     <string name="qr_code_login_header_failed_timeout_description">Sidumine ei lõppenud etteantud aja jooksul.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Sidumine selle seadmega ei ole toetatud.</string>
@@ -2796,4 +2796,35 @@
     <string name="permissions_rationale_msg_notification">${app_name} vajab teavituste näitamiseks õigusi. Teavituste sisuks võivad olla sulle saadetud sõnumid, kutsed ja muud olulist.
 \n
 \nJärgmistes vaadetes palun anna sellele rakendusele teavituste kuvamiseks vajalikud õigused.</string>
+    <string name="labs_enable_voice_broadcast_summary">Võimalus salvestada ja postitada ringhäälingukõnesid jututoa ajajoonele.</string>
+    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned (aktiivses arenduses)</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Koduserver ei toeta muude seadmete võrku logimise võimalust.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Sisselogimine katkestati teises seadmes.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">See QR-kood on vigane.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Teine seade peab olema võrku loginud.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Teine seade on juba võrku loginud.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Turvalise sõnumivahetuse ülesseadmisel tekkis turvaviga. Üks kolmest võib olla sattunud vale osapoole kontrolli alla: sinu koduserver, sinu internetiühendus või sinu seade;</string>
+    <string name="qr_code_login_header_failed_other_description">Päring ei õnnestunud.</string>
+    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel</string>
+    <string name="a11y_play_voice_broadcast">Alusta või jätka ringhäälingukõne esitamist</string>
+    <string name="a11y_stop_voice_broadcast_record">Lõpeta ringhäälingukõne salvestamine</string>
+    <string name="a11y_pause_voice_broadcast_record">Peata ringhäälingukõne salvestamine</string>
+    <string name="a11y_resume_voice_broadcast_record">Jätka ringhäälingukõne salvestamist</string>
+    <string name="a11y_pause_voice_broadcast">Peata ringhäälingukõne esitamine</string>
+    <string name="voice_broadcast_live">Otse eetris</string>
+    <string name="device_manager_other_sessions_select">Vali sessioonid</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kaamera</string>
+    <string name="attachment_type_selector_location">Asukoht</string>
+    <string name="attachment_type_selector_poll">Küsitlused</string>
+    <string name="attachment_type_selector_voice_broadcast">Ringhäälingukõne</string>
+    <string name="attachment_type_selector_file">Manused</string>
+    <string name="attachment_type_selector_sticker">Kleepsud</string>
+    <string name="attachment_type_selector_gallery">Fotode kogu</string>
+    <string name="action_deselect_all">Eemalda kõik valikud</string>
+    <string name="action_select_all">Vali kõik</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d valitud</item>
+        <item quantity="other">%1$d valitud</item>
+    </plurals>
 </resources>

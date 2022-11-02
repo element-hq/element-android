@@ -351,7 +351,7 @@
     <string name="call_in_progress">Hovor probíhá…</string>
     <string name="call_error_user_not_responding">Protější strana hovor nepřijala.</string>
     <string name="permissions_rationale_popup_title">Informace</string>
-    <string name="permissions_rationale_msg_record_audio">${app_name} potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} potřebuje oprávnění pro přístup k vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
     <string name="yes">ANO</string>
     <string name="no">NE</string>
     <string name="_continue">Pokračovat</string>
@@ -411,12 +411,12 @@
     <string name="done">Hotovo</string>
     <string name="action_sign_out_confirmation_simple">Opravdu se chcete odhlásit\?</string>
     <string name="video_call_in_progress">Video hovor probíhá…</string>
-    <string name="permissions_rationale_msg_camera_and_audio">${app_name} potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} potřebuje oprávnění pro přístup k vaší kameře a mikrofonu pro uskutečnění video hovoru.
 \n
 \nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor.</string>
     <string name="room_participants_power_level_prompt">Tuto změnu nelze zvrátit, protože povyšujete uživatele na stejnou úroveň, jakou máte vy.
 \nOpravdu to chcete udělat\?</string>
-    <string name="ssl_cert_not_trust">Toto by mohlo znamenat, že někdo škodlivě zachytává Vaši komunikaci nebo že Váš telefon nedůvěřuje certifikátu poskytnutému vzdáleným serverem.</string>
+    <string name="ssl_cert_not_trust">Toto by mohlo znamenat, že někdo škodlivě zachytává vaši komunikaci nebo že Váš telefon nedůvěřuje certifikátu poskytnutému vzdáleným serverem.</string>
     <string name="ssl_cert_new_account_expl">Pokud administrátor serveru řekl, že toto je předpokládané, ujistěte se, že otisk níže se shoduje s otiskem který Vám poskytl.</string>
     <string name="ssl_unexpected_existing_expl">Certifikát se změnil z toho, kterému Váš telefon důvěřoval. Toto je VELMI NEOBVYKLÉ. Je doporučeno, abyste NEPŘIJALI tento nový certifikát.</string>
     <string name="ssl_expected_existing_expl">Certifikát se změnil z původně důvěryhodného na nyní nedůvěryhodný. Server patrně obnovil svůj certifikát. Kontaktujte administrátora kvůli očekávanému otisku.</string>
@@ -578,7 +578,7 @@
     <string name="settings_deactivate_account_section">Deaktivace účtu</string>
     <string name="settings_deactivate_my_account">Deaktivovat můj účet</string>
     <string name="settings_discovery_category">Objevování</string>
-    <string name="settings_discovery_manage">Správa Vašich nastavení pro objevování.</string>
+    <string name="settings_discovery_manage">Správa vašich nastavení pro objevování.</string>
     <string name="settings_analytics">Analýza</string>
     <string name="settings_opt_in_of_analytics">Odeslat analytická data</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} sbírá anonymní analytická data pro vylepšení aplikace.</string>
@@ -848,7 +848,7 @@
     <string name="keys_backup_setup">Začít používat zálohu klíčů</string>
     <string name="keys_backup_setup_step1_advanced">(Pokročilé)</string>
     <string name="keys_backup_setup_step2_text_title">Zabezpečit zálohu přístupovou frází.</string>
-    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem domovském serveru. Chraňte svoji zálohu přístupovou frází, abyste ji udrželi v bezpečí.
+    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii vašich klíčů na Vašem domovském serveru. Chraňte svoji zálohu přístupovou frází, abyste ji udrželi v bezpečí.
 \n
 \nZ důvodu nejvyšší bezpečnosti by se měla lišit od hesla účtu.</string>
     <string name="keys_backup_setup_step2_button_title">Nastavit přístupovou frází</string>
@@ -856,7 +856,7 @@
     <string name="keys_backup_setup_step1_recovery_key_alternative">Nebo zabezpečte svoji zálohu pomocí klíče obnovy, uloženého někde v bezpečí.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Pokročilé) Nastavit s klíčem obnovy</string>
     <string name="keys_backup_setup_step3_success_title">Podařilo se!</string>
-    <string name="keys_backup_setup_step3_text_line2">Váš klíč obnovy je záchranná síť - lze jej použít pro obnovu Vašich šifrovaných zpráv, pokud zapomenete svou přístupovou frázi.
+    <string name="keys_backup_setup_step3_text_line2">Váš klíč obnovy je záchranná síť - lze jej použít pro obnovu vašich šifrovaných zpráv, pokud zapomenete svou přístupovou frázi.
 \nUchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Uchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
     <string name="keys_backup_setup_step3_button_title">Hotovo</string>
@@ -971,7 +971,7 @@
     <string name="preference_voice_and_video">Hlas a video</string>
     <string name="preference_root_help_about">Nápověda a O aplikaci</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrovat token</string>
-    <string name="send_suggestion">Učinit návrh</string>
+    <string name="send_suggestion">Poslat návrh</string>
     <string name="send_suggestion_content">Prosím, zapište svůj návrh níže.</string>
     <string name="send_suggestion_report_placeholder">Popište svůj návrh tady</string>
     <string name="send_suggestion_sent">Děkujeme, návrh byl úspěšně odeslán</string>
@@ -1023,7 +1023,7 @@
     <string name="labs_allow_extended_logging">Zapnout podrobné záznamy.</string>
     <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomohou vývojářům mnoha podrobnostmi, odešlete-li RageShake. I když jsou zapnuty, aplikace nezaznamenává obsah zpráv nebo jakákoli soukromá data.</string>
     <string name="error_terms_not_accepted">Prosím, opakujte, jakmile jste přijali všeobecné podmínky svého domovského serveru.</string>
-    <string name="error_network_timeout">Vypadá to, že serveru dlouho trvá odpovědět, to může být způsobeno buď slabým spojením nebo chybou na serveru. Prosím, opakujte za chvíli.</string>
+    <string name="error_network_timeout">Vypadá to, že serveru trvá příliš dlouho, než odpoví, což může být způsobeno buď špatným připojením, nebo chybou serveru. Zkuste to prosím za chvíli znovu.</string>
     <string name="send_attachment">Poslat přílohu</string>
     <string name="a11y_open_drawer">Otevřít navigační zásuvku</string>
     <string name="a11y_create_menu_open">Otevřít menu založení místnosti</string>
@@ -1106,7 +1106,7 @@
     <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
     <string name="login_server_url_form_modular_notice">Zadejte adresu Modular Element nebo serveru, který chcete použít</string>
     <string name="login_sso_error_message">Při načítání stránky došlo k chybě: %1$s (%2$d)</string>
-    <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto homeserveru. Homeserver podporuje následující typy přihlášení: %1$s.
+    <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto domovskému serveru. Domovský server podporuje následující typy přihlášení: %1$s.
 \n
 \nChcete se přihlásit webovým klientem\?</string>
     <string name="login_registration_disabled">Omlouváme se, tento server již nepřijímá nové účty.</string>
@@ -1279,7 +1279,7 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} neobstarává události typu \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
     <string name="unignore">Odignorovat</string>
-    <string name="verify_cannot_cross_sign">Tato relace nemůže sdílet toto ověření s jinými z Vašich relací.
+    <string name="verify_cannot_cross_sign">Tato relace nemůže sdílet toto ověření s jinými z vašich relací.
 \nToto ověření bude uloženo místně a sdíleno v budoucí verzi aplikace.</string>
     <string name="command_description_rainbow">Odešle danou zprávu zabarvenou jako duha</string>
     <string name="command_description_rainbow_emote">Odešle daný emote zabarvený jako duha</string>
@@ -1475,7 +1475,7 @@
     <string name="cross_signing_verify_by_text">Manuálně ověřit textem</string>
     <string name="crosssigning_verify_session">Ověřit přihlášení</string>
     <string name="cross_signing_verify_by_emoji">Interaktivně ověřit pomocí Emoji</string>
-    <string name="confirm_your_identity">Potvrďte svou identitu ověřením tohoto přihlášení v některé z Vašich dalších relacích a udělte přístup k zašifrovaným zprávám.</string>
+    <string name="confirm_your_identity">Potvrďte svou identitu ověřením tohoto přihlášení v některé z vašich dalších relacích a udělte přístup k zašifrovaným zprávám.</string>
     <string name="error_empty_field_choose_user_name">Zvolte si, prosím, uživatelské jméno.</string>
     <string name="error_empty_field_choose_password">Prosím, zvolte heslo.</string>
     <string name="external_link_confirmation_title">Překontrolovat tento odkaz</string>
@@ -1517,7 +1517,7 @@
     <string name="no_permissions_to_start_conf_call">Nemáte povolení zahájit konferenční hovor v této místnosti</string>
     <string name="video_meeting">Zahájit video schůzku</string>
     <string name="audio_meeting">Zahájit hlasovou schůzku</string>
-    <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco Vaše schůzka probíhá.</string>
+    <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco vaše schůzka probíhá.</string>
     <string name="cannot_call_yourself">Nemůžete zahájit hovor se sebou</string>
     <string name="cannot_call_yourself_with_invite">Nemůžete zahájit hovor se sebou, počkejte, až účastníci přijmou pozvánku</string>
     <string name="failed_to_add_widget">Přidání widgetu se nezdařilo</string>
@@ -1567,9 +1567,9 @@
     <string name="room_participants_ban_reason">Důvod k vykázání</string>
     <string name="room_participants_unban_title">Zrušit vykázání uživatele</string>
     <string name="room_participants_unban_prompt_msg">Zrušení vykázání uživatele jim opět umožní vstoupit do místnosti.</string>
-    <string name="settings_phone_number_empty">Žádné telefonní číslo nebylo zadáno do Vašeho účtu</string>
+    <string name="settings_phone_number_empty">Žádné telefonní číslo nebylo zadáno do vašeho účtu</string>
     <string name="settings_emails">Emailová adresa</string>
-    <string name="settings_emails_empty">Žádná emailová adresa nebyla zadána do Vašeho účtu</string>
+    <string name="settings_emails_empty">Žádná emailová adresa nebyla zadána do vašeho účtu</string>
     <string name="settings_phone_numbers">Telefonní čísla</string>
     <string name="settings_remove_three_pid_confirmation_content">Ostranit %s\?</string>
     <string name="error_threepid_auth_failed">Ujistěte se, že kliknete na odkaz v e-mailu, který jsme Vám poslali.</string>
@@ -1577,7 +1577,7 @@
     <string name="settings_secure_backup_setup">Vytvořit bezpečnou zálohu</string>
     <string name="settings_secure_backup_reset">Resetovat bezpečnou zálohu</string>
     <string name="settings_secure_backup_enter_to_setup">Nastavit na tomto zařízení</string>
-    <string name="settings_secure_backup_section_info">Ochrana před ztrátou přístupu k šifrovaným zprávám a datům pomocí zálohy šifrovacích klíčů na Vašem serveru.</string>
+    <string name="settings_secure_backup_section_info">Ochrana před ztrátou přístupu k šifrovaným zprávám a datům pomocí zálohy šifrovacích klíčů na vašem serveru.</string>
     <string name="reset_secure_backup_title">Generovat nový bezpečnostní klíč nebo nastavit novou bezpečnostní frázi pro existující zálohu.</string>
     <string name="reset_secure_backup_warning">To nahradí Váš nynější klíč nebo frázi.</string>
     <string name="disabled_integration_dialog_title">Integrace jsou vypnuty</string>
@@ -1641,7 +1641,7 @@
     <string name="a11y_stop_camera">Zastavit fotoaparát</string>
     <string name="a11y_start_camera">Spustit fotoaparát</string>
     <string name="bottom_sheet_setup_secure_backup_title">Bezpečná záloha</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Ochrana před ztrátou přístupu k šifrovaným zprávám a datům pomocí zálohy šifrovacích klíčů na Vašem serveru.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Ochrana před ztrátou přístupu k šifrovaným zprávám a datům pomocí zálohy šifrovacích klíčů na vašem serveru.</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Nastavit</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Použít bezpečnostní klíč</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generovat bezpečnostní klíč k uložení na bezpečném místě např. správci hesel nebo sejfu.</string>
@@ -2104,13 +2104,13 @@
     <string name="space_settings_alias_subtitle">Prohlédnout a spravovat adresy tohoto prostoru.</string>
     <string name="space_settings_alias_title">Adresy prostorů</string>
     <string name="room_upgrade_to_recommended_version">Aktualizujte na doporučenou verzi místnosti</string>
-    <string name="room_using_unstable_room_version">Tato místnost používá místnost verze %s, kterou homeserver označil za nestabilní.</string>
+    <string name="room_using_unstable_room_version">Tato místnost používá verzi místnosti %s, kterou domovský server označil za nestabilní.</string>
     <string name="upgrade_room_no_power_to_manage">K aktualizaci místnosti potřebujete oprávnění</string>
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
     <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
     <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %1$s na %2$s.</string>
-    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
-\nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
+    <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje, pokud je místnost nestabilní kvůli chybám, chybějícím funkcím nebo bezpečnostním zranitelnostem.
+\nObvykle ovlivňuje pouze způsob zpracování místnosti na serveru.</string>
     <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>
     <string name="upgrade_public_room">Aktualizovat veřejnou místnost</string>
     <string name="upgrade">Aktualizace</string>
@@ -2124,7 +2124,7 @@
     <string name="verification_scan_self_emoji_subtitle">Raději ověřit porovnáním emoji</string>
     <string name="verification_scan_with_this_device">Oskenovat tímto zařízením</string>
     <string name="verification_scan_self_notice">Oskenujte kód svým dalším zařízením nebo přepněte a oskenujte tímto zařízením</string>
-    <string name="hs_client_url">URL API Homeserveru</string>
+    <string name="hs_client_url">URL API domovského serveru</string>
     <string name="missing_permissions_title">Chybějící oprávnění</string>
     <string name="denied_permission_camera">Pro provedení této akce udělte, prosím, oprávnění Fotoaparát v systémových nastaveních.</string>
     <string name="denied_permission_generic">Některá z oprávnění potřebných k provedení akce chybí, prosím, udělte oprávnění v systémových nastaveních.</string>
@@ -2762,7 +2762,7 @@
     <string name="labs_enable_deferred_dm_summary">Vytvořit přímou zprávu pouze při první zprávě</string>
     <string name="labs_enable_deferred_dm_title">Povolit odložené přímé zprávy</string>
     <string name="labs_enable_new_app_layout_summary">Zjednodušený Element s volitelnými kartami</string>
-    <string name="labs_enable_new_app_layout_title">Povolit nový vzhled</string>
+    <string name="labs_enable_new_app_layout_title">Zapnout nové uspořádání</string>
     <string name="device_manager_learn_more_session_rename">Ostatní uživatelé v přímých zprávách a místnostech, ke kterým se připojíte, si mohou prohlédnout úplný seznam vašich relací.
 \n
 \nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
@@ -2839,9 +2839,9 @@
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Vyberte možnost \"Přihlásit se pomocí QR kódu\"</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Začněte na přihlašovací obrazovce</string>
-    <string name="qr_code_login_new_device_instruction_3">Vyberte možnost \"Zobrazit QR kód na tomto zařízení\"</string>
-    <string name="qr_code_login_new_device_instruction_2">Přejděte do Nastavení -&gt; Zabezpečení a soukromí -&gt; Zobrazit všechny relace</string>
-    <string name="qr_code_login_new_device_instruction_1">Otevřete ${app_name} na vašem druhém zařízení</string>
+    <string name="qr_code_login_new_device_instruction_3">Vyberte možnost \"Zobrazit QR kód\"</string>
+    <string name="qr_code_login_new_device_instruction_2">Přejděte do Nastavení -&gt; Zabezpečení a soukromí</string>
+    <string name="qr_code_login_new_device_instruction_1">Otevřete aplikaci na vašem druhém zařízení</string>
     <string name="qr_code_login_header_failed_denied_description">Žádost byla na druhém zařízení zamítnuta.</string>
     <string name="qr_code_login_header_failed_timeout_description">Propojení nebylo dokončeno v požadovaném čase.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Propojení s tímto zařízením není podporováno.</string>
@@ -2859,4 +2859,36 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Pomocí tohoto zařízení se můžete přihlásit do mobilního nebo webového zařízení pomocí QR kódu. Můžete to provést dvěma způsoby:</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Přihlásit se pomocí QR kódu</string>
     <string name="login_scan_qr_code">Naskenovat QR kód</string>
+    <string name="labs_enable_voice_broadcast_summary">Možnost nahrávat a odesílat hlasové vysílání na časové ose místnosti.</string>
+    <string name="labs_enable_voice_broadcast_title">Povolit hlasové vysílání (v aktivním vývoji)</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Domovský server nepodporuje přihlášení pomocí QR kódu.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Přihlášení bylo na druhém zařízení zrušeno.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Tento QR kód je neplatný.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Druhé zařízení musí být přihlášeno.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zařízení je již přihlášeno.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Při nastavování zabezpečeného zasílání zpráv se vyskytl problém se zabezpečením. Může být napadena jedna z následujících věcí: váš domovský server; vaše internetové připojení; vaše zařízení;</string>
+    <string name="qr_code_login_header_failed_other_description">Žádost se nezdařila.</string>
+    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti</string>
+    <string name="a11y_pause_voice_broadcast">Pozastavit hlasové vysílání</string>
+    <string name="a11y_play_voice_broadcast">Přehrát nebo obnovit hlasové vysílání</string>
+    <string name="a11y_stop_voice_broadcast_record">Ukončit záznam hlasového vysílání</string>
+    <string name="a11y_pause_voice_broadcast_record">Pozastavit záznam hlasového vysílání</string>
+    <string name="a11y_resume_voice_broadcast_record">Obnovit záznam hlasového vysílání</string>
+    <string name="voice_broadcast_live">Živě</string>
+    <string name="device_manager_other_sessions_select">Vybrat relace</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Fotoaparát</string>
+    <string name="attachment_type_selector_location">Poloha</string>
+    <string name="attachment_type_selector_poll">Hlasování</string>
+    <string name="attachment_type_selector_voice_broadcast">Hlasové vysílání</string>
+    <string name="attachment_type_selector_file">Přílohy</string>
+    <string name="attachment_type_selector_sticker">Nálepky</string>
+    <string name="attachment_type_selector_gallery">Knihovna fotografií</string>
+    <string name="action_deselect_all">Zrušit výběr všech</string>
+    <string name="action_select_all">Vybrat všechny</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vybraný</item>
+        <item quantity="few">%1$d vybrané</item>
+        <item quantity="other">%1$d vybraných</item>
+    </plurals>
 </resources>

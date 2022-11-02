@@ -65,6 +65,11 @@ data class HomeServerCapabilities(
          * True if the home server supports login via qr code, false otherwise.
          */
         val canLoginWithQrCode: Boolean = false,
+
+        /**
+         * True if the home server supports threaded read receipts and unread notifications.
+         */
+        val canUseThreadReadReceiptsAndNotifications: Boolean = false,
 ) {
 
     enum class RoomCapabilitySupport {

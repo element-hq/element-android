@@ -30,4 +30,5 @@ data class DeviceFullInfo(
         val isCurrentDevice: Boolean,
         val deviceExtendedInfo: DeviceExtendedInfo,
         val matrixClientInfo: MatrixClientInfoContent?,
+        val isSelected: Boolean = false,
 )

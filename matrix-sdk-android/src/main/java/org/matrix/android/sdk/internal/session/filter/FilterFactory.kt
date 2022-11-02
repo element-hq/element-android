@@ -28,7 +28,7 @@ internal object FilterFactory {
                 limit = numberOfEvents,
 //                senders = listOf(userId),
 //                relationSenders = userId?.let { listOf(it) },
-                relationTypes = listOf(RelationType.THREAD)
+                relationTypes = listOf(RelationType.THREAD),
         )
     }
 
@@ -37,7 +37,7 @@ internal object FilterFactory {
                 limit = numberOfEvents,
                 containsUrl = true,
                 types = listOf(EventType.MESSAGE),
-                lazyLoadMembers = true
+                lazyLoadMembers = true,
         )
     }
 
@@ -55,30 +55,23 @@ internal object FilterFactory {
     }
 
     fun createDefaultRoomFilter(): RoomEventFilter {
-        return RoomEventFilter(
-                lazyLoadMembers = true
-        )
+        return RoomEventFilter(lazyLoadMembers = true)
     }
 
     fun createElementRoomFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
+                lazyLoadMembers = true,
                 // TODO Enable this for optimization
                 // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
         )
     }
 
     private fun createElementTimelineFilter(): RoomEventFilter? {
-        return null // RoomEventFilter().apply {
-        // TODO Enable this for optimization
-        // types = listOfSupportedEventTypes.toMutableList()
-        // }
+        return RoomEventFilter(enableUnreadThreadNotifications = true)
     }
 
     private fun createElementStateFilter(): RoomEventFilter {
-        return RoomEventFilter(
-                lazyLoadMembers = true
-        )
+        return RoomEventFilter(lazyLoadMembers = true)
     }
 
     // Get only managed types by Element

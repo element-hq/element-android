@@ -18,8 +18,12 @@ package im.vector.app.features.settings.devices.v2.othersessions
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
@@ -31,7 +35,9 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterBottomSheet
@@ -40,23 +46,77 @@ import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class OtherSessionsFragment :
         VectorBaseFragment<FragmentOtherSessionsBinding>(),
         VectorBaseBottomSheetDialogFragment.ResultListener,
-        OtherSessionsView.Callback {
+        OtherSessionsView.Callback,
+        VectorMenuProvider {
 
     private val viewModel: OtherSessionsViewModel by fragmentViewModel()
     private val args: OtherSessionsArgs by args()
 
     @Inject lateinit var colorProvider: ColorProvider
 
+    @Inject lateinit var stringProvider: StringProvider
+
     @Inject lateinit var viewNavigator: OtherSessionsViewNavigator
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentOtherSessionsBinding {
         return FragmentOtherSessionsBinding.inflate(layoutInflater, container, false)
+    }
+
+    override fun getMenuRes() = R.menu.menu_other_sessions
+
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            val isSelectModeEnabled = state.isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
+        }
+    }
+
+    override fun handleMenuItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.otherSessionsSelect -> {
+                enableSelectMode(true)
+                true
+            }
+            R.id.otherSessionsSelectAll -> {
+                viewModel.handle(OtherSessionsAction.SelectAll)
+                true
+            }
+            R.id.otherSessionsDeselectAll -> {
+                viewModel.handle(OtherSessionsAction.DeselectAll)
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun enableSelectMode(isEnabled: Boolean, deviceId: String? = null) {
+        val action = if (isEnabled) OtherSessionsAction.EnableSelectMode(deviceId) else OtherSessionsAction.DisableSelectMode
+        viewModel.handle(action)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(owner = this) {
+            handleBackPress(this)
+        }
+    }
+
+    private fun handleBackPress(onBackPressedCallback: OnBackPressedCallback) = withState(viewModel) { state ->
+        if (state.isSelectModeEnabled) {
+            enableSelectMode(false)
+        } else {
+            onBackPressedCallback.isEnabled = false
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,11 +163,24 @@ class OtherSessionsFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         if (state.devices is Success) {
-            renderDevices(state.devices(), state.currentFilter)
+            val devices = state.devices.invoke()
+            renderDevices(devices, state.currentFilter)
+            updateToolbar(devices, state.isSelectModeEnabled)
         }
     }
 
-    private fun renderDevices(devices: List<DeviceFullInfo>?, currentFilter: DeviceManagerFilterType) {
+    private fun updateToolbar(devices: List<DeviceFullInfo>, isSelectModeEnabled: Boolean) {
+        invalidateOptionsMenu()
+        val title = if (isSelectModeEnabled) {
+            val selection = devices.count { it.isSelected }
+            stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
+        } else {
+            getString(args.titleResourceId)
+        }
+        toolbar?.title = title
+    }
+
+    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType) {
         views.otherSessionsFilterBadgeImageView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.otherSessionsSecurityRecommendationView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.deviceListHeaderOtherSessions.isVisible = currentFilter == DeviceManagerFilterType.ALL_SESSIONS
@@ -160,7 +233,7 @@ class OtherSessionsFragment :
             }
         }
 
-        if (devices.isNullOrEmpty()) {
+        if (devices.isEmpty()) {
             views.deviceListOtherSessions.isVisible = false
             views.otherSessionsNotFoundLayout.isVisible = true
         } else {
@@ -190,11 +263,21 @@ class OtherSessionsFragment :
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 
-    override fun onOtherSessionClicked(deviceId: String) {
-        viewNavigator.navigateToSessionOverview(
-                context = requireActivity(),
-                deviceId = deviceId
-        )
+    override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
+        if (!state.isSelectModeEnabled) {
+            enableSelectMode(true, deviceId)
+        }
+    }
+
+    override fun onOtherSessionClicked(deviceId: String) = withState(viewModel) { state ->
+        if (state.isSelectModeEnabled) {
+            viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(deviceId))
+        } else {
+            viewNavigator.navigateToSessionOverview(
+                    context = requireActivity(),
+                    deviceId = deviceId
+            )
+        }
     }
 
     override fun onViewAllOtherSessionsClicked() {
