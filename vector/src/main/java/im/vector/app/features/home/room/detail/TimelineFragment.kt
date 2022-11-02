@@ -1131,6 +1131,9 @@ class TimelineFragment :
             lazyLoadedViews.inviteView(false)?.isVisible = false
 
             if (mainState.tombstoneEvent == null) {
+                views.composerContainer.isInvisible = !messageComposerState.isComposerVisible
+                views.voiceMessageRecorderContainer.isVisible = messageComposerState.isVoiceMessageRecorderVisible
+
                 when (messageComposerState.canSendMessage) {
                     CanSendStatus.Allowed -> {
                         NotificationAreaView.State.Hidden
@@ -1186,6 +1189,7 @@ class TimelineFragment :
 
     private fun FragmentTimelineBinding.hideComposerViews() {
         composerContainer.isVisible = false
+        voiceMessageRecorderContainer.isVisible = false
     }
 
     private fun renderTypingMessageNotification(roomSummary: RoomSummary?, state: RoomDetailViewState) {
