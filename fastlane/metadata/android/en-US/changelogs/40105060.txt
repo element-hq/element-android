@@ -1,0 +1,2 @@
+Main changes in this version: new UI for selecting an attachment.
+Full changelog: https://github.com/vector-im/element-android/releases
