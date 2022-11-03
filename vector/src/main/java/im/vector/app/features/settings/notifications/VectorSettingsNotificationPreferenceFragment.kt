@@ -120,31 +120,25 @@ class VectorSettingsNotificationPreferenceFragment :
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
         }
 
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
-            pushersManager.getPusherForCurrentSession()?.let { pusher ->
-                it.isChecked = pusher.enabled
-            }
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
+                ?.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                    if (isChecked) {
+                        enableNotificationsForCurrentSessionUseCase.execute(requireActivity())
 
-            it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
-                if (isChecked) {
-                    enableNotificationsForCurrentSessionUseCase.execute(requireActivity())
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
+                                ?.summary = unifiedPushHelper.getCurrentDistributorName()
 
-                    findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
-                            ?.summary = unifiedPushHelper.getCurrentDistributorName()
-
-                    // TODO test with API 33
-                    notificationPermissionManager.eventuallyRequestPermission(
-                            requireActivity(),
-                            postPermissionLauncher,
-                            showRationale = false,
-                            ignorePreference = true
-                    )
-                } else {
-                    disableNotificationsForCurrentSessionUseCase.execute()
-                    notificationPermissionManager.eventuallyRevokePermission(requireActivity())
+                        notificationPermissionManager.eventuallyRequestPermission(
+                                requireActivity(),
+                                postPermissionLauncher,
+                                showRationale = false,
+                                ignorePreference = true
+                        )
+                    } else {
+                        disableNotificationsForCurrentSessionUseCase.execute()
+                        notificationPermissionManager.eventuallyRevokePermission(requireActivity())
+                    }
                 }
-            }
-        }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
