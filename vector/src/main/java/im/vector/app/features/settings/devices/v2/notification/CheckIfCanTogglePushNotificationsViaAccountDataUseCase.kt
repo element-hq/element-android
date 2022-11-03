@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
 
+    // TODO update unit tests
     fun execute(session: Session, deviceId: String): Boolean {
         return session
                 .accountDataService()

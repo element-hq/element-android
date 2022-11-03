@@ -28,6 +28,7 @@ class TogglePushNotificationUseCase @Inject constructor(
         private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
 ) {
 
+    // TODO update unit tests
     suspend fun execute(deviceId: String, enabled: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 

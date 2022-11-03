@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 class CheckIfCanTogglePushNotificationsViaPusherUseCase @Inject constructor() {
 
+    // TODO update unit tests
     fun execute(session: Session): Boolean {
         return session
                 .homeServerCapabilitiesService()
