@@ -96,9 +96,11 @@ class SessionOverviewViewModel @AssistedInject constructor(
     }
 
     private fun observeNotificationsStatus(deviceId: String) {
-        getNotificationsStatusUseCase.execute(deviceId)
-                .onEach { setState { copy(notificationsStatus = it) } }
-                .launchIn(viewModelScope)
+        activeSessionHolder.getSafeActiveSession()?.let { session ->
+            getNotificationsStatusUseCase.execute(session, deviceId)
+                    .onEach { setState { copy(notificationsStatus = it) } }
+                    .launchIn(viewModelScope)
+        }
     }
 
     override fun handle(action: SessionOverviewAction) {

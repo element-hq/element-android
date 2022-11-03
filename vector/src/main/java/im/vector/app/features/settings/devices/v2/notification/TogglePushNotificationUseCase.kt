@@ -31,14 +31,14 @@ class TogglePushNotificationUseCase @Inject constructor(
     suspend fun execute(deviceId: String, enabled: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute()) {
+        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
             val devicePusher = session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
             devicePusher?.let { pusher ->
                 session.pushersService().togglePusher(pusher, enabled)
             }
         }
 
-        if (checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(deviceId)) {
+        if (checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(session, deviceId)) {
             val newNotificationSettingsContent = LocalNotificationSettingsContent(isSilenced = !enabled)
             session.accountDataService().updateUserAccountData(
                     UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId,

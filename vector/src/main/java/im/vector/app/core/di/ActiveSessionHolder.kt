@@ -19,6 +19,7 @@ package im.vector.app.core.di
 import android.content.Context
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.notification.EnableNotificationsSettingUpdater
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase

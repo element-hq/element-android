@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.notification
+package im.vector.app.core.notification
 
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
+@Singleton
+class EnableNotificationsSettingUpdater @Inject constructor(
+        private val updateEnableNotificationsSettingOnChangeUseCase: UpdateEnableNotificationsSettingOnChangeUseCase,
+) {
 
-    fun execute(session: Session, deviceId: String): Boolean {
-        return session
-                .accountDataService()
-                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
+    private var job: Job? = null
+
+    fun onSessionsStarted(session: Session) {
+        job?.cancel()
+        job = session.coroutineScope.launch {
+            updateEnableNotificationsSettingOnChangeUseCase.execute(session)
+                    .launchIn(this)
+        }
     }
 }

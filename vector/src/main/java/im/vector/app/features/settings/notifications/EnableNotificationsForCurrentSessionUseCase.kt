@@ -44,8 +44,8 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
             registerPusher(fragmentActivity)
         }
 
-        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute()) {
-            val session = activeSessionHolder.getSafeActiveSession() ?: return
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
             val deviceId = session.sessionParams.deviceId ?: return
             togglePushNotificationUseCase.execute(deviceId, enabled = true)
         }
