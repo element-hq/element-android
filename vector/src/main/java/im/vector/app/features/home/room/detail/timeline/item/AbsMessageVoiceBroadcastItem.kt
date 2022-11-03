@@ -27,6 +27,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -36,7 +37,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     @EpoxyAttribute
     lateinit var voiceBroadcastAttributes: Attributes
 
-    protected val voiceBroadcastId get() = voiceBroadcastAttributes.voiceBroadcastId
+    protected val voiceBroadcast get() = voiceBroadcastAttributes.voiceBroadcast
     protected val voiceBroadcastState get() = voiceBroadcastAttributes.voiceBroadcastState
     protected val recorderName get() = voiceBroadcastAttributes.recorderName
     protected val recorder get() = voiceBroadcastAttributes.recorder
@@ -95,7 +96,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     }
 
     data class Attributes(
-            val voiceBroadcastId: String,
+            val voiceBroadcast: VoiceBroadcast,
             val voiceBroadcastState: VoiceBroadcastState?,
             val duration: Int,
             val recorderName: String,

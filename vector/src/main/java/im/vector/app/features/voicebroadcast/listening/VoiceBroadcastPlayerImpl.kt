@@ -26,9 +26,10 @@ import im.vector.app.features.voicebroadcast.duration
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Listener
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.State
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.sequence
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +52,7 @@ import javax.inject.Singleton
 class VoiceBroadcastPlayerImpl @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
-        private val getVoiceBroadcastUseCase: GetVoiceBroadcastUseCase,
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastEventUseCase,
         private val getLiveVoiceBroadcastChunksUseCase: GetLiveVoiceBroadcastChunksUseCase
 ) : VoiceBroadcastPlayer {
 
@@ -73,7 +74,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private var isLive: Boolean = false
 
-    override var currentVoiceBroadcastId: String? = null
+    override var currentVoiceBroadcast: VoiceBroadcast? = null
 
     override var playingState = State.IDLE
         @MainThread
@@ -81,7 +82,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
             field = value
             // Notify state change to all the listeners attached to the current voice broadcast id
-            currentVoiceBroadcastId?.let { voiceBroadcastId ->
+            currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
                 when (value) {
                     State.PLAYING -> {
                         playbackTracker.startPlayback(voiceBroadcastId)
@@ -103,17 +104,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 listeners[voiceBroadcastId]?.forEach { listener -> listener.onStateChanged(value) }
             }
         }
-    private var currentRoomId: String? = null
 
     /**
      * Map voiceBroadcastId to listeners.
      */
     private val listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
-    override fun playOrResume(roomId: String, voiceBroadcastId: String) {
-        val hasChanged = currentVoiceBroadcastId != voiceBroadcastId
+    override fun playOrResume(voiceBroadcast: VoiceBroadcast) {
+        val hasChanged = currentVoiceBroadcast != voiceBroadcast
         when {
-            hasChanged -> startPlayback(roomId, voiceBroadcastId)
+            hasChanged -> startPlayback(voiceBroadcast)
             playingState == State.PAUSED -> resumePlayback()
             else -> Unit
         }
@@ -152,37 +152,35 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         playlist = emptyList()
         currentSequence = null
 
-        currentRoomId = null
-        currentVoiceBroadcastId = null
+        currentVoiceBroadcast = null
     }
 
-    override fun addListener(voiceBroadcastId: String, listener: Listener) {
-        listeners[voiceBroadcastId]?.add(listener) ?: run {
-            listeners[voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
+    override fun addListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
+        listeners[voiceBroadcast.voiceBroadcastId]?.add(listener) ?: run {
+            listeners[voiceBroadcast.voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
-        if (voiceBroadcastId == currentVoiceBroadcastId) listener.onStateChanged(playingState) else listener.onStateChanged(State.IDLE)
+        listener.onStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
     }
 
-    override fun removeListener(voiceBroadcastId: String, listener: Listener) {
-        listeners[voiceBroadcastId]?.remove(listener)
+    override fun removeListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
+        listeners[voiceBroadcast.voiceBroadcastId]?.remove(listener)
     }
 
-    private fun startPlayback(roomId: String, eventId: String) {
+    private fun startPlayback(voiceBroadcast: VoiceBroadcast) {
         // Stop listening previous voice broadcast if any
         if (playingState != State.IDLE) stop()
 
-        currentRoomId = roomId
-        currentVoiceBroadcastId = eventId
+        currentVoiceBroadcast = voiceBroadcast
 
         playingState = State.BUFFERING
 
-        val voiceBroadcastState = getVoiceBroadcastUseCase.execute(roomId, eventId)?.content?.voiceBroadcastState
+        val voiceBroadcastState = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)?.content?.voiceBroadcastState
         isLive = voiceBroadcastState != null && voiceBroadcastState != VoiceBroadcastState.STOPPED
-        fetchPlaylistAndStartPlayback(roomId, eventId)
+        fetchPlaylistAndStartPlayback(voiceBroadcast)
     }
 
-    private fun fetchPlaylistAndStartPlayback(roomId: String, voiceBroadcastId: String) {
-        fetchPlaylistJob = getLiveVoiceBroadcastChunksUseCase.execute(roomId, voiceBroadcastId)
+    private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
+        fetchPlaylistJob = getLiveVoiceBroadcastChunksUseCase.execute(voiceBroadcast)
                 .onEach(this::updatePlaylist)
                 .launchIn(coroutineScope)
     }
@@ -347,9 +345,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         override fun onCompletion(mp: MediaPlayer) {
             if (nextMediaPlayer != null) return
-            val roomId = currentRoomId ?: return
-            val voiceBroadcastId = currentVoiceBroadcastId ?: return
-            val voiceBroadcastEventContent = getVoiceBroadcastUseCase.execute(roomId, voiceBroadcastId)?.content ?: return
+            val voiceBroadcast = currentVoiceBroadcast ?: return
+            val voiceBroadcastEventContent = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)?.content ?: return
             isLive = voiceBroadcastEventContent.voiceBroadcastState != null && voiceBroadcastEventContent.voiceBroadcastState != VoiceBroadcastState.STOPPED
 
             if (!isLive && voiceBroadcastEventContent.lastChunkSequence == currentSequence) {

@@ -46,7 +46,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         playerListener = VoiceBroadcastPlayer.Listener { state ->
             renderPlayingState(holder, state)
         }
-        player.addListener(voiceBroadcastId, playerListener)
+        player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
     }
 
@@ -77,7 +77,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId)) }
+                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast)) }
                     seekBar.isEnabled = false
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> {
@@ -98,11 +98,11 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcastId, seekBar.progress))
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress))
                 isUserSeeking = false
             }
         })
-        playbackTracker.track(voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
+        playbackTracker.track(voiceBroadcast.voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
             override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
                 when (state) {
                     is AudioMessagePlaybackTracker.Listener.State.Paused -> {
@@ -126,9 +126,9 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        player.removeListener(voiceBroadcastId, playerListener)
+        player.removeListener(voiceBroadcast, playerListener)
         holder.seekBar.setOnSeekBarChangeListener(null)
-        playbackTracker.untrack(voiceBroadcastId)
+        playbackTracker.untrack(voiceBroadcast.voiceBroadcastId)
     }
 
     override fun getViewStubId() = STUB_ID

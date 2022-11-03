@@ -16,6 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.session.Session
@@ -24,17 +25,18 @@ import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
 
-class GetVoiceBroadcastUseCase @Inject constructor(
+class GetVoiceBroadcastEventUseCase @Inject constructor(
         private val session: Session,
 ) {
 
-    fun execute(roomId: String, eventId: String): VoiceBroadcastEvent? {
-        val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
+    fun execute(voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
+        val room = session.getRoom(voiceBroadcast.roomId) ?: error("Unknown roomId: ${voiceBroadcast.roomId}")
 
-        Timber.d("## GetVoiceBroadcastUseCase: get voice broadcast $eventId")
+        Timber.d("## GetVoiceBroadcastUseCase: get voice broadcast $voiceBroadcast")
 
-        val initialEvent = room.timelineService().getTimelineEvent(eventId)?.root?.asVoiceBroadcastEvent() // Fallback to initial event
-        val relatedEvents = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, eventId).sortedBy { it.root.originServerTs }
+        val initialEvent = room.timelineService().getTimelineEvent(voiceBroadcast.voiceBroadcastId)?.root?.asVoiceBroadcastEvent()
+        val relatedEvents = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
+                .sortedBy { it.root.originServerTs }
         return relatedEvents.mapNotNull { it.root.asVoiceBroadcastEvent() }.lastOrNull() ?: initialEvent
     }
 }

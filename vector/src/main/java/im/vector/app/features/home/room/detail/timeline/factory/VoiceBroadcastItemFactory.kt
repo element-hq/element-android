@@ -29,6 +29,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadca
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
@@ -60,14 +61,14 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
         val voiceBroadcastEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent().root.asVoiceBroadcastEvent() ?: return null
         val voiceBroadcastContent = voiceBroadcastEvent.content ?: return null
-        val voiceBroadcastId = voiceBroadcastEventsGroup.voiceBroadcastId
+        val voiceBroadcast = VoiceBroadcast(voiceBroadcastId = voiceBroadcastEventsGroup.voiceBroadcastId, roomId = params.event.roomId)
 
         val isRecording = voiceBroadcastContent.voiceBroadcastState != VoiceBroadcastState.STOPPED &&
                 voiceBroadcastEvent.root.stateKey == session.myUserId &&
                 messageContent.deviceId == session.sessionParams.deviceId
 
         val voiceBroadcastAttributes = AbsMessageVoiceBroadcastItem.Attributes(
-                voiceBroadcastId = voiceBroadcastId,
+                voiceBroadcast = voiceBroadcast,
                 voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
                 duration = voiceBroadcastEventsGroup.getDuration(),
                 recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
@@ -92,7 +93,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastRecordingItem {
         return MessageVoiceBroadcastRecordingItem_()
-                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcast.voiceBroadcastId}")
                 .attributes(attributes)
                 .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)
@@ -105,7 +106,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastListeningItem {
         return MessageVoiceBroadcastListeningItem_()
-                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcast.voiceBroadcastId}")
                 .attributes(attributes)
                 .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)
