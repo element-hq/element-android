@@ -57,7 +57,6 @@ import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -81,6 +80,8 @@ class VectorSettingsNotificationPreferenceFragment :
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
+    @Inject lateinit var disableNotificationsForCurrentSessionUseCase: DisableNotificationsForCurrentSessionUseCase
+    @Inject lateinit var enableNotificationsForCurrentSessionUseCase: EnableNotificationsForCurrentSessionUseCase
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -126,28 +127,12 @@ class VectorSettingsNotificationPreferenceFragment :
 
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                 if (isChecked) {
-                    unifiedPushHelper.register(requireActivity()) {
-                        // Update the summary
-                        if (unifiedPushHelper.isEmbeddedDistributor()) {
-                            fcmHelper.ensureFcmTokenIsRetrieved(
-                                    requireActivity(),
-                                    pushersManager,
-                                    vectorPreferences.areNotificationEnabledForDevice()
-                            )
-                        }
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
-                                ?.summary = unifiedPushHelper.getCurrentDistributorName()
-                        lifecycleScope.launch {
-                            val result = runCatching {
-                                pushersManager.togglePusherForCurrentSession(true)
-                            }
+                    enableNotificationsForCurrentSessionUseCase.execute(requireActivity())
 
-                            result.exceptionOrNull()?.let { _ ->
-                                Toast.makeText(context, R.string.error_check_network, Toast.LENGTH_SHORT).show()
-                                it.isChecked = false
-                            }
-                        }
-                    }
+                    findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)
+                            ?.summary = unifiedPushHelper.getCurrentDistributorName()
+
+                    // TODO test with API 33
                     notificationPermissionManager.eventuallyRequestPermission(
                             requireActivity(),
                             postPermissionLauncher,
@@ -155,8 +140,7 @@ class VectorSettingsNotificationPreferenceFragment :
                             ignorePreference = true
                     )
                 } else {
-                    unifiedPushHelper.unregister(pushersManager)
-                    session.pushersService().refreshPushers()
+                    disableNotificationsForCurrentSessionUseCase.execute()
                     notificationPermissionManager.eventuallyRevokePermission(requireActivity())
                 }
             }

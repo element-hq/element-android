@@ -1679,7 +1679,8 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="error_check_network">Something went wrong. Please check your network connection and try again.</string>
+    <!-- TODO delete -->
+    <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
