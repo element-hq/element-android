@@ -38,19 +38,19 @@ class GetNotificationsStatusUseCase @Inject constructor(
         val session = activeSessionHolder.getSafeActiveSession()
         return when {
             session == null -> flowOf(NotificationsStatus.NOT_SUPPORTED)
-            checkIfCanTogglePushNotificationsViaPusherUseCase.execute() -> {
-                session.flow()
-                        .livePushers()
-                        .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                        .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
-                        .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
-                        .distinctUntilChanged()
-            }
             checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(deviceId) -> {
                 session.flow()
                         .liveUserAccountData(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
                         .unwrap()
                         .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
+                        .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
+                        .distinctUntilChanged()
+            }
+            checkIfCanTogglePushNotificationsViaPusherUseCase.execute() -> {
+                session.flow()
+                        .livePushers()
+                        .map { it.filter { pusher -> pusher.deviceId == deviceId } }
+                        .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
                         .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
                         .distinctUntilChanged()
             }

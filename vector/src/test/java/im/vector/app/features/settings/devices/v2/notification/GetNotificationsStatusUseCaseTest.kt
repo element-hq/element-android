@@ -22,6 +22,7 @@ import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.testDispatcher
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.resetMain
@@ -89,6 +90,11 @@ class GetNotificationsStatusUseCaseTest {
 
         // Then
         result.firstOrNull() shouldBeEqualTo NotificationsStatus.NOT_SUPPORTED
+        verifyOrder {
+            // we should first check account data
+            fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(A_DEVICE_ID)
+            fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute()
+        }
     }
 
     @Test
