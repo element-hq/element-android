@@ -45,7 +45,7 @@ class BluetoothLowEnergyServiceConnection @Inject constructor(
 
         if (!isBound) {
             Intent(context, BluetoothLowEnergyService::class.java).also { intent ->
-                context.bindService(intent, this, 0)
+                context.bindService(intent, this, Context.BIND_AUTO_CREATE)
             }
         }
     }
