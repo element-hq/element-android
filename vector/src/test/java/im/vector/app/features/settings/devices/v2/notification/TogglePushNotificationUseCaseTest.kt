@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.overview
+package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fixtures.PusherFixture
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
@@ -27,10 +29,21 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 class TogglePushNotificationUseCaseTest {
 
     private val activeSessionHolder = FakeActiveSessionHolder()
-    private val togglePushNotificationUseCase = TogglePushNotificationUseCase(activeSessionHolder.instance)
+    private val fakeCheckIfCanTogglePushNotificationsViaPusherUseCase =
+            mockk<CheckIfCanTogglePushNotificationsViaPusherUseCase>()
+    private val fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase =
+            mockk<CheckIfCanTogglePushNotificationsViaAccountDataUseCase>()
+
+    private val togglePushNotificationUseCase =
+            TogglePushNotificationUseCase(
+                    activeSessionHolder = activeSessionHolder.instance,
+                    checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanTogglePushNotificationsViaPusherUseCase,
+                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase,
+            )
 
     @Test
     fun `when execute, then toggle enabled for device pushers`() = runTest {
+        // Given
         val sessionId = "a_session_id"
         val pushers = listOf(
                 PusherFixture.aPusher(deviceId = sessionId, enabled = false),
@@ -38,14 +51,19 @@ class TogglePushNotificationUseCaseTest {
         )
         activeSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
         activeSessionHolder.fakeSession.pushersService().givenGetPushers(pushers)
+        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute() } returns true
+        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(sessionId) } returns false
 
+        // When
         togglePushNotificationUseCase.execute(sessionId, true)
 
+        // Then
         activeSessionHolder.fakeSession.pushersService().verifyTogglePusherCalled(pushers.first(), true)
     }
 
     @Test
     fun `when execute, then toggle local notification settings`() = runTest {
+        // Given
         val sessionId = "a_session_id"
         val pushers = listOf(
                 PusherFixture.aPusher(deviceId = sessionId, enabled = false),
@@ -56,9 +74,13 @@ class TogglePushNotificationUseCaseTest {
                 UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + sessionId,
                 LocalNotificationSettingsContent(isSilenced = true).toContent()
         )
+        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute() } returns false
+        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(sessionId) } returns true
 
+        // When
         togglePushNotificationUseCase.execute(sessionId, true)
 
+        // Then
         activeSessionHolder.fakeSession.accountDataService().verifyUpdateUserAccountDataEventSucceeds(
                 UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + sessionId,
                 LocalNotificationSettingsContent(isSilenced = false).toContent(),

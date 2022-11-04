@@ -29,6 +29,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
+import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
+import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
@@ -36,21 +38,15 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
@@ -65,6 +61,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
+        private val getNotificationsStatusUseCase: GetNotificationsStatusUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
@@ -81,7 +78,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         refreshPushers()
         observeSessionInfo(initialState.deviceId)
         observeCurrentSessionInfo()
-        observePushers(initialState.deviceId)
+        observeNotificationsStatus(initialState.deviceId)
     }
 
     private fun refreshPushers() {
@@ -107,20 +104,9 @@ class SessionOverviewViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observePushers(deviceId: String) {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val pusherFlow = session.flow()
-                .livePushers()
-                .map { it.filter { pusher -> pusher.deviceId == deviceId } }
-                .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
-
-        val accountDataFlow = session.flow()
-                .liveUserAccountData(TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
-                .unwrap()
-                .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
-
-        merge(pusherFlow, accountDataFlow)
-                .onEach { it?.let { setState { copy(notificationsEnabled = it) } } }
+    private fun observeNotificationsStatus(deviceId: String) {
+        getNotificationsStatusUseCase.execute(deviceId)
+                .onEach { setState { copy(notificationsStatus = it) } }
                 .launchIn(viewModelScope)
     }
 
@@ -233,7 +219,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
             togglePushNotificationUseCase.execute(action.deviceId, action.enabled)
-            setState { copy(notificationsEnabled = action.enabled) }
         }
     }
 }

@@ -23,6 +23,8 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
@@ -32,7 +34,6 @@ import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeVerificationService
-import im.vector.app.test.fixtures.PusherFixture.aPusher
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
@@ -87,6 +88,8 @@ class SessionOverviewViewModelTest {
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
+    private val fakeGetNotificationsStatusUseCase = mockk<GetNotificationsStatusUseCase>()
+    private val notificationsStatus = NotificationsStatus.ENABLED
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -99,6 +102,7 @@ class SessionOverviewViewModelTest {
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
+            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase,
     )
 
     @Before
@@ -108,6 +112,7 @@ class SessionOverviewViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
+        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationsStatus)
     }
 
     @After
@@ -131,7 +136,7 @@ class SessionOverviewViewModelTest {
                 deviceId = A_SESSION_ID_1,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
 
         val viewModel = createViewModel()
@@ -227,7 +232,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
 
         // When
@@ -264,7 +269,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
         fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
 
@@ -299,7 +304,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
         fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
@@ -466,13 +471,13 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `when viewModel init, then observe pushers and emit to state`() {
-        val pushers = listOf(aPusher(deviceId = A_SESSION_ID_1))
-        fakeActiveSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
+        val notificationStatus = NotificationsStatus.ENABLED
+        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationStatus)
 
         val viewModel = createViewModel()
 
         viewModel.test()
-                .assertLatestState { state -> state.notificationsEnabled }
+                .assertLatestState { state -> state.notificationsStatus == notificationStatus }
                 .finish()
     }
 
@@ -483,6 +488,6 @@ class SessionOverviewViewModelTest {
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
         togglePushNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
-        viewModel.test().assertLatestState { state -> state.notificationsEnabled }.finish()
+        viewModel.test().assertLatestState { state -> state.notificationsStatus == NotificationsStatus.ENABLED }.finish()
     }
 }
