@@ -31,7 +31,6 @@ class DisableNotificationsForCurrentSessionUseCase @Inject constructor(
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
 ) {
 
-    // TODO add unit tests
     suspend fun execute() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val deviceId = session.sessionParams.deviceId ?: return
