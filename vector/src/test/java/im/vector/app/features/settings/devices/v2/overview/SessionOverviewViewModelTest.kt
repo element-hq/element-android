@@ -37,6 +37,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
+import io.mockk.justRun
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
@@ -98,7 +100,7 @@ class SessionOverviewViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
-        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationsStatus)
+        every { fakeGetNotificationsStatusUseCase.execute(fakeActiveSessionHolder.fakeSession, A_SESSION_ID_1) } returns flowOf(notificationsStatus)
     }
 
     private fun givenVerificationService(): FakeVerificationService {
@@ -412,13 +414,10 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `when viewModel init, then observe pushers and emit to state`() {
-        val notificationStatus = NotificationsStatus.ENABLED
-        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationStatus)
-
         val viewModel = createViewModel()
 
         viewModel.test()
-                .assertLatestState { state -> state.notificationsStatus == notificationStatus }
+                .assertLatestState { state -> state.notificationsStatus == notificationsStatus }
                 .finish()
     }
 

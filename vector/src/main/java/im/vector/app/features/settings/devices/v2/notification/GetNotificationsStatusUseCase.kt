@@ -34,7 +34,6 @@ class GetNotificationsStatusUseCase @Inject constructor(
         private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
 ) {
 
-    // TODO update unit tests
     fun execute(session: Session, deviceId: String): Flow<NotificationsStatus> {
         return when {
             checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(session, deviceId) -> {

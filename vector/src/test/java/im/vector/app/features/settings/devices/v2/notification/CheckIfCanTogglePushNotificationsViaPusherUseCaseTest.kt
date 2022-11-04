@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -25,37 +25,22 @@ private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canRemotelyToggl
 
 class CheckIfCanTogglePushNotificationsViaPusherUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeSession = FakeSession()
 
     private val checkIfCanTogglePushNotificationsViaPusherUseCase =
-            CheckIfCanTogglePushNotificationsViaPusherUseCase(
-                    activeSessionHolder = fakeActiveSessionHolder.instance,
-            )
+            CheckIfCanTogglePushNotificationsViaPusherUseCase()
 
     @Test
     fun `given current session when execute then toggle capability is returned`() {
         // Given
-        fakeActiveSessionHolder
-                .fakeSession
+        fakeSession
                 .fakeHomeServerCapabilitiesService
                 .givenCapabilities(A_HOMESERVER_CAPABILITIES)
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaPusherUseCase.execute()
+        val result = checkIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession)
 
         // Then
         result shouldBeEqualTo A_HOMESERVER_CAPABILITIES.canRemotelyTogglePushNotificationsOfDevices
-    }
-
-    @Test
-    fun `given no current session when execute then false is returned`() {
-        // Given
-        fakeActiveSessionHolder.givenGetSafeActiveSessionReturns(null)
-
-        // When
-        val result = checkIfCanTogglePushNotificationsViaPusherUseCase.execute()
-
-        // Then
-        result shouldBeEqualTo false
     }
 }

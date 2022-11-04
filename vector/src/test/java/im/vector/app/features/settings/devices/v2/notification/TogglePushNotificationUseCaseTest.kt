@@ -49,10 +49,11 @@ class TogglePushNotificationUseCaseTest {
                 PusherFixture.aPusher(deviceId = sessionId, enabled = false),
                 PusherFixture.aPusher(deviceId = "another id", enabled = false)
         )
-        activeSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
-        activeSessionHolder.fakeSession.pushersService().givenGetPushers(pushers)
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute() } returns true
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(sessionId) } returns false
+        val fakeSession = activeSessionHolder.fakeSession
+        fakeSession.pushersService().givenPushersLive(pushers)
+        fakeSession.pushersService().givenGetPushers(pushers)
+        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns true
+        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns false
 
         // When
         togglePushNotificationUseCase.execute(sessionId, true)
@@ -69,13 +70,14 @@ class TogglePushNotificationUseCaseTest {
                 PusherFixture.aPusher(deviceId = sessionId, enabled = false),
                 PusherFixture.aPusher(deviceId = "another id", enabled = false)
         )
-        activeSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
-        activeSessionHolder.fakeSession.accountDataService().givenGetUserAccountDataEventReturns(
+        val fakeSession = activeSessionHolder.fakeSession
+        fakeSession.pushersService().givenPushersLive(pushers)
+        fakeSession.accountDataService().givenGetUserAccountDataEventReturns(
                 UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + sessionId,
                 LocalNotificationSettingsContent(isSilenced = true).toContent()
         )
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute() } returns false
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(sessionId) } returns true
+        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns false
+        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns true
 
         // When
         togglePushNotificationUseCase.execute(sessionId, true)

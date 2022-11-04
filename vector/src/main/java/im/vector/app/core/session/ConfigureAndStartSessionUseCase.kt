@@ -36,7 +36,6 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val enableNotificationsSettingUpdater: EnableNotificationsSettingUpdater,
 ) {
 
-    // TODO update unit tests
     suspend fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
