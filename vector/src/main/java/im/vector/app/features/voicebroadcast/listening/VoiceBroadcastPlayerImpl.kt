@@ -166,8 +166,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 }
             }
             State.BUFFERING -> {
-                val newMediaContent = getNextAudioContent()
-                if (newMediaContent != null) {
+                val nextItem = playlist.getNextItem()
+                if (nextItem != null) {
                     val savedPosition = currentVoiceBroadcast?.let { playbackTracker.getPlaybackTime(it.voiceBroadcastId) }
                     startPlayback(savedPosition)
                 }
@@ -222,14 +222,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private fun getNextAudioContent(): MessageAudioContent? {
-        return playlist.getNextItem()?.audioEvent?.content
-    }
-
     private fun prepareNextMediaPlayer() {
         nextMediaPlayer = null
-        val nextContent = getNextAudioContent()
-        if (nextContent != null) {
+        val nextItem = playlist.getNextItem()
+        if (nextItem != null) {
             sessionScope.launch {
                 prepareMediaPlayer(nextContent) { mp ->
                     if (nextMediaPlayer == null) {
