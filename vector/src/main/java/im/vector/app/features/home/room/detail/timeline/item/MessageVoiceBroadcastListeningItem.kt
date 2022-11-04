@@ -94,7 +94,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress))
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress, duration))
                 isUserSeeking = false
             }
         })

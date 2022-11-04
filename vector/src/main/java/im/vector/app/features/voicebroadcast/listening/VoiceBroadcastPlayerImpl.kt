@@ -94,8 +94,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     override fun pause() {
-        currentMediaPlayer?.pause()
-        playingState = State.PAUSED
+        pausePlayback()
     }
 
     override fun stop() {
@@ -212,16 +211,39 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private fun resumePlayback() {
-        currentMediaPlayer?.start()
-        playingState = State.PLAYING
+    private fun pausePlayback(positionMillis: Int? = null) {
+        if (positionMillis == null) {
+            currentMediaPlayer?.pause()
+        } else {
+            stopPlayer()
+            currentVoiceBroadcast?.voiceBroadcastId?.let { id ->
+                playbackTracker.updatePausedAtPlaybackTime(id, positionMillis, positionMillis.toFloat() / playlist.duration)
+            }
+        }
+        playingState = State.PAUSED
     }
 
-    override fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int) {
-        if (voiceBroadcast != currentVoiceBroadcast) {
-            playbackTracker.updatePausedAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, 0f)
+    private fun resumePlayback() {
+        if (currentMediaPlayer != null) {
+            currentMediaPlayer?.start()
+            playingState = State.PLAYING
         } else {
-            startPlayback(positionMillis)
+            val position = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPlaybackTime(it) }
+            startPlayback(position)
+        }
+    }
+
+    override fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int, duration: Int) {
+        when {
+            voiceBroadcast != currentVoiceBroadcast -> {
+                playbackTracker.updatePausedAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
+            }
+            playingState == State.PLAYING || playingState == State.BUFFERING -> {
+                startPlayback(positionMillis)
+            }
+            playingState == State.IDLE || playingState == State.PAUSED -> {
+                pausePlayback(positionMillis)
+            }
         }
     }
 

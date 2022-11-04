@@ -637,7 +637,7 @@ class TimelineViewModel @AssistedInject constructor(
                 is VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(action.voiceBroadcast)
                 VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
                 VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()
-                is VoiceBroadcastAction.Listening.SeekTo -> voiceBroadcastHelper.seekTo(action.voiceBroadcast, action.positionMillis)
+                is VoiceBroadcastAction.Listening.SeekTo -> voiceBroadcastHelper.seekTo(action.voiceBroadcast, action.positionMillis, action.duration)
             }
         }
     }
