@@ -65,6 +65,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private var currentMediaPlayer: MediaPlayer? = null
     private var nextMediaPlayer: MediaPlayer? = null
+    private var isPreparingNextPlayer: Boolean = false
 
     private var currentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
 
@@ -156,12 +157,12 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private fun onPlaylistUpdated() {
         when (playingState) {
             State.PLAYING -> {
-                if (nextMediaPlayer == null) {
+                if (nextMediaPlayer == null && !isPreparingNextPlayer) {
                     prepareNextMediaPlayer()
                 }
             }
             State.PAUSED -> {
-                if (nextMediaPlayer == null) {
+                if (nextMediaPlayer == null && !isPreparingNextPlayer) {
                     prepareNextMediaPlayer()
                 }
             }
@@ -223,17 +224,14 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun prepareNextMediaPlayer() {
-        nextMediaPlayer = null
         val nextItem = playlist.getNextItem()
         if (nextItem != null) {
+            isPreparingNextPlayer = true
             sessionScope.launch {
-                prepareMediaPlayer(nextContent) { mp ->
-                    if (nextMediaPlayer == null) {
-                        nextMediaPlayer = mp
-                        currentMediaPlayer?.setNextMediaPlayer(mp)
-                    } else {
-                        mp.release()
-                    }
+                prepareMediaPlayer(nextItem.audioEvent.content) { mp ->
+                    nextMediaPlayer = mp
+                    currentMediaPlayer?.setNextMediaPlayer(mp)
+                    isPreparingNextPlayer = false
                 }
             }
         }
@@ -274,6 +272,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         nextMediaPlayer?.release()
         nextMediaPlayer = null
+        isPreparingNextPlayer = false
     }
 
     private fun onPlayingStateChanged(playingState: State) {
