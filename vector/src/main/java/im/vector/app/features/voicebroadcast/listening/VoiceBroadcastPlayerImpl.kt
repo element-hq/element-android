@@ -74,9 +74,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     override var playingState = State.IDLE
         @MainThread
         set(value) {
-            Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
-            field = value
-            onPlayingStateChanged(value)
+            if (field != value) {
+                Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
+                field = value
+                onPlayingStateChanged(value)
+            }
         }
 
     /** Map voiceBroadcastId to listeners.*/
@@ -299,6 +301,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                     playlist.currentSequence = playlist.currentSequence?.inc()
                     currentMediaPlayer = mp
                     nextMediaPlayer = null
+                    playingState = State.PLAYING
                     prepareNextMediaPlayer()
                 }
             }
