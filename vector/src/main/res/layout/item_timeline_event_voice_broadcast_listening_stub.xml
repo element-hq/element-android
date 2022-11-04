@@ -100,7 +100,7 @@
         android:id="@+id/fastBackwardButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_backward"
         android:src="@drawable/ic_player_backward_30"
         app:tint="?vctr_content_secondary" />
@@ -127,7 +127,7 @@
         android:id="@+id/fastForwardButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_forward"
         android:src="@drawable/ic_player_forward_30"
         app:tint="?vctr_content_secondary" />

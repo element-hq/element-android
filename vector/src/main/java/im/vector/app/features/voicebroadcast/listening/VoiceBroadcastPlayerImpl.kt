@@ -371,7 +371,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         private fun onPlaybackTick(id: String) {
             val currentItem = playlist.currentItem ?: return
             val itemStartTime = currentItem.startTime
-            val duration = playlist.duration
             when (playingState) {
                 State.PLAYING,
                 State.PAUSED -> {
@@ -383,15 +382,13 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                         playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
                     }
                 }
-                State.BUFFERING,
-                State.IDLE -> {
+                State.BUFFERING -> {
                     val playbackTime = playbackTracker.getPlaybackTime(id)
                     val percentage = playbackTracker.getPercentage(id)
-                    if (playingState == State.IDLE && duration > 0 && (duration - playbackTime) < 100) {
-                        playbackTracker.stopPlayback(id)
-                    } else {
-                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
-                    }
+                    playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                }
+                State.IDLE -> {
+                    playbackTracker.stopPlayback(id)
                 }
             }
         }

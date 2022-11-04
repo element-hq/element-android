@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
@@ -48,6 +49,32 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         }
         player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
+        bindButtons(holder)
+    }
+
+    private fun bindButtons(holder: Holder) {
+        with(holder) {
+            playPauseButton.onClick {
+                when (player.playingState) {
+                    VoiceBroadcastPlayer.State.PLAYING -> {
+                        callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
+                    }
+                    VoiceBroadcastPlayer.State.PAUSED,
+                    VoiceBroadcastPlayer.State.IDLE -> {
+                        callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
+                    }
+                    VoiceBroadcastPlayer.State.BUFFERING -> Unit
+                }
+            }
+            fastBackwardButton.onClick {
+                val newPos = seekBar.progress.minus(30_000).coerceIn(0, duration)
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
+            }
+            fastForwardButton.onClick {
+                val newPos = seekBar.progress.plus(30_000).coerceIn(0, duration)
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
+            }
+        }
     }
 
     override fun renderMetadata(holder: Holder) {
@@ -63,20 +90,15 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
             playPauseButton.isVisible = state != VoiceBroadcastPlayer.State.BUFFERING
 
-            fastBackwardButton.isInvisible = true
-            fastForwardButton.isInvisible = true
-
             when (state) {
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast)) }
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
@@ -99,23 +121,22 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             }
         })
         playbackTracker.track(voiceBroadcast.voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
-            override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
-                when (state) {
-                    is AudioMessagePlaybackTracker.Listener.State.Paused -> {
-                        if (!isUserSeeking) {
-                            holder.seekBar.progress = state.playbackTime
-                        }
-                    }
-                    is AudioMessagePlaybackTracker.Listener.State.Playing -> {
-                        if (!isUserSeeking) {
-                            holder.seekBar.progress = state.playbackTime
-                        }
-                    }
-                    AudioMessagePlaybackTracker.Listener.State.Idle -> Unit
-                    is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
+            override fun onUpdate(state: State) {
+                renderBackwardForwardButtons(holder, state)
+                if (!isUserSeeking) {
+                    holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
                 }
             }
         })
+    }
+
+    private fun renderBackwardForwardButtons(holder: Holder, playbackState: State) {
+        val isPlayingOrPaused = playbackState is State.Playing || playbackState is State.Paused
+        val playbackTime = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
+        val canBackward = isPlayingOrPaused && playbackTime > 0
+        val canForward = isPlayingOrPaused && playbackTime < duration
+        holder.fastBackwardButton.isInvisible = !canBackward
+        holder.fastForwardButton.isInvisible = !canForward
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
