@@ -358,12 +358,14 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             playbackTicker = null
 
             val totalDuration = playlist.duration
-            val playbackTime = playbackTracker.getPlaybackTime(id)
-            val remainingTime = totalDuration - playbackTime
-            if (remainingTime < 1000) {
-                playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
-            } else {
-                playbackTracker.pausePlayback(id)
+            if (totalDuration > 0) {
+                val playbackTime = playbackTracker.getPlaybackTime(id)
+                val remainingTime = totalDuration - playbackTime
+                if (remainingTime < 1000) {
+                    playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
+                } else {
+                    playbackTracker.pausePlayback(id)
+                }
             }
         }
     }
