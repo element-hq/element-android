@@ -355,7 +355,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         fun startPlaybackTicker(id: String) {
             playbackTicker?.stop()
-            playbackTicker = CountUpTimer().apply {
+            playbackTicker = CountUpTimer(50L).apply {
                 tickListener = CountUpTimer.TickListener { onPlaybackTick(id) }
                 resume()
             }
@@ -388,7 +388,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 State.IDLE -> {
                     val playbackTime = playbackTracker.getPlaybackTime(id)
                     val percentage = playbackTracker.getPercentage(id)
-                    if (playingState == State.IDLE && duration > 0 && (duration - playbackTime) < 1000) {
+                    if (playingState == State.IDLE && duration > 0 && (duration - playbackTime) < 100) {
                         playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
                     } else {
                         playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
