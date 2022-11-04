@@ -2653,7 +2653,7 @@
     <string name="device_manager_sessions_other_description">V záujme čo najlepšieho zabezpečenia, overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
     <string name="device_manager_sessions_other_title">Iné relácie</string>
     <string name="settings_sessions_list">Relácie</string>
-    <string name="a11y_open_spaces">Otvoriť zoznam priestorov</string>
+    <string name="a11y_open_spaces">Zoznam priestorov</string>
     <string name="a11y_create_message">Vytvoriť novú konverzáciu alebo miestnosť</string>
     <string name="room_list_filter_people">Ľudia</string>
     <string name="room_list_filter_favourites">Obľúbené</string>

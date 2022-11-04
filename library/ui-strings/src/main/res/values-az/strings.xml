@@ -20,7 +20,7 @@
     <string name="notice_placed_voice_call">%s səsli zəng etdi.</string>
     <string name="notice_answered_call">%s zəngə cavab verdi.</string>
     <string name="notice_ended_call">%s zəng başa çatdı.</string>
-    <string name="notice_made_future_room_visibility">"%1$s gələcək otaq tarixçəsini %2$s-ə  görünən etdi"</string>
+    <string name="notice_made_future_room_visibility">%1$s gələcək otaq tarixçəsini %2$s-ə görünən etdi</string>
     <string name="notice_room_visibility_invited">bütün otaq üzvləri, dəvət olunduğu andan.</string>
     <string name="notice_room_visibility_joined">bütün otaq üzvləri, qoşulduğu andan.</string>
     <string name="notice_room_visibility_shared">bütün otaq üzvləri.</string>
@@ -48,8 +48,9 @@
 \nKriptografiyanın idxalı</string>
     <string name="initial_sync_start_importing_account_rooms">İlkin sinxronizasiya:
 \nOtaqlar idxalı</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">İlkin sinxronizasiya:
-\nOtaqlara daxil olmaq</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">İlkin sinxronizasiya: 
+\nSöhbətləriniz yüklənilir
+\nƏgər çoxlu otaqlara qoşulmusunuzsa, bu, bir az vaxt apara bilər</string>
     <string name="initial_sync_start_importing_account_invited_rooms">İlkin sinxronizasiya:
 \nDəvət olunmuş otaqların idxalı</string>
     <string name="initial_sync_start_importing_account_left_rooms">İlkin sinxronizasiya:
@@ -133,4 +134,6 @@
     <string name="notice_room_third_party_invite_by_you">Otağa qoşulmaq üçün %1$s-a dəvət göndərdiniz</string>
     <string name="notice_room_server_acl_updated_title">%s, bu otaq üçün server ACL-lərini dəyişdi.</string>
     <string name="notice_room_server_acl_set_allowed">• %s ilə uyğunlaşan serverlərə icazə verildi.</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Siz %1$s üçün otağa qoşulmaq dəvətin ləğv etdiniz</string>
+    <string name="notice_direct_room_third_party_invite_by_you">%1$s-ı dəvət etdiniz</string>
 </resources>
