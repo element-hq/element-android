@@ -108,7 +108,6 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     }
                     is AudioMessagePlaybackTracker.Listener.State.Playing -> {
                         if (!isUserSeeking) {
-//                            Timber.d("Voice Broadcast | AudioMessagePlaybackTracker.Listener.onUpdate - duration: $duration, playbackTime: ${state.playbackTime}")
                             holder.seekBar.progress = state.playbackTime
                         }
                     }

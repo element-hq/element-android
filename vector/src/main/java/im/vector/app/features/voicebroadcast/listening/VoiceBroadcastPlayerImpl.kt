@@ -375,7 +375,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             when (playingState) {
                 State.PLAYING,
                 State.PAUSED -> {
-                    Timber.d("Voice Broadcast | VoiceBroadcastPlayerImpl - sequence: ${playlist.currentSequence}, itemStartTime $itemStartTime, currentMediaPlayer=$currentMediaPlayer, currentMediaPlayer?.currentPosition: ${currentMediaPlayer?.currentPosition}")
                     val position = itemStartTime + (currentMediaPlayer?.currentPosition ?: 0)
                     val percentage = position.toFloat() / playlist.duration
                     if (playingState == State.PLAYING) {
