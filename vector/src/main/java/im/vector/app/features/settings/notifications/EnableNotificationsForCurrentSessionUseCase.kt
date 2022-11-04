@@ -37,7 +37,6 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(fragmentActivity: FragmentActivity) {
         val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
         if (pusherForCurrentSession == null) {

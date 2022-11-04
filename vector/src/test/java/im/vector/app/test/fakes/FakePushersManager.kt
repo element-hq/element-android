@@ -17,9 +17,15 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.core.pushers.PushersManager
+import io.mockk.every
 import io.mockk.mockk
+import org.matrix.android.sdk.api.session.pushers.Pusher
 
 class FakePushersManager {
 
     val instance = mockk<PushersManager>()
+
+    fun givenGetPusherForCurrentSessionReturns(pusher: Pusher?) {
+        every { instance.getPusherForCurrentSession() } returns pusher
+    }
 }
