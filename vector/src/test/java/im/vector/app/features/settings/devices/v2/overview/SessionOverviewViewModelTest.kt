@@ -22,11 +22,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
-import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
@@ -77,7 +77,7 @@ class SessionOverviewViewModelTest {
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
-    private val fakeGetNotificationsStatusUseCase = mockk<GetNotificationsStatusUseCase>()
+    private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
 
     private fun createViewModel() = SessionOverviewViewModel(
@@ -90,7 +90,7 @@ class SessionOverviewViewModelTest {
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
-            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase,
+            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
     )
 
     @Before
@@ -100,7 +100,11 @@ class SessionOverviewViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
-        every { fakeGetNotificationsStatusUseCase.execute(fakeActiveSessionHolder.fakeSession, A_SESSION_ID_1) } returns flowOf(notificationsStatus)
+        fakeGetNotificationsStatusUseCase.givenExecuteReturns(
+                fakeActiveSessionHolder.fakeSession,
+                A_SESSION_ID_1,
+                notificationsStatus
+        )
     }
 
     private fun givenVerificationService(): FakeVerificationService {

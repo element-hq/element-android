@@ -19,8 +19,7 @@ package im.vector.app.core.notification
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -35,11 +34,11 @@ class UpdateEnableNotificationsSettingOnChangeUseCase @Inject constructor(
         private val getNotificationsStatusUseCase: GetNotificationsStatusUseCase,
 ) {
 
-    // TODO add unit tests
-    fun execute(session: Session): Flow<NotificationsStatus> {
-        val deviceId = session.sessionParams.deviceId ?: return emptyFlow()
-        return getNotificationsStatusUseCase.execute(session, deviceId)
+    suspend fun execute(session: Session) {
+        val deviceId = session.sessionParams.deviceId ?: return
+        getNotificationsStatusUseCase.execute(session, deviceId)
                 .onEach(::updatePreference)
+                .collect()
     }
 
     private fun updatePreference(notificationStatus: NotificationsStatus) {

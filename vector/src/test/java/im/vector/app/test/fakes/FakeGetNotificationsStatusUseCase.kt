@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.notification
+package im.vector.app.test.fakes
 
-import im.vector.app.features.session.coroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class EnableNotificationsSettingUpdater @Inject constructor(
-        private val updateEnableNotificationsSettingOnChangeUseCase: UpdateEnableNotificationsSettingOnChangeUseCase,
-) {
+class FakeGetNotificationsStatusUseCase {
 
-    private var job: Job? = null
+    val instance = mockk<GetNotificationsStatusUseCase>()
 
-    fun onSessionsStarted(session: Session) {
-        job?.cancel()
-        job = session.coroutineScope.launch {
-            updateEnableNotificationsSettingOnChangeUseCase.execute(session)
-        }
+    fun givenExecuteReturns(
+            session: Session,
+            sessionId: String,
+            notificationsStatus: NotificationsStatus
+    ) {
+        every { instance.execute(session, sessionId) } returns flowOf(notificationsStatus)
     }
 }
