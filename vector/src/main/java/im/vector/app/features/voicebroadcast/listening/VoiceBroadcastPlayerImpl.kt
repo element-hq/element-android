@@ -56,16 +56,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private val session get() = sessionHolder.getActiveSession()
     private val sessionScope get() = session.coroutineScope
 
-    private var fetchPlaylistTask: Job? = null
-    private var voiceBroadcastStateTask: Job? = null
-
     private val mediaPlayerListener = MediaPlayerListener()
     private val playbackTicker = PlaybackTicker()
+    private val playlist = VoiceBroadcastPlaylist()
+
+    private var fetchPlaylistTask: Job? = null
+    private var voiceBroadcastStateObserver: Job? = null
 
     private var currentMediaPlayer: MediaPlayer? = null
     private var nextMediaPlayer: MediaPlayer? = null
 
-    private val playlist = VoiceBroadcastPlaylist()
     private var currentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
 
     override var currentVoiceBroadcast: VoiceBroadcast? = null
@@ -105,8 +105,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         // Do not observe anymore voice broadcast changes
         fetchPlaylistTask?.cancel()
         fetchPlaylistTask = null
-        voiceBroadcastStateTask?.cancel()
-        voiceBroadcastStateTask = null
+        voiceBroadcastStateObserver?.cancel()
+        voiceBroadcastStateObserver = null
 
         // Clear playlist
         playlist.reset()
@@ -139,7 +139,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun observeVoiceBroadcastLiveState(voiceBroadcast: VoiceBroadcast) {
-        voiceBroadcastStateTask = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
+        voiceBroadcastStateObserver = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
                 .onEach { currentVoiceBroadcastEvent = it.getOrNull() }
                 .launchIn(sessionScope)
     }
@@ -345,7 +345,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             if (currentMediaPlayer?.isPlaying.orFalse()) {
                 val itemStartPosition = playlist.currentItem?.startTime
                 val currentVoiceBroadcastPosition = itemStartPosition?.plus(currentMediaPlayer?.currentPosition ?: 0)
-                Timber.d("Voice Broadcast | VoiceBroadcastPlayerImpl - sequence: $currentSequence, itemStartPosition $itemStartPosition, currentMediaPlayer=$currentMediaPlayer, currentMediaPlayer?.currentPosition: ${currentMediaPlayer?.currentPosition}")
+                Timber.d("Voice Broadcast | VoiceBroadcastPlayerImpl - sequence: ${playlist.currentSequence}, itemStartPosition $itemStartPosition, currentMediaPlayer=$currentMediaPlayer, currentMediaPlayer?.currentPosition: ${currentMediaPlayer?.currentPosition}")
                 if (currentVoiceBroadcastPosition != null) {
                     val percentage = currentVoiceBroadcastPosition.toFloat() / playlist.duration
                     playbackTracker.updatePlayingAtPlaybackTime(id, currentVoiceBroadcastPosition, percentage)
