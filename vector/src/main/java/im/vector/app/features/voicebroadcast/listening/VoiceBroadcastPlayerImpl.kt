@@ -171,12 +171,12 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 val nextItem = playlist.getNextItem()
                 if (nextItem != null) {
                     val savedPosition = currentVoiceBroadcast?.let { playbackTracker.getPlaybackTime(it.voiceBroadcastId) }
-                    startPlayback(savedPosition)
+                    startPlayback(savedPosition?.takeIf { it > 0 })
                 }
             }
             State.IDLE -> {
                 val savedPosition = currentVoiceBroadcast?.let { playbackTracker.getPlaybackTime(it.voiceBroadcastId) }
-                startPlayback(savedPosition)
+                startPlayback(savedPosition?.takeIf { it > 0 })
             }
         }
     }
@@ -389,7 +389,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                     val playbackTime = playbackTracker.getPlaybackTime(id)
                     val percentage = playbackTracker.getPercentage(id)
                     if (playingState == State.IDLE && duration > 0 && (duration - playbackTime) < 100) {
-                        playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
+                        playbackTracker.stopPlayback(id)
                     } else {
                         playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
                     }
