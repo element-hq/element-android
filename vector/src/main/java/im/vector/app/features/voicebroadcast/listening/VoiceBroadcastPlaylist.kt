@@ -24,8 +24,8 @@ class VoiceBroadcastPlaylist(
         private val items: MutableList<PlaylistItem> = mutableListOf(),
 ) : List<PlaylistItem> by items {
 
-    var currentSequence = 1
-    val currentItem get() = findBySequence(currentSequence)
+    var currentSequence: Int? = null
+    val currentItem get() = currentSequence?.let { findBySequence(it) }
 
     val duration
         get() = items.lastOrNull()?.let { it.startTime + it.audioEvent.duration } ?: 0
@@ -47,7 +47,7 @@ class VoiceBroadcastPlaylist(
     }
 
     fun reset() {
-        currentSequence = 1
+        currentSequence = null
         items.clear()
     }
 
@@ -59,7 +59,7 @@ class VoiceBroadcastPlaylist(
         return items.find { it.audioEvent.sequence == sequenceNumber }
     }
 
-    fun getNextItem() = findBySequence(currentSequence.plus(1))
+    fun getNextItem() = findBySequence(currentSequence?.plus(1) ?: 1)
 
     fun firstOrNull() = findBySequence(1)
 }

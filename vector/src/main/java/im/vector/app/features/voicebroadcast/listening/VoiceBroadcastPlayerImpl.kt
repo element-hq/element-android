@@ -296,7 +296,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         override fun onInfo(mp: MediaPlayer, what: Int, extra: Int): Boolean {
             when (what) {
                 MediaPlayer.MEDIA_INFO_STARTED_AS_NEXT -> {
-                    playlist.currentSequence++
+                    playlist.currentSequence = playlist.currentSequence?.inc()
                     currentMediaPlayer = mp
                     nextMediaPlayer = null
                     prepareNextMediaPlayer()
