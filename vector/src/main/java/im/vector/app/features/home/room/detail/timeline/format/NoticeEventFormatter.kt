@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
+import org.matrix.android.sdk.api.session.events.model.getIdsOfPinnedEvents
+import org.matrix.android.sdk.api.session.events.model.getPreviousIdsOfPinnedEvents
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
@@ -86,6 +88,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, isDm)
             EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_PINNED_EVENT -> formatPinnedEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
@@ -116,6 +119,19 @@ class NoticeEventFormatter @Inject constructor(
                 null
             }
         }
+    }
+
+    private fun formatPinnedEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
+        val idsOfPinnedEvents: MutableList<String> = event.getIdsOfPinnedEvents() ?: return null
+        val previousIdsOfPinnedEvents: MutableList<String>? = event.getPreviousIdsOfPinnedEvents()
+        // A message was pinned
+        val pinnedMessageString = if (event.resolvedPrevContent() == null || previousIdsOfPinnedEvents != null && previousIdsOfPinnedEvents.size < idsOfPinnedEvents.size) {
+            sp.getString(R.string.user_pinned_message, disambiguatedDisplayName)
+        // A message was unpinned
+        } else {
+            sp.getString(R.string.user_unpinned_message, disambiguatedDisplayName)
+        }
+        return pinnedMessageString
     }
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
@@ -178,6 +194,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     fun format(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
+        Timber.v("°°°°°°°°°°°°°°°°°°°format(event: Event, senderName: String?, isDm: Boolean)")
         return when (val type = event.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(event, senderName, isDm)
             EventType.STATE_ROOM_NAME -> formatRoomNameEvent(event, senderName)
@@ -872,6 +889,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     fun formatRedactedEvent(event: Event): String {
+        Timber.v("°°°°°°°formatRedactedEvent°°°°°°")
         return (event
                 .unsignedData
                 ?.redactedEvent

@@ -34,6 +34,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getIdsOfPinnedEvents
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -63,7 +66,8 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
-        stateEventDataSource: StateEventDataSource,
+        private val stateEventDataSource: StateEventDataSource,
+        private val timelineEventDataSource: TimelineEventDataSource,
         paginationTask: PaginationTask,
         getEventTask: GetContextOfEventTask,
         fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
@@ -95,6 +99,9 @@ internal class DefaultTimeline(
     private var isFromThreadTimeline = false
     private var rootThreadEventId: String? = null
 
+    private var isFromPinnedMessagesTimeline = false
+    private var rootPinnedMessageEventId: String? = null
+
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
             timelineSettings = settings,
             realm = backgroundRealm,
@@ -125,7 +132,11 @@ internal class DefaultTimeline(
     override fun addListener(listener: Timeline.Listener): Boolean {
         listeners.add(listener)
         timelineScope.launch {
-            val snapshot = strategy.buildSnapshot()
+            val snapshot = if (isFromPinnedMessagesTimeline) {
+                getPinnedEvents()
+            } else {
+                strategy.buildSnapshot()
+            }
             withContext(coroutineDispatchers.main) {
                 tryOrNull { listener.onTimelineUpdated(snapshot) }
             }
@@ -141,7 +152,7 @@ internal class DefaultTimeline(
         listeners.clear()
     }
 
-    override fun start(rootThreadEventId: String?) {
+    override fun start(rootThreadEventId: String?, rootPinnedMessageEventId: String?) {
         timelineScope.launch {
             loadRoomMembersIfNeeded()
         }
@@ -150,6 +161,8 @@ internal class DefaultTimeline(
                 if (isStarted.compareAndSet(false, true)) {
                     isFromThreadTimeline = rootThreadEventId != null
                     this@DefaultTimeline.rootThreadEventId = rootThreadEventId
+                    isFromPinnedMessagesTimeline = rootPinnedMessageEventId != null
+                    this@DefaultTimeline.rootPinnedMessageEventId = rootPinnedMessageEventId
                     // /
                     val realm = Realm.getInstance(realmConfiguration)
                     ensureReadReceiptAreLoaded(realm)
@@ -254,7 +267,12 @@ internal class DefaultTimeline(
             }
         }
         Timber.v("$baseLogMessage: result $loadMoreResult")
-        val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
+        val hasMoreToLoad = if (isFromPinnedMessagesTimeline) {
+            !areAllPinnedMessagesLoaded()
+        } else {
+            loadMoreResult != LoadMoreResult.REACHED_END
+        }
+
         updateState(direction) {
             it.copy(loading = false, hasMoreToLoad = hasMoreToLoad)
         }
@@ -334,7 +352,11 @@ internal class DefaultTimeline(
     }
 
     private suspend fun postSnapshot() {
-        val snapshot = strategy.buildSnapshot()
+        val snapshot = if (isFromPinnedMessagesTimeline) {
+            getPinnedEvents()
+        } else {
+            strategy.buildSnapshot()
+        }
         Timber.v("Post snapshot of ${snapshot.size} events")
         withContext(coroutineDispatchers.main) {
             listeners.forEach {
@@ -347,6 +369,28 @@ internal class DefaultTimeline(
                 }
             }
         }
+    }
+
+    private fun getIdsOfPinnedEvents(): MutableList<String> {
+        return stateEventDataSource
+                .getStateEvent(roomId, EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
+                ?.getIdsOfPinnedEvents() ?: mutableListOf("")
+    }
+
+    private fun getPinnedEvents(): List<TimelineEvent> {
+        val idsOfPinnedEvents = getIdsOfPinnedEvents()
+        val pinnedEvents = ArrayList<TimelineEvent>()
+        for (id in idsOfPinnedEvents) {
+            val timelineEvent = timelineEventDataSource.getTimelineEvent(roomId, id)
+            if (timelineEvent != null) {
+                pinnedEvents.add(timelineEvent)
+            }
+        }
+        return pinnedEvents.reversed()
+    }
+
+    private fun areAllPinnedMessagesLoaded(): Boolean {
+        return getIdsOfPinnedEvents().size == getPinnedEvents().size
     }
 
     private fun onNewTimelineEvents(eventIds: List<String>) {

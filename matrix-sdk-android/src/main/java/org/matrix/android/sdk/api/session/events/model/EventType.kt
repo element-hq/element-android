@@ -45,6 +45,7 @@ object EventType {
     const val STATE_ROOM_NAME = "m.room.name"
     const val STATE_ROOM_TOPIC = "m.room.topic"
     const val STATE_ROOM_AVATAR = "m.room.avatar"
+    const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
     const val STATE_ROOM_MEMBER = "m.room.member"
     const val STATE_ROOM_THIRD_PARTY_INVITE = "m.room.third_party_invite"
     const val STATE_ROOM_CREATE = "m.room.create"
@@ -67,7 +68,6 @@ object EventType {
     const val STATE_ROOM_CANONICAL_ALIAS = "m.room.canonical_alias"
     const val STATE_ROOM_HISTORY_VISIBILITY = "m.room.history_visibility"
     const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
-    const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
     const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 

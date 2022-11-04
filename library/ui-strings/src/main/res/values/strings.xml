@@ -373,6 +373,7 @@
     <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
+    <string name="action_open_pinned_messages">Open Pinned Messages</string>
     <string name="action_view_threads">View Threads</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
     <string name="action_quick_reply">Quick reply</string>
@@ -801,6 +802,12 @@
     <string name="threads_labs_enable_notice_title">Threads Beta</string>
     <string name="threads_labs_enable_notice_message">Your homeserver does not currently support threads, so this feature may be unreliable. Some threaded messages may not be reliably available. %sDo you want to enable threads anyway?</string>
 
+    <!-- Pinning -->
+    <string name="pinning_message">Pin</string>
+    <string name="unpinning_message">Unpin</string>
+    <string name="pinned_messages_timeline_title">Pinned Messages</string>
+    <string name="user_pinned_message">%1$s pinned a message.</string>
+    <string name="user_unpinned_message">%1$s unpinned a message.</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -3032,6 +3039,7 @@
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
+    <string name="labs_enable_pinned_messages">Enable Pinned Messages</string>
     <string name="labs_enable_thread_messages">Enable Thread Messages</string>
     <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
     <string name="settings_show_latest_profile">Show latest user info</string>

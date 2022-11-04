@@ -36,7 +36,7 @@ internal class DefaultResolveRoomStateTask @Inject constructor(
 
     override suspend fun execute(params: ResolveRoomStateTask.Params): List<Event> {
         return executeRequest(globalErrorReceiver) {
-            roomAPI.getRoomState(params.roomId)
+            roomAPI.getAllRoomStates(params.roomId)
         }
     }
 }

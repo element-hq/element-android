@@ -234,6 +234,8 @@ class VectorPreferences @Inject constructor(
 
         private const val SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS = "SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS"
 
+        private const val SETTINGS_LABS_ENABLE_PINNED_MESSAGES = "SETTINGS_LABS_ENABLE_PINNED_MESSAGES"
+
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
 
@@ -1110,6 +1112,10 @@ class VectorPreferences @Inject constructor(
 
     fun labsEnableElementCallPermissionShortcuts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_ELEMENT_CALL_PERMISSION_SHORTCUTS, false)
+    }
+
+    fun arePinnedMessagesEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_PINNED_MESSAGES, getDefault(R.bool.settings_labs_pinned_messages_default))
     }
 
     /**

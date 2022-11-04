@@ -42,6 +42,16 @@
 
     <!-- We always want to show this item as an icon -->
     <item
+        android:id="@+id/open_pinned_messages"
+        android:icon="@drawable/ic_open_pinned_messages"
+        android:title="@string/action_open_pinned_messages"
+        android:visible="true"
+        app:iconTint="?colorPrimary"
+        app:showAsAction="always"
+        tools:visible="true" />
+
+    <!-- We always want to show this item as an icon -->
+    <item
         android:id="@+id/menu_timeline_thread_list"
         android:title="@string/action_view_threads"
         android:visible="false"

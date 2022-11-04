@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMembersRespon
 import org.matrix.android.sdk.internal.session.room.membership.admin.UserIdAndReason
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBody
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
+import org.matrix.android.sdk.internal.session.room.pinnedmessages.PinnedEventsStateResponse
 import org.matrix.android.sdk.internal.session.room.read.ReadBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
@@ -233,11 +234,22 @@ internal interface RoomAPI {
     ): SendResponse
 
     /**
-     * Get state events of a room
+     * Get all state events of a room
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
-    suspend fun getRoomState(@Path("roomId") roomId: String): List<Event>
+    suspend fun getAllRoomStates(@Path("roomId") roomId: String): List<Event>
+
+    /**
+     * Get specific state event of a room
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state-eventtype-statekey
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{eventType}/{state_key}")
+    suspend fun getRoomState(
+                @Path("roomId") roomId: String,
+                @Path("eventType") eventType: String,
+                @Path("state_key") stateKey: String
+    ): PinnedEventsStateResponse
 
     /**
      * Paginate relations for event based in normal topological order.

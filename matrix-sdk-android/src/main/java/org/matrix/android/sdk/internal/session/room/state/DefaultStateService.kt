@@ -22,8 +22,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.query.QueryStateEventValue
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getIdsOfPinnedEvents
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
@@ -31,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.model.pinnedmessages.PinnedEventsStateContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -168,6 +171,23 @@ internal class DefaultStateService @AssistedInject constructor(
                 body = emptyMap(),
                 stateKey = ""
         )
+    }
+
+    override suspend fun pinMessage(eventIds: MutableList<String>) {
+        sendStateEvent(
+                eventType = EventType.STATE_ROOM_PINNED_EVENT,
+                body = PinnedEventsStateContent(eventIds).toContent(),
+                stateKey = ""
+        )
+    }
+
+    override fun getPinnedEventsState(): Event? {
+        return getStateEvent(EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
+    }
+
+    override fun isPinned(eventId: String): Boolean? {
+        val idsOfPinnedEvents: MutableList<String> = getPinnedEventsState()?.getIdsOfPinnedEvents() ?: return null
+        return idsOfPinnedEvents.contains(eventId)
     }
 
     override suspend fun setJoinRulePublic() {

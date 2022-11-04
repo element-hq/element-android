@@ -89,6 +89,7 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getIdsOfPinnedEvents
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
@@ -203,10 +204,12 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun initSafe(room: Room, timeline: Timeline) {
-        timeline.start(initialState.rootThreadEventId)
+        timeline.start(initialState.rootThreadEventId, initialState.rootPinnedMessageEventId)
         timeline.addListener(this)
         observeMembershipChanges()
-        observeSummaryState()
+        if (!initialState.isPinnedMessagesTimeline()) {
+            observeSummaryState()
+        }
         getUnreadState()
         observeSyncState()
         observeDataStore()
@@ -448,6 +451,8 @@ class TimelineViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
+            is RoomDetailAction.PinMessage -> handlePinMessage(action)
+            is RoomDetailAction.UnpinMessage -> handleUnpinMessage(action)
             is RoomDetailAction.ComposerFocusChange -> handleComposerFocusChange(action)
             is RoomDetailAction.SendMedia -> handleSendMedia(action)
             is RoomDetailAction.SendSticker -> handleSendSticker(action)
@@ -757,6 +762,14 @@ class TimelineViewModel @AssistedInject constructor(
         return room?.membershipService()?.getRoomMember(userId)
     }
 
+    fun getIdOfLastPinnedEvent(): String? {
+        return room
+                ?.stateService()
+                ?.getPinnedEventsState()
+                ?.getIdsOfPinnedEvents()
+                ?.last()
+    }
+
     private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         if (room == null) return
         // Ensure outbound session keys
@@ -827,6 +840,7 @@ class TimelineViewModel @AssistedInject constructor(
                     else -> false
                 }
             }
+            initialState.isPinnedMessagesTimeline() -> false
             else -> {
                 when (itemId) {
                     R.id.timeline_setting -> true
@@ -837,6 +851,7 @@ class TimelineViewModel @AssistedInject constructor(
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                     R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                     R.id.search -> state.isSearchAvailable()
+                    R.id.open_pinned_messages -> vectorPreferences.arePinnedMessagesEnabled() && areTherePinnedMessages()
                     R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                     R.id.dev_tools -> vectorPreferences.developerMode()
                     else -> false
@@ -1021,6 +1036,47 @@ class TimelineViewModel @AssistedInject constructor(
             setState { copy(highlightedEventId = targetEventId) }
         }
         _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
+    }
+
+    private fun handlePinMessage(action: RoomDetailAction.PinMessage) {
+        if (room == null) return
+        val idsOfPinnedMessages = getIdsOfPinnedEvents()
+        if (idsOfPinnedMessages == null) return
+        idsOfPinnedMessages.add(action.eventId)
+        sendPinnedStateEvent(idsOfPinnedMessages, action)
+    }
+
+    private fun handleUnpinMessage(action: RoomDetailAction.UnpinMessage) {
+        if (room == null) return
+        val idsOfPinnedMessages = getIdsOfPinnedEvents()
+        if (idsOfPinnedMessages == null) return
+        idsOfPinnedMessages.remove(action.eventId)
+        sendPinnedStateEvent(idsOfPinnedMessages, action)
+    }
+
+    private fun getIdsOfPinnedEvents(): MutableList<String>? {
+        return room
+                ?.stateService()
+                ?.getPinnedEventsState()
+                ?.getIdsOfPinnedEvents()
+    }
+
+    private fun areTherePinnedMessages(): Boolean {
+        val idsOfPinnedMessages = getIdsOfPinnedEvents() ?: return false
+        return idsOfPinnedMessages.isNotEmpty()
+    }
+
+    private fun sendPinnedStateEvent(eventIds: MutableList<String>, action: RoomDetailAction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                room
+                    ?.stateService()
+                    ?.pinMessage(eventIds)
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+            }
+        }
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {

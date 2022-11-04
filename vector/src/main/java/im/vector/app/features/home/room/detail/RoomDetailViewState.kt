@@ -71,6 +71,7 @@ data class RoomDetailViewState(
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
         val isAllowedToSetupEncryption: Boolean = true,
+        val rootPinnedMessageEventId: String?,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
         val switchToParentSpace: Boolean = false,
@@ -92,6 +93,7 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId,
             showKeyboardWhenPresented = args.threadTimelineArgs?.showKeyboard.orFalse(),
             sharedData = args.sharedData,
+            rootPinnedMessageEventId = args.pinnedMessagesTimelineArgs?.rootPinnedMessageEventId,
     )
 
     fun isCallOptionAvailable(): Boolean {
@@ -112,6 +114,8 @@ data class RoomDetailViewState(
     fun isDm() = asyncRoomSummary()?.isDirect == true
 
     fun isThreadTimeline() = rootThreadEventId != null
+
+    fun isPinnedMessagesTimeline() = rootPinnedMessageEventId != null
 
     fun isLocalRoom() = RoomLocalEcho.isLocalEchoId(roomId)
 }

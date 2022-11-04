@@ -33,6 +33,10 @@ data class TimelineSettings(
          */
         val rootThreadEventId: String? = null,
         /**
+         * The root pinned message eventId if this is a pinned messages timeline, or null if this is NOT a pinned messages timeline.
+         */
+        val rootPinnedMessageEventId: String? = null,
+        /**
          * If true Sender Info shown in room will get the latest data information (avatar + displayName).
          */
         val useLiveSenderInfo: Boolean = false,
@@ -42,4 +46,9 @@ data class TimelineSettings(
      * Returns true if this is a thread timeline or false otherwise.
      */
     fun isThreadTimeline() = rootThreadEventId != null
+
+    /**
+     * Returns true if this is a pinned messages timeline or false otherwise.
+     */
+    fun isPinnedMessagesTimeline() = rootPinnedMessageEventId != null
 }

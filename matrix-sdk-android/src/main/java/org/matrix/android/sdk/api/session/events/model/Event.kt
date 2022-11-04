@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
+import org.matrix.android.sdk.api.session.room.model.pinnedmessages.PinnedEventsStateContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.relation.isReply
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
@@ -447,3 +448,11 @@ fun Event.supportsNotification() =
 
 fun Event.isContentReportable() =
         this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO.values
+
+fun Event.getIdsOfPinnedEvents(): MutableList<String>? {
+    return getClearContent()?.toModel<PinnedEventsStateContent>()?.eventIds
+}
+
+fun Event.getPreviousIdsOfPinnedEvents(): MutableList<String>? {
+    return resolvedPrevContent()?.toModel<PinnedEventsStateContent>()?.eventIds
+}

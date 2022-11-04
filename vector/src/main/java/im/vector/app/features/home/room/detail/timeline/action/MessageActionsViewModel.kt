@@ -131,7 +131,8 @@ class MessageActionsViewModel @AssistedInject constructor(
                     val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
                     val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact)
+                    val canPinMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.STATE_ROOM_PINNED_EVENT)
+                    val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact, canPinMessage = canPinMessage)
                     setState {
                         copy(actionPermissions = permissions)
                     }
@@ -333,6 +334,13 @@ class MessageActionsViewModel @AssistedInject constructor(
     ) {
         val eventId = timelineEvent.eventId
         if (!timelineEvent.root.isRedacted()) {
+            if (initialState.isFromPinnedMessagesTimeline) {
+                if (actionPermissions.canPinMessage && vectorPreferences.arePinnedMessagesEnabled()) {
+                    add(EventSharedAction.UnpinMessage(eventId))
+                    add(EventSharedAction.ViewPinnedMessageInRoom(eventId))
+                }
+                return
+            }
             if (canReply(timelineEvent, messageContent, actionPermissions)) {
                 add(EventSharedAction.Reply(eventId))
             }
@@ -360,6 +368,16 @@ class MessageActionsViewModel @AssistedInject constructor(
 
             if (timelineEvent.canReact() && actionPermissions.canReact) {
                 add(EventSharedAction.AddReaction(eventId))
+            }
+
+            if (actionPermissions.canPinMessage && vectorPreferences.arePinnedMessagesEnabled()) {
+                val id: String = timelineEvent.root.eventId ?: return
+                val isPinned: Boolean = room?.stateService()?.isPinned(id) ?: return
+                if (isPinned) {
+                    add(EventSharedAction.UnpinMessage(eventId))
+                } else {
+                    add(EventSharedAction.PinMessage(eventId))
+                }
             }
 
             if (canViewReactions(timelineEvent)) {

@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail.timeline.action
+package im.vector.app.features.home.room.pinnedmessages.arguments
 
 import android.os.Parcelable
-import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
 @Parcelize
-data class TimelineEventFragmentArgs(
-        val eventId: String,
+data class PinnedMessagesTimelineArgs(
         val roomId: String,
-        val informationData: MessageInformationData,
-        val isFromThreadTimeline: Boolean = false,
-        val isFromPinnedMessagesTimeline: Boolean = false
+        val displayName: String?,
+        val avatarUrl: String?,
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel?,
+        val rootPinnedMessageEventId: String?
 ) : Parcelable
