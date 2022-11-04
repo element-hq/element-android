@@ -340,34 +340,37 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             onPlaybackTick(id)
         }
 
-        private fun onPlaybackTick(id: String) {
-            if (currentMediaPlayer?.isPlaying.orFalse()) {
-                val itemStartPosition = playlist.currentItem?.startTime
-                val currentVoiceBroadcastPosition = itemStartPosition?.plus(currentMediaPlayer?.currentPosition ?: 0)
-                Timber.d("Voice Broadcast | VoiceBroadcastPlayerImpl - sequence: ${playlist.currentSequence}, itemStartPosition $itemStartPosition, currentMediaPlayer=$currentMediaPlayer, currentMediaPlayer?.currentPosition: ${currentMediaPlayer?.currentPosition}")
-                if (currentVoiceBroadcastPosition != null) {
-                    val percentage = currentVoiceBroadcastPosition.toFloat() / playlist.duration
-                    playbackTracker.updatePlayingAtPlaybackTime(id, currentVoiceBroadcastPosition, percentage)
-                } else {
-                    stopPlaybackTicker(id)
-                }
-            } else {
-                stopPlaybackTicker(id)
-            }
-        }
-
         fun stopPlaybackTicker(id: String) {
             playbackTicker?.stop()
             playbackTicker = null
+            onPlaybackTick(id)
+        }
 
-            val totalDuration = playlist.duration
-            if (totalDuration > 0) {
-                val playbackTime = playbackTracker.getPlaybackTime(id)
-                val remainingTime = totalDuration - playbackTime
-                if (remainingTime < 1000) {
-                    playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
-                } else {
-                    playbackTracker.pausePlayback(id)
+        private fun onPlaybackTick(id: String) {
+            val currentItem = playlist.currentItem ?: return
+            val itemStartTime = currentItem.startTime
+            val duration = playlist.duration
+            when (playingState) {
+                State.PLAYING,
+                State.PAUSED -> {
+                    Timber.d("Voice Broadcast | VoiceBroadcastPlayerImpl - sequence: ${playlist.currentSequence}, itemStartTime $itemStartTime, currentMediaPlayer=$currentMediaPlayer, currentMediaPlayer?.currentPosition: ${currentMediaPlayer?.currentPosition}")
+                    val position = itemStartTime + (currentMediaPlayer?.currentPosition ?: 0)
+                    val percentage = position.toFloat() / playlist.duration
+                    if (playingState == State.PLAYING) {
+                        playbackTracker.updatePlayingAtPlaybackTime(id, position, percentage)
+                    } else {
+                        playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
+                    }
+                }
+                State.BUFFERING,
+                State.IDLE -> {
+                    val playbackTime = playbackTracker.getPlaybackTime(id)
+                    val percentage = playbackTracker.getPercentage(id)
+                    if (playingState == State.IDLE && duration > 0 && (duration - playbackTime) < 1000) {
+                        playbackTracker.updatePausedAtPlaybackTime(id, 0, 0f)
+                    } else {
+                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                    }
                 }
             }
         }

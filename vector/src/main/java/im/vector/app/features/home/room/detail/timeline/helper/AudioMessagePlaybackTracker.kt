@@ -127,7 +127,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    private fun getPercentage(id: String): Float {
+    fun getPercentage(id: String): Float {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.percentage
             is Listener.State.Paused -> state.percentage
