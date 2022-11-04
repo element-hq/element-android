@@ -2891,4 +2891,12 @@
         <item quantity="few">%1$d vybrané</item>
         <item quantity="other">%1$d vybraných</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Přepnutí režimu celé obrazovky</string>
+    <string name="attachment_type_selector_text_formatting">Formátování textu</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Již nahráváte hlasové vysílání. Ukončete prosím aktuální hlasové vysílání a zahajte nové.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Hlasové vysílání už nahrává někdo jiný. Počkejte, až jeho hlasové vysílání skončí, a zahajte nové.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nemáte potřebná oprávnění k zahájení hlasového vysílání v této místnosti. Obraťte se na správce místnosti, aby vám zvýšil oprávnění.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Nelze zahájit nové hlasové vysílání</string>
+    <string name="a11y_voice_broadcast_fast_backward">Přetočení o 30 sekund zpět</string>
+    <string name="a11y_voice_broadcast_fast_forward">Přetočení o 30 sekund dopředu</string>
 </resources>
