@@ -71,18 +71,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                     playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
-                    seekBar.isEnabled = true
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
                     playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast)) }
-                    seekBar.isEnabled = false
                 }
-                VoiceBroadcastPlayer.State.BUFFERING -> {
-                    seekBar.isEnabled = true
-                }
+                VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
         }
     }
@@ -112,6 +108,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     }
                     is AudioMessagePlaybackTracker.Listener.State.Playing -> {
                         if (!isUserSeeking) {
+//                            Timber.d("Voice Broadcast | AudioMessagePlaybackTracker.Listener.onUpdate - duration: $duration, playbackTime: ${state.playbackTime}")
                             holder.seekBar.progress = state.playbackTime
                         }
                     }

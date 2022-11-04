@@ -29,9 +29,12 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningReduce
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
@@ -57,7 +60,7 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
         val existingChunks = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
                 .mapNotNull { timelineEvent -> timelineEvent.root.asMessageAudioEvent().takeIf { it.isVoiceBroadcast() } }
 
-        val voiceBroadcastEvent = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
+        val voiceBroadcastEvent = runBlocking { getVoiceBroadcastEventUseCase.execute(voiceBroadcast).firstOrNull()?.getOrNull() }
         val voiceBroadcastState = voiceBroadcastEvent?.content?.voiceBroadcastState
 
         return if (voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED) {

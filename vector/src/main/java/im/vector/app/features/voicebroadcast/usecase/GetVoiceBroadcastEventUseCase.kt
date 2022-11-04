@@ -16,12 +16,26 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,14 +43,27 @@ class GetVoiceBroadcastEventUseCase @Inject constructor(
         private val session: Session,
 ) {
 
-    fun execute(voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
+    fun execute(voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
         val room = session.getRoom(voiceBroadcast.roomId) ?: error("Unknown roomId: ${voiceBroadcast.roomId}")
 
         Timber.d("## GetVoiceBroadcastUseCase: get voice broadcast $voiceBroadcast")
 
         val initialEvent = room.timelineService().getTimelineEvent(voiceBroadcast.voiceBroadcastId)?.root?.asVoiceBroadcastEvent()
-        val relatedEvents = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
-                .sortedBy { it.root.originServerTs }
-        return relatedEvents.mapNotNull { it.root.asVoiceBroadcastEvent() }.lastOrNull() ?: initialEvent
+        val latestEvent = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
+                .mapNotNull { it.root.asVoiceBroadcastEvent() }
+                .maxByOrNull { it.root.originServerTs ?: 0 }
+                ?: initialEvent
+
+        return when (latestEvent?.content?.voiceBroadcastState) {
+            null, VoiceBroadcastState.STOPPED -> flowOf(latestEvent.toOptional())
+            else     -> {
+                room.flow()
+                        .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(latestEvent.root.stateKey.orEmpty()))
+                        .unwrap()
+                        .mapNotNull { it.asVoiceBroadcastEvent() }
+                        .filter { it.reference?.eventId == voiceBroadcast.voiceBroadcastId }
+                        .map { it.toOptional() }
+            }
+        }
     }
 }

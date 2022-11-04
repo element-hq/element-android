@@ -17,6 +17,8 @@
 package im.vector.app.features.voicebroadcast
 
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -34,3 +36,6 @@ fun MessageAudioEvent.getVoiceBroadcastChunk(): VoiceBroadcastChunk? {
 val MessageAudioEvent.sequence: Int? get() = getVoiceBroadcastChunk()?.sequence
 
 val MessageAudioEvent.duration get() = content.audioInfo?.duration ?: content.audioWaveformInfo?.duration ?: 0
+
+val VoiceBroadcastEvent.isLive
+    get() = content?.voiceBroadcastState != null && content?.voiceBroadcastState != VoiceBroadcastState.STOPPED

@@ -49,8 +49,6 @@ class VoiceBroadcastHelper @Inject constructor(
     fun stopPlayback() = voiceBroadcastPlayer.stop()
 
     fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int) {
-        if (voiceBroadcastPlayer.currentVoiceBroadcast == voiceBroadcast) {
-            voiceBroadcastPlayer.seekTo(positionMillis)
-        }
+        voiceBroadcastPlayer.seekTo(voiceBroadcast, positionMillis)
     }
 }

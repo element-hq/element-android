@@ -46,9 +46,9 @@ interface VoiceBroadcastPlayer {
     fun stop()
 
     /**
-     * Seek to the given playback position, is milliseconds.
+     * Seek the given voice broadcast playback to the given position, is milliseconds.
      */
-    fun seekTo(positionMillis: Int)
+    fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int)
 
     /**
      * Add a [Listener] to the given voice broadcast.
