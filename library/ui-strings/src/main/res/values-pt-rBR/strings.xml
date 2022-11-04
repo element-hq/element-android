@@ -2836,4 +2836,12 @@
         <item quantity="one">%1$d selecionada(o)</item>
         <item quantity="other">%1$d selecionadas(os)</item>
     </plurals>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Alguma outra pessoa já está gravando um broadcast de voz. Espere que o broadcast de voz dela termine para começar um novo.</string>
+    <string name="rich_text_editor_full_screen_toggle">Alternar modo de tela cheia</string>
+    <string name="attachment_type_selector_text_formatting">Formatação de texto</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Você já está gravando um broadcast de voz. Por favor termine seu broadcast de voz atual para começar um novo.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Você não tem as permissões requeridas para começar um broadcast de voz nesta sala. Contacte um/uma administrador(a) para fazer upgrade de suas permissões.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Não dá pra começar um novo broadcast de voz</string>
+    <string name="a11y_voice_broadcast_fast_forward">Avançar rápido 30 segundos</string>
+    <string name="a11y_voice_broadcast_fast_backward">Retroceder 30 segundos</string>
 </resources>
