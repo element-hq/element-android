@@ -298,6 +298,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 MediaPlayer.MEDIA_INFO_STARTED_AS_NEXT -> {
                     playlist.currentSequence++
                     currentMediaPlayer = mp
+                    nextMediaPlayer = null
                     prepareNextMediaPlayer()
                 }
             }
