@@ -22,6 +22,7 @@ import android.media.MediaPlayer.OnPreparedListener
 import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voicebroadcast.duration
 import im.vector.app.features.voicebroadcast.isLive
@@ -33,10 +34,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.sequence
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -48,7 +46,6 @@ import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.absoluteValue
 
 @Singleton
 class VoiceBroadcastPlayerImpl @Inject constructor(
@@ -58,10 +55,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         private val getLiveVoiceBroadcastChunksUseCase: GetLiveVoiceBroadcastChunksUseCase
 ) : VoiceBroadcastPlayer {
 
-    private val session
-        get() = sessionHolder.getActiveSession()
+    private val session get() = sessionHolder.getActiveSession()
+    private val sessionScope get() = session.coroutineScope
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var fetchPlaylistTask: Job? = null
     private var voiceBroadcastStateTask: Job? = null
 
@@ -151,13 +147,13 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private fun observeVoiceBroadcastLiveState(voiceBroadcast: VoiceBroadcast) {
         voiceBroadcastStateTask = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
                 .onEach { currentVoiceBroadcastEvent = it.getOrNull() }
-                .launchIn(coroutineScope)
+                .launchIn(sessionScope)
     }
 
     private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
         fetchPlaylistTask = getLiveVoiceBroadcastChunksUseCase.execute(voiceBroadcast)
                 .onEach(this::updatePlaylist)
-                .launchIn(coroutineScope)
+                .launchIn(sessionScope)
     }
 
     private fun updatePlaylist(audioEvents: List<MessageAudioEvent>) {
@@ -212,7 +208,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
         val sequence = playlistItem.audioEvent.sequence
         val sequencePosition = position?.let { it - playlistItem.startTime } ?: 0
-        coroutineScope.launch {
+        sessionScope.launch {
             try {
                 prepareMediaPlayer(content) { mp ->
                     currentMediaPlayer = mp
@@ -255,7 +251,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         nextMediaPlayer = null
         val nextContent = getNextAudioContent()
         if (nextContent != null) {
-            coroutineScope.launch {
+            sessionScope.launch {
                 prepareMediaPlayer(nextContent) { mp ->
                     if (nextMediaPlayer == null) {
                         nextMediaPlayer = mp
