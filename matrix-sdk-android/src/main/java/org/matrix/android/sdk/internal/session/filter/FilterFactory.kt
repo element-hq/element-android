@@ -66,8 +66,8 @@ internal object FilterFactory {
         )
     }
 
-    private fun createElementTimelineFilter(): RoomEventFilter? {
-        return RoomEventFilter(enableUnreadThreadNotifications = true)
+    private fun createElementTimelineFilter(): RoomEventFilter {
+        return RoomEventFilter()
     }
 
     private fun createElementStateFilter(): RoomEventFilter {
