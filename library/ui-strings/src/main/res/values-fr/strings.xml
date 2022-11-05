@@ -2836,4 +2836,12 @@
         <item quantity="one">%1$d sélectionné</item>
         <item quantity="other">%1$d sélectionnés</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Basculer en mode plein écran</string>
+    <string name="attachment_type_selector_text_formatting">Formatage de texte</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Vous êtes déjà en train de réaliser une diffusion audio. Veuillez terminer votre diffusion audio actuelle pour en démarrer une nouvelle.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Une autre personne est déjà en train de réaliser une diffusion audio. Attendez que sa diffusion audio soit terminée pour en démarrer une nouvelle.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Vous n’avez pas les permissions requises pour démarrer une nouvelle diffusion audio dans ce salon. Contactez un administrateur du salon pour mettre-à-jour vos permissions.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Impossible de commencer une nouvelle diffusion audio</string>
+    <string name="a11y_voice_broadcast_fast_forward">Avance rapide de 30 secondes</string>
+    <string name="a11y_voice_broadcast_fast_backward">Retour rapide de 30 secondes</string>
 </resources>
