@@ -896,7 +896,7 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
     <string name="settings_integration_manager">Përgjegjës integrimesh</string>
     <string name="push_gateway_item_app_id">ID Aplikacioni:</string>
-    <string name="push_gateway_item_push_key"></string>
+    <string name="push_gateway_item_push_key"/>
     <string name="push_gateway_item_app_display_name">Emër Aplikacioni Në Ekran:</string>
     <string name="push_gateway_item_device_name">Emër Sesioni Në Ekran:</string>
     <string name="bottom_action_people_x">Mesazhe të Drejtpërdrejtë</string>
@@ -1275,7 +1275,7 @@
 \n - Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni
 \n - Lidhja juaj internet ose ajo e përdoruesit tjetër
 \n - Pajisja juaj ose ajo e përdoruesit tjetër</string>
-    <string name="verification_request_other_cancelled"></string>
+    <string name="verification_request_other_cancelled">%s u anulua</string>
     <string name="verification_request_other_accepted">%s u pranua</string>
     <string name="verification_scan_notice">Skanojeni kodin me pajisjen e përdoruesit tjetër, për të verifikuar në mënyrë të sigurt njëri-tjetrin</string>
     <string name="verification_scan_emoji_subtitle">Nëse s’jeni vetë atje, krahasoni emoji-n</string>
@@ -2808,4 +2808,18 @@
         <item quantity="one">%1$d i përzgjedhura</item>
         <item quantity="other">%1$d të përzgjedhura</item>
     </plurals>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Shërbyesi Home nuk mbulon hyrje me kod QR.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">U has një problem sigurie, kur ujdisej shkëmbim i siguruar mesazhesh. Mund të jetë komprometuar një nga sa vijon: shërbyesi juaj Home; lidhja(et) tuaja internet; pajisja(et) tuaja;</string>
+    <string name="qr_code_login_header_failed_timeout_description">Lidhja s’u plotësua në kohën e duhur.</string>
+    <string name="qr_code_login_header_connected_description">Kontrolloni pajisjen ku jeni i futur, duhet të shfaqet kodi më poshtë. Sigurohuni se kodi më poshtë përputhet me atë pajisje:</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Skanoni kodin QR më poshtë me pajisjen tuaj prej nga është dalë nga llogaria.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Përdorni pajisjen tuaj ku jeni brenda llogarisë që të skanoni kodin QR më poshtë:</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Përdorni kamerën në këtë pajisje që të skanoni kodin QR të shfaqur në pajisjen tuaj tjetër:</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Mirato vetvetiu widget-e Thirrjesh Element Call dhe akordo përdorim kamere / mikfrofoni</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Po jepen kyçe dhome për mesazhe të dikurshëm</string>
+    <string name="settings_show_latest_profile_description">Shfaq hollësitë më të reja të profileve (avatar dhe emër në ekran) për krejt mesazhet.</string>
+    <string name="settings_security_incognito_keyboard_summary">Kërko doemos që tastiera të mos përditësojë ndonjë të dhënë të personalizuar, bie fjala, historik shtypjeje në të dhe fjalor bazuar në ç’keni shtypur në biseda. Kini parasysh se disa tastiera mund të mos e respektojnë këtë rregullim.</string>
+    <string name="verify_invalid_qr_notice">Ky kod QR duket i formuar keq. Ju lutemi, provoni ta verifikoni me tjetër metodë.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Keni aktivizuar fshehtëzim për sesionie të verifikuar vetëm për krejt dhomat, që nga Rregullime Sigurie.</string>
+    <string name="settings_autoplay_animated_images_summary">Luaj figura të animuara te rrjedha kohora sapo zënë të duken</string>
 </resources>
