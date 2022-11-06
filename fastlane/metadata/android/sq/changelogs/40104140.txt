@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Përmirësim i administrimit të përdoruesve të shpërfillur. Ndreqje të metash dhe përmirësime të ndryshme qëndrueshmërie.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
