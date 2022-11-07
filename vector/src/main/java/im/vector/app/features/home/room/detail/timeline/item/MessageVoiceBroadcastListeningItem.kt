@@ -140,8 +140,13 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     override fun unbind(holder: Holder) {
         super.unbind(holder)
         player.removeListener(voiceBroadcast, playerListener)
-        holder.seekBar.setOnSeekBarChangeListener(null)
         playbackTracker.untrack(voiceBroadcast.voiceBroadcastId)
+        with(holder) {
+            seekBar.onClick(null)
+            playPauseButton.onClick(null)
+            fastForwardButton.onClick(null)
+            fastBackwardButton.onClick(null)
+        }
     }
 
     override fun getViewStubId() = STUB_ID
