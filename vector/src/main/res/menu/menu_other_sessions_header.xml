@@ -5,6 +5,11 @@
     tools:ignore="AlwaysShowAction">
 
     <item
+        android:id="@+id/otherSessionsHeaderToggleIpAddress"
+        android:title="@string/device_manager_other_sessions_show_ip_address"
+        app:showAsAction="withText|never" />
+
+    <item
         android:id="@+id/otherSessionsHeaderMultiSignout"
         android:title="@plurals/device_manager_other_sessions_multi_signout_all"
         app:showAsAction="withText|never" />

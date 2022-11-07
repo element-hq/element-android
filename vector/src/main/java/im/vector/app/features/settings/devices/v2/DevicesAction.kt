@@ -29,4 +29,5 @@ sealed class DevicesAction : VectorViewModelAction {
     object VerifyCurrentSession : DevicesAction()
     data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
     object MultiSignoutOtherSessions : DevicesAction()
+    object ToggleIpAddressVisibility : DevicesAction()
 }

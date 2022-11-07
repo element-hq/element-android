@@ -116,7 +116,13 @@ class DevicesViewModel @AssistedInject constructor(
             is DevicesAction.VerifyCurrentSession -> handleVerifyCurrentSessionAction()
             is DevicesAction.MarkAsManuallyVerified -> handleMarkAsManuallyVerifiedAction()
             DevicesAction.MultiSignoutOtherSessions -> handleMultiSignoutOtherSessions()
+            DevicesAction.ToggleIpAddressVisibility -> handleToggleIpAddressVisibility()
         }
+    }
+
+    private fun handleToggleIpAddressVisibility() = withState { state ->
+        val isShowingIpAddress = state.isShowingIpAddress
+        setState { copy(isShowingIpAddress = !isShowingIpAddress) }
     }
 
     private fun handleVerifyCurrentSessionAction() {
