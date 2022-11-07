@@ -27,7 +27,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
-import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
@@ -53,11 +52,15 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     private fun bindButtons(holder: Holder) {
         with(holder) {
             playPauseButton.onClick {
-                when (player.playingState) {
-                    VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
-                    VoiceBroadcastPlayer.State.PAUSED,
-                    VoiceBroadcastPlayer.State.IDLE -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
-                    VoiceBroadcastPlayer.State.BUFFERING -> Unit
+                if (player.currentVoiceBroadcast == voiceBroadcast) {
+                    when (player.playingState) {
+                        VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
+                        VoiceBroadcastPlayer.State.PAUSED,
+                        VoiceBroadcastPlayer.State.IDLE -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
+                        VoiceBroadcastPlayer.State.BUFFERING -> Unit
+                    }
+                } else {
+                    callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                 }
             }
             fastBackwardButton.onClick {
