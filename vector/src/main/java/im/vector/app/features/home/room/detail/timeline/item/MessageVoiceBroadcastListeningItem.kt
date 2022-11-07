@@ -44,9 +44,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        playerListener = VoiceBroadcastPlayer.Listener { state ->
-            renderPlayingState(holder, state)
-        }
+        playerListener = VoiceBroadcastPlayer.Listener { renderPlayingState(holder, it) }
         player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
         bindButtons(holder)
@@ -56,13 +54,9 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         with(holder) {
             playPauseButton.onClick {
                 when (player.playingState) {
-                    VoiceBroadcastPlayer.State.PLAYING -> {
-                        callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
-                    }
+                    VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
                     VoiceBroadcastPlayer.State.PAUSED,
-                    VoiceBroadcastPlayer.State.IDLE -> {
-                        callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
-                    }
+                    VoiceBroadcastPlayer.State.IDLE -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                     VoiceBroadcastPlayer.State.BUFFERING -> Unit
                 }
             }
@@ -106,20 +100,22 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindSeekBar(holder: Holder) {
-        holder.durationView.text = formatPlaybackTime(duration)
-        holder.seekBar.max = duration
-        holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
+        with(holder) {
+            durationView.text = formatPlaybackTime(duration)
+            seekBar.max = duration
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                isUserSeeking = true
-            }
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    isUserSeeking = true
+                }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress, duration))
-                isUserSeeking = false
-            }
-        })
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress, duration))
+                    isUserSeeking = false
+                }
+            })
+        }
         playbackTracker.track(voiceBroadcast.voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
             override fun onUpdate(state: State) {
                 renderBackwardForwardButtons(holder, state)
