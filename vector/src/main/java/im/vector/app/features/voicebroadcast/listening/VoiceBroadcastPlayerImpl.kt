@@ -402,7 +402,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                     }
                 }
                 State.IDLE -> {
-                    if (playbackTime == null || percentage == null || playbackTime == playlist.duration) {
+                    if (playbackTime == null || percentage == null || (playlist.duration - playbackTime) < 50) {
                         playbackTracker.stopPlayback(id)
                     } else {
                         playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
