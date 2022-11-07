@@ -37,17 +37,16 @@ class InterceptSignoutFlowResponseUseCase @Inject constructor(
             flowResponse: RegistrationFlowResponse,
             errCode: String?,
             promise: Continuation<UIABaseAuth>
-    ): SignoutSessionResult {
+    ): SignoutSessionsReAuthNeeded? {
         return if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
             UserPasswordAuth(
                     session = null,
                     user = activeSessionHolder.getActiveSession().myUserId,
                     password = reAuthHelper.data
             ).let { promise.resume(it) }
-
-            SignoutSessionResult.Completed
+            null
         } else {
-            SignoutSessionResult.ReAuthNeeded(
+            SignoutSessionsReAuthNeeded(
                     pendingAuth = DefaultBaseAuth(session = flowResponse.session),
                     uiaContinuation = promise,
                     flowResponse = flowResponse,

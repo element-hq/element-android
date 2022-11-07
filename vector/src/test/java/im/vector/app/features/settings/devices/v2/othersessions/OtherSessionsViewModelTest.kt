@@ -23,7 +23,6 @@ import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
-import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
@@ -66,7 +65,6 @@ class OtherSessionsViewModelTest {
     private val fakeGetDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
-    private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
 
     private fun createViewModel(viewState: OtherSessionsViewState = OtherSessionsViewState(defaultArgs)) =
@@ -75,7 +73,6 @@ class OtherSessionsViewModelTest {
                     activeSessionHolder = fakeActiveSessionHolder.instance,
                     getDeviceFullInfoListUseCase = fakeGetDeviceFullInfoListUseCase,
                     signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
-                    interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                     pendingAuthHandler = fakePendingAuthHandler.instance,
                     refreshDevicesUseCase = fakeRefreshDevicesUseCase,
             )
@@ -321,7 +318,7 @@ class OtherSessionsViewModelTest {
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         // signout only selected devices
-        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_2))
         val expectedViewState = OtherSessionsViewState(
                 devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
                 currentFilter = defaultArgs.defaultFilter,
@@ -357,7 +354,7 @@ class OtherSessionsViewModelTest {
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
         // signout all devices
-        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2))
         val expectedViewState = OtherSessionsViewState(
                 devices = Success(listOf(deviceFullInfo1, deviceFullInfo2)),
                 currentFilter = defaultArgs.defaultFilter,
@@ -422,7 +419,7 @@ class OtherSessionsViewModelTest {
         val deviceFullInfo2 = aDeviceFullInfo(A_DEVICE_ID_2, isSelected = true)
         val devices: List<DeviceFullInfo> = listOf(deviceFullInfo1, deviceFullInfo2)
         givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
-        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2))
         val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         val expectedReAuthEvent = OtherSessionsViewEvents.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode)
 

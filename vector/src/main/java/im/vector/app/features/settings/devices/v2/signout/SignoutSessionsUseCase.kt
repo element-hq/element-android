@@ -16,27 +16,42 @@
 
 package im.vector.app.features.settings.devices.v2.signout
 
+import androidx.annotation.Size
 import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.util.awaitCallback
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.Continuation
 
-/**
- * Use case to signout several sessions.
- */
 class SignoutSessionsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
+        private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
 ) {
 
-    suspend fun execute(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor): Result<Unit> {
-        return deleteDevices(deviceIds, userInteractiveAuthInterceptor)
+    suspend fun execute(
+            @Size(min = 1) deviceIds: List<String>,
+            onReAuthNeeded: (SignoutSessionsReAuthNeeded) -> Unit,
+    ): Result<Unit> = runCatching {
+        Timber.d("start execute with ${deviceIds.size} deviceIds")
+
+        val authInterceptor = object : UserInteractiveAuthInterceptor {
+            override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)
+                result?.let(onReAuthNeeded)
+            }
+        }
+
+        deleteDevices(deviceIds, authInterceptor)
+        Timber.d("end execute")
     }
 
-    private suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) = runCatching {
-        awaitCallback { matrixCallback ->
-            activeSessionHolder.getActiveSession()
-                    .cryptoService()
-                    .deleteDevices(deviceIds, userInteractiveAuthInterceptor, matrixCallback)
-        }
-    }
+    private suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) =
+            awaitCallback { matrixCallback ->
+                activeSessionHolder.getActiveSession()
+                        .cryptoService()
+                        .deleteDevices(deviceIds, userInteractiveAuthInterceptor, matrixCallback)
+            }
 }
