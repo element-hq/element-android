@@ -148,7 +148,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         const val RECORDING_ID = "RECORDING_ID"
     }
 
-    interface Listener {
+    fun interface Listener {
 
         fun onUpdate(state: State)
 

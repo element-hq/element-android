@@ -116,14 +116,12 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 }
             })
         }
-        playbackTracker.track(voiceBroadcast.voiceBroadcastId, object : AudioMessagePlaybackTracker.Listener {
-            override fun onUpdate(state: State) {
-                renderBackwardForwardButtons(holder, state)
-                if (!isUserSeeking) {
-                    holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
-                }
+        playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
+            renderBackwardForwardButtons(holder, playbackState)
+            if (!isUserSeeking) {
+                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
             }
-        })
+        }
     }
 
     private fun renderBackwardForwardButtons(holder: Holder, playbackState: State) {
