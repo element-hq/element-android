@@ -21,13 +21,16 @@ import io.realm.Realm
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.FilterEntity
 import org.matrix.android.sdk.internal.database.model.FilterEntityFields
+import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
-internal class DefaultFilterRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : FilterRepository {
+internal class DefaultFilterRepository @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+) : FilterRepository {
 
     override suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
@@ -69,15 +72,19 @@ internal class DefaultFilterRepository @Inject constructor(@SessionDatabase priv
         }
     }
 
-    override suspend fun getFilter(): String {
+    override suspend fun getStoredFilterBody(): String {
         return monarchy.awaitTransaction {
-            val filter = FilterEntity.getOrCreate(it)
-            if (filter.filterId.isBlank()) {
-                // Use the Json format
-                filter.filterBodyJson
+            FilterEntity.getOrCreate(it).filterBodyJson
+        }
+    }
+
+    override suspend fun getStoredFilterId(): String? {
+        return monarchy.awaitTransaction {
+            val id = FilterEntity.get(it)?.filterId
+            if (id.isNullOrBlank()) {
+                null
             } else {
-                // Use FilterId
-                filter.filterId
+                id
             }
         }
     }
@@ -85,6 +92,18 @@ internal class DefaultFilterRepository @Inject constructor(@SessionDatabase priv
     override suspend fun getRoomFilter(): String {
         return monarchy.awaitTransaction {
             FilterEntity.getOrCreate(it).roomEventFilterJson
+        }
+    }
+
+    override suspend fun getStoredParams(): SyncFilterParamsEntity? {
+        return monarchy.awaitTransaction { realm ->
+            realm.where<SyncFilterParamsEntity>().findFirst()
+        }
+    }
+
+    override suspend fun storeFilterParams(params: SyncFilterParamsEntity) {
+        return monarchy.awaitTransaction { realm ->
+            realm.insertOrUpdate(params)
         }
     }
 }

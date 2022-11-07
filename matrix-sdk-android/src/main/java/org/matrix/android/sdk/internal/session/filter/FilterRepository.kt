@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
+import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
+
 internal interface FilterRepository {
 
     /**
@@ -28,13 +30,22 @@ internal interface FilterRepository {
      */
     suspend fun storeFilterId(filter: Filter, filterId: String)
 
-    /**
-     * Return filter json or filter id.
-     */
-    suspend fun getFilter(): String
+    suspend fun getStoredFilterBody(): String?
+
+    suspend fun getStoredFilterId(): String?
 
     /**
      * Return the room filter.
      */
     suspend fun getRoomFilter(): String
+
+    /**
+     * TODO: doc
+     */
+    suspend fun getStoredParams(): SyncFilterParamsEntity?
+
+    /**
+     * TODO: doc
+     */
+    suspend fun storeFilterParams(params: SyncFilterParamsEntity)
 }

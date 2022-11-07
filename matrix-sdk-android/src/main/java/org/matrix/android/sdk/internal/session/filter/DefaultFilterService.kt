@@ -16,20 +16,33 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.sync.FilterService
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultFilterService @Inject constructor(
         private val saveFilterTask: SaveFilterTask,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val filterRepository: FilterRepository,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : FilterService {
 
     // TODO Pass a list of support events instead
-    override fun setFilter(filterPreset: FilterService.FilterPreset) {
+    override fun setSyncFilter(filterBuilder: SyncFilterBuilder) {
+        taskExecutor.executorScope.launch {
+            filterRepository.storeFilterParams(filterBuilder.extractParams())
+        }
+        val filter = filterBuilder.build(homeServerCapabilitiesDataSource.getHomeServerCapabilities() ?: HomeServerCapabilities())
         saveFilterTask
-                .configureWith(SaveFilterTask.Params(filterPreset))
+                .configureWith(
+                        SaveFilterTask.Params(
+                                filter = filter
+                        )
+                )
                 .executeBy(taskExecutor)
     }
 }
