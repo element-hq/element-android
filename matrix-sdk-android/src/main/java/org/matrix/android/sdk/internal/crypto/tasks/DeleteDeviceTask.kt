@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import androidx.annotation.Size
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.uia.UiaResult
@@ -31,7 +32,7 @@ import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
-            val deviceIds: List<String>,
+            @Size(min = 1) val deviceIds: List<String>,
             val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
             val userAuthParam: UIABaseAuth?
     )
