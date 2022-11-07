@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.sync
+package org.matrix.android.sdk.api.session.sync.filter
 
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
-
-interface FilterService {
-
-    /**
-     * Configure the filter for the sync.
-     */
-    fun setSyncFilter(filterBuilder: SyncFilterBuilder)
-}
+internal data class SyncFilterParams(
+        val lazyLoadMembersForStateEvents: Boolean? = null,
+        val lazyLoadMembersForMessageEvents: Boolean? = null,
+        val useThreadNotifications: Boolean? = null,
+        val listOfSupportedEventTypes: List<String>? = null,
+        val listOfSupportedStateEventTypes: List<String>? = null,
+)

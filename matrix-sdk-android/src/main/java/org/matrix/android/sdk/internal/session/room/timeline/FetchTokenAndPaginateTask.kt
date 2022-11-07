@@ -47,7 +47,7 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
 ) : FetchTokenAndPaginateTask {
 
     override suspend fun execute(params: FetchTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
-        val filter = filterRepository.getRoomFilter()
+        val filter = filterRepository.getRoomFilterBody()
         val response = executeRequest(globalErrorReceiver) {
             roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
         }
