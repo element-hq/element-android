@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices.v2
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.R
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
@@ -30,7 +29,6 @@ import im.vector.app.features.settings.devices.v2.verification.GetCurrentSession
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
-import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -49,20 +47,16 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
-import javax.net.ssl.HttpsURLConnection
 
 private const val A_CURRENT_DEVICE_ID = "current-device-id"
 private const val A_DEVICE_ID_1 = "device-id-1"
 private const val A_DEVICE_ID_2 = "device-id-2"
 private const val A_PASSWORD = "password"
-private const val AUTH_ERROR_MESSAGE = "auth-error-message"
-private const val AN_ERROR_MESSAGE = "error-message"
 
 class DevicesViewModelTest {
 
@@ -70,7 +64,6 @@ class DevicesViewModelTest {
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val fakeStringProvider = FakeStringProvider()
     private val getCurrentSessionCrossSigningInfoUseCase = mockk<GetCurrentSessionCrossSigningInfoUseCase>()
     private val getDeviceFullInfoListUseCase = mockk<GetDeviceFullInfoListUseCase>()
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>(relaxed = true)
@@ -84,7 +77,6 @@ class DevicesViewModelTest {
         return DevicesViewModel(
                 initialState = DevicesViewState(),
                 activeSessionHolder = fakeActiveSessionHolder.instance,
-                stringProvider = fakeStringProvider.instance,
                 getCurrentSessionCrossSigningInfoUseCase = getCurrentSessionCrossSigningInfoUseCase,
                 getDeviceFullInfoListUseCase = getDeviceFullInfoListUseCase,
                 refreshDevicesOnCryptoDevicesChangeUseCase = refreshDevicesOnCryptoDevicesChangeUseCase,
@@ -258,36 +250,11 @@ class DevicesViewModelTest {
     }
 
     @Test
-    fun `given server error during multiSignout when handling multiSignout other sessions action then signout process is performed`() {
-        // Given
-        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
-        fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), serverError)
-        val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
-        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is DevicesViewEvent.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
-                .finish()
-    }
-
-    @Test
     fun `given unexpected error during multiSignout when handling multiSignout action then signout process is performed`() {
         // Given
         val error = Exception()
         fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), error)
         val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
-        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
         // When
         val viewModel = createViewModel()
@@ -301,7 +268,7 @@ class DevicesViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                .assertEvent { it is DevicesViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
+                .assertEvent { it is DevicesViewEvent.SignoutError && it.error == error }
                 .finish()
     }
 

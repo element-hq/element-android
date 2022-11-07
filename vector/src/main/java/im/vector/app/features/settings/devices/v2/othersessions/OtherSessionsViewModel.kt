@@ -21,11 +21,9 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
@@ -39,16 +37,13 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
-import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 
 class OtherSessionsViewModel @AssistedInject constructor(
         @Assisted private val initialState: OtherSessionsViewState,
         activeSessionHolder: ActiveSessionHolder,
-        private val stringProvider: StringProvider,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
         private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
@@ -223,12 +218,7 @@ class OtherSessionsViewModel @AssistedInject constructor(
 
     private fun onSignoutFailure(failure: Throwable) {
         Timber.e("signout failure", failure)
-        val failureMessage = if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-            stringProvider.getString(R.string.authentication_error)
-        } else {
-            stringProvider.getString(R.string.matrix_error)
-        }
-        _viewEvents.post(OtherSessionsViewEvents.SignoutError(Exception(failureMessage)))
+        _viewEvents.post(OtherSessionsViewEvents.SignoutError(failure))
     }
 
     private fun handleSsoAuthDone() {
