@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes;
+package org.matrix.android.sdk.test.fakes
 
 import android.content.ClipboardManager
 import android.content.ContentResolver
