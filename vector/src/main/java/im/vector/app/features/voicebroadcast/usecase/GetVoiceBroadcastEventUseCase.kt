@@ -22,9 +22,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -56,7 +54,7 @@ class GetVoiceBroadcastEventUseCase @Inject constructor(
 
         return when (latestEvent?.content?.voiceBroadcastState) {
             null, VoiceBroadcastState.STOPPED -> flowOf(latestEvent.toOptional())
-            else     -> {
+            else -> {
                 room.flow()
                         .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(latestEvent.root.stateKey.orEmpty()))
                         .unwrap()
