@@ -216,8 +216,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             currentMediaPlayer?.pause()
         } else {
             stopPlayer()
-            currentVoiceBroadcast?.voiceBroadcastId?.let { id ->
-                playbackTracker.updatePausedAtPlaybackTime(id, positionMillis, positionMillis.toFloat() / playlist.duration)
+            val voiceBroadcastId = currentVoiceBroadcast?.voiceBroadcastId
+            val duration = playlist.duration.takeIf { it > 0 }
+            if (voiceBroadcastId != null && duration != null) {
+                playbackTracker.updatePausedAtPlaybackTime(voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
             }
         }
         playingState = State.PAUSED
@@ -312,6 +314,22 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
+    private fun getCurrentPlaybackPosition(): Int? {
+        val playlistPosition = playlist.currentItem?.startTime
+        val computedPosition = currentMediaPlayer?.currentPosition?.let { playlistPosition?.plus(it) } ?: playlistPosition
+        val savedPosition = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPlaybackTime(it) }
+        return computedPosition ?: savedPosition
+    }
+
+    private fun getCurrentPlaybackPercentage(): Float? {
+        val playlistPosition = playlist.currentItem?.startTime
+        val computedPosition = currentMediaPlayer?.currentPosition?.let { playlistPosition?.plus(it) } ?: playlistPosition
+        val duration = playlist.duration.takeIf { it > 0 }
+        val computedPercentage = if (computedPosition != null && duration != null) computedPosition.toFloat() / duration else null
+        val savedPercentage = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPercentage(it) }
+        return computedPercentage ?: savedPercentage
+    }
+
     private inner class MediaPlayerListener :
             MediaPlayer.OnInfoListener,
             MediaPlayer.OnCompletionListener,
@@ -369,26 +387,26 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
 
         private fun onPlaybackTick(id: String) {
-            val currentItem = playlist.currentItem ?: return
-            val itemStartTime = currentItem.startTime
+            val playbackTime = getCurrentPlaybackPosition()
+            val percentage = getCurrentPlaybackPercentage()
             when (playingState) {
-                State.PLAYING,
-                State.PAUSED -> {
-                    val position = itemStartTime + (currentMediaPlayer?.currentPosition ?: 0)
-                    val percentage = position.toFloat() / playlist.duration
-                    if (playingState == State.PLAYING) {
-                        playbackTracker.updatePlayingAtPlaybackTime(id, position, percentage)
-                    } else {
-                        playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
+                State.PLAYING -> {
+                    if (playbackTime != null && percentage != null) {
+                        playbackTracker.updatePlayingAtPlaybackTime(id, playbackTime, percentage)
                     }
                 }
+                State.PAUSED,
                 State.BUFFERING -> {
-                    val playbackTime = playbackTracker.getPlaybackTime(id)
-                    val percentage = playbackTracker.getPercentage(id)
-                    playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                    if (playbackTime != null && percentage != null) {
+                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                    }
                 }
                 State.IDLE -> {
-                    playbackTracker.stopPlayback(id)
+                    if (playbackTime == null || percentage == null || playbackTime == playlist.duration) {
+                        playbackTracker.stopPlayback(id)
+                    } else {
+                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                    }
                 }
             }
         }
