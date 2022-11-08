@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices.v2.notification
 
 import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.unwrap
@@ -32,5 +33,6 @@ class CanTogglePushNotificationsViaPusherUseCase @Inject constructor() {
                 .asFlow()
                 .unwrap()
                 .map { it.canRemotelyTogglePushNotificationsOfDevices }
+                .distinctUntilChanged()
     }
 }
