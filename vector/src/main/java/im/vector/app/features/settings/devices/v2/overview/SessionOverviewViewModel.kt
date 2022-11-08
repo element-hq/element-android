@@ -16,15 +16,19 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.features.auth.PendingAuthHandler
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
@@ -58,6 +62,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
         private val getNotificationsStatusUseCase: GetNotificationsStatusUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
+        @DefaultPreferences
+        private val sharedPreferences: SharedPreferences,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
 ) {
@@ -74,6 +80,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
         observeSessionInfo(initialState.deviceId)
         observeCurrentSessionInfo()
         observeNotificationsStatus(initialState.deviceId)
+        refreshIpAddressVisibility()
+    }
+
+    private fun refreshIpAddressVisibility() {
+        val shouldShowIpAddress = sharedPreferences.getBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, false)
+        setState {
+            copy(isShowingIpAddress = shouldShowIpAddress)
+        }
     }
 
     private fun refreshPushers() {
@@ -121,6 +135,9 @@ class SessionOverviewViewModel @AssistedInject constructor(
         val isShowingIpAddress = state.isShowingIpAddress
         setState {
             copy(isShowingIpAddress = !isShowingIpAddress)
+        }
+        sharedPreferences.edit {
+            putBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, !isShowingIpAddress)
         }
     }
 
