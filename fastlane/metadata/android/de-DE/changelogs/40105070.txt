@@ -1,0 +1,2 @@
+Die wichtigste Änderung in dieser Version: Neue Anhangauswahl-Oberfläche.
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
