@@ -29,6 +29,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,15 +37,22 @@ import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
 import androidx.core.text.toSpannable
 import androidx.core.util.Pair
+import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsCompat.Type.InsetsType
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -94,6 +102,7 @@ import im.vector.app.core.ui.views.JoinConferenceView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.ExpandingBottomSheetBehavior
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.checkPermissions
@@ -418,20 +427,12 @@ class TimelineFragment :
             }
         }
 
-        if (savedInstanceState == null) {
-            handleSpaceShare()
+        ViewCompat.setOnApplyWindowInsetsListener(views.coordinatorLayout) { _, insets ->
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
+            views.appBarLayout.updatePadding(top = imeInsets.top)
+            views.voiceMessageRecorderContainer.updatePadding(bottom = imeInsets.bottom)
+            insets
         }
-
-        views.scrim.setOnClickListener {
-            messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
-        }
-
-        messageComposerViewModel.stateFlow.map { it.isFullScreen }
-                .distinctUntilChanged()
-                .onEach { isFullScreen ->
-                    toggleFullScreenEditor(isFullScreen)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupBackPressHandling() {
@@ -1048,13 +1049,7 @@ class TimelineFragment :
             override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()
-                withState(messageComposerViewModel) { composerState ->
-                    if (!composerState.isFullScreen) {
-                        jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
-                    } else {
-                        jumpToBottomViewVisibilityManager.hideAndPreventVisibilityChangesWithScrolling()
-                    }
-                }
+                jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
         }.apply {
             // For local rooms, pin the view's content to the top edge (the layout is reversed)
@@ -1168,9 +1163,6 @@ class TimelineFragment :
             lazyLoadedViews.inviteView(false)?.isVisible = false
 
             if (mainState.tombstoneEvent == null) {
-                views.composerContainer.isInvisible = !messageComposerState.isComposerVisible
-                views.voiceMessageRecorderContainer.isVisible = messageComposerState.isVoiceMessageRecorderVisible
-
                 when (messageComposerState.canSendMessage) {
                     CanSendStatus.Allowed -> {
                         NotificationAreaView.State.Hidden
@@ -1226,7 +1218,6 @@ class TimelineFragment :
 
     private fun FragmentTimelineBinding.hideComposerViews() {
         composerContainer.isVisible = false
-        voiceMessageRecorderContainer.isVisible = false
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
@@ -2034,19 +2025,6 @@ class TimelineFragment :
                 startActivity(it)
             }
         }
-    }
-
-    private fun toggleFullScreenEditor(isFullScreen: Boolean) {
-        views.composerContainer.animateLayoutChange(200)
-
-        val constraintSet = ConstraintSet()
-        val constraintSetId = if (isFullScreen) {
-            R.layout.fragment_timeline_fullscreen
-        } else {
-            R.layout.fragment_timeline
-        }
-        constraintSet.clone(requireContext(), constraintSetId)
-        constraintSet.applyTo(views.rootConstraintLayout)
     }
 
     /**

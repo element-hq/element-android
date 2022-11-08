@@ -8,12 +8,22 @@
     android:minHeight="200dp">
 
     <View
+        android:id="@+id/voiceMessageBackgroundView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/composer_min_height"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?android:colorBackground" />
+
+    <View
         android:id="@+id/voiceMessageLockBackground"
-        android:layout_width="78dp"
+        android:layout_width="52dp"
         android:layout_height="180dp"
         android:background="@drawable/bg_voice_message_lock"
         android:backgroundTint="?vctr_system"
         android:visibility="gone"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/voiceMessageMicButton"
         tools:translationY="-180dp"
@@ -26,7 +36,7 @@
         android:minWidth="32dp"
         android:minHeight="32dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_start_voice_message"
         android:src="@drawable/ic_microphone"
@@ -100,7 +110,6 @@
         android:id="@+id/voiceMessageSlideToCancelDivider"
         android:layout_width="48dp"
         android:layout_height="0dp"
-        android:background="?android:colorBackground"
         app:layout_constraintBottom_toBottomOf="@id/voiceMessageTimer"
         app:layout_constraintStart_toEndOf="@id/voiceMessageTimer"
         app:layout_constraintTop_toTopOf="@id/voiceMessageTimer" />
@@ -109,7 +118,7 @@
         android:id="@+id/voiceMessageLockImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_voice_message_unlocked"
         android:visibility="gone"
@@ -123,7 +132,6 @@
         android:id="@+id/voiceMessageLockArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:layout_marginBottom="14dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_voice_lock_arrow"
