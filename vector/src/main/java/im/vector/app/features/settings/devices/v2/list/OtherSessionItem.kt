@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
@@ -69,6 +70,9 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
     @EpoxyAttribute
     var selected: Boolean = false
 
+    @EpoxyAttribute
+    var ipAddress: String? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
@@ -100,6 +104,7 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
             holder.otherSessionDescriptionTextView.setTextColor(it)
         }
         holder.otherSessionDescriptionTextView.setCompoundDrawablesWithIntrinsicBounds(sessionDescriptionDrawable, null, null, null)
+        holder.otherSessionIpAddressTextView.setTextOrHide(ipAddress)
         holder.otherSessionItemBackgroundView.isSelected = selected
     }
 
@@ -108,6 +113,7 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
         val otherSessionVerificationStatusImageView by bind<ShieldImageView>(R.id.otherSessionVerificationStatusImageView)
         val otherSessionNameTextView by bind<TextView>(R.id.otherSessionNameTextView)
         val otherSessionDescriptionTextView by bind<TextView>(R.id.otherSessionDescriptionTextView)
+        val otherSessionIpAddressTextView by bind<TextView>(R.id.otherSessionIpAddressTextView)
         val otherSessionItemBackgroundView by bind<View>(R.id.otherSessionItemBackground)
     }
 }

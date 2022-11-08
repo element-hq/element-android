@@ -72,6 +72,7 @@ class OtherSessionsController @Inject constructor(
                     sessionDescription(description)
                     sessionDescriptionDrawable(descriptionDrawable)
                     sessionDescriptionColor(descriptionColor)
+                    ipAddress(device.deviceInfo.lastSeenIp)
                     stringProvider(host.stringProvider)
                     colorProvider(host.colorProvider)
                     drawableProvider(host.drawableProvider)

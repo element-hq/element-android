@@ -67,11 +67,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:drawablePadding="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/otherSessionDeviceTypeImageView"
         app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
         app:layout_constraintTop_toBottomOf="@id/otherSessionNameTextView"
         tools:text="@string/device_manager_verification_status_verified" />
+
+    <TextView
+        android:id="@+id/otherSessionIpAddressTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:drawablePadding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
+        app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionDescriptionTextView"
+        tools:text="0.0.0.0" />
 
     <View
         android:layout_width="0dp"
@@ -80,6 +91,6 @@
         android:background="?vctr_content_quinary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
-        app:layout_constraintTop_toBottomOf="@id/otherSessionItemBackground" />
+        app:layout_constraintTop_toBottomOf="@id/otherSessionIpAddressTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
