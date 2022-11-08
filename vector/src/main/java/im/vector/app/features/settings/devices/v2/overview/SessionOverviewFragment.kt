@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.overview
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -156,14 +157,32 @@ class SessionOverviewFragment :
 
     override fun getMenuRes() = R.menu.menu_session_overview
 
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.sessionOverviewToggleIpAddress).title = if (state.isShowingIpAddress) {
+                getString(R.string.device_manager_other_sessions_hide_ip_address)
+            } else {
+                getString(R.string.device_manager_other_sessions_show_ip_address)
+            }
+        }
+    }
+
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.sessionOverviewRename -> {
                 goToRenameSession()
                 true
             }
+            R.id.sessionOverviewToggleIpAddress -> {
+                toggleIpAddressVisibility()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun toggleIpAddressVisibility() {
+        viewModel.handle(SessionOverviewAction.ToggleIpAddressVisibility)
     }
 
     private fun goToRenameSession() = withState(viewModel) { state ->
@@ -206,6 +225,7 @@ class SessionOverviewFragment :
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
                     isLastSeenDetailsVisible = !isCurrentSession,
+                    isShowingIpAddress = viewState.isShowingIpAddress,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {

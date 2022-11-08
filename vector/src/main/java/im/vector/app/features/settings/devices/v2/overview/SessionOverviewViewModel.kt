@@ -113,6 +113,14 @@ class SessionOverviewViewModel @AssistedInject constructor(
             is SessionOverviewAction.PasswordAuthDone -> handlePasswordAuthDone(action)
             SessionOverviewAction.ReAuthCancelled -> handleReAuthCancelled()
             is SessionOverviewAction.TogglePushNotifications -> handleTogglePusherAction(action)
+            SessionOverviewAction.ToggleIpAddressVisibility -> handleToggleIpAddressVisibility()
+        }
+    }
+
+    private fun handleToggleIpAddressVisibility() = withState { state ->
+        val isShowingIpAddress = state.isShowingIpAddress
+        setState {
+            copy(isShowingIpAddress = !isShowingIpAddress)
         }
     }
 

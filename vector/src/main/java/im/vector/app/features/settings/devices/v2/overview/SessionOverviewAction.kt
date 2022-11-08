@@ -29,4 +29,5 @@ sealed class SessionOverviewAction : VectorViewModelAction {
             val deviceId: String,
             val enabled: Boolean,
     ) : SessionOverviewAction()
+    object ToggleIpAddressVisibility : SessionOverviewAction()
 }
