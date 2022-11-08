@@ -48,9 +48,4 @@ class TypingMessageView @JvmOverloads constructor(
         views.typingUserText.text = typingHelper.getNotificationTypingMessage(typingUsers)
         views.typingUserAvatars.render(typingUsers, avatarRenderer)
     }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        removeAllViews()
-    }
 }
