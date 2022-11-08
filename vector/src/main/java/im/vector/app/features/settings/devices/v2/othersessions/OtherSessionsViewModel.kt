@@ -91,6 +91,14 @@ class OtherSessionsViewModel @AssistedInject constructor(
             OtherSessionsAction.DeselectAll -> handleDeselectAll()
             OtherSessionsAction.SelectAll -> handleSelectAll()
             OtherSessionsAction.MultiSignout -> handleMultiSignout()
+            OtherSessionsAction.ToggleIpAddressVisibility -> handleToggleIpAddressVisibility()
+        }
+    }
+
+    private fun handleToggleIpAddressVisibility() = withState { state ->
+        val isShowingIpAddress = state.isShowingIpAddress
+        setState {
+            copy(isShowingIpAddress = !isShowingIpAddress)
         }
     }
 

@@ -28,6 +28,7 @@ data class OtherSessionsViewState(
         val excludeCurrentDevice: Boolean = false,
         val isSelectModeEnabled: Boolean = false,
         val isLoading: Boolean = false,
+        val isShowingIpAddress: Boolean = false,
 ) : MavericksState {
 
     constructor(args: OtherSessionsArgs) : this(excludeCurrentDevice = args.excludeCurrentDevice)
