@@ -32,7 +32,7 @@ def fragment = "1.5.4"
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
 def espresso = "3.4.0"
 def androidxTest = "1.4.0"
-def androidxOrchestrator = "1.4.1"
+def androidxOrchestrator = "1.4.2"
 def paparazzi = "1.1.0"
 
 ext.libs = [
