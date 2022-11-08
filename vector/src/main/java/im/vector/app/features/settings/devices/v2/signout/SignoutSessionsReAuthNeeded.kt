@@ -20,13 +20,9 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import kotlin.coroutines.Continuation
 
-sealed class SignoutSessionResult {
-    data class ReAuthNeeded(
-            val pendingAuth: UIABaseAuth,
-            val uiaContinuation: Continuation<UIABaseAuth>,
-            val flowResponse: RegistrationFlowResponse,
-            val errCode: String?
-    ) : SignoutSessionResult()
-
-    object Completed : SignoutSessionResult()
-}
+data class SignoutSessionsReAuthNeeded(
+        val pendingAuth: UIABaseAuth,
+        val uiaContinuation: Continuation<UIABaseAuth>,
+        val flowResponse: RegistrationFlowResponse,
+        val errCode: String?
+)
