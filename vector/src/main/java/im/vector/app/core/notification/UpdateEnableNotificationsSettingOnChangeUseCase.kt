@@ -22,7 +22,6 @@ import im.vector.app.features.settings.devices.v2.notification.NotificationsStat
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -42,7 +41,6 @@ class UpdateEnableNotificationsSettingOnChangeUseCase @Inject constructor(
     }
 
     private fun updatePreference(notificationStatus: NotificationsStatus) {
-        Timber.d("updatePreference with status=$notificationStatus")
         when (notificationStatus) {
             NotificationsStatus.ENABLED -> vectorPreferences.setNotificationEnabledForDevice(true)
             NotificationsStatus.DISABLED -> vectorPreferences.setNotificationEnabledForDevice(false)
