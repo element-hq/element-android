@@ -1,3 +1,10 @@
+Changes in Element v1.5.7 (2022-11-07)
+======================================
+
+Bugfixes 🐛
+----------
+- Fix regression when syncing with homeserver < 1.4. ([#7534](https://github.com/vector-im/element-android/issues/7534))
+
 Changes in Element v1.5.6 (2022-11-02)
 ======================================
 

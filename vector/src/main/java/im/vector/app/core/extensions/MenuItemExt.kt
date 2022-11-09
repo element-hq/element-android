@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+package im.vector.app.core.extensions
 
-/**
- * This class provides the parameter to delete a device.
- */
-@JsonClass(generateAdapter = true)
-internal data class DeleteDeviceParams(
-        /**
-         * Additional authentication information for the user-interactive authentication API.
-         */
-        @Json(name = "auth")
-        val auth: Map<String, *>? = null,
-)
+import android.view.MenuItem
+import androidx.annotation.ColorInt
+import androidx.core.text.toSpannable
+import im.vector.app.core.utils.colorizeMatchingText
+
+fun MenuItem.setTextColor(@ColorInt color: Int) {
+    val currentTitle = title.orEmpty().toString()
+    title = currentTitle
+            .toSpannable()
+            .colorizeMatchingText(currentTitle, color)
+}

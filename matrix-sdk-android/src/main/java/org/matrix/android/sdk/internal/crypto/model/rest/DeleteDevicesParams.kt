@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,19 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This class provides the parameter to delete a device.
+ * This class provides the parameter to delete several devices.
  */
 @JsonClass(generateAdapter = true)
-internal data class DeleteDeviceParams(
+internal data class DeleteDevicesParams(
         /**
          * Additional authentication information for the user-interactive authentication API.
          */
         @Json(name = "auth")
         val auth: Map<String, *>? = null,
+
+        /**
+         * Required: The list of device IDs to delete.
+         */
+        @Json(name = "devices")
+        val deviceIds: List<String>,
 )

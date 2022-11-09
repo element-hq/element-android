@@ -21,42 +21,33 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
 import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
-import javax.net.ssl.HttpsURLConnection
-import kotlin.coroutines.Continuation
 
 class SessionOverviewViewModel @AssistedInject constructor(
         @Assisted val initialState: SessionOverviewViewState,
-        private val stringProvider: StringProvider,
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
-        private val signoutSessionUseCase: SignoutSessionUseCase,
+        private val signoutSessionsUseCase: SignoutSessionsUseCase,
         private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
@@ -154,30 +145,21 @@ class SessionOverviewViewModel @AssistedInject constructor(
     private fun handleSignoutOtherSession(deviceId: String) {
         viewModelScope.launch {
             setLoading(true)
-            val signoutResult = signout(deviceId)
+            val result = signout(deviceId)
             setLoading(false)
 
-            if (signoutResult.isSuccess) {
+            val error = result.exceptionOrNull()
+            if (error == null) {
                 onSignoutSuccess()
             } else {
-                when (val failure = signoutResult.exceptionOrNull()) {
-                    null -> onSignoutSuccess()
-                    else -> onSignoutFailure(failure)
-                }
+                onSignoutFailure(error)
             }
         }
     }
 
-    private suspend fun signout(deviceId: String) = signoutSessionUseCase.execute(deviceId, object : UserInteractiveAuthInterceptor {
-        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-            when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
-                is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
-                is SignoutSessionResult.Completed -> Unit
-            }
-        }
-    })
+    private suspend fun signout(deviceId: String) = signoutSessionsUseCase.execute(listOf(deviceId), this::onReAuthNeeded)
 
-    private fun onReAuthNeeded(reAuthNeeded: SignoutSessionResult.ReAuthNeeded) {
+    private fun onReAuthNeeded(reAuthNeeded: SignoutSessionsReAuthNeeded) {
         Timber.d("onReAuthNeeded")
         pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         pendingAuthHandler.uiaContinuation = reAuthNeeded.uiaContinuation
@@ -196,12 +178,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun onSignoutFailure(failure: Throwable) {
         Timber.e("signout failure", failure)
-        val failureMessage = if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-            stringProvider.getString(R.string.authentication_error)
-        } else {
-            stringProvider.getString(R.string.matrix_error)
-        }
-        _viewEvents.post(SessionOverviewViewEvent.SignoutError(Exception(failureMessage)))
+        _viewEvents.post(SessionOverviewViewEvent.SignoutError(failure))
     }
 
     private fun handleSsoAuthDone() {
