@@ -253,8 +253,8 @@ class AudioMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
-    fun clearTracker() {
-        playbackTracker.clear()
+    fun stopTracking() {
+        playbackTracker.unregisterListeners()
     }
 
     fun stopAllVoiceActions(deleteRecord: Boolean = true): MultiPickerAudioType? {
