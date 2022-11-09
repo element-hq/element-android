@@ -31,6 +31,11 @@ interface VoiceBroadcastPlayer {
     val playingState: State
 
     /**
+     * Tells whether the player is listening a live voice broadcast in "live" position.
+     */
+    val isLiveListening: Boolean
+
+    /**
      * Start playback of the given voice broadcast.
      */
     fun playOrResume(voiceBroadcast: VoiceBroadcast)

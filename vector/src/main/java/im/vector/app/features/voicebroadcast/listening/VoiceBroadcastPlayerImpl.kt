@@ -30,7 +30,6 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Stat
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.sequence
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
@@ -70,6 +69,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private var currentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
 
     override var currentVoiceBroadcast: VoiceBroadcast? = null
+    override var isLiveListening: Boolean = false
 
     override var playingState = State.IDLE
         @MainThread
@@ -142,7 +142,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun observeVoiceBroadcastLiveState(voiceBroadcast: VoiceBroadcast) {
         voiceBroadcastStateObserver = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
-                .onEach { currentVoiceBroadcastEvent = it.getOrNull() }
+                .onEach {
+                    currentVoiceBroadcastEvent = it.getOrNull()
+                    updateLiveListeningMode()
+                }
                 .launchIn(sessionScope)
     }
 
@@ -190,7 +193,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             else -> playlist.firstOrNull()
         }
         val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
-        val sequence = playlistItem.audioEvent.sequence ?: run { Timber.w("## VoiceBroadcastPlayer: playlist item has no sequence"); return }
+        val sequence = playlistItem.sequence ?: run { Timber.w("## VoiceBroadcastPlayer: playlist item has no sequence"); return }
         val sequencePosition = position?.let { it - playlistItem.startTime } ?: 0
         sessionScope.launch {
             try {
@@ -241,6 +244,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 playbackTracker.updatePausedAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
             }
             playingState == State.PLAYING || playingState == State.BUFFERING -> {
+                updateLiveListeningMode(positionMillis)
                 startPlayback(positionMillis)
             }
             playingState == State.IDLE || playingState == State.PAUSED -> {
@@ -302,15 +306,28 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun onPlayingStateChanged(playingState: State) {
-        // Notify state change to all the listeners attached to the current voice broadcast id
+        // Update live playback flag
+        updateLiveListeningMode()
+
         currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
+            // Start or stop playback ticker
             when (playingState) {
                 State.PLAYING -> playbackTicker.startPlaybackTicker(voiceBroadcastId)
                 State.PAUSED,
                 State.BUFFERING,
                 State.IDLE -> playbackTicker.stopPlaybackTicker(voiceBroadcastId)
             }
+            // Notify state change to all the listeners attached to the current voice broadcast id
             listeners[voiceBroadcastId]?.forEach { listener -> listener.onStateChanged(playingState) }
+        }
+    }
+
+    private fun updateLiveListeningMode(playbackPosition: Int? = null) {
+        isLiveListening = when {
+            !currentVoiceBroadcastEvent?.isLive.orFalse() -> false
+            playingState == State.IDLE || playingState == State.PAUSED -> false
+            playbackPosition != null -> playlist.findByPosition(playbackPosition)?.sequence == playlist.lastOrNull()?.sequence
+            else -> isLiveListening || playlist.currentSequence == playlist.lastOrNull()?.sequence
         }
     }
 

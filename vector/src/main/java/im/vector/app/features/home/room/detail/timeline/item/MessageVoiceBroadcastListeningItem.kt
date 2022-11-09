@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
@@ -82,6 +83,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         }
     }
 
+    override fun renderLiveIndicator(holder: Holder) {
+        when {
+            voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED -> renderNoLiveIndicator(holder)
+            voiceBroadcastState == VoiceBroadcastState.PAUSED || !player.isLiveListening -> renderPausedLiveIndicator(holder)
+            else -> renderPlayingLiveIndicator(holder)
+        }
+    }
+
     private fun renderPlayingState(holder: Holder, state: VoiceBroadcastPlayer.State) {
         with(holder) {
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
@@ -99,6 +108,8 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
+
+            renderLiveIndicator(holder)
         }
     }
 
@@ -121,6 +132,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         }
         playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
             renderBackwardForwardButtons(holder, playbackState)
+            renderLiveIndicator(holder)
             if (!isUserSeeking) {
                 holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
             }

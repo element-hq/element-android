@@ -48,6 +48,15 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         }
     }
 
+    override fun renderLiveIndicator(holder: Holder) {
+        when (voiceBroadcastState) {
+            VoiceBroadcastState.STARTED,
+            VoiceBroadcastState.RESUMED -> renderPlayingLiveIndicator(holder)
+            VoiceBroadcastState.PAUSED -> renderPausedLiveIndicator(holder)
+            VoiceBroadcastState.STOPPED, null -> renderNoLiveIndicator(holder)
+        }
+    }
+
     override fun renderMetadata(holder: Holder) {
         with(holder) {
             listenersCountMetadata.isVisible = false
