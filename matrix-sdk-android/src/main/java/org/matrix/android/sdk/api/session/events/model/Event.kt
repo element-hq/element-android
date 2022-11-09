@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageStickerConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.isReply
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
@@ -420,7 +421,7 @@ fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
         getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
-    return getRelationContent()?.inReplyTo?.eventId != null
+    return getRelationContent().isReply()
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
