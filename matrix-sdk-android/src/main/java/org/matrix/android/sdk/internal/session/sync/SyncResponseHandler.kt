@@ -101,7 +101,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun startCryptoService(isInitialSync: Boolean) {
-        // "start_crypto_service" span
         relevantPlugins.measureSpan("task", "start_crypto_service") {
             measureTimeMillis {
                 if (!cryptoService.isStarted()) {
@@ -116,7 +115,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private suspend fun handleToDevice(syncResponse: SyncResponse, reporter: ProgressReporter?) {
-        // "handle_to_device" span
         relevantPlugins.measureSpan("task", "handle_to_device") {
             measureTimeMillis {
                 Timber.v("Handle toDevice")
@@ -131,9 +129,13 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun startMonarchyTransaction(syncResponse: SyncResponse, isInitialSync: Boolean, reporter: ProgressReporter?, aggregator: SyncResponsePostTreatmentAggregator) {
+    private suspend fun startMonarchyTransaction(
+            syncResponse: SyncResponse,
+            isInitialSync: Boolean,
+            reporter: ProgressReporter?,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ) {
         // Start one big transaction
-        // Big "monarchy_transaction" span
         relevantPlugins.measureSpan("task", "monarchy_transaction") {
             monarchy.awaitTransaction { realm ->
                 // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
@@ -146,8 +148,13 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun handleRooms(reporter: ProgressReporter?, syncResponse: SyncResponse, realm: Realm, isInitialSync: Boolean, aggregator: SyncResponsePostTreatmentAggregator) {
-        // Child "handle_rooms" span
+    private fun handleRooms(
+            reporter: ProgressReporter?,
+            syncResponse: SyncResponse,
+            realm: Realm,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ) {
         relevantPlugins.measureSpan("task", "handle_rooms") {
             measureTimeMillis {
                 Timber.v("Handle rooms")
@@ -163,7 +170,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun handleAccountData(reporter: ProgressReporter?, realm: Realm, syncResponse: SyncResponse) {
-        // Child "handle_account_data" span
         relevantPlugins.measureSpan("task", "handle_account_data") {
             measureTimeMillis {
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
@@ -177,7 +183,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun handlePresence(realm: Realm, syncResponse: SyncResponse) {
-        // Child "handle_presence" span
         relevantPlugins.measureSpan("task", "handle_presence") {
             measureTimeMillis {
                 Timber.v("Handle Presence")
@@ -189,7 +194,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private suspend fun aggregateSyncResponse(aggregator: SyncResponsePostTreatmentAggregator) {
-        // "aggregator_management" span
         relevantPlugins.measureSpan("task", "aggregator_management") {
             // Everything else we need to do outside the transaction
             measureTimeMillis {
@@ -201,7 +205,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private suspend fun postTreatmentSyncResponse(syncResponse: SyncResponse, isInitialSync: Boolean) {
-        // "sync_response_post_treatment" span
         relevantPlugins.measureSpan("task", "sync_response_post_treatment") {
             measureTimeMillis {
                 syncResponse.rooms?.let {
@@ -216,7 +219,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun markCryptoSyncCompleted(syncResponse: SyncResponse) {
-        // "crypto_sync_handler_onSyncCompleted" span
         relevantPlugins.measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
             measureTimeMillis {
                 cryptoSyncHandler.onSyncCompleted(syncResponse)
@@ -227,7 +229,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun handlePostSync() {
-        // post sync stuffs
         monarchy.writeAsync {
             roomSyncHandler.postSyncSpaceHierarchyHandle(it)
         }

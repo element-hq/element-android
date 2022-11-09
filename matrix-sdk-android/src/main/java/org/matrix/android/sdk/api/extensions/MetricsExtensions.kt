@@ -25,7 +25,6 @@ import kotlin.contracts.contract
 /**
  * Executes the given [block] while measuring the transaction.
  *
- * @param metricMeasurementPlugins Relevant plugins used for tracking.
  * @param block Action/Task to be executed within this span.
  */
 @OptIn(ExperimentalContracts::class)
@@ -47,7 +46,6 @@ inline fun List<MetricPlugin>.measureMetric(block: () -> Unit) {
 /**
  * Executes the given [block] while measuring a span.
  *
- * @param metricMeasurementPlugins Relevant plugins used for tracking.
  * @param operation Name of the new span.
  * @param description Description of the new span.
  * @param block Action/Task to be executed within this span.
