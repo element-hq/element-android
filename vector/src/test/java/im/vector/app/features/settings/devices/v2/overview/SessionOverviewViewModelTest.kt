@@ -28,6 +28,7 @@ import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowRe
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSignoutSessionUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeVerificationService
@@ -77,6 +78,7 @@ class SessionOverviewViewModelTest {
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
     private val fakeGetNotificationsStatusUseCase = mockk<GetNotificationsStatusUseCase>()
     private val notificationsStatus = NotificationsStatus.ENABLED
+    private val fakeSharedPreferences = FakeSharedPreferences()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -89,6 +91,7 @@ class SessionOverviewViewModelTest {
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase,
+            sharedPreferences = fakeSharedPreferences,
     )
 
     @Before
@@ -99,6 +102,7 @@ class SessionOverviewViewModelTest {
 
         givenVerificationService()
         every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationsStatus)
+        fakeSharedPreferences.givenSessionManagerShowIpAddress(false)
     }
 
     private fun givenVerificationService(): FakeVerificationService {

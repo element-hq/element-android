@@ -28,6 +28,7 @@ import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCro
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -72,6 +73,7 @@ class DevicesViewModelTest {
     private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
+    private val fakeSharedPreferences = FakeSharedPreferences()
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
@@ -85,6 +87,7 @@ class DevicesViewModelTest {
                 interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                 pendingAuthHandler = fakePendingAuthHandler.instance,
                 refreshDevicesUseCase = fakeRefreshDevicesUseCase,
+                sharedPreferences = fakeSharedPreferences,
         )
     }
 
@@ -97,6 +100,7 @@ class DevicesViewModelTest {
         givenVerificationService()
         givenCurrentSessionCrossSigningInfo()
         givenDeviceFullInfoList(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
+        fakeSharedPreferences.givenSessionManagerShowIpAddress(false)
     }
 
     private fun givenVerificationService(): FakeVerificationService {

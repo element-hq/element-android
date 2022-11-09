@@ -18,6 +18,7 @@ package im.vector.app.test.fakes
 
 import android.content.SharedPreferences
 import im.vector.app.features.settings.FontScaleValue
+import im.vector.app.features.settings.VectorPreferences.Companion.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS
 import io.mockk.every
 import io.mockk.mockk
 
@@ -31,5 +32,9 @@ class FakeSharedPreferences : SharedPreferences by mockk() {
     fun givenUseSystemFontScaleIsSetTo(useSystemScale: Boolean) {
         every { contains("APPLICATION_USE_SYSTEM_FONT_SCALE_KEY") } returns true
         every { getBoolean("APPLICATION_USE_SYSTEM_FONT_SCALE_KEY", any()) } returns useSystemScale
+    }
+
+    fun givenSessionManagerShowIpAddress(showIpAddress: Boolean) {
+        every { getBoolean(SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, any()) } returns showIpAddress
     }
 }

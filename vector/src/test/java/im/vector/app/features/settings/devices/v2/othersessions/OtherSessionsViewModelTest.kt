@@ -26,6 +26,7 @@ import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
+import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.fixtures.aDeviceFullInfo
@@ -68,6 +69,7 @@ class OtherSessionsViewModelTest {
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
+    private val fakeSharedPreferences = FakeSharedPreferences()
 
     private fun createViewModel(viewState: OtherSessionsViewState = OtherSessionsViewState(defaultArgs)) =
             OtherSessionsViewModel(
@@ -78,6 +80,7 @@ class OtherSessionsViewModelTest {
                     interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                     pendingAuthHandler = fakePendingAuthHandler.instance,
                     refreshDevicesUseCase = fakeRefreshDevicesUseCase,
+                    sharedPreferences = fakeSharedPreferences,
             )
 
     @Before
@@ -87,6 +90,7 @@ class OtherSessionsViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
+        fakeSharedPreferences.givenSessionManagerShowIpAddress(false)
     }
 
     private fun givenVerificationService(): FakeVerificationService {
