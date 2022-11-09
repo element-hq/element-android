@@ -18,24 +18,33 @@ package im.vector.app.core.di
 
 import android.content.Context
 import android.os.Build
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorder
-import im.vector.app.features.voicebroadcast.VoiceBroadcastRecorderQ
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayerImpl
+import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
+import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorderQ
 import javax.inject.Singleton
 
-@Module
 @InstallIn(SingletonComponent::class)
-object VoiceModule {
-    @Provides
-    @Singleton
-    fun providesVoiceBroadcastRecorder(context: Context): VoiceBroadcastRecorder? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceBroadcastRecorderQ(context)
-        } else {
-            null
+@Module
+abstract class VoiceModule {
+
+    companion object {
+        @Provides
+        @Singleton
+        fun providesVoiceBroadcastRecorder(context: Context): VoiceBroadcastRecorder? {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                VoiceBroadcastRecorderQ(context)
+            } else {
+                null
+            }
         }
     }
+
+    @Binds
+    abstract fun bindVoiceBroadcastPlayer(player: VoiceBroadcastPlayerImpl): VoiceBroadcastPlayer
 }

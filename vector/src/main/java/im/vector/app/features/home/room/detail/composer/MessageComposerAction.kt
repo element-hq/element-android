@@ -34,6 +34,8 @@ sealed class MessageComposerAction : VectorViewModelAction {
     data class SlashCommandConfirmed(val parsedCommand: ParsedCommand) : MessageComposerAction()
     data class InsertUserDisplayName(val userId: String) : MessageComposerAction()
 
+    data class SetFullScreen(val isFullScreen: Boolean) : MessageComposerAction()
+
     // Voice Message
     data class InitializeVoiceRecorder(val attachmentData: ContentAttachmentData) : MessageComposerAction()
     data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : MessageComposerAction()

@@ -23,6 +23,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class DeleteDeviceParams(
+        /**
+         * Additional authentication information for the user-interactive authentication API.
+         */
         @Json(name = "auth")
-        val auth: Map<String, *>? = null
+        val auth: Map<String, *>? = null,
 )

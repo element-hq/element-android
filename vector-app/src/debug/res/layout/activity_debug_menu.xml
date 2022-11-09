@@ -186,6 +186,12 @@
                 android:layout_height="wrap_content"
                 android:text="Permissions" />
 
+            <Button
+                android:id="@+id/debug_jitsi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jitsi" />
+
         </LinearLayout>
 
     </ScrollView>

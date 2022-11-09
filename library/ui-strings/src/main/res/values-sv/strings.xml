@@ -2810,7 +2810,7 @@
     <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
     <string name="a11y_pause_voice_broadcast_record">Pausa inspelning av röstsändning</string>
     <string name="a11y_resume_voice_broadcast_record">Återuppta inspelning av röstsändning</string>
-    <string name="voice_broadcast_live">Realtid</string>
+    <string name="voice_broadcast_live">Live</string>
     <string name="qr_code_login_header_scan_qr_code_title">Skanna QR-kod</string>
     <string name="three">3</string>
     <string name="two">2</string>
@@ -2821,4 +2821,19 @@
     <string name="onboarding_new_app_layout_spaces_message">Kom åt dina utrymmen (nere till höger) snabbare och enklare än någonsin förut.</string>
     <string name="onboarding_new_app_layout_spaces_title">Kom åt utrymmen</string>
     <string name="onboarding_new_app_layout_welcome_message">För att förenkla din ${app_name} så är flikar nu valfria. Hantera dem i menyn uppe till höger.</string>
+    <string name="device_manager_other_sessions_select">Välj sessioner</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Plats</string>
+    <string name="attachment_type_selector_poll">Omröstningar</string>
+    <string name="attachment_type_selector_voice_broadcast">Röstsändning</string>
+    <string name="attachment_type_selector_file">Bilagor</string>
+    <string name="attachment_type_selector_sticker">Dekaler</string>
+    <string name="attachment_type_selector_gallery">Fotobibliotek</string>
+    <string name="action_deselect_all">Avmarkera alla</string>
+    <string name="action_select_all">Välj alla</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vald</item>
+        <item quantity="other">%1$d valda</item>
+    </plurals>
 </resources>

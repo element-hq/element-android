@@ -2305,4 +2305,8 @@
     <string name="create_spaces_me_and_teammates">Minä ja tiimikaverit</string>
     <string name="room_permissions_upgrade_the_space">Päivitä avaruus</string>
     <string name="room_permissions_change_space_avatar">Vaihda avaruuden kuva</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d valittu</item>
+        <item quantity="other">%1$d valittu</item>
+    </plurals>
 </resources>

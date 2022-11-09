@@ -2929,4 +2929,21 @@
     <string name="a11y_pause_voice_broadcast_record">Призупинити запис голосового повідомлення</string>
     <string name="a11y_resume_voice_broadcast_record">Відновити запис голосового повідомлення</string>
     <string name="voice_broadcast_live">Наживо</string>
+    <string name="device_manager_other_sessions_select">Вибрати сеанси</string>
+    <string name="attachment_type_selector_contact">Контакт</string>
+    <string name="attachment_type_selector_camera">Камера</string>
+    <string name="attachment_type_selector_location">Місце перебування</string>
+    <string name="attachment_type_selector_poll">Опитування</string>
+    <string name="attachment_type_selector_voice_broadcast">Голосові повідомлення</string>
+    <string name="attachment_type_selector_file">Вкладення</string>
+    <string name="attachment_type_selector_sticker">Наліпки</string>
+    <string name="attachment_type_selector_gallery">Фотобібліотека</string>
+    <string name="action_deselect_all">Скасувати вибір усіх</string>
+    <plurals name="x_selected">
+        <item quantity="one">Вибрано %1$d</item>
+        <item quantity="few">Вибрано %1$d</item>
+        <item quantity="many">Вибрано %1$d</item>
+        <item quantity="other">Вибрано %1$d</item>
+    </plurals>
+    <string name="action_select_all">Вибрати все</string>
 </resources>

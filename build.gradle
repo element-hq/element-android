@@ -96,9 +96,9 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-5.0.2"
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-6.2.2"
             // Note: to test Jitsi release you can use a local file like this:
-            // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.10.0"
+            // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-6.2.2"
             content {
                 groups.jitsi.regex.each { includeGroupByRegex it }
                 groups.jitsi.group.each { includeGroup it }
