@@ -844,13 +844,13 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         val plainTextBody = buildString {
             val plainMessageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray().orEmpty()
-            for ((i, paragraph) in plainMessageParagraphs.withIndex()) {
+            plainMessageParagraphs.forEachIndexed { index, paragraph ->
                 if (paragraph.isNotBlank()) {
                     append("> ")
                     append(paragraph)
                 }
 
-                if (i != plainMessageParagraphs.lastIndex) {
+                if (index != plainMessageParagraphs.lastIndex) {
                     append("\n\n")
                 }
             }
