@@ -26,8 +26,10 @@ class SentryDownloadDeviceKeysMetrics @Inject constructor() : DownloadDeviceKeys
     private var transaction: ITransaction? = null
 
     override fun startTransaction() {
-        transaction = Sentry.startTransaction("download_device_keys", "task")
-        logTransaction("Sentry transaction started")
+        if (Sentry.isEnabled()) {
+            transaction = Sentry.startTransaction("download_device_keys", "task")
+            logTransaction("Sentry transaction started")
+        }
     }
 
     override fun finishTransaction() {
