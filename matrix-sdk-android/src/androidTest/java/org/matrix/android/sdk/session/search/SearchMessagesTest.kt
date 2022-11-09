@@ -43,7 +43,7 @@ class SearchMessagesTest : InstrumentedTest {
             cryptoTestData.firstSession
                     .searchService()
                     .search(
-                            searchTerm = "lore",
+                            searchTerm = "lorem",
                             limit = 10,
                             includeProfile = true,
                             afterLimit = 0,
@@ -61,7 +61,7 @@ class SearchMessagesTest : InstrumentedTest {
             cryptoTestData.firstSession
                     .searchService()
                     .search(
-                            searchTerm = "lore",
+                            searchTerm = "lorem",
                             roomId = cryptoTestData.roomId,
                             limit = 10,
                             includeProfile = true,
