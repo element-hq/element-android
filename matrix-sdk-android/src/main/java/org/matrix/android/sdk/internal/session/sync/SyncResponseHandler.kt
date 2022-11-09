@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.extensions.measureMetric
 import org.matrix.android.sdk.api.extensions.measureSpan
@@ -60,7 +61,7 @@ internal class SyncResponseHandler @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
 ) {
 
-    private val metricPlugins = matrixConfiguration.metricPlugins
+    private val relevantPlugins = matrixConfiguration.metricPlugins.filterIsInstance<SyncDurationMetricPlugin>()
 
     suspend fun handleResponse(
             syncResponse: SyncResponse,
@@ -70,127 +71,165 @@ internal class SyncResponseHandler @Inject constructor(
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        val relevantPlugins = metricPlugins.filterIsInstance<SyncDurationMetricPlugin>()
-        measureMetric(relevantPlugins) {
-            // "start_crypto_service" span
-            measureSpan(relevantPlugins, "task", "start_crypto_service") {
-                measureTimeMillis {
-                    if (!cryptoService.isStarted()) {
-                        Timber.v("Should start cryptoService")
-                        cryptoService.start()
-                    }
-                    cryptoService.onSyncWillProcess(isInitialSync)
-                }.also {
-                    Timber.v("Finish handling start cryptoService in $it ms")
-                }
-            }
+        relevantPlugins.measureMetric {
+            startCryptoService(isInitialSync)
 
             // Handle the to device events before the room ones
             // to ensure to decrypt them properly
-
-            // "handle_to_device" span
-            measureSpan(relevantPlugins, "task", "handle_to_device") {
-                measureTimeMillis {
-                    Timber.v("Handle toDevice")
-                    reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
-                        if (syncResponse.toDevice != null) {
-                            cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
-                        }
-                    }
-                }.also {
-                    Timber.v("Finish handling toDevice in $it ms")
-                }
-            }
+            handleToDevice(syncResponse, reporter)
 
             val aggregator = SyncResponsePostTreatmentAggregator()
 
             // Prerequisite for thread events handling in RoomSyncHandler
-// Disabled due to the new fallback
-//        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
-//        }
+            // Disabled due to the new fallback
+            //        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            //            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+            //        }
 
-            // Start one big transaction
-            // Big "monarchy_transaction" span
-            measureSpan(relevantPlugins, "task", "monarchy_transaction") {
-                monarchy.awaitTransaction { realm ->
-                    // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
-                    // Child "handle_rooms" span
-                    measureSpan(relevantPlugins, "task", "handle_rooms") {
-                        measureTimeMillis {
-                            Timber.v("Handle rooms")
-                            reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
-                                if (syncResponse.rooms != null) {
-                                    roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
-                                }
-                            }
-                        }.also {
-                            Timber.v("Finish handling rooms in $it ms")
-                        }
-                    }
+            startMonarchyTransaction(syncResponse, isInitialSync, reporter, aggregator)
 
-                    // Child "handle_account_data" span
-                    measureSpan(relevantPlugins, "task", "handle_account_data") {
-                        measureTimeMillis {
-                            reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
-                                Timber.v("Handle accountData")
-                                userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
-                            }
-                        }.also {
-                            Timber.v("Finish handling accountData in $it ms")
-                        }
-                    }
+            aggregateSyncResponse(aggregator)
 
-                    // Child "handle_presence" span
-                    measureSpan(relevantPlugins, "task", "handle_presence") {
-                        measureTimeMillis {
-                            Timber.v("Handle Presence")
-                            presenceSyncHandler.handle(realm, syncResponse.presence)
-                        }.also {
-                            Timber.v("Finish handling Presence in $it ms")
-                        }
-                    }
-                    tokenStore.saveToken(realm, syncResponse.nextBatch)
-                }
-            }
+            postTreatmentSyncResponse(syncResponse, isInitialSync)
 
-            // "aggregator_management" span
-            measureSpan(relevantPlugins, "task", "aggregator_management") {
-                // Everything else we need to do outside the transaction
-                measureTimeMillis {
-                    aggregatorHandler.handle(aggregator)
-                }.also {
-                    Timber.v("Aggregator management took $it ms")
-                }
-            }
+            markCryptoSyncCompleted(syncResponse)
 
-            // "sync_response_post_treatment" span
-            measureSpan(relevantPlugins, "task", "sync_response_post_treatment") {
-                measureTimeMillis {
-                    syncResponse.rooms?.let {
-                        checkPushRules(it, isInitialSync)
-                        userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
-                        dispatchInvitedRoom(it)
-                    }
-                }.also {
-                    Timber.v("SyncResponse.rooms post treatment took $it ms")
-                }
-            }
+            handlePostSync()
 
-            // "crypto_sync_handler_onSyncCompleted" span
-            measureSpan(relevantPlugins, "task", "crypto_sync_handler_onSyncCompleted") {
-                measureTimeMillis {
-                    cryptoSyncHandler.onSyncCompleted(syncResponse)
-                }.also {
-                    Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
-                }
-            }
-
-            // post sync stuffs
-            monarchy.writeAsync {
-                roomSyncHandler.postSyncSpaceHierarchyHandle(it)
-            }
             Timber.v("On sync completed")
+        }
+    }
+
+    private fun startCryptoService(isInitialSync: Boolean) {
+        // "start_crypto_service" span
+        relevantPlugins.measureSpan("task", "start_crypto_service") {
+            measureTimeMillis {
+                if (!cryptoService.isStarted()) {
+                    Timber.v("Should start cryptoService")
+                    cryptoService.start()
+                }
+                cryptoService.onSyncWillProcess(isInitialSync)
+            }.also {
+                Timber.v("Finish handling start cryptoService in $it ms")
+            }
+        }
+    }
+
+    private suspend fun handleToDevice(syncResponse: SyncResponse, reporter: ProgressReporter?) {
+        // "handle_to_device" span
+        relevantPlugins.measureSpan("task", "handle_to_device") {
+            measureTimeMillis {
+                Timber.v("Handle toDevice")
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
+                    if (syncResponse.toDevice != null) {
+                        cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                    }
+                }
+            }.also {
+                Timber.v("Finish handling toDevice in $it ms")
+            }
+        }
+    }
+
+    private suspend fun startMonarchyTransaction(syncResponse: SyncResponse, isInitialSync: Boolean, reporter: ProgressReporter?, aggregator: SyncResponsePostTreatmentAggregator) {
+        // Start one big transaction
+        // Big "monarchy_transaction" span
+        relevantPlugins.measureSpan("task", "monarchy_transaction") {
+            monarchy.awaitTransaction { realm ->
+                // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
+                handleRooms(reporter, syncResponse, realm, isInitialSync, aggregator)
+                handleAccountData(reporter, realm, syncResponse)
+                handlePresence(realm, syncResponse)
+
+                tokenStore.saveToken(realm, syncResponse.nextBatch)
+            }
+        }
+    }
+
+    private fun handleRooms(reporter: ProgressReporter?, syncResponse: SyncResponse, realm: Realm, isInitialSync: Boolean, aggregator: SyncResponsePostTreatmentAggregator) {
+        // Child "handle_rooms" span
+        relevantPlugins.measureSpan("task", "handle_rooms") {
+            measureTimeMillis {
+                Timber.v("Handle rooms")
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
+                    if (syncResponse.rooms != null) {
+                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
+                    }
+                }
+            }.also {
+                Timber.v("Finish handling rooms in $it ms")
+            }
+        }
+    }
+
+    private fun handleAccountData(reporter: ProgressReporter?, realm: Realm, syncResponse: SyncResponse) {
+        // Child "handle_account_data" span
+        relevantPlugins.measureSpan("task", "handle_account_data") {
+            measureTimeMillis {
+                reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
+                    Timber.v("Handle accountData")
+                    userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
+                }
+            }.also {
+                Timber.v("Finish handling accountData in $it ms")
+            }
+        }
+    }
+
+    private fun handlePresence(realm: Realm, syncResponse: SyncResponse) {
+        // Child "handle_presence" span
+        relevantPlugins.measureSpan("task", "handle_presence") {
+            measureTimeMillis {
+                Timber.v("Handle Presence")
+                presenceSyncHandler.handle(realm, syncResponse.presence)
+            }.also {
+                Timber.v("Finish handling Presence in $it ms")
+            }
+        }
+    }
+
+    private suspend fun aggregateSyncResponse(aggregator: SyncResponsePostTreatmentAggregator) {
+        // "aggregator_management" span
+        relevantPlugins.measureSpan("task", "aggregator_management") {
+            // Everything else we need to do outside the transaction
+            measureTimeMillis {
+                aggregatorHandler.handle(aggregator)
+            }.also {
+                Timber.v("Aggregator management took $it ms")
+            }
+        }
+    }
+
+    private suspend fun postTreatmentSyncResponse(syncResponse: SyncResponse, isInitialSync: Boolean) {
+        // "sync_response_post_treatment" span
+        relevantPlugins.measureSpan("task", "sync_response_post_treatment") {
+            measureTimeMillis {
+                syncResponse.rooms?.let {
+                    checkPushRules(it, isInitialSync)
+                    userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
+                    dispatchInvitedRoom(it)
+                }
+            }.also {
+                Timber.v("SyncResponse.rooms post treatment took $it ms")
+            }
+        }
+    }
+
+    private fun markCryptoSyncCompleted(syncResponse: SyncResponse) {
+        // "crypto_sync_handler_onSyncCompleted" span
+        relevantPlugins.measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
+            measureTimeMillis {
+                cryptoSyncHandler.onSyncCompleted(syncResponse)
+            }.also {
+                Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
+            }
+        }
+    }
+
+    private fun handlePostSync() {
+        // post sync stuffs
+        monarchy.writeAsync {
+            roomSyncHandler.postSyncSpaceHierarchyHandle(it)
         }
     }
 
