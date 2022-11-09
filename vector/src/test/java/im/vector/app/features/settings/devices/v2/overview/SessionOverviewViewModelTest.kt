@@ -29,7 +29,7 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSharedPreferences
-import im.vector.app.test.fakes.FakeSignoutSessionUseCase
+import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -71,7 +71,7 @@ class SessionOverviewViewModelTest {
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
-    private val fakeSignoutSessionUseCase = FakeSignoutSessionUseCase()
+    private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
@@ -84,7 +84,7 @@ class SessionOverviewViewModelTest {
             initialState = SessionOverviewViewState(args),
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
-            signoutSessionUseCase = fakeSignoutSessionUseCase.instance,
+            signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
             interceptSignoutFlowResponseUseCase = interceptSignoutFlowResponseUseCase,
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
@@ -252,7 +252,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        fakeSignoutSessionUseCase.givenSignoutSuccess(A_SESSION_ID_1, interceptSignoutFlowResponseUseCase)
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_SESSION_ID_1))
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
@@ -289,7 +289,7 @@ class SessionOverviewViewModelTest {
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         val error = Exception()
-        fakeSignoutSessionUseCase.givenSignoutError(A_SESSION_ID_1, error)
+        fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_SESSION_ID_1), error)
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
@@ -322,7 +322,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val reAuthNeeded = fakeSignoutSessionUseCase.givenSignoutReAuthNeeded(A_SESSION_ID_1, interceptSignoutFlowResponseUseCase)
+        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_SESSION_ID_1))
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)

@@ -26,7 +26,7 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.6.0"
+def sentry = "6.7.0"
 def fragment = "1.5.4"
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819

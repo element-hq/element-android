@@ -31,20 +31,16 @@ import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
-import kotlin.coroutines.Continuation
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
@@ -166,16 +162,14 @@ class DevicesViewModel @AssistedInject constructor(
             if (deviceIds.isEmpty()) {
                 return@launch
             }
-            val signoutResult = signout(deviceIds)
+            val result = signout(deviceIds)
             setLoading(false)
 
-            if (signoutResult.isSuccess) {
+            val error = result.exceptionOrNull()
+            if (error == null) {
                 onSignoutSuccess()
             } else {
-                when (val failure = signoutResult.exceptionOrNull()) {
-                    null -> onSignoutSuccess()
-                    else -> onSignoutFailure(failure)
-                }
+                onSignoutFailure(error)
             }
         }
     }
@@ -187,16 +181,9 @@ class DevicesViewModel @AssistedInject constructor(
                 .orEmpty()
     }
 
-    private suspend fun signout(deviceIds: List<String>) = signoutSessionsUseCase.execute(deviceIds, object : UserInteractiveAuthInterceptor {
-        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-            when (val result = interceptSignoutFlowResponseUseCase.execute(flowResponse, errCode, promise)) {
-                is SignoutSessionResult.ReAuthNeeded -> onReAuthNeeded(result)
-                is SignoutSessionResult.Completed -> Unit
-            }
-        }
-    })
+    private suspend fun signout(deviceIds: List<String>) = signoutSessionsUseCase.execute(deviceIds, this::onReAuthNeeded)
 
-    private fun onReAuthNeeded(reAuthNeeded: SignoutSessionResult.ReAuthNeeded) {
+    private fun onReAuthNeeded(reAuthNeeded: SignoutSessionsReAuthNeeded) {
         Timber.d("onReAuthNeeded")
         pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         pendingAuthHandler.uiaContinuation = reAuthNeeded.uiaContinuation

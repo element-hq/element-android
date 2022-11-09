@@ -16,55 +16,33 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
+import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import kotlin.coroutines.Continuation
 
 class FakeSignoutSessionsUseCase {
 
     val instance = mockk<SignoutSessionsUseCase>()
 
-    fun givenSignoutSuccess(
-            deviceIds: List<String>,
-            interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
-    ) {
-        val interceptor = slot<UserInteractiveAuthInterceptor>()
-        val flowResponse = mockk<RegistrationFlowResponse>()
-        val errorCode = "errorCode"
-        val promise = mockk<Continuation<UIABaseAuth>>()
-        every { interceptSignoutFlowResponseUseCase.execute(flowResponse, errorCode, promise) } returns SignoutSessionResult.Completed
-        coEvery { instance.execute(deviceIds, capture(interceptor)) } coAnswers {
-            secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
-            Result.success(Unit)
-        }
+    fun givenSignoutSuccess(deviceIds: List<String>) {
+        coEvery { instance.execute(deviceIds, any()) } returns Result.success(Unit)
     }
 
-    fun givenSignoutReAuthNeeded(
-            deviceIds: List<String>,
-            interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
-    ): SignoutSessionResult.ReAuthNeeded {
-        val interceptor = slot<UserInteractiveAuthInterceptor>()
+    fun givenSignoutReAuthNeeded(deviceIds: List<String>): SignoutSessionsReAuthNeeded {
         val flowResponse = mockk<RegistrationFlowResponse>()
         every { flowResponse.session } returns "a-session-id"
         val errorCode = "errorCode"
-        val promise = mockk<Continuation<UIABaseAuth>>()
-        val reAuthNeeded = SignoutSessionResult.ReAuthNeeded(
+        val reAuthNeeded = SignoutSessionsReAuthNeeded(
                 pendingAuth = mockk(),
-                uiaContinuation = promise,
+                uiaContinuation = mockk(),
                 flowResponse = flowResponse,
                 errCode = errorCode,
         )
-        every { interceptSignoutFlowResponseUseCase.execute(flowResponse, errorCode, promise) } returns reAuthNeeded
-        coEvery { instance.execute(deviceIds, capture(interceptor)) } coAnswers {
-            secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
+        coEvery { instance.execute(deviceIds, any()) } coAnswers {
+            secondArg<(SignoutSessionsReAuthNeeded) -> Unit>().invoke(reAuthNeeded)
             Result.success(Unit)
         }
 

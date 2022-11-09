@@ -232,7 +232,7 @@ class DevicesViewModelTest {
         // Given
         val expectedViewState = givenInitialViewState(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_CURRENT_DEVICE_ID)
         // signout all devices except the current device
-        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1), fakeInterceptSignoutFlowResponseUseCase)
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_DEVICE_ID_1))
 
         // When
         val viewModel = createViewModel()
@@ -279,7 +279,7 @@ class DevicesViewModelTest {
     @Test
     fun `given reAuth is needed during multiSignout when handling multiSignout action then requestReAuth is sent and pending auth is stored`() {
         // Given
-        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2), fakeInterceptSignoutFlowResponseUseCase)
+        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_DEVICE_ID_1, A_DEVICE_ID_2))
         val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
         val expectedReAuthEvent = DevicesViewEvent.RequestReAuth(reAuthNeeded.flowResponse, reAuthNeeded.errCode)
 
