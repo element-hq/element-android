@@ -280,7 +280,7 @@ class SessionOverviewFragment :
             R.string.device_manager_verification_status_unverified
         }
         val descriptionResId = if (isVerified) {
-            R.string.device_manager_learn_more_sessions_verified
+            R.string.device_manager_learn_more_sessions_verified_description
         } else {
             R.string.device_manager_learn_more_sessions_unverified
         }
