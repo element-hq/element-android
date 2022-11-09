@@ -229,11 +229,14 @@ data class Event(
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage() -> "sent a file."
+            isVoiceMessage() -> "sent a voice message."
             isAudioMessage() -> "sent an audio file."
             isImageMessage() -> "sent an image."
             isVideoMessage() -> "sent a video."
-            isSticker() -> "sent a sticker"
+            isSticker() -> "sent a sticker."
             isPoll() -> getPollQuestion() ?: "created a poll."
+            isLiveLocation() -> "Live location."
+            isLocationMessage() -> "has shared their location."
             else -> text
         }
     }
@@ -444,7 +447,7 @@ fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
 
 fun Event.getPollContent(): MessagePollContent? {
-    return content.toModel<MessagePollContent>()
+    return getDecryptedContent().toModel<MessagePollContent>()
 }
 
 fun Event.supportsNotification() =
