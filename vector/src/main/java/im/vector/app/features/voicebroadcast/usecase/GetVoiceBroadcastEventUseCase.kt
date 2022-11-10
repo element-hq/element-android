@@ -21,11 +21,12 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onStart
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -33,7 +34,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.unwrap
+import org.matrix.android.sdk.flow.mapOptional
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,10 +58,10 @@ class GetVoiceBroadcastEventUseCase @Inject constructor(
             else -> {
                 room.flow()
                         .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(latestEvent.root.stateKey.orEmpty()))
-                        .unwrap()
-                        .mapNotNull { it.asVoiceBroadcastEvent() }
-                        .filter { it.reference?.eventId == voiceBroadcast.voiceBroadcastId }
-                        .map { it.toOptional() }
+                        .onStart { emit(latestEvent.root.toOptional()) }
+                        .distinctUntilChanged()
+                        .filter { !it.hasValue() || it.getOrNull()?.asVoiceBroadcastEvent()?.voiceBroadcastId == voiceBroadcast.voiceBroadcastId }
+                        .mapOptional { it.asVoiceBroadcastEvent() }
             }
         }
     }
