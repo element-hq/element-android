@@ -2802,4 +2802,27 @@
         <item quantity="one">۱ گزیده</item>
         <item quantity="other">%1$d گزیده</item>
     </plurals>
+    <string name="error_voice_broadcast_permission_denied_message">اجازه‌های لازم برای آغاز پخش صوتی در این اتاق را ندارید. برای ارتقای اجازه‌هایتان با یک مدیر اتاق تماس بگیرید.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">فرد دیگری در حال ضبط یک پخش صوتی است. برای آغاز یک پخش جدید، منتظر پایان پخشش بمانید.</string>
+    <string name="qr_code_login_header_connected_description">با بررسی افزاره‌های وارد شده‌تان باید کد زیر را ببینید. تأیید کنید که این کد با آن افزاره مطابق است:</string>
+    <string name="error_voice_broadcast_already_in_progress_message">دارید یک پخش صوتی ضبط می‌کنید. لطفاً برای آغاز یک پخش جدید، به پخش کنونی پایان دهید.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ افزاره‌های تأییدنشده‌ای در این اتاق وجود دارند. آن‌ها قادر به رمزگشایی پیام‌هایی که فرستاده‌اید نیستند.</string>
+    <string name="qr_code_login_header_scan_qr_code_description">استفاده از دوربین روی این افزاره برای پویش کد QR نشان داده شده روی افزارهٔ دیگرتان:</string>
+    <string name="labs_enable_client_info_recording_summary">ضبط نام کارخواه، نگارش و نشانی برای بازشناسی آسان‌تر نشست‌ها در مدیر نشست.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 رمزگذاری به نشست‌های تأیید شده را فقط برای تمامی اتاق‌ها در تنظیمات امنیت به کار انداخته‌اید.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">خارج شدن از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+        <item quantity="other">خارج شدن از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+    </plurals>
+    <string name="labs_enable_voice_broadcast_summary">توانایی ضبط و فرستادن پخش صدا در خط زمانی اتاق.</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">پویش کد QR زیر با افزاره‌ای که خارج شده.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">استفاده از افزارهٔ وارد شده‌تان برای پویش کد QR زیر:</string>
+    <string name="error_check_network">چیزی اشتباه پیش رفت. لطفاً اتّصال شبکه‌تان را بررسی و دوباره تلاش کنید.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} برای نمایش آگاهی‌ها نیازمند اجازه است.
+\nلطفاً اجازه را اعطا کنید.</string>
+    <string name="error_voice_broadcast_unauthorized_title">نمی‌توان پخش صدایی جدید را آغاز کرد</string>
+    <string name="rich_text_editor_full_screen_toggle">تغییر حالت تمام‌صفحه</string>
+    <string name="a11y_voice_broadcast_fast_forward">۳۰ ثانیه پیش‌روی</string>
+    <string name="a11y_voice_broadcast_fast_backward">۳۰ ثانیه پس‌روی</string>
+    <string name="attachment_type_selector_text_formatting">قالب‌بندی متن</string>
 </resources>

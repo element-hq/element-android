@@ -2783,4 +2783,12 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <plurals name="x_selected">
         <item quantity="other">%1$d dipilih</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Ubah mode layar penuh</string>
+    <string name="attachment_type_selector_text_formatting">Format teks</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Anda sedang merekam sebuah siaran suara. Mohon akhiri siaran suara Anda saat ini untuk memulai yang baru.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Orang lain sedang merekam sebuah siaran suara. Tunggu untuk siaran suara berakhir untuk memulai yang baru.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Anda tidak memiliki izin yang dibutuhkan untuk memulai sebuah siaran suara di ruangan ini. Hubungi sebuah administrator ruangan untuk meningkatkan izin Anda.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Tidak dapat memulai siaran suara baru</string>
+    <string name="a11y_voice_broadcast_fast_forward">Maju cepat 30 detik</string>
+    <string name="a11y_voice_broadcast_fast_backward">Mundur cepat 30 detik</string>
 </resources>
