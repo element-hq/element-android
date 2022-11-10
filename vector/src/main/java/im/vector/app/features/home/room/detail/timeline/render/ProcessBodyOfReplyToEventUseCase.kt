@@ -37,7 +37,6 @@ private const val IN_REPLY_TO = "In reply to"
 private const val BREAKING_LINE = "<br />"
 private const val ENDING_BLOCK_QUOTE = "</blockquote>"
 
-// TODO add unit tests
 class ProcessBodyOfReplyToEventUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider,
@@ -48,7 +47,6 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
         val breakingLineIndex = matrixFormattedBody.lastIndexOf(BREAKING_LINE)
         val endOfBlockQuoteIndex = matrixFormattedBody.lastIndexOf(ENDING_BLOCK_QUOTE)
 
-        // TODO check in other platform how is handled the case of no repliedToEvent fetched
         val withTranslatedContent = if (repliedToEvent != null && breakingLineIndex != -1 && endOfBlockQuoteIndex != -1) {
             val afterBreakingLineIndex = breakingLineIndex + BREAKING_LINE.length
             when {
