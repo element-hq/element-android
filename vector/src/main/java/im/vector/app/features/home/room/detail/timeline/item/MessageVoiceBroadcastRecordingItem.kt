@@ -113,6 +113,10 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         super.unbind(holder)
         recorderListener?.let { recorder?.removeListener(it) }
         recorderListener = null
+        with(holder) {
+            recordButton.onClick(null)
+            stopRecordButton.onClick(null)
+        }
     }
 
     override fun getViewStubId() = STUB_ID
