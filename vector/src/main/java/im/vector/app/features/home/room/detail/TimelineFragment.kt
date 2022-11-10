@@ -1154,7 +1154,6 @@ class TimelineFragment :
         }
         val summary = mainState.asyncRoomSummary()
         renderToolbar(summary)
-        renderTypingMessageNotification(summary, mainState)
         views.removeJitsiWidgetView.render(mainState)
         if (mainState.hasFailedSending) {
             lazyLoadedViews.failedMessagesWarningView(inflateIfNeeded = true, createFailedMessagesWarningCallback())?.isVisible = true
@@ -1228,17 +1227,6 @@ class TimelineFragment :
     private fun FragmentTimelineBinding.hideComposerViews() {
         composerContainer.isVisible = false
         voiceMessageRecorderContainer.isVisible = false
-    }
-
-    private fun renderTypingMessageNotification(roomSummary: RoomSummary?, state: RoomDetailViewState) {
-        if (!isThreadTimeLine() && roomSummary != null) {
-            views.typingMessageView.isInvisible = state.typingUsers.isNullOrEmpty()
-            state.typingUsers
-                    ?.take(MAX_TYPING_MESSAGE_USERS_COUNT)
-                    ?.let { senders -> views.typingMessageView.render(senders, avatarRenderer) }
-        } else {
-            views.typingMessageView.isInvisible = true
-        }
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?) {

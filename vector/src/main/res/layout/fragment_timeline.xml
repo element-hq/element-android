@@ -85,7 +85,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintBottom_toTopOf="@id/typingMessageView"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
@@ -106,18 +106,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView" />
-
-    <im.vector.app.core.ui.views.TypingMessageView
-        android:id="@+id/typingMessageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView" />
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
