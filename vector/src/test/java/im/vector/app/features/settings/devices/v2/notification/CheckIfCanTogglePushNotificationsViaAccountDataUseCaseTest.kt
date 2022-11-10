@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeSession
 import io.mockk.mockk
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -26,18 +26,15 @@ private const val A_DEVICE_ID = "device-id"
 
 class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
+    private val fakeSession = FakeSession()
 
     private val checkIfCanTogglePushNotificationsViaAccountDataUseCase =
-            CheckIfCanTogglePushNotificationsViaAccountDataUseCase(
-                    activeSessionHolder = fakeActiveSessionHolder.instance,
-            )
+            CheckIfCanTogglePushNotificationsViaAccountDataUseCase()
 
     @Test
     fun `given current session and an account data for the device id when execute then result is true`() {
         // Given
-        fakeActiveSessionHolder
-                .fakeSession
+        fakeSession
                 .accountDataService()
                 .givenGetUserAccountDataEventReturns(
                         type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
@@ -45,7 +42,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
                 )
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(A_DEVICE_ID)
+        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo true
@@ -54,8 +51,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
     @Test
     fun `given current session and NO account data for the device id when execute then result is false`() {
         // Given
-        fakeActiveSessionHolder
-                .fakeSession
+        fakeSession
                 .accountDataService()
                 .givenGetUserAccountDataEventReturns(
                         type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
@@ -63,7 +59,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
                 )
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(A_DEVICE_ID)
+        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo false

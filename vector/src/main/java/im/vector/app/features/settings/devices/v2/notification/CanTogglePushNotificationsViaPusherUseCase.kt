@@ -16,15 +16,23 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
+import androidx.lifecycle.asFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
+class CanTogglePushNotificationsViaPusherUseCase @Inject constructor() {
 
-    fun execute(session: Session, deviceId: String): Boolean {
+    fun execute(session: Session): Flow<Boolean> {
         return session
-                .accountDataService()
-                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
+                .homeServerCapabilitiesService()
+                .getHomeServerCapabilitiesLive()
+                .asFlow()
+                .unwrap()
+                .map { it.canRemotelyTogglePushNotificationsOfDevices }
+                .distinctUntilChanged()
     }
 }

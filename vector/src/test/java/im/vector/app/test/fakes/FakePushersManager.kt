@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.notification
+package im.vector.app.test.fakes
 
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import javax.inject.Inject
+import im.vector.app.core.pushers.PushersManager
+import io.mockk.every
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.pushers.Pusher
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
+class FakePushersManager {
 
-    fun execute(session: Session, deviceId: String): Boolean {
-        return session
-                .accountDataService()
-                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
+    val instance = mockk<PushersManager>()
+
+    fun givenGetPusherForCurrentSessionReturns(pusher: Pusher?) {
+        every { instance.getPusherForCurrentSession() } returns pusher
     }
 }
