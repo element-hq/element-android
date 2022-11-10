@@ -17,6 +17,7 @@
 package im.vector.app.features.voicebroadcast
 
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.recording.usecase.PauseVoiceBroadcastUseCase
 import im.vector.app.features.voicebroadcast.recording.usecase.ResumeVoiceBroadcastUseCase
 import im.vector.app.features.voicebroadcast.recording.usecase.StartVoiceBroadcastUseCase
@@ -41,15 +42,13 @@ class VoiceBroadcastHelper @Inject constructor(
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
 
-    fun playOrResumePlayback(roomId: String, voiceBroadcastId: String) = voiceBroadcastPlayer.playOrResume(roomId, voiceBroadcastId)
+    fun playOrResumePlayback(voiceBroadcast: VoiceBroadcast) = voiceBroadcastPlayer.playOrResume(voiceBroadcast)
 
     fun pausePlayback() = voiceBroadcastPlayer.pause()
 
     fun stopPlayback() = voiceBroadcastPlayer.stop()
 
-    fun seekTo(voiceBroadcastId: String, positionMillis: Int) {
-        if (voiceBroadcastPlayer.currentVoiceBroadcastId == voiceBroadcastId) {
-            voiceBroadcastPlayer.seekTo(positionMillis)
-        }
+    fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int, duration: Int) {
+        voiceBroadcastPlayer.seekTo(voiceBroadcast, positionMillis, duration)
     }
 }

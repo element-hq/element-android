@@ -167,12 +167,10 @@ class WebRtcCall(
     private var screenSender: RtpSender? = null
 
     private val timer = CountUpTimer(1000L).apply {
-        tickListener = object : CountUpTimer.TickListener {
-            override fun onTick(milliseconds: Long) {
-                val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
-                listeners.forEach {
-                    tryOrNull { it.onTick(formattedDuration) }
-                }
+        tickListener = CountUpTimer.TickListener { milliseconds ->
+            val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
+            listeners.forEach {
+                tryOrNull { it.onTick(formattedDuration) }
             }
         }
     }

@@ -199,11 +199,7 @@ class AudioMessageHelper @Inject constructor(
     private fun startRecordingAmplitudes() {
         amplitudeTicker?.stop()
         amplitudeTicker = CountUpTimer(50).apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    onAmplitudeTick()
-                }
-            }
+            tickListener = CountUpTimer.TickListener { onAmplitudeTick() }
             resume()
         }
     }
@@ -234,11 +230,7 @@ class AudioMessageHelper @Inject constructor(
     private fun startPlaybackTicker(id: String) {
         playbackTicker?.stop()
         playbackTicker = CountUpTimer().apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    onPlaybackTick(id)
-                }
-            }
+            tickListener = CountUpTimer.TickListener { onPlaybackTick(id) }
             resume()
         }
         onPlaybackTick(id)

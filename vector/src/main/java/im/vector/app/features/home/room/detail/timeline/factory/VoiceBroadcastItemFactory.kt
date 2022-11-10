@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
@@ -28,6 +29,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadca
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem_
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
@@ -44,6 +46,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         private val drawableProvider: DrawableProvider,
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
+        private val playbackTracker: AudioMessagePlaybackTracker,
 ) {
 
     fun create(
@@ -58,19 +61,20 @@ class VoiceBroadcastItemFactory @Inject constructor(
         val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
         val voiceBroadcastEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent().root.asVoiceBroadcastEvent() ?: return null
         val voiceBroadcastContent = voiceBroadcastEvent.content ?: return null
-        val voiceBroadcastId = voiceBroadcastEventsGroup.voiceBroadcastId
+        val voiceBroadcast = VoiceBroadcast(voiceBroadcastId = voiceBroadcastEventsGroup.voiceBroadcastId, roomId = params.event.roomId)
 
         val isRecording = voiceBroadcastContent.voiceBroadcastState != VoiceBroadcastState.STOPPED &&
                 voiceBroadcastEvent.root.stateKey == session.myUserId &&
                 messageContent.deviceId == session.sessionParams.deviceId
 
         val voiceBroadcastAttributes = AbsMessageVoiceBroadcastItem.Attributes(
-                voiceBroadcastId = voiceBroadcastId,
+                voiceBroadcast = voiceBroadcast,
                 voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
                 duration = voiceBroadcastEventsGroup.getDuration(),
                 recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
                 recorder = voiceBroadcastRecorder,
                 player = voiceBroadcastPlayer,
+                playbackTracker = playbackTracker,
                 roomItem = session.getRoom(params.event.roomId)?.roomSummary()?.toMatrixItem(),
                 colorProvider = colorProvider,
                 drawableProvider = drawableProvider,
@@ -89,7 +93,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastRecordingItem {
         return MessageVoiceBroadcastRecordingItem_()
-                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcast.voiceBroadcastId}")
                 .attributes(attributes)
                 .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)
@@ -102,7 +106,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
             voiceBroadcastAttributes: AbsMessageVoiceBroadcastItem.Attributes,
     ): MessageVoiceBroadcastListeningItem {
         return MessageVoiceBroadcastListeningItem_()
-                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcastId}")
+                .id("voice_broadcast_${voiceBroadcastAttributes.voiceBroadcast.voiceBroadcastId}")
                 .attributes(attributes)
                 .voiceBroadcastAttributes(voiceBroadcastAttributes)
                 .highlighted(highlight)

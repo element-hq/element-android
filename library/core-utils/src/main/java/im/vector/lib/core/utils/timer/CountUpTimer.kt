@@ -66,7 +66,7 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
         coroutineScope.cancel()
     }
 
-    interface TickListener {
+    fun interface TickListener {
         fun onTick(milliseconds: Long)
     }
 }
