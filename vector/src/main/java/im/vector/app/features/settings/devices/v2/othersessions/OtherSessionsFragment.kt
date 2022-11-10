@@ -267,7 +267,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_verified_sessions_found)
-                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_verified_title, R.string.device_manager_learn_more_sessions_verified)
+                updateSecurityLearnMoreButton(
+                        R.string.device_manager_learn_more_sessions_verified_title,
+                        R.string.device_manager_learn_more_sessions_verified_description
+                )
             }
             DeviceManagerFilterType.UNVERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(

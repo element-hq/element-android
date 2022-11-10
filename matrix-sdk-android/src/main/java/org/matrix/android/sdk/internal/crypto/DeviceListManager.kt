@@ -355,7 +355,7 @@ internal class DeviceListManager @Inject constructor(
         val relevantPlugins = metricPlugins.filterIsInstance<DownloadDeviceKeysMetricsPlugin>()
 
         val response: KeysQueryResponse
-        measureMetric(relevantPlugins) {
+        relevantPlugins.measureMetric {
             response = try {
                 downloadKeysForUsersTask.execute(params)
             } catch (throwable: Throwable) {

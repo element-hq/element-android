@@ -16,9 +16,14 @@
 
 package org.matrix.android.sdk.internal.session.homeserver
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.HomeServerCapabilitiesMapper
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
 import org.matrix.android.sdk.internal.database.query.get
@@ -26,13 +31,23 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
 internal class HomeServerCapabilitiesDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy
+        @SessionDatabase private val monarchy: Monarchy,
 ) {
     fun getHomeServerCapabilities(): HomeServerCapabilities? {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             HomeServerCapabilitiesEntity.get(realm)?.let {
                 HomeServerCapabilitiesMapper.map(it)
             }
+        }
+    }
+
+    fun getHomeServerCapabilitiesLive(): LiveData<Optional<HomeServerCapabilities>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm -> realm.where<HomeServerCapabilitiesEntity>() },
+                { HomeServerCapabilitiesMapper.map(it) }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
         }
     }
 }

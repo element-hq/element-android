@@ -22,11 +22,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
-import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
@@ -76,7 +76,7 @@ class SessionOverviewViewModelTest {
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
-    private val fakeGetNotificationsStatusUseCase = mockk<GetNotificationsStatusUseCase>()
+    private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
     private val fakeSharedPreferences = FakeSharedPreferences()
 
@@ -90,7 +90,7 @@ class SessionOverviewViewModelTest {
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
-            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase,
+            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
             sharedPreferences = fakeSharedPreferences,
     )
 
@@ -101,7 +101,11 @@ class SessionOverviewViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
-        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationsStatus)
+        fakeGetNotificationsStatusUseCase.givenExecuteReturns(
+                fakeActiveSessionHolder.fakeSession,
+                A_SESSION_ID_1,
+                notificationsStatus
+        )
         fakeSharedPreferences.givenSessionManagerShowIpAddress(false)
     }
 
@@ -416,13 +420,10 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `when viewModel init, then observe pushers and emit to state`() {
-        val notificationStatus = NotificationsStatus.ENABLED
-        every { fakeGetNotificationsStatusUseCase.execute(A_SESSION_ID_1) } returns flowOf(notificationStatus)
-
         val viewModel = createViewModel()
 
         viewModel.test()
-                .assertLatestState { state -> state.notificationsStatus == notificationStatus }
+                .assertLatestState { state -> state.notificationsStatus == notificationsStatus }
                 .finish()
     }
 

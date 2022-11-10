@@ -100,10 +100,12 @@
         android:id="@+id/fastBackwardButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_backward"
         android:src="@drawable/ic_player_backward_30"
-        app:tint="?vctr_content_secondary" />
+        android:visibility="invisible"
+        app:tint="?vctr_content_secondary"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/playPauseButton"
@@ -121,16 +123,20 @@
         android:layout_height="@dimen/voice_broadcast_player_button_size"
         android:contentDescription="@string/a11y_voice_broadcast_buffering"
         android:indeterminate="true"
-        android:indeterminateTint="?vctr_content_secondary" />
+        android:indeterminateTint="?vctr_content_secondary"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/fastForwardButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_forward"
         android:src="@drawable/ic_player_forward_30"
-        app:tint="?vctr_content_secondary" />
+        android:visibility="invisible"
+        app:tint="?vctr_content_secondary"
+        tools:visibility="visible" />
 
     <SeekBar
         android:id="@+id/seekBar"

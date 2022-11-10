@@ -29,7 +29,6 @@ import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.fixtures.SessionParamsFixture
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
@@ -100,20 +99,5 @@ class PushersManagerTest {
         val pusher = pushersManager.getPusherForCurrentSession()
 
         pusher shouldBeEqualTo expectedPusher
-    }
-
-    @Test
-    fun `when togglePusherForCurrentSession, then do service toggle pusher`() = runTest {
-        val deviceId = "device_id"
-        val sessionParams = SessionParamsFixture.aSessionParams(
-                credentials = CredentialsFixture.aCredentials(deviceId = deviceId)
-        )
-        session.givenSessionParams(sessionParams)
-        val pusher = PusherFixture.aPusher(deviceId = deviceId)
-        pushersService.givenGetPushers(listOf(pusher))
-
-        pushersManager.togglePusherForCurrentSession(true)
-
-        pushersService.verifyTogglePusherCalled(pusher, true)
     }
 }

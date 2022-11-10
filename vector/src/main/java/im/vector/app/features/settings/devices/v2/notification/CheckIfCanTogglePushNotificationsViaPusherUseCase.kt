@@ -16,20 +16,15 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.core.di.ActiveSessionHolder
-import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-class CheckIfCanTogglePushNotificationsViaPusherUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
+class CheckIfCanTogglePushNotificationsViaPusherUseCase @Inject constructor() {
 
-    fun execute(): Boolean {
-        return activeSessionHolder
-                .getSafeActiveSession()
-                ?.homeServerCapabilitiesService()
-                ?.getHomeServerCapabilities()
-                ?.canRemotelyTogglePushNotificationsOfDevices
-                .orFalse()
+    fun execute(session: Session): Boolean {
+        return session
+                .homeServerCapabilitiesService()
+                .getHomeServerCapabilities()
+                .canRemotelyTogglePushNotificationsOfDevices
     }
 }

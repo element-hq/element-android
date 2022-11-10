@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.api.session.homeserver
 
+import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.util.Optional
+
 /**
  * This interface defines a method to retrieve the homeserver capabilities.
  */
@@ -30,4 +33,9 @@ interface HomeServerCapabilitiesService {
      * Get the HomeServer capabilities.
      */
     fun getHomeServerCapabilities(): HomeServerCapabilities
+
+    /**
+     * Get a LiveData on the HomeServer capabilities.
+     */
+    fun getHomeServerCapabilitiesLive(): LiveData<Optional<HomeServerCapabilities>>
 }

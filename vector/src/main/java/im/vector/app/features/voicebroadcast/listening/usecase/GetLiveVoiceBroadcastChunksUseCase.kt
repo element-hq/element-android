@@ -19,18 +19,21 @@ package im.vector.app.features.voicebroadcast.listening.usecase
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.getVoiceBroadcastEventId
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.sequence
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningReduce
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
@@ -44,19 +47,19 @@ import javax.inject.Inject
  */
 class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val getVoiceBroadcastUseCase: GetVoiceBroadcastUseCase,
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastEventUseCase,
 ) {
 
-    fun execute(roomId: String, voiceBroadcastId: String): Flow<List<MessageAudioEvent>> {
+    fun execute(voiceBroadcast: VoiceBroadcast): Flow<List<MessageAudioEvent>> {
         val session = activeSessionHolder.getSafeActiveSession() ?: return emptyFlow()
-        val room = session.roomService().getRoom(roomId) ?: return emptyFlow()
+        val room = session.roomService().getRoom(voiceBroadcast.roomId) ?: return emptyFlow()
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(5))
 
         // Get initial chunks
-        val existingChunks = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcastId)
+        val existingChunks = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
                 .mapNotNull { timelineEvent -> timelineEvent.root.asMessageAudioEvent().takeIf { it.isVoiceBroadcast() } }
 
-        val voiceBroadcastEvent = getVoiceBroadcastUseCase.execute(roomId, voiceBroadcastId)
+        val voiceBroadcastEvent = runBlocking { getVoiceBroadcastEventUseCase.execute(voiceBroadcast).firstOrNull()?.getOrNull() }
         val voiceBroadcastState = voiceBroadcastEvent?.content?.voiceBroadcastState
 
         return if (voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED) {
@@ -82,7 +85,7 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
                             lastSequence = stopEvent.content?.lastChunkSequence
                         }
 
-                        val newChunks = newEvents.mapToChunkEvents(voiceBroadcastId, voiceBroadcastEvent.root.senderId)
+                        val newChunks = newEvents.mapToChunkEvents(voiceBroadcast.voiceBroadcastId, voiceBroadcastEvent.root.senderId)
 
                         // Notify about new chunks
                         if (newChunks.isNotEmpty()) {

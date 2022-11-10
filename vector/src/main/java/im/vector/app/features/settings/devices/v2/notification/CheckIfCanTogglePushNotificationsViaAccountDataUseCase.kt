@@ -16,18 +16,15 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.core.di.ActiveSessionHolder
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import javax.inject.Inject
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
+class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
 
-    fun execute(deviceId: String): Boolean {
-        return activeSessionHolder
-                .getSafeActiveSession()
-                ?.accountDataService()
-                ?.getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
+    fun execute(session: Session, deviceId: String): Boolean {
+        return session
+                .accountDataService()
+                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
     }
 }

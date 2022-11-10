@@ -27,6 +27,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
@@ -34,6 +35,7 @@ import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastListeningItem.Holder>() {
 
     private lateinit var playerListener: VoiceBroadcastPlayer.Listener
+    private var isUserSeeking = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -41,11 +43,35 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        playerListener = VoiceBroadcastPlayer.Listener { state ->
-            renderPlayingState(holder, state)
-        }
-        player.addListener(voiceBroadcastId, playerListener)
+        playerListener = VoiceBroadcastPlayer.Listener { renderPlayingState(holder, it) }
+        player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
+        bindButtons(holder)
+    }
+
+    private fun bindButtons(holder: Holder) {
+        with(holder) {
+            playPauseButton.onClick {
+                if (player.currentVoiceBroadcast == voiceBroadcast) {
+                    when (player.playingState) {
+                        VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
+                        VoiceBroadcastPlayer.State.PAUSED,
+                        VoiceBroadcastPlayer.State.IDLE -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
+                        VoiceBroadcastPlayer.State.BUFFERING -> Unit
+                    }
+                } else {
+                    callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
+                }
+            }
+            fastBackwardButton.onClick {
+                val newPos = seekBar.progress.minus(30_000).coerceIn(0, duration)
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
+            }
+            fastForwardButton.onClick {
+                val newPos = seekBar.progress.plus(30_000).coerceIn(0, duration)
+                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
+            }
+        }
     }
 
     override fun renderMetadata(holder: Holder) {
@@ -61,50 +87,67 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
             playPauseButton.isVisible = state != VoiceBroadcastPlayer.State.BUFFERING
 
-            fastBackwardButton.isInvisible = true
-            fastForwardButton.isInvisible = true
-
             when (state) {
                 VoiceBroadcastPlayer.State.PLAYING -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause) }
-                    seekBar.isEnabled = true
                 }
                 VoiceBroadcastPlayer.State.IDLE,
                 VoiceBroadcastPlayer.State.PAUSED -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
-                    playPauseButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcastId)) }
-                    seekBar.isEnabled = false
                 }
-                VoiceBroadcastPlayer.State.BUFFERING -> {
-                    seekBar.isEnabled = true
-                }
+                VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
         }
     }
 
     private fun bindSeekBar(holder: Holder) {
-        holder.durationView.text = formatPlaybackTime(voiceBroadcastAttributes.duration)
-        holder.seekBar.max = voiceBroadcastAttributes.duration
-        holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
+        with(holder) {
+            durationView.text = formatPlaybackTime(duration)
+            seekBar.max = duration
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    isUserSeeking = true
+                }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcastId, seekBar.progress))
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, seekBar.progress, duration))
+                    isUserSeeking = false
+                }
+            })
+        }
+        playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
+            renderBackwardForwardButtons(holder, playbackState)
+            if (!isUserSeeking) {
+                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
             }
-        })
+        }
+    }
+
+    private fun renderBackwardForwardButtons(holder: Holder, playbackState: State) {
+        val isPlayingOrPaused = playbackState is State.Playing || playbackState is State.Paused
+        val playbackTime = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
+        val canBackward = isPlayingOrPaused && playbackTime > 0
+        val canForward = isPlayingOrPaused && playbackTime < duration
+        holder.fastBackwardButton.isInvisible = !canBackward
+        holder.fastForwardButton.isInvisible = !canForward
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        player.removeListener(voiceBroadcastId, playerListener)
-        holder.seekBar.setOnSeekBarChangeListener(null)
+        player.removeListener(voiceBroadcast, playerListener)
+        playbackTracker.untrack(voiceBroadcast.voiceBroadcastId)
+        with(holder) {
+            seekBar.onClick(null)
+            playPauseButton.onClick(null)
+            fastForwardButton.onClick(null)
+            fastBackwardButton.onClick(null)
+        }
     }
 
     override fun getViewStubId() = STUB_ID
