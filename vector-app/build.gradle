@@ -412,7 +412,7 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.21"
     debugImplementation libs.androidx.fragmentTesting
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }
