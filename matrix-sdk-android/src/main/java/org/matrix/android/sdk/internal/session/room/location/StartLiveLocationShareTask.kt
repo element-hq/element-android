@@ -30,7 +30,6 @@ internal interface StartLiveLocationShareTask : Task<StartLiveLocationShareTask.
     data class Params(
             val roomId: String,
             val timeoutMillis: Long,
-            val description: String,
     )
 }
 
@@ -42,7 +41,7 @@ internal class DefaultStartLiveLocationShareTask @Inject constructor(
 
     override suspend fun execute(params: StartLiveLocationShareTask.Params): UpdateLiveLocationShareResult {
         val beaconContent = MessageBeaconInfoContent(
-                body = params.description,
+                body = "Live location",
                 timeout = params.timeoutMillis,
                 isLive = true,
                 unstableTimestampMillis = clock.epochMillis()
