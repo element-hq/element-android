@@ -78,10 +78,15 @@ interface VoiceBroadcastPlayer {
     /**
      * Listener related to [VoiceBroadcastPlayer].
      */
-    fun interface Listener {
+    interface Listener {
         /**
          * Notify about [VoiceBroadcastPlayer.playingState] changes.
          */
-        fun onStateChanged(state: State)
+        fun onPlayingStateChanged(state: State) = Unit
+
+        /**
+         * Notify about [VoiceBroadcastPlayer.isLiveListening] changes.
+         */
+        fun onLiveModeChanged(isLive: Boolean) = Unit
     }
 }

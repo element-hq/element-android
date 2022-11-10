@@ -121,7 +121,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         listeners[voiceBroadcast.voiceBroadcastId]?.add(listener) ?: run {
             listeners[voiceBroadcast.voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
-        listener.onStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
+        listener.onPlayingStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
+        listener.onLiveModeChanged(if (voiceBroadcast == currentVoiceBroadcast) isLiveListening else false)
     }
 
     override fun removeListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
@@ -318,16 +319,40 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 State.IDLE -> playbackTicker.stopPlaybackTicker(voiceBroadcastId)
             }
             // Notify state change to all the listeners attached to the current voice broadcast id
-            listeners[voiceBroadcastId]?.forEach { listener -> listener.onStateChanged(playingState) }
+            listeners[voiceBroadcastId]?.forEach { listener -> listener.onPlayingStateChanged(playingState) }
         }
     }
 
-    private fun updateLiveListeningMode(playbackPosition: Int? = null) {
+    /**
+     * Update the live listening state according to:
+     * - the voice broadcast state,
+     * - the playing state,
+     * - the potential seek position.
+     */
+    private fun updateLiveListeningMode(seekPosition: Int? = null) {
         isLiveListening = when {
+            // the current voice broadcast is not live (ended)
             !currentVoiceBroadcastEvent?.isLive.orFalse() -> false
+            // the player is stopped or paused
             playingState == State.IDLE || playingState == State.PAUSED -> false
-            playbackPosition != null -> playlist.findByPosition(playbackPosition)?.sequence == playlist.lastOrNull()?.sequence
+            // the user has sought
+            seekPosition != null -> {
+                val seekDirection = seekPosition.compareTo(getCurrentPlaybackPosition() ?: 0)
+                when {
+                    // backward
+                    seekDirection < 0 -> false
+                    // forward: check if new sequence is the last one
+                    else -> playlist.findByPosition(seekPosition)?.sequence == playlist.lastOrNull()?.sequence
+                }
+            }
+            // otherwise, stay in live or go in live if we reached the last sequence
             else -> isLiveListening || playlist.currentSequence == playlist.lastOrNull()?.sequence
+        }
+
+        currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
+            // Notify live mode change to all the listeners attached to the current voice broadcast id
+            listeners[voiceBroadcastId]?.forEach { listener -> listener.onLiveModeChanged(isLiveListening) }
+
         }
     }
 

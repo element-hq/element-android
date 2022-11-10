@@ -44,7 +44,15 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        playerListener = VoiceBroadcastPlayer.Listener { renderPlayingState(holder, it) }
+        playerListener = object : VoiceBroadcastPlayer.Listener {
+            override fun onPlayingStateChanged(state: VoiceBroadcastPlayer.State) {
+                renderPlayingState(holder, state)
+            }
+
+            override fun onLiveModeChanged(isLive: Boolean) {
+                renderLiveIndicator(holder)
+            }
+        }
         player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
         bindButtons(holder)
