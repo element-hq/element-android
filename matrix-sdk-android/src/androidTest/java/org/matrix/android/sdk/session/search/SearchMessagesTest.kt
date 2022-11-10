@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.search
 
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -43,7 +44,7 @@ class SearchMessagesTest : InstrumentedTest {
             cryptoTestData.firstSession
                     .searchService()
                     .search(
-                            searchTerm = "lore",
+                            searchTerm = "lorem",
                             limit = 10,
                             includeProfile = true,
                             afterLimit = 0,
@@ -61,7 +62,7 @@ class SearchMessagesTest : InstrumentedTest {
             cryptoTestData.firstSession
                     .searchService()
                     .search(
-                            searchTerm = "lore",
+                            searchTerm = "lorem",
                             roomId = cryptoTestData.roomId,
                             limit = 10,
                             includeProfile = true,
@@ -73,7 +74,28 @@ class SearchMessagesTest : InstrumentedTest {
         }
     }
 
-    private fun doTest(block: suspend (CryptoTestData) -> SearchResult) = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    @Test
+    fun sendTextMessageAndSearchPartOfItIncompleteWord() {
+        doTest(expectedNumberOfResult = 0) { cryptoTestData ->
+            cryptoTestData.firstSession
+                    .searchService()
+                    .search(
+                            searchTerm = "lore", /* incomplete word */
+                            roomId = cryptoTestData.roomId,
+                            limit = 10,
+                            includeProfile = true,
+                            afterLimit = 0,
+                            beforeLimit = 10,
+                            orderByRecent = true,
+                            nextBatch = null
+                    )
+        }
+    }
+
+    private fun doTest(
+            expectedNumberOfResult: Int = 2,
+            block: suspend (CryptoTestData) -> SearchResult,
+    ) = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -87,7 +109,7 @@ class SearchMessagesTest : InstrumentedTest {
 
         val data = block.invoke(cryptoTestData)
 
-        assertTrue(data.results?.size == 2)
+        data.results?.size shouldBeEqualTo expectedNumberOfResult
         assertTrue(
                 data.results
                         ?.all {
