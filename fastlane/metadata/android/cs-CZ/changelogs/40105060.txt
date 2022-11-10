@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: nové uživatelské rozhraní pro výběr přílohy.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases

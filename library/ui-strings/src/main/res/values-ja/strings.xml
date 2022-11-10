@@ -2459,4 +2459,18 @@
     <string name="create_room">ルームを作成</string>
     <string name="start_chat">チャットを開始</string>
     <string name="all_chats">全ての会話</string>
+    <string name="home_empty_no_rooms_title">${app_name}にようこそ、
+\n%s。</string>
+    <string name="device_manager_learn_more_sessions_verified_title">認証済のセッション</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">QRコードでサインイン</string>
+    <string name="labs_enable_session_manager_title">新しいセッションマネージャーを有効にする</string>
+    <string name="qr_code_login_header_show_qr_code_title">QRコードでサインイン</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="qr_code_login_header_failed_other_description">リクエストが失敗しました。</string>
+    <string name="qr_code_login_scan_qr_code_button">QRコードをスキャン</string>
+    <string name="login_scan_qr_code">QRコードをスキャン</string>
+    <string name="qr_code_login_header_scan_qr_code_title">QRコードをスキャン</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">QRコードが不正です。</string>
 </resources>

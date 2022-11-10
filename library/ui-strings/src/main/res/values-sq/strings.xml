@@ -601,9 +601,7 @@
     <string name="settings_send_markdown_summary">Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.</string>
     <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, heqjet dhe dëbimet.</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name}-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
-    <string name="settings_unignore_user">Të shfaqen krejt mesazhet prej %s\?
-\n
-\nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
+    <string name="settings_unignore_user">Të shfaqen krejt mesazhet prej %s\?</string>
     <string name="settings_labs_native_camera_summary">Nis kamerën e sistemit, në vend se skenën e kamerës vetjake.</string>
     <string name="command_description_emote">Shfaq veprimin</string>
     <string name="command_description_markdown">On/Off sintakse Markdown</string>
@@ -897,10 +895,10 @@
     <string name="send_suggestion_failed">S’u arrit të dërgohej sugjerimi (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Shfaq te rrjedha kohore akte të fshehura</string>
     <string name="settings_integration_manager">Përgjegjës integrimesh</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">emër_sesioni:</string>
+    <string name="push_gateway_item_app_id">ID Aplikacioni:</string>
+    <string name="push_gateway_item_push_key"/>
+    <string name="push_gateway_item_app_display_name">Emër Aplikacioni Në Ekran:</string>
+    <string name="push_gateway_item_device_name">Emër Sesioni Në Ekran:</string>
     <string name="bottom_action_people_x">Mesazhe të Drejtpërdrejtë</string>
     <string name="send_file_step_idle">Po pritet…</string>
     <string name="send_file_step_encrypting_thumbnail">Po fshehtëzohet miniatura…</string>
@@ -949,11 +947,11 @@
     <string name="settings_discovery_identity_server_info">Po përdorni %1$s për të zbuluar dhe për të qenë i zbulueshëm nga kontakte ekzistues që njihni.</string>
     <string name="settings_discovery_identity_server_info_none">S’po përdorni ndonjë shërbyes identitetesh. Që të zbuloni dhe të jini i zbulueshëm nga kontakte ekzistuese që njihni, formësoni një të tillë më poshtë.</string>
     <string name="settings_discovery_emails_title">Adresa email të zbulueshme</string>
-    <string name="settings_discovery_no_mails">Mundësitë rreth zbulimesh do të shfaqen sapo të keni shtuar një email.</string>
+    <string name="settings_discovery_no_mails">Mundësitë e zbulimit do të shfaqen sapo të keni shtuar një adresë email.</string>
     <string name="settings_discovery_no_msisdn">Mundësi zbulimesh do të shfaqen sapo të keni shtuar një numër telefoni.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Shkëputja prej shërbyesit tuaj të identiteteve do të thotë se s’do të jeni i zbulueshëm prej përdoruesish të tjerë dhe s’do të jeni në gjendje të ftoni të tjerë me email ose telefon.</string>
     <string name="settings_discovery_msisdn_title">Numra telefoni të zbulueshëm</string>
-    <string name="settings_discovery_confirm_mail">Ju dërguam një email ripohimi te %s, hapeni dhe klikoni mbi lidhjen e ripohimit</string>
+    <string name="settings_discovery_confirm_mail">Ju dërguam një email te %s, hapeni dhe klikoni mbi lidhjen e ripohimit</string>
     <string name="settings_discovery_enter_identity_server">Jepni një URL shërbyesi identitetesh</string>
     <string name="settings_discovery_bad_identity_server">S’u lidh dot te shërbyes identitetesh</string>
     <string name="settings_discovery_please_enter_server">Ju lutemi, jepni URL-në e shërbyesit të identiteteve</string>
@@ -1080,7 +1078,7 @@
     <string name="login_registration_not_supported">Aplikacioni s’është në gjendje të krijojë llogari në këtë shërbyes Home.
 \n
 \nDoni të regjistroheni duke përdorur një klient web\?</string>
-    <string name="login_login_with_email_error">Ky emai s’është përshoqëruar me ndonjë llogari.</string>
+    <string name="login_login_with_email_error">Kjo adresë email s’është e përshoqëruar me ndonjë llogari.</string>
     <string name="login_reset_password_on">Ricaktoni fjalëkalimin në %1$s</string>
     <string name="login_reset_password_notice">Te mesazhet tuaj do të dërgohet një email verifikimi, për të ripohuar caktimin e fjalëkalimit tuaj të ri.</string>
     <string name="login_reset_password_submit">Pasuesi</string>
@@ -1089,7 +1087,7 @@
     <string name="login_reset_password_warning_title">Kujdes!</string>
     <string name="login_reset_password_warning_content">Ndryshimi i fjalëkalimit tuaj do të sjellë zerim të çfarëdo kyçesh fshehtëzimi skaj-më-skaj në krejt sesionet tuaj, duke e bërë të palexueshëm historikun e bisedave të fshehtëzuara. Ujdisni një Kopjeruajtje Kyçesh ose eksportoni kyçet e dhomës tuaj prej një tjetër sesioni, përpara se të ricaktoni fjalëkalimin tuaj.</string>
     <string name="login_reset_password_warning_submit">Vazhdo</string>
-    <string name="login_reset_password_error_not_found">Ky email s’është i lidhur me ndonjë llogari</string>
+    <string name="login_reset_password_error_not_found">Kjo adresë email s’është e lidhur me ndonjë llogari</string>
     <string name="login_reset_password_mail_confirmation_title">Kontrolloni te mesazhet tuaj të marrë</string>
     <string name="login_reset_password_mail_confirmation_notice">Një email verifikimi u dërgua te %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Prekni mbi lidhjen që të ripohohet fjalëkalimi juaj i ri. Pasi të keni ndjekur lidhjen që përmban, klikoni më poshtë.</string>
@@ -1103,7 +1101,7 @@
 \n
 \nTë ndalet procesi i ndryshimit të fjalëkalimit\?</string>
     <string name="login_set_email_title">Caktoni adresë email</string>
-    <string name="login_set_email_notice">Caktoni një email për rimarrje të llogarisë tuaj. Më vonë, mundeni të lejoni persona që njihni t’ju zbulojnë përmes email-it tuaj.</string>
+    <string name="login_set_email_notice">Caktoni një adresë email për rimarrje të llogarisë tuaj. Më vonë, mundeni të lejoni persona që njihni t’ju zbulojnë përmes kësaj adrese.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (në daçi)</string>
     <string name="login_set_email_submit">Pasuesi</string>
@@ -1445,7 +1443,7 @@
     <string name="event_redacted">Mesazhi u fshi</string>
     <string name="settings_show_redacted">Shfaq mesazhe të hequr</string>
     <string name="settings_show_redacted_summary">Shfaq një vendmbajtëse për mesazhe të hequr</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Ju dërguam një email ripohimi te %s, ju lutemi, së pari, shihni email-in tuaj dhe klikoni mbi lidhjen e ripohimit</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ju dërguam një email te %s, ju lutemi, së pari, shihni email-in tuaj dhe klikoni mbi lidhjen e ripohimit</string>
     <string name="settings_text_message_sent_wrong_code">Kodi i verifikimit s’është i saktë.</string>
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">S’ka media në këtë dhomë</string>
@@ -1518,9 +1516,7 @@
 \n
 \nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.</string>
     <string name="room_participants_action_unignore_title">Hiqe shpërfilljen e përdoruesit</string>
-    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.
-\n
-\nKini parasysh se ky veprim do të sjellë rinisjen e aplikacionit dhe do të hajë ca kohë.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
     <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
     <string name="room_participants_remove_title">Përzëre përdoruesin</string>
@@ -1534,7 +1530,7 @@
     <string name="room_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në dhomë.</string>
     <string name="settings_phone_number_empty">Te llogaria juaj s’është shtuar ndonjë numër telefoni</string>
     <string name="settings_emails">Adresa email</string>
-    <string name="settings_emails_empty">Te llogaria juaj s’është shtuar ndonjë email</string>
+    <string name="settings_emails_empty">Te llogaria juaj s’është shtuar ndonjë adresë email</string>
     <string name="settings_phone_numbers">Numra telefoni</string>
     <string name="settings_remove_three_pid_confirmation_content">Të hiqet %s\?</string>
     <string name="error_threepid_auth_failed">Sigurohuni që keni klikuar te lidhja në email-in që ju kemi dërguar.</string>
@@ -1552,7 +1548,7 @@
     <string name="disabled_integration_dialog_title">Integrimet janë të çaktivizuara</string>
     <string name="disabled_integration_dialog_content">Që të bëhet kjo, aktivizoni “Lejo integrime”, te Rregullimet.</string>
     <string name="settings_emails_and_phone_numbers_title">Email-e dhe numra telefonash</string>
-    <string name="settings_emails_and_phone_numbers_summary">Administroni email-e dhe numra telefonash të lidhur me llogarinë tuaj Matrix</string>
+    <string name="settings_emails_and_phone_numbers_summary">Administroni adresa email dhe numra telefonash të lidhur me llogarinë tuaj Matrix</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">%d përdorues i dëbuar</item>
         <item quantity="other">%d përdorues të dëbuar</item>
@@ -1605,7 +1601,7 @@
     <string name="auth_invalid_login_deactivated_account">Kjo llogari është çaktivizuar.</string>
     <string name="error_saving_media_file">S’u ruajt dot kartelë media</string>
     <string name="confirm_your_identity_quad_s">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjeje, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim adresash email dhe numrash telefoni përdoruesi të koduar.</string>
     <string name="power_level_edit_title">Caktoni rol</string>
     <string name="power_level_title">Rol</string>
     <string name="a11y_open_chat">Hapni fjalosje</string>
@@ -1769,7 +1765,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d nga %2$d</string>
     <string name="settings_discovery_consent_action_give_consent">Jepe pranimin</string>
     <string name="settings_discovery_consent_action_revoke">Shfuqizoje pranimin tim</string>
-    <string name="settings_discovery_consent_notice_on">Keni dhënë pranimin tuaj për të dërguar email-e dhe numra telefonash te ky shërbyes identitetesh që të zbulojë përdorues të tjerë prej kontakteve tuaj.</string>
+    <string name="settings_discovery_consent_notice_on">Keni dhënë pranimin tuaj për të dërguar adresa email-e dhe numra telefonash te ky shërbyes identitetesh që të zbulojë përdorues të tjerë prej kontakteve tuaj.</string>
     <string name="settings_discovery_consent_title">Dërgo email-e dhe numra telefonash</string>
     <string name="direct_room_user_list_suggestions_title">Sugjerime</string>
     <string name="direct_room_user_list_known_title">Përdorues të Ditur</string>
@@ -2135,7 +2131,7 @@
     <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
     <string name="settings_notification_default">Njoftime Parazgjedhje</string>
     <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në ${app_name}.</string>
-    <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
+    <string name="link_this_email_settings_link">Lidheni këtë adresë email me llogarinë tuaj</string>
     <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Krejt dhomat ku gjendeni do të shfaqen te Home.</string>
@@ -2203,7 +2199,7 @@
     <string name="room_settings_space_access_title">Hyrje në hapësirë</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kush mund të hyjë\?</string>
     <string name="settings_notification_emails_enable_for_email">Aktivizo njoftime me email për %s</string>
-    <string name="settings_notification_emails_no_emails">Që të merrni email me njoftim, ju lutemi, përshoqërojini llogarisë tuaj Matrix një email</string>
+    <string name="settings_notification_emails_no_emails">Që të merrni email me njoftim, ju lutemi, përshoqërojini llogarisë tuaj Matrix një adresë email</string>
     <string name="settings_notification_emails_category">Njoftim me email</string>
     <string name="room_permissions_upgrade_the_space">Të përmirësojë hapësirën</string>
     <string name="room_permissions_change_space_name">Të ndryshojë emrin e hapësirës</string>
@@ -2249,8 +2245,8 @@
     <string name="create_poll_question_title">Pyetje ose temë pyetësori</string>
     <string name="create_poll_title">Krijoni Pyetësor</string>
     <string name="identity_server_consent_dialog_content_question">A pranoni të dërgohen këto hollësi\?</string>
-    <string name="identity_server_consent_dialog_content_3">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti (email-e dhe numra telefonash) te shërbyesi juaj i identiteteve. Para dërgimit, i fshehtëzojmë të dhënat tuaja, për privatësi.</string>
-    <string name="identity_server_consent_dialog_title_2">Dërgo email-e dhe numra telefonash te %s</string>
+    <string name="identity_server_consent_dialog_content_3">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti (adresa email dhe numra telefonash) te shërbyesi juaj i identiteteve. Para dërgimit, i fshehtëzojmë të dhënat tuaja, për privatësi.</string>
+    <string name="identity_server_consent_dialog_title_2">Dërgo adresa email dhe numra telefonash te %s</string>
     <string name="settings_discovery_consent_notice_off_2">Kontaktet tuaja janë private. Për të zbuluar përdorues prej kontakteve tuaja, na duhet leja juaj për të dërguar hollësi kontakti te shërbyesi juaj i identiteteve.</string>
     <string name="shortcut_disabled_reason_sign_out">Është bërë dalja nga sesioni!</string>
     <string name="shortcut_disabled_reason_room_left">U dol nga dhoma!</string>
@@ -2355,7 +2351,7 @@
     <string name="ftue_auth_use_case_option_three">Bashkësi</string>
     <string name="ftue_auth_use_case_option_two">Ekipe</string>
     <string name="ftue_auth_use_case_option_one">Shokë dhe familje</string>
-    <string name="ftue_auth_use_case_subtitle">Do t’ju ndihmojmë të lidheni.</string>
+    <string name="ftue_auth_use_case_subtitle">Do t’ju ndihmojmë të lidheni</string>
     <string name="ftue_auth_use_case_title">Me kë do të bisedoni më shumë\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Po e shihni tashmë këtë rrjedhë!</string>
     <string name="view_in_room">Shiheni në Dhomë</string>
@@ -2411,15 +2407,15 @@
     <string name="error_forbidden_digits_only_username">Shërbyesi Home s’pranon emër përdorues vetëm me shifra.</string>
     <string name="ftue_personalize_skip_this_step">Anashkalojeni këtë hap</string>
     <string name="ftue_personalize_submit">Ruajeni dhe vazhdoni</string>
-    <string name="ftue_personalize_complete_subtitle">Parapëlqimet tuaja u ruajtën.</string>
+    <string name="ftue_personalize_complete_subtitle">Kaloni te rregullimet, kur të doni, që të përditësoni profilin tuaj</string>
     <string name="ftue_personalize_complete_title">Kaq qe!</string>
     <string name="ftue_personalize_lets_go">Shkojmë</string>
-    <string name="ftue_profile_picture_subtitle">Këtë mund ta ndryshoni kurdo.</string>
+    <string name="ftue_profile_picture_subtitle">Erdh koha t’i jepet surrat emrit</string>
     <string name="ftue_profile_picture_title">Shtoni një foto profili</string>
     <string name="ftue_display_name_entry_footer">Këtë mund ta ndryshoni më vonë</string>
     <string name="ftue_display_name_entry_title">Emër Në Ekran</string>
     <string name="ftue_display_name_title">Zgjidhni një emër për në ekran</string>
-    <string name="ftue_account_created_subtitle">Llogaria juaj %s u krijua.</string>
+    <string name="ftue_account_created_subtitle">Llogaria juaj %s u krijua</string>
     <string name="ftue_account_created_congratulations_title">Përgëzime!</string>
     <string name="ftue_account_created_take_me_home">Shpjemëni në shtëpi</string>
     <string name="ftue_account_created_personalize">Personalizoni profil</string>
@@ -2450,4 +2446,380 @@
     <string name="settings_presence">Prani</string>
     <string name="action_learn_more">Mësoni më tepër</string>
     <string name="action_try_it_out">Provojeni</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Aktivizo shkurtore lejesh për Thirrje Element</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">S’u gjet metodë tjetër veç njëkohësimit në prapaskenë.</string>
+    <string name="initial_sync_request_content">${app_name}-it i duhet një fshehtinë e pastër, për të qenë i përditësuar, për arsyen vijuese:
+\n%s
+\n
+\nKini parasysh se ky veprim do të sjellë rinisjen e aplikacionit dhe mund të dojë ca kohë.</string>
+    <string name="labs_enable_client_info_recording_summary">Regjistro emrin, versionin dhe URL-në e klientit, për të dalluar më kollaj sesionet te përgjegjës sesionesh.</string>
+    <string name="device_manager_session_last_activity">Veprimtaria e fundit më %1$s</string>
+    <string name="rich_text_editor_format_underline">Apliko format me të nënvizuara</string>
+    <string name="rich_text_editor_format_strikethrough">Apliko format me të hequravije</string>
+    <string name="rich_text_editor_format_italic">Apliko format me të pjerrta</string>
+    <string name="rich_text_editor_format_bold">Apliko format me të trasha</string>
+    <string name="qr_code_login_confirm_security_code_description">Ju lutemi, sigurohuni se e dini origjinën e këtij kodi. Duke lidhur pajisje, do t’i jepni dikujt hyrje të plotë në llogarinë tuaj.</string>
+    <string name="qr_code_login_confirm_security_code">Ripohojeni</string>
+    <string name="qr_code_login_try_again">Riprovoni</string>
+    <string name="qr_code_login_status_no_match">Pa përputhje\?</string>
+    <string name="qr_code_login_signing_in">Po bëhet hyrja juaj</string>
+    <string name="qr_code_login_connecting_to_device">Po lidhet me pajisjen</string>
+    <string name="qr_code_login_scan_qr_code_button">Skanoni kodin QR</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Po bëhet hyrja te një pajisje celulare\?</string>
+    <string name="qr_code_login_show_qr_code_button">Shfaq kod QR te kjo pajisje</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Përzgjidhni “Skanoni kod QR”</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Filloja në skenën e hyrjes</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Përzgjidhni “Hyni me kod QR”</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Filloja në skenën e hyrjes</string>
+    <string name="qr_code_login_new_device_instruction_3">Përzgjidhni “Shfaq kod QR”</string>
+    <string name="qr_code_login_new_device_instruction_2">Kaloni te Rregullime -&gt; Siguri &amp; Privatësi</string>
+    <string name="qr_code_login_new_device_instruction_1">Hapeni aplikacionin në pajisjen tuaj tjetër</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Hyrja u anulua në pajisjen tuaj tjetër.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Ai kod QR është i pavlefshëm.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Duhet bërë hyrja te pajisja tjetër.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Nga pajisja tjetër është bërë tashmë hyrja.</string>
+    <string name="qr_code_login_header_failed_other_description">Kërkesa dështoi.</string>
+    <string name="qr_code_login_header_failed_denied_description">Kërkesa u hodh poshtë në pajisjen tjetër.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Lidhja me këtë pajisje nuk mbulohet.</string>
+    <string name="qr_code_login_header_failed_title">Lidhje e pasuksesshme</string>
+    <string name="qr_code_login_header_connected_title">U vendos lidhje e siguruar</string>
+    <string name="qr_code_login_header_show_qr_code_title">Hyni me kod QR</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Skanoni kodin QR</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="onboarding_new_app_layout_button_try">Provojeni</string>
+    <string name="onboarding_new_app_layout_feedback_message">Prekeni djathtas në krye që të shihni mundësinë për dhënie përshtypjesh.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Jepni Përshtypje</string>
+    <string name="onboarding_new_app_layout_spaces_message">Hyni në Hapësirat tuaja (poshtë djathtas) më shpejt dhe më kollaj se kurrë më parë.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Hyni Në Hapësira</string>
+    <string name="onboarding_new_app_layout_welcome_message">Që të thjeshtohet ${app_name} juaj, skedat tanimë janë opsionale. Administrojini duke përdorur menunë djathtas në krye.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Mirë se vini te një pamje e re!</string>
+    <string name="home_empty_no_unreads_message">Ky është vendi ku do të shfaqen mesazhet tuaj të palexuar, kur të ketë të tillë.</string>
+    <string name="home_empty_no_unreads_title">S’ka gjë për ta raportuar.</string>
+    <string name="home_empty_no_rooms_message">Aplikacioni “all-in-one” i fjalosjeve të siguruara, për ekipe, shokë dhe ente. Që t’ia filloni, krijoni një fjalosje, ose hyni në një dhomë ekzistuese.</string>
+    <string name="home_empty_no_rooms_title">Mirë se vini te ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Hapësirat janë një mënyrë e re për të grupuar dhoma dhe persona. Shtoni një dhomë ekzistuese, ose krijoni një të re, duke përdorur butonin poshtë djathtas.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nduket paksa si i zbrazët.</string>
+    <string name="labs_enable_voice_broadcast_summary">Jini në gjendje të incizoni dhe dërgoni transmetim zanor në rrjedhën kohore të dhomës.</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor (nën zhvillim aktiv)</string>
+    <string name="labs_enable_client_info_recording_title">Aktivizo regjistrim hollësish klienti</string>
+    <string name="labs_enable_session_manager_summary">Shihini më qartë dhe kontrolloni më mirë krejt sesionet tuaj.</string>
+    <string name="labs_enable_session_manager_title">Aktivizo përgjegjës të ri sesionesh</string>
+    <string name="device_manager_learn_more_session_rename">Përdorues të tjerë në mesazhe të drejtpërdrejtë dhe dhoma ku hyni janë në gjendje të shohin një listë të plotë të sesioneve tuaj.
+\n
+\nKjo u jep atyre besim se po flasin vërtet me ju, por do të thotë gjithashtu që mund shohin emrin e sesionit që jepni këtu.</string>
+    <string name="device_manager_learn_more_session_rename_title">Riemërtim sesionesh</string>
+    <string name="device_manager_learn_more_sessions_verified">Sesionet e verifikuar përfaqësojnë sesione ku është bërë hyrja dhe janë verifikuar, ose duke përdorur togfjalëshin tuaj të sigurt, ose me verifikim.
+\n
+\nKjo do të thotë se zotërojnë kyçe fshehtëzimi për mesazhe tuajt të mëparshëm dhe u ripohojnë përdoruesve të tjerë, me të cilët po komunikoni, se këto sesione ju takojnë juve.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Sesione të verifikuar</string>
+    <string name="device_manager_learn_more_sessions_unverified">Sesionet e paverifikuar janë sesione në të cilët është bërë hyrja me kredencialet tuaja, por pa u bërë verifikim.
+\n
+\nDuhet të jeni posaçërisht të qartë se i njihni këto sesione, ngaqë mund të përbëjnë përdorim të paautorizuar të llogarisë tuaj.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Sesione të paverifikuar</string>
+    <string name="device_manager_learn_more_sessions_inactive">Sesioni joaktive janë sesione që keni ca kohë që s’i përdorni, por që vazhdojnë të marrin kyçe fshehtëzimi.
+\n
+\nHeqja e sesioneve joaktive përmirëson sigurinë dhe punimin dhe e bën më të lehtë për ju të pikasni nëse një sesion i ri është i dyshimtë.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Sesione joaktive</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Mund të përdorni këtë pajisje për të bërë hyrjen në një pajisje celulare apo web me një kod QR. Për ta bërë këtë ka dy mënyra:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Hyni me Kod QR</string>
+    <string name="device_manager_session_rename_warning">Ju lutemi, kini parasysh se emrat e sesioneve janë të dukshëm edhe për personat me të cilët komunikoni.</string>
+    <string name="device_manager_session_rename_description">Emra vetjakë sesionesh mund t’ju ndihmojnë të njihni më kollaj pajisjet tuaja.</string>
+    <string name="device_manager_session_rename_edit_hint">Emër sesioni</string>
+    <string name="device_manager_session_rename">Riemërtoni sesionin</string>
+    <string name="device_manager_session_details_device_ip_address">Adresë IP</string>
+    <string name="device_manager_session_details_device_operating_system">Sistem operativ</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_browser">Shfletues</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_name">Ëmër</string>
+    <string name="device_manager_session_details_application">Aplikacion</string>
+    <string name="device_manager_session_details_session_last_activity">Veprimtaria e fundit</string>
+    <string name="device_manager_session_details_session_name">Emër sesioni</string>
+    <string name="device_manager_push_notifications_description">Merrni njoftime push për këtë sesion.</string>
+    <string name="device_manager_push_notifications_title">Njoftime Push</string>
+    <string name="device_manager_session_details_description">Hollësi aplikacioni, pajisjeje dhe veprimtarie.</string>
+    <string name="device_manager_session_details_title">Hollësi sesioni</string>
+    <string name="device_manager_session_overview_signout">Dilni nga ky sesion</string>
+    <string name="device_manager_other_sessions_select">Përzgjidhni sesione</string>
+    <string name="device_manager_other_sessions_clear_filter">Spastroje Filtrin</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">S’u gjetën sesione joaktive.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">S’u gjetën seanca të paverifikuara.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">S’u gjetën sesione të verifikuara.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
+        <item quantity="other">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Joaktive</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifikoni sesionet tuaj, për shkëmbim më të sigurt mesazhesh, ose dilni prej atyre që nuk i njihni, apo përdorni më.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Të paverifikuar</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">Për sigurinë më të mirë, dilni nga çfarëdo sesioni që nuk e njihni apo përdorni më.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Të verifikuar</string>
+    <string name="a11y_device_manager_filter">Filtroji</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Joaktiv për %1$d ditë, ose më gjatë</item>
+        <item quantity="other">Joaktiv për %1$d ditë, ose më gjatë</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Jo aktiv</string>
+    <string name="device_manager_filter_option_unverified_description">Jo gati për shkëmbim të sigurt mesazhesh</string>
+    <string name="device_manager_filter_option_unverified">E paverifikuar</string>
+    <string name="device_manager_filter_option_verified_description">Gati për shkëmbim të sigurt mesazhesh</string>
+    <string name="device_manager_filter_option_verified">E verifikuar</string>
+    <string name="device_manager_filter_option_all_sessions">Krejt sesionet</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtroji</string>
+    <string name="device_manager_device_title">Pajisje</string>
+    <string name="device_manager_session_title">Sesion</string>
+    <string name="device_manager_current_session_title">Sesioni i Tanishëm</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
+        <item quantity="other">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
+    </plurals>
+    <string name="device_manager_inactive_sessions_title">Sesione joaktive</string>
+    <string name="device_manager_unverified_sessions_description">Verifikojini, ose dilni nga sesione të paverifikuar.</string>
+    <string name="device_manager_unverified_sessions_title">Sesione të paverifikuar</string>
+    <string name="device_manager_header_section_security_recommendations_description">Përmirësoni sigurinë e llogarisë tuaj duke ndjekur këto rekomandime.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Rekomandime sigurie</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Joaktiv për %1$d+ ditë (%2$s)</item>
+        <item quantity="other">Joaktiv për %1$d+ ditë (%2$s)</item>
+    </plurals>
+    <string name="device_manager_other_sessions_description_unverified_current_session">I paverifikuar · Sesioni juaj i tanishëm</string>
+    <string name="device_manager_other_sessions_description_unverified">I paverifikuar · Veprimtari së fundi më %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">I verifikuar · Veprimtaria e fundit më %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Shihni Krejt (%1$d)</string>
+    <string name="device_manager_view_details">Shihni Hollësitë</string>
+    <string name="device_manager_verify_session">Verifiko Sesion</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifikoni sesionin tuaj të tanishëm, që të shfaqni gjendjen e verifikimit të këtij sesioni.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Për sigurinë dhe besueshmërinë më të mirë, verifikojeni, ose dilni nga ky sesion.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifikoni sesionin tuaj të tanishëm, për shkëmbim më të sigurt të mesazheve.</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Ky sesion është gati për shkëmbim të sigurt mesazhesh.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Sesioni juaj i tanishëm është gati për shkëmbim të sigurt mesazhesh.</string>
+    <string name="device_manager_verification_status_unknown">Gjendje e panjohur verifikimi</string>
+    <string name="device_manager_verification_status_unverified">Sesion i paverifikuar</string>
+    <string name="device_manager_verification_status_verified">Sesion i verifikuar</string>
+    <string name="a11y_device_manager_device_type_unknown">Lloj i panjohur pajisjeje</string>
+    <string name="a11y_device_manager_device_type_desktop">Desktop</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="a11y_device_manager_device_type_mobile">Celular</string>
+    <string name="device_manager_sessions_other_description">Për sigurinë më të mirë, verifikoni sesionet tuaja dhe dilni nga çfarëdo sesioni që s’e njihni, ose s’e përdorni më.</string>
+    <string name="device_manager_sessions_other_title">Sesione të tjera</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">U hoq %d mesazh</item>
+        <item quantity="other">U hoqë %d mesazhe</item>
+    </plurals>
+    <string name="live_location_labs_promotion_switch_title">Aktivizoni tregim vendndodhjeje</string>
+    <string name="live_location_labs_promotion_description">Ju lutemi, kini parasysh: kjo është një veçori në zhvillim, që përdor një sendërtim të përkohshëm. Kjo do të thotë se s’do të jeni në gjendje të fshini historikun e vendndodhjeve tuaja dhe përdoruesit e përparuar do të jenë në gjendje të shohin historikun e vendndodhjeve tuaja, edhe pasi të keni ndalur dhënien “live” për këtë dhomë të vendndodhjes tuaj.</string>
+    <string name="live_location_labs_promotion_title">Tregim “live” vendndodhjeje</string>
+    <string name="settings_troubleshoot_test_current_gateway">Kanal i tanishëm: %s</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Kanal</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">S’gjendet pikëmbarimi.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Pikëmbarim i tanishëm: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Pikëmbarim</string>
+    <string name="settings_troubleshoot_test_current_distributor">Hëpërhë po përdoret %s.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Metodë</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="one">U gjet %d metodë.</item>
+        <item quantity="other">U gjetën %d metoda.</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_distributors_gplay">S’u gjet metodë tjetër veç Google Play Service.</string>
+    <string name="settings_troubleshoot_test_distributors_title">Metoda të gatshme</string>
+    <string name="settings_notification_method">Metodë njoftimi</string>
+    <string name="unifiedpush_distributor_background_sync">Njëkohësim në prapaskenë</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Shërbime Google</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Zgjidhni si të merren njoftime</string>
+    <string name="screen_sharing_notification_description">Tregimi i ekranit është në punë e sipër</string>
+    <string name="screen_sharing_notification_title">Tregim Ekrani ${app_name}</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamerë</string>
+    <string name="attachment_type_selector_location">Vendndodhje</string>
+    <string name="attachment_type_selector_poll">Pyetësorë</string>
+    <string name="attachment_type_selector_voice_broadcast">Transmetim zanor</string>
+    <string name="attachment_type_selector_file">Bashkëngjitje</string>
+    <string name="attachment_type_selector_sticker">Ngjitës</string>
+    <string name="attachment_type_selector_gallery">Fototekë</string>
+    <string name="tooltip_attachment_voice_broadcast">Nisni një transmetim zanor</string>
+    <string name="live_location_description">Vendndodhje drejtpërsëdrejti</string>
+    <string name="live_location_share_location_item_share">Jepe vendndodhjen</string>
+    <string name="live_location_not_enough_permission_dialog_description">Që të mund të ndani drejtpërsëdrejti vendndodhje me të tjerë në këtë dhomë, lypset të keni lejet e duhura.</string>
+    <string name="live_location_not_enough_permission_dialog_title">S’keni leje të tregoni vendndodhje drejtpërsëdrejti</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Përditësuar %1$s më parë</string>
+    <string name="labs_enable_live_location_summary">Sendërtim i përkohshëm: vendndodhjet mbeten në historikun e dhomës</string>
+    <string name="labs_enable_live_location">Aktivizo Tregim Vendndodhjeje “Live”</string>
+    <string name="live_location_sharing_notification_title">Vendndodhje Drejtpërsëdrejti ${app_name}</string>
+    <string name="location_share_live_remaining_time">Edhe %1$s</string>
+    <string name="location_share_live_until">“Live” deri më %1$s</string>
+    <string name="location_share_live_view">Shihni vendndodhje “live”</string>
+    <string name="location_share_live_ended">Tregimi “live” i vendndodhjes përfundoi</string>
+    <string name="location_share_live_started">Po ngarkohet vendndodhje “live”…</string>
+    <string name="location_share_loading_map_error">S’arrihet të ngarkohet hartë
+\nKy shërbyes Home mund të mos jetë formësuar të shfaqë harta.</string>
+    <string name="poll_undisclosed_not_ended">Përfundimet do të jenë të dukshme pasi të ketë përfunduar pyetësori</string>
+    <string name="labs_enable_msc3061_share_history_desc">Kur bëhet ftesë në një dhomë të fshehtëzuar që ka historik ndarjesh me të tjerët, historiku i fshehtëzuar do të jetë i dukshëm.</string>
+    <string name="a11y_voice_broadcast_buffering">Përdo</string>
+    <string name="a11y_pause_voice_broadcast">Ndal transmetim zanor</string>
+    <string name="a11y_play_voice_broadcast">Luani ose vazhdoni luajtje transmetimi zanor</string>
+    <string name="a11y_stop_voice_broadcast_record">Ndal incizim transmetimi zanor</string>
+    <string name="a11y_pause_voice_broadcast_record">Ndal incizim transmetimi zanor</string>
+    <string name="a11y_resume_voice_broadcast_record">Vazhdo incizim transmetimi zanor</string>
+    <string name="voice_broadcast_live">Drejtpërdrejt</string>
+    <string name="settings_show_latest_profile">Shfaq hollësitë më të reja të përdoruesit</string>
+    <string name="space_explore_filter_no_result_description">Disa përfundime mund të jenë të fshehura, ngaqë janë private dhe ju duhet një ftesë për to.</string>
+    <string name="space_explore_filter_no_result_title">S’u gjetën përfundime</string>
+    <string name="space_leave_radio_button_none">Mos braktis ndonjë</string>
+    <string name="space_leave_radio_button_all">Braktisi krejt</string>
+    <string name="space_leave_radio_buttons_title">Gjëra në këtë hapësirë</string>
+    <string name="a11y_presence_busy">I zënë</string>
+    <string name="a11y_open_settings">Hap rregullimet</string>
+    <string name="settings_security_pin_code_use_biometrics_error">S’u aktivizua dot mirëfilltësim biometrik.</string>
+    <string name="auth_biometric_key_invalidated_message">Mirëfilltësimi biometrik qe çaktivizuar ngaqë tani së fundi është shtuar një metodë e re mirëfilltësimi biometrik. Mund ta riaktivizoni që nga Rregullimet.</string>
+    <string name="key_authenticity_not_guaranteed">S’mund të garantohet mirëfilltësia e këtij mesazhi të fshehtëzuar në këtë pajisje.</string>
+    <string name="settings_security_incognito_keyboard_title">Tastierë inkonjito</string>
+    <string name="send_your_first_msg_to_invite">Dërgoni mesazhin tuaj të parë për të ftuar në fjalosje %s</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Mesazhet në këtë fjalosje do të jenë të fshehtëzuar skaj-më-skaj.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">S’do të jeni në gjendje të shihni historikun e mesazheve të fshehtëzuara. Që t’ia rifilloni nga e para, ricaktoni kyçet tuaja për Kopjeruajtje të Sigurt Mesazhesh dhe kyçe verifikimi.</string>
+    <string name="crosssigning_cannot_verify_this_session">S’arrihet të verifikohet kjo pajisje</string>
+    <string name="settings_sessions_list">Sesione</string>
+    <string name="sent_live_location">Tregoi vendndodhjen e vet drejtpërsëdrejti</string>
+    <string name="command_description_table_flip">E paraprin një mesazh tekst i thjeshtë me (╯°□°）╯︵ ┻━┻</string>
+    <string name="permalink_unsupported_groups">S’hapet dot kjo lidhje: bashkësitë janë zëvendësuar nga hapësirat</string>
+    <string name="login_scan_qr_code">Skanoni kodin QR</string>
+    <string name="ftue_auth_login_username_entry">Emër përdoruesi / Email / Telefon</string>
+    <string name="ftue_auth_captcha_title">Jeni qenie njerëzore\?</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">Ndiqni udhëzimet e dërguara te %s</string>
+    <string name="ftue_auth_password_reset_confirmation">Ricaktim fjalëkalimi</string>
+    <string name="ftue_auth_forgot_password">Harrova fjalëkalimin</string>
+    <string name="ftue_auth_email_resend_email">Ridërgo email</string>
+    <string name="ftue_auth_email_verification_footer">S’morët email\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Ndiqni udhëzimet e dërguara te %s</string>
+    <string name="ftue_auth_email_verification_title">Verifikoni email-in tuaj</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Ridërgomëni kodin</string>
+    <string name="ftue_auth_phone_confirmation_subtitle">Te %s u dërgua një kod</string>
+    <string name="ftue_auth_phone_confirmation_title">Ripohoni numrin e telefonit tuaj</string>
+    <string name="ftue_auth_sign_out_all_devices">Dil nga krejt pajisjet</string>
+    <string name="ftue_auth_reset_password">Ricaktoni fjalëkalimin</string>
+    <string name="ftue_auth_new_password_subtitle">Sigurohuni të jetë 8 ose më shumë shenja.</string>
+    <string name="ftue_auth_new_password_title">Zgjidhni një fjalëkalim të ri</string>
+    <string name="ftue_auth_new_password_entry_title">Fjalëkalim i Ri</string>
+    <string name="ftue_auth_reset_password_breaker_title">Kontrolloni email-in tuaj.</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s do t’ju dërgojë një lidhje verifikimi</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">Kod ripohimi</string>
+    <string name="ftue_auth_phone_entry_title">Numër Telefoni</string>
+    <string name="ftue_auth_phone_subtitle">%s lyp verifikimin e llogarisë tuaj</string>
+    <string name="ftue_auth_phone_title">Jepni numrin e telefonit tuaj</string>
+    <string name="ftue_auth_email_entry_title">Email</string>
+    <string name="ftue_auth_email_subtitle">%s lyp verifikimin e llogarisë tuaj</string>
+    <string name="ftue_auth_email_title">Jepni email-in tuaj</string>
+    <string name="ftue_auth_terms_subtitle">Ju lutemi, lexoni kushte dhe rregulla të %s</string>
+    <string name="ftue_auth_terms_title">Rregulla shërbyesi</string>
+    <string name="ftue_auth_choose_server_ems_cta">Lidhuni</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) është një shërbim strehimi i fuqishëm dhe i besueshëm, për komunikim të shpejtë, të sigurt dhe të atypëratyshëm. Shihni më tepër se si, te<a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_title">Doni të strehoni shërbyesin tuaj\?</string>
+    <string name="ftue_auth_choose_server_entry_hint">URL Shërbyesi</string>
+    <string name="ftue_auth_choose_server_sign_in_subtitle">Cila është adresa e shërbyesit tuaj\?</string>
+    <string name="ftue_auth_choose_server_subtitle">Cila është adresa e shërbyesit tuaj\? Kjo është si një shtëpi për krejt të dhënat tuaja</string>
+    <string name="ftue_auth_choose_server_title">Përzgjidhni shërbyesin tuaj</string>
+    <string name="ftue_auth_welcome_back_title">Mirë se u kthyet!</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Përpunojeni</string>
+    <string name="ftue_auth_create_account_sso_section_header">Ose</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Ku gjenden bisedat tuaja</string>
+    <string name="ftue_auth_create_account_choose_server_header">Ku do të gjenden bisedat tuaja</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Duhet të jetë 8 ose më shumë shenja</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Të tjerët mund t’ju zbulojnë %s</string>
+    <string name="ftue_auth_create_account_title">Krijoni llogarinë tuaj</string>
+    <string name="attachment_type_voice_broadcast">Transmetim Zanor</string>
+    <string name="a11y_open_spaces">Hap listë hapësirash</string>
+    <string name="a11y_create_message">Krijoni një bisedë ose dhomë të re</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Ricaktoni metodë njoftimesh</string>
+    <string name="push_gateway_item_enabled">Të aktivizuara:</string>
+    <string name="push_gateway_item_profile_tag">Etiketë profili:</string>
+    <string name="push_gateway_item_device_id">ID sesioni:</string>
+    <string name="create_room_action_go">Jepi</string>
+    <string name="updating_your_data">Po përditësohen të dhënat tuaja…</string>
+    <string name="error_check_network">Diç shkoi ters. Ju lutemi, kontrolloni lidhjen tuaj në rrjet dhe riprovoni.</string>
+    <string name="room_list_filter_people">Persona</string>
+    <string name="room_list_filter_favourites">Të parapëlqyera</string>
+    <string name="room_list_filter_unreads">Të palexuara</string>
+    <string name="room_list_filter_all">Krejt</string>
+    <string name="keys_backup_settings_signature_from_this_user">Kopjeruajtja ka një nënshkrim të vlefshëm prej këtij përdoruesi.</string>
+    <string name="command_description_devtools">Hap skenën e mjeteve të zhvilluesit</string>
+    <string name="timeline_error_room_not_found">Na ndjeni, kjo dhomë s’u gjet.
+\nJu lutemi, riprovoni më vonë.%s</string>
+    <string name="font_size_use_system">Përdor parazgjedhje sistemi</string>
+    <string name="font_size_section_manually">Zgjidheni dorazi</string>
+    <string name="font_size_section_auto">Caktoje vetvetiu</string>
+    <string name="font_size_title">Zgjidhni madhësi shkronjash</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Në këtë dhomë ka pajisje të paverifikuara, ato s’do të jenë në gjendje të shfshehtëzojnë mesazhet që dërgoni.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Mos dërgo kurrë prej këtij sesioni mesazhe të fshehtëzuar te sesione të paverifikuar në këtë dhomë.</string>
+    <string name="settings_autoplay_animated_images_title">Figurat e animuara vetëluaji</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">S’u arrit të regjistrohej token pikëmbarimi te shërbyesi Home:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Pikëmbarim i regjistruar me sukses te shërbyesi Home.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Regjistrim Pikëmbarimi</string>
+    <string name="grant_permission">Akordojini Leje</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} lyp lejen për shfaqje njoftimesh.
+\nJu lutemi, akordoni lejen.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s dhe %2$d tjetër</item>
+        <item quantity="other">%1$s dhe %2$d të tjerë</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s dhe %2$s</string>
+    <string name="permissions_rationale_msg_notification">${app_name} lyp leje të shfaqë njoftime. Njoftimet mund të shfaqin mesazhet tuaja, ftesa tuajat, etj.
+\n
+\nJu lutemi, lejoni përdorimin e tyre te flluska pasuese, që të jeni në gjendje të shihni njoftime.</string>
+    <string name="auth_reset_password_error_unverified">Email jo i verifikuar, kontrolloni te Të marrët tuaj</string>
+    <string name="call_stop_screen_sharing">Reshtni tregimin e ekranit tuaj</string>
+    <string name="call_start_screen_sharing">Tregojuani ekranin të tjerëve</string>
+    <string name="invites_empty_message">Ky është vendi ku do të gjenden kërkesat dhe ftesat tuaja të reja.</string>
+    <string name="invites_empty_title">S’ka gjë të re.</string>
+    <string name="invites_title">Ftesa</string>
+    <string name="space_list_empty_message">Hapësirat janë një mënyrë e re për të grupuar dhoma dhe njerëz. Që t’ia filloni, krijoni një hapësirë.</string>
+    <string name="space_list_empty_title">Ende pa hapësira.</string>
+    <string name="labs_enable_rich_text_editor_summary">Provoni përpunuesin e teksteve të pasur (për tekst të thjeshtë vjen së shpejti)</string>
+    <string name="labs_enable_rich_text_editor_title">Aktivizo përpunues teksti të pasur</string>
+    <string name="labs_enable_deferred_dm_summary">Krijo MD vetëm për mesazhin e parë</string>
+    <string name="labs_enable_new_app_layout_summary">Një Element i thjeshtuar, me skeda opsionale</string>
+    <string name="labs_enable_new_app_layout_title">Aktivizo skemë të re</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Veprimtari</string>
+    <string name="home_layout_preferences_sort_by">Renditi sipas</string>
+    <string name="home_layout_preferences_recents">Shfaq të freskëta</string>
+    <string name="home_layout_preferences_filters">Shfaq filtra</string>
+    <string name="home_layout_preferences">Parapëlqime skeme grafike</string>
+    <string name="action_deselect_all">Shpërzgjidhi krejt</string>
+    <string name="action_select_all">Përzgjidhi krejt</string>
+    <string name="action_got_it">E mora</string>
+    <string name="action_next">Më pas</string>
+    <string name="action_reset">Rifillo</string>
+    <string name="time_unit_second_short">sek</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_hour_short">h</string>
+    <string name="initial_sync_request_reason_unignored_users">- Për disa përdorues u hoq shpërfillja</string>
+    <string name="initial_sync_request_title">Kërkesë njëkohësimi fillestar</string>
+    <string name="explore_rooms">Eksploroni Dhoma</string>
+    <string name="change_space">Ndërroni Hapësire</string>
+    <string name="create_room">Krijo Dhomë</string>
+    <string name="start_chat">Filloni Fjalosje</string>
+    <string name="all_chats">Krejt Fjalosjet</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d i përzgjedhura</item>
+        <item quantity="other">%1$d të përzgjedhura</item>
+    </plurals>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Shërbyesi Home nuk mbulon hyrje me kod QR.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">U has një problem sigurie, kur ujdisej shkëmbim i siguruar mesazhesh. Mund të jetë komprometuar një nga sa vijon: shërbyesi juaj Home; lidhja(et) tuaja internet; pajisja(et) tuaja;</string>
+    <string name="qr_code_login_header_failed_timeout_description">Lidhja s’u plotësua në kohën e duhur.</string>
+    <string name="qr_code_login_header_connected_description">Kontrolloni pajisjen ku jeni i futur, duhet të shfaqet kodi më poshtë. Sigurohuni se kodi më poshtë përputhet me atë pajisje:</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Skanoni kodin QR më poshtë me pajisjen tuaj prej nga është dalë nga llogaria.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Përdorni pajisjen tuaj ku jeni brenda llogarisë që të skanoni kodin QR më poshtë:</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Përdorni kamerën në këtë pajisje që të skanoni kodin QR të shfaqur në pajisjen tuaj tjetër:</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Mirato vetvetiu widget-e Thirrjesh Element Call dhe akordo përdorim kamere / mikfrofoni</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Po jepen kyçe dhome për mesazhe të dikurshëm</string>
+    <string name="settings_show_latest_profile_description">Shfaq hollësitë më të reja të profileve (avatar dhe emër në ekran) për krejt mesazhet.</string>
+    <string name="settings_security_incognito_keyboard_summary">Kërko doemos që tastiera të mos përditësojë ndonjë të dhënë të personalizuar, bie fjala, historik shtypjeje në të dhe fjalor bazuar në ç’keni shtypur në biseda. Kini parasysh se disa tastiera mund të mos e respektojnë këtë rregullim.</string>
+    <string name="verify_invalid_qr_notice">Ky kod QR duket i formuar keq. Ju lutemi, provoni ta verifikoni me tjetër metodë.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Keni aktivizuar fshehtëzim për sesionie të verifikuar vetëm për krejt dhomat, që nga Rregullime Sigurie.</string>
+    <string name="settings_autoplay_animated_images_summary">Luaj figura të animuara te rrjedha kohora sapo zënë të duken</string>
 </resources>

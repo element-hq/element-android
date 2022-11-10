@@ -2653,7 +2653,7 @@
     <string name="device_manager_sessions_other_description">V záujme čo najlepšieho zabezpečenia, overte svoje relácie a odhláste sa z každej relácie, ktorú už nepoznáte alebo nepoužívate.</string>
     <string name="device_manager_sessions_other_title">Iné relácie</string>
     <string name="settings_sessions_list">Relácie</string>
-    <string name="a11y_open_spaces">Otvoriť zoznam priestorov</string>
+    <string name="a11y_open_spaces">Zoznam priestorov</string>
     <string name="a11y_create_message">Vytvoriť novú konverzáciu alebo miestnosť</string>
     <string name="room_list_filter_people">Ľudia</string>
     <string name="room_list_filter_favourites">Obľúbené</string>
@@ -2891,4 +2891,12 @@
         <item quantity="few">%1$d vybraté</item>
         <item quantity="other">%1$d vybraných</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Prepnutie režimu na celú obrazovku</string>
+    <string name="attachment_type_selector_text_formatting">Formátovanie textu</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Už nahrávate hlasové vysielanie. Ukončite aktuálne hlasové vysielanie a spustite nové.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nemáte požadované oprávnenia na spustenie hlasového vysielania v tejto miestnosti. Obráťte sa na správcu miestnosti, aby vám rozšíril oprávnenia.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Nie je možné spustiť nové hlasové vysielanie</string>
+    <string name="a11y_voice_broadcast_fast_backward">Rýchle posunutie dozadu o 30 sekúnd</string>
+    <string name="a11y_voice_broadcast_fast_forward">Rýchle posunutie dopredu o 30 sekúnd</string>
 </resources>

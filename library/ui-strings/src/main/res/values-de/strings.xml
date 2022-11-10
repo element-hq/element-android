@@ -2835,4 +2835,12 @@
         <item quantity="one">%1$d ausgewählt</item>
         <item quantity="other">%1$d ausgewählt</item>
     </plurals>
+    <string name="error_voice_broadcast_permission_denied_message">Du hast nicht die nötigen Berechtigungen, um eine Sprachübertragung in diesem Raum zu starten. Kontaktiere einen Raumadministrator, um deine Berechtigungen anzupassen.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Sprachübertragung kann nicht gestartet werden</string>
+    <string name="rich_text_editor_full_screen_toggle">Vollbildmodus umschalten</string>
+    <string name="attachment_type_selector_text_formatting">Textformatierung</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Du zeichnest bereits eine Sprachübertragung auf. Bitte beende die laufende Übertragung, um eine neue zu beginnen.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.</string>
+    <string name="a11y_voice_broadcast_fast_forward">30 Sekunden vorspulen</string>
+    <string name="a11y_voice_broadcast_fast_backward">30 Sekunden zurückspulen</string>
 </resources>

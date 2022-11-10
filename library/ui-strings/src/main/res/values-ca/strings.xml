@@ -2836,4 +2836,5 @@
     <string name="attachment_type_selector_file">Adjunts</string>
     <string name="attachment_type_selector_sticker">Adhesius</string>
     <string name="attachment_type_selector_gallery">Galeria</string>
+    <string name="attachment_type_selector_text_formatting">Format de text</string>
 </resources>
