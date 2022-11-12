@@ -2844,4 +2844,12 @@
     <string name="error_voice_broadcast_unauthorized_title">Impossible de commencer une nouvelle diffusion audio</string>
     <string name="a11y_voice_broadcast_fast_forward">Avance rapide de 30 secondes</string>
     <string name="a11y_voice_broadcast_fast_backward">Retour rapide de 30 secondes</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Les sessions vérifiées sont toutes celles qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’une autre session vérifiée.
+\n
+\nCela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateur que vous faites confiance à cette session.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Déconnecter %1$d session</item>
+        <item quantity="other">Déconnecter %1$d sessions</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Déconnecter</string>
 </resources>
