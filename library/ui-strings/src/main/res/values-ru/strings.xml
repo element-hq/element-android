@@ -2805,4 +2805,30 @@
     <string name="attachment_type_selector_location">Местоположение</string>
     <string name="attachment_type_selector_camera">Камера</string>
     <string name="attachment_type_selector_contact">Контакт</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} нуждается в разрешении для отображения оповещений.
+\nПожалуйста, дайте разрешение.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s и %2$d другой</item>
+        <item quantity="few">%1$s и %2$d другие</item>
+        <item quantity="many">%1$s и %2$d других</item>
+        <item quantity="other">%1$s и %2$d других</item>
+    </plurals>
+    <string name="permissions_rationale_msg_notification">${app_name} нуждается в резрешении для отображения оповещений. Оповещения могут показывать ваши сообщения, приглашения и тому подобное.
+\n
+\nПожалуйста разрешите доступ при следующем всплывающем сообщении, чтобы иметь возможность видеть оповещения.</string>
+    <string name="invites_empty_message">Здесь будут появляться новые запросы и приглашения.</string>
+    <string name="invites_title">Приглашения</string>
+    <string name="labs_enable_rich_text_editor_summary">Попробуйте расширенный текстовый редактор (режим набора обычного текста скоро появится)</string>
+    <string name="labs_enable_deferred_dm_summary">Создавать личные сообщения только при отправке первого сообщения</string>
+    <string name="labs_enable_deferred_dm_title">Включить отложенные личные сообщения</string>
+    <string name="action_deselect_all">Отменить выбор всего</string>
+    <string name="action_select_all">Выбрать всё</string>
+    <string name="a11y_collapse_space_children">Свернуть дочерние элементы %s</string>
+    <string name="a11y_expand_space_children">Развернуть дочерние элементы %s</string>
+    <plurals name="x_selected">
+        <item quantity="one">Выбрано %1$d</item>
+        <item quantity="few">Выбрано %1$d</item>
+        <item quantity="many">Выбрано %1$d</item>
+        <item quantity="other">Выбрано %1$d</item>
+    </plurals>
 </resources>
