@@ -2837,4 +2837,6 @@
     <string name="attachment_type_selector_sticker">Adhesius</string>
     <string name="attachment_type_selector_gallery">Galeria</string>
     <string name="attachment_type_selector_text_formatting">Format de text</string>
+    <string name="a11y_voice_broadcast_fast_backward">Enrere 30 segons</string>
+    <string name="a11y_voice_broadcast_fast_forward">Avança 30 segons</string>
 </resources>
