@@ -66,7 +66,7 @@ class AudioMessageHelper @Inject constructor(
 
     fun startRecording(roomId: String) {
         stopPlayback()
-        playbackTracker.makeAllPlaybacksIdle()
+        playbackTracker.pauseAllPlaybacks()
         amplitudeList.clear()
 
         try {
