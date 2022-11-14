@@ -343,17 +343,21 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             !currentVoiceBroadcastEvent?.isLive.orFalse() -> false
             // the player is stopped or paused
             playingState == State.IDLE || playingState == State.PAUSED -> false
-            // the user has sought
             seekPosition != null -> {
                 val seekDirection = seekPosition.compareTo(getCurrentPlaybackPosition() ?: 0)
-                when {
-                    // backward
-                    seekDirection < 0 -> false
-                    // forward: check if new sequence is the last one
-                    else -> playlist.findByPosition(seekPosition)?.sequence == playlist.lastOrNull()?.sequence
+                val newSequence = playlist.findByPosition(seekPosition)?.sequence
+                // the user has sought forward
+                if (seekDirection >= 0) {
+                    // stay in live or latest sequence reached
+                    isLiveListening || newSequence == playlist.lastOrNull()?.sequence
+                }
+                // the user has sought backward
+                else {
+                    // was in live and stay in the same sequence
+                    isLiveListening && newSequence == playlist.currentSequence
                 }
             }
-            // otherwise, stay in live or go in live if we reached the last sequence
+            // otherwise, stay in live or go in live if we reached the latest sequence
             else -> isLiveListening || playlist.currentSequence == playlist.lastOrNull()?.sequence
         }
     }
