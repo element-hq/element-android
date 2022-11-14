@@ -26,7 +26,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R

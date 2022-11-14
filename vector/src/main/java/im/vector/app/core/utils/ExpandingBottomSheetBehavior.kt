@@ -42,6 +42,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     interface Callback {
         /** Called when the dragging state of the BottomSheet changes. */
         fun onStateChanged(state: State) {}
+
         /** Called when the position of the BottomSheet changes while dragging. */
         fun onSlidePositionChanged(view: View, yPosition: Float) {}
     }
@@ -50,10 +51,13 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     enum class State(val value: Int) {
         /** BottomSheet is at min height, collapsed at the bottom. */
         Collapsed(0),
+
         /** BottomSheet is being dragged by the user. */
         Dragging(1),
+
         /** BottomSheet has been released after being dragged by the user and is animating to its destination. */
         Settling(2),
+
         /** BottomSheet is at its max height. */
         Expanded(3);
 
@@ -67,6 +71,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     /** Current BottomSheet state. Default to [State.Collapsed]. */
     var state: State = State.Collapsed
         private set
+
     /** Whether the BottomSheet can be dragged by the user or not. Defaults to `true`. */
     var isDraggable = true
 
@@ -84,23 +89,29 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
             field = value
             expandedOffset = -1
         }
+
     /** Whether the BottomSheet should be expanded up to the bottom of any [AppBarLayout] found in the parent [CoordinatorLayout]. Defaults to `false`. */
     var avoidAppBarLayout = false
         set(value) {
             field = value
             expandedOffset = -1
         }
+
     /**
      * Whether to add the [scrimView], a 'shadow layer' that will be displayed while dragging/expanded so it obscures the content below the BottomSheet.
      * Defaults to `false`.
      */
     var useScrimView = false
+
     /** Color to use for the [scrimView] shadow layer. */
     var scrimViewColor = 0x60000000
+
     /** [View.TRANSLATION_Z] in `dps` to apply to the [scrimView]. Defaults to `0dp`. */
     var scrimViewTranslationZ = 0
+
     /** Whether the content view should be layout to the top of the BottomSheet when it's collapsed. Defaults to true. */
     var applyInsetsToContentViewWhenCollapsed = true
+
     /** Lambda used to calculate a min collapsed when the view using the behavior should have a special 'collapsed' layout. It's null by default. */
     var minCollapsedHeight: (() -> Int)? = null
 

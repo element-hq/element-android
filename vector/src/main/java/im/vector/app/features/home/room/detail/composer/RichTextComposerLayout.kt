@@ -134,10 +134,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
         val cornerSize = if (!isSingleLine || hasRelatedMessage) {
             resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded).toFloat()
         } else {
-            val multilineSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
-            val singleLineSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
-            val diff = singleLineSize - multilineSize
-            multilineSize + diff*(1-percentage)
+            val multilineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
+            val singleLineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            val diff = singleLineCornerSize - multilineCornerSize
+            multilineCornerSize + diff * (1 - percentage)
         }
         if (cornerSize != borderShapeDrawable.bottomLeftCornerResolvedSize) {
             borderShapeDrawable.setCornerSize(cornerSize)
