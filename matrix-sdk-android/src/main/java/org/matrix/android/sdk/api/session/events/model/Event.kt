@@ -447,7 +447,7 @@ fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
 
 fun Event.getPollContent(): MessagePollContent? {
-    return getDecryptedContent().toModel<MessagePollContent>()
+    return getClearContent().toModel<MessagePollContent>()
 }
 
 fun Event.supportsNotification() =
