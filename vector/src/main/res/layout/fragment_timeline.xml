@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:inflatedId="@+id/failedMessagesWarningStub"
             android:layout="@layout/view_stub_failed_message_warning_layout"
-            app:layout_constraintBottom_toTopOf="@id/composerContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_height="300dp" />

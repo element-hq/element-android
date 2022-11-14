@@ -43,7 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/sendButton"
             app:layout_goneMarginBottom="57dp"
-            tools:ignore="MissingPrefix" />
+            tools:ignore="MissingPrefix,RtlSymmetry" />
 
         <FrameLayout
             android:id="@+id/composerEditTextOuterBorder"
@@ -52,7 +52,6 @@
             android:minHeight="40dp"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="12dp"
-            android:background="@drawable/bg_composer_rich_edit_text_single_line"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/sendButton"
@@ -171,7 +170,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="1"
-            tools:ignore="MissingPrefix"
+            tools:ignore="MissingPrefix,RtlSymmetry"
             tools:visibility="visible" />
 
         <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
