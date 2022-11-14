@@ -70,18 +70,26 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     override var currentVoiceBroadcast: VoiceBroadcast? = null
     override var isLiveListening: Boolean = false
+        @MainThread
+        set(value) {
+            if (field != value) {
+                Timber.w("isLiveListening: $field -> $value")
+                field = value
+                onLiveListeningChanged(value)
+            }
+        }
 
     override var playingState = State.IDLE
         @MainThread
         set(value) {
             if (field != value) {
-                Timber.w("## VoiceBroadcastPlayer state: $field -> $value")
+                Timber.w("playingState: $field -> $value")
                 field = value
                 onPlayingStateChanged(value)
             }
         }
 
-    /** Map voiceBroadcastId to listeners.*/
+    /** Map voiceBroadcastId to listeners. */
     private val listeners: MutableMap<String, CopyOnWriteArrayList<Listener>> = mutableMapOf()
 
     override fun playOrResume(voiceBroadcast: VoiceBroadcast) {
@@ -325,9 +333,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     /**
      * Update the live listening state according to:
-     * - the voice broadcast state,
-     * - the playing state,
-     * - the potential seek position.
+     * - the voice broadcast state (started/paused/resumed/stopped),
+     * - the playing state (IDLE, PLAYING, PAUSED, BUFFERING),
+     * - the potential seek position (backward/forward).
      */
     private fun updateLiveListeningMode(seekPosition: Int? = null) {
         isLiveListening = when {
@@ -348,11 +356,12 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             // otherwise, stay in live or go in live if we reached the last sequence
             else -> isLiveListening || playlist.currentSequence == playlist.lastOrNull()?.sequence
         }
+    }
 
+    private fun onLiveListeningChanged(isLiveListening: Boolean) {
         currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
             // Notify live mode change to all the listeners attached to the current voice broadcast id
             listeners[voiceBroadcastId]?.forEach { listener -> listener.onLiveModeChanged(isLiveListening) }
-
         }
     }
 
