@@ -60,7 +60,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun bindButtons(holder: Holder) {
         with(holder) {
-            playPauseButton.onClick {
+            playPauseButton.setOnClickListener {
                 if (player.currentVoiceBroadcast == voiceBroadcast) {
                     when (player.playingState) {
                         VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
@@ -72,11 +72,11 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                 }
             }
-            fastBackwardButton.onClick {
+            fastBackwardButton.setOnClickListener {
                 val newPos = seekBar.progress.minus(30_000).coerceIn(0, duration)
                 callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
             }
-            fastForwardButton.onClick {
+            fastForwardButton.setOnClickListener {
                 val newPos = seekBar.progress.plus(30_000).coerceIn(0, duration)
                 callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
             }
@@ -163,7 +163,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         player.removeListener(voiceBroadcast, playerListener)
         playbackTracker.untrack(voiceBroadcast.voiceBroadcastId)
         with(holder) {
-            seekBar.onClick(null)
+            seekBar.setOnSeekBarChangeListener(null)
             playPauseButton.onClick(null)
             fastForwardButton.onClick(null)
             fastBackwardButton.onClick(null)
