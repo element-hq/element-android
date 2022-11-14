@@ -130,7 +130,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             listeners[voiceBroadcast.voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
         listener.onPlayingStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
-        listener.onLiveModeChanged(if (voiceBroadcast == currentVoiceBroadcast) isLiveListening else false)
+        listener.onLiveModeChanged(voiceBroadcast == currentVoiceBroadcast && isLiveListening)
     }
 
     override fun removeListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
