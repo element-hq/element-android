@@ -24,8 +24,4 @@ sealed interface MessageComposerMode {
     class Edit(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
     class Quote(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
     class Reply(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
-
-    fun isSpecial(): Boolean {
-        return this is Special
-    }
 }

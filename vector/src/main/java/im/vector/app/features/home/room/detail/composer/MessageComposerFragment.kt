@@ -272,9 +272,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
             callback = object : ExpandingBottomSheetBehavior.Callback {
                 override fun onStateChanged(state: ExpandingBottomSheetBehavior.State) {
+                    // Dragging is disabled while the composer is collapsed
                     bottomSheetBehavior?.isDraggable = state != ExpandingBottomSheetBehavior.State.Collapsed
 
-                    // The difficult part is changing this without breaking dragging
                     val setFullScreen = when (state) {
                         ExpandingBottomSheetBehavior.State.Collapsed -> false
                         ExpandingBottomSheetBehavior.State.Expanded -> true
