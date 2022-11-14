@@ -44,7 +44,7 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
 
     fun execute(roomId: String, matrixFormattedBody: String, replyToContent: ReplyToContent): String {
         val repliedToEvent = replyToContent.eventId?.let { getEvent(it, roomId) }
-        val breakingLineIndex = matrixFormattedBody.lastIndexOf(BREAKING_LINE)
+        val breakingLineIndex = matrixFormattedBody.indexOf(BREAKING_LINE)
         val endOfBlockQuoteIndex = matrixFormattedBody.lastIndexOf(ENDING_BLOCK_QUOTE)
 
         val withTranslatedContent = if (repliedToEvent != null && breakingLineIndex != -1 && endOfBlockQuoteIndex != -1) {
