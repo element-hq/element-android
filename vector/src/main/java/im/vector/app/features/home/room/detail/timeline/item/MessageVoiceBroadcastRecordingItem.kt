@@ -21,10 +21,12 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+import org.threeten.bp.Duration
 
 @EpoxyModelClass
 abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastRecordingItem.Holder>() {
@@ -37,10 +39,14 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        if (recorder != null && recorder?.state != VoiceBroadcastRecorder.State.Idle) {
+        if (recorder != null && recorder?.recordingState != VoiceBroadcastRecorder.State.Idle) {
             recorderListener = object : VoiceBroadcastRecorder.Listener {
                 override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
                     renderRecordingState(holder, state)
+                }
+
+                override fun onRemainingTimeUpdated(remainingTime: Long?) {
+                    renderRemainingTime(holder, remainingTime)
                 }
             }.also { recorder?.addListener(it) }
         } else {
@@ -58,9 +64,19 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     override fun renderMetadata(holder: Holder) {
-        with(holder) {
-            listenersCountMetadata.isVisible = false
-            remainingTimeMetadata.isVisible = false
+        holder.listenersCountMetadata.isVisible = false
+    }
+
+    private fun renderRemainingTime(holder: Holder, remainingTime: Long?) {
+        if (remainingTime != null) {
+            val formattedDuration = TextUtils.formatDurationWithUnits(
+                    holder.view.context,
+                    Duration.ofSeconds(remainingTime.coerceAtLeast(0L))
+            )
+            holder.remainingTimeMetadata.value = holder.view.resources.getString(R.string.voice_broadcast_recording_time_left, formattedDuration)
+            holder.remainingTimeMetadata.isVisible = true
+        } else {
+            holder.remainingTimeMetadata.isVisible = false
         }
     }
 
