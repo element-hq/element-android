@@ -21,9 +21,11 @@ import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
+import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceBroadcastRecorderQ(
@@ -32,13 +34,21 @@ class VoiceBroadcastRecorderQ(
 
     private var maxFileSize = 0L // zero or negative for no limit
     private var currentRoomId: String? = null
+    private var currentMaxLength: Int = 0
+
     override var currentSequence = 0
-    override var state = VoiceBroadcastRecorder.State.Idle
+    override var recordingState = VoiceBroadcastRecorder.State.Idle
         set(value) {
             field = value
             listeners.forEach { it.onStateUpdated(value) }
         }
+    override var currentRemainingTime: Long? = null
+        set(value) {
+            field = value
+            listeners.forEach { it.onRemainingTimeUpdated(value) }
+        }
 
+    private val recordingTicker = RecordingTicker()
     private val listeners = CopyOnWriteArrayList<VoiceBroadcastRecorder.Listener>()
 
     override val outputFormat = MediaRecorder.OutputFormat.MPEG_4
@@ -58,33 +68,47 @@ class VoiceBroadcastRecorderQ(
         }
     }
 
-    override fun startRecord(roomId: String, chunkLength: Int) {
+    override fun startRecord(roomId: String, chunkLength: Int, maxLength: Int) {
         currentRoomId = roomId
         maxFileSize = (chunkLength * audioEncodingBitRate / 8).toLong()
+        currentMaxLength = maxLength
         currentSequence = 1
         startRecord(roomId)
-        state = VoiceBroadcastRecorder.State.Recording
+        recordingState = VoiceBroadcastRecorder.State.Recording
+        recordingTicker.start()
     }
 
     override fun pauseRecord() {
         tryOrNull { mediaRecorder?.stop() }
         mediaRecorder?.reset()
+        recordingState = VoiceBroadcastRecorder.State.Paused
+        recordingTicker.pause()
         notifyOutputFileCreated()
-        state = VoiceBroadcastRecorder.State.Paused
     }
 
     override fun resumeRecord() {
         currentSequence++
         currentRoomId?.let { startRecord(it) }
-        state = VoiceBroadcastRecorder.State.Recording
+        recordingState = VoiceBroadcastRecorder.State.Recording
+        recordingTicker.resume()
     }
 
     override fun stopRecord() {
         super.stopRecord()
+
+        // Stop recording
+        recordingState = VoiceBroadcastRecorder.State.Idle
+        recordingTicker.stop()
         notifyOutputFileCreated()
+
+        // Remove listeners
         listeners.clear()
+
+        // Reset data
         currentSequence = 0
-        state = VoiceBroadcastRecorder.State.Idle
+        currentMaxLength = 0
+        currentRemainingTime = null
+        currentRoomId = null
     }
 
     override fun release() {
@@ -94,7 +118,8 @@ class VoiceBroadcastRecorderQ(
 
     override fun addListener(listener: VoiceBroadcastRecorder.Listener) {
         listeners.add(listener)
-        listener.onStateUpdated(state)
+        listener.onStateUpdated(recordingState)
+        listener.onRemainingTimeUpdated(currentRemainingTime)
     }
 
     override fun removeListener(listener: VoiceBroadcastRecorder.Listener) {
@@ -115,6 +140,55 @@ class VoiceBroadcastRecorderQ(
             listeners.forEach { it.onVoiceMessageCreated(file, currentSequence) }
             outputFile = nextOutputFile
             nextOutputFile = null
+        }
+    }
+
+    private fun onElapsedTimeUpdated(elapsedTimeMillis: Long) {
+        currentRemainingTime = if (currentMaxLength > 0 && recordingState != VoiceBroadcastRecorder.State.Idle) {
+            val currentMaxLengthMillis = TimeUnit.SECONDS.toMillis(currentMaxLength.toLong())
+            val remainingTimeMillis = currentMaxLengthMillis - elapsedTimeMillis
+            TimeUnit.MILLISECONDS.toSeconds(remainingTimeMillis)
+        } else {
+            null
+        }
+    }
+
+    private inner class RecordingTicker(
+            private var recordingTicker: CountUpTimer? = null,
+    ) {
+        fun start() {
+            recordingTicker?.stop()
+            recordingTicker = CountUpTimer().apply {
+                tickListener = CountUpTimer.TickListener { onTick(elapsedTime()) }
+                resume()
+                onTick(elapsedTime())
+            }
+        }
+
+        fun pause() {
+            recordingTicker?.apply {
+                pause()
+                onTick(elapsedTime())
+            }
+        }
+
+        fun resume() {
+            recordingTicker?.apply {
+                resume()
+                onTick(elapsedTime())
+            }
+        }
+
+        fun stop() {
+            recordingTicker?.apply {
+                stop()
+                onTick(elapsedTime())
+                recordingTicker = null
+            }
+        }
+
+        private fun onTick(elapsedTimeMillis: Long) {
+            onElapsedTimeUpdated(elapsedTimeMillis)
         }
     }
 }
