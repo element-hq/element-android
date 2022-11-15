@@ -340,7 +340,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private fun updateLiveListeningMode(seekPosition: Int? = null) {
         isLiveListening = when {
             // the current voice broadcast is not live (ended)
-            !currentVoiceBroadcastEvent?.isLive.orFalse() -> false
+            currentVoiceBroadcastEvent?.isLive?.not().orFalse() -> false
             // the player is stopped or paused
             playingState == State.IDLE || playingState == State.PAUSED -> false
             seekPosition != null -> {
