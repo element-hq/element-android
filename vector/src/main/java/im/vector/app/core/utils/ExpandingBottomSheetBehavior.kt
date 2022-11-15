@@ -122,6 +122,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     private var lastY: Int = -1
     private var collapsedOffset = -1
     private var expandedOffset = -1
+    private var parentWidth = -1
     private var parentHeight = -1
 
     private var activePointerId = -1
@@ -159,6 +160,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     constructor() : super()
 
     override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
+        parentWidth = parent.width
         parentHeight = parent.height
 
         if (viewRef == null) {
@@ -180,7 +182,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
 
         // This should optimise calculations when they're not needed
         if (state == State.Collapsed) {
-            calculateCollapsedOffset(child, parent.width)
+            calculateCollapsedOffset(child)
         }
         calculateExpandedOffset(parent)
 
@@ -227,7 +229,8 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
                     params.height = newHeight
                     child.layoutParams = params
                 }
-                val newOffset = collapsedOffset - insetTop
+                // If the offset is < insetTop it will cover the status bar too
+                val newOffset = max(insetTop, collapsedOffset - insetTop)
                 ViewCompat.offsetTopAndBottom(child, newOffset)
                 log("State: Collapsed | Offset: $newOffset | Height: $newHeight")
             }
@@ -393,10 +396,11 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     }
 
     // region: Size measuring and utils
-    private fun calculateCollapsedOffset(child: View, parentWidth: Int) {
+    private fun calculateCollapsedOffset(child: View) {
+        val availableSpace = parentHeight - insetTop
         child.measure(
                 MeasureSpec.makeMeasureSpec(parentWidth, MeasureSpec.EXACTLY),
-                MeasureSpec.UNSPECIFIED,
+                MeasureSpec.makeMeasureSpec(availableSpace, MeasureSpec.AT_MOST),
         )
         collapsedOffset = parentHeight - child.measuredHeight + insetTop
     }
@@ -656,7 +660,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
             val params = view.layoutParams
             params.height = CoordinatorLayout.LayoutParams.WRAP_CONTENT
             view.layoutParams = params
-            calculateCollapsedOffset(view, parentHeight)
+            calculateCollapsedOffset(view)
         }
         return WindowInsetsCompat.CONSUMED
     }
@@ -710,11 +714,12 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         }
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+            val actualCollapsedOffset = minCollapsedOffset ?: collapsedOffset
             val targetState = if (yvel < 0) {
                 // Moving up
                 val currentTop = releasedChild.top
 
-                val yPositionPercentage = currentTop * 100f / collapsedOffset
+                val yPositionPercentage = currentTop * 100f / actualCollapsedOffset
                 if (yPositionPercentage >= 0.5f) {
                     State.Expanded
                 } else {
@@ -725,7 +730,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
                 // being greater than the Y velocity, settle to the nearest correct height.
 
                 val currentTop = releasedChild.top
-                if (currentTop < collapsedOffset / 2) {
+                if (currentTop < actualCollapsedOffset / 2) {
                     State.Expanded
                 } else {
                     State.Collapsed
@@ -734,7 +739,7 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
                 // Moving down
                 val currentTop = releasedChild.top
 
-                val yPositionPercentage = currentTop * 100f / collapsedOffset
+                val yPositionPercentage = currentTop * 100f / actualCollapsedOffset
                 if (yPositionPercentage >= 0.5f) {
                     State.Collapsed
                 } else {
@@ -750,7 +755,8 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
 
         override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
             val collapsed = minCollapsedOffset ?: collapsedOffset
-            return min(max(top, expandedOffset), collapsed)
+            val maxTop = max(top, insetTop)
+            return min(max(maxTop, expandedOffset), collapsed)
         }
 
         override fun getViewVerticalDragRange(child: View): Int {

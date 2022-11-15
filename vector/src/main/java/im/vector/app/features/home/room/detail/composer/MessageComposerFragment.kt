@@ -270,6 +270,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             minCollapsedHeight = {
                 (composer as? RichTextComposerLayout)?.estimateCollapsedHeight() ?: -1
             }
+            isDraggable = false
             callback = object : ExpandingBottomSheetBehavior.Callback {
                 override fun onStateChanged(state: ExpandingBottomSheetBehavior.State) {
                     // Dragging is disabled while the composer is collapsed
