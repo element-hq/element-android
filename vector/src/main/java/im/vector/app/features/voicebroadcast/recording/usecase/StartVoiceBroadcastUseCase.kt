@@ -137,7 +137,8 @@ class StartVoiceBroadcastUseCase @Inject constructor(
     @VisibleForTesting
     fun assertNoOngoingVoiceBroadcast(room: Room) {
         when {
-            voiceBroadcastRecorder?.recordingState == VoiceBroadcastRecorder.State.Recording || voiceBroadcastRecorder?.recordingState == VoiceBroadcastRecorder.State.Paused -> {
+            voiceBroadcastRecorder?.recordingState == VoiceBroadcastRecorder.State.Recording ||
+                    voiceBroadcastRecorder?.recordingState == VoiceBroadcastRecorder.State.Paused -> {
                 Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: another voice broadcast")
                 throw VoiceBroadcastFailure.RecordingError.UserAlreadyBroadcasting
             }
