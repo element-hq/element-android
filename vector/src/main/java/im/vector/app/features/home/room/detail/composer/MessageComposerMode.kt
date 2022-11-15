@@ -20,8 +20,9 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 sealed interface MessageComposerMode {
     data class Normal(val content: CharSequence?) : MessageComposerMode
-    open class Special(val event: TimelineEvent, val defaultContent: CharSequence) : MessageComposerMode
-    class Edit(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
-    class Quote(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
-    class Reply(event: TimelineEvent, defaultContent: CharSequence) : Special(event, defaultContent)
+
+    sealed class Special(open val event: TimelineEvent, open val defaultContent: CharSequence) : MessageComposerMode
+    data class Edit(override val event: TimelineEvent, override val defaultContent: CharSequence) : Special(event, defaultContent)
+    class Quote(override val event: TimelineEvent, override val defaultContent: CharSequence) : Special(event, defaultContent)
+    class Reply(override val event: TimelineEvent, override val defaultContent: CharSequence) : Special(event, defaultContent)
 }

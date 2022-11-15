@@ -162,11 +162,10 @@ class PlainTextComposerLayout @JvmOverloads constructor(
         val event = specialMode.event
         val defaultContent = specialMode.defaultContent
 
-        val iconRes: Int? = when (specialMode) {
+        val iconRes: Int = when (specialMode) {
             is MessageComposerMode.Reply -> R.drawable.ic_reply
             is MessageComposerMode.Edit -> R.drawable.ic_edit
             is MessageComposerMode.Quote -> R.drawable.ic_quote
-            else -> null
         }
 
         val pillsPostProcessor = pillsPostProcessorFactory.create(event.roomId)
@@ -204,7 +203,7 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
         views.composerRelatedMessageImage.isVisible = isImageVisible
 
-        iconRes?.let { views.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(context, it)) }
+        views.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(context, iconRes))
 
         avatarRenderer.render(event.senderInfo.toMatrixItem(), views.composerRelatedMessageAvatar)
 
