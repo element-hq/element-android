@@ -331,7 +331,13 @@ class RichTextComposerLayout @JvmOverloads constructor(
             editText.showKeyboard(andRequestFocus = true)
         } else {
             views.composerModeGroup.isGone = true
-            (mode as? MessageComposerMode.Normal)?.content?.let { replaceFormattedContent(it) }
+            (mode as? MessageComposerMode.Normal)?.content?.let { text ->
+                if (isTextFormattingEnabled) {
+                    replaceFormattedContent(text)
+                } else {
+                    views.plainTextComposerEditText.setText(text)
+                }
+            }
             views.sendButton.contentDescription = resources.getString(R.string.action_send)
             hasRelatedMessage = false
         }
