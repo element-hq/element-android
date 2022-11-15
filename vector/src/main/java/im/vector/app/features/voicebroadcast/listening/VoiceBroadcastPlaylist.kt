@@ -56,7 +56,7 @@ class VoiceBroadcastPlaylist(
     }
 
     fun findBySequence(sequenceNumber: Int): PlaylistItem? {
-        return items.find { it.audioEvent.sequence == sequenceNumber }
+        return items.find { it.sequence == sequenceNumber }
     }
 
     fun getNextItem() = findBySequence(currentSequence?.plus(1) ?: 1)
@@ -64,4 +64,7 @@ class VoiceBroadcastPlaylist(
     fun firstOrNull() = findBySequence(1)
 }
 
-data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int)
+data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int) {
+    val sequence: Int?
+        get() = audioEvent.sequence
+}

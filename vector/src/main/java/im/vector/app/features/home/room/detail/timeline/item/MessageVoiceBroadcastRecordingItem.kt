@@ -48,6 +48,15 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         }
     }
 
+    override fun renderLiveIndicator(holder: Holder) {
+        when (voiceBroadcastState) {
+            VoiceBroadcastState.STARTED,
+            VoiceBroadcastState.RESUMED -> renderPlayingLiveIndicator(holder)
+            VoiceBroadcastState.PAUSED -> renderPausedLiveIndicator(holder)
+            VoiceBroadcastState.STOPPED, null -> renderNoLiveIndicator(holder)
+        }
+    }
+
     override fun renderMetadata(holder: Holder) {
         with(holder) {
             listenersCountMetadata.isVisible = false
@@ -104,6 +113,10 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         super.unbind(holder)
         recorderListener?.let { recorder?.removeListener(it) }
         recorderListener = null
+        with(holder) {
+            recordButton.onClick(null)
+            stopRecordButton.onClick(null)
+        }
     }
 
     override fun getViewStubId() = STUB_ID

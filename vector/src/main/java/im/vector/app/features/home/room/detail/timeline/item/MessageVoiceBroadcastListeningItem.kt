@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
 
 @EpoxyModelClass
@@ -43,7 +44,15 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun bindVoiceBroadcastItem(holder: Holder) {
-        playerListener = VoiceBroadcastPlayer.Listener { renderPlayingState(holder, it) }
+        playerListener = object : VoiceBroadcastPlayer.Listener {
+            override fun onPlayingStateChanged(state: VoiceBroadcastPlayer.State) {
+                renderPlayingState(holder, state)
+            }
+
+            override fun onLiveModeChanged(isLive: Boolean) {
+                renderLiveIndicator(holder)
+            }
+        }
         player.addListener(voiceBroadcast, playerListener)
         bindSeekBar(holder)
         bindButtons(holder)
@@ -51,7 +60,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun bindButtons(holder: Holder) {
         with(holder) {
-            playPauseButton.onClick {
+            playPauseButton.setOnClickListener {
                 if (player.currentVoiceBroadcast == voiceBroadcast) {
                     when (player.playingState) {
                         VoiceBroadcastPlayer.State.PLAYING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
@@ -63,11 +72,11 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                 }
             }
-            fastBackwardButton.onClick {
+            fastBackwardButton.setOnClickListener {
                 val newPos = seekBar.progress.minus(30_000).coerceIn(0, duration)
                 callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
             }
-            fastForwardButton.onClick {
+            fastForwardButton.setOnClickListener {
                 val newPos = seekBar.progress.plus(30_000).coerceIn(0, duration)
                 callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.SeekTo(voiceBroadcast, newPos, duration))
             }
@@ -79,6 +88,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             broadcasterNameMetadata.value = recorderName
             voiceBroadcastMetadata.isVisible = true
             listenersCountMetadata.isVisible = false
+        }
+    }
+
+    override fun renderLiveIndicator(holder: Holder) {
+        when {
+            voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED -> renderNoLiveIndicator(holder)
+            voiceBroadcastState == VoiceBroadcastState.PAUSED || !player.isLiveListening -> renderPausedLiveIndicator(holder)
+            else -> renderPlayingLiveIndicator(holder)
         }
     }
 
@@ -99,6 +116,8 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 }
                 VoiceBroadcastPlayer.State.BUFFERING -> Unit
             }
+
+            renderLiveIndicator(holder)
         }
     }
 
@@ -121,6 +140,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         }
         playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
             renderBackwardForwardButtons(holder, playbackState)
+            renderLiveIndicator(holder)
             if (!isUserSeeking) {
                 holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
             }
@@ -143,7 +163,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         player.removeListener(voiceBroadcast, playerListener)
         playbackTracker.untrack(voiceBroadcast.voiceBroadcastId)
         with(holder) {
-            seekBar.onClick(null)
+            seekBar.setOnSeekBarChangeListener(null)
             playPauseButton.onClick(null)
             fastForwardButton.onClick(null)
             fastBackwardButton.onClick(null)

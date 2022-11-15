@@ -39,6 +39,9 @@ val MessageAudioEvent.sequence: Int? get() = getVoiceBroadcastChunk()?.sequence
 
 val MessageAudioEvent.duration get() = content.audioInfo?.duration ?: content.audioWaveformInfo?.duration ?: 0
 
+val VoiceBroadcastEvent.voiceBroadcastId
+    get() = reference?.eventId
+
 val VoiceBroadcastEvent.isLive
     get() = content?.isLive.orFalse()
 

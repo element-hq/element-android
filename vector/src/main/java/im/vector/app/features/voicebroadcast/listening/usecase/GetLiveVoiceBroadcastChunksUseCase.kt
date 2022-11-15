@@ -25,6 +25,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.sequence
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
+import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -73,14 +74,15 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
 
                 // Observe new timeline events
                 val listener = object : Timeline.Listener {
-                    private var lastEventId: String? = null
+                    private var latestEventId: String? = null
                     private var lastSequence: Int? = null
 
                     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                        val newEvents = lastEventId?.let { eventId -> snapshot.subList(0, snapshot.indexOfFirst { it.eventId == eventId }) } ?: snapshot
+                        val latestEventIndex = latestEventId?.let { eventId -> snapshot.indexOfFirst { it.eventId == eventId } }
+                        val newEvents = if (latestEventIndex != null) snapshot.subList(0, latestEventIndex) else snapshot
 
                         // Detect a potential stopped voice broadcast state event
-                        val stopEvent = newEvents.findStopEvent()
+                        val stopEvent = newEvents.findStopEvent(voiceBroadcast)
                         if (stopEvent != null) {
                             lastSequence = stopEvent.content?.lastChunkSequence
                         }
@@ -98,7 +100,7 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
                             timeline.dispose()
                         }
 
-                        lastEventId = snapshot.firstOrNull()?.eventId
+                        latestEventId = snapshot.firstOrNull()?.eventId
                     }
                 }
 
@@ -117,8 +119,8 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
     /**
      * Find a [VoiceBroadcastEvent] with a [VoiceBroadcastState.STOPPED] state.
      */
-    private fun List<TimelineEvent>.findStopEvent(): VoiceBroadcastEvent? =
-            this.mapNotNull { it.root.asVoiceBroadcastEvent() }
+    private fun List<TimelineEvent>.findStopEvent(voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? =
+            this.mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent()?.takeIf { it.voiceBroadcastId == voiceBroadcast.voiceBroadcastId } }
                     .find { it.content?.voiceBroadcastState == VoiceBroadcastState.STOPPED }
 
     /**
