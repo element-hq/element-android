@@ -2843,4 +2843,5 @@
         <item quantity="other">Logi välja %1$d\'st sessioonist</item>
     </plurals>
     <string name="device_manager_other_sessions_multi_signout_selection">Logi välja</string>
+    <string name="voice_broadcast_recording_time_left">jäänud %1$s</string>
 </resources>
