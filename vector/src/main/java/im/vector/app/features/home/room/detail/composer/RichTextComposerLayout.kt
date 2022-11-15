@@ -70,6 +70,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
             if (field == value) return
             syncEditTexts()
             field = value
+            updateTextFieldBorder(isFullScreen)
             updateEditTextVisibility()
         }
 
@@ -162,6 +163,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         // Workaround to avoid cut-off text caused by padding in scrolled TextView (there is no clipToPadding).
         // In TextView, clipTop = padding, but also clipTop -= shadowRadius. So if we set the shadowRadius to padding, they cancel each other
         views.richTextComposerEditText.setShadowLayer(views.richTextComposerEditText.paddingBottom.toFloat(), 0f, 0f, 0)
+        views.plainTextComposerEditText.setShadowLayer(views.richTextComposerEditText.paddingBottom.toFloat(), 0f, 0f, 0)
 
         renderComposerMode(MessageComposerMode.Normal(null))
 
@@ -199,6 +201,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.composerEditTextOuterBorder.background = borderShapeDrawable
 
         setupRichTextMenu()
+
+        updateTextFieldBorder(isFullScreen)
     }
 
     private fun setupRichTextMenu() {
@@ -309,10 +313,13 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun replaceFormattedContent(text: CharSequence) {
         views.richTextComposerEditText.setHtml(text.toString())
+        updateTextFieldBorder(isFullScreen)
     }
 
     override fun setTextIfDifferent(text: CharSequence?): Boolean {
-        return editText.setTextIfDifferent(text)
+        val result = editText.setTextIfDifferent(text)
+        updateTextFieldBorder(isFullScreen)
+        return result
     }
 
     private fun updateEditTextFullScreenState(editText: EditText, isFullScreen: Boolean) {
