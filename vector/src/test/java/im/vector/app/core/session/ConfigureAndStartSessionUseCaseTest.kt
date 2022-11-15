@@ -18,6 +18,7 @@ package im.vector.app.core.session
 
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
+import im.vector.app.features.sync.SyncUtils
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeEnableNotificationsSettingUpdater
 import im.vector.app.test.fakes.FakeSession
@@ -36,7 +37,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.session.sync.FilterService
 
 class ConfigureAndStartSessionUseCaseTest {
 
@@ -78,7 +78,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify { fakeSession.startSyncing(fakeContext.instance) }
-        fakeSession.fakeFilterService.verifySetFilter(FilterService.FilterPreset.ElementFilter)
+        fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
@@ -98,7 +98,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify { fakeSession.startSyncing(fakeContext.instance) }
-        fakeSession.fakeFilterService.verifySetFilter(FilterService.FilterPreset.ElementFilter)
+        fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify(inverse = true) { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
@@ -118,7 +118,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify(inverse = true) { fakeSession.startSyncing(fakeContext.instance) }
-        fakeSession.fakeFilterService.verifySetFilter(FilterService.FilterPreset.ElementFilter)
+        fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }

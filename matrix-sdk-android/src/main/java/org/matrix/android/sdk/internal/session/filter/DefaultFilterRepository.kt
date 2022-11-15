@@ -32,7 +32,7 @@ internal class DefaultFilterRepository @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
 ) : FilterRepository {
 
-    override suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
+    override suspend fun storeSyncFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val filterEntity = FilterEntity.get(realm)
             // Filter has changed, or no filter Id yet
@@ -59,7 +59,7 @@ internal class DefaultFilterRepository @Inject constructor(
         }
     }
 
-    override suspend fun storeFilterId(filter: Filter, filterId: String) {
+    override suspend fun storeSyncFilterId(filter: Filter, filterId: String) {
         monarchy.awaitTransaction {
             // We manage only one filter for now
             val filterJson = filter.toJSONString()
@@ -72,13 +72,13 @@ internal class DefaultFilterRepository @Inject constructor(
         }
     }
 
-    override suspend fun getStoredFilterBody(): String {
+    override suspend fun getStoredSyncFilterBody(): String {
         return monarchy.awaitTransaction {
             FilterEntity.getOrCreate(it).filterBodyJson
         }
     }
 
-    override suspend fun getStoredFilterId(): String? {
+    override suspend fun getStoredSyncFilterId(): String? {
         return monarchy.awaitTransaction {
             val id = FilterEntity.get(it)?.filterId
             if (id.isNullOrBlank()) {

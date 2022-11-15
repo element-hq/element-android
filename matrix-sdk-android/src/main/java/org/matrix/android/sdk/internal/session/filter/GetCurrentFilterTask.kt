@@ -26,12 +26,12 @@ internal interface GetCurrentFilterTask : Task<Unit, String>
 internal class DefaultGetCurrentFilterTask @Inject constructor(
         private val filterRepository: FilterRepository,
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
-        private val saveFilterTask: DefaultSaveFilterTask
+        private val saveFilterTask: SaveFilterTask
 ) : GetCurrentFilterTask {
 
     override suspend fun execute(params: Unit): String {
-        val storedFilterId = filterRepository.getStoredFilterId()
-        val storedFilterBody = filterRepository.getStoredFilterBody()
+        val storedFilterId = filterRepository.getStoredSyncFilterId()
+        val storedFilterBody = filterRepository.getStoredSyncFilterBody()
         val homeServerCapabilities = homeServerCapabilitiesDataSource.getHomeServerCapabilities() ?: HomeServerCapabilities()
         val currentFilter = SyncFilterBuilder()
                 .with(filterRepository.getStoredParams())

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
+import io.realm.RealmList
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 
@@ -46,6 +47,8 @@ class SyncFilterBuilder {
                     useThreadNotifications = currentFilterParams.useThreadNotifications
                     lazyLoadMembersForMessageEvents = currentFilterParams.lazyLoadMembersForMessageEvents
                     lazyLoadMembersForStateEvents = currentFilterParams.lazyLoadMembersForStateEvents
+                    listOfSupportedEventTypes = currentFilterParams.listOfSupportedEventTypes?.toList()
+                    listOfSupportedStateEventTypes = currentFilterParams.listOfSupportedStateEventTypes?.toList()
                 }
             }
 
@@ -54,6 +57,8 @@ class SyncFilterBuilder {
                 useThreadNotifications = useThreadNotifications,
                 lazyLoadMembersForMessageEvents = lazyLoadMembersForMessageEvents,
                 lazyLoadMembersForStateEvents = lazyLoadMembersForStateEvents,
+                listOfSupportedEventTypes = listOfSupportedEventTypes?.toTypedArray()?.let { RealmList(*it) },
+                listOfSupportedStateEventTypes = listOfSupportedStateEventTypes?.toTypedArray()?.let { RealmList(*it) }
         )
     }
 
@@ -88,5 +93,29 @@ class SyncFilterBuilder {
         } else {
             null
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SyncFilterBuilder
+
+        if (lazyLoadMembersForStateEvents != other.lazyLoadMembersForStateEvents) return false
+        if (lazyLoadMembersForMessageEvents != other.lazyLoadMembersForMessageEvents) return false
+        if (useThreadNotifications != other.useThreadNotifications) return false
+        if (listOfSupportedEventTypes != other.listOfSupportedEventTypes) return false
+        if (listOfSupportedStateEventTypes != other.listOfSupportedStateEventTypes) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = lazyLoadMembersForStateEvents?.hashCode() ?: 0
+        result = 31 * result + (lazyLoadMembersForMessageEvents?.hashCode() ?: 0)
+        result = 31 * result + (useThreadNotifications?.hashCode() ?: 0)
+        result = 31 * result + (listOfSupportedEventTypes?.hashCode() ?: 0)
+        result = 31 * result + (listOfSupportedStateEventTypes?.hashCode() ?: 0)
+        return result
     }
 }

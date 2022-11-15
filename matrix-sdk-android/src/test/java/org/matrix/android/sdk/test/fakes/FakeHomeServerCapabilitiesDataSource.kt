@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package org.matrix.android.sdk.test.fakes
 
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
-import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 
-class FakeFilterService : FilterService by mockk() {
+internal class FakeHomeServerCapabilitiesDataSource {
+    val instance = mockk<HomeServerCapabilitiesDataSource>()
 
-    fun givenSetFilterSucceeds() {
-        every { setSyncFilter(any()) } just runs
-    }
-
-    fun verifySetSyncFilter(filterBuilder: SyncFilterBuilder) {
-        verify { setSyncFilter(filterBuilder) }
+    fun givenHomeServerCapabilities(homeServerCapabilities: HomeServerCapabilities) {
+        every { instance.getHomeServerCapabilities() } returns homeServerCapabilities
     }
 }

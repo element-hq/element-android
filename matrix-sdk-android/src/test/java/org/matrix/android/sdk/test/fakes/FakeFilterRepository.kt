@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package org.matrix.android.sdk.test.fakes
 
-import io.mockk.every
-import io.mockk.just
+import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
-import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
+import org.matrix.android.sdk.internal.session.filter.FilterRepository
 
-class FakeFilterService : FilterService by mockk() {
+internal class FakeFilterRepository: FilterRepository by mockk() {
 
-    fun givenSetFilterSucceeds() {
-        every { setSyncFilter(any()) } just runs
+    fun givenFilterStored(filterId: String?, filterBody: String?) {
+        coEvery { getStoredSyncFilterId() } returns filterId
+        coEvery { getStoredSyncFilterBody() } returns filterBody
     }
 
-    fun verifySetSyncFilter(filterBuilder: SyncFilterBuilder) {
-        verify { setSyncFilter(filterBuilder) }
+    fun givenFilterParamsAreStored(filterParamsEntity: SyncFilterParamsEntity?) {
+        coEvery { getStoredParams() } returns filterParamsEntity
     }
 }
