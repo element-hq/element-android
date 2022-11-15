@@ -406,7 +406,7 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.3.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestImplementation libs.mockk.mockkAndroid
