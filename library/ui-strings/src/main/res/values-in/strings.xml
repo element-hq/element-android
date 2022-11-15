@@ -2791,4 +2791,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_voice_broadcast_unauthorized_title">Tidak dapat memulai siaran suara baru</string>
     <string name="a11y_voice_broadcast_fast_forward">Maju cepat 30 detik</string>
     <string name="a11y_voice_broadcast_fast_backward">Mundur cepat 30 detik</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Sesi terverifikasi ada di mana pun Anda menggunakan Element setelah memasukkan frasa sandi atau mengonfirmasi identitas Anda dengan sesi terverifikasi lainnya.
+\n
+\nIni berarti Anda memiliki semua kunci yang diperlukan untuk membuka kunci pesan terenkripsi dan mengonfirmasi kepada pengguna lain bahwa Anda memercayai sesi ini.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="other">Keluarkan %1$d sesi</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Keluarkan</string>
 </resources>
