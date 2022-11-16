@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
-import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 
 class SyncFilterBuilder {
     private var lazyLoadMembersForStateEvents: Boolean? = true
@@ -75,11 +74,17 @@ class SyncFilterBuilder {
         )
     }
 
-    private fun buildTimelineFilter(homeServerCapabilities: HomeServerCapabilities): RoomEventFilter? =
-            RoomEventFilter(
-                    enableUnreadThreadNotifications = useThreadNotifications == true && homeServerCapabilities.canUseThreadReadReceiptsAndNotifications,
-                    lazyLoadMembers = lazyLoadMembersForMessageEvents
-            ).orNullIfEmpty()
+    private fun buildTimelineFilter(homeServerCapabilities: HomeServerCapabilities): RoomEventFilter? {
+        val resolvedUseThreadNotifications = if (homeServerCapabilities.canUseThreadReadReceiptsAndNotifications) {
+            useThreadNotifications
+        } else {
+            null
+        }
+        return RoomEventFilter(
+                enableUnreadThreadNotifications = resolvedUseThreadNotifications,
+                lazyLoadMembers = lazyLoadMembersForMessageEvents
+        ).orNullIfEmpty()
+    }
 
     private fun buildStateFilter(): RoomEventFilter? =
             RoomEventFilter(
