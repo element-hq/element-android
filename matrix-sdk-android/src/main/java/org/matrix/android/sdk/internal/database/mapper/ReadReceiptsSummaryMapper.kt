@@ -50,7 +50,7 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(
                 .mapNotNull {
                     val roomMember = RoomMemberSummaryEntity.where(realm, roomId = it.roomId, userId = it.userId).findFirst()
                             ?: return@mapNotNull null
-                    ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
+                    ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong(), it.threadId)
                 }
     }
 }

@@ -66,7 +66,7 @@ class AudioMessageHelper @Inject constructor(
 
     fun startRecording(roomId: String) {
         stopPlayback()
-        playbackTracker.makeAllPlaybacksIdle()
+        playbackTracker.pauseAllPlaybacks()
         amplitudeList.clear()
 
         try {
@@ -253,8 +253,8 @@ class AudioMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
-    fun clearTracker() {
-        playbackTracker.clear()
+    fun stopTracking() {
+        playbackTracker.unregisterListeners()
     }
 
     fun stopAllVoiceActions(deleteRecord: Boolean = true): MultiPickerAudioType? {

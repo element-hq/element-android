@@ -51,15 +51,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun pauseAllPlaybacks() {
-        listeners.keys.forEach { key ->
-            pausePlayback(key)
-        }
-    }
-
-    fun makeAllPlaybacksIdle() {
-        listeners.keys.forEach { key ->
-            setState(key, Listener.State.Idle)
-        }
+        listeners.keys.forEach(::pausePlayback)
     }
 
     /**
@@ -136,12 +128,11 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    fun clear() {
+    fun unregisterListeners() {
         listeners.forEach {
             it.value.onUpdate(Listener.State.Idle)
         }
         listeners.clear()
-        states.clear()
     }
 
     companion object {

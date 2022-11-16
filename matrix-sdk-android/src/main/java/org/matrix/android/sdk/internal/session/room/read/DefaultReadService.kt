@@ -22,6 +22,7 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.util.Optional
@@ -30,6 +31,7 @@ import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
+import org.matrix.android.sdk.internal.database.query.forMainTimelineWhere
 import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -40,7 +42,8 @@ internal class DefaultReadService @AssistedInject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val setReadMarkersTask: SetReadMarkersTask,
         private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
 ) : ReadService {
 
     @AssistedFactory
@@ -48,17 +51,28 @@ internal class DefaultReadService @AssistedInject constructor(
         fun create(roomId: String): DefaultReadService
     }
 
-    override suspend fun markAsRead(params: ReadService.MarkAsReadParams) {
+    override suspend fun markAsRead(params: ReadService.MarkAsReadParams, mainTimeLineOnly: Boolean) {
+        val readReceiptThreadId = if (homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications) {
+            if (mainTimeLineOnly) ReadService.THREAD_ID_MAIN else null
+        } else {
+            null
+        }
         val taskParams = SetReadMarkersTask.Params(
                 roomId = roomId,
                 forceReadMarker = params.forceReadMarker(),
-                forceReadReceipt = params.forceReadReceipt()
+                forceReadReceipt = params.forceReadReceipt(),
+                readReceiptThreadId = readReceiptThreadId
         )
         setReadMarkersTask.execute(taskParams)
     }
 
-    override suspend fun setReadReceipt(eventId: String) {
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
+    override suspend fun setReadReceipt(eventId: String, threadId: String) {
+        val readReceiptThreadId = if (homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications) {
+            threadId
+        } else {
+            null
+        }
+        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId, readReceiptThreadId = readReceiptThreadId)
         setReadMarkersTask.execute(params)
     }
 
@@ -68,7 +82,8 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override fun isEventRead(eventId: String): Boolean {
-        return isEventRead(monarchy.realmConfiguration, userId, roomId, eventId)
+        val shouldCheckIfReadInEventsThread = homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+        return isEventRead(monarchy.realmConfiguration, userId, roomId, eventId, shouldCheckIfReadInEventsThread)
     }
 
     override fun getReadMarkerLive(): LiveData<Optional<String>> {
@@ -94,10 +109,11 @@ internal class DefaultReadService @AssistedInject constructor(
     override fun getUserReadReceipt(userId: String): String? {
         var eventId: String? = null
         monarchy.doWithRealm {
-            eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = userId)
+            eventId = ReadReceiptEntity.forMainTimelineWhere(it, roomId = roomId, userId = userId)
                     .findFirst()
                     ?.eventId
         }
+
         return eventId
     }
 

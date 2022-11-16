@@ -217,7 +217,7 @@ class TimelineViewModel @AssistedInject constructor(
         observePowerLevel()
         setupPreviewUrlObservers()
         viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = true) }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO) {
@@ -1103,7 +1103,8 @@ class TimelineViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         session.coroutineScope.launch {
-                            tryOrNull { room.readService().setReadReceipt(eventId) }
+                            val threadId = initialState.rootThreadEventId ?: ReadService.THREAD_ID_MAIN
+                            tryOrNull { room.readService().setReadReceipt(eventId, threadId = threadId) }
                         }
                     }
                 }
@@ -1121,7 +1122,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH, mainTimeLineOnly = true) }
         }
     }
 

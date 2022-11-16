@@ -68,23 +68,24 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
         renderMetadata(holder)
     }
 
-    private fun renderLiveIndicator(holder: H) {
+    abstract fun renderLiveIndicator(holder: H)
+
+    protected fun renderPlayingLiveIndicator(holder: H) {
         with(holder) {
-            when (voiceBroadcastState) {
-                VoiceBroadcastState.STARTED,
-                VoiceBroadcastState.RESUMED -> {
-                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
-                    liveIndicator.isVisible = true
-                }
-                VoiceBroadcastState.PAUSED -> {
-                    liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
-                    liveIndicator.isVisible = true
-                }
-                VoiceBroadcastState.STOPPED, null -> {
-                    liveIndicator.isVisible = false
-                }
-            }
+            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
+            liveIndicator.isVisible = true
         }
+    }
+
+    protected fun renderPausedLiveIndicator(holder: H) {
+        with(holder) {
+            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
+            liveIndicator.isVisible = true
+        }
+    }
+
+    protected fun renderNoLiveIndicator(holder: H) {
+        holder.liveIndicator.isVisible = false
     }
 
     abstract fun renderMetadata(holder: H)

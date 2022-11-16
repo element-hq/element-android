@@ -60,6 +60,7 @@ class StartVoiceBroadcastUseCaseTest {
                     context = FakeContext().instance,
                     buildMeta = mockk(),
                     getOngoingVoiceBroadcastsUseCase = fakeGetOngoingVoiceBroadcastsUseCase,
+                    stopVoiceBroadcastUseCase = mockk()
             )
     )
 
@@ -67,7 +68,7 @@ class StartVoiceBroadcastUseCaseTest {
     fun setup() {
         every { fakeRoom.roomId } returns A_ROOM_ID
         justRun { startVoiceBroadcastUseCase.assertHasEnoughPowerLevels(fakeRoom) }
-        every { fakeVoiceBroadcastRecorder.state } returns VoiceBroadcastRecorder.State.Idle
+        every { fakeVoiceBroadcastRecorder.recordingState } returns VoiceBroadcastRecorder.State.Idle
     }
 
     @Test
