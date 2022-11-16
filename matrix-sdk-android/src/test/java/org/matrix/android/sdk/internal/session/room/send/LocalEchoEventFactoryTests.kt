@@ -23,8 +23,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.EditAggregatedSummary
-import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -226,16 +224,14 @@ class LocalEchoEventFactoryTests {
             ).toMessageTextContent().toContent()
         }
         return TimelineEvent(
-                root = A_START_EVENT,
+                root = A_START_EVENT.copy(
+                        type = EventType.MESSAGE,
+                        content = textContent
+                ),
                 localId = 1234,
                 eventId = AN_EVENT_ID,
                 displayIndex = 0,
                 senderInfo = SenderInfo(A_USER_ID_1, A_USER_ID_1, true, null),
-                annotations = if (textContent != null) {
-                    EventAnnotationsSummary(
-                            editSummary = EditAggregatedSummary(latestContent = textContent, emptyList(), emptyList())
-                    )
-                } else null
         )
     }
 }
