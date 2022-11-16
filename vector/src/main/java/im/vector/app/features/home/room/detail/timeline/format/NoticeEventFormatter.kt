@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -108,7 +109,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STICKER,
             in EventType.POLL_RESPONSE,
             in EventType.POLL_END,
-            in EventType.BEACON_LOCATION_DATA -> formatDebug(timelineEvent.root)
+            in EventType.BEACON_LOCATION_DATA,
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatDebug(timelineEvent.root)
             else -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
