@@ -76,9 +76,9 @@ body:
   - type: dropdown
     id: pr
     attributes:
-      label: Are you willing to provide a PR?
+      label: (Optional) Will you be opening a PR for this?
       description:  |
-        Providing a PR can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
+        It can considerably speed up the process of fixing the bug.
       options:
         - 'Yes'
         - 'No'
