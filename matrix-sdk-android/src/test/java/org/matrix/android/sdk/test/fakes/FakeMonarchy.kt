@@ -39,8 +39,8 @@ internal class FakeMonarchy {
         mockkStatic("org.matrix.android.sdk.internal.util.MonarchyKt")
         coEvery {
             instance.awaitTransaction(any<(Realm) -> Any>())
-        } coAnswers {
-            secondArg<suspend (Realm) -> Any>().invoke(fakeRealm.instance)
+        } answers {
+            secondArg<(Realm) -> Any>().invoke(fakeRealm.instance)
         }
         coEvery {
             instance.doWithRealm(any())

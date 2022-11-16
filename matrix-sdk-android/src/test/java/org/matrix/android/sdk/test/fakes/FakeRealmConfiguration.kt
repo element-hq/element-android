@@ -34,8 +34,8 @@ internal class FakeRealmConfiguration {
 
     fun <T> givenAwaitTransaction(realm: Realm) {
         val transaction = slot<(Realm) -> T>()
-        coEvery { awaitTransaction(instance, capture(transaction)) } coAnswers {
-            secondArg<suspend (Realm) -> T>().invoke(realm)
+        coEvery { awaitTransaction(instance, capture(transaction)) } answers {
+            secondArg<(Realm) -> T>().invoke(realm)
         }
     }
 }
