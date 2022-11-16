@@ -27,7 +27,7 @@ internal interface FilterRepository {
      * Stores sync filter and room filter
      * @return true if the filterBody has changed, or need to be sent to the server.
      */
-    suspend fun storeSyncFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean
+    suspend fun storeSyncFilter(filter: Filter, roomEventFilter: RoomEventFilter)
 
     /**
      * Set the filterId of sync filter.

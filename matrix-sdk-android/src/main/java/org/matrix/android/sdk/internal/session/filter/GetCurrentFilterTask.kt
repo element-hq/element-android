@@ -30,7 +30,7 @@ internal class DefaultGetCurrentFilterTask @Inject constructor(
 ) : GetCurrentFilterTask {
 
     override suspend fun execute(params: Unit): String {
-        val storedFilterId = filterRepository.getStoredSyncFilterId()
+//        val storedFilterId = filterRepository.getStoredSyncFilterId()
         val storedFilterBody = filterRepository.getStoredSyncFilterBody()
         val homeServerCapabilities = homeServerCapabilitiesDataSource.getHomeServerCapabilities() ?: HomeServerCapabilities()
         val currentFilter = SyncFilterBuilder()
@@ -40,7 +40,7 @@ internal class DefaultGetCurrentFilterTask @Inject constructor(
         val currentFilterBody = currentFilter.toJSONString()
 
         return when (storedFilterBody) {
-            currentFilterBody -> storedFilterId ?: storedFilterBody
+            currentFilterBody -> storedFilterBody
             else -> saveFilter(currentFilter)
         }
     }

@@ -34,30 +34,18 @@ internal class DefaultFilterRepository @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
 ) : FilterRepository {
 
-    override suspend fun storeSyncFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val filterEntity = FilterEntity.get(realm)
-            // Filter has changed, or no filter Id yet
-            filterEntity == null ||
-                    filterEntity.filterBodyJson != filter.toJSONString() ||
-                    filterEntity.filterId.isBlank()
-        }.also { hasChanged ->
-            if (hasChanged) {
-                // Filter is new or has changed, store it and reset the filter Id.
-                // This has to be done outside of the Realm.use(), because awaitTransaction change the current thread
-                monarchy.awaitTransaction { realm ->
-                    // We manage only one filter for now
-                    val filterJson = filter.toJSONString()
-                    val roomEventFilterJson = roomEventFilter.toJSONString()
+    override suspend fun storeSyncFilter(filter: Filter, roomEventFilter: RoomEventFilter) {
+        monarchy.awaitTransaction { realm ->
+            // We manage only one filter for now
+            val filterJson = filter.toJSONString()
+            val roomEventFilterJson = roomEventFilter.toJSONString()
 
-                    val filterEntity = FilterEntity.getOrCreate(realm)
+            val filterEntity = FilterEntity.getOrCreate(realm)
 
-                    filterEntity.filterBodyJson = filterJson
-                    filterEntity.roomEventFilterJson = roomEventFilterJson
-                    // Reset filterId
-                    filterEntity.filterId = ""
-                }
-            }
+            filterEntity.filterBodyJson = filterJson
+            filterEntity.roomEventFilterJson = roomEventFilterJson
+            // Reset filterId
+            filterEntity.filterId = ""
         }
     }
 

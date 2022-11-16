@@ -41,16 +41,12 @@ internal class DefaultSaveFilterTask @Inject constructor(
 
     override suspend fun execute(params: SaveFilterTask.Params): String {
         val filter = params.filter
-        val updated = filterRepository.storeSyncFilter(filter, filter.room?.timeline ?: FilterFactory.createDefaultRoomFilter())
-        return if (updated) {
-            val filterResponse = executeRequest(globalErrorReceiver) {
-                // TODO auto retry
-                filterAPI.uploadFilter(userId, filter)
-            }
-            filterRepository.storeSyncFilterId(filter, filterResponse.filterId)
-            filterResponse.filterId
-        } else {
-            filterRepository.getStoredSyncFilterId() ?: filterRepository.getStoredSyncFilterBody() ?: ""
+        val filterResponse = executeRequest(globalErrorReceiver) {
+            // TODO auto retry
+            filterAPI.uploadFilter(userId, filter)
         }
+        filterRepository.storeSyncFilter(filter, filter.room?.timeline ?: FilterFactory.createDefaultRoomFilter())
+        filterRepository.storeSyncFilterId(filter, filterResponse.filterId)
+        return filterResponse.filterId
     }
 }
