@@ -22,6 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -70,16 +71,21 @@ class FakeCryptoService(
         }
     }
 
-    fun givenDeleteDeviceSucceeds(deviceId: String) {
-        val matrixCallback = slot<MatrixCallback<Unit>>()
-        every { deleteDevice(deviceId, any(), capture(matrixCallback)) } answers {
+    fun givenDeleteDevicesSucceeds(deviceIds: List<String>) {
+        every { deleteDevices(deviceIds, any(), any()) } answers {
             thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
         }
     }
 
-    fun givenDeleteDeviceFailsWithError(deviceId: String, error: Exception) {
-        val matrixCallback = slot<MatrixCallback<Unit>>()
-        every { deleteDevice(deviceId, any(), capture(matrixCallback)) } answers {
+    fun givenDeleteDevicesNeedsUIAuth(deviceIds: List<String>) {
+        every { deleteDevices(deviceIds, any(), any()) } answers {
+            secondArg<UserInteractiveAuthInterceptor>().performStage(mockk(), "", mockk())
+            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        }
+    }
+
+    fun givenDeleteDevicesFailsWithError(deviceIds: List<String>, error: Exception) {
+        every { deleteDevices(deviceIds, any(), any()) } answers {
             thirdArg<MatrixCallback<Unit>>().onFailure(error)
         }
     }

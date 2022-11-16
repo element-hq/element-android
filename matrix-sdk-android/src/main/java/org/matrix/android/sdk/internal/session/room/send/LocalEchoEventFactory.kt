@@ -804,20 +804,12 @@ internal class LocalEchoEventFactory @Inject constructor(
             additionalContent: Content? = null,
     ): Event {
         val messageContent = quotedEvent.getLastMessageContent()
-        val textMsg = if (messageContent is MessageContentWithFormattedBody) {
-            messageContent.formattedBody
-        } else {
-            messageContent?.body
-        }
-        val quoteText = legacyRiotQuoteText(textMsg, text)
-        val quoteFormattedText = "<blockquote>$textMsg</blockquote>$formattedText"
-
+        val formattedQuotedText = (messageContent as? MessageContentWithFormattedBody)?.formattedBody
+        val textContent = createQuoteTextContent(messageContent?.body, formattedQuotedText, text, formattedText, autoMarkdown)
         return if (rootThreadEventId != null) {
             createMessageEvent(
                     roomId,
-                    markdownParser
-                            .parse(quoteText, force = true, advanced = autoMarkdown).copy(formattedText = quoteFormattedText)
-                            .toThreadTextContent(
+                    textContent.toThreadTextContent(
                                     rootThreadEventId = rootThreadEventId,
                                     latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
                                     msgType = MessageType.MSGTYPE_TEXT
@@ -827,31 +819,54 @@ internal class LocalEchoEventFactory @Inject constructor(
         } else {
             createFormattedTextEvent(
                     roomId,
-                    markdownParser.parse(quoteText, force = true, advanced = autoMarkdown).copy(formattedText = quoteFormattedText),
+                    textContent,
                     MessageType.MSGTYPE_TEXT,
                     additionalContent,
             )
         }
     }
 
-    private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
-        val messageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
-        return buildString {
-            if (messageParagraphs != null) {
-                for (i in messageParagraphs.indices) {
-                    if (messageParagraphs[i].isNotBlank()) {
-                        append("> ")
-                        append(messageParagraphs[i])
-                    }
+    private fun createQuoteTextContent(
+            quotedText: String?,
+            formattedQuotedText: String?,
+            text: String,
+            formattedText: String?,
+            autoMarkdown: Boolean
+    ): TextContent {
+        val currentFormattedText = formattedText ?: if (autoMarkdown) {
+            val parsed = markdownParser.parse(text, force = true, advanced = true)
+            // If formattedText == text, formattedText is returned as null
+            parsed.formattedText ?: parsed.text
+        } else {
+            text
+        }
+        val processedFormattedQuotedText = formattedQuotedText ?: quotedText
 
-                    if (i != messageParagraphs.lastIndex) {
-                        append("\n\n")
-                    }
+        val plainTextBody = buildString {
+            val plainMessageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray().orEmpty()
+            plainMessageParagraphs.forEachIndexed { index, paragraph ->
+                if (paragraph.isNotBlank()) {
+                    append("> ")
+                    append(paragraph)
+                }
+
+                if (index != plainMessageParagraphs.lastIndex) {
+                    append("\n\n")
                 }
             }
             append("\n\n")
-            append(myText)
+            append(text)
         }
+        val formattedTextBody = buildString {
+            if (!processedFormattedQuotedText.isNullOrBlank()) {
+                append("<blockquote>")
+                append(processedFormattedQuotedText)
+                append("</blockquote>")
+            }
+            append("<br/>")
+            append(currentFormattedText)
+        }
+        return TextContent(plainTextBody, formattedTextBody)
     }
 
     companion object {

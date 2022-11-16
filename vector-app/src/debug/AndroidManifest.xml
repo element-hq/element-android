@@ -4,6 +4,7 @@
     <application>
         <activity android:name="im.vector.app.features.debug.TestLinkifyActivity" />
         <activity android:name="im.vector.app.features.debug.DebugPermissionActivity" />
+        <activity android:name="im.vector.app.features.debug.jitsi.DebugJitsiActivity" />
         <activity android:name="im.vector.app.features.debug.analytics.DebugAnalyticsActivity" />
         <activity android:name="im.vector.app.features.debug.settings.DebugPrivateSettingsActivity" />
         <activity android:name="im.vector.app.features.debug.sas.DebugSasEmojiActivity" />

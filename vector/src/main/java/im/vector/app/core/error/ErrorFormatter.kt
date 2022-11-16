@@ -21,6 +21,8 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.voice.VoiceFailure
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure.RecordingError
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
@@ -135,6 +137,7 @@ class DefaultErrorFormatter @Inject constructor(
             is MatrixIdFailure.InvalidMatrixId ->
                 stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
             is VoiceFailure -> voiceMessageError(throwable)
+            is VoiceBroadcastFailure -> voiceBroadcastMessageError(throwable)
             is ActivityNotFoundException ->
                 stringProvider.getString(R.string.error_no_external_application_found)
             else -> throwable.localizedMessage
@@ -146,6 +149,14 @@ class DefaultErrorFormatter @Inject constructor(
         return when (throwable) {
             is VoiceFailure.UnableToPlay -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
             is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+        }
+    }
+
+    private fun voiceBroadcastMessageError(throwable: VoiceBroadcastFailure): String {
+        return when (throwable) {
+            RecordingError.BlockedBySomeoneElse -> stringProvider.getString(R.string.error_voice_broadcast_blocked_by_someone_else_message)
+            RecordingError.NoPermission -> stringProvider.getString(R.string.error_voice_broadcast_permission_denied_message)
+            RecordingError.UserAlreadyBroadcasting -> stringProvider.getString(R.string.error_voice_broadcast_already_in_progress_message)
         }
     }
 

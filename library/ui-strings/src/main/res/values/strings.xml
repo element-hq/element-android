@@ -1679,7 +1679,8 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="error_check_network">Something went wrong. Please check your network connection and try again.</string>
+    <!-- TODO delete -->
+    <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
@@ -3094,6 +3095,14 @@
     <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
     <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
     <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
+    <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
+    <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
+    <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>
+    <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
+    <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
+    <string name="voice_broadcast_recording_time_left">%1$s left</string>
 
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
@@ -3222,6 +3231,7 @@
     <string name="attachment_type_selector_location">Location</string>
     <string name="attachment_type_selector_camera">Camera</string>
     <string name="attachment_type_selector_contact">Contact</string>
+    <string name="attachment_type_selector_text_formatting">Text formatting</string>
 
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
@@ -3338,6 +3348,11 @@
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
     <string name="device_manager_other_sessions_select">Select sessions</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">Sign out</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Sign out of %1$d session</item>
+        <item quantity="other">Sign out of %1$d sessions</item>
+    </plurals>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
@@ -3366,7 +3381,9 @@
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
-    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
     <string name="labs_enable_session_manager_title">Enable new session manager</string>
@@ -3442,5 +3459,6 @@
     <string name="rich_text_editor_format_italic">Apply italic format</string>
     <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
     <string name="rich_text_editor_format_underline">Apply underline format</string>
+    <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
 </resources>

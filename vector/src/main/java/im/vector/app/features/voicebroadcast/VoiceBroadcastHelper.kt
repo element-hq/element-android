@@ -16,10 +16,12 @@
 
 package im.vector.app.features.voicebroadcast
 
-import im.vector.app.features.voicebroadcast.usecase.PauseVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.ResumeVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.StartVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.StopVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
+import im.vector.app.features.voicebroadcast.recording.usecase.PauseVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.ResumeVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.StartVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.StopVoiceBroadcastUseCase
 import javax.inject.Inject
 
 /**
@@ -40,9 +42,13 @@ class VoiceBroadcastHelper @Inject constructor(
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
 
-    fun playOrResumePlayback(roomId: String, eventId: String) = voiceBroadcastPlayer.playOrResume(roomId, eventId)
+    fun playOrResumePlayback(voiceBroadcast: VoiceBroadcast) = voiceBroadcastPlayer.playOrResume(voiceBroadcast)
 
     fun pausePlayback() = voiceBroadcastPlayer.pause()
 
     fun stopPlayback() = voiceBroadcastPlayer.stop()
+
+    fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int, duration: Int) {
+        voiceBroadcastPlayer.seekTo(voiceBroadcast, positionMillis, duration)
+    }
 }

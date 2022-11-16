@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.homeserver
 
+import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.util.Optional
 import javax.inject.Inject
 
 internal class DefaultHomeServerCapabilitiesService @Inject constructor(
@@ -32,5 +34,9 @@ internal class DefaultHomeServerCapabilitiesService @Inject constructor(
     override fun getHomeServerCapabilities(): HomeServerCapabilities {
         return homeServerCapabilitiesDataSource.getHomeServerCapabilities()
                 ?: HomeServerCapabilities()
+    }
+
+    override fun getHomeServerCapabilitiesLive(): LiveData<Optional<HomeServerCapabilities>> {
+        return homeServerCapabilitiesDataSource.getHomeServerCapabilitiesLive()
     }
 }

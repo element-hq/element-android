@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.duration
 import im.vector.app.features.voicebroadcast.getVoiceBroadcastEventId
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
@@ -141,8 +142,15 @@ class CallSignalingEventsGroup(private val group: TimelineEventsGroup) {
 }
 
 class VoiceBroadcastEventsGroup(private val group: TimelineEventsGroup) {
+
+    val voiceBroadcastId = group.groupId
+
     fun getLastDisplayableEvent(): TimelineEvent {
         return group.events.find { it.root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState == VoiceBroadcastState.STOPPED }
                 ?: group.events.filter { it.root.type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO }.maxBy { it.root.originServerTs ?: 0L }
+    }
+
+    fun getDuration(): Int {
+        return group.events.mapNotNull { it.root.asMessageAudioEvent()?.duration }.sum()
     }
 }

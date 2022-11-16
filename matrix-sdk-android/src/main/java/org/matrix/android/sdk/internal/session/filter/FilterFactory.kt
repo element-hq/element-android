@@ -67,7 +67,9 @@ internal object FilterFactory {
     }
 
     private fun createElementTimelineFilter(): RoomEventFilter? {
-        return RoomEventFilter(enableUnreadThreadNotifications = true)
+//        we need to check if homeserver supports thread notifications before setting this param
+//        return RoomEventFilter(enableUnreadThreadNotifications = true)
+        return null
     }
 
     private fun createElementStateFilter(): RoomEventFilter {

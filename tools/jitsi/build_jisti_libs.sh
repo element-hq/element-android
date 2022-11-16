@@ -25,12 +25,8 @@ export LIBRE_BUILD=true
 
 cd jitsi-meet
 
-# This is commit after version 2.2.2, which does not compile
-# git checkout 5a934c071a5cbe64de275a25d0ed62d8193cdd03
-
-# Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
-
-git checkout android-sdk-5.0.2
+# Get the latest version from the changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
+git checkout android-sdk-6.2.2
 
 echo
 echo "##################################################"

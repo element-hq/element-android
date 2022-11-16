@@ -242,8 +242,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
+        deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor, callback)
+    }
+
+    override fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
+                .configureWith(DeleteDeviceTask.Params(deviceIds, userInteractiveAuthInterceptor, null)) {
                     this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }

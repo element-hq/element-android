@@ -20,19 +20,17 @@ import android.os.SystemClock
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.R
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionResult
-import im.vector.app.features.settings.devices.v2.signout.SignoutSessionUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
-import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeVerificationService
-import im.vector.app.test.fixtures.PusherFixture.aPusher
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
@@ -42,7 +40,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyAll
@@ -52,19 +49,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
-import javax.net.ssl.HttpsURLConnection
-import kotlin.coroutines.Continuation
 
 private const val A_SESSION_ID_1 = "session-id-1"
 private const val A_SESSION_ID_2 = "session-id-2"
-private const val AUTH_ERROR_MESSAGE = "auth-error-message"
-private const val AN_ERROR_MESSAGE = "error-message"
 private const val A_PASSWORD = "password"
 
 class SessionOverviewViewModelTest {
@@ -80,25 +69,26 @@ class SessionOverviewViewModelTest {
     )
     private val getDeviceFullInfoUseCase = mockk<GetDeviceFullInfoUseCase>(relaxed = true)
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val fakeStringProvider = FakeStringProvider()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
-    private val signoutSessionUseCase = mockk<SignoutSessionUseCase>()
+    private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
-    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>()
+    private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
+    private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
+    private val notificationsStatus = NotificationsStatus.ENABLED
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
-            stringProvider = fakeStringProvider.instance,
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
-            signoutSessionUseCase = signoutSessionUseCase,
+            signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
             interceptSignoutFlowResponseUseCase = interceptSignoutFlowResponseUseCase,
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
+            getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
     )
 
     @Before
@@ -108,11 +98,55 @@ class SessionOverviewViewModelTest {
         every { SystemClock.elapsedRealtime() } returns 1234
 
         givenVerificationService()
+        fakeGetNotificationsStatusUseCase.givenExecuteReturns(
+                fakeActiveSessionHolder.fakeSession,
+                A_SESSION_ID_1,
+                notificationsStatus
+        )
+    }
+
+    private fun givenVerificationService(): FakeVerificationService {
+        val fakeVerificationService = fakeActiveSessionHolder
+                .fakeSession
+                .fakeCryptoService
+                .fakeVerificationService
+        fakeVerificationService.givenAddListenerSucceeds()
+        fakeVerificationService.givenRemoveListenerSucceeds()
+        return fakeVerificationService
     }
 
     @After
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun `given the viewModel when initializing it then verification listener is added`() {
+        // Given
+        val fakeVerificationService = givenVerificationService()
+
+        // When
+        val viewModel = createViewModel()
+
+        // Then
+        verify {
+            fakeVerificationService.addListener(viewModel)
+        }
+    }
+
+    @Test
+    fun `given the viewModel when clearing it then verification listener is removed`() {
+        // Given
+        val fakeVerificationService = givenVerificationService()
+
+        // When
+        val viewModel = createViewModel()
+        viewModel.onCleared()
+
+        // Then
+        verify {
+            fakeVerificationService.removeListener(viewModel)
+        }
     }
 
     @Test
@@ -131,7 +165,7 @@ class SessionOverviewViewModelTest {
                 deviceId = A_SESSION_ID_1,
                 deviceInfo = Success(deviceFullInfo),
                 isCurrentSessionTrusted = true,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
 
         val viewModel = createViewModel()
@@ -218,8 +252,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        givenSignoutSuccess(A_SESSION_ID_1)
-        every { refreshDevicesUseCase.execute() } just runs
+        fakeSignoutSessionsUseCase.givenSignoutSuccess(listOf(A_SESSION_ID_1))
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
@@ -227,7 +260,7 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
 
         // When
@@ -250,48 +283,13 @@ class SessionOverviewViewModelTest {
     }
 
     @Test
-    fun `given another session and server error during signout when handling signout action then signout process is performed`() {
-        // Given
-        val deviceFullInfo = mockk<DeviceFullInfo>()
-        every { deviceFullInfo.isCurrentDevice } returns false
-        every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val serverError = Failure.OtherServerError(errorBody = "", httpCode = HttpsURLConnection.HTTP_UNAUTHORIZED)
-        givenSignoutError(A_SESSION_ID_1, serverError)
-        val signoutAction = SessionOverviewAction.SignoutOtherSession
-        givenCurrentSessionIsTrusted()
-        val expectedViewState = SessionOverviewViewState(
-                deviceId = A_SESSION_ID_1,
-                isCurrentSessionTrusted = true,
-                deviceInfo = Success(deviceFullInfo),
-                isLoading = false,
-                notificationsEnabled = true,
-        )
-        fakeStringProvider.given(R.string.authentication_error, AUTH_ERROR_MESSAGE)
-
-        // When
-        val viewModel = createViewModel()
-        val viewModelTest = viewModel.test()
-        viewModel.handle(signoutAction)
-
-        // Then
-        viewModelTest
-                .assertStatesChanges(
-                        expectedViewState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AUTH_ERROR_MESSAGE }
-                .finish()
-    }
-
-    @Test
     fun `given another session and unexpected error during signout when handling signout action then signout process is performed`() {
         // Given
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
         val error = Exception()
-        givenSignoutError(A_SESSION_ID_1, error)
+        fakeSignoutSessionsUseCase.givenSignoutError(listOf(A_SESSION_ID_1), error)
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedViewState = SessionOverviewViewState(
@@ -299,9 +297,8 @@ class SessionOverviewViewModelTest {
                 isCurrentSessionTrusted = true,
                 deviceInfo = Success(deviceFullInfo),
                 isLoading = false,
-                notificationsEnabled = true,
+                notificationsStatus = notificationsStatus,
         )
-        fakeStringProvider.given(R.string.matrix_error, AN_ERROR_MESSAGE)
 
         // When
         val viewModel = createViewModel()
@@ -315,7 +312,7 @@ class SessionOverviewViewModelTest {
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error.message == AN_ERROR_MESSAGE }
+                .assertEvent { it is SessionOverviewViewEvent.SignoutError && it.error == error }
                 .finish()
     }
 
@@ -325,7 +322,7 @@ class SessionOverviewViewModelTest {
         val deviceFullInfo = mockk<DeviceFullInfo>()
         every { deviceFullInfo.isCurrentDevice } returns false
         every { getDeviceFullInfoUseCase.execute(A_SESSION_ID_1) } returns flowOf(deviceFullInfo)
-        val reAuthNeeded = givenSignoutReAuthNeeded(A_SESSION_ID_1)
+        val reAuthNeeded = fakeSignoutSessionsUseCase.givenSignoutReAuthNeeded(listOf(A_SESSION_ID_1))
         val signoutAction = SessionOverviewAction.SignoutOtherSession
         givenCurrentSessionIsTrusted()
         val expectedPendingAuth = DefaultBaseAuth(session = reAuthNeeded.flowResponse.session)
@@ -410,53 +407,6 @@ class SessionOverviewViewModelTest {
         }
     }
 
-    private fun givenSignoutSuccess(deviceId: String) {
-        val interceptor = slot<UserInteractiveAuthInterceptor>()
-        val flowResponse = mockk<RegistrationFlowResponse>()
-        val errorCode = "errorCode"
-        val promise = mockk<Continuation<UIABaseAuth>>()
-        every { interceptSignoutFlowResponseUseCase.execute(flowResponse, errorCode, promise) } returns SignoutSessionResult.Completed
-        coEvery { signoutSessionUseCase.execute(deviceId, capture(interceptor)) } coAnswers {
-            secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
-            Result.success(Unit)
-        }
-    }
-
-    private fun givenSignoutReAuthNeeded(deviceId: String): SignoutSessionResult.ReAuthNeeded {
-        val interceptor = slot<UserInteractiveAuthInterceptor>()
-        val flowResponse = mockk<RegistrationFlowResponse>()
-        every { flowResponse.session } returns A_SESSION_ID_1
-        val errorCode = "errorCode"
-        val promise = mockk<Continuation<UIABaseAuth>>()
-        val reAuthNeeded = SignoutSessionResult.ReAuthNeeded(
-                pendingAuth = mockk(),
-                uiaContinuation = promise,
-                flowResponse = flowResponse,
-                errCode = errorCode,
-        )
-        every { interceptSignoutFlowResponseUseCase.execute(flowResponse, errorCode, promise) } returns reAuthNeeded
-        coEvery { signoutSessionUseCase.execute(deviceId, capture(interceptor)) } coAnswers {
-            secondArg<UserInteractiveAuthInterceptor>().performStage(flowResponse, errorCode, promise)
-            Result.success(Unit)
-        }
-
-        return reAuthNeeded
-    }
-
-    private fun givenSignoutError(deviceId: String, error: Throwable) {
-        coEvery { signoutSessionUseCase.execute(deviceId, any()) } returns Result.failure(error)
-    }
-
-    private fun givenVerificationService(): FakeVerificationService {
-        val fakeVerificationService = fakeActiveSessionHolder
-                .fakeSession
-                .fakeCryptoService
-                .fakeVerificationService
-        fakeVerificationService.givenAddListenerSucceeds()
-        fakeVerificationService.givenRemoveListenerSucceeds()
-        return fakeVerificationService
-    }
-
     private fun givenCurrentSessionIsTrusted() {
         fakeActiveSessionHolder.fakeSession.givenSessionId(A_SESSION_ID_2)
         val deviceFullInfo = mockk<DeviceFullInfo>()
@@ -466,13 +416,10 @@ class SessionOverviewViewModelTest {
 
     @Test
     fun `when viewModel init, then observe pushers and emit to state`() {
-        val pushers = listOf(aPusher(deviceId = A_SESSION_ID_1))
-        fakeActiveSessionHolder.fakeSession.pushersService().givenPushersLive(pushers)
-
         val viewModel = createViewModel()
 
         viewModel.test()
-                .assertLatestState { state -> state.notificationsEnabled }
+                .assertLatestState { state -> state.notificationsStatus == notificationsStatus }
                 .finish()
     }
 
@@ -483,6 +430,6 @@ class SessionOverviewViewModelTest {
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
         togglePushNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
-        viewModel.test().assertLatestState { state -> state.notificationsEnabled }.finish()
+        viewModel.test().assertLatestState { state -> state.notificationsStatus == NotificationsStatus.ENABLED }.finish()
     }
 }

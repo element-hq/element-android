@@ -408,7 +408,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             newAttachmentAttributes: NewAttachmentAttributes
     ) {
         localEchoRepository.updateEcho(eventId) { _, event ->
-            val content: Content? = event.asDomain().content
+            val content: Content? = event.asDomain(castJsonNumbers = true).content
             val messageContent: MessageContent? = content.toModel()
             // Retrieve potential additional content from the original event
             val additionalContent = content.orEmpty() - messageContent?.toContent().orEmpty().keys

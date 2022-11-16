@@ -6,6 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ========================
+        /!\ Constraints for this layout are defined in external layout files that are used as constraint set for animation.
+        /!\ These 2 files must be modified to stay coherent!
+    ======================== -->
+
+    <View android:id="@+id/scrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:background="#44000000" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -70,7 +85,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintBottom_toTopOf="@id/typingMessageView"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
@@ -91,17 +106,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView" />
-
-    <im.vector.app.core.ui.views.TypingMessageView
-        android:id="@+id/typingMessageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView" />
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -128,6 +132,7 @@
         android:id="@+id/composerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -165,6 +170,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/ic_expand_more"
+        android:visibility="gone"
         app:backgroundTint="#FFFFFF"
         app:badgeBackgroundColor="?colorPrimary"
         app:badgeTextColor="?colorOnPrimary"

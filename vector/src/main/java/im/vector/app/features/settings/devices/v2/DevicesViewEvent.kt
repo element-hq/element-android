@@ -19,15 +19,17 @@ package im.vector.app.features.settings.devices.v2
 import im.vector.app.core.platform.VectorViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 sealed class DevicesViewEvent : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : DevicesViewEvent()
-    data class Failure(val throwable: Throwable) : DevicesViewEvent()
-    data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse, val lastErrorCode: String?) : DevicesViewEvent()
-    data class PromptRenameDevice(val deviceInfo: DeviceInfo) : DevicesViewEvent()
+    data class RequestReAuth(
+            val registrationFlowResponse: RegistrationFlowResponse,
+            val lastErrorCode: String?
+    ) : DevicesViewEvent()
+
     data class ShowVerifyDevice(val userId: String, val transactionId: String?) : DevicesViewEvent()
     object SelfVerification : DevicesViewEvent()
     data class ShowManuallyVerify(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesViewEvent()
     object PromptResetSecrets : DevicesViewEvent()
+    object SignoutSuccess : DevicesViewEvent()
+    data class SignoutError(val error: Throwable) : DevicesViewEvent()
 }

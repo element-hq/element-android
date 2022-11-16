@@ -24,11 +24,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
@@ -43,6 +43,8 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -66,6 +68,8 @@ class SessionOverviewFragment :
     @Inject lateinit var colorProvider: ColorProvider
 
     @Inject lateinit var stringProvider: StringProvider
+
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
@@ -132,13 +136,7 @@ class SessionOverviewFragment :
 
     private fun confirmSignoutOtherSession() {
         activity?.let {
-            MaterialAlertDialogBuilder(it)
-                    .setTitle(R.string.action_sign_out)
-                    .setMessage(R.string.action_sign_out_confirmation_simple)
-                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
-                        signoutSession()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
+            buildConfirmSignoutDialogUseCase.execute(it, this::signoutSession)
                     .show()
         }
     }
@@ -177,7 +175,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
+        updatePushNotificationToggle(state.deviceId, state.notificationsStatus)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -218,15 +216,19 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
-        views.sessionOverviewPushNotifications.apply {
-            setOnCheckedChangeListener(null)
-            setChecked(enabled)
-            post {
-                setOnCheckedChangeListener { _, isChecked ->
-                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+    private fun updatePushNotificationToggle(deviceId: String, notificationsStatus: NotificationsStatus) {
+        views.sessionOverviewPushNotifications.isGone = notificationsStatus == NotificationsStatus.NOT_SUPPORTED
+        when (notificationsStatus) {
+            NotificationsStatus.ENABLED, NotificationsStatus.DISABLED -> {
+                views.sessionOverviewPushNotifications.setOnCheckedChangeListener(null)
+                views.sessionOverviewPushNotifications.setChecked(notificationsStatus == NotificationsStatus.ENABLED)
+                views.sessionOverviewPushNotifications.post {
+                    views.sessionOverviewPushNotifications.setOnCheckedChangeListener { _, isChecked ->
+                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                    }
                 }
             }
+            else -> Unit
         }
     }
 
@@ -278,7 +280,7 @@ class SessionOverviewFragment :
             R.string.device_manager_verification_status_unverified
         }
         val descriptionResId = if (isVerified) {
-            R.string.device_manager_learn_more_sessions_verified
+            R.string.device_manager_learn_more_sessions_verified_description
         } else {
             R.string.device_manager_learn_more_sessions_unverified
         }
