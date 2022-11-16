@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 
 /**
  * Repository for request filters
@@ -52,10 +52,10 @@ internal interface FilterRepository {
     /**
      * Returns filter params stored in local storage if it exists
      */
-    suspend fun getStoredParams(): SyncFilterParamsEntity?
+    suspend fun getStoredParams(): SyncFilterParams?
 
     /**
      * Stores filter params to local storage
      */
-    suspend fun storeFilterParams(params: SyncFilterParamsEntity)
+    suspend fun storeFilterParams(params: SyncFilterParams)
 }

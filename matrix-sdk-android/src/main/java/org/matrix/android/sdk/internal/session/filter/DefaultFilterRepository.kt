@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.filter
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
+import org.matrix.android.sdk.internal.database.mapper.FilterParamsMapper
 import org.matrix.android.sdk.internal.database.model.FilterEntity
 import org.matrix.android.sdk.internal.database.model.FilterEntityFields
 import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
@@ -95,15 +97,17 @@ internal class DefaultFilterRepository @Inject constructor(
         }
     }
 
-    override suspend fun getStoredParams(): SyncFilterParamsEntity? {
+    override suspend fun getStoredParams(): SyncFilterParams? {
         return monarchy.awaitTransaction { realm ->
-            realm.where<SyncFilterParamsEntity>().findFirst()
+            realm.where<SyncFilterParamsEntity>().findFirst()?.let {
+                FilterParamsMapper().map(it)
+            }
         }
     }
 
-    override suspend fun storeFilterParams(params: SyncFilterParamsEntity) {
+    override suspend fun storeFilterParams(params: SyncFilterParams) {
         return monarchy.awaitTransaction { realm ->
-            realm.insertOrUpdate(params)
+            realm.insertOrUpdate(FilterParamsMapper().map(params))
         }
     }
 }

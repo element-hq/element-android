@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import io.realm.RealmList
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 
 class SyncFilterBuilder {
@@ -41,7 +41,7 @@ class SyncFilterBuilder {
     fun listOfSupportedTimelineEventTypes(listOfSupportedEventTypes: List<String>) =
             apply { this.listOfSupportedEventTypes = listOfSupportedEventTypes }
 
-    internal fun with(currentFilterParams: SyncFilterParamsEntity?) =
+    internal fun with(currentFilterParams: SyncFilterParams?) =
             apply {
                 currentFilterParams?.let {
                     useThreadNotifications = currentFilterParams.useThreadNotifications
@@ -52,13 +52,13 @@ class SyncFilterBuilder {
                 }
             }
 
-    internal fun extractParams(): SyncFilterParamsEntity {
-        return SyncFilterParamsEntity(
+    internal fun extractParams(): SyncFilterParams {
+        return SyncFilterParams(
                 useThreadNotifications = useThreadNotifications,
                 lazyLoadMembersForMessageEvents = lazyLoadMembersForMessageEvents,
                 lazyLoadMembersForStateEvents = lazyLoadMembersForStateEvents,
-                listOfSupportedEventTypes = listOfSupportedEventTypes?.toTypedArray()?.let { RealmList(*it) },
-                listOfSupportedStateEventTypes = listOfSupportedStateEventTypes?.toTypedArray()?.let { RealmList(*it) }
+                listOfSupportedEventTypes = listOfSupportedEventTypes,
+                listOfSupportedStateEventTypes = listOfSupportedStateEventTypes,
         )
     }
 
