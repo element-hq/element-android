@@ -31,10 +31,6 @@ PIPELINE_SLUG = "element-android"
 
 ### Arguments
 
-print("Sorry, this script needs to be updated to download APKs from GitHub action. Buildkite is not building APKs anymore.")
-exit(1)
-
-
 parser = argparse.ArgumentParser(description='Download artifacts from Buildkite.')
 parser.add_argument('-t',
                     '--token',

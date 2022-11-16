@@ -3,9 +3,6 @@
 # Exit on any error
 set -e
 
-echo "Sorry, this script needs to be updated to download APKs from GitHub action. Buildkite is not building APKs anymore."
-exit 1
-
 if [[ "$#" -ne 1 ]]; then
   echo "Usage: $0 BUILDKITE_TOKEN" >&2
   exit 1
