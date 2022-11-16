@@ -20,7 +20,9 @@ import im.vector.app.test.fakes.FakeSession
 import io.mockk.mockk
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.api.session.events.model.toContent
 
 private const val A_DEVICE_ID = "device-id"
 
@@ -32,7 +34,24 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
             CheckIfCanTogglePushNotificationsViaAccountDataUseCase()
 
     @Test
-    fun `given current session and an account data for the device id when execute then result is true`() {
+    fun `given current session and an account data with a content for the device id when execute then result is true`() {
+        // Given
+        fakeSession
+                .accountDataService()
+                .givenGetUserAccountDataEventReturns(
+                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
+                        content = LocalNotificationSettingsContent(isSilenced = true).toContent(),
+                )
+
+        // When
+        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+
+        // Then
+        result shouldBeEqualTo true
+    }
+
+    @Test
+    fun `given current session and an account data with empty content for the device id when execute then result is false`() {
         // Given
         fakeSession
                 .accountDataService()
@@ -45,7 +64,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
         val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
-        result shouldBeEqualTo true
+        result shouldBeEqualTo false
     }
 
     @Test
