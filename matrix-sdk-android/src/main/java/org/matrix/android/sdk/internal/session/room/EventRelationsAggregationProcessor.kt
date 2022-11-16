@@ -213,7 +213,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     if (content?.relatesTo?.type == RelationType.REPLACE) {
                         Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
                         // A replace!
-                        handleReplace(realm, event, roomId, isLocalEcho, content?.relatesTo.eventId)
+                        handleReplace(realm, event, roomId, isLocalEcho, content.relatesTo.eventId)
                     }
                 }
                 in EventType.POLL_RESPONSE -> {
@@ -474,7 +474,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
         val sourceToDiscard = eventSummary.editSummary?.editions?.firstOrNull { it.eventId == redacted.eventId }
         if (sourceToDiscard == null) {
-            Timber.w("Redaction of a replace that was not known in aggregation $sourceToDiscard")
+            Timber.w("Redaction of a replace that was not known in aggregation")
             return
         }
         // Need to remove this event from the edition list

@@ -33,13 +33,15 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
     }
 
     /**
-     *There are a number of requirements on replacement events, which must be satisfied for the replacement to be considered valid:
+     * There are a number of requirements on replacement events, which must be satisfied for the replacement
+     * to be considered valid:
      * As with all event relationships, the original event and replacement event must have the same room_id
      * (i.e. you cannot send an event in one room and then an edited version in a different room).
      * The original event and replacement event must have the same sender (i.e. you cannot edit someone else’s messages).
      * The replacement and original events must have the same type (i.e. you cannot change the original event’s type).
      * The replacement and original events must not have a state_key property (i.e. you cannot edit state events at all).
-     * The original event must not, itself, have a rel_type of m.replace (i.e. you cannot edit an edit — though you can send multiple edits for a single original event).
+     * The original event must not, itself, have a rel_type of m.replace
+     * (i.e. you cannot edit an edit — though you can send multiple edits for a single original event).
      * The replacement event (once decrypted, if appropriate) must have an m.new_content property.
      *
      * If the original event was encrypted, the replacement should be too.
