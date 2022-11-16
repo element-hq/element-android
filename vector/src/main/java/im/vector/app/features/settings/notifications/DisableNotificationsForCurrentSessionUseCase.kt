@@ -34,9 +34,8 @@ class DisableNotificationsForCurrentSessionUseCase @Inject constructor(
     suspend fun execute() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val deviceId = session.sessionParams.deviceId ?: return
-        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
-            togglePushNotificationUseCase.execute(deviceId, enabled = false)
-        } else {
+        togglePushNotificationUseCase.execute(deviceId, enabled = false)
+        if (!checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
             unregisterUnifiedPushUseCase.execute(pushersManager)
         }
     }
