@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.timeline
 
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -30,8 +31,12 @@ import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -136,12 +141,21 @@ fun TimelineEvent.getEditedEventId(): String? {
  * Get last MessageContent, after a possible edition.
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
-    return (
-            annotations?.editSummary?.latestEdit
-                    ?.getClearContent()?.toModel<MessageContent>()?.newContent
-                    ?: root.getClearContent()
-            )
-            .toModel<MessageContent>()
+    return when (root.getClearType()) {
+        EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
+        // XXX
+        // Polls/Beacon are not message contents like others as there is no msgtype subtype to discriminate moshi parsing
+        // so toModel<MessageContent> won't parse them correctly
+        // It's discriminated on event type instead. Maybe it shouldn't be MessageContent at all to avoid confusion?
+        in EventType.POLL_START -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.STATE_ROOM_BEACON_INFO -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
+        in EventType.BEACON_LOCATION_DATA -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
+        else -> (getLastEditNewContent() ?: root.getClearContent()).toModel()
+    }
+}
+
+fun TimelineEvent.getLastEditNewContent(): Content? {
+    return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
 }
 
 /**
