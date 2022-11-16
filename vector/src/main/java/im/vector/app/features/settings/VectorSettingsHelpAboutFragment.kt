@@ -73,6 +73,8 @@ class VectorSettingsHelpAboutFragment :
                 if (buildMeta.isDebug) {
                     append(" ")
                     append(buildMeta.gitBranchName)
+                    append(" ")
+                    append(buildMeta.gitRevision)
                 }
             }
 
