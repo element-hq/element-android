@@ -184,7 +184,7 @@ fun TimelineEvent.isRootThread(): Boolean {
 fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
     val lastMessageContent = getLastMessageContent()
     val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
-        lastMessageContent.formattedBody
+        lastMessageContent.formattedBody ?: lastMessageContent.body
     } else {
         lastMessageContent?.body
     } ?: return ""
