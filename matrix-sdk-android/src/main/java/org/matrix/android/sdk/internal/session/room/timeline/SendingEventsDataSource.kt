@@ -43,6 +43,7 @@ internal class RealmSendingEventsDataSource(
     private var roomEntity: RoomEntity? = null
     private var sendingTimelineEvents: RealmList<TimelineEventEntity>? = null
     private var frozenSendingTimelineEvents: RealmList<TimelineEventEntity>? = null
+    private val builtEvents =  ArrayList<TimelineEvent>()
 
     private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
         if (events.isValid) {

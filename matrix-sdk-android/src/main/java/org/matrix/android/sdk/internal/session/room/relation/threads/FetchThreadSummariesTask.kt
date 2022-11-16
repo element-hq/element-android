@@ -16,9 +16,9 @@
 package org.matrix.android.sdk.internal.session.room.relation.threads
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
@@ -54,7 +54,7 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
         @SessionDatabase private val monarchy: Monarchy,
-        private val cryptoService: DefaultCryptoService,
+        private val cryptoService: CryptoService,
         @UserId private val userId: String,
         private val clock: Clock,
 ) : FetchThreadSummariesTask {

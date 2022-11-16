@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.crypto.gossiping
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
-import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Assert.assertNull
@@ -100,7 +100,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Try to request
         aliceSession2.cryptoService().enableKeyGossiping(true)
-        aliceSession2.cryptoService().requestRoomKeyForEvent(receivedEvent.root)
+        aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
 
         val eventMegolmSessionId = receivedEvent.root.content.toModel<EncryptedEventContent>()?.sessionId
 
@@ -163,8 +163,8 @@ class KeyShareTests : InstrumentedTest {
 
         // Mark the device as trusted
 
-        Log.v("#TEST", "=======> Alice device 1 is ${aliceSession.sessionParams.deviceId}|${aliceSession.cryptoService().getMyDevice().identityKey()}")
-        val aliceSecondSession = aliceSession2.cryptoService().getMyDevice()
+        Log.v("#TEST", "=======> Alice device 1 is ${aliceSession.sessionParams.deviceId}|${aliceSession.cryptoService().getMyCryptoDevice().identityKey()}")
+        val aliceSecondSession = aliceSession2.cryptoService().getMyCryptoDevice()
         Log.v("#TEST", "=======> Alice device 2 is ${aliceSession2.sessionParams.deviceId}|${aliceSecondSession.identityKey()}")
 
         aliceSession.cryptoService().setDeviceVerification(
@@ -178,7 +178,11 @@ class KeyShareTests : InstrumentedTest {
                 aliceSession.sessionParams.deviceId ?: ""
         )
 
-        aliceSession.cryptoService().deviceWithIdentityKey(aliceSecondSession.identityKey()!!, MXCRYPTO_ALGORITHM_OLM)!!.isVerified shouldBeEqualTo true
+        aliceSession.cryptoService().deviceWithIdentityKey(
+                aliceSecondSession.userId,
+                aliceSecondSession.identityKey()!!,
+                MXCRYPTO_ALGORITHM_OLM
+        )!!.isVerified shouldBeEqualTo true
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -257,11 +261,11 @@ class KeyShareTests : InstrumentedTest {
                     outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
             ownDeviceReply != null && ownDeviceReply.result is RequestResult.Success
         }
+
+        commonTestHelper.signOutAndClose(aliceSession)
+        commonTestHelper.signOutAndClose(aliceNewSession)
     }
 
-    /**
-     * Tests that keys reshared with own verified session are done from the earliest known index
-     */
     @Test
     fun test_reShareFromTheEarliestKnownIndexWithOwnVerifiedSession() = runCryptoTest(
             context(),
@@ -375,9 +379,6 @@ class KeyShareTests : InstrumentedTest {
         commonTestHelper.signOutAndClose(bobSession)
     }
 
-    /**
-     * Tests that we don't cancel a request to early on first forward if the index is not good enough
-     */
     @Test
     fun test_dontCancelToEarly() = runCryptoTest(
             context(),

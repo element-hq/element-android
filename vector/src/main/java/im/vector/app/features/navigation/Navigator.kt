@@ -77,13 +77,13 @@ interface Navigator {
 
     fun openSpacePreview(context: Context, spaceId: String)
 
-    fun performDeviceVerification(fragmentActivity: FragmentActivity, otherUserId: String, sasTransactionId: String)
+    fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
 
-    fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String)
+    fun requestSessionVerification(context: Context, otherSessionId: String)
 
-    fun requestSelfSessionVerification(fragmentActivity: FragmentActivity)
+    fun requestSelfSessionVerification(context: Context)
 
-    fun waitSessionVerification(fragmentActivity: FragmentActivity)
+//    fun waitSessionVerification(fragmentActivity: FragmentActivity)
 
     fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean)
 
@@ -111,7 +111,7 @@ interface Navigator {
 
     fun openDebug(context: Context)
 
-    fun openKeysBackupSetup(fragmentActivity: FragmentActivity, showManualExport: Boolean)
+    fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
 
     fun open4SSetup(fragmentActivity: FragmentActivity, setupMode: SetupMode)
 

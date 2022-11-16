@@ -17,13 +17,13 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -85,7 +85,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
         @SessionDatabase private val monarchy: Monarchy,
-        private val cryptoService: DefaultCryptoService,
+        private val cryptoService: CryptoService,
         private val clock: Clock,
 ) : FetchThreadTimelineTask {
 

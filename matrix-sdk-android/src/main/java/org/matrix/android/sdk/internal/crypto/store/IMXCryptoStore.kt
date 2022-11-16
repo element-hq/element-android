@@ -247,6 +247,8 @@ internal interface IMXCryptoStore {
 
     fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>?
 
+//    fun getUserDeviceListFlow(userId: String): Flow<List<CryptoDeviceInfo>>
+
     fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>>
 
     fun getLiveDeviceList(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
@@ -520,6 +522,8 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningInfo(userId: String): MXCrossSigningInfo?
     fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>>
+
+//    fun getCrossSigningInfoFlow(userId: String): Flow<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
@@ -531,6 +535,7 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
+//    fun getCrossSigningPrivateKeysFlow():  Flow<Optional<PrivateKeysInfo>>
 
     fun getGlobalCryptoConfig(): GlobalCryptoConfig
     fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>
@@ -580,4 +585,5 @@ internal interface IMXCryptoStore {
     fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest>
+//    fun logDbUsageInfo()
 }

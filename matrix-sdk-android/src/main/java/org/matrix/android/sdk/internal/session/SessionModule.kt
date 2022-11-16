@@ -140,7 +140,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @DeviceId
         @Provides
-        fun providesDeviceId(credentials: Credentials): String? {
+        fun providesDeviceId(credentials: Credentials): String {
             return credentials.deviceId
         }
 

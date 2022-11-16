@@ -17,19 +17,18 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
-import org.matrix.android.sdk.internal.session.sync.handler.CryptoSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
@@ -46,9 +45,8 @@ internal class SyncResponseHandler @Inject constructor(
         private val sessionListeners: SessionListeners,
         private val roomSyncHandler: RoomSyncHandler,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val cryptoSyncHandler: CryptoSyncHandler,
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
-        private val cryptoService: DefaultCryptoService,
+        private val cryptoService: CryptoService,
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
@@ -63,25 +61,26 @@ internal class SyncResponseHandler @Inject constructor(
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        measureTimeMillis {
-            if (!cryptoService.isStarted()) {
-                Timber.v("Should start cryptoService")
-                cryptoService.start()
-            }
-            cryptoService.onSyncWillProcess(isInitialSync)
-        }.also {
-            Timber.v("Finish handling start cryptoService in $it ms")
-        }
+//        measureTimeMillis {
+//            if (!cryptoService.isStarted()) {
+//                Timber.v("Should start cryptoService")
+//                // TODO surely there's a better place for this than the sync
+//                cryptoService.start()
+//            }
+//        }.also {
+//            Timber.v("Finish handling start cryptoService in $it ms")
+//        }
 
         // Handle the to device events before the room ones
         // to ensure to decrypt them properly
         measureTimeMillis {
             Timber.v("Handle toDevice")
-            reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
-                if (syncResponse.toDevice != null) {
-                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
-                }
-            }
+
+            cryptoService.receiveSyncChanges(
+                syncResponse.toDevice,
+                syncResponse.deviceLists,
+                syncResponse.deviceOneTimeKeysCount
+            )
         }.also {
             Timber.v("Finish handling toDevice in $it ms")
         }
@@ -143,9 +142,9 @@ internal class SyncResponseHandler @Inject constructor(
         }
 
         measureTimeMillis {
-            cryptoSyncHandler.onSyncCompleted(syncResponse)
+            cryptoService.onSyncCompleted(syncResponse)
         }.also {
-            Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
+            Timber.v("cryptoService.onSyncCompleted took $it ms")
         }
 
         // post sync stuffs

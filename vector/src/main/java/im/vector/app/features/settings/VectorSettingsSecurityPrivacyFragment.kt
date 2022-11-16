@@ -72,12 +72,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -351,31 +349,32 @@ class VectorSettingsSecurityPrivacyFragment :
 
     // Todo this should be refactored and use same state as 4S section
     private fun refreshXSigningStatus() {
-        val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
-        val xSigningIsEnableInAccount = crossSigningKeys != null
-        val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-        val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+        lifecycleScope.launchWhenResumed {
+            val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
+            val xSigningIsEnableInAccount = crossSigningKeys != null
+            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
-        when {
-            xSigningKeyCanSign -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+            when {
+                xSigningKeyCanSign -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+                }
+                xSigningKeysAreTrusted -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+                }
+                xSigningIsEnableInAccount -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+                }
+                else -> {
+                    mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+                }
             }
-            xSigningKeysAreTrusted -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
-            }
-            xSigningIsEnableInAccount -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
-            }
-            else -> {
-                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
-            }
+            mCrossSigningStatePreference.isVisible = true
         }
-
-        mCrossSigningStatePreference.isVisible = true
     }
 
     private val saveMegolmStartForActivityResult = registerStartForActivityResult {
@@ -561,7 +560,7 @@ class VectorSettingsSecurityPrivacyFragment :
     /**
      * Build the cryptography preference section.
      */
-    private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+    private suspend fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
@@ -621,28 +620,19 @@ class VectorSettingsSecurityPrivacyFragment :
     // ==============================================================================================================
 
     private fun refreshMyDevice() {
-        session.cryptoService().getUserDevices(session.myUserId).map {
-            DeviceInfo(
-                    userId = session.myUserId,
-                    deviceId = it.deviceId,
-                    displayName = it.displayName()
-            )
-        }.let {
-            refreshCryptographyPreference(it)
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            session.cryptoService().getUserDevices(session.myUserId).map {
+                DeviceInfo(
+                        userId = session.myUserId,
+                        deviceId = it.deviceId,
+                        displayName = it.displayName()
+                )
+            }.let {
+                refreshCryptographyPreference(it)
+            }
+            // TODO Move to a ViewModel...
+            val devicesList = session.cryptoService().fetchDevicesList()
+            refreshCryptographyPreference(devicesList)
         }
-        // TODO Move to a ViewModel...
-        session.cryptoService().fetchDevicesList(object : MatrixCallback<DevicesListResponse> {
-            override fun onSuccess(data: DevicesListResponse) {
-                if (isAdded) {
-                    refreshCryptographyPreference(data.devices.orEmpty())
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                if (isAdded) {
-                    refreshCryptographyPreference(emptyList())
-                }
-            }
-        })
     }
 }

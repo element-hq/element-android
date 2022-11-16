@@ -184,7 +184,9 @@ internal class MXMegolmEncryption(
                 trusted = true
         )
 
-        defaultKeysBackupService.maybeBackupKeys()
+        cryptoCoroutineScope.launch {
+            defaultKeysBackupService.maybeBackupKeys()
+        }
 
         return MXOutboundSessionInfo(
                 sessionId = sessionId,

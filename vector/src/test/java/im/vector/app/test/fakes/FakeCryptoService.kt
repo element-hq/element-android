@@ -44,9 +44,9 @@ class FakeCryptoService(
 
     override fun getLiveCryptoDeviceInfo() = MutableLiveData(cryptoDeviceInfos.values.toList())
 
-    override fun getLiveCryptoDeviceInfo(userId: String) = getLiveCryptoDeviceInfo(listOf(userId))
+    override fun getLiveCryptoDeviceInfoList(userId: String) = getLiveCryptoDeviceInfo(listOf(userId))
 
-    override fun getLiveCryptoDeviceInfo(userIds: List<String>) = MutableLiveData(
+    override fun getLiveCryptoDeviceInfoList(userIds: List<String>) = MutableLiveData(
             cryptoDeviceInfos.filterKeys { userIds.contains(it) }.values.toList()
     )
 

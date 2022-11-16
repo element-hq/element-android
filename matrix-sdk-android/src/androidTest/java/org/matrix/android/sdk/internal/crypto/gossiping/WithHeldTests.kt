@@ -26,7 +26,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -71,6 +70,7 @@ class WithHeldTests : InstrumentedTest {
         val roomAlicePOV = aliceSession.getRoom(roomId)!!
 
         val bobUnverifiedSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
+
         // =============================
         // ACT
         // =============================
@@ -155,15 +155,13 @@ class WithHeldTests : InstrumentedTest {
         val aliceInterceptor = testHelper.getTestInterceptor(aliceSession)
 
         // Simulate no OTK
-        aliceInterceptor!!.addRule(
-                MockOkHttpInterceptor.SimpleRule(
-                        "/keys/claim",
-                        200,
-                        """
+        aliceInterceptor!!.addRule(MockOkHttpInterceptor.SimpleRule(
+                "/keys/claim",
+                200,
+                """
                    { "one_time_keys" : {} } 
                 """
-                )
-        )
+        ))
         Log.d("#TEST", "Recovery :${aliceSession.sessionParams.credentials.accessToken}")
 
         val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
@@ -191,10 +189,7 @@ class WithHeldTests : InstrumentedTest {
 
         // Ensure that alice has marked the session to be shared with bob
         val sessionId = eventBobPOV!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
-        val chainIndex = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(
-                bobSession.myUserId,
-                bobSession.sessionParams.credentials.deviceId
-        )
+        val chainIndex = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSession.myUserId, bobSession.sessionParams.credentials.deviceId)
 
         Assert.assertEquals("Alice should have marked bob's device for this session", 0, chainIndex)
         // Add a new device for bob
@@ -210,10 +205,7 @@ class WithHeldTests : InstrumentedTest {
             bobSecondSession.getRoom(testData.roomId)?.getTimelineEvent(secondMessageId) != null
         }
 
-        val chainIndex2 = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(
-                bobSecondSession.myUserId,
-                bobSecondSession.sessionParams.credentials.deviceId
-        )
+        val chainIndex2 = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSecondSession.myUserId, bobSecondSession.sessionParams.credentials.deviceId)
 
         Assert.assertEquals("Alice should have marked bob's device for this session", 1, chainIndex2)
 
@@ -243,8 +235,8 @@ class WithHeldTests : InstrumentedTest {
         cryptoTestHelper.initializeCrossSigning(bobSecondSession)
 
         // Trust bob second device from Alice POV
-        aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId!!, NoOpMatrixCallback())
-        bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId!!, NoOpMatrixCallback())
+        aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId)
+        bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId)
 
         var sessionId: String? = null
         // Check that the

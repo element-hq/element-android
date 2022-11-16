@@ -77,10 +77,7 @@ class VerificationChooseMethodFragment :
 
     override fun doVerifyBySas() = withState(sharedViewModel) { state ->
         sharedViewModel.handle(
-                VerificationAction.StartSASVerification(
-                        state.otherUserId,
-                        state.pendingRequest.invoke()?.transactionId ?: ""
-                )
+                VerificationAction.StartSASVerification
         )
     }
 

@@ -1,0 +1,390 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.app.features.crypto.verification.user
+
+import androidx.core.text.toSpannable
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.R
+import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.buttonPositiveDestructiveButtonBarItem
+import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationEmojisItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
+import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import timber.log.Timber
+import javax.inject.Inject
+
+class UserVerificationController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val eventHtmlRenderer: EventHtmlRenderer,
+) : EpoxyController() {
+
+    interface InteractionListener {
+        fun acceptRequest()
+        fun declineRequest()
+        fun onClickOnVerificationStart()
+        fun onDone(b: Boolean)
+        fun onDoNotMatchButtonTapped()
+        fun onMatchButtonTapped()
+        fun openCamera()
+        fun doVerifyBySas()
+    }
+
+    var listener: InteractionListener? = null
+
+    var state: UserVerificationViewState? = null
+
+    fun update(state: UserVerificationViewState) {
+        Timber.w("VALR controller updated $state")
+        this.state = state
+        requestModelBuild()
+    }
+
+    override fun buildModels() {
+        val state = this.state ?: return
+        renderRequest(state)
+    }
+
+    private fun renderRequest(state: UserVerificationViewState) {
+        val host = this
+        when (state.pendingRequest) {
+            Uninitialized -> {
+                // let's add option to start one
+                val styledText = stringProvider.getString(R.string.verification_request_notice, state.otherUserId)
+                        .toSpannable()
+                        .colorizeMatchingText(state.otherUserId, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    notice(styledText.toEpoxyCharSequence())
+                }
+
+                bottomSheetDividerItem {
+                    id("sep")
+                }
+                bottomSheetVerificationActionItem {
+                    id("start")
+                    title(host.stringProvider.getString(R.string.start_verification))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                    listener { host.listener?.onClickOnVerificationStart() }
+                }
+            }
+            is Loading -> {
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
+                }
+            }
+            is Success -> {
+                val pendingRequest = state.pendingRequest.invoke()
+                when (pendingRequest.state) {
+                    EVerificationState.WaitingForReady -> {
+                        bottomSheetVerificationWaitingItem {
+                            id("waiting")
+                            title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
+                        }
+                    }
+                    EVerificationState.Requested -> {
+                        // add accept buttons?
+                        buttonPositiveDestructiveButtonBarItem {
+                            id("accept_decline")
+                            positiveText(host.stringProvider.getString(R.string.action_accept).toEpoxyCharSequence())
+                            destructiveText(host.stringProvider.getString(R.string.action_decline).toEpoxyCharSequence())
+                            positiveButtonClickAction { host.listener?.acceptRequest() }
+                            destructiveButtonClickAction { host.listener?.declineRequest() }
+                        }
+                    }
+                    EVerificationState.Ready -> {
+                        // add start options
+                        renderStartTransactionOptions(state, pendingRequest)
+                    }
+                    EVerificationState.Started,
+                    EVerificationState.WeStarted -> {
+                        // nothing to do, in this case the active transaction is shown
+                        renderActiveTransaction(state)
+                    }
+                    EVerificationState.WaitingForDone,
+                    EVerificationState.Done -> {
+                        bottomSheetVerificationNoticeItem {
+                            id("notice")
+                            notice(
+                                    host.stringProvider.getString(
+                                            R.string.verification_conclusion_ok_notice
+                                    )
+                                            .toEpoxyCharSequence()
+                            )
+                        }
+
+                        bottomSheetVerificationBigImageItem {
+                            id("image")
+                            roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+                        }
+
+                        bottomDone()
+                    }
+                    EVerificationState.Cancelled -> {
+                        renderCancel(pendingRequest.cancelConclusion ?: CancelCode.User)
+                    }
+                    EVerificationState.HandledByOtherSession -> {
+                        // we should dismiss
+                    }
+                }
+            }
+            is Fail -> {
+                //TODO
+            }
+        }
+    }
+
+    private fun renderStartTransactionOptions(state: UserVerificationViewState, request: PendingVerificationRequest) {
+        val scanCodeInstructions = stringProvider.getString(R.string.verification_scan_notice)
+        val host = this
+        val scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_their_code)
+        val compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_emoji_subtitle)
+
+        bottomSheetVerificationNoticeItem {
+            id("notice")
+            notice(scanCodeInstructions.toEpoxyCharSequence())
+        }
+
+        if (request.otherCanScanQrCode && !request.qrCodeText.isNullOrEmpty()) {
+            bottomSheetVerificationQrCodeItem {
+                id("qr")
+                data(request.qrCodeText!!)
+            }
+
+            bottomSheetDividerItem {
+                id("sep0")
+            }
+        }
+
+        if (request.otherCanShowQrCode) {
+            bottomSheetVerificationActionItem {
+                id("openCamera")
+                title(scanOtherCodeTitle)
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                iconRes(R.drawable.ic_camera)
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                listener { host.listener?.openCamera() }
+            }
+
+            bottomSheetDividerItem {
+                id("sep1")
+            }
+
+            bottomSheetVerificationActionItem {
+                id("openEmoji")
+                title(host.stringProvider.getString(R.string.verification_scan_emoji_title))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                subTitle(compareEmojiSubtitle)
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                listener { host.listener?.doVerifyBySas() }
+            }
+        } else if (request.isSasSupported) {
+            bottomSheetVerificationActionItem {
+                id("openEmoji")
+                title(host.stringProvider.getString(R.string.verification_no_scan_emoji_title))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                listener { host.listener?.doVerifyBySas() }
+            }
+        } else {
+            // ??? can this happen
+        }
+    }
+
+    private fun renderActiveTransaction(state: UserVerificationViewState) {
+        val transaction = state.startedTransaction
+        val host = this
+        when (transaction) {
+            is Loading -> {
+                // Loading => We are starting a transaction
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(host.stringProvider.getString(R.string.please_wait))
+                }
+            }
+            is Success -> {
+                // Success => There is an active transaction
+                renderTransaction(state, transaction = transaction.invoke())
+            }
+            is Fail -> {
+                // todo
+            }
+            is Uninitialized -> {
+            }
+        }
+    }
+
+    private fun renderTransaction(state: UserVerificationViewState, transaction: VerificationTransactionData) {
+        val host = this
+        if (transaction.method == VerificationMethod.SAS) {
+            when (val txState = transaction.state) {
+                VerificationTxState.SasShortCodeReady -> {
+                    buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
+                }
+                is VerificationTxState.SasMacReceived -> {
+                    if(!txState.codeConfirmed) {
+                        buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
+                    } else {
+                        // waiting
+                        bottomSheetVerificationWaitingItem {
+                            id("waiting")
+                            title(host.stringProvider.getString(R.string.please_wait))
+                        }
+                    }
+                }
+                is VerificationTxState.Cancelled,
+                is VerificationTxState.Done -> {
+                    // should show request status
+                }
+                else -> {
+                    // waiting
+                    bottomSheetVerificationWaitingItem {
+                        id("waiting")
+                        title(host.stringProvider.getString(R.string.please_wait))
+                    }
+                }
+            }
+        } else {
+            // TODO (QR CODe
+        }
+    }
+
+    private fun renderCancel(cancelCode: CancelCode) {
+        val host = this
+        when (cancelCode) {
+            CancelCode.QrCodeInvalid -> {
+                // TODO
+            }
+            CancelCode.MismatchedUser,
+            CancelCode.MismatchedSas,
+            CancelCode.MismatchedCommitment,
+            CancelCode.MismatchedKeys -> {
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())
+                }
+
+                bottomSheetVerificationBigImageItem {
+                    id("image")
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
+                }
+
+                bottomSheetVerificationNoticeItem {
+                    id("warning_notice")
+                    notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verification_conclusion_compromised)).toEpoxyCharSequence())
+                }
+            }
+            else -> {
+                bottomSheetVerificationNoticeItem {
+                    id("notice_cancelled")
+                    notice(host.stringProvider.getString(R.string.verify_cancelled_notice).toEpoxyCharSequence())
+                }
+            }
+        }
+    }
+
+    private fun buildEmojiItem(emoji: List<EmojiRepresentation>) {
+        val host = this
+        bottomSheetVerificationNoticeItem {
+            id("notice")
+            notice(host.stringProvider.getString(R.string.verification_emoji_notice).toEpoxyCharSequence())
+        }
+
+        bottomSheetVerificationEmojisItem {
+            id("emojis")
+            emojiRepresentation0(emoji[0])
+            emojiRepresentation1(emoji[1])
+            emojiRepresentation2(emoji[2])
+            emojiRepresentation3(emoji[3])
+            emojiRepresentation4(emoji[4])
+            emojiRepresentation5(emoji[5])
+            emojiRepresentation6(emoji[6])
+        }
+
+        buildSasCodeActions()
+    }
+
+    private fun buildSasCodeActions() {
+        val host = this
+        bottomSheetDividerItem {
+            id("sepsas0")
+        }
+        bottomSheetVerificationActionItem {
+            id("ko")
+            title(host.stringProvider.getString(R.string.verification_sas_do_not_match))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            iconRes(R.drawable.ic_check_off)
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            listener { host.listener?.onDoNotMatchButtonTapped() }
+        }
+        bottomSheetDividerItem {
+            id("sepsas1")
+        }
+        bottomSheetVerificationActionItem {
+            id("ok")
+            title(host.stringProvider.getString(R.string.verification_sas_match))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            iconRes(R.drawable.ic_check_on)
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            listener { host.listener?.onMatchButtonTapped() }
+        }
+    }
+
+    private fun bottomDone() {
+        val host = this
+        bottomSheetDividerItem {
+            id("sep_done")
+        }
+
+        bottomSheetVerificationActionItem {
+            id("done")
+            title(host.stringProvider.getString(R.string.done))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            iconRes(R.drawable.ic_arrow_right)
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            listener { host.listener?.onDone(true) }
+        }
+    }
+}

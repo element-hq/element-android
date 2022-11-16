@@ -21,6 +21,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -39,7 +40,6 @@ import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
@@ -89,7 +89,7 @@ internal class RoomSyncHandler @Inject constructor(
         private val readReceiptHandler: ReadReceiptHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomAccountDataHandler: RoomSyncAccountDataHandler,
-        private val cryptoService: DefaultCryptoService,
+        private val cryptoService: CryptoService,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomTypingUsersHandler: RoomTypingUsersHandler,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -196,7 +196,7 @@ internal class RoomSyncHandler @Inject constructor(
                                                 roomSync = handlingStrategy.data[it] ?: error("Should not happen"),
                                                 insertType = EventInsertType.INITIAL_SYNC,
                                                 syncLocalTimestampMillis = syncLocalTimeStampMillis,
-                                                aggregator
+                                                aggregator = aggregator,
                                         )
                                     }
                             realm.insertOrUpdate(roomEntities)

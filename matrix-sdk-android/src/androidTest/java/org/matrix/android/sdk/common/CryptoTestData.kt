@@ -37,4 +37,10 @@ data class CryptoTestData(
             testHelper.signOutAndClose(it)
         }
     }
+
+    suspend fun initializeCrossSigning(testHelper: CryptoTestHelper) {
+        sessions.forEach {
+            testHelper.initializeCrossSigning(it)
+        }
+    }
 }

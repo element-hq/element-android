@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,9 +91,25 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
             }
 
             // Let's now claim one time keys
-            val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
+            val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim.map)
             val oneTimeKeys = withContext(coroutineDispatchers.io) {
                 oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, ONE_TIME_KEYS_RETRY_COUNT)
+            }.oneTimeKeys.let { oneTimeKeys ->
+                val map = MXUsersDevicesMap<MXKey>()
+                oneTimeKeys?.let { oneTimeKeys ->
+                    for ((userId, mapByUserId) in oneTimeKeys) {
+                        for ((deviceId, deviceKey) in mapByUserId) {
+                            val mxKey = MXKey.from(deviceKey)
+
+                            if (mxKey != null) {
+                                map.setObject(userId, deviceId, mxKey)
+                            } else {
+                                Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
+                            }
+                        }
+                    }
+                }
+                map
             }
 
             // let now start olm session using the new otks

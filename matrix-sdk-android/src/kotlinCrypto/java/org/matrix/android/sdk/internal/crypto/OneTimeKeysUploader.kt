@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import android.content.Context
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.MXKey
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -138,7 +139,7 @@ internal class OneTimeKeysUploader @Inject constructor(
 
     private suspend fun fetchOtkCount(): Int? {
         return tryOrNull("Unable to get OTK count") {
-            val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null, null))
+            val result = uploadKeysTask.execute(UploadKeysTask.Params(KeysUploadBody()))
             result.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
         }
     }
@@ -227,9 +228,11 @@ internal class OneTimeKeysUploader @Inject constructor(
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         val uploadParams = UploadKeysTask.Params(
-                deviceKeys = null,
-                oneTimeKeys = oneTimeJson,
-                fallbackKeys = fallbackJson.takeIf { fallbackJson.isNotEmpty() }
+                KeysUploadBody(
+                        deviceKeys = null,
+                        oneTimeKeys = oneTimeJson,
+                        fallbackKeys = fallbackJson.takeIf { fallbackJson.isNotEmpty() }
+                )
         )
         return uploadKeysTask.executeRetry(uploadParams, 3)
     }

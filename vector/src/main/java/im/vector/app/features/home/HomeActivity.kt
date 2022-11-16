@@ -64,6 +64,7 @@ import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -264,11 +265,12 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
-                    if (it.sendRequest) {
+                    //TODO
+//                    if (it.sendRequest) {
                         navigator.requestSelfSessionVerification(this)
-                    } else {
-                        navigator.waitSessionVerification(this)
-                    }
+//                    } else {
+//                        navigator.waitSessionVerification(this)
+//                    }
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
@@ -450,7 +452,8 @@ class HomeActivity :
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            it.navigator.waitSessionVerification(it)
+            TODO()
+           // it.navigator.waitSessionVerification(it)
         }
     }
 
@@ -461,11 +464,12 @@ class HomeActivity :
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            if (event.waitForIncomingRequest) {
-                it.navigator.waitSessionVerification(it)
-            } else {
-                it.navigator.requestSelfSessionVerification(it)
-            }
+            navigator.openSettings(this, SettingsActivityPayload.SecurityPrivacy)
+//            if (event.waitForIncomingRequest) {
+//                //it.navigator.waitSessionVerification(it)
+//            } else {
+//                it.navigator.requestSelfSessionVerification(it)
+//            }
         }
     }
 

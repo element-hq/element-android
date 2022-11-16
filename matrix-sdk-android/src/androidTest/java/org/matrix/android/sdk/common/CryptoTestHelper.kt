@@ -33,18 +33,19 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
-import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.verification.IncomingSasVerificationTransaction
-import org.matrix.android.sdk.internal.crypto.verification.OutgoingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -52,7 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
-import org.matrix.android.sdk.api.util.toBase64NoPadding
+import timber.log.Timber
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -119,6 +120,80 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
         return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
+    }
+
+    suspend fun inviteNewUsersAndWaitForThemToJoin(session: Session, roomId: String, usernames: List<String>): List<Session> {
+        val newSessions = usernames.map { username ->
+            testHelper.createAccount(username, SessionTestParams(true)).also {
+                it.cryptoService().enableKeyGossiping(false)
+            }
+        }
+
+        val room = session.getRoom(roomId)!!
+
+        Log.v("#E2E TEST", "accounts for ${usernames.joinToString(",") { it.take(10) }} created")
+        // we want to invite them in the room
+        newSessions.forEach { newSession ->
+            Log.v("#E2E TEST", "${session.myUserId.take(10)} invites ${newSession.myUserId.take(10)}")
+            room.membershipService().invite(newSession.myUserId)
+        }
+
+        // All user should accept invite
+        newSessions.forEach { newSession ->
+            waitForAndAcceptInviteInRoom(newSession, roomId)
+            Log.v("#E2E TEST", "${newSession.myUserId.take(10)} joined room $roomId")
+        }
+        ensureMembersHaveJoined(session, newSessions, roomId)
+        return newSessions
+    }
+
+    private suspend fun ensureMembersHaveJoined(session: Session, invitedUserSessions: List<Session>, roomId: String) {
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("Members ${invitedUserSessions.map { it.myUserId.take(10) }} should have join from the pov of ${session.myUserId.take(10)}")
+                }
+        ) {
+            invitedUserSessions.map { invitedUserSession ->
+                session.roomService().getRoomMember(invitedUserSession.myUserId, roomId)?.membership?.also {
+                    Log.v("#E2E TEST", "${invitedUserSession.myUserId.take(10)} membership is $it")
+                }
+            }.all {
+                it == Membership.JOIN
+            }
+        }
+    }
+
+    private suspend fun waitForAndAcceptInviteInRoom(session: Session, roomId: String) {
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("${session.myUserId} cannot see the invite from ${session.myUserId.take(10)}")
+                }
+        ) {
+            val roomSummary = session.getRoomSummary(roomId)
+            (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                if (it) {
+                    Log.v("#E2E TEST", "${session.myUserId.take(10)} can see the invite from ${roomSummary?.inviterId}")
+                }
+            }
+        }
+
+        // not sure why it's taking so long :/
+        Log.v("#E2E TEST", "${session.myUserId.take(10)} tries to join room $roomId")
+        try {
+            session.roomService().joinRoom(roomId)
+        } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+            // it's ok we will wait after
+        }
+
+        Log.v("#E2E TEST", "${session.myUserId} waiting for join echo ...")
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("${session.myUserId.take(10)} cannot see the join echo for ${roomId}")
+                }
+        ) {
+            val roomSummary = session.getRoomSummary(roomId)
+            roomSummary != null && roomSummary.membership == Membership.JOIN
+        }
     }
 
     /**
@@ -189,7 +264,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
                 authData = createFakeMegolmBackupAuthData(),
-                recoveryKey = "fake"
+                recoveryKey = BackupUtils.recoveryKeyFromPassphrase("3cnTdW")!!
         )
     }
 
@@ -221,7 +296,6 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     suspend fun initializeCrossSigning(session: Session) {
-        testHelper.waitForCallback<Unit> {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -234,9 +308,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                                             )
                                     )
                                 }
-                            }, it
-                    )
-        }
+                            })
     }
 
     /**
@@ -272,16 +344,13 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
 
         // set up megolm backup
-        val creationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
-        }
-        val version = testHelper.waitForCallback<KeysVersion> {
-            session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
-        }
+        val creationInfo = session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null)
+        val version = session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo)
+
         // Save it for gossiping
         session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
 
-        extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+        creationInfo.recoveryKey.toBase64().let { secret ->
             ssssService.storeSecret(
                     KEYBACKUP_SECRET_SSSS_NAME,
                     secret,
@@ -298,61 +367,78 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val bobVerificationService = bob.cryptoService().verificationService()
 
         val localId = UUID.randomUUID().toString()
-        aliceVerificationService.requestKeyVerificationInDMs(
+        val requestID = aliceVerificationService.requestKeyVerificationInDMs(
                 localId = localId,
                 methods = listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
                 otherUserId = bob.myUserId,
                 roomId = roomId
         ).transactionId
 
-        testHelper.retryPeriodically {
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("Bob should see an incoming request from alice")
+                }
+        ) {
             bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
-                it.requestInfo?.fromDevice == alice.sessionParams.deviceId
+                it.otherDeviceId == alice.sessionParams.deviceId
             } != null
         }
+
         val incomingRequest = bobVerificationService.getExistingVerificationRequests(alice.myUserId).first {
-            it.requestInfo?.fromDevice == alice.sessionParams.deviceId
+            it.otherDeviceId == alice.sessionParams.deviceId
         }
-        bobVerificationService.readyPendingVerificationInDMs(listOf(VerificationMethod.SAS), alice.myUserId, roomId, incomingRequest.transactionId!!)
 
-        var requestID: String? = null
+        Timber.v("#TEST Incoming request is $incomingRequest")
+
+        Timber.v("#TEST let bob ready the verification with SAS method")
+        bobVerificationService.readyPendingVerification(
+                listOf(VerificationMethod.SAS),
+                alice.myUserId,
+                incomingRequest.transactionId
+        )
+
         // wait for it to be readied
-        testHelper.retryPeriodically {
-            val outgoingRequest = aliceVerificationService.getExistingVerificationRequests(bob.myUserId)
-                    .firstOrNull { it.localId == localId }
-            if (outgoingRequest?.isReady == true) {
-                requestID = outgoingRequest.transactionId!!
-                true
-            } else {
-                false
-            }
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("Alice should see the verification in ready state")
+                }
+        ) {
+            val outgoingRequest = aliceVerificationService.getExistingVerificationRequest(bob.myUserId, requestID)
+            outgoingRequest?.state == EVerificationState.Ready
         }
 
-        aliceVerificationService.beginKeyVerificationInDMs(
+        Timber.v("#TEST let alice start the verification")
+        aliceVerificationService.startKeyVerification(
                 VerificationMethod.SAS,
-                requestID!!,
-                roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!
+                requestID,
         )
 
         // we should reach SHOW SAS on both
-        var alicePovTx: OutgoingSasVerificationTransaction? = null
-        var bobPovTx: IncomingSasVerificationTransaction? = null
+        var alicePovTx: SasVerificationTransaction? = null
+        var bobPovTx: SasVerificationTransaction? = null
 
-        testHelper.retryPeriodically {
-            alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID!!) as? OutgoingSasVerificationTransaction
-            Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
-            alicePovTx?.state == VerificationTxState.ShortCodeReady
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("Alice should should see a verification code")
+                }
+        ) {
+            alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID)
+                    as? SasVerificationTransaction
+            Log.v("TEST", "== alicePovTx id:${requestID} is ${alicePovTx?.state}")
+            alicePovTx?.getDecimalCodeRepresentation() != null
         }
         // wait for alice to get the ready
-        testHelper.retryPeriodically {
-            bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID!!) as? IncomingSasVerificationTransaction
-            Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
-            if (bobPovTx?.state == VerificationTxState.OnStarted) {
-                bobPovTx?.performAccept()
-            }
-            bobPovTx?.state == VerificationTxState.ShortCodeReady
+        testHelper.betterRetryPeriodically(
+                onFail = {
+                    fail("Bob should should see a verification code")
+                }
+        ) {
+            bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID)
+                    as? SasVerificationTransaction
+            Log.v("TEST", "== bobPovTx is ${bobPovTx?.state}")
+//            bobPovTx?.state == VerificationTxState.ShortCodeReady
+            bobPovTx?.getDecimalCodeRepresentation() != null
         }
 
         assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
@@ -360,11 +446,11 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         bobPovTx!!.userHasVerifiedShortCode()
         alicePovTx!!.userHasVerifiedShortCode()
 
-        testHelper.retryPeriodically {
+        testHelper.betterRetryPeriodically {
             alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
         }
 
-        testHelper.retryPeriodically {
+        testHelper.betterRetryPeriodically {
             bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
         }
     }

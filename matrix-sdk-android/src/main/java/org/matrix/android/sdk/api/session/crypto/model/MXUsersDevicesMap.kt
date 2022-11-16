@@ -104,6 +104,10 @@ class MXUsersDevicesMap<E> {
         map.clear()
     }
 
+    fun join(other: Map<out String, HashMap<String, E>>) {
+        map.putAll(other)
+    }
+
     /**
      * Add entries from another MXUsersDevicesMap.
      *

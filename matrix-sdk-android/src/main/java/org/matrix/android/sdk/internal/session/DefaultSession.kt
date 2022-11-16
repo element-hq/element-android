@@ -67,7 +67,6 @@ import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -105,7 +104,7 @@ internal class DefaultSession @Inject constructor(
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
         private val searchService: Lazy<SearchService>,
-        private val cryptoService: Lazy<DefaultCryptoService>,
+        private val cryptoService: Lazy<CryptoService>,
         private val defaultFileService: Lazy<FileService>,
         private val permalinkService: Lazy<PermalinkService>,
         private val profileService: Lazy<ProfileService>,
@@ -147,7 +146,7 @@ internal class DefaultSession @Inject constructor(
     override fun open() {
         sessionState.setIsOpen(true)
         globalErrorHandler.listener = this
-        cryptoService.get().ensureDevice()
+        cryptoService.get().start()
         uiHandler.post {
             lifecycleObservers.forEach {
                 it.onSessionStarted(this)

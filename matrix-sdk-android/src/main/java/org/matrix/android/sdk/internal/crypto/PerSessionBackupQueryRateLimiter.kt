@@ -20,11 +20,9 @@ import dagger.Lazy
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
-import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.api.util.awaitCallback
-import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -40,7 +38,7 @@ private val loggerTag = LoggerTag("OutgoingGossipingRequestManager", LoggerTag.C
  */
 internal class PerSessionBackupQueryRateLimiter @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val keysBackupService: Lazy<DefaultKeysBackupService>,
+        private val keysBackupService: Lazy<KeysBackupService>,
         private val cryptoStore: IMXCryptoStore,
         private val clock: Clock,
 ) {
@@ -101,19 +99,17 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
                         (now - lastTry.timestamp) > MIN_TRY_BACKUP_PERIOD_MILLIS
 
         if (!shouldQuery) return false
-
+        val recoveryKey = savedKeyBackupKeyInfo?.recoveryKey ?: return false
         val successfullyImported = withContext(coroutineDispatchers.io) {
             try {
-                awaitCallback<ImportRoomKeysResult> {
                     keysBackupService.get().restoreKeysWithRecoveryKey(
                             currentVersion,
-                            savedKeyBackupKeyInfo?.recoveryKey ?: "",
+                            recoveryKey,
                             roomId,
                             sessionId,
                             null,
-                            it
                     )
-                }.successfullyNumberOfImportedKeys
+                .successfullyNumberOfImportedKeys
             } catch (failure: Throwable) {
                 // Fail silently
                 Timber.tag(loggerTag.value).v("getFromBackup failed ${failure.localizedMessage}")

@@ -165,10 +165,12 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         // as we are going to reset, we'd better cancel all outgoing requests
         // if not they could be accepted in the middle of the reset process
         // and cause strange use cases
-        session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
-            session.cryptoService().verificationService().cancelVerificationRequest(it)
+        viewModelScope.launch {
+            session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
+                session.cryptoService().verificationService().cancelVerificationRequest(it)
+            }
+            _viewEvents.post(SharedSecureStorageViewEvent.ShowResetBottomSheet)
         }
-        _viewEvents.post(SharedSecureStorageViewEvent.ShowResetBottomSheet)
     }
 
     private fun handleResetAll() {

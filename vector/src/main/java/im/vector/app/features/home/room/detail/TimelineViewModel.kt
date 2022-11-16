@@ -85,6 +85,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -1116,25 +1117,28 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
-        Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${initialState.roomId}, txId:${action.transactionId}")
-        if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
-                        supportedVerificationMethodsProvider.provide(),
-                        action.otherUserId,
-                        initialState.roomId,
-                        action.transactionId
-                )) {
-            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
-        } else {
-            // TODO
+        viewModelScope.launch {
+            Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${initialState.roomId}, txId:${action.transactionId}")
+            if (session.cryptoService().verificationService().readyPendingVerification(
+                            methods = supportedVerificationMethodsProvider.provide(),
+                            otherUserId = action.otherUserId,
+                            transactionId = action.transactionId
+                    )) {
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } else {
+                // TODO
+            }
         }
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.cryptoService().verificationService().declineVerificationRequestInDMs(
-                action.otherUserId,
-                action.transactionId,
-                initialState.roomId
-        )
+        viewModelScope.launch {
+            session.cryptoService().verificationService().declineVerificationRequestInDMs(
+                    action.otherUserId,
+                    action.transactionId,
+                    initialState.roomId
+            )
+        }
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
@@ -1143,27 +1147,31 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
-        // Check if this request is still active and handled by me
-        session.cryptoService().verificationService().getExistingVerificationRequestInRoom(initialState.roomId, action.transactionId)?.let {
-            if (it.handledByOtherSession) return
-            if (!it.isFinished) {
-                _viewEvents.post(
-                        RoomDetailViewEvents.ActionSuccess(
-                                action.copy(
-                                        otherUserId = it.otherUserId
-                                )
-                        )
-                )
+        viewModelScope.launch {
+            // Check if this request is still active and handled by me
+            session.cryptoService().verificationService().getExistingVerificationRequestInRoom(initialState.roomId, action.transactionId)?.let {
+                if (it.state == EVerificationState.HandledByOtherSession) return@launch
+                if (!it.isFinished) {
+                    _viewEvents.post(
+                            RoomDetailViewEvents.ActionSuccess(
+                                    action.copy(
+                                            otherUserId = it.otherUserId
+                                    )
+                            )
+                    )
+                }
             }
         }
     }
 
     private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
         if (room == null) return
-        // Check if this request is still active and handled by me
-        room.getTimelineEvent(action.eventId)?.let {
-            session.cryptoService().reRequestRoomKeyForEvent(it.root)
-            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+        viewModelScope.launch {
+            // Check if this request is still active and handled by me
+            room.getTimelineEvent(action.eventId)?.let {
+                session.cryptoService().reRequestRoomKeyForEvent(it.root)
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+            }
         }
     }
 

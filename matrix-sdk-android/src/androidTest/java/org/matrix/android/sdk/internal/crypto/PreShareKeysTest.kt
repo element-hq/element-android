@@ -52,9 +52,7 @@ class PreShareKeysTest : InstrumentedTest {
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
-        testHelper.waitForCallback<Unit> {
-            aliceSession.cryptoService().prepareToEncrypt(e2eRoomID, it)
-        }
+        aliceSession.cryptoService().prepareToEncrypt(e2eRoomID)
 
         testHelper.retryPeriodically {
             val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()

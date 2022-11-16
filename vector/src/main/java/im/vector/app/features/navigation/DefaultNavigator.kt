@@ -25,6 +25,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
@@ -103,7 +104,9 @@ import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
-import org.matrix.android.sdk.internal.crypto.verification.IncomingSasVerificationTransaction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -123,6 +126,7 @@ class DefaultNavigator @Inject constructor(
         private val spaceStateHandler: SpaceStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val features: VectorFeatures,
+        private val coroutineScope: CoroutineScope,
         private val analyticsTracker: AnalyticsTracker,
         private val debugNavigator: DebugNavigator,
 ) : Navigator {
@@ -224,57 +228,69 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, SpacePreviewActivity.newIntent(context, spaceId), false)
     }
 
-    override fun performDeviceVerification(fragmentActivity: FragmentActivity, otherUserId: String, sasTransactionId: String) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
-                ?: return
-        (tx as? IncomingSasVerificationTransaction)?.performAccept()
-        VerificationBottomSheet.withArgs(
-                roomId = null,
-                otherUserId = otherUserId,
-                transactionId = sasTransactionId
-        ).show(fragmentActivity.supportFragmentManager, "REQPOP")
-    }
+    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
+                    ?: return@launch
+            if (tx is SasVerificationTransaction && tx.isIncoming) {
+                tx.acceptVerification()
+            }
 
-    override fun requestSessionVerification(fragmentActivity: FragmentActivity, otherSessionId: String) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val pr = session.cryptoService().verificationService().requestKeyVerification(
-                supportedVerificationMethodsProvider.provide(),
-                session.myUserId,
-                listOf(otherSessionId)
-        )
-        VerificationBottomSheet.withArgs(
-                roomId = null,
-                otherUserId = session.myUserId,
-                transactionId = pr.transactionId
-        ).show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-    }
-
-    override fun requestSelfSessionVerification(fragmentActivity: FragmentActivity) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val otherSessions = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .filter { it.deviceId != session.sessionParams.deviceId }
-                .map { it.deviceId }
-        if (otherSessions.isNotEmpty()) {
-            val pr = session.cryptoService().verificationService().requestKeyVerification(
-                    supportedVerificationMethodsProvider.provide(),
-                    session.myUserId,
-                    otherSessions
-            )
-            VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
-                    .show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-        } else {
-            VerificationBottomSheet.forSelfVerification(session)
-                    .show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            if (context is AppCompatActivity) {
+                TODO()
+//                VerificationBottomSheet.withArgs(
+//                        roomId = null,
+//                        otherUserId = otherUserId,
+//                        transactionId = sasTransactionId
+//                ).show(context.supportFragmentManager, "REQPOP")
+            }
         }
     }
 
-    override fun waitSessionVerification(fragmentActivity: FragmentActivity) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        VerificationBottomSheet.forSelfVerification(session)
-                .show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+    override fun requestSessionVerification(context: Context, otherSessionId: String) {
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
+                    supportedVerificationMethodsProvider.provide()
+            )
+            if (context is AppCompatActivity) {
+                TODO()
+//                VerificationBottomSheet.withArgs(
+//                        otherUserId = session.myUserId,
+//                        transactionId = pr.requestId()
+//                ).show(context.supportFragmentManager)
+            }
+        }
     }
+
+    override fun requestSelfSessionVerification(context: Context) {
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val otherSessions = session.cryptoService()
+                    .getCryptoDeviceInfoList(session.myUserId)
+                    .filter { it.deviceId != session.sessionParams.deviceId }
+                    .map { it.deviceId }
+            if (context is AppCompatActivity) {
+                TODO()
+//                if (otherSessions.isNotEmpty()) {
+//                    val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
+//                            supportedVerificationMethodsProvider.provide())
+//                    VerificationBottomSheet.forSelfVerification(session, pr.transactionId)
+//                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+//                } else {
+//                    VerificationBottomSheet.forSelfVerification(session)
+//                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+//                }
+            }
+        }
+    }
+
+//    override fun waitSessionVerification(fragmentActivity: FragmentActivity) {
+//        val session = sessionHolder.getSafeActiveSession() ?: return
+//        VerificationBottomSheet.forSelfVerification(session)
+//                .show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+//    }
 
     override fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean) {
         BootstrapBottomSheet.show(
@@ -367,14 +383,18 @@ class DefaultNavigator @Inject constructor(
         debugNavigator.openDebugMenu(context)
     }
 
-    override fun openKeysBackupSetup(fragmentActivity: FragmentActivity, showManualExport: Boolean) {
+    override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
         // if cross signing is enabled and trusted or not set up at all we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
-            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null ||
-                    session.cryptoService().crossSigningService().canCrossSign()) {
-                BootstrapBottomSheet.show(fragmentActivity.supportFragmentManager, SetupMode.NORMAL)
-            } else {
-                fragmentActivity.startActivity(KeysBackupSetupActivity.intent(fragmentActivity, showManualExport))
+            coroutineScope.launch {
+                if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null ||
+                        session.cryptoService().crossSigningService().canCrossSign()) {
+                    (context as? AppCompatActivity)?.let {
+                        BootstrapBottomSheet.show(it.supportFragmentManager, SetupMode.NORMAL)
+                    }
+                } else {
+                    context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
+                }
             }
         }
     }

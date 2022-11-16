@@ -27,10 +27,6 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
-import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
-import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -217,15 +213,11 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val keysBackupService = aliceSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
-        val megolmBackupCreationInfo = commonTestHelper.waitForCallback<MegolmBackupCreationInfo> {
-            keysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
-        }
-        val version = commonTestHelper.waitForCallback<KeysVersion> {
-            keysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
-        }
+        val megolmBackupCreationInfo = keysBackupService.prepareKeysBackupVersion(keyBackupPassword, null)
+        val version = keysBackupService.createKeysBackupVersion(megolmBackupCreationInfo)
 
-        commonTestHelper.waitForCallback<Unit> {
-            keysBackupService.backupAllGroupSessions(null, it)
+        commonTestHelper.retryPeriodically {
+            keysBackupService.getTotalNumbersOfKeys() == keysBackupService.getTotalNumbersOfBackedUpKeys()
         }
 
         // signout
@@ -235,20 +227,15 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         newAliceSession.cryptoService().enableShareKeyOnInvite(true)
 
         newAliceSession.cryptoService().keysBackupService().let { kbs ->
-            val keyVersionResult = commonTestHelper.waitForCallback<KeysVersionResult?> {
-                kbs.getVersion(version.version, it)
-            }
+            val keyVersionResult = kbs.getVersion(version.version)
 
-            val importedResult = commonTestHelper.waitForCallback<ImportRoomKeysResult> {
-                kbs.restoreKeyBackupWithPassword(
+            val importedResult =  kbs.restoreKeyBackupWithPassword(
                         keyVersionResult!!,
                         keyBackupPassword,
                         null,
                         null,
                         null,
-                        it
                 )
-            }
 
             assertEquals(2, importedResult.totalNumberOfKeys)
         }

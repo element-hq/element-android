@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
+import timber.log.Timber
 
 /**
  * A new event type is added to the key verification framework: m.key.verification.ready,
@@ -37,9 +38,15 @@ internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInf
     val methods: List<String>?
 
     override fun asValidObject(): ValidVerificationInfoReady? {
-        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
-        val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
-        val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null.also {
+            Timber.e("## SAS Invalid room ready content invalid transaction id $transactionId")
+        }
+        val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null.also {
+            Timber.e("## SAS Invalid room ready content invalid fromDevice $fromDevice")
+        }
+        val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null.also {
+            Timber.e("## SAS Invalid room ready content invalid methods $methods")
+        }
 
         return ValidVerificationInfoReady(
                 validTransactionId,

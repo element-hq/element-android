@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ internal class MegolmSessionDataImporter @Inject constructor(
             progressListener: ProgressListener?
     ): ImportRoomKeysResult {
         val t0 = clock.epochMillis()
+        val importedSession = mutableMapOf<String, MutableMap<String, MutableList<String>>>()
 
         val totalNumbersOfKeys = megolmSessionsData.size
         var lastProgress = 0
@@ -70,18 +71,23 @@ internal class MegolmSessionDataImporter @Inject constructor(
 
             if (null != decrypting) {
                 try {
-                    val sessionId = megolmSessionData.sessionId
+                    val sessionId = megolmSessionData.sessionId ?: return@forEachIndexed
+                    val senderKey = megolmSessionData.senderKey ?: return@forEachIndexed
+                    val roomId = megolmSessionData.roomId ?: return@forEachIndexed
                     Timber.tag(loggerTag.value).v("## importRoomKeys retrieve senderKey ${megolmSessionData.senderKey} sessionId $sessionId")
 
+                    importedSession.getOrPut(roomId) { mutableMapOf() }
+                            .getOrPut(senderKey) { mutableListOf() }
+                            .add(sessionId)
                     totalNumbersOfImportedKeys++
 
                     // cancel any outstanding room key requests for this session
 
                     Timber.tag(loggerTag.value).d("Imported megolm session $sessionId from backup=$fromBackup in ${megolmSessionData.roomId}")
                     outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(
-                            megolmSessionData.sessionId ?: "",
-                            megolmSessionData.roomId ?: "",
-                            megolmSessionData.senderKey ?: "",
+                            sessionId,
+                            roomId,
+                            senderKey,
                             tryOrNull {
                                 olmInboundGroupSessionWrappers
                                         .firstOrNull { it.session.sessionIdentifier() == megolmSessionData.sessionId }
@@ -93,7 +99,7 @@ internal class MegolmSessionDataImporter @Inject constructor(
                     // Have another go at decrypting events sent with this session
                     when (decrypting) {
                         is MXMegolmDecryption -> {
-                            decrypting.onNewSession(megolmSessionData.roomId, megolmSessionData.senderKey!!, sessionId!!)
+                            decrypting.onNewSession(megolmSessionData.roomId, senderKey, sessionId)
                         }
                     }
                 } catch (e: Exception) {
@@ -121,6 +127,6 @@ internal class MegolmSessionDataImporter @Inject constructor(
 
         Timber.tag(loggerTag.value).v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 
-        return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys)
+        return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys, importedSession)
     }
 }

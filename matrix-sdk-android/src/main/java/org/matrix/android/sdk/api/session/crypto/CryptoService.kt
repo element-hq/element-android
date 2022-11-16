@@ -19,7 +19,6 @@ package org.matrix.android.sdk.api.session.crypto
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
@@ -29,10 +28,8 @@ import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListen
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
-import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
@@ -40,6 +37,10 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
+import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 
@@ -51,9 +52,9 @@ interface CryptoService {
 
     fun keysBackupService(): KeysBackupService
 
-    fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
+    suspend fun setDeviceName(deviceId: String, deviceName: String)
 
-    fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
+    suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
@@ -65,15 +66,9 @@ interface CryptoService {
 
     fun setWarnOnUnknownDevices(warn: Boolean)
 
-    fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String)
+    suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo>
 
-    fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
-
-    fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?)
-
-    fun deviceWithIdentityKey(senderKey: String, algorithm: String): CryptoDeviceInfo?
-
-    fun getMyDevice(): CryptoDeviceInfo
+    suspend fun getMyCryptoDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
@@ -118,11 +113,11 @@ interface CryptoService {
 
     fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean)
 
-    fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
-
-    fun getCryptoDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+    suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
     fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+
+//    fun getCryptoDeviceInfoFlow(userId: String): Flow<List<CryptoDeviceInfo>>
 
     fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
 
@@ -132,15 +127,13 @@ interface CryptoService {
 
     fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
-    fun requestRoomKeyForEvent(event: Event)
-
-    fun reRequestRoomKeyForEvent(event: Event)
+    suspend fun reRequestRoomKeyForEvent(event: Event)
 
     fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
 
-    fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
+    suspend fun fetchDevicesList(): List<DeviceInfo>
 
     fun getMyDevicesInfo(): List<DeviceInfo>
 
@@ -148,30 +141,35 @@ interface CryptoService {
 
     fun getMyDevicesInfoLive(deviceId: String): LiveData<Optional<DeviceInfo>>
 
-    fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
+    suspend fun fetchDeviceInfo(deviceId: String): DeviceInfo
+
+    suspend fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
     fun isRoomEncrypted(roomId: String): Boolean
 
     // TODO This could be removed from this interface
-    fun encryptEventContent(
+    suspend fun encryptEventContent(
             eventContent: Content,
             eventType: String,
-            roomId: String,
-            callback: MatrixCallback<MXEncryptEventContentResult>
-    )
+            roomId: String
+    ): MXEncryptEventContentResult
 
     fun discardOutboundSession(roomId: String)
 
     @Throws(MXCryptoError::class)
     suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
-    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
-
     fun getEncryptionAlgorithm(roomId: String): String?
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
-    fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
+    suspend fun downloadKeysIfNeeded(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
+
+    suspend fun getCryptoDeviceInfoList(userId: String): List<CryptoDeviceInfo>
+
+//    fun getLiveCryptoDeviceInfoList(userId: String): Flow<List<CryptoDeviceInfo>>
+//
+//    fun getLiveCryptoDeviceInfoList(userIds: List<String>): Flow<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
     fun removeSessionListener(listener: NewSessionListener)
@@ -199,10 +197,30 @@ interface CryptoService {
      * Perform any background tasks that can be done before a message is ready to
      * send, in order to speed up sending of the message.
      */
-    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+    suspend fun prepareToEncrypt(roomId: String)
 
     /**
      * Share all inbound sessions of the last chunk messages to the provided userId devices.
      */
     suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?)
+
+    /**
+     * When LL all room members might not be loaded when setting up encryption.
+     * This is called after room members have been loaded
+     * ... not sure if shoud be API
+     */
+    fun onE2ERoomMemberLoadedFromServer(roomId: String)
+
+    suspend fun deviceWithIdentityKey(userId: String, senderKey: String, algorithm: String): CryptoDeviceInfo?
+    suspend fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String)
+
+    fun close()
+    fun start()
+    fun isStarted(): Boolean
+    suspend fun receiveSyncChanges(toDevice: ToDeviceSyncResponse?, deviceChanges: DeviceListResponse?, keyCounts: DeviceOneTimeKeysCountSyncResponse?)
+    fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean)
+    fun onStateEvent(roomId: String, event: Event) {}
+    suspend fun onSyncCompleted(syncResponse: SyncResponse)
+    fun logDbUsageInfo()
+    suspend fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 }

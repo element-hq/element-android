@@ -27,6 +27,7 @@ import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayoutFactory
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
@@ -72,7 +73,7 @@ class MessageInformationDataFactory @Inject constructor(
                 prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val e2eDecoration = getE2EDecoration(roomSummary, event)
+        val e2eDecoration = runBlocking { getE2EDecoration(roomSummary, event) }
 
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
@@ -144,7 +145,7 @@ class MessageInformationDataFactory @Inject constructor(
         }
     }
 
-    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
+    private suspend fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
         if (roomSummary?.isEncrypted != true) {
             // No decoration for clear room
             // Questionable? what if the event is E2E?
@@ -167,6 +168,7 @@ class MessageInformationDataFactory @Inject constructor(
                     val sendingDevice = event.root.getSenderKey()
                             ?.let {
                                 session.cryptoService().deviceWithIdentityKey(
+                                        event.senderInfo.userId,
                                         it,
                                         event.root.content?.get("algorithm") as? String ?: ""
                                 )

@@ -18,7 +18,6 @@ package im.vector.app.features.settings.devices.v2.signout
 
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
 class SignoutSessionUseCase @Inject constructor(
@@ -30,10 +29,8 @@ class SignoutSessionUseCase @Inject constructor(
     }
 
     private suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) = runCatching {
-        awaitCallback { matrixCallback ->
             activeSessionHolder.getActiveSession()
                     .cryptoService()
-                    .deleteDevice(deviceId, userInteractiveAuthInterceptor, matrixCallback)
-        }
+                    .deleteDevice(deviceId, userInteractiveAuthInterceptor)
     }
 }

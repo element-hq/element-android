@@ -84,8 +84,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             EventType.KEY_VERIFICATION_ACCEPT,
             EventType.KEY_VERIFICATION_START,
             EventType.KEY_VERIFICATION_MAC,
-            // TODO Add ?
-            // EventType.KEY_VERIFICATION_READY,
+            EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_KEY,
             EventType.ENCRYPTED
     ) + EventType.POLL_START + EventType.POLL_RESPONSE + EventType.POLL_END + EventType.STATE_ROOM_BEACON_INFO + EventType.BEACON_LOCATION_DATA

@@ -85,13 +85,15 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null,  autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
-                try {
-                    withContext(Dispatchers.Default) {
+            return try {
+                runTest(dispatchTimeoutMs = TestConstants.timeOutMillis * 2) {
+                    withContext(Dispatchers.Main) {
                         block(cryptoTestHelper, testHelper)
                     }
-                } finally {
-                    if (autoSignoutOnClose) {
+                }
+            } finally {
+                if (autoSignoutOnClose) {
+                    runBlocking {
                         testHelper.cleanUpOpenedSessions()
                     }
                 }
@@ -250,7 +252,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
 
         // not sure why it's taking so long :/
         wrapWithTimeout(90_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
+            Log.v("#E2E TEST", "${otherSession.myUserId.take(10)} tries to join room $roomID")
             try {
                 otherSession.roomService().joinRoom(roomID)
             } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
@@ -430,6 +432,31 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 runBlocking { delay(500) }
             }
         }
+    }
+
+    private val backoff = listOf(500L, 1_000L, 1_000L, 3_000L, 3_000L, 5_000L)
+    suspend fun betterRetryPeriodically(
+            timeout: Long = TestConstants.timeOutMillis,
+            // we use on fail to let caller report a proper error that will show nicely in junit test result with correct line
+            // just call fail with your message
+            onFail: (() -> Unit)? = null,
+            predicate: suspend () -> Boolean,
+    ) {
+        var backoffTry = 0
+        val now = System.currentTimeMillis()
+        while (!predicate()) {
+            Timber.w("## VALR Trial nb $backoffTry")
+            withContext(Dispatchers.IO) {
+                delay(backoff[backoffTry.coerceAtMost(backoff.size - 1)])
+            }
+            backoffTry++
+            if (System.currentTimeMillis() - now > timeout) {
+                Timber.w("## VALR Trial fail")
+                onFail?.invoke()
+                return
+            }
+        }
+        Timber.w("## VALR Trial success for")
     }
 
     suspend fun <T> waitForCallback(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {

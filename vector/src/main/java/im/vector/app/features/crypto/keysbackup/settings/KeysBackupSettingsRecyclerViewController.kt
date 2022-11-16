@@ -126,10 +126,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
                     hasIndeterminateProcess(true)
 
-                    val totalKeys = host.session.cryptoService().inboundGroupSessionsCount(false)
-                    val backedUpKeys = host.session.cryptoService().inboundGroupSessionsCount(true)
-
-                    val remainingKeysToBackup = totalKeys - backedUpKeys
+                    val remainingKeysToBackup = data.remainingKeysToBackup
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())

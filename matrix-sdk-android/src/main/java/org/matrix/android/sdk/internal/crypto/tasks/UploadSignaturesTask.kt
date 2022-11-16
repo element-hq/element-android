@@ -16,12 +16,13 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
+import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, Unit> {
+internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, SignatureUploadResponse> {
     data class Params(
             val signatures: Map<String, Map<String, Any>>
     )
@@ -32,7 +33,7 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSignaturesTask {
 
-    override suspend fun execute(params: UploadSignaturesTask.Params) {
+    override suspend fun execute(params: UploadSignaturesTask.Params): SignatureUploadResponse {
         val response = executeRequest(
                 globalErrorReceiver,
                 canRetry = true,
@@ -40,8 +41,10 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         ) {
             cryptoApi.uploadSignatures(params.signatures)
         }
+        // TODO should we still throw here, looks like rust & kotlin does not work the same way
         if (response.failures?.isNotEmpty() == true) {
             throw Throwable(response.failures.toString())
         }
+        return response
     }
 }

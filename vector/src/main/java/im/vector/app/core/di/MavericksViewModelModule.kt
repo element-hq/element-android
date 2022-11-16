@@ -34,6 +34,7 @@ import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
 import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
+import im.vector.app.features.crypto.verification.user.UserVerificationViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
@@ -595,6 +596,12 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
     fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UserVerificationViewModel::class)
+    fun userVerificationBottomSheetViewModelFactory(factory: UserVerificationViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

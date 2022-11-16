@@ -1,5 +1,5 @@
 ext.groups = [
-        jitpack     : [
+        jitpack       : [
                 regex: [
                 ],
                 group: [
@@ -15,7 +15,7 @@ ext.groups = [
                         'com.github.Zhuinden',
                 ]
         ],
-        jitsi       : [
+        jitsi         : [
                 regex: [
                 ],
                 group: [
@@ -24,7 +24,7 @@ ext.groups = [
                         'org.webkit',
                 ]
         ],
-        google      : [
+        google        : [
                 regex: [
                         'androidx\\..*',
                         'com\\.android\\.tools\\..*',
@@ -43,6 +43,13 @@ ext.groups = [
                 ],
                 group: [
                         'com.vanniktech',
+                ]
+        ],
+        mavenSnapshots: [
+                regex: [
+                ],
+                group: [
+                        'org.matrix.rustcomponents'
                 ]
         ],
         mavenCentral: [
@@ -205,6 +212,7 @@ ext.groups = [
                         'org.jvnet.staxex',
                         'org.maplibre.gl',
                         'org.matrix.android',
+                        'org.matrix.rustcomponents',
                         'org.mockito',
                         'org.mongodb',
                         'org.objenesis',
@@ -224,7 +232,7 @@ ext.groups = [
                         'xml-apis',
                 ]
         ],
-        jcenter     : [
+        jcenter       : [
                 regex: [
                 ],
                 group: [

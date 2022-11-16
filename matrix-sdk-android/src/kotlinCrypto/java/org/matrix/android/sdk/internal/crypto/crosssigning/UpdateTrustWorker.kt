@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
@@ -68,7 +69,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             val filename: String? = null
     ) : SessionWorkerParams
 
-    @Inject lateinit var crossSigningService: DefaultCrossSigningService
+    @Inject lateinit var crossSigningService: CrossSigningService
 
     // It breaks the crypto store contract, but we need to batch things :/
     @CryptoDatabase
@@ -174,9 +175,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         ?.devices
 
                 val trustMap = devicesEntities?.associateWith { device ->
-                    // get up to date from DB has could have been updated
-                    val otherInfo = getCrossSigningInfo(cryptoRealm, userId)
-                    crossSigningService.checkDeviceTrust(myCrossSigningInfo, otherInfo, CryptoMapper.mapToModel(device))
+                    crossSigningService.checkDeviceTrust(userId, device.deviceId ?: "", CryptoMapper.mapToModel(device).trustLevel?.locallyVerified)
                 }
 
                 // Update trust if needed

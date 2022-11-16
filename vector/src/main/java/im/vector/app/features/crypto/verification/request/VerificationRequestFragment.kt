@@ -64,7 +64,7 @@ class VerificationRequestFragment :
     }
 
     override fun onClickOnVerificationStart(): Unit = withState(viewModel) { state ->
-        viewModel.handle(VerificationAction.RequestVerificationByDM(state.otherUserId, state.roomId))
+        viewModel.handle(VerificationAction.RequestVerificationByDM)
     }
 
     override fun onClickRecoverFromPassphrase() {

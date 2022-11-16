@@ -51,7 +51,7 @@ class DeviceListBottomSheet :
             when (it) {
                 is DeviceListBottomSheetViewEvents.Verify -> {
                     VerificationBottomSheet.withArgs(
-                            roomId = null,
+//                            roomId = null,
                             otherUserId = it.userId,
                             transactionId = it.txID
                     ).show(requireActivity().supportFragmentManager, "REQPOP")

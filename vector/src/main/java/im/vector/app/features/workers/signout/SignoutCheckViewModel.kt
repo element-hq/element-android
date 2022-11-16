@@ -72,7 +72,9 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     init {
         session.cryptoService().keysBackupService().addListener(this)
-        session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+        viewModelScope.launch {
+            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+        }
 
         val quad4SIsSetup = session.sharedSecretStorageService().isRecoverySetup()
         val allKeysKnown = session.cryptoService().crossSigningService().allPrivateKeysKnown()
@@ -111,7 +113,9 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     fun refreshRemoteStateIfNeeded() = withState { state ->
         if (state.keysBackupState == KeysBackupState.Disabled) {
-            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            viewModelScope.launch {
+                session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            }
         }
     }
 

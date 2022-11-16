@@ -48,13 +48,13 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import timber.log.Timber
 import javax.inject.Inject
@@ -66,8 +66,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     @Parcelize
     data class VerificationArgs(
             val otherUserId: String,
-            val verificationId: String? = null,
-            val verificationLocalId: String? = null,
+            // might be null for self verification if there is no device to request to
+            // in this case you could use 4S (or reset all)
+            val verificationId: String?,
+//            val verificationLocalId: String? = null,
             val roomId: String? = null,
             // Special mode where UX should show loading wheel until other session sends a request/tx
             val selfVerificationMode: Boolean = false
@@ -213,21 +215,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         // Did the request result in a SAS transaction?
         if (state.sasTransactionState != null) {
             when (state.sasTransactionState) {
-                is VerificationTxState.None,
-                is VerificationTxState.SendingStart,
-                is VerificationTxState.Started,
-                is VerificationTxState.OnStarted,
-                is VerificationTxState.SendingAccept,
-                is VerificationTxState.Accepted,
-                is VerificationTxState.OnAccepted,
-                is VerificationTxState.SendingKey,
-                is VerificationTxState.KeySent,
-                is VerificationTxState.OnKeyReceived,
-                is VerificationTxState.ShortCodeReady,
-                is VerificationTxState.ShortCodeAccepted,
-                is VerificationTxState.SendingMac,
-                is VerificationTxState.MacSent,
-                is VerificationTxState.Verifying -> {
+
+                VerificationTxState.None,
+                VerificationTxState.SasStarted,
+                VerificationTxState.SasKeySent,
+                VerificationTxState.SasShortCodeReady,
+                VerificationTxState.SasMacSent,
+                is VerificationTxState.SasMacReceived,
+                VerificationTxState.SasAccepted -> {
                     showFragment(
                             VerificationEmojiCodeFragment::class,
                             VerificationArgs(
@@ -251,6 +246,44 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                     )
                 }
                 else -> Unit
+//                is VerificationTxState.None,
+//                is VerificationTxState.SendingStart,
+//                is VerificationTxState.Started,
+//                is VerificationTxState.OnStarted,
+//                is VerificationTxState.SendingAccept,
+//                is VerificationTxState.Accepted,
+//                is VerificationTxState.OnAccepted,
+//                is VerificationTxState.SendingKey,
+//                is VerificationTxState.KeySent,
+//                is VerificationTxState.OnKeyReceived,
+//                is VerificationTxState.ShortCodeReady,
+//                is VerificationTxState.ShortCodeAccepted,
+//                is VerificationTxState.SendingMac,
+//                is VerificationTxState.MacSent,
+//                is VerificationTxState.Verifying -> {
+//                    showFragment(
+//                            VerificationEmojiCodeFragment::class,
+//                            VerificationArgs(
+//                                    state.otherUserId,
+//                                    // If it was outgoing it.transaction id would be null, but the pending request
+//                                    // would be updated (from localId to txId)
+//                                    state.pendingRequest.invoke()?.transactionId ?: state.transactionId
+//                            )
+//                    )
+//                }
+//                is VerificationTxState.Verified -> {
+//                    showFragment(
+//                            VerificationConclusionFragment::class,
+//                            VerificationConclusionFragment.Args(true, null, state.isMe)
+//                    )
+//                }
+//                is VerificationTxState.Cancelled -> {
+//                    showFragment(
+//                            VerificationConclusionFragment::class,
+//                            VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe)
+//                    )
+//                }
+//                else -> Unit
             }
 
             return@withState
@@ -261,7 +294,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 showFragment(VerificationQrScannedByOtherFragment::class)
                 return@withState
             }
-            is VerificationTxState.Started,
+            //TODO
+//            is VerificationTxState.Started,
             is VerificationTxState.WaitingOtherReciprocateConfirm -> {
                 showFragment(
                         VerificationQRWaitingFragment::class,
@@ -309,7 +343,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         // If it's an outgoing
         if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.selfVerificationMode) {
             Timber.v("## SAS show bottom sheet for outgoing request")
-            if (state.pendingRequest.invoke()?.isReady == true) {
+            if (state.pendingRequest.invoke()?.state == EVerificationState.Ready) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
                 // Show choose method fragment with waiting
                 showFragment(
@@ -326,7 +360,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         VerificationArgs(
                                 otherUserId = state.otherUserId,
                                 verificationId = state.pendingRequest.invoke()?.transactionId,
-                                verificationLocalId = state.roomId
                         )
                 )
             }
@@ -358,43 +391,41 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     }
 
     companion object {
-        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
+        fun withArgs(otherUserId: String, transactionId: String): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 setArguments(
                         VerificationArgs(
                                 otherUserId = otherUserId,
-                                roomId = roomId,
                                 verificationId = transactionId,
-                                selfVerificationMode = false
                         )
                 )
             }
         }
 
-        fun forSelfVerification(session: Session): VerificationBottomSheet {
-            return VerificationBottomSheet().apply {
-                setArguments(
-                        VerificationArgs(
-                                otherUserId = session.myUserId,
-                                selfVerificationMode = true
-                        )
-                )
-            }
-        }
+//        fun forSelfVerification(session: Session): VerificationBottomSheet {
+//            return VerificationBottomSheet().apply {
+//                setArguments(
+//                        VerificationArgs(
+//                                otherUserId = session.myUserId,
+//                                selfVerificationMode = true
+//                        )
+//                )
+//            }
+//        }
 
-        fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
-            return VerificationBottomSheet().apply {
-                setArguments(
-                        VerificationArgs(
-                                otherUserId = session.myUserId,
-                                selfVerificationMode = true,
-                                verificationId = outgoingRequest
-                        )
-                )
-            }
-        }
+//        fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
+//            return VerificationBottomSheet().apply {
+//                setArguments(
+//                        VerificationArgs(
+//                                otherUserId = session.myUserId,
+//                                selfVerificationMode = true,
+//                                verificationId = outgoingRequest
+//                        )
+//                )
+//            }
+//        }
 
-        const val WAITING_SELF_VERIF_TAG: String = "WAITING_SELF_VERIF_TAG"
+//        const val WAITING_SELF_VERIF_TAG: String = "WAITING_SELF_VERIF_TAG"
     }
 }
 

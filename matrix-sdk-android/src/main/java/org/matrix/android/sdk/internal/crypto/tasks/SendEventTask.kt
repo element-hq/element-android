@@ -74,6 +74,7 @@ internal class DefaultSendEventTask @Inject constructor(
                         eventType = event.type ?: ""
                 )
             }
+            Timber.d("Event sent to ${event.roomId} with event id ${response.eventId}")
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
             return response.eventId.also {
                 Timber.d("Event: $it just sent in ${params.event.roomId}")
@@ -94,13 +95,12 @@ internal class DefaultSendEventTask @Inject constructor(
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(
-                    EncryptEventTask.Params(
-                            params.event.roomId ?: "",
-                            params.event,
-                            listOf("m.relates_to")
-                    )
+            val params = EncryptEventTask.Params(
+                    params.event.roomId ?: "",
+                    params.event,
+                    listOf("m.relates_to")
             )
+            return encryptEventTask.execute(params)
         }
         return params.event
     }

@@ -125,6 +125,7 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.crypto.verification.user.UserVerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.CanSendStatus
@@ -1327,24 +1328,23 @@ class TimelineFragment :
                 }
             }
             is RoomDetailAction.RequestVerification -> {
-                Timber.v("## SAS RequestVerification action")
-                VerificationBottomSheet.withArgs(
+                Timber.v("## SAS RequestVerification action $data")
+                UserVerificationBottomSheet.verifyUser(
                         timelineArgs.roomId,
                         data.userId
                 ).show(parentFragmentManager, "REQ")
             }
             is RoomDetailAction.AcceptVerificationRequest -> {
-                Timber.v("## SAS AcceptVerificationRequest action")
-                VerificationBottomSheet.withArgs(
-                        timelineArgs.roomId,
+                Timber.v("## SAS AcceptVerificationRequest action $data")
+                UserVerificationBottomSheet.verifyUser(
                         data.otherUserId,
                         data.transactionId
                 ).show(parentFragmentManager, "REQ")
             }
             is RoomDetailAction.ResumeVerification -> {
                 val otherUserId = data.otherUserId ?: return
-                VerificationBottomSheet.withArgs(
-                        roomId = timelineArgs.roomId,
+                UserVerificationBottomSheet.verifyUser(
+//                        roomId = timelineArgs.roomId,
                         otherUserId = otherUserId,
                         transactionId = data.transactionId,
                 ).show(parentFragmentManager, "REQ")

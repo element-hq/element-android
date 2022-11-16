@@ -56,7 +56,7 @@ internal class VerificationMessageProcessor @Inject constructor(
         return allowedTypes.contains(eventType)
     }
 
-    suspend fun process(event: Event) {
+    suspend fun process(roomId:String, event: Event) {
         Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.getClearType()} from ${event.senderId}")
 
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
@@ -74,45 +74,49 @@ internal class VerificationMessageProcessor @Inject constructor(
         if (event.senderId == userId) {
             // If it's send from me, we need to keep track of Requests or Start
             // done from another device of mine
-            if (EventType.MESSAGE == event.getClearType()) {
-                val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
-                if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
-                    event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+//            if (EventType.MESSAGE == event.getClearType()) {
+//                val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
+//                if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
+//                    event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+//                        if (it.fromDevice != deviceId) {
+//                            // The verification is requested from another device
+//                            Timber.v("## SAS Verification live observer: Transaction requested from other device  tid:${event.eventId} ")
+//                            event.eventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+//                        }
+//                    }
+//                }
+//            } else if (EventType.KEY_VERIFICATION_START == event.getClearType()) {
+//                event.getClearContent().toModel<MessageVerificationStartContent>()?.let {
+//                    if (it.fromDevice != deviceId) {
+//                        // The verification is started from another device
+//                        Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
+//                        relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+//                        verificationService.onRoomRequestHandledByOtherDevice(event)
+//                    }
+//                }
+//            } else
+            // we only care about room ready sent by me
+                if (EventType.KEY_VERIFICATION_READY == event.getClearType()) {
+                    event.getClearContent().toModel<MessageVerificationReadyContent>()?.let {
                         if (it.fromDevice != deviceId) {
-                            // The verification is requested from another device
-                            Timber.v("## SAS Verification live observer: Transaction requested from other device  tid:${event.eventId} ")
-                            event.eventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                            // The verification is started from another device
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
+                            relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                            verificationService.onRoomReadyFromOneOfMyOtherDevice(event)
                         }
                     }
+                } else {
+                    Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: ${event.getClearType()}")
                 }
-            } else if (EventType.KEY_VERIFICATION_START == event.getClearType()) {
-                event.getClearContent().toModel<MessageVerificationStartContent>()?.let {
-                    if (it.fromDevice != deviceId) {
-                        // The verification is started from another device
-                        Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
-                        relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                        verificationService.onRoomRequestHandledByOtherDevice(event)
-                    }
-                }
-            } else if (EventType.KEY_VERIFICATION_READY == event.getClearType()) {
-                event.getClearContent().toModel<MessageVerificationReadyContent>()?.let {
-                    if (it.fromDevice != deviceId) {
-                        // The verification is started from another device
-                        Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
-                        relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                        verificationService.onRoomRequestHandledByOtherDevice(event)
-                    }
-                }
-            } else if (EventType.KEY_VERIFICATION_CANCEL == event.getClearType() || EventType.KEY_VERIFICATION_DONE == event.getClearType()) {
-                relatesToEventId?.let {
-                    transactionsHandledByOtherDevice.remove(it)
-                    verificationService.onRoomRequestHandledByOtherDevice(event)
-                }
-            } else if (EventType.ENCRYPTED == event.getClearType()) {
-                verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
-            }
+//            } else if (EventType.KEY_VERIFICATION_CANCEL == event.getClearType() || EventType.KEY_VERIFICATION_DONE == event.getClearType()) {
+//                relatesToEventId?.let {
+//                    transactionsHandledByOtherDevice.remove(it)
+//                    verificationService.onRoomRequestHandledByOtherDevice(event)
+//                }
+//            } else if (EventType.ENCRYPTED == event.getClearType()) {
+//                verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
+//            }
 
-            Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: ${event.getClearType()}")
             return
         }
 
@@ -129,11 +133,11 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.KEY_VERIFICATION_CANCEL,
             EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_DONE -> {
-                verificationService.onRoomEvent(event)
+                verificationService.onRoomEvent(roomId, event)
             }
             EventType.MESSAGE -> {
                 if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
-                    verificationService.onRoomRequestReceived(event)
+                    verificationService.onRoomRequestReceived(roomId, event)
                 }
             }
         }

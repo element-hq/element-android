@@ -25,6 +25,7 @@ import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.StrictMode
+import android.util.Log
 import android.view.Gravity
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
@@ -234,6 +235,7 @@ class VectorApplication :
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
                 .setWorkerFactory(matrix.getWorkerFactory())
+                .setMinimumLoggingLevel(Log.DEBUG)
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

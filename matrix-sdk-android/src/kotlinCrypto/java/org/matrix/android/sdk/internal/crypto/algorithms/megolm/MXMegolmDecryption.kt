@@ -189,7 +189,7 @@ internal class MXMegolmDecryption(
      * @param defaultKeysBackupService the keys backup service
      * @param forceAccept if true will force to accept the forwarded key
      */
-    override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService, forceAccept: Boolean) {
+    override suspend fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService, forceAccept: Boolean) {
         Timber.tag(loggerTag.value).v("onRoomKeyEvent(${event.getSenderKey()})")
         var exportFormat = false
         val roomKeyContent = event.getDecryptedContent()?.toModel<RoomKeyContent>() ?: return
@@ -360,6 +360,6 @@ internal class MXMegolmDecryption(
      */
     fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
-        newSessionListener?.onNewSession(roomId, senderKey, sessionId)
+        newSessionListener?.onNewSession(roomId, sessionId)
     }
 }

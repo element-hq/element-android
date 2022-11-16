@@ -99,9 +99,9 @@ class VectorSettingsDevicesFragment :
                 is DevicesViewEvent.PromptRenameDevice -> Unit // TODO. Next PR
                 is DevicesViewEvent.ShowVerifyDevice -> {
                     VerificationBottomSheet.withArgs(
-                            roomId = null,
+//                            roomId = null,
                             otherUserId = it.userId,
-                            transactionId = it.transactionId
+                            transactionId = it.transactionId ?:""
                     ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {

@@ -169,11 +169,12 @@ class MessageActionsViewModel @AssistedInject constructor(
         onEach(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
             val nonNullTimelineEvent = timelineEvent() ?: return@onEach
             eventIdFlow.tryEmit(nonNullTimelineEvent.eventId)
+            val events = actionsForEvent(nonNullTimelineEvent, permissions)
             setState {
                 copy(
                         eventId = nonNullTimelineEvent.eventId,
                         messageBody = computeMessageBody(nonNullTimelineEvent),
-                        actions = actionsForEvent(nonNullTimelineEvent, permissions)
+                        actions = events
                 )
             }
         }
@@ -252,7 +253,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
+    private suspend fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
         val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 
@@ -325,7 +326,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         // TODO sent by me or sufficient power level
     }
 
-    private fun ArrayList<EventSharedAction>.addActionsForSyncedState(
+    private suspend fun ArrayList<EventSharedAction>.addActionsForSyncedState(
             timelineEvent: TimelineEvent,
             actionPermissions: ActionPermissions,
             messageContent: MessageContent?,
@@ -414,7 +415,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 ) {
                     add(EventSharedAction.UseKeyBackup)
                 }
-                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1 ||
+                if (session.cryptoService().getCryptoDeviceInfoList(session.myUserId).size > 1 ||
                         timelineEvent.senderInfo.userId != session.myUserId) {
                     add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                 }

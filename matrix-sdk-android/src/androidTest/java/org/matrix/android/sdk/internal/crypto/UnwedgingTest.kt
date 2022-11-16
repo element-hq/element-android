@@ -94,7 +94,9 @@ class UnwedgingTest : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-        val olmDevice = (aliceSession.cryptoService() as DefaultCryptoService).olmDeviceForTest
+
+        // bobSession.cryptoService().setWarnOnUnknownDevices(false)
+        // aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
@@ -116,9 +118,9 @@ class UnwedgingTest : InstrumentedTest {
         //  - Store the olm session between A&B devices
         // Let us pickle our session with bob here so we can later unpickle it
         // and wedge our session.
-        val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(bobSession.cryptoService().getMyDevice().identityKey()!!)
+        val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(bobSession.cryptoService().getMyCryptoDevice().identityKey()!!)
         sessionIdsForBob!!.size shouldBeEqualTo 1
-        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyDevice().identityKey()!!)!!
+        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyCryptoDevice().identityKey()!!)!!
 
         val oldSession = serializeForRealm(olmSession.olmSession)
 
@@ -142,9 +144,10 @@ class UnwedgingTest : InstrumentedTest {
 
         aliceCryptoStore.storeSession(
                 OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!),
-                bobSession.cryptoService().getMyDevice().identityKey()!!
+                bobSession.cryptoService().getMyCryptoDevice().identityKey()!!
         )
-        olmDevice.clearOlmSessionCache()
+        // TODO mmm we can't do that with rust
+//        olmDevice.clearOlmSessionCache()
 
         // Force new session, and key share
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
@@ -170,7 +173,6 @@ class UnwedgingTest : InstrumentedTest {
         Assert.assertTrue(messagesReceivedByBob[0].root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // It's a trick to force key request on fail to decrypt
-        testHelper.waitForCallback<Unit> {
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -183,9 +185,7 @@ class UnwedgingTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it
-                    )
-        }
+                            })
 
         // Wait until we received back the key
         testHelper.retryPeriodically {

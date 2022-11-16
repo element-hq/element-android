@@ -70,12 +70,12 @@ class VerificationEmojiCodeFragment :
     override fun onMatchButtonTapped() = withState(viewModel) { state ->
         val otherUserId = state.otherUser.id
         val txId = state.transactionId ?: return@withState
-        sharedViewModel.handle(VerificationAction.SASMatchAction(otherUserId, txId))
+        sharedViewModel.handle(VerificationAction.SASMatchAction)
     }
 
     override fun onDoNotMatchButtonTapped() = withState(viewModel) { state ->
         val otherUserId = state.otherUser.id
         val txId = state.transactionId ?: return@withState
-        sharedViewModel.handle(VerificationAction.SASDoNotMatchAction(otherUserId, txId))
+        sharedViewModel.handle(VerificationAction.SASDoNotMatchAction)
     }
 }

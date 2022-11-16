@@ -27,20 +27,42 @@ sealed class VerificationTxState {
      */
     abstract class VerificationSasTxState : VerificationTxState()
 
-    object SendingStart : VerificationSasTxState()
-    object Started : VerificationSasTxState()
-    object OnStarted : VerificationSasTxState()
-    object SendingAccept : VerificationSasTxState()
-    object Accepted : VerificationSasTxState()
-    object OnAccepted : VerificationSasTxState()
-    object SendingKey : VerificationSasTxState()
-    object KeySent : VerificationSasTxState()
-    object OnKeyReceived : VerificationSasTxState()
-    object ShortCodeReady : VerificationSasTxState()
-    object ShortCodeAccepted : VerificationSasTxState()
-    object SendingMac : VerificationSasTxState()
-    object MacSent : VerificationSasTxState()
-    object Verifying : VerificationSasTxState()
+//    object SendingStart : VerificationSasTxState()
+//    object Started : VerificationSasTxState()
+//    object OnStarted : VerificationSasTxState()
+//    object SendingAccept : VerificationSasTxState()
+//    object Accepted : VerificationSasTxState()
+//    object OnAccepted : VerificationSasTxState()
+//    object SendingKey : VerificationSasTxState()
+//    object KeySent : VerificationSasTxState()
+//    object OnKeyReceived : VerificationSasTxState()
+//    object ShortCodeReady : VerificationSasTxState()
+//    object ShortCodeAccepted : VerificationSasTxState()
+//    object SendingMac : VerificationSasTxState()
+//    object MacSent : VerificationSasTxState()
+//    object Verifying : VerificationSasTxState()
+
+    // I wend a start
+    object SasStarted : VerificationSasTxState()
+
+    // I received a start and it was accepted
+    object SasAccepted : VerificationSasTxState()
+
+    // I received an accept and sent my key
+    object SasKeySent : VerificationSasTxState()
+
+    // Keys exchanged and code ready to be shared
+    object SasShortCodeReady : VerificationSasTxState()
+
+    // I received the other Mac, but might have not yet confirmed the short code
+    // at that time (other side already confirmed)
+    data class SasMacReceived(val codeConfirmed: Boolean) : VerificationSasTxState()
+
+    // I confirmed the code and sent my mac
+    object SasMacSent : VerificationSasTxState()
+
+    // I am done, waiting for other Done
+    data class Done(val otherDone: Boolean) : VerificationSasTxState()
 
     /**
      * Specific for QR code.

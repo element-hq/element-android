@@ -18,11 +18,13 @@ package org.matrix.android.sdk.api.session.crypto.verification
 
 interface VerificationTransaction {
 
-    var state: VerificationTxState
+    val state: VerificationTxState
+
+    val method: VerificationMethod
 
     val transactionId: String
     val otherUserId: String
-    var otherDeviceId: String?
+    val otherDeviceId: String?
 
     // TODO Not used. Remove?
     val isIncoming: Boolean
@@ -30,9 +32,9 @@ interface VerificationTransaction {
     /**
      * User wants to cancel the transaction.
      */
-    fun cancel()
+    suspend fun cancel()
 
-    fun cancel(code: CancelCode)
+    suspend fun cancel(code: CancelCode)
 
     fun isToDeviceTransport(): Boolean
 }

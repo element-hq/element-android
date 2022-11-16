@@ -25,6 +25,8 @@ import im.vector.app.core.utils.PublishDataSource
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
@@ -40,28 +42,40 @@ abstract class VectorSessionsListViewModel<S : MavericksState, VA : VectorViewMo
     private val refreshThrottleDelayMs = 4.seconds.inWholeMilliseconds
 
     init {
-        addVerificationListener()
+//        addVerificationListener()
         observeRefreshSource()
-    }
-
-    override fun onCleared() {
-        removeVerificationListener()
-        super.onCleared()
-    }
-
-    private fun addVerificationListener() {
         activeSessionHolder.getSafeActiveSession()
                 ?.cryptoService()
                 ?.verificationService()
-                ?.addListener(this)
+                ?.requestEventFlow()
+                ?.onEach {
+                    when (it) {
+                        is VerificationEvent.RequestAdded -> verificationRequestCreated(it.request)
+                        is VerificationEvent.RequestUpdated -> verificationRequestUpdated(it.request)
+                        is VerificationEvent.TransactionAdded -> transactionCreated(it.transaction)
+                        is VerificationEvent.TransactionUpdated -> transactionUpdated(it.transaction)
+                    }
+                }
+                ?.launchIn(viewModelScope)
     }
 
-    private fun removeVerificationListener() {
-        activeSessionHolder.getSafeActiveSession()
-                ?.cryptoService()
-                ?.verificationService()
-                ?.removeListener(this)
-    }
+//    override fun onCleared() {
+//        super.onCleared()
+//    }
+
+//    private fun addVerificationListener() {
+//        activeSessionHolder.getSafeActiveSession()
+//                ?.cryptoService()
+//                ?.verificationService()
+//                ?.addListener(this)
+//    }
+
+//    private fun removeVerificationListener() {
+//        activeSessionHolder.getSafeActiveSession()
+//                ?.cryptoService()
+//                ?.verificationService()
+//                ?.removeListener(this)
+//    }
 
     private fun observeRefreshSource() {
         refreshSource.stream()

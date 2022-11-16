@@ -34,9 +34,13 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
@@ -59,34 +63,44 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 ) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
-        refreshStateFromTx(
-                session.cryptoService().verificationService()
-                        .getExistingTransaction(
-                                otherUserId = initialState.otherUser.id,
-                                tid = initialState.transactionId ?: ""
-                        ) as? SasVerificationTransaction
-        )
 
-        session.cryptoService().verificationService().addListener(this)
+        session.cryptoService().verificationService()
+                .requestEventFlow()
+                .onEach {
+                    when (it) {
+                        is VerificationEvent.RequestAdded -> verificationRequestCreated(it.request)
+                        is VerificationEvent.RequestUpdated -> verificationRequestUpdated(it.request)
+                        is VerificationEvent.TransactionAdded -> transactionCreated(it.transaction)
+                        is VerificationEvent.TransactionUpdated -> transactionUpdated(it.transaction)
+                    }
+                }
+                .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            refreshStateFromTx(
+                    session.cryptoService().verificationService()
+                            .getExistingTransaction(
+                                    otherUserId = initialState.otherUser.id,
+                                    tid = initialState.transactionId ?: ""
+                            ) as? SasVerificationTransaction
+            )
+
+        }
+
+//        session.cryptoService().verificationService().addListener(this)
     }
 
-    override fun onCleared() {
-        session.cryptoService().verificationService().removeListener(this)
-        super.onCleared()
-    }
+//    override fun onCleared() {
+//        session.cryptoService().verificationService().removeListener(this)
+//        super.onCleared()
+//    }
 
     private fun refreshStateFromTx(sasTx: SasVerificationTransaction?) {
-        when (sasTx?.state) {
+        when (val state = sasTx?.state) {
             is VerificationTxState.None,
-            is VerificationTxState.SendingStart,
-            is VerificationTxState.Started,
-            is VerificationTxState.OnStarted,
-            is VerificationTxState.SendingAccept,
-            is VerificationTxState.Accepted,
-            is VerificationTxState.OnAccepted,
-            is VerificationTxState.SendingKey,
-            is VerificationTxState.KeySent,
-            is VerificationTxState.OnKeyReceived -> {
+            is VerificationTxState.SasStarted,
+            is VerificationTxState.SasAccepted,
+            is VerificationTxState.SasKeySent -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -100,22 +114,37 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is VerificationTxState.ShortCodeReady -> {
+            is VerificationTxState.SasShortCodeReady -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
                             supportsEmoji = sasTx.supportsEmoji(),
                             emojiDescription = if (sasTx.supportsEmoji()) Success(sasTx.getEmojiCodeRepresentation())
                             else Uninitialized,
-                            decimalDescription = if (!sasTx.supportsEmoji()) Success(sasTx.getDecimalCodeRepresentation())
+                            decimalDescription = if (!sasTx.supportsEmoji()) Success(sasTx.getDecimalCodeRepresentation().orEmpty())
                             else Uninitialized
                     )
                 }
             }
-            is VerificationTxState.ShortCodeAccepted,
-            is VerificationTxState.SendingMac,
-            is VerificationTxState.MacSent,
-            is VerificationTxState.Verifying,
+            is VerificationTxState.SasMacReceived -> {
+                if (state.codeConfirmed) {
+                    setState {
+                        copy(isWaitingFromOther = true)
+                    }
+                } else {
+                    setState {
+                        copy(
+                                isWaitingFromOther = false,
+                                supportsEmoji = sasTx.supportsEmoji(),
+                                emojiDescription = if (sasTx.supportsEmoji()) Success(sasTx.getEmojiCodeRepresentation())
+                                else Uninitialized,
+                                decimalDescription = if (!sasTx.supportsEmoji()) Success(sasTx.getDecimalCodeRepresentation().orEmpty())
+                                else Uninitialized
+                        )
+                    }
+                }
+            }
+            is VerificationTxState.SasMacSent,
             is VerificationTxState.Verified -> {
                 setState {
                     copy(isWaitingFromOther = true)

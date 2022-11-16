@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -113,7 +114,7 @@ internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val deviceId: String,
         private val clock: Clock,
         private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
 ) : IMXCryptoStore {
@@ -157,7 +158,7 @@ internal class RealmCryptoStore @Inject constructor(
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
                 if (currentMetadata.userId != userId ||
-                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                        (deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -446,6 +447,21 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where(CrossSigningInfoEntity::class.java)
+                            .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+                },
+                {
+                    mapCrossSigningInfoEntity(it)
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
+        }
+    }
+
     override fun getGlobalCryptoConfig(): GlobalCryptoConfig {
         return doWithRealm(realmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()
@@ -506,7 +522,9 @@ internal class RealmCryptoStore @Inject constructor(
                         val key = it.keyBackupRecoveryKey
                         val version = it.keyBackupRecoveryKeyVersion
                         if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
-                            SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+                            BackupUtils.recoveryKeyFromBase58(key)?.let { key ->
+                                SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+                            }
                         } else {
                             null
                         }
@@ -1654,19 +1672,6 @@ internal class RealmCryptoStore @Inject constructor(
         )
     }
 
-    override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm ->
-                    realm.where<CrossSigningInfoEntity>()
-                            .equalTo(UserEntityFields.USER_ID, userId)
-                },
-                { mapCrossSigningInfoEntity(it) }
-        )
-        return Transformations.map(liveData) {
-            it.firstOrNull().toOptional()
-        }
-    }
-
     override fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?) {
         doRealmTransaction(realmConfiguration) { realm ->
             addOrUpdateCrossSigningInfo(realm, userId, info)
@@ -1815,4 +1820,11 @@ internal class RealmCryptoStore @Inject constructor(
             // Can we do something for WithHeldSessionEntity?
         }
     }
+
+//    /**
+//     * Prints out database info
+//     */
+//    override fun logDbUsageInfo() {
+//        RealmDebugTools(realmConfiguration).logInfo("Crypto")
+//    }
 }

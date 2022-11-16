@@ -34,6 +34,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationN
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import im.vector.app.features.displayname.getBestName
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(
@@ -139,7 +140,7 @@ class VerificationRequestController @Inject constructor(
                     }
                 }
                 is Success -> {
-                    if (!pr.invoke().isReady) {
+                    if (pr.invoke().state != EVerificationState.Ready) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {
                                 id("waiting")

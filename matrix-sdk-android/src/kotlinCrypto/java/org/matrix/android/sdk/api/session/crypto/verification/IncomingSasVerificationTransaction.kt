@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.crypto.verification
 interface IncomingSasVerificationTransaction : SasVerificationTransaction {
     val uxState: UxState
 
-    fun performAccept()
+    override suspend fun acceptVerification()
 
     enum class UxState {
         UNKNOWN,

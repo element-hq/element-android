@@ -40,7 +40,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -73,7 +72,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
-        private val crossSigningService: DefaultCrossSigningService,
         private val roomAccountDataDataSource: RoomAccountDataDataSource
 ) {
 
@@ -185,7 +183,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                 if (aggregator == null) {
                     // Do it now
                     // mmm maybe we could only refresh shield instead of checking trust also?
-                    crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
+                    // XXX why doing this here? we don't show shield anymore and it will be refreshed
+                    // by the sdk
+                    // crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
                 } else {
                     // Schedule it
                     aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)

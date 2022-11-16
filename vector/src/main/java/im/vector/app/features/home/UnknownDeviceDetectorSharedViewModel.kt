@@ -36,10 +36,11 @@ import im.vector.app.core.time.Clock
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -60,12 +61,11 @@ data class DeviceDetectionInfo(
         val currentSessionTrust: Boolean
 )
 
-class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
-        @Assisted initialState: UnknownDevicesState,
-        session: Session,
-        private val vectorPreferences: VectorPreferences,
-        clock: Clock,
-) : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
+                                                                       session: Session,
+                                                                       private val vectorPreferences: VectorPreferences,
+                                                                       private val clock: Clock,) :
+        VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()
@@ -89,12 +89,6 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
     private val ignoredDeviceList = ArrayList<String>()
 
     init {
-        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
-                .firstOrNull { it.deviceId == session.sessionParams.deviceId }
-                ?.firstTimeSeenLocalTs
-                ?: clock.epochMillis()
-        Timber.v("## Detector - Current Session first time seen $currentSessionTs")
-
         ignoredDeviceList.addAll(
                 vectorPreferences.getUnknownDeviceDismissedList().also {
                     Timber.v("## Detector - Remembered ignored list $it")
@@ -104,10 +98,12 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo(),
-                session.flow().liveCrossSigningPrivateKeys()
-        ) { cryptoList, infoList, pInfo ->
+                session.flow().liveCrossSigningPrivateKeys(),
+                session.firstTimeDeviceSeen(),
+                ) { cryptoList, infoList, pInfo, firstTimeDeviceSeen ->
             //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
+            Timber.v("## Detector - Current Session first time seen $firstTimeDeviceSeen")
             infoList
                     .filter { info ->
                         // filter verified session, by checking the crypto device info
@@ -120,7 +116,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                         val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firstTimeSeenLocalTs ?: 0
                         DeviceDetectionInfo(
                                 deviceInfo,
-                                deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
+                                deviceKnownSince > firstTimeDeviceSeen + 60_000, // short window to avoid false positive,
                                 pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
                         )
                     }
@@ -139,12 +135,14 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                 .sample(5_000)
                 .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    session.cryptoService().fetchDevicesList()
                 }
                 .launchIn(viewModelScope)
 
         // trigger a refresh of lastSeen / last Ip
-        session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+        viewModelScope.launch {
+            session.cryptoService().fetchDevicesList()
+        }
     }
 
     override fun handle(action: Action) {
@@ -167,5 +165,13 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
     override fun onCleared() {
         vectorPreferences.storeUnknownDeviceDismissedList(ignoredDeviceList)
         super.onCleared()
+    }
+
+    private fun Session.firstTimeDeviceSeen() = flow {
+        val value = cryptoService().getCryptoDeviceInfoList(myUserId)
+                .firstOrNull { it.deviceId == sessionParams.deviceId }
+                ?.firstTimeSeenLocalTs
+                ?: clock.epochMillis()
+        emit(value)
     }
 }
