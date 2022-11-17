@@ -140,4 +140,12 @@ class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
     override fun doVerifyBySas() {
         viewModel.handle(VerificationAction.StartSASVerification)
     }
+
+    override fun onUserDeniesQrCodeScanned() {
+       viewModel.handle(VerificationAction.OtherUserDidNotScanned)
+    }
+
+    override fun onUserConfirmsQrCodeScanned() {
+        viewModel.handle(VerificationAction.OtherUserScannedSuccessfully)
+    }
 }

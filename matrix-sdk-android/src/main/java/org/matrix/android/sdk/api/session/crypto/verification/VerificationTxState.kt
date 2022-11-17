@@ -16,6 +16,35 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
+sealed class SasTransactionState {
+
+    object None : SasTransactionState()
+
+    // I wend a start
+    object SasStarted : SasTransactionState()
+
+    // I received a start and it was accepted
+    object SasAccepted : SasTransactionState()
+
+    // I received an accept and sent my key
+    object SasKeySent : SasTransactionState()
+
+    // Keys exchanged and code ready to be shared
+    object SasShortCodeReady : SasTransactionState()
+
+    // I received the other Mac, but might have not yet confirmed the short code
+    // at that time (other side already confirmed)
+    data class SasMacReceived(val codeConfirmed: Boolean) : SasTransactionState()
+
+    // I confirmed the code and sent my mac
+    object SasMacSent : SasTransactionState()
+
+    // I am done, waiting for other Done
+    data class Done(val otherDone: Boolean) : SasTransactionState()
+
+    data class Cancelled(val cancelCode: CancelCode, val byMe: Boolean) : SasTransactionState()
+}
+
 sealed class VerificationTxState {
     /**
      * Uninitialized state.
@@ -42,24 +71,24 @@ sealed class VerificationTxState {
 //    object MacSent : VerificationSasTxState()
 //    object Verifying : VerificationSasTxState()
 
-    // I wend a start
-    object SasStarted : VerificationSasTxState()
-
-    // I received a start and it was accepted
-    object SasAccepted : VerificationSasTxState()
-
-    // I received an accept and sent my key
-    object SasKeySent : VerificationSasTxState()
-
-    // Keys exchanged and code ready to be shared
-    object SasShortCodeReady : VerificationSasTxState()
-
-    // I received the other Mac, but might have not yet confirmed the short code
-    // at that time (other side already confirmed)
-    data class SasMacReceived(val codeConfirmed: Boolean) : VerificationSasTxState()
-
-    // I confirmed the code and sent my mac
-    object SasMacSent : VerificationSasTxState()
+//    // I wend a start
+//    object SasStarted : VerificationSasTxState()
+//
+//    // I received a start and it was accepted
+//    object SasAccepted : VerificationSasTxState()
+//
+//    // I received an accept and sent my key
+//    object SasKeySent : VerificationSasTxState()
+//
+//    // Keys exchanged and code ready to be shared
+//    object SasShortCodeReady : VerificationSasTxState()
+//
+//    // I received the other Mac, but might have not yet confirmed the short code
+//    // at that time (other side already confirmed)
+//    data class SasMacReceived(val codeConfirmed: Boolean) : VerificationSasTxState()
+//
+//    // I confirmed the code and sent my mac
+//    object SasMacSent : VerificationSasTxState()
 
     // I am done, waiting for other Done
     data class Done(val otherDone: Boolean) : VerificationSasTxState()
@@ -67,13 +96,13 @@ sealed class VerificationTxState {
     /**
      * Specific for QR code.
      */
-    abstract class VerificationQrTxState : VerificationTxState()
-
-    /**
-     * Will be used to ask the user if the other user has correctly scanned.
-     */
-    object QrScannedByOther : VerificationQrTxState()
-    object WaitingOtherReciprocateConfirm : VerificationQrTxState()
+//    abstract class VerificationQrTxState : VerificationTxState()
+//
+//    /**
+//     * Will be used to ask the user if the other user has correctly scanned.
+//     */
+//    object QrScannedByOther : VerificationQrTxState()
+//    object WaitingOtherReciprocateConfirm : VerificationQrTxState()
 
     /**
      * Terminal states.

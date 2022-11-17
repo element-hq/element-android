@@ -22,10 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,15 +30,11 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetVerificationBinding
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
-import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import javax.inject.Inject
 import kotlin.reflect.KClass
 

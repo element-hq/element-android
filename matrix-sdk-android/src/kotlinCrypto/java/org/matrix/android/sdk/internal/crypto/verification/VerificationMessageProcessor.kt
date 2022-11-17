@@ -23,8 +23,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -56,7 +54,7 @@ internal class VerificationMessageProcessor @Inject constructor(
         return allowedTypes.contains(eventType)
     }
 
-    suspend fun process(roomId:String, event: Event) {
+    suspend fun process(roomId: String, event: Event) {
         Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.getClearType()} from ${event.senderId}")
 
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,

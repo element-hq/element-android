@@ -40,6 +40,10 @@ interface SasVerificationTransaction : VerificationTransaction {
         val KNOWN_SHORT_CODES = listOf(SasMode.EMOJI, SasMode.DECIMAL)
     }
 
+    fun state(): SasTransactionState
+
+    override fun isSuccessful() = state() is SasTransactionState.Done
+
     fun supportsEmoji(): Boolean
 
     fun getEmojiCodeRepresentation(): List<EmojiRepresentation>

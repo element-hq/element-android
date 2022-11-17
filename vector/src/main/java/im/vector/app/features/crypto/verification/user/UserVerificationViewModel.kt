@@ -35,7 +35,6 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -44,14 +43,13 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
-import org.matrix.android.sdk.api.session.crypto.verification.IVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.getRequest
 import org.matrix.android.sdk.api.session.crypto.verification.getTransaction
 import org.matrix.android.sdk.api.session.getUser
@@ -82,25 +80,52 @@ data class UserVerificationViewState(
 }
 
 // We need immutable objects to use properly in MvrxState
-data class VerificationTransactionData(
-        val transactionId: String,
-        val state: VerificationTxState,
-        val method: VerificationMethod,
-        val otherUserId: String,
-        val otherDeviceId: String?,
-        val isIncoming: Boolean,
-        val emojiCodeRepresentation: List<EmojiRepresentation>?
-)
-fun VerificationTransaction.toDataClass() : VerificationTransactionData {
-    return VerificationTransactionData(
-            transactionId = this.transactionId,
-            state = this.state,
-            method = this.method,
-            otherUserId = this.otherUserId,
-            otherDeviceId = this.otherUserId,
-            isIncoming = this.isIncoming,
-            emojiCodeRepresentation = (this as? SasVerificationTransaction)?.getEmojiCodeRepresentation()
-    )
+sealed class VerificationTransactionData(
+        open val transactionId: String,
+        open val otherUserId: String,
+) {
+
+    data class SasTransactionData(
+            override val transactionId: String,
+            val state: SasTransactionState,
+            override val otherUserId: String,
+            val otherDeviceId: String?,
+            val isIncoming: Boolean,
+            val emojiCodeRepresentation: List<EmojiRepresentation>?
+    ) : VerificationTransactionData(transactionId, otherUserId)
+
+    data class QrTransactionData(
+            override val transactionId: String,
+            val state: QRCodeVerificationState,
+            override val otherUserId: String,
+            val otherDeviceId: String?,
+            val isIncoming: Boolean,
+    ) : VerificationTransactionData(transactionId, otherUserId)
+}
+
+private fun VerificationTransaction.toDataClass(): VerificationTransactionData? {
+    return when (this) {
+        is SasVerificationTransaction -> {
+            VerificationTransactionData.SasTransactionData(
+                    transactionId = this.transactionId,
+                    state = this.state(),
+                    otherUserId = this.otherUserId,
+                    otherDeviceId = this.otherDeviceId,
+                    isIncoming = this.isIncoming,
+                    emojiCodeRepresentation = this.getEmojiCodeRepresentation()
+            )
+        }
+        is QrCodeVerificationTransaction -> {
+            VerificationTransactionData.QrTransactionData(
+                    transactionId = this.transactionId,
+                    state = this.state(),
+                    otherUserId = this.otherUserId,
+                    otherDeviceId = this.otherDeviceId,
+                    isIncoming = this.isIncoming,
+            )
+        }
+        else -> null
+    }
 }
 
 class UserVerificationViewModel @AssistedInject constructor(
@@ -127,8 +152,8 @@ class UserVerificationViewModel @AssistedInject constructor(
         session.cryptoService().verificationService()
                 .requestEventFlow()
                 .filter {
-                    it.transactionId == currentTransactionId
-                            || currentTransactionId == null && initialState.otherUserId == it.getRequest()?.otherUserId
+                    it.transactionId == currentTransactionId ||
+                            currentTransactionId == null && initialState.otherUserId == it.getRequest()?.otherUserId
                 }
                 .onEach {
                     Timber.w("VALR update event ${it.getRequest()} ")
@@ -142,10 +167,19 @@ class UserVerificationViewModel @AssistedInject constructor(
                     }
                     it.getTransaction()?.let {
                         Timber.w("VALR state updated transaction to $it")
-                        setState {
-                            copy(
-                                    startedTransaction = Success(it.toDataClass()),
-                            )
+                        val dClass = it.toDataClass()
+                        if (dClass != null) {
+                            setState {
+                                copy(
+                                        startedTransaction = Success(dClass),
+                                )
+                            }
+                        } else {
+                            setState {
+                                copy(
+                                        startedTransaction = Fail(IllegalArgumentException("Unsupported Transaction")),
+                                )
+                            }
                         }
                     }
                 }
@@ -229,8 +263,30 @@ class UserVerificationViewModel @AssistedInject constructor(
             is VerificationAction.GotResultFromSsss -> {
                 // not applicable, only for self verification
             }
-            VerificationAction.OtherUserDidNotScanned -> TODO()
-            VerificationAction.OtherUserScannedSuccessfully -> TODO()
+            VerificationAction.OtherUserDidNotScanned -> {
+                withState { state ->
+                    state.startedTransaction.invoke()?.let {
+                        viewModelScope.launch {
+                            val tx = session.cryptoService().verificationService()
+                                    .getExistingTransaction(it.otherUserId, it.transactionId)
+                                    as? QrCodeVerificationTransaction
+                            tx?.otherUserDidNotScannedMyQrCode()
+                        }
+                    }
+                }
+            }
+            VerificationAction.OtherUserScannedSuccessfully -> {
+                withState { state ->
+                    state.startedTransaction.invoke()?.let {
+                        viewModelScope.launch {
+                            val tx = session.cryptoService().verificationService()
+                                    .getExistingTransaction(it.otherUserId, it.transactionId)
+                                    as? QrCodeVerificationTransaction
+                            tx?.otherUserScannedMyQrCode()
+                        }
+                    }
+                }
+            }
             VerificationAction.ReadyPendingVerification -> {
                 withState { state ->
                     state.pendingRequest.invoke()?.let {
@@ -244,13 +300,34 @@ class UserVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is VerificationAction.RemoteQrCodeScanned -> TODO()
+            is VerificationAction.RemoteQrCodeScanned -> {
+                setState {
+                    copy(startedTransaction = Loading())
+                }
+                withState { state ->
+                    val request = state.pendingRequest.invoke() ?: return@withState
+                    viewModelScope.launch {
+                        try {
+                            session.cryptoService().verificationService()
+                                    .reciprocateQRVerification(
+                                            request.otherUserId,
+                                            request.transactionId,
+                                            action.scannedData
+                                    )
+                        } catch (failure: Throwable) {
+                            Timber.w(failure, "Failed to reciprocated")
+                            setState {
+                                copy(startedTransaction = Fail(failure))
+                            }
+                        }
+                    }
+                }
+            }
             is VerificationAction.RequestVerificationByDM -> {
                 setState {
                     copy(pendingRequest = Loading())
                 }
                 viewModelScope.launch {
-
                     // TODO if self verif we should do via DM
                     val roomId = session.roomService().getExistingDirectRoomWithUser(initialState.otherUserId)
                             ?: session.roomService().createDirectRoom(initialState.otherUserId)
@@ -266,14 +343,12 @@ class UserVerificationViewModel @AssistedInject constructor(
 
                     Timber.w("VALR started request is $request")
 
-
                     setState {
                         copy(
                                 pendingRequest = Success(request),
                                 transactionId = request.transactionId
                         )
                     }
-
                 }
             }
             is VerificationAction.SASDoNotMatchAction -> {

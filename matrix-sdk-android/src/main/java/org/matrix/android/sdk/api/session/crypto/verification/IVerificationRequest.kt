@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
-import org.matrix.android.sdk.internal.crypto.verification.KotlinVerificationRequest
-
 enum class EVerificationState {
     // outgoing started request
     WaitingForReady,
+
     // for incoming
     Requested,
+
     // both incoming/outgoing
     Ready,
     Started,
@@ -34,15 +34,16 @@ enum class EVerificationState {
 }
 
 // TODO remove that
-interface IVerificationRequest{
+interface IVerificationRequest {
 
     fun requestId(): String
 
     fun incoming(): Boolean
     fun otherUserId(): String
     fun roomId(): String?
+
     // target devices in case of to_device self verification
-    fun targetDevices() : List<String>?
+    fun targetDevices(): List<String>?
 
     fun state(): EVerificationState
     fun ageLocalTs(): Long
@@ -53,10 +54,9 @@ interface IVerificationRequest{
 
     fun otherDeviceId(): String?
 
-    fun qrCodeText() : String?
+    fun qrCodeText(): String?
 
-    fun isFinished() : Boolean = state() == EVerificationState.Cancelled || state() == EVerificationState.Done
+    fun isFinished(): Boolean = state() == EVerificationState.Cancelled || state() == EVerificationState.Done
 
     fun cancelCode(): CancelCode?
-
 }

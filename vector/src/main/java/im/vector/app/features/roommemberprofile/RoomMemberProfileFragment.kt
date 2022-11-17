@@ -50,7 +50,6 @@ import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.crypto.verification.user.UserVerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer

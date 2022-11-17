@@ -25,11 +25,9 @@ import im.vector.app.core.utils.PublishDataSource
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import kotlin.time.Duration.Companion.seconds
 
 abstract class VectorSessionsListViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(
@@ -85,7 +83,7 @@ abstract class VectorSessionsListViewModel<S : MavericksState, VA : VectorViewMo
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) {
-        if (tx.state == VerificationTxState.Verified) {
+        if (tx.isSuccessful()) {
             refreshDeviceList()
         }
     }

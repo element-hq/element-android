@@ -27,19 +27,23 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.SendToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -53,6 +57,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationDone
@@ -94,7 +99,8 @@ internal class VerificationActor @AssistedInject constructor(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val sendToDeviceTask: SendToDeviceTask,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val crossSigningService: dagger.Lazy<CrossSigningService>
+        private val crossSigningService: dagger.Lazy<CrossSigningService>,
+        private val secretShareManager: SecretShareManager,
 ) {
 
     @AssistedFactory
@@ -119,6 +125,34 @@ internal class VerificationActor @AssistedInject constructor(
 
     suspend fun send(intent: VerificationIntent) {
         channel.send(intent)
+    }
+
+    private suspend fun withMatchingRequest(
+            otherUserId: String,
+            requestId: String,
+            block: suspend ((KotlinVerificationRequest) -> Unit)
+    ) {
+        val matchingRequest = pendingRequests[otherUserId]
+                ?.firstOrNull { it.requestId == requestId }
+                ?: return Unit.also {
+                    // Receive a transaction event with no matching request.. should ignore.
+                    // Not supported any more to do raw start
+                    Timber.tag(loggerTag.value)
+                            .v("[${myUserId.take(8)}] request $requestId not found!")
+                }
+
+        if (matchingRequest.state == EVerificationState.HandledByOtherSession) {
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}] ignore transaction event for $requestId handled by other")
+            return
+        }
+
+        if (matchingRequest.isFinished()) {
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}] ignore transaction event for $requestId for finished request")
+            return
+        }
+        block.invoke(matchingRequest)
     }
 
     private suspend fun withMatchingRequest(
@@ -202,7 +236,13 @@ internal class VerificationActor @AssistedInject constructor(
                 handleSasStart(msg)
             }
             is VerificationIntent.ActionReciprocateQrVerification -> {
-                handleReciprocateQR(msg)
+                handleActionReciprocateQR(msg)
+            }
+            is VerificationIntent.ActionConfirmCodeWasScanned -> {
+                withMatchingRequest(msg.otherUserId, msg.requestId) {
+                    handleActionQRScanConfirmed(it)
+                }
+                msg.deferred.complete(Unit)
             }
             is VerificationIntent.OnStartReceived -> {
                 onStartReceived(msg)
@@ -277,14 +317,15 @@ internal class VerificationActor @AssistedInject constructor(
                     request.state = EVerificationState.Cancelled
                     val cancelCode = safeValueOf(msg.validCancel.code)
                     request.cancelCode = cancelCode
-                    val existingTx = txMap[msg.fromUser]?.get(msg.validCancel.transactionId)
+                    // TODO or QR
+                    val existingTx: KotlinSasTransaction? =
+                            getExistingTransaction(msg.validCancel.transactionId) // txMap[msg.fromUser]?.get(msg.validCancel.transactionId)
                     if (existingTx != null) {
-                        existingTx.state = VerificationTxState.Cancelled(cancelCode, false)
+                        existingTx.state = SasTransactionState.Cancelled(cancelCode, false)
                         txMap[msg.fromUser]?.remove(msg.validCancel.transactionId)
                         eventFlow.emit(VerificationEvent.TransactionUpdated(existingTx))
                     }
                     eventFlow.emit(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
-
                 }
             }
             is VerificationIntent.OnReadyByAnotherOfMySessionReceived -> {
@@ -358,6 +399,27 @@ internal class VerificationActor @AssistedInject constructor(
     }
 
     private suspend fun handleReceiveStartForQR(request: KotlinVerificationRequest, reciprocate: ValidVerificationInfoStart.ReciprocateVerificationInfoStart) {
+        // Ok so the other did scan our code
+        val ourSecret = request.qrCodeData?.sharedSecret
+        if (ourSecret != reciprocate.sharedSecret) {
+            // something went wrong
+            cancelRequest(request, CancelCode.MismatchedKeys)
+            return
+        }
+
+        // The secret matches, we need manual action to confirm that it was scan
+        val tx = KotlinQRVerification(
+                channel = this.channel,
+                state = QRCodeVerificationState.WaitingForScanConfirmation,
+                qrCodeData = request.qrCodeData,
+                method = VerificationMethod.QR_CODE_SCAN,
+                transactionId = request.requestId,
+                otherUserId = request.otherUserId,
+                otherDeviceId = request.otherDeviceId(),
+                isIncoming = false,
+                isToDevice = request.roomId == null
+        )
+        addTransaction(tx)
     }
 
     private suspend fun handleReceiveStartForSas(
@@ -372,7 +434,7 @@ internal class VerificationActor @AssistedInject constructor(
         // and the other m.key.verification.start event is ignored.
         // So let's check if I already send a start?
         val requestId = msg.validVerificationInfoStart.transactionId
-        val existing = getExistingTransaction(msg.fromUser, requestId)
+        val existing: KotlinSasTransaction? = getExistingTransaction(msg.fromUser, requestId)
         if (existing != null) {
             Timber.tag(loggerTag.value)
                     .v("[${myUserId.take(8)}] No existing Sas transaction for ${request.requestId}")
@@ -380,23 +442,6 @@ internal class VerificationActor @AssistedInject constructor(
             return
         }
 
-        val sasTx = SasV1Transaction(
-                channel = channel,
-                transactionId = requestId,
-                state = VerificationTxState.None,
-                otherUserId = request.otherUserId,
-                myUserId = myUserId,
-                myTrustedMSK = cryptoStore.getMyCrossSigningInfo()
-                        ?.takeIf { it.isTrusted() }
-                        ?.masterKey()
-                        ?.unpaddedBase64PublicKey,
-                otherDeviceId = request.otherDeviceId(),
-                myDeviceId = cryptoStore.getDeviceId(),
-                myDeviceFingerprint = cryptoStore.getUserDevice(myUserId, cryptoStore.getDeviceId())?.fingerprint().orEmpty(),
-                startReq = sasStart,
-                isIncoming = true,
-                isToDevice = msg.viaRoom == null
-        )
         // we accept with the agreement methods
         // Select a key agreement protocol, a hash algorithm, a message authentication code,
         // and short authentication string methods out of the lists given in requester's message.
@@ -440,11 +485,28 @@ internal class VerificationActor @AssistedInject constructor(
             cancelRequest(request, CancelCode.UserError)
             return
         }
+        val sasTx = KotlinSasTransaction(
+                channel = channel,
+                transactionId = requestId,
+                state = SasTransactionState.None,
+                otherUserId = request.otherUserId,
+                myUserId = myUserId,
+                myTrustedMSK = cryptoStore.getMyCrossSigningInfo()
+                        ?.takeIf { it.isTrusted() }
+                        ?.masterKey()
+                        ?.unpaddedBase64PublicKey,
+                otherDeviceId = request.otherDeviceId(),
+                myDeviceId = cryptoStore.getDeviceId(),
+                myDeviceFingerprint = cryptoStore.getUserDevice(myUserId, cryptoStore.getDeviceId())?.fingerprint().orEmpty(),
+                startReq = sasStart,
+                isIncoming = true,
+                isToDevice = msg.viaRoom == null,
+        )
 
         val concat = sasTx.getSAS().publicKey + sasStart.canonicalJson
         val commitment = hashUsingAgreedHashMethod(agreedHash, concat)
 
-        val accept = SasV1Transaction.sasAccept(
+        val accept = KotlinSasTransaction.sasAccept(
                 inRoom = request.roomId != null,
                 requestId = requestId,
                 keyAgreementProtocol = agreedProtocol,
@@ -464,7 +526,6 @@ internal class VerificationActor @AssistedInject constructor(
         }
 
         sasTx.accepted = accept.asValidObject()
-        sasTx.state = VerificationTxState.SasAccepted
 
         addTransaction(sasTx)
     }
@@ -472,13 +533,13 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun handleReceiveAccept(matchingRequest: KotlinVerificationRequest, msg: VerificationIntent.OnAcceptReceived) {
         val requestId = msg.validAccept.transactionId
 
-        val existing = getExistingTransaction(msg.fromUser, requestId)
+        val existing: KotlinSasTransaction = getExistingTransaction(msg.fromUser, requestId)
                 ?: return Unit.also {
                     Timber.v("on accept received in room ${msg.viaRoom} for verification id:${requestId} in room ${matchingRequest.roomId}")
                 }
 
         // Existing should be in
-        if (existing.state != VerificationTxState.SasStarted) {
+        if (existing.state != SasTransactionState.SasStarted) {
             // it's a wrong state should cancel?
             // TODO cancel
         }
@@ -501,10 +562,9 @@ internal class VerificationActor @AssistedInject constructor(
         // and replies with a to_device message with type set to “m.key.verification.key”, sending Alice’s public key QA
         val pubKey = existing.getSAS().publicKey
 
-        val keyMessage = SasV1Transaction.sasKeyMessage(matchingRequest.roomId != null, requestId, pubKey)
+        val keyMessage = KotlinSasTransaction.sasKeyMessage(matchingRequest.roomId != null, requestId, pubKey)
 
         try {
-
             if (BuildConfig.LOG_PRIVATE_DATA) {
                 Timber.tag(loggerTag.value)
                         .v("[${myUserId.take(8)}]: Sending my key $pubKey")
@@ -515,7 +575,7 @@ internal class VerificationActor @AssistedInject constructor(
                     keyMessage,
             )
         } catch (failure: Throwable) {
-            existing.state = VerificationTxState.Cancelled(CancelCode.UserError, true)
+            existing.state = SasTransactionState.Cancelled(CancelCode.UserError, true)
             matchingRequest.cancelCode = CancelCode.UserError
             matchingRequest.state = EVerificationState.Cancelled
             eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
@@ -523,7 +583,7 @@ internal class VerificationActor @AssistedInject constructor(
             return
         }
         existing.accepted = accept
-        existing.state = VerificationTxState.SasKeySent
+        existing.state = SasTransactionState.SasKeySent
         eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
     }
 
@@ -545,13 +605,13 @@ internal class VerificationActor @AssistedInject constructor(
             msg.deferred.completeExceptionally(java.lang.IllegalArgumentException("Failed to find other device Id"))
         }
 
-        val existingTransaction = getExistingTransaction(msg.otherUserId, msg.requestId)
+        val existingTransaction = getExistingTransaction<VerificationTransaction>(msg.otherUserId, msg.requestId)
         if (existingTransaction is SasVerificationTransaction) {
             // there is already an existing transaction??
             msg.deferred.completeExceptionally(IllegalStateException("Already started"))
             return
         }
-        val startMessage = SasV1Transaction.sasStart(
+        val startMessage = KotlinSasTransaction.sasStart(
                 inRoom = matchingRequest.roomId != null,
                 fromDevice = cryptoStore.getDeviceId(),
                 requestId = msg.requestId
@@ -564,10 +624,10 @@ internal class VerificationActor @AssistedInject constructor(
         )
 
         // should check if already one (and cancel it)
-        val tx = SasV1Transaction(
+        val tx = KotlinSasTransaction(
                 channel = channel,
                 transactionId = msg.requestId,
-                state = VerificationTxState.SasStarted,
+                state = SasTransactionState.SasStarted,
                 otherUserId = msg.otherUserId,
                 myUserId = myUserId,
                 myTrustedMSK = cryptoStore.getMyCrossSigningInfo()
@@ -589,16 +649,22 @@ internal class VerificationActor @AssistedInject constructor(
         msg.deferred.complete(tx)
     }
 
-    private suspend fun handleReciprocateQR(msg: VerificationIntent.ActionReciprocateQrVerification) {
+    private suspend fun handleActionReciprocateQR(msg: VerificationIntent.ActionReciprocateQrVerification) {
+        Timber.tag(loggerTag.value)
+                .d("[${myUserId.take(8)}] handle reciprocate for ${msg.requestId}")
         val matchingRequest = pendingRequests
                 .flatMap { entry ->
                     entry.value.filter { it.requestId == msg.requestId }
                 }.firstOrNull()
                 ?: return Unit.also {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] No matching request, abort ${msg.requestId}")
                     msg.deferred.completeExceptionally(java.lang.IllegalArgumentException("Unknown request"))
                 }
 
         if (matchingRequest.state != EVerificationState.Ready) {
+            Timber.tag(loggerTag.value)
+                    .d("[${myUserId.take(8)}] Can't start if not ready, abort ${msg.requestId}")
             msg.deferred.completeExceptionally(java.lang.IllegalStateException("Can't start a non ready request"))
             return
         }
@@ -607,21 +673,24 @@ internal class VerificationActor @AssistedInject constructor(
             msg.deferred.completeExceptionally(java.lang.IllegalArgumentException("Failed to find other device Id"))
         }
 
-        val existingTransaction = getExistingTransaction(msg.otherUserId, msg.requestId)
+        val existingTransaction = getExistingTransaction<VerificationTransaction>(msg.otherUserId, msg.requestId)
         // what if there is an existing??
         if (existingTransaction != null) {
             // cancel or replace??
+            Timber.tag(loggerTag.value)
+                    .w("[${myUserId.take(8)}] There is already a started transaction for request  ${msg.requestId}")
             return
         }
 
         val myMasterKey = crossSigningService.get()
                 .getUserCrossSigningKeys(myUserId)?.masterKey()?.unpaddedBase64PublicKey
-        var canTrustOtherUserMasterKey = false
 
         // Check the other device view of my MSK
         val otherQrCodeData = msg.scannedData.toQrCodeData()
         when (otherQrCodeData) {
             null -> {
+                Timber.tag(loggerTag.value)
+                        .d("[${myUserId.take(8)}] Malformed QR code  ${msg.requestId}")
                 msg.deferred.completeExceptionally(IllegalArgumentException("Malformed QrCode data"))
                 return
             }
@@ -629,93 +698,85 @@ internal class VerificationActor @AssistedInject constructor(
                 // key2 (aka otherUserMasterCrossSigningPublicKey) is what the one displaying the QR code (other user) think my MSK is.
                 // Let's check that it's correct
                 // If not -> Cancel
-                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey != myMasterKey) {
-                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
+                val whatOtherThinksMyMskIs = otherQrCodeData.otherUserMasterCrossSigningPublicKey
+                if (whatOtherThinksMyMskIs != myMasterKey) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
                     cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
                     msg.deferred.complete(null)
                     return
-                } else Unit
+                }
+
+                val whatIThinkOtherMskIs = crossSigningService.get().getUserCrossSigningKeys(matchingRequest.otherUserId)
+                        ?.masterKey()
+                        ?.unpaddedBase64PublicKey
+                if (whatIThinkOtherMskIs != otherQrCodeData.userMasterCrossSigningPublicKey) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
+                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
+                    msg.deferred.complete(null)
+                    return
+                }
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
+                if (matchingRequest.otherUserId != myUserId) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] Self mode qr with wrong user ${matchingRequest.otherUserId}")
+                    cancelRequest(matchingRequest, CancelCode.MismatchedUser)
+                    msg.deferred.complete(null)
+                    return
+                }
                 // key1 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
                 // Let's check that I see the same MSK
                 // If not -> Cancel
-                if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
-                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                val whatOtherThinksOurMskIs = otherQrCodeData.userMasterCrossSigningPublicKey
+                if (whatOtherThinksOurMskIs != myMasterKey) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
                     msg.deferred.complete(null)
                     return
-                } else {
-                    // I can trust the MSK then (i see the same one, and other session tell me it's trusted by him)
-                    canTrustOtherUserMasterKey = true
+                }
+                val whatOtherThinkMyDeviceKeyIs = otherQrCodeData.otherDeviceKey
+                val myDeviceKey = cryptoStore.getUserDevice(myUserId, cryptoStore.getDeviceId())?.fingerprint()
+                if (whatOtherThinkMyDeviceKeyIs != myDeviceKey) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other device key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
+                    msg.deferred.complete(null)
+                    return
                 }
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                if (matchingRequest.otherUserId != myUserId) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] Self mode qr with wrong user ${matchingRequest.otherUserId}")
+                    cancelRequest(matchingRequest, CancelCode.MismatchedUser)
+                    msg.deferred.complete(null)
+                    return
+                }
                 // key2 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
                 // Let's check that it's the good one
                 // If not -> Cancel
-                if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
-                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                val otherDeclaredDeviceKey = otherQrCodeData.deviceKey
+                val whatIThinkItIs = cryptoStore.getUserDevice(myUserId, otherDeviceId)?.fingerprint()
+
+                if (otherDeclaredDeviceKey != whatIThinkItIs) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other device key $otherDeviceId")
+                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
+                    msg.deferred.complete(null)
+                }
+
+                val ownMasterKeyTrustedAsSeenByOther = otherQrCodeData.userMasterCrossSigningPublicKey
+                if (ownMasterKeyTrustedAsSeenByOther != myMasterKey) {
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}] ## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
                     msg.deferred.complete(null)
                     return
-                } else {
-                    // Nothing special here, we will send a reciprocate start event, and then the other session will trust it's view of the MSK
                 }
             }
-        }
-
-        val toVerifyDeviceIds = mutableListOf<String>()
-
-        // Let's now check the other user/device key material
-        when (otherQrCodeData) {
-            is QrCodeData.VerifyingAnotherUser -> {
-                // key1(aka userMasterCrossSigningPublicKey) is the MSK of the one displaying the QR code (i.e other user)
-                // Let's check that it matches what I think it should be
-                if (otherQrCodeData.userMasterCrossSigningPublicKey
-                        != crossSigningService.get().getUserCrossSigningKeys(msg.otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
-                    Timber.d("## Verification QR: Invalid user master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
-                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
-                    msg.deferred.complete(null)
-                    return
-                } else {
-                    // It does so i should mark it as trusted
-                    canTrustOtherUserMasterKey = true
-                }
-            }
-            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
-                // key2 (aka otherDeviceKey) is my current device key in POV of the one displaying the QR code (i.e other device)
-                // Let's check that it's correct
-                if (otherQrCodeData.otherDeviceKey
-                        != cryptoStore.getUserDevice(myUserId, cryptoStore.getDeviceId())?.fingerprint()) {
-                    Timber.d("## Verification QR: Invalid other device key ${otherQrCodeData.otherDeviceKey}")
-                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
-                    msg.deferred.complete(null)
-                    return
-                } else Unit // Nothing special here, we will send a reciprocate start event, and then the other session will trust my device
-                // and thus allow me to request SSSS secret
-            }
-            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
-                // key1 (aka otherDeviceKey) is the device key of the one displaying the QR code (i.e other device)
-                // Let's check that it matches what I have locally
-                if (otherQrCodeData.deviceKey
-                        != cryptoStore.getUserDevice(msg.otherUserId, otherDeviceId ?: "")?.fingerprint()) {
-                    Timber.d("## Verification QR: Invalid device key ${otherQrCodeData.deviceKey}")
-                    cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
-                    msg.deferred.complete(null)
-                    return
-                } else {
-                    // Yes it does -> i should trust it and sign then upload the signature
-                    toVerifyDeviceIds.add(otherDeviceId ?: "")
-                    Unit
-                }
-            }
-        }
-
-        if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
-            // Nothing to verify
-            cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
-            return
         }
 
         // All checks are correct
@@ -746,6 +807,8 @@ internal class VerificationActor @AssistedInject constructor(
         try {
             sendToOther(matchingRequest, EventType.KEY_VERIFICATION_START, message)
         } catch (failure: Throwable) {
+            Timber.tag(loggerTag.value)
+                    .d("[${myUserId.take(8)}] Failed to send reciprocate message")
             msg.deferred.completeExceptionally(failure)
             return
         }
@@ -754,21 +817,45 @@ internal class VerificationActor @AssistedInject constructor(
         eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
 
         val tx = KotlinQRVerification(
-                qrCodeText = msg.scannedData,
-                state = VerificationTxState.WaitingOtherReciprocateConfirm,
+                channel = this.channel,
+                state = QRCodeVerificationState.Reciprocated,
+                qrCodeData = msg.scannedData.toQrCodeData(),
                 method = VerificationMethod.QR_CODE_SCAN,
                 transactionId = msg.requestId,
                 otherUserId = msg.otherUserId,
                 otherDeviceId = matchingRequest.otherDeviceId(),
-                isIncoming = false
+                isIncoming = false,
+                isToDevice = matchingRequest.roomId == null
         )
+
         addTransaction(tx)
+        msg.deferred.complete(tx)
+    }
+
+    private suspend fun handleActionQRScanConfirmed(matchingRequest: KotlinVerificationRequest) {
+        val transaction = getExistingTransaction<KotlinQRVerification>(matchingRequest.otherUserId, matchingRequest.requestId)
+        if (transaction == null) {
+            // return
+            Timber.tag(loggerTag.value)
+                    .d("[${myUserId.take(8)}]: No matching transaction for key tId:${matchingRequest.requestId}")
+            return
+        }
+
+        if (transaction.state() == QRCodeVerificationState.WaitingForScanConfirmation) {
+            completeValidQRTransaction(transaction, matchingRequest)
+        } else {
+            Timber.tag(loggerTag.value)
+                    .d("[${myUserId.take(8)}]: Unexpected confirm in state tId:${matchingRequest.requestId}")
+            // TODO throw?
+            cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
+            return
+        }
     }
 
     private suspend fun handleReceiveKey(matchingRequest: KotlinVerificationRequest, msg: VerificationIntent.OnKeyReceived) {
         val requestId = msg.validKey.transactionId
 
-        val existing = getExistingTransaction(msg.fromUser, requestId)
+        val existing: KotlinSasTransaction = getExistingTransaction(msg.fromUser, requestId)
                 ?: return Unit.also {
                     Timber.tag(loggerTag.value)
                             .v("[${myUserId.take(8)}]: No matching transaction for key tId:$requestId")
@@ -776,9 +863,9 @@ internal class VerificationActor @AssistedInject constructor(
 
         // Existing should be in SAS key sent
         val isCorrectState = if (existing.isIncoming) {
-            existing.state == VerificationTxState.SasAccepted
+            existing.state == SasTransactionState.SasAccepted
         } else {
-            existing.state == VerificationTxState.SasKeySent
+            existing.state == SasTransactionState.SasKeySent
         }
 
         if (!isCorrectState) {
@@ -792,7 +879,7 @@ internal class VerificationActor @AssistedInject constructor(
         if (existing.isIncoming) {
             // ok i can now send my key and compute the sas code
             val pubKey = existing.getSAS().publicKey
-            val keyMessage = SasV1Transaction.sasKeyMessage(matchingRequest.roomId != null, requestId, pubKey)
+            val keyMessage = KotlinSasTransaction.sasKeyMessage(matchingRequest.roomId != null, requestId, pubKey)
             try {
                 sendToOther(
                         matchingRequest,
@@ -804,7 +891,7 @@ internal class VerificationActor @AssistedInject constructor(
                             .v("[${myUserId.take(8)}]:i calculate SAS my key $pubKey their Key: $otherKey")
                 }
                 existing.calculateSASBytes(otherKey)
-                existing.state = VerificationTxState.SasShortCodeReady
+                existing.state = SasTransactionState.SasShortCodeReady
                 if (BuildConfig.LOG_PRIVATE_DATA) {
                     Timber.tag(loggerTag.value)
                             .v("[${myUserId.take(8)}]:i CODE ${existing.getDecimalCodeRepresentation()}")
@@ -813,7 +900,7 @@ internal class VerificationActor @AssistedInject constructor(
                 }
                 eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
             } catch (failure: Throwable) {
-                existing.state = VerificationTxState.Cancelled(CancelCode.UserError, true)
+                existing.state = SasTransactionState.Cancelled(CancelCode.UserError, true)
                 matchingRequest.state = EVerificationState.Cancelled
                 matchingRequest.cancelCode = CancelCode.UserError
                 eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
@@ -843,7 +930,7 @@ internal class VerificationActor @AssistedInject constructor(
                             .v("[${myUserId.take(8)}]:o calculate SAS my key ${existing.getSAS().publicKey} their Key: $otherKey")
                 }
                 existing.calculateSASBytes(otherKey)
-                existing.state = VerificationTxState.SasShortCodeReady
+                existing.state = SasTransactionState.SasShortCodeReady
                 eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
                 if (BuildConfig.LOG_PRIVATE_DATA) {
                     Timber.tag(loggerTag.value)
@@ -864,21 +951,21 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun handleMacReceived(matchingRequest: KotlinVerificationRequest, msg: VerificationIntent.OnMacReceived) {
         val requestId = msg.validMac.transactionId
 
-        val existing = getExistingTransaction(msg.fromUser, requestId)
+        val existing: KotlinSasTransaction = getExistingTransaction(msg.fromUser, requestId)
                 ?: return Unit.also {
                     Timber.tag(loggerTag.value)
                             .v("[${myUserId.take(8)}] on Mac for unknown transaction with id:$requestId")
                 }
 
         when (existing.state) {
-            is VerificationTxState.SasMacSent -> {
+            is SasTransactionState.SasMacSent -> {
                 existing.theirMac = msg.validMac
                 finalizeSasTransaction(existing, msg.validMac, matchingRequest, existing.transactionId)
             }
-            is VerificationTxState.SasShortCodeReady -> {
+            is SasTransactionState.SasShortCodeReady -> {
                 // I can start verify, store it
                 existing.theirMac = msg.validMac
-                existing.state = VerificationTxState.SasMacReceived(false)
+                existing.state = SasTransactionState.SasMacReceived(false)
                 eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
             }
             else -> {
@@ -901,14 +988,14 @@ internal class VerificationActor @AssistedInject constructor(
                 msg.deferred.completeExceptionally(IllegalStateException("Request was cancelled"))
             }
         }
-        val existing = getExistingTransaction(transactionId)
+        val existing: KotlinSasTransaction = getExistingTransaction(transactionId)
                 ?: return Unit.also {
                     msg.deferred.completeExceptionally(IllegalStateException("Unknown Transaction"))
                 }
 
         val isCorrectState = when (val state = existing.state) {
-            is VerificationTxState.SasShortCodeReady -> true
-            is VerificationTxState.SasMacReceived -> !state.codeConfirmed
+            is SasTransactionState.SasShortCodeReady -> true
+            is SasTransactionState.SasMacReceived -> !state.codeConfirmed
             else -> false
         }
         if (!isCorrectState) {
@@ -927,25 +1014,122 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun handleDoneReceived(matchingRequest: KotlinVerificationRequest, msg: VerificationIntent.OnDoneReceived) {
         val requestId = msg.transactionId
 
-        val existing = getExistingTransaction(msg.fromUser, requestId)
+        val existing: VerificationTransaction = getExistingTransaction(msg.fromUser, requestId)
                 ?: return Unit.also {
                     Timber.v("on accept received in room ${msg.viaRoom} for verification id:${requestId} in room ${matchingRequest.roomId}")
                 }
 
-        val state = existing.state
-        val isCorrectState = state is VerificationTxState.Done && !state.otherDone
+        when {
+            existing is KotlinSasTransaction -> {
+                val state = existing.state
+                val isCorrectState = state is SasTransactionState.Done && !state.otherDone
 
-        if (isCorrectState) {
-            // XXX whatabout waiting for done?
-            matchingRequest.state = EVerificationState.Done
-            eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
-//            updatePendingRequest(
-//                    matchingRequest.copy(
-//                            isSuccessful = true
-//                    )
-//            )
-        } else {
-            // TODO cancel?
+                if (isCorrectState) {
+                    existing.state = SasTransactionState.Done(true)
+                    eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                    // we can forget about it
+                    txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
+                    // XXX whatabout waiting for done?
+                    matchingRequest.state = EVerificationState.Done
+                    eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                } else {
+                    // TODO cancel?
+                    Timber.tag(loggerTag.value)
+                            .d("[${myUserId.take(8)}]: Unexpected done in state $state")
+
+                    cancelRequest(matchingRequest, CancelCode.UnexpectedMessage)
+                }
+            }
+            existing is KotlinQRVerification -> {
+                val state = existing.state()
+                when (state) {
+                    QRCodeVerificationState.Reciprocated -> {
+                        completeValidQRTransaction(existing, matchingRequest)
+                    }
+                    QRCodeVerificationState.WaitingForOtherDone -> {
+                        matchingRequest.state = EVerificationState.Done
+                        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                    }
+                    else -> {
+                        Timber.tag(loggerTag.value)
+                                .d("[${myUserId.take(8)}]: Unexpected done in state $state")
+                        cancelRequest(matchingRequest, CancelCode.UnexpectedMessage)
+                    }
+                }
+            }
+            else -> {
+                // unexpected message?
+                cancelRequest(matchingRequest, CancelCode.UnexpectedMessage)
+            }
+        }
+    }
+
+    private suspend fun completeValidQRTransaction(existing: KotlinQRVerification, matchingRequest: KotlinVerificationRequest) {
+        var shouldRequestSecret = false
+        // Ok so the other side is fine let's trust what we need to trust
+        when (existing.qrCodeData) {
+            is QrCodeData.VerifyingAnotherUser -> {
+                // let's trust him
+                // it's his code scanned so user is him and other me
+                try {
+                    crossSigningService.get().trustUser(matchingRequest.otherUserId)
+                } catch (failure: Throwable) {
+                    // fail silently?
+                    // at least it will be marked as trusted locally?
+                }
+            }
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                // the other device is the one that doesn't trust yet our MSK
+                // As all is good I can upload a signature for my new device
+
+                // Also notify the secret share manager for the soon to come secret share requests
+                secretShareManager.onVerificationCompleteForDevice(matchingRequest.otherDeviceId()!!)
+                try {
+                    crossSigningService.get().trustDevice(matchingRequest.otherDeviceId()!!)
+                } catch (failure: Throwable) {
+                    // network problem??
+                    Timber.w("## Verification: Failed to sign new device ${matchingRequest.otherDeviceId()}, ${failure.localizedMessage}")
+                }
+            }
+            is QrCodeData.SelfVerifyingMasterKeyTrusted -> {
+                // I can trust my MSK
+                crossSigningService.get().markMyMasterKeyAsTrusted()
+                shouldRequestSecret = true
+            }
+            null -> {
+                // This shouldn't happen? cancel?
+            }
+        }
+
+        sendToOther(
+                matchingRequest,
+                EventType.KEY_VERIFICATION_DONE,
+                if (matchingRequest.roomId != null) {
+                    MessageVerificationDoneContent(
+                            relatesTo = RelationDefaultContent(
+                                    RelationType.REFERENCE,
+                                    matchingRequest.requestId
+                            )
+                    )
+                } else {
+                    KeyVerificationDone(matchingRequest.requestId)
+                }
+        )
+
+        existing.state = QRCodeVerificationState.Done
+        eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+        // we can forget about it
+        txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
+        matchingRequest.state = EVerificationState.WaitingForDone
+        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+
+        if (shouldRequestSecret) {
+            matchingRequest.otherDeviceId()?.let { otherDeviceId ->
+                secretShareManager.requestSecretTo(otherDeviceId, MASTER_KEY_SSSS_NAME)
+                secretShareManager.requestSecretTo(otherDeviceId, SELF_SIGNING_KEY_SSSS_NAME)
+                secretShareManager.requestSecretTo(otherDeviceId, USER_SIGNING_KEY_SSSS_NAME)
+                secretShareManager.requestSecretTo(otherDeviceId, KEYBACKUP_SECRET_SSSS_NAME)
+            }
         }
     }
 
@@ -956,21 +1140,21 @@ internal class VerificationActor @AssistedInject constructor(
                     msg.deferred.completeExceptionally(IllegalStateException("Unknown Request"))
                 }
 
-        if (matchingRequest.state != EVerificationState.WeStarted
-                && matchingRequest.state != EVerificationState.Started) {
+        if (matchingRequest.state != EVerificationState.WeStarted &&
+                matchingRequest.state != EVerificationState.Started) {
             return Unit.also {
                 msg.deferred.completeExceptionally(IllegalStateException("Can't accept code in state: ${matchingRequest.state}"))
             }
         }
 
-        val existing = getExistingTransaction(transactionId)
+        val existing: KotlinSasTransaction = getExistingTransaction(transactionId)
                 ?: return Unit.also {
                     msg.deferred.completeExceptionally(IllegalStateException("Unknown Transaction"))
                 }
 
         val isCorrectState = when (val state = existing.state) {
-            is VerificationTxState.SasShortCodeReady -> true
-            is VerificationTxState.SasMacReceived -> !state.codeConfirmed
+            is SasTransactionState.SasShortCodeReady -> true
+            is SasTransactionState.SasMacReceived -> !state.codeConfirmed
             else -> false
         }
         if (!isCorrectState) {
@@ -981,7 +1165,7 @@ internal class VerificationActor @AssistedInject constructor(
 
         val macInfo = existing.computeMyMac()
 
-        val macMsg = SasV1Transaction.sasMacMessage(matchingRequest.roomId != null, transactionId, macInfo)
+        val macMsg = KotlinSasTransaction.sasMacMessage(matchingRequest.roomId != null, transactionId, macInfo)
         try {
             sendToOther(matchingRequest, EventType.KEY_VERIFICATION_MAC, macMsg)
         } catch (failure: Throwable) {
@@ -995,7 +1179,7 @@ internal class VerificationActor @AssistedInject constructor(
         if (theirMac != null) {
             finalizeSasTransaction(existing, theirMac, matchingRequest, transactionId)
         } else {
-            existing.state = VerificationTxState.SasMacSent
+            existing.state = SasTransactionState.SasMacSent
             eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
         }
 
@@ -1003,7 +1187,7 @@ internal class VerificationActor @AssistedInject constructor(
     }
 
     private suspend fun finalizeSasTransaction(
-            existing: SasV1Transaction,
+            existing: KotlinSasTransaction,
             theirMac: ValidVerificationInfoMac,
             matchingRequest: KotlinVerificationRequest,
             transactionId: String
@@ -1017,7 +1201,7 @@ internal class VerificationActor @AssistedInject constructor(
         Timber.tag(loggerTag.value)
                 .v("[${myUserId.take(8)}] verify macs result $result id:$transactionId")
         when (result) {
-            is SasV1Transaction.MacVerificationResult.Success -> {
+            is KotlinSasTransaction.MacVerificationResult.Success -> {
                 // mark the devices as locally trusted
                 result.verifiedDeviceId.forEach { deviceId ->
                     val actualTrustLevel = cryptoStore.getUserDevice(matchingRequest.otherUserId, deviceId)?.trustLevel
@@ -1068,17 +1252,17 @@ internal class VerificationActor @AssistedInject constructor(
                         }
                 )
 
-                existing.state = VerificationTxState.Done(false)
+                existing.state = SasTransactionState.Done(false)
                 eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
                 pastTransactions.getOrPut(transactionId) { mutableMapOf() }[transactionId] = existing
                 txMap[matchingRequest.otherUserId]?.remove(transactionId)
                 matchingRequest.state = EVerificationState.WaitingForDone
                 eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
             }
-            SasV1Transaction.MacVerificationResult.MismatchKeys,
-            SasV1Transaction.MacVerificationResult.MismatchMacCrossSigning,
-            is SasV1Transaction.MacVerificationResult.MismatchMacDevice,
-            SasV1Transaction.MacVerificationResult.NoDevicesVerified -> {
+            KotlinSasTransaction.MacVerificationResult.MismatchKeys,
+            KotlinSasTransaction.MacVerificationResult.MismatchMacCrossSigning,
+            is KotlinSasTransaction.MacVerificationResult.MismatchMacDevice,
+            KotlinSasTransaction.MacVerificationResult.NoDevicesVerified -> {
                 cancelRequest(matchingRequest, CancelCode.MismatchedKeys)
             }
         }
@@ -1126,7 +1310,7 @@ internal class VerificationActor @AssistedInject constructor(
                 commonMethods
         )
 
-        val message = SasV1Transaction.sasReady(
+        val message = KotlinSasTransaction.sasReady(
                 inRoom = existing.roomId != null,
                 requestId = msg.transactionId,
                 methods = commonMethods,
@@ -1533,11 +1717,17 @@ internal class VerificationActor @AssistedInject constructor(
         eventFlow.emit(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
 
         // should also update SAS/QR transaction
-        getExistingTransaction(request.otherUserId, request.requestId)?.let {
-            it.state = VerificationTxState.Cancelled(code, true)
+        getExistingTransaction<KotlinSasTransaction>(request.otherUserId, request.requestId)?.let {
+            it.state = SasTransactionState.Cancelled(code, true)
             txMap[request.otherUserId]?.remove(request.requestId)
             eventFlow.emit(VerificationEvent.TransactionUpdated(it))
         }
+        getExistingTransaction<KotlinQRVerification>(request.otherUserId, request.requestId)?.let {
+            it.state = QRCodeVerificationState.Cancelled
+            txMap[request.otherUserId]?.remove(request.requestId)
+            eventFlow.emit(VerificationEvent.TransactionUpdated(it))
+        }
+
         cancelRequest(request.requestId, request.roomId, request.otherUserId, request.otherDeviceId(), code)
     }
 
@@ -1592,17 +1782,17 @@ internal class VerificationActor @AssistedInject constructor(
         throw java.lang.IllegalArgumentException("Unsupported hash method $hashMethod")
     }
 
-    private suspend fun addTransaction(tx: SasV1Transaction) {
+    private suspend fun addTransaction(tx: VerificationTransaction) {
         val txInnerMap = txMap.getOrPut(tx.otherUserId) { mutableMapOf() }
         txInnerMap[tx.transactionId] = tx
         eventFlow.emit(VerificationEvent.TransactionAdded(tx))
     }
 
-    private fun getExistingTransaction(otherUserId: String, transactionId: String): SasV1Transaction? {
-        return txMap[otherUserId]?.get(transactionId)
+    private inline fun <reified T : VerificationTransaction> getExistingTransaction(otherUserId: String, transactionId: String): T? {
+        return txMap[otherUserId]?.get(transactionId) as? T
     }
 
-    private inline fun <reified T: VerificationTransaction> getExistingTransaction(transactionId: String, type: T): T? {
+    private inline fun <reified T : VerificationTransaction> getExistingTransaction(transactionId: String): T? {
         txMap.forEach {
             val match = it.value.values
                     .firstOrNull { it.transactionId == transactionId }

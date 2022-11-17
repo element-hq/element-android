@@ -15,13 +15,6 @@
  */
 package org.matrix.android.sdk.api.session.crypto.verification
 
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
-import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
-import java.util.UUID
-
-
 /**
  * Stores current pending verification requests.
  */
@@ -34,7 +27,7 @@ data class PendingVerificationRequest(
         val otherDeviceId: String?,
         // in case of verification via room, it will be not null
         val roomId: String?,
-        val transactionId: String,//? = null,
+        val transactionId: String, // ? = null,
 //        val requestInfo: ValidVerificationInfoRequest? = null,
 //        val readyInfo: ValidVerificationInfoReady? = null,
         val cancelConclusion: CancelCode? = null,
@@ -52,5 +45,4 @@ data class PendingVerificationRequest(
 //    val isReady: Boolean = readyInfo != null
 //
 //    val isFinished: Boolean = isSuccessful || cancelConclusion != null
-
 }

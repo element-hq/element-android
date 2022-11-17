@@ -36,7 +36,6 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.NUMBER_OF_OTHER_DEVICES_TO_RENDER
 import im.vector.app.features.settings.devices.v2.list.OtherSessionsView
@@ -98,11 +97,12 @@ class VectorSettingsDevicesFragment :
                 is DevicesViewEvent.RequestReAuth -> Unit // TODO. Next PR
                 is DevicesViewEvent.PromptRenameDevice -> Unit // TODO. Next PR
                 is DevicesViewEvent.ShowVerifyDevice -> {
-                    VerificationBottomSheet.withArgs(
-//                            roomId = null,
-                            otherUserId = it.userId,
-                            transactionId = it.transactionId ?:""
-                    ).show(childFragmentManager, "REQPOP")
+                    // TODO selfverif
+//                    VerificationBottomSheet.withArgs(
+// //                            roomId = null,
+//                            otherUserId = it.userId,
+//                            transactionId = it.transactionId ?:""
+//                    ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {
                     navigator.requestSelfSessionVerification(requireActivity())

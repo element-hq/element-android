@@ -18,7 +18,6 @@ package im.vector.app.features.crypto.verification.user
 
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -43,8 +42,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
+import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -63,6 +63,8 @@ class UserVerificationController @Inject constructor(
         fun onMatchButtonTapped()
         fun openCamera()
         fun doVerifyBySas()
+        fun onUserDeniesQrCodeScanned()
+        fun onUserConfirmsQrCodeScanned()
     }
 
     var listener: InteractionListener? = null
@@ -169,7 +171,7 @@ class UserVerificationController @Inject constructor(
                 }
             }
             is Fail -> {
-                //TODO
+                // TODO
             }
         }
     }
@@ -257,28 +259,100 @@ class UserVerificationController @Inject constructor(
     }
 
     private fun renderTransaction(state: UserVerificationViewState, transaction: VerificationTransactionData) {
+        when (transaction) {
+            is VerificationTransactionData.QrTransactionData -> {
+                renderQrTransaction(transaction, state.otherUserMxItem)
+            }
+            is VerificationTransactionData.SasTransactionData -> {
+                renderSasTransaction(transaction)
+            }
+        }
+    }
+
+    private fun renderQrTransaction(transaction: VerificationTransactionData.QrTransactionData, otherUserItem: MatrixItem) {
         val host = this
-        if (transaction.method == VerificationMethod.SAS) {
-            when (val txState = transaction.state) {
-                VerificationTxState.SasShortCodeReady -> {
-                    buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
-                }
-                is VerificationTxState.SasMacReceived -> {
-                    if(!txState.codeConfirmed) {
-                        buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
-                    } else {
-                        // waiting
-                        bottomSheetVerificationWaitingItem {
-                            id("waiting")
-                            title(host.stringProvider.getString(R.string.please_wait))
-                        }
+        when (val txState = transaction.state) {
+            QRCodeVerificationState.Reciprocated -> {
+                // we are waiting for confirmation from the other side
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    apply {
+                        notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice).toEpoxyCharSequence())
                     }
                 }
-                is VerificationTxState.Cancelled,
-                is VerificationTxState.Done -> {
-                    // should show request status
+
+                bottomSheetVerificationBigImageItem {
+                    id("image")
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
                 }
-                else -> {
+
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, otherUserItem.getBestName()))
+                }
+            }
+            QRCodeVerificationState.WaitingForScanConfirmation -> {
+                // we need to confirm that the other party actual scanned us
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    apply {
+                        val name = otherUserItem.getBestName()
+                        notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name).toEpoxyCharSequence())
+                    }
+                }
+
+                bottomSheetVerificationBigImageItem {
+                    id("image")
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+                }
+
+                bottomSheetDividerItem {
+                    id("sep0")
+                }
+
+                bottomSheetVerificationActionItem {
+                    id("deny")
+                    title(host.stringProvider.getString(R.string.qr_code_scanned_by_other_no))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    iconRes(R.drawable.ic_check_off)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                    listener { host.listener?.onUserDeniesQrCodeScanned() }
+                }
+
+                bottomSheetDividerItem {
+                    id("sep1")
+                }
+
+                bottomSheetVerificationActionItem {
+                    id("confirm")
+                    title(host.stringProvider.getString(R.string.qr_code_scanned_by_other_yes))
+                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    iconRes(R.drawable.ic_check_on)
+                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    listener { host.listener?.onUserConfirmsQrCodeScanned() }
+                }
+            }
+            QRCodeVerificationState.WaitingForOtherDone,
+            QRCodeVerificationState.Done -> {
+                // Done
+            }
+            QRCodeVerificationState.Cancelled -> {
+                // Done
+//                renderCancel(transaction.)
+            }
+        }
+    }
+
+    private fun renderSasTransaction(transaction: VerificationTransactionData.SasTransactionData) {
+        val host = this
+        when (val txState = transaction.state) {
+            SasTransactionState.SasShortCodeReady -> {
+                buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
+            }
+            is SasTransactionState.SasMacReceived -> {
+                if (!txState.codeConfirmed) {
+                    buildEmojiItem(transaction.emojiCodeRepresentation.orEmpty())
+                } else {
                     // waiting
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
@@ -286,8 +360,17 @@ class UserVerificationController @Inject constructor(
                     }
                 }
             }
-        } else {
-            // TODO (QR CODe
+            is SasTransactionState.Cancelled,
+            is SasTransactionState.Done -> {
+                // should show request status
+            }
+            else -> {
+                // waiting
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(host.stringProvider.getString(R.string.please_wait))
+                }
+            }
         }
     }
 

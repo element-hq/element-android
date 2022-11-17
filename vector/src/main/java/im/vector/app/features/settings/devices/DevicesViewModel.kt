@@ -60,7 +60,6 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -126,7 +125,7 @@ class DevicesViewModel @AssistedInject constructor(
 
             session.cryptoService().verificationService().requestEventFlow()
                     .onEach {
-                        when(it) {
+                        when (it) {
                             is VerificationEvent.RequestUpdated -> {
                                 if (it.request.isFinished) {
                                     queryRefreshDevicesList()
@@ -241,7 +240,7 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) {
-        if (tx.state == VerificationTxState.Verified) {
+        if (tx.isSuccessful()) {
             queryRefreshDevicesList()
         }
     }

@@ -124,7 +124,6 @@ import im.vector.app.features.call.conference.ConferenceEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.crypto.verification.user.UserVerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs

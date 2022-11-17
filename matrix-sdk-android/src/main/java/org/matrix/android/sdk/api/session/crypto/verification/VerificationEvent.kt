@@ -23,8 +23,8 @@ sealed class VerificationEvent(val transactionId: String) {
     data class TransactionUpdated(val transaction: VerificationTransaction) : VerificationEvent(transaction.transactionId)
 }
 
-fun VerificationEvent.getRequest() : PendingVerificationRequest? {
-    return when(this) {
+fun VerificationEvent.getRequest(): PendingVerificationRequest? {
+    return when (this) {
         is VerificationEvent.RequestAdded -> this.request
         is VerificationEvent.RequestUpdated -> this.request
         is VerificationEvent.TransactionAdded -> null
@@ -32,12 +32,11 @@ fun VerificationEvent.getRequest() : PendingVerificationRequest? {
     }
 }
 
-fun VerificationEvent.getTransaction() : VerificationTransaction? {
-    return when(this) {
+fun VerificationEvent.getTransaction(): VerificationTransaction? {
+    return when (this) {
         is VerificationEvent.RequestAdded -> null
         is VerificationEvent.RequestUpdated -> null
         is VerificationEvent.TransactionAdded -> this.transaction
         is VerificationEvent.TransactionUpdated -> this.transaction
     }
 }
-

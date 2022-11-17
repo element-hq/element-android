@@ -561,7 +561,6 @@ class SASTest : InstrumentedTest {
 
         val requestID = req.transactionId
 
-
         Log.v("TEST", "== requestID is $requestID")
 
         testHelper.retryPeriodically {

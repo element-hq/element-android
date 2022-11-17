@@ -37,10 +37,11 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
@@ -89,8 +90,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         // TODO we don't have that anymore? as it has to be requested first?
-        when (tx.state) {
-            is VerificationTxState.SasStarted -> {
+        if (tx !is SasVerificationTransaction) return
+        when (tx.state()) {
+            is SasTransactionState.SasStarted -> {
                 // Add a notification for every incoming request
 //                val user = session.getUserOrDefault(tx.otherUserId).toMatrixItem()
 //                val name = user.getBestName()
@@ -139,7 +141,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
 //                        }
 //                popupAlertManager.postVectorAlert(alert)
             }
-            is VerificationTxState.TerminalTxState -> {
+            is SasTransactionState.Done -> {
                 // cancel related notification
                 popupAlertManager.cancelAlert(uid)
             }
@@ -186,7 +188,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
                                     // TODO
-                                    //it.navigator.waitSessionVerification(it)
+                                    // it.navigator.waitSessionVerification(it)
                                 } else {
                                     it.navigator.openRoom(
                                             context = it,
@@ -213,9 +215,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
         // If an incoming request is readied (by another device?) we should discard the alert
-        if (pr.isIncoming && (pr.state == EVerificationState.HandledByOtherSession
-                        || pr.state == EVerificationState.Started
-                        || pr.state == EVerificationState.WeStarted)) {
+        if (pr.isIncoming && (pr.state == EVerificationState.HandledByOtherSession ||
+                        pr.state == EVerificationState.Started ||
+                        pr.state == EVerificationState.WeStarted)) {
             popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
         }
     }

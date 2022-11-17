@@ -265,7 +265,7 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
-                    //TODO
+                    // TODO
 //                    if (it.sendRequest) {
                         navigator.requestSelfSessionVerification(this)
 //                    } else {

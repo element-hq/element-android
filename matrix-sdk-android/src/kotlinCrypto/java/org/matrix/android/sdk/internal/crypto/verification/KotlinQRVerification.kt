@@ -16,41 +16,67 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.channels.Channel
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeData
+import org.matrix.android.sdk.internal.crypto.verification.qrcode.toEncodedString
 
-class KotlinQRVerification(
-        override val qrCodeText: String?,
-        override val state: VerificationTxState,
+internal class KotlinQRVerification(
+        private val channel: Channel<VerificationIntent>,
+        var qrCodeData: QrCodeData?,
         override val method: VerificationMethod,
         override val transactionId: String,
         override val otherUserId: String,
         override val otherDeviceId: String?,
-        override val isIncoming: Boolean) : QrCodeVerificationTransaction {
+        override val isIncoming: Boolean,
+        var state: QRCodeVerificationState,
+        val isToDevice: Boolean
+) : QrCodeVerificationTransaction {
 
-    override suspend fun userHasScannedOtherQrCode(otherQrCodeText: String) {
-        TODO("Not yet implemented")
-    }
+    override fun state() = state
+
+    override val qrCodeText: String?
+        get() = qrCodeData?.toEncodedString()
+//
+//    var userMSKKeyToTrust: String? = null
+//    var deviceKeysToTrust = mutableListOf<String>()
+
+//    override suspend fun userHasScannedOtherQrCode(otherQrCodeText: String) {
+//        TODO("Not yet implemented")
+//    }
 
     override suspend fun otherUserScannedMyQrCode() {
-        TODO("Not yet implemented")
+        val deferred = CompletableDeferred<Unit>()
+        channel.send(
+                VerificationIntent.ActionConfirmCodeWasScanned(otherUserId, transactionId, deferred)
+        )
+        deferred.await()
     }
 
     override suspend fun otherUserDidNotScannedMyQrCode() {
-        TODO("Not yet implemented")
+        val deferred = CompletableDeferred<Unit>()
+        channel.send(
+                // TODO what cancel code??
+                VerificationIntent.ActionCancel(transactionId, deferred)
+        )
+        deferred.await()
     }
 
     override suspend fun cancel() {
-        TODO("Not yet implemented")
+        cancel(CancelCode.User)
     }
 
     override suspend fun cancel(code: CancelCode) {
-        TODO("Not yet implemented")
+        val deferred = CompletableDeferred<Unit>()
+        channel.send(
+                VerificationIntent.ActionCancel(transactionId, deferred)
+        )
+        deferred.await()
     }
 
-    override fun isToDeviceTransport(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isToDeviceTransport() = isToDevice
 }

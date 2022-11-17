@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import kotlinx.coroutines.CompletableDeferred
-import org.matrix.android.sdk.api.session.crypto.verification.IVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
@@ -104,6 +103,12 @@ internal sealed class VerificationIntent {
             val requestId: String,
             val scannedData: String,
             val deferred: CompletableDeferred<VerificationTransaction?>,
+    ) : VerificationIntent()
+
+    data class ActionConfirmCodeWasScanned(
+            val otherUserId: String,
+            val requestId: String,
+            val deferred: CompletableDeferred<Unit>,
     ) : VerificationIntent()
 
     data class OnStartReceived(

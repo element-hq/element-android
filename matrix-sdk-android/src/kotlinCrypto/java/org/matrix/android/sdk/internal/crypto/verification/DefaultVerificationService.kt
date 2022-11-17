@@ -1233,7 +1233,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     override suspend fun reciprocateQRVerification(otherUserId: String, requestId: String, scannedData: String): String? {
-        val deferred = CompletableDeferred<VerificationTransaction>()
+        val deferred = CompletableDeferred<VerificationTransaction?>()
         stateMachine.send(
                 VerificationIntent.ActionReciprocateQrVerification(
                         otherUserId = otherUserId,
@@ -1242,7 +1242,7 @@ internal class DefaultVerificationService @Inject constructor(
                         deferred = deferred
                 )
         )
-        return deferred.await().transactionId
+        return deferred.await()?.transactionId
     }
 
     override suspend fun requestKeyVerificationInDMs(

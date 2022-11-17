@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import android.os.Handler
 import android.os.Looper
-import org.matrix.android.sdk.api.session.crypto.verification.IVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction

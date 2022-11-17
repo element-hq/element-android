@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.SasMode
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction.Companion.KEY_AGREEMENT_V1
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction.Companion.KEY_AGREEMENT_V2
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction.Companion.SAS_MAC_SHA256
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction.Companion.SAS_MAC_SHA256_LONGKDF
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationAcceptContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationKeyContent
@@ -50,9 +50,8 @@ import org.matrix.olm.OlmSAS
 import timber.log.Timber
 import java.util.Locale
 
-internal class SasV1Transaction(
+internal class KotlinSasTransaction(
         private val channel: Channel<VerificationIntent>,
-        override var state: VerificationTxState,
         override val transactionId: String,
         override val otherUserId: String,
         private val myUserId: String,
@@ -63,6 +62,7 @@ internal class SasV1Transaction(
         override val isIncoming: Boolean,
         val startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null,
         val isToDevice: Boolean,
+        var state: SasTransactionState
 ) : SasVerificationTransaction {
 
     override val method: VerificationMethod
@@ -206,6 +206,8 @@ internal class SasV1Transaction(
     var shortCodeBytes: ByteArray? = null
     var myMac: ValidVerificationInfoMac? = null
     var theirMac: ValidVerificationInfoMac? = null
+
+    override fun state() = this.state
 
     override fun supportsEmoji(): Boolean {
         return accepted?.shortAuthenticationStrings?.contains(SasMode.EMOJI) == true

@@ -25,7 +25,6 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.cancellable
@@ -39,11 +38,11 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -275,8 +274,8 @@ class KeyRequestHandler @Inject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx is SasVerificationTransaction) {
-            val state = tx.state
-            if (state == VerificationTxState.Verified) {
+            val state = tx.state()
+            if (state is SasTransactionState.Done) {
                 // ok it's verified, see if we have key request for that
                 shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
                 popupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")

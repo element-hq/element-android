@@ -18,8 +18,6 @@ package org.matrix.android.sdk.api.session.crypto.verification
 
 interface VerificationTransaction {
 
-    val state: VerificationTxState
-
     val method: VerificationMethod
 
     val transactionId: String
@@ -37,4 +35,6 @@ interface VerificationTransaction {
     suspend fun cancel(code: CancelCode)
 
     fun isToDeviceTransport(): Boolean
+
+    fun isSuccessful(): Boolean
 }
