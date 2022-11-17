@@ -21,10 +21,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.extensions.measureTransaction
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.isLimitExceededError
+import org.matrix.android.sdk.api.metrics.SendServiceMetricPlugin
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
@@ -58,10 +61,13 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
         private val sessionParams: SessionParams,
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
-        private val memento: QueueMemento
+        private val memento: QueueMemento,
+        matrixConfiguration: MatrixConfiguration,
 ) : EventSenderProcessor {
 
     private val waitForNetworkSequencer = SemaphoreCoroutineSequencer()
+
+    private val relevantPlugins = matrixConfiguration.metricPlugins.filterIsInstance<SendServiceMetricPlugin>()
 
     /**
      * sequencers use QueuedTask.queueIdentifier as key.
@@ -137,33 +143,35 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     }
 
     private suspend fun executeTask(task: QueuedTask) {
-        try {
-            if (task.isCancelled()) {
-                Timber.v("## $task has been cancelled, try next task")
-                return
-            }
-            task.waitForNetwork()
-            task.execute()
-        } catch (exception: Throwable) {
-            when {
-                exception is IOException || exception is Failure.NetworkConnection -> {
-                    canReachServer.set(false)
-                    task.markAsFailedOrRetry(exception, 0)
-                }
-                (exception.isLimitExceededError()) -> {
-                    task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
-                }
-                exception is CancellationException -> {
+        relevantPlugins.measureTransaction {
+            try {
+                if (task.isCancelled()) {
                     Timber.v("## $task has been cancelled, try next task")
+                    return
                 }
-                else -> {
-                    Timber.v("## un-retryable error for $task, try next task")
-                    // this task is in error, check next one?
-                    task.onTaskFailed()
+                task.waitForNetwork()
+                task.execute()
+            } catch (exception: Throwable) {
+                when {
+                    exception is IOException || exception is Failure.NetworkConnection -> {
+                        canReachServer.set(false)
+                        task.markAsFailedOrRetry(exception, 0)
+                    }
+                    (exception.isLimitExceededError()) -> {
+                        task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
+                    }
+                    exception is CancellationException -> {
+                        Timber.v("## $task has been cancelled, try next task")
+                    }
+                    else -> {
+                        Timber.v("## un-retryable error for $task, try next task")
+                        // this task is in error, check next one?
+                        task.onTaskFailed()
+                    }
                 }
             }
+            markAsFinished(task)
         }
-        markAsFinished(task)
     }
 
     private suspend fun QueuedTask.markAsFailedOrRetry(failure: Throwable, retryDelay: Long) {

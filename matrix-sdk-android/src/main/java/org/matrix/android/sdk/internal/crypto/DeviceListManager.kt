@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.extensions.measureMetric
+import org.matrix.android.sdk.api.extensions.measureTransaction
 import org.matrix.android.sdk.api.metrics.DownloadDeviceKeysMetricsPlugin
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -355,7 +355,7 @@ internal class DeviceListManager @Inject constructor(
         val relevantPlugins = metricPlugins.filterIsInstance<DownloadDeviceKeysMetricsPlugin>()
 
         val response: KeysQueryResponse
-        relevantPlugins.measureMetric {
+        relevantPlugins.measureTransaction {
             response = try {
                 downloadKeysForUsersTask.execute(params)
             } catch (throwable: Throwable) {

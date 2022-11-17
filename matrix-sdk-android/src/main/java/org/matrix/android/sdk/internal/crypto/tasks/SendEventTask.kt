@@ -15,6 +15,9 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.metrics.SendServiceMetricPlugin
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -41,47 +44,58 @@ internal class DefaultSendEventTask @Inject constructor(
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val createRoomFromLocalRoomTask: CreateRoomFromLocalRoomTask,
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        matrixConfiguration: MatrixConfiguration
 ) : SendEventTask {
 
+    private val relevantPlugins = matrixConfiguration.metricPlugins.filterIsInstance<SendServiceMetricPlugin>()
+
     override suspend fun execute(params: SendEventTask.Params): String {
-        try {
-            if (params.event.isLocalRoomEvent) {
-                return createRoomAndSendEvent(params)
-            }
-
-            // Make sure to load all members in the room before sending the event.
-            params.event.roomId
-                    ?.takeIf { params.encrypt }
-                    ?.let { roomId ->
-                        try {
-                            loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
-                        } catch (failure: Throwable) {
-                            // send any way?
-                            // the result is that some users won't probably be able to decrypt :/
-                            Timber.w(failure, "SendEvent: failed to load members in room ${params.event.roomId}")
-                        }
+        relevantPlugins.measureSpan("send_service.execute_send_event_task", "Execute send event task") {
+            try {
+                if (params.event.isLocalRoomEvent) {
+                    return relevantPlugins.measureSpan("send_service.create_room_send_event", "Create room and send event") {
+                        createRoomAndSendEvent(params)
                     }
+                }
 
-            val event = handleEncryption(params)
-            val localId = event.eventId!!
-            localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
-            val response = executeRequest(globalErrorReceiver) {
-                roomAPI.send(
-                        localId,
-                        roomId = event.roomId ?: "",
-                        content = event.content,
-                        eventType = event.type ?: ""
-                )
-            }
-            localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
-            return response.eventId.also {
-                Timber.d("Event: $it just sent in ${params.event.roomId}")
-            }
-        } catch (e: Throwable) {
+                // Make sure to load all members in the room before sending the event.
+                relevantPlugins.measureSpan("send_service.load_all_members", "Load all members of room") {
+                    params.event.roomId
+                            ?.takeIf { params.encrypt }
+                            ?.let { roomId ->
+                                try {
+                                    loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                                } catch (failure: Throwable) {
+                                    // send any way?
+                                    // the result is that some users won't probably be able to decrypt :/
+                                    Timber.w(failure, "SendEvent: failed to load members in room ${params.event.roomId}")
+                                }
+                            }
+                }
+
+                val event = handleEncryption(params)
+                val localId = event.eventId!!
+                localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
+                relevantPlugins.measureSpan("send_service.room_send_event", "Send event in room") {
+                    val response = executeRequest(globalErrorReceiver) {
+                        roomAPI.send(
+                                localId,
+                                roomId = event.roomId ?: "",
+                                content = event.content,
+                                eventType = event.type ?: ""
+                        )
+                    }
+                    localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
+                    return response.eventId.also {
+                        Timber.d("Event: $it just sent in ${params.event.roomId}")
+                    }
+                }
+            } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
-            Timber.w(e, "Unable to send the Event")
-            throw e
+                Timber.w(e, "Unable to send the Event")
+                throw e
+            }
         }
     }
 
@@ -93,16 +107,18 @@ internal class DefaultSendEventTask @Inject constructor(
 
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
-        if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(
-                    EncryptEventTask.Params(
-                            params.event.roomId ?: "",
-                            params.event,
-                            listOf("m.relates_to")
-                    )
-            )
+        relevantPlugins.measureSpan("send_service.encrypt_event", "Encrypt event") {
+            if (params.encrypt && !params.event.isEncrypted()) {
+                return encryptEventTask.execute(
+                        EncryptEventTask.Params(
+                                params.event.roomId ?: "",
+                                params.event,
+                                listOf("m.relates_to")
+                        )
+                )
+            }
+            return params.event
         }
-        return params.event
     }
 
     private val Event.isLocalRoomEvent

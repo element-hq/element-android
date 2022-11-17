@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.extensions.measureMetric
 import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.extensions.measureTransaction
 import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
@@ -71,7 +71,7 @@ internal class SyncResponseHandler @Inject constructor(
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        relevantPlugins.measureMetric {
+        relevantPlugins.measureTransaction {
             startCryptoService(isInitialSync)
 
             // Handle the to device events before the room ones

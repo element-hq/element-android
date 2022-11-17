@@ -20,7 +20,7 @@ import io.sentry.ISpan
 import io.sentry.ITransaction
 import io.sentry.Sentry
 import io.sentry.SpanStatus
-import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
+import org.matrix.android.sdk.api.metrics.SendServiceMetricPlugin
 import java.util.EmptyStackException
 import java.util.Stack
 import javax.inject.Inject
@@ -28,7 +28,7 @@ import javax.inject.Inject
 /**
  * Sentry based implementation of SyncDurationMetricPlugin.
  */
-class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin {
+class SentrySendServiceMetrics @Inject constructor() : SendServiceMetricPlugin {
     private var transaction: ITransaction? = null
 
     // Stacks to keep spans in LIFO order.
@@ -44,7 +44,7 @@ class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin
      */
     override fun startSpan(operation: String, description: String) {
         if (Sentry.isEnabled()) {
-            val span = Sentry.getSpan()
+            val span = Sentry.getSpan() ?: transaction
             span?.let {
                 val innerSpan = it.startChild(operation, description)
                 spans.push(innerSpan)
@@ -64,7 +64,7 @@ class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin
 
     override fun startTransaction() {
         if (Sentry.isEnabled()) {
-            transaction = Sentry.startTransaction("sync_response_handler", "task", true)
+            transaction = Sentry.startTransaction("SendService", "action.handle", true)
             logTransaction("Sentry transaction started")
         }
     }

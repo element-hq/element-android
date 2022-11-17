@@ -15,6 +15,9 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.metrics.SendServiceMetricPlugin
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -32,18 +35,23 @@ internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
 
 internal class DefaultRedactEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        matrixConfiguration: MatrixConfiguration
 ) : RedactEventTask {
 
+    private val relevantPlugins = matrixConfiguration.metricPlugins.filterIsInstance<SendServiceMetricPlugin>()
+
     override suspend fun execute(params: RedactEventTask.Params): String {
-        val response = executeRequest(globalErrorReceiver) {
-            roomAPI.redactEvent(
-                    txId = params.txID,
-                    roomId = params.roomId,
-                    eventId = params.eventId,
-                    reason = if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
-            )
+        relevantPlugins.measureSpan("send_service.execute_redact_event_task", "Execute redact event task") {
+            val response = executeRequest(globalErrorReceiver) {
+                roomAPI.redactEvent(
+                        txId = params.txID,
+                        roomId = params.roomId,
+                        eventId = params.eventId,
+                        reason = if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                )
+            }
+            return response.eventId
         }
-        return response.eventId
     }
 }

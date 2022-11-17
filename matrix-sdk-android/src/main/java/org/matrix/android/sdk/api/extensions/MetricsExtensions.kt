@@ -28,11 +28,11 @@ import kotlin.contracts.contract
  * @param block Action/Task to be executed within this span.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun List<MetricPlugin>.measureMetric(block: () -> Unit) {
+inline fun <T> List<MetricPlugin>.measureTransaction(block: () -> T): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
-    try {
+    return try {
         this.forEach { plugin -> plugin.startTransaction() } // Start the transaction.
         block()
     } catch (throwable: Throwable) {
@@ -51,11 +51,11 @@ inline fun List<MetricPlugin>.measureMetric(block: () -> Unit) {
  * @param block Action/Task to be executed within this span.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun List<SpannableMetricPlugin>.measureSpan(operation: String, description: String, block: () -> Unit) {
+inline fun <T> List<SpannableMetricPlugin>.measureSpan(operation: String, description: String, block: () -> T): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
-    try {
+    return try {
         this.forEach { plugin -> plugin.startSpan(operation, description) } // Start the transaction.
         block()
     } catch (throwable: Throwable) {

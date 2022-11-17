@@ -25,7 +25,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.extensions.measureTransaction
+import org.matrix.android.sdk.api.metrics.SendServiceMetricPlugin
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -73,8 +77,11 @@ internal class DefaultSendService @AssistedInject constructor(
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository,
         private val eventSenderProcessor: EventSenderProcessor,
-        private val cancelSendTracker: CancelSendTracker
+        private val cancelSendTracker: CancelSendTracker,
+        matrixConfiguration: MatrixConfiguration,
 ) : SendService {
+
+    private val relevantPlugins = matrixConfiguration.metricPlugins.filterIsInstance<SendServiceMetricPlugin>()
 
     @AssistedFactory
     interface Factory {
@@ -84,21 +91,45 @@ internal class DefaultSendService @AssistedInject constructor(
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
 
     override fun sendEvent(eventType: String, content: JsonDict?): Cancelable {
-        return localEchoEventFactory.createEvent(roomId, eventType, content)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.create_event", "Create local event") {
+                localEchoEventFactory.createEvent(roomId, eventType, content)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean, additionalContent: Content?): Cancelable {
-        return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown, additionalContent)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.create_text_event", "Create local text event") {
+                localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown, additionalContent)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String, additionalContent: Content?): Cancelable {
-        return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType, additionalContent)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.create_formatted_text_event", "Create local formatted text event") {
+                localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType, additionalContent)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun sendQuotedTextMessage(
@@ -109,35 +140,67 @@ internal class DefaultSendService @AssistedInject constructor(
             rootThreadEventId: String?,
             additionalContent: Content?,
     ): Cancelable {
-        return localEchoEventFactory.createQuotedTextEvent(
-                roomId = roomId,
-                quotedEvent = quotedEvent,
-                text = text,
-                formattedText = formattedText,
-                autoMarkdown = autoMarkdown,
-                rootThreadEventId = rootThreadEventId,
-                additionalContent = additionalContent,
-        )
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.create_quoted_text_event", "Create local quoted text event") {
+                localEchoEventFactory.createQuotedTextEvent(
+                        roomId = roomId,
+                        quotedEvent = quotedEvent,
+                        text = text,
+                        formattedText = formattedText,
+                        autoMarkdown = autoMarkdown,
+                        rootThreadEventId = rootThreadEventId,
+                        additionalContent = additionalContent,
+                )
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun sendPoll(pollType: PollType, question: String, options: List<String>, additionalContent: Content?): Cancelable {
-        return localEchoEventFactory.createPollEvent(roomId, pollType, question, options, additionalContent)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.create_poll", "Create local poll event") {
+                localEchoEventFactory.createPollEvent(roomId, pollType, question, options, additionalContent)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun voteToPoll(pollEventId: String, answerId: String, additionalContent: Content?): Cancelable {
-        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId, additionalContent)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.reply_to_poll", "Create local reply poll event") {
+                localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId, additionalContent)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun endPoll(pollEventId: String, additionalContent: Content?): Cancelable {
-        return localEchoEventFactory.createEndPollEvent(roomId, pollEventId, additionalContent)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+        return relevantPlugins.measureTransaction {
+            relevantPlugins.measureSpan("send_service.end_poll", "Create local end poll event") {
+                localEchoEventFactory.createEndPollEvent(roomId, pollEventId, additionalContent)
+            }.also {
+                relevantPlugins.measureSpan("send_service.create_local_echo", "Create local echo") {
+                    createLocalEcho(it)
+                }
+            }.let {
+                relevantPlugins.measureSpan("send_service.send_event", "Send event") { sendEvent(it) }
+            }
+        }
     }
 
     override fun redactEvent(event: Event, reason: String?, additionalContent: Content?): Cancelable {
@@ -148,11 +211,13 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable {
-        if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
-            localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
-            return sendEvent(localEcho.root)
+        relevantPlugins.measureTransaction {
+            if (localEcho.root.isTextMessage() && localEcho.root.sendState.hasFailed()) {
+                localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
+                return relevantPlugins.measureSpan("send_service.resend_text_event", "Resend text message") { sendEvent(localEcho.root) }
+            }
+            return NoOpCancellable
         }
-        return NoOpCancellable
     }
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable {
@@ -163,8 +228,10 @@ internal class DefaultSendService @AssistedInject constructor(
             val url = messageContent.getFileUrl() ?: return NoOpCancellable
             if (url.isMxcUrl()) {
                 // We need to resend only the message as the attachment is ok
-                localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
-                return sendEvent(localEcho.root)
+                return relevantPlugins.measureTransaction {
+                    localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
+                    relevantPlugins.measureSpan("send_service.resend_media_message", "Resend media message") { sendEvent(localEcho.root) }
+                }
             }
 
             // we need to resend the media
