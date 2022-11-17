@@ -1,3 +1,43 @@
+Changes in Element v1.5.8 (2022-11-17)
+======================================
+
+Features ✨
+----------
+ - [Session manager] Multi-session signout ([#7418](https://github.com/vector-im/element-android/issues/7418))
+ - Rich text editor: add full screen mode. ([#7436](https://github.com/vector-im/element-android/issues/7436))
+ - [Rich text editor] Add plain text mode ([#7452](https://github.com/vector-im/element-android/issues/7452))
+ - Move TypingView inside the timeline items. ([#7496](https://github.com/vector-im/element-android/issues/7496))
+ - Push notifications toggle: align implementation for current session ([#7512](https://github.com/vector-im/element-android/issues/7512))
+ - Voice messages - Persist the playback position across different screens ([#7582](https://github.com/vector-im/element-android/issues/7582))
+
+Bugfixes 🐛
+----------
+ - [Voice Broadcast] Do not display the recorder view for a live broadcast started from another session ([#7431](https://github.com/vector-im/element-android/issues/7431))
+ - [Session manager] Hide push notification toggle when there is no server support ([#7457](https://github.com/vector-im/element-android/issues/7457))
+ - Fix rich text editor textfield not growing to fill parent on full screen. ([#7491](https://github.com/vector-im/element-android/issues/7491))
+ - Fix duplicated mention pills in some cases ([#7501](https://github.com/vector-im/element-android/issues/7501))
+ - Voice Broadcast - Fix duplicated voice messages in the internal playlist ([#7502](https://github.com/vector-im/element-android/issues/7502))
+ - When joining a room, the message composer is displayed once the room is loaded. ([#7509](https://github.com/vector-im/element-android/issues/7509))
+ - Voice Broadcast - Fix error on voice messages in unencrypted rooms ([#7519](https://github.com/vector-im/element-android/issues/7519))
+ - Fix description of verified sessions ([#7533](https://github.com/vector-im/element-android/issues/7533))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Improve timeline items factory and handle bad recording state display ([#7448](https://github.com/vector-im/element-android/issues/7448))
+ - [Voice Broadcast] Stop recording when opening the room after an app restart ([#7450](https://github.com/vector-im/element-android/issues/7450))
+ - [Voice Broadcast] Improve playlist fetching and player codebase ([#7478](https://github.com/vector-im/element-android/issues/7478))
+ - [Voice Broadcast] Display an error dialog if the user fails to start a voice broadcast ([#7485](https://github.com/vector-im/element-android/issues/7485))
+ - [Voice Broadcast] Add seekbar in listening tile ([#7496](https://github.com/vector-im/element-android/issues/7496))
+ - [Voice Broadcast] Improve the live indicator icon rendering in the timeline ([#7579](https://github.com/vector-im/element-android/issues/7579))
+ - Voice Broadcast - Add maximum length ([#7588](https://github.com/vector-im/element-android/issues/7588))
+
+SDK API changes ⚠️
+------------------
+ - [Metrics] Add `SpannableMetricPlugin` to support spans within transactions. ([#7514](https://github.com/vector-im/element-android/issues/7514))
+ - Fix a bug that caused messages with no formatted text to be quoted as "null". ([#7530](https://github.com/vector-im/element-android/issues/7530))
+ - If message content has no `formattedBody`, default to `body` when editing. ([#7574](https://github.com/vector-im/element-android/issues/7574))
+
+
 Changes in Element v1.5.7 (2022-11-07)
 ======================================
 

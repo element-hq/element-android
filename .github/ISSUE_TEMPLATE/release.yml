@@ -24,8 +24,7 @@ body:
 
         ### Do the release
 
-        - [ ] Make sure `develop` and `main` are up to date (git pull)
-        - [ ] Checkout develop and create a release with gitflow, branch name `release/1.2.3`
+        - [ ] Make sure `develop` and `main` are up to date and create a release with gitflow: `git checkout main; git pull; git checkout develop; git pull; git flow release start '1.2.3'`
         - [ ] Check the crashes from the PlayStore
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
@@ -34,12 +33,12 @@ body:
         - [ ] Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things
         - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs
         - [ ] (optional) Push the branch and start a draft PR (will not be merged), to check that the CI is happy with all the changes.
-        - [ ] Finish release with gitflow, delete the draft PR (if created)
-        - [ ] Push `main` and the new tag `v1.2.3` to origin
-        - [ ] Checkout `develop`
+        - [ ] Finish release with gitflow, delete the draft PR (if created): `git flow release finish '1.2.3'`
+        - [ ] Push `main` and the new tag `v1.2.3` to origin: `git push origin main; git push origin 'v1.2.3'`
+        - [ ] Checkout `develop`: `git checkout develop`
         - [ ] Increase version (versionPatch + 2) in `./vector/build.gradle`
         - [ ] Change the value of SDK_VERSION in the file `./matrix-sdk-android/build.gradle`
-        - [ ] Commit and push `develop`
+        - [ ] Commit and push `develop`: `git commit -m 'version++'; git push origin develop`
         - [ ] Wait for [Buildkite](https://buildkite.com/matrix-dot-org/element-android/builds?branch=main) to build the `main` branch.
         - [ ] Run the script `~/scripts/releaseElement.sh`. It will download the APKs from Buildkite check them and sign them.
         - [ ] Install the APK on your phone to check that the upgrade went well (no init sync, etc.)

@@ -53,7 +53,7 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
     val moshiAdapter = moshi.adapter(T::class.java)
     return try {
         moshiAdapter.fromJsonValue(this)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         if (catchError) {
             Timber.e(e, "To model failed : $e")
             null
