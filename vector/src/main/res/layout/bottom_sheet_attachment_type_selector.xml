@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorSurface">
@@ -81,6 +82,25 @@
             app:leftIcon="@drawable/ic_attachment_contact_white_24dp"
             app:tint="?colorPrimary"
             app:titleTextColor="?vctr_content_primary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?vctr_list_separator" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/textFormatting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_text_formatting"
+            android:drawablePadding="20dp"
+            android:padding="20dp"
+            android:paddingStart="28dp"
+            android:text="@string/attachment_type_selector_text_formatting"
+            android:textAppearance="@style/TextAppearance.Vector.Subtitle"
+            android:textColor="?vctr_content_primary"
+            app:drawableTint="?colorPrimary"
+            tools:ignore="RtlSymmetry" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -20,6 +20,7 @@ import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.call.conference.ConferenceEvent
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
@@ -129,9 +130,10 @@ sealed class RoomDetailAction : VectorViewModelAction {
         }
 
         sealed class Listening : VoiceBroadcastAction() {
-            data class PlayOrResume(val eventId: String) : Listening()
+            data class PlayOrResume(val voiceBroadcast: VoiceBroadcast) : Listening()
             object Pause : Listening()
             object Stop : Listening()
+            data class SeekTo(val voiceBroadcast: VoiceBroadcast, val positionMillis: Int, val duration: Int) : Listening()
         }
     }
 }

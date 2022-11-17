@@ -29,7 +29,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import im.vector.app.R
+import im.vector.app.core.animations.SimpleTransitionListener
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -89,4 +95,19 @@ fun ImageView.setAttributeTintedImageResource(@DrawableRes drawableRes: Int, @At
 fun View.setAttributeBackground(@AttrRes attributeId: Int) {
     val attribute = ThemeUtils.getAttribute(context, attributeId)!!
     setBackgroundResource(attribute.resourceId)
+}
+
+fun ViewGroup.animateLayoutChange(animationDuration: Long, transitionComplete: (() -> Unit)? = null) {
+    val transition = TransitionSet().apply {
+        ordering = TransitionSet.ORDERING_SEQUENTIAL
+        addTransition(ChangeBounds())
+        addTransition(Fade(Fade.IN))
+        duration = animationDuration
+        addListener(object : SimpleTransitionListener() {
+            override fun onTransitionEnd(transition: Transition) {
+                transitionComplete?.invoke()
+            }
+        })
+    }
+    TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
 }

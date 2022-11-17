@@ -16,7 +16,7 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.settings.devices.v2.overview.TogglePushNotificationUseCase
+import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk

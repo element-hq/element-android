@@ -19,6 +19,7 @@ package im.vector.app.core.session
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.notification.EnableNotificationsSettingUpdater
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.settings.VectorPreferences
@@ -32,6 +33,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val webRtcCallManager: WebRtcCallManager,
         private val updateMatrixClientInfoUseCase: UpdateMatrixClientInfoUseCase,
         private val vectorPreferences: VectorPreferences,
+        private val enableNotificationsSettingUpdater: EnableNotificationsSettingUpdater,
 ) {
 
     suspend fun execute(session: Session, startSyncing: Boolean = true) {
@@ -46,5 +48,6 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         if (vectorPreferences.isClientInfoRecordingEnabled()) {
             updateMatrixClientInfoUseCase.execute(session)
         }
+        enableNotificationsSettingUpdater.onSessionsStarted(session)
     }
 }

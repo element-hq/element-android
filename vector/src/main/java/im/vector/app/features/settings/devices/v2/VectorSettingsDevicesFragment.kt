@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,12 +31,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
+import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.setTextColor
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.login.qr.QrCodeLoginArgs
@@ -47,6 +51,8 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -70,6 +76,8 @@ class VectorSettingsDevicesFragment :
 
     @Inject lateinit var stringProvider: StringProvider
 
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
+
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsDevicesBinding {
@@ -91,6 +99,7 @@ class VectorSettingsDevicesFragment :
         super.onViewCreated(view, savedInstanceState)
 
         initWaitingView()
+        initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
         initQrLoginView()
@@ -100,10 +109,7 @@ class VectorSettingsDevicesFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is DevicesViewEvent.Loading -> showLoading(it.message)
-                is DevicesViewEvent.Failure -> showFailure(it.throwable)
-                is DevicesViewEvent.RequestReAuth -> Unit // TODO. Next PR
-                is DevicesViewEvent.PromptRenameDevice -> Unit // TODO. Next PR
+                is DevicesViewEvent.RequestReAuth -> askForReAuthentication(it)
                 is DevicesViewEvent.ShowVerifyDevice -> {
                     VerificationBottomSheet.withArgs(
                             roomId = null,
@@ -122,6 +128,8 @@ class VectorSettingsDevicesFragment :
                 is DevicesViewEvent.PromptResetSecrets -> {
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
                 }
+                is DevicesViewEvent.SignoutError -> showFailure(it.error)
+                is DevicesViewEvent.SignoutSuccess -> Unit // do nothing
             }
         }
     }
@@ -129,6 +137,29 @@ class VectorSettingsDevicesFragment :
     private fun initWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun initOtherSessionsHeaderView() {
+        views.deviceListHeaderOtherSessions.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.otherSessionsHeaderMultiSignout -> {
+                    confirmMultiSignoutOtherSessions()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun confirmMultiSignoutOtherSessions() {
+        activity?.let {
+            buildConfirmSignoutDialogUseCase.execute(it, this::multiSignoutOtherSessions)
+                    .show()
+        }
+    }
+
+    private fun multiSignoutOtherSessions() {
+        viewModel.handle(DevicesAction.MultiSignoutOtherSessions)
     }
 
     private fun initOtherSessionsView() {
@@ -142,7 +173,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.UNVERIFIED,
-                        excludeCurrentDevice = false
+                        excludeCurrentDevice = true
                 )
             }
         }
@@ -152,7 +183,7 @@ class VectorSettingsDevicesFragment :
                         requireActivity(),
                         R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.INACTIVE,
-                        excludeCurrentDevice = false
+                        excludeCurrentDevice = true
                 )
             }
         }
@@ -271,6 +302,11 @@ class VectorSettingsDevicesFragment :
             hideOtherSessionsView()
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
+            val color = colorProvider.getColorFromAttribute(R.attr.colorError)
+            val multiSignoutItem = views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout)
+            val nbDevices = otherDevices.size
+            multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
+            multiSignoutItem.setTextColor(color)
             views.deviceListOtherSessions.isVisible = true
             views.deviceListOtherSessions.render(
                     devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
@@ -346,5 +382,38 @@ class VectorSettingsDevicesFragment :
                 defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
                 excludeCurrentDevice = true
         )
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(DevicesAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(DevicesAction.PasswordAuthDone(password))
+                }
+                else -> {
+                    viewModel.handle(DevicesAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(DevicesAction.ReAuthCancelled)
+        }
+    }
+
+    /**
+     * Launch the re auth activity to get credentials.
+     */
+    private fun askForReAuthentication(reAuthReq: DevicesViewEvent.RequestReAuth) {
+        ReAuthActivity.newIntent(
+                requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)
+        ).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
+        }
     }
 }

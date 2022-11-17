@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto
 
 import android.content.Context
+import androidx.annotation.Size
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
@@ -54,6 +55,8 @@ interface CryptoService {
     fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
 
     fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
+
+    fun deleteDevices(@Size(min = 1) deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 

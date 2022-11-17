@@ -2781,4 +2781,12 @@
     <plurals name="x_selected">
         <item quantity="other">已選取 %1$d</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">切換全螢幕模式</string>
+    <string name="attachment_type_selector_text_formatting">文字格式化</string>
+    <string name="error_voice_broadcast_already_in_progress_message">您已在錄製語音廣播。請結束您目前的語音廣播以開始新的。</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的。</string>
+    <string name="error_voice_broadcast_permission_denied_message">您沒有在此聊天室中開始語音廣播的必要權限。請聯絡聊天室管理員以升級您的權限。</string>
+    <string name="error_voice_broadcast_unauthorized_title">無法開始新的語音廣播</string>
+    <string name="a11y_voice_broadcast_fast_forward">快轉30秒</string>
+    <string name="a11y_voice_broadcast_fast_backward">快退30秒</string>
 </resources>

@@ -42,6 +42,7 @@ import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voicebroadcast.recording.usecase.StopOngoingVoiceBroadcastUseCase
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -92,6 +93,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
         private val vectorFeatures: VectorFeatures,
+        private val stopOngoingVoiceBroadcastUseCase: StopOngoingVoiceBroadcastUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -123,6 +125,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeReleaseNotes()
         observeLocalNotificationsSilenced()
         initThreadsMigration()
+        viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
     }
 
     private fun observeReleaseNotes() = withState { state ->

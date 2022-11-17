@@ -51,15 +51,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun pauseAllPlaybacks() {
-        listeners.keys.forEach { key ->
-            pausePlayback(key)
-        }
-    }
-
-    fun makeAllPlaybacksIdle() {
-        listeners.keys.forEach { key ->
-            setState(key, Listener.State.Idle)
-        }
+        listeners.keys.forEach(::pausePlayback)
     }
 
     /**
@@ -127,7 +119,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    private fun getPercentage(id: String): Float {
+    fun getPercentage(id: String): Float {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.percentage
             is Listener.State.Paused -> state.percentage
@@ -136,19 +128,18 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    fun clear() {
+    fun unregisterListeners() {
         listeners.forEach {
             it.value.onUpdate(Listener.State.Idle)
         }
         listeners.clear()
-        states.clear()
     }
 
     companion object {
         const val RECORDING_ID = "RECORDING_ID"
     }
 
-    interface Listener {
+    fun interface Listener {
 
         fun onUpdate(state: State)
 

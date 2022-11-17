@@ -2827,4 +2827,12 @@
         <item quantity="one">%1$d valitud</item>
         <item quantity="other">%1$d valitud</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Lülita täisekraanivaade sisse/välja</string>
+    <string name="attachment_type_selector_text_formatting">Tekstivorming</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Sul pole piisavalt õigusi selles jututoas ringhäälingukõne algatamiseks. Õiguste lisamiseks palun võta ühendust jututoa haldajaga.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Uue ringhäälingukõne alustamine pole võimalik</string>
+    <string name="a11y_voice_broadcast_fast_backward">Keri tagasi 30 sekundi kaupa</string>
+    <string name="a11y_voice_broadcast_fast_forward">Keri edasi 30 sekundi kaupa</string>
 </resources>

@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
 import im.vector.app.core.extensions.prevOrNull
 import im.vector.app.core.time.Clock
+import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.JitsiState
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
@@ -57,6 +58,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
+import im.vector.app.features.home.room.detail.timeline.item.TypingItem_
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
@@ -94,6 +96,7 @@ class TimelineEventController @Inject constructor(
         private val readReceiptsItemFactory: ReadReceiptsItemFactory,
         private val reactionListFactory: ReactionsSummaryFactory,
         private val clock: Clock,
+        private val avatarRenderer: AvatarRenderer,
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
     /**
@@ -104,7 +107,7 @@ class TimelineEventController @Inject constructor(
             val highlightedEventId: String? = null,
             val jitsiState: JitsiState = JitsiState(),
             val roomSummary: RoomSummary? = null,
-            val rootThreadEventId: String? = null
+            val rootThreadEventId: String? = null,
     ) {
 
         constructor(state: RoomDetailViewState) : this(
@@ -112,7 +115,7 @@ class TimelineEventController @Inject constructor(
                 highlightedEventId = state.highlightedEventId,
                 jitsiState = state.jitsiState,
                 roomSummary = state.asyncRoomSummary(),
-                rootThreadEventId = state.rootThreadEventId
+                rootThreadEventId = state.rootThreadEventId,
         )
 
         fun isFromThreadTimeline(): Boolean = rootThreadEventId != null
@@ -286,7 +289,7 @@ class TimelineEventController @Inject constructor(
 
     private val interceptorHelper = TimelineControllerInterceptorHelper(
             ::positionOfReadMarker,
-            adapterPositionMapping
+            adapterPositionMapping,
     )
 
     init {
@@ -333,6 +336,12 @@ class TimelineEventController @Inject constructor(
                 .id("forward_loading_item_$timestamp")
                 .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
                 .addWhenLoading(Timeline.Direction.FORWARDS)
+
+        if (!showingForwardLoader) {
+            val typingUsers = partialState.roomSummary?.typingUsers.orEmpty()
+            val typingItem = TypingItem_().id("typing_view").avatarRenderer(avatarRenderer).users(typingUsers)
+            add(typingItem)
+        }
 
         val timelineModels = getModels()
         add(timelineModels)

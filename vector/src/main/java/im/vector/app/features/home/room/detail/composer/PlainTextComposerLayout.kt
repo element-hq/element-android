@@ -49,13 +49,6 @@ class PlainTextComposerLayout @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), MessageComposerView {
 
-    interface Callback : ComposerEditText.Callback {
-        fun onCloseRelatedMessage()
-        fun onSendMessage(text: CharSequence)
-        fun onAddAttachment()
-        fun onExpandOrCompactChange()
-    }
-
     private val views: ComposerLayoutBinding
 
     override var callback: Callback? = null
@@ -83,6 +76,7 @@ class PlainTextComposerLayout @JvmOverloads constructor(
     }
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
+    override val fullScreenButton: ImageButton? = null
     override val composerRelatedMessageActionIcon: ImageView
         get() = views.composerRelatedMessageActionIcon
     override val composerRelatedMessageAvatar: ImageView
@@ -153,6 +147,10 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
     override fun setTextIfDifferent(text: CharSequence?): Boolean {
         return views.composerEditText.setTextIfDifferent(text)
+    }
+
+    override fun toggleFullScreen(newValue: Boolean) {
+        // Plain text composer has no full screen
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {

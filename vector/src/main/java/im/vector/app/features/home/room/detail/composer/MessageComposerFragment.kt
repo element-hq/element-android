@@ -43,6 +43,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -69,6 +70,7 @@ import im.vector.app.features.attachments.AttachmentTypeSelectorBottomSheet
 import im.vector.app.features.attachments.AttachmentTypeSelectorSharedAction
 import im.vector.app.features.attachments.AttachmentTypeSelectorSharedActionViewModel
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
+import im.vector.app.features.attachments.AttachmentTypeSelectorViewModel
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
@@ -97,6 +99,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.voice.VoiceFailure
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -167,7 +170,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private val timelineViewModel: TimelineViewModel by parentFragmentViewModel()
     private val messageComposerViewModel: MessageComposerViewModel by parentFragmentViewModel()
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-    private val attachmentViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
+    private val attachmentViewModel: AttachmentTypeSelectorViewModel by fragmentViewModel()
+    private val attachmentActionsViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
 
     private val composer: MessageComposerView get() {
         return if (vectorPreferences.isRichTextEditorEnabled()) {
@@ -213,6 +217,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
         }
 
+        messageComposerViewModel.stateFlow.map { it.isFullScreen }
+                .distinctUntilChanged()
+                .onEach { isFullScreen ->
+                    composer.toggleFullScreen(isFullScreen)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
         messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
             if (!canSend.boolean()) {
                 return@onEach
@@ -226,7 +237,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
         }
 
-        attachmentViewModel.stream()
+        attachmentActionsViewModel.stream()
                 .filterIsInstance<AttachmentTypeSelectorSharedAction.SelectAttachmentTypeAction>()
                 .onEach { onTypeSelected(it.attachmentType) }
                 .launchIn(lifecycleScope)
@@ -246,7 +257,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 }
                 // TODO remove this when there will be a recording indicator outside of the timeline
                 // Pause voice broadcast if the timeline is not shown anymore
-                it.isVoiceBroadcasting && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
+                it.isRecordingVoiceBroadcast && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
                 else -> {
                     timelineViewModel.handle(VoiceBroadcastAction.Listening.Pause)
                     messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
@@ -264,11 +275,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         messageComposerViewModel.endAllVoiceActions()
     }
 
-    override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
+    override fun invalidate() = withState(
+            timelineViewModel, messageComposerViewModel, attachmentViewModel
+    ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
         composer.setInvisible(!messageComposerState.isComposerVisible)
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
     }
 
     private fun setupComposer() {
@@ -309,7 +323,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             // Show keyboard when the user started a thread
             composerEditText.showKeyboard(andRequestFocus = true)
         }
-        composer.callback = object : PlainTextComposerLayout.Callback {
+        composer.callback = object : Callback {
             override fun onAddAttachment() {
                 if (vectorPreferences.isRichTextEditorEnabled()) {
                     AttachmentTypeSelectorBottomSheet.show(childFragmentManager)
@@ -336,8 +350,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 composer.emojiButton?.isVisible = isEmojiKeyboardVisible
             }
 
-            override fun onSendMessage(text: CharSequence) {
+            override fun onSendMessage(text: CharSequence) = withState(messageComposerViewModel) { state ->
                 sendTextMessage(text, composer.formattedText)
+
+                if (state.isFullScreen) {
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
+                }
             }
 
             override fun onCloseRelatedMessage() {
@@ -350,6 +368,10 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
             override fun onTextChanged(text: CharSequence) {
                 messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
+            }
+
+            override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
+                messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(!state.isFullScreen))
             }
         }
     }
@@ -477,7 +499,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             composer.sendButton.alpha = 0f
             composer.sendButton.isVisible = true
             composer.sendButton.animate().alpha(1f).setDuration(150).start()
-        } else {
+        } else if (!event.isVisible) {
             composer.sendButton.isInvisible = true
         }
     }
