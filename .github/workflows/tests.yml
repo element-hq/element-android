@@ -14,7 +14,7 @@ jobs:
   tests:
     name: Runs all tests
     runs-on: buildjet-4vcpu-ubuntu-2204
-    timeout-minutes: 60 # We might need to increase it if the time for tests grows
+    timeout-minutes: 90 # We might need to increase it if the time for tests grows
     strategy:
       matrix:
         api-level: [28]
