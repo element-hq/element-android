@@ -180,11 +180,13 @@ fun TimelineEvent.isRootThread(): Boolean {
 
 /**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
+ * @param formatted Indicates whether the formatted HTML body of the message should be retrieved of the plain text one.
+ * @return If [formatted] is `true`, the HTML body of the message will be retrieved if available. Otherwise, the plain text/markdown version will be returned.
  */
 fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
     val lastMessageContent = getLastMessageContent()
     val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
-        lastMessageContent.formattedBody
+        lastMessageContent.formattedBody ?: lastMessageContent.body
     } else {
         lastMessageContent?.body
     } ?: return ""
