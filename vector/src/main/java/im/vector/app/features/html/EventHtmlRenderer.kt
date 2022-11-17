@@ -98,12 +98,6 @@ class EventHtmlRenderer @Inject constructor(
         // It needs to be in this specific format: https://noties.io/Markwon/docs/v4/ext-latex
         builder
                 .usePlugin(object : AbstractMarkwonPlugin() {
-                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                        builder.setFactory(
-                                Emphasis::class.java
-                        ) { _, _ -> CustomTypefaceSpan(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC)) }
-                    }
-
                     override fun processMarkdown(markdown: String): String {
                         return markdown
                                 .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) { matchResult ->
@@ -133,6 +127,12 @@ class EventHtmlRenderer @Inject constructor(
                     )
             )
             .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                    builder.setFactory(
+                            Emphasis::class.java
+                    ) { _, _ -> CustomTypefaceSpan(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC)) }
+                }
+
                 override fun configureParser(builder: Parser.Builder) {
                     /* Configuring the Markwon block formatting processor.
                      * Default settings are all Markdown blocks. Turn those off.
