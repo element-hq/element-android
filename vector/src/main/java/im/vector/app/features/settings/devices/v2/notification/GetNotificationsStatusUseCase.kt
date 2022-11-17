@@ -30,13 +30,13 @@ import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject
 
 class GetNotificationsStatusUseCase @Inject constructor(
-        private val canTogglePushNotificationsViaPusherUseCase: CanTogglePushNotificationsViaPusherUseCase,
-        private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
+        private val canToggleNotificationsViaPusherUseCase: CanToggleNotificationsViaPusherUseCase,
+        private val checkIfCanToggleNotificationsViaAccountDataUseCase: CheckIfCanToggleNotificationsViaAccountDataUseCase,
 ) {
 
     fun execute(session: Session, deviceId: String): Flow<NotificationsStatus> {
         return when {
-            checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(session, deviceId) -> {
+            checkIfCanToggleNotificationsViaAccountDataUseCase.execute(session, deviceId) -> {
                 session.flow()
                         .liveUserAccountData(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
                         .unwrap()
@@ -44,7 +44,7 @@ class GetNotificationsStatusUseCase @Inject constructor(
                         .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
                         .distinctUntilChanged()
             }
-            else -> canTogglePushNotificationsViaPusherUseCase.execute(session)
+            else -> canToggleNotificationsViaPusherUseCase.execute(session)
                     .flatMapLatest { canToggle ->
                         if (canToggle) {
                             session.flow()

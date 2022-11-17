@@ -26,12 +26,12 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 
 private const val A_DEVICE_ID = "device-id"
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
+class CheckIfCanToggleNotificationsViaAccountDataUseCaseTest {
 
     private val fakeSession = FakeSession()
 
-    private val checkIfCanTogglePushNotificationsViaAccountDataUseCase =
-            CheckIfCanTogglePushNotificationsViaAccountDataUseCase()
+    private val checkIfCanToggleNotificationsViaAccountDataUseCase =
+            CheckIfCanToggleNotificationsViaAccountDataUseCase()
 
     @Test
     fun `given current session and an account data with a content for the device id when execute then result is true`() {
@@ -44,7 +44,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
                 )
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+        val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo true
@@ -61,7 +61,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
                 )
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+        val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo false
@@ -78,7 +78,7 @@ class CheckIfCanTogglePushNotificationsViaAccountDataUseCaseTest {
                 )
 
         // When
-        val result = checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+        val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result shouldBeEqualTo false

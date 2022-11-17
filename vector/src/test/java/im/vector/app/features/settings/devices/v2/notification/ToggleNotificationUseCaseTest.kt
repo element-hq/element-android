@@ -26,21 +26,21 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 
-class TogglePushNotificationUseCaseTest {
+class ToggleNotificationUseCaseTest {
 
     private val activeSessionHolder = FakeActiveSessionHolder()
-    private val fakeCheckIfCanTogglePushNotificationsViaPusherUseCase =
-            mockk<CheckIfCanTogglePushNotificationsViaPusherUseCase>()
-    private val fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase =
-            mockk<CheckIfCanTogglePushNotificationsViaAccountDataUseCase>()
+    private val fakeCheckIfCanToggleNotificationsViaPusherUseCase =
+            mockk<CheckIfCanToggleNotificationsViaPusherUseCase>()
+    private val fakeCheckIfCanToggleNotificationsViaAccountDataUseCase =
+            mockk<CheckIfCanToggleNotificationsViaAccountDataUseCase>()
     private val fakeSetNotificationSettingsAccountDataUseCase =
             mockk<SetNotificationSettingsAccountDataUseCase>()
 
-    private val togglePushNotificationUseCase =
-            TogglePushNotificationUseCase(
+    private val toggleNotificationUseCase =
+            ToggleNotificationUseCase(
                     activeSessionHolder = activeSessionHolder.instance,
-                    checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanTogglePushNotificationsViaPusherUseCase,
-                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase,
+                    checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanToggleNotificationsViaPusherUseCase,
+                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanToggleNotificationsViaAccountDataUseCase,
                     setNotificationSettingsAccountDataUseCase = fakeSetNotificationSettingsAccountDataUseCase,
             )
 
@@ -55,11 +55,11 @@ class TogglePushNotificationUseCaseTest {
         val fakeSession = activeSessionHolder.fakeSession
         fakeSession.pushersService().givenPushersLive(pushers)
         fakeSession.pushersService().givenGetPushers(pushers)
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns true
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns false
+        every { fakeCheckIfCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns true
+        every { fakeCheckIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns false
 
         // When
-        togglePushNotificationUseCase.execute(sessionId, true)
+        toggleNotificationUseCase.execute(sessionId, true)
 
         // Then
         activeSessionHolder.fakeSession.pushersService().verifyTogglePusherCalled(pushers.first(), true)
@@ -70,15 +70,15 @@ class TogglePushNotificationUseCaseTest {
         // Given
         val sessionId = "a_session_id"
         val fakeSession = activeSessionHolder.fakeSession
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns false
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns true
+        every { fakeCheckIfCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns false
+        every { fakeCheckIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns true
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any()) }
         val expectedLocalNotificationSettingsContent = LocalNotificationSettingsContent(
                 isSilenced = false
         )
 
         // When
-        togglePushNotificationUseCase.execute(sessionId, true)
+        toggleNotificationUseCase.execute(sessionId, true)
 
         // Then
         coVerify {
