@@ -18,14 +18,14 @@ package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.events.model.toContent
 import javax.inject.Inject
 
+// TODO rename into ToggleNotificationsUseCase
 class TogglePushNotificationUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val checkIfCanTogglePushNotificationsViaPusherUseCase: CheckIfCanTogglePushNotificationsViaPusherUseCase,
         private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
+        private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
 ) {
 
     suspend fun execute(deviceId: String, enabled: Boolean) {
@@ -40,10 +40,7 @@ class TogglePushNotificationUseCase @Inject constructor(
 
         if (checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(session, deviceId)) {
             val newNotificationSettingsContent = LocalNotificationSettingsContent(isSilenced = !enabled)
-            session.accountDataService().updateUserAccountData(
-                    UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId,
-                    newNotificationSettingsContent.toContent(),
-            )
+            setNotificationSettingsAccountDataUseCase.execute(deviceId, newNotificationSettingsContent)
         }
     }
 }
