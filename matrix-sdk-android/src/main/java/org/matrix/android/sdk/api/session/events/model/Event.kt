@@ -390,11 +390,11 @@ fun Event.isLocationMessage(): Boolean {
     }
 }
 
-fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
+fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START.values || getClearType() in EventType.POLL_END.values
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
-fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO.values
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
@@ -404,7 +404,7 @@ fun Event.getRelationContent(): RelationDefaultContent? {
             // Special cases when there is only a local msgtype for some event types
             when (getClearType()) {
                 EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
-                in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
+                in EventType.BEACON_LOCATION_DATA.values -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
                 else -> getClearContent()?.get("m.relates_to")?.toContent().toModel()
             }
         }
@@ -451,7 +451,7 @@ fun Event.getPollContent(): MessagePollContent? {
 }
 
 fun Event.supportsNotification() =
-        this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+        this.getClearType() in EventType.MESSAGE + EventType.POLL_START.values + EventType.STATE_ROOM_BEACON_INFO.values
 
 fun Event.isContentReportable() =
-        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO.values

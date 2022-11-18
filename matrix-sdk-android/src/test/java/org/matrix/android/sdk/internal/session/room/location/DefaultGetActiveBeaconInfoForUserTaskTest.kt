@@ -69,7 +69,7 @@ class DefaultGetActiveBeaconInfoForUserTaskTest {
         result shouldBeEqualTo currentStateEvent
         fakeStateEventDataSource.verifyGetStateEvent(
                 roomId = params.roomId,
-                eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                eventType = EventType.STATE_ROOM_BEACON_INFO.stable,
                 stateKey = QueryStringValue.Equals(A_USER_ID)
         )
     }

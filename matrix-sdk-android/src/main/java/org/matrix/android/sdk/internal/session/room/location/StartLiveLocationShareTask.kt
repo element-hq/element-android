@@ -46,7 +46,7 @@ internal class DefaultStartLiveLocationShareTask @Inject constructor(
                 isLive = true,
                 unstableTimestampMillis = clock.epochMillis()
         ).toContent()
-        val eventType = EventType.STATE_ROOM_BEACON_INFO.first()
+        val eventType = EventType.STATE_ROOM_BEACON_INFO.stable
         val sendStateTaskParams = SendStateTask.Params(
                 roomId = params.roomId,
                 stateKey = userId,

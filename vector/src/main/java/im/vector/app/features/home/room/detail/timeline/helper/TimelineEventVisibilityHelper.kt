@@ -248,7 +248,7 @@ class TimelineEventVisibilityHelper @Inject constructor(
             } else root.eventId != rootThreadEventId
         }
 
-        if (root.getClearType() in EventType.BEACON_LOCATION_DATA) {
+        if (root.getClearType() in EventType.BEACON_LOCATION_DATA.values) {
             return !root.isRedacted()
         }
 

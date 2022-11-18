@@ -45,7 +45,7 @@ internal class DefaultStopLiveLocationShareTask @Inject constructor(
         val sendStateTaskParams = SendStateTask.Params(
                 roomId = params.roomId,
                 stateKey = stateKey,
-                eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                eventType = EventType.STATE_ROOM_BEACON_INFO.stable,
                 body = updatedContent
         )
         return try {

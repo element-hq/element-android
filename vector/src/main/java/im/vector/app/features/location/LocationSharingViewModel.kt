@@ -83,7 +83,7 @@ class LocationSharingViewModel @AssistedInject constructor(
                 .distinctUntilChanged()
                 .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO
+                    val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO.values
                             .all { beaconInfoType ->
                                 powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
                             }
