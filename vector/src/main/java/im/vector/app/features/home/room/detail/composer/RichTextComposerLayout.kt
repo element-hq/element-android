@@ -16,25 +16,34 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
-import im.vector.app.core.extensions.animateLayoutChange
+import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextIfDifferent
+import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
@@ -46,23 +55,22 @@ class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), MessageComposerView {
+) : LinearLayout(context, attrs, defStyleAttr), MessageComposerView {
 
     private val views: ComposerRichTextLayoutBinding
 
     override var callback: Callback? = null
 
-    private var currentConstraintSetId: Int = -1
-    private val animationDuration = 100L
-    private val maxEditTextLinesWhenCollapsed = 12
-
-    private val isFullScreen: Boolean get() = currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_fullscreen
+    // There is no need to persist these values since they're always updated by the parent fragment
+    private var isFullScreen = false
+    private var hasRelatedMessage = false
 
     var isTextFormattingEnabled = true
         set(value) {
             if (field == value) return
             syncEditTexts()
             field = value
+            updateTextFieldBorder(isFullScreen)
             updateEditTextVisibility()
         }
 
@@ -82,37 +90,94 @@ class RichTextComposerLayout @JvmOverloads constructor(
         get() = views.sendButton
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
-    override val fullScreenButton: ImageButton?
-        get() = views.composerFullScreenButton
-    override val composerRelatedMessageActionIcon: ImageView
-        get() = views.composerRelatedMessageActionIcon
-    override val composerRelatedMessageAvatar: ImageView
-        get() = views.composerRelatedMessageAvatar
-    override val composerRelatedMessageContent: TextView
-        get() = views.composerRelatedMessageContent
-    override val composerRelatedMessageImage: ImageView
-        get() = views.composerRelatedMessageImage
-    override val composerRelatedMessageTitle: TextView
-        get() = views.composerRelatedMessageTitle
-    override var isVisible: Boolean
-        get() = views.root.isVisible
-        set(value) { views.root.isVisible = value }
+
+    // Border of the EditText
+    private val borderShapeDrawable: MaterialShapeDrawable by lazy {
+        MaterialShapeDrawable().apply {
+            val typedData = TypedValue()
+            val lineColor = context.theme.obtainStyledAttributes(typedData.data, intArrayOf(R.attr.vctr_content_quaternary))
+                    .getColor(0, 0)
+            strokeColor = ColorStateList.valueOf(lineColor)
+            strokeWidth = 1 * resources.displayMetrics.scaledDensity
+            fillColor = ColorStateList.valueOf(Color.TRANSPARENT)
+            val cornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            setCornerSize(cornerSize.toFloat())
+        }
+    }
+
+    fun setFullScreen(isFullScreen: Boolean) {
+        editText.updateLayoutParams<ViewGroup.LayoutParams> {
+            height = if (isFullScreen) 0 else ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+
+        updateTextFieldBorder(isFullScreen)
+        updateEditTextVisibility()
+
+        updateEditTextFullScreenState(views.richTextComposerEditText, isFullScreen)
+        updateEditTextFullScreenState(views.plainTextComposerEditText, isFullScreen)
+
+        views.composerFullScreenButton.setImageResource(
+                if (isFullScreen) R.drawable.ic_composer_collapse else R.drawable.ic_composer_full_screen
+        )
+
+        views.bottomSheetHandle.isVisible = isFullScreen
+        if (isFullScreen) {
+            editText.showKeyboard(true)
+        } else {
+            editText.hideKeyboard()
+        }
+        this.isFullScreen = isFullScreen
+    }
+
+    fun notifyIsBeingDragged(percentage: Float) {
+        // Calculate a new shape for the border according to the position in screen
+        val isSingleLine = editText.lineCount == 1
+        val cornerSize = if (!isSingleLine || hasRelatedMessage) {
+            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded).toFloat()
+        } else {
+            val multilineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
+            val singleLineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            val diff = singleLineCornerSize - multilineCornerSize
+            multilineCornerSize + diff * (1 - percentage)
+        }
+        if (cornerSize != borderShapeDrawable.bottomLeftCornerResolvedSize) {
+            borderShapeDrawable.setCornerSize(cornerSize)
+        }
+
+        // Change maxLines while dragging, this should improve the smoothness of animations
+        val maxLines = if (percentage > 0.25f) {
+            Int.MAX_VALUE
+        } else {
+            MessageComposerView.MAX_LINES_WHEN_COLLAPSED
+        }
+        views.richTextComposerEditText.maxLines = maxLines
+        views.plainTextComposerEditText.maxLines = maxLines
+
+        views.bottomSheetHandle.isVisible = true
+    }
 
     init {
         inflate(context, R.layout.composer_rich_text_layout, this)
         views = ComposerRichTextLayoutBinding.bind(this)
 
-        collapse(false)
+        // Workaround to avoid cut-off text caused by padding in scrolled TextView (there is no clipToPadding).
+        // In TextView, clipTop = padding, but also clipTop -= shadowRadius. So if we set the shadowRadius to padding, they cancel each other
+        views.richTextComposerEditText.setShadowLayer(views.richTextComposerEditText.paddingBottom.toFloat(), 0f, 0f, 0)
+        views.plainTextComposerEditText.setShadowLayer(views.richTextComposerEditText.paddingBottom.toFloat(), 0f, 0f, 0)
+
+        renderComposerMode(MessageComposerMode.Normal(null))
 
         views.richTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder(isFullScreen) })
         )
         views.plainTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder() })
+                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder(isFullScreen) })
         )
 
-        views.composerRelatedMessageCloseButton.setOnClickListener {
-            collapse()
+        disallowParentInterceptTouchEvent(views.richTextComposerEditText)
+        disallowParentInterceptTouchEvent(views.plainTextComposerEditText)
+
+        views.composerModeCloseView.setOnClickListener {
             callback?.onCloseRelatedMessage()
         }
 
@@ -125,11 +190,19 @@ class RichTextComposerLayout @JvmOverloads constructor(
             callback?.onAddAttachment()
         }
 
-        views.composerFullScreenButton.setOnClickListener {
-            callback?.onFullScreenModeChanged()
+        views.composerFullScreenButton.apply {
+            // There's no point in having full screen in landscape since there's almost no vertical space
+            isInvisible = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            setOnClickListener {
+                callback?.onFullScreenModeChanged()
+            }
         }
 
+        views.composerEditTextOuterBorder.background = borderShapeDrawable
+
         setupRichTextMenu()
+
+        updateTextFieldBorder(isFullScreen)
     }
 
     private fun setupRichTextMenu() {
@@ -144,6 +217,21 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
         addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun disallowParentInterceptTouchEvent(view: View) {
+        view.setOnTouchListener { v, event ->
+            if (v.hasFocus()) {
+                v.parent?.requestDisallowInterceptTouchEvent(true)
+                val action = event.actionMasked
+                if (action == MotionEvent.ACTION_SCROLL) {
+                    v.parent?.requestDisallowInterceptTouchEvent(false)
+                    return@setOnTouchListener true
+                }
+            }
+            false
         }
     }
 
@@ -197,84 +285,99 @@ class RichTextComposerLayout @JvmOverloads constructor(
         button.isSelected = menuState.reversedActions.contains(action)
     }
 
-    private fun updateTextFieldBorder() {
-        val isExpanded = editText.editableText.lines().count() > 1
-        val borderResource = if (isExpanded || isFullScreen) {
-            R.drawable.bg_composer_rich_edit_text_expanded
+    fun estimateCollapsedHeight(): Int {
+        val editText = this.editText
+        val originalLines = editText.maxLines
+        val originalParamsHeight = editText.layoutParams.height
+        editText.maxLines = MessageComposerView.MAX_LINES_WHEN_COLLAPSED
+        editText.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        measure(
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.UNSPECIFIED,
+        )
+        val result = measuredHeight
+        editText.layoutParams.height = originalParamsHeight
+        editText.maxLines = originalLines
+        return result
+    }
+
+    private fun updateTextFieldBorder(isFullScreen: Boolean) {
+        val isMultiline = editText.editableText.lines().count() > 1 || isFullScreen || hasRelatedMessage
+        val cornerSize = if (isMultiline) {
+            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
         } else {
-            R.drawable.bg_composer_rich_edit_text_single_line
-        }
-        views.composerEditTextOuterBorder.setBackgroundResource(borderResource)
+            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+        }.toFloat()
+        borderShapeDrawable.setCornerSize(cornerSize)
     }
 
-    override fun replaceFormattedContent(text: CharSequence) {
+    private fun replaceFormattedContent(text: CharSequence) {
         views.richTextComposerEditText.setHtml(text.toString())
-    }
-
-    override fun collapse(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        if (currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_compact) {
-            // ignore we good
-            return
-        }
-        currentConstraintSetId = R.layout.composer_rich_text_layout_constraint_set_compact
-        applyNewConstraintSet(animate, transitionComplete)
-        updateEditTextVisibility()
-    }
-
-    override fun expand(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        if (currentConstraintSetId == R.layout.composer_rich_text_layout_constraint_set_expanded) {
-            // ignore we good
-            return
-        }
-        currentConstraintSetId = R.layout.composer_rich_text_layout_constraint_set_expanded
-        applyNewConstraintSet(animate, transitionComplete)
-        updateEditTextVisibility()
+        updateTextFieldBorder(isFullScreen)
     }
 
     override fun setTextIfDifferent(text: CharSequence?): Boolean {
-        return editText.setTextIfDifferent(text)
-    }
-
-    override fun toggleFullScreen(newValue: Boolean) {
-        val constraintSetId = if (newValue) R.layout.composer_rich_text_layout_constraint_set_fullscreen else currentConstraintSetId
-        ConstraintSet().also {
-            it.clone(context, constraintSetId)
-            it.applyTo(this)
-        }
-
-        updateTextFieldBorder()
-        updateEditTextVisibility()
-
-        updateEditTextFullScreenState(views.richTextComposerEditText, newValue)
-        updateEditTextFullScreenState(views.plainTextComposerEditText, newValue)
+        val result = editText.setTextIfDifferent(text)
+        updateTextFieldBorder(isFullScreen)
+        return result
     }
 
     private fun updateEditTextFullScreenState(editText: EditText, isFullScreen: Boolean) {
         if (isFullScreen) {
             editText.maxLines = Int.MAX_VALUE
-            // This is a workaround to fix incorrect scroll position when maximised
-            post { editText.requestLayout() }
         } else {
-            editText.maxLines = maxEditTextLinesWhenCollapsed
+            editText.maxLines = MessageComposerView.MAX_LINES_WHEN_COLLAPSED
         }
     }
 
-    private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        // val wasSendButtonInvisible = views.sendButton.isInvisible
-        if (animate) {
-            animateLayoutChange(animationDuration, transitionComplete)
-        }
-        ConstraintSet().also {
-            it.clone(context, currentConstraintSetId)
-            it.applyTo(this)
+    override fun renderComposerMode(mode: MessageComposerMode) {
+        if (mode is MessageComposerMode.Special) {
+            views.composerModeGroup.isVisible = true
+            replaceFormattedContent(mode.defaultContent)
+            hasRelatedMessage = true
+            editText.showKeyboard(andRequestFocus = true)
+        } else {
+            views.composerModeGroup.isGone = true
+            (mode as? MessageComposerMode.Normal)?.content?.let { text ->
+                if (isTextFormattingEnabled) {
+                    replaceFormattedContent(text)
+                } else {
+                    views.plainTextComposerEditText.setText(text)
+                }
+            }
+            views.sendButton.contentDescription = resources.getString(R.string.action_send)
+            hasRelatedMessage = false
         }
 
-        // Might be updated by view state just after, but avoid blinks
-        // views.sendButton.isInvisible = wasSendButtonInvisible
-    }
+        views.sendButton.apply {
+            if (mode is MessageComposerMode.Edit) {
+                contentDescription = resources.getString(R.string.action_save)
+                setImageResource(R.drawable.ic_composer_rich_text_save)
+            } else {
+                contentDescription = resources.getString(R.string.action_send)
+                setImageResource(R.drawable.ic_rich_composer_send)
+            }
+        }
 
-    override fun setInvisible(isInvisible: Boolean) {
-        this.isInvisible = isInvisible
+        updateTextFieldBorder(isFullScreen)
+
+        when (mode) {
+            is MessageComposerMode.Edit -> {
+                views.composerModeTitleView.setText(R.string.editing)
+                views.composerModeIconView.setImageResource(R.drawable.ic_composer_rich_text_editor_edit)
+            }
+            is MessageComposerMode.Quote -> {
+                views.composerModeTitleView.setText(R.string.quoting)
+                views.composerModeIconView.setImageResource(R.drawable.ic_quote)
+            }
+            is MessageComposerMode.Reply -> {
+                val senderInfo = mode.event.senderInfo
+                val userName = senderInfo.displayName ?: senderInfo.disambiguatedDisplayName
+                views.composerModeTitleView.text = resources.getString(R.string.replying_to, userName)
+                views.composerModeIconView.setImageResource(R.drawable.ic_reply)
+            }
+            else -> Unit
+        }
     }
 
     private class TextChangeListener(

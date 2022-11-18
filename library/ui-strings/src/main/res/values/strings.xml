@@ -1642,7 +1642,10 @@
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
     <string name="edit">Edit</string>
+    <string name="editing">Editing</string>
     <string name="reply">Reply</string>
+    <string name="replying_to">Replying to %s</string>
+    <string name="quoting">Quoting</string>
     <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
