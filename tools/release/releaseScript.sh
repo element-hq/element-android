@@ -232,7 +232,11 @@ read -p "Please run the APK on your phone to check that the upgrade went well (n
 read -p "Create the release on gitHub from the tag https://github.com/vector-im/element-android/tags, copy paste the block from the file CHANGES.md. Press enter when it's done."
 
 read -p "Add the 4 signed APKs to the GitHub release. Press enter when it's done."
-read -p "Ping the Android Internal room. Press enter when it's done."
+
+printf "\n================================================================================\n"
+printf "Ping the Android Internal room. Here is an example of message which can be sent:\n\n"
+printf "@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!\n\n"
+read -p "Press enter when it's done."
 
 printf "\n================================================================================\n"
 printf "Congratulation! Kudos for using this script! Have a nice day!\n"
