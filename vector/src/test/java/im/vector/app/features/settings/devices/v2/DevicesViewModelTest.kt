@@ -72,7 +72,6 @@ class DevicesViewModelTest {
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>(relaxed = true)
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
-    private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val fakeVectorPreferences = FakeVectorPreferences()
@@ -87,7 +86,6 @@ class DevicesViewModelTest {
                 refreshDevicesOnCryptoDevicesChangeUseCase = refreshDevicesOnCryptoDevicesChangeUseCase,
                 checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
                 signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
-                interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                 pendingAuthHandler = fakePendingAuthHandler.instance,
                 refreshDevicesUseCase = fakeRefreshDevicesUseCase,
                 vectorPreferences = fakeVectorPreferences.instance,

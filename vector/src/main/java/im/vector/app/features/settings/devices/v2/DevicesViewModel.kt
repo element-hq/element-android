@@ -48,7 +48,6 @@ class DevicesViewModel @AssistedInject constructor(
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
-        private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,

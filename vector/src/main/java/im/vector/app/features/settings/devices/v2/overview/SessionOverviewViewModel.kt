@@ -51,7 +51,6 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val getDeviceFullInfoUseCase: GetDeviceFullInfoUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
-        private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
         private val toggleNotificationUseCase: ToggleNotificationUseCase,
