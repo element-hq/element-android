@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageStickerConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.isReply
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
@@ -228,11 +229,14 @@ data class Event(
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage() -> "sent a file."
+            isVoiceMessage() -> "sent a voice message."
             isAudioMessage() -> "sent an audio file."
             isImageMessage() -> "sent an image."
             isVideoMessage() -> "sent a video."
-            isSticker() -> "sent a sticker"
+            isSticker() -> "sent a sticker."
             isPoll() -> getPollQuestion() ?: "created a poll."
+            isLiveLocation() -> "Live location."
+            isLocationMessage() -> "has shared their location."
             else -> text
         }
     }
@@ -420,7 +424,7 @@ fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
         getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
-    return getRelationContent()?.inReplyTo?.eventId != null
+    return getRelationContent().isReply()
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
@@ -443,7 +447,7 @@ fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
 
 fun Event.getPollContent(): MessagePollContent? {
-    return content.toModel<MessagePollContent>()
+    return getClearContent().toModel<MessagePollContent>()
 }
 
 fun Event.supportsNotification() =

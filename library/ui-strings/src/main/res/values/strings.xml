@@ -3464,4 +3464,13 @@
     <string name="rich_text_editor_format_underline">Apply underline format</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
+    <!-- ReplyTo events -->
+    <string name="message_reply_to_prefix">In reply to</string>
+    <string name="message_reply_to_sender_sent_file">sent a file.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sent an audio file.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sent a voice message.</string>
+    <string name="message_reply_to_sender_sent_image">sent an image.</string>
+    <string name="message_reply_to_sender_sent_video">sent a video.</string>
+    <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
+    <string name="message_reply_to_sender_created_poll">created a poll.</string>
 </resources>
