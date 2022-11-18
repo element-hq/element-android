@@ -18,6 +18,7 @@ package im.vector.app.core.session
 
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeEnableNotificationsSettingUpdater
 import im.vector.app.test.fakes.FakeSession
@@ -32,6 +33,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -57,6 +59,7 @@ class ConfigureAndStartSessionUseCaseTest {
     @Before
     fun setup() {
         mockkStatic("im.vector.app.core.extensions.SessionKt")
+        mockkStatic("im.vector.app.features.session.SessionCoroutineScopesKt")
     }
 
     @After
@@ -68,6 +71,7 @@ class ConfigureAndStartSessionUseCaseTest {
     fun `given start sync needed and client info recording enabled when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
+        every { fakeSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
@@ -75,6 +79,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // When
         configureAndStartSessionUseCase.execute(fakeSession, startSyncing = true)
+        advanceUntilIdle()
 
         // Then
         verify { fakeSession.startSyncing(fakeContext.instance) }
@@ -88,6 +93,7 @@ class ConfigureAndStartSessionUseCaseTest {
     fun `given start sync needed and client info recording disabled when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
+        every { fakeSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = false)
@@ -95,6 +101,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // When
         configureAndStartSessionUseCase.execute(fakeSession, startSyncing = true)
+        advanceUntilIdle()
 
         // Then
         verify { fakeSession.startSyncing(fakeContext.instance) }
@@ -108,6 +115,7 @@ class ConfigureAndStartSessionUseCaseTest {
     fun `given a session and no start sync needed when execute then it should be configured properly`() = runTest {
         // Given
         val fakeSession = givenASession()
+        every { fakeSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
@@ -115,6 +123,7 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // When
         configureAndStartSessionUseCase.execute(fakeSession, startSyncing = false)
+        advanceUntilIdle()
 
         // Then
         verify(inverse = true) { fakeSession.startSyncing(fakeContext.instance) }
