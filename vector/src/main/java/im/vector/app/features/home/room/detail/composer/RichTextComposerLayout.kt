@@ -34,6 +34,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -72,6 +73,11 @@ class RichTextComposerLayout @JvmOverloads constructor(
             field = value
             updateTextFieldBorder(isFullScreen)
             updateEditTextVisibility()
+            updateFullScreenButtonVisibility()
+            // If formatting is no longer enabled and it's in full screen, minimise the editor
+            if (!value && isFullScreen) {
+                callback?.onFullScreenModeChanged()
+            }
         }
 
     override val text: Editable?
@@ -191,8 +197,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
 
         views.composerFullScreenButton.apply {
-            // There's no point in having full screen in landscape since there's almost no vertical space
-            isInvisible = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            updateFullScreenButtonVisibility()
             setOnClickListener {
                 callback?.onFullScreenModeChanged()
             }
@@ -251,6 +256,33 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.richTextComposerEditText.isVisible = isTextFormattingEnabled
         views.richTextMenu.isVisible = isTextFormattingEnabled
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
+
+        // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints
+        val dp = { px: Int -> (px * resources.displayMetrics.density).toInt() }
+        ConstraintSet().apply {
+            clone(views.composerLayoutContent)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.TOP)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.START)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.END)
+            if (isTextFormattingEnabled) {
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dp(8))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.sendButton, ConstraintSet.TOP, 0)
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.composerLayoutContent, ConstraintSet.START, dp(12))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.composerLayoutContent, ConstraintSet.END, dp(12))
+            } else {
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dp(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dp(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.attachmentButton, ConstraintSet.END, 0)
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.sendButton, ConstraintSet.START, 0)
+            }
+            applyTo(views.composerLayoutContent)
+        }
+    }
+
+    private fun updateFullScreenButtonVisibility() {
+        // There's no point in having full screen in landscape since there's almost no vertical space
+        views.composerFullScreenButton.isInvisible = !isTextFormattingEnabled || resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
     /**
