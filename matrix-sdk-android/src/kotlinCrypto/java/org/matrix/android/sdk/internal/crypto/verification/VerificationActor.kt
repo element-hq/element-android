@@ -16,11 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import androidx.annotation.VisibleForTesting
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -31,8 +35,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.SendToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
@@ -45,12 +47,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
-import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationDoneContent
@@ -69,14 +68,11 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_REC
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tools.withOlmUtility
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeData
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.generateSharedSecretV2
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.Locale
@@ -91,21 +87,34 @@ import java.util.Locale
 private val loggerTag = LoggerTag("Verification", LoggerTag.CRYPTO)
 
 internal class VerificationActor @AssistedInject constructor(
-        @Assisted private val channel: Channel<VerificationIntent>,
+        @Assisted private val scope: CoroutineScope,
         private val clock: Clock,
         @UserId private val myUserId: String,
         private val cryptoStore: IMXCryptoStore,
-        private val sendVerificationMessageTask: SendVerificationMessageTask,
-        private val localEchoEventFactory: LocalEchoEventFactory,
-        private val sendToDeviceTask: SendToDeviceTask,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val crossSigningService: dagger.Lazy<CrossSigningService>,
         private val secretShareManager: SecretShareManager,
+        private val transportLayer: VerificationTransportLayer,
 ) {
 
     @AssistedFactory
     interface Factory {
-        fun create(channel: Channel<VerificationIntent>): VerificationActor
+        fun create(scope: CoroutineScope): VerificationActor
+    }
+
+    @VisibleForTesting
+    val channel = Channel<VerificationIntent>(
+            capacity = Channel.UNLIMITED,
+    )
+
+    init {
+        scope.launch {
+            Timber.e("VALR BEFORE")
+            for (msg in channel) {
+                onReceive(msg)
+            }
+            Timber.e("VALR NNNNNNNN")
+        }
     }
 
     // map [sender : [transaction]]
@@ -121,7 +130,10 @@ internal class VerificationActor @AssistedInject constructor(
      */
     private val pendingRequests = HashMap<String, MutableList<KotlinVerificationRequest>>()
 
-    val eventFlow = MutableSharedFlow<VerificationEvent>(replay = 0)
+    // Replaces the typical list of listeners pattern. Looks to me as the sane setup, not sure if more than 1 is needed as extraBufferCapacity
+    // We don't want to use emit as it would block if no listener is subscribed
+    // So we should use try emit using extraBufferCapacity, we use drop_oldest instead of suspend.
+    val eventFlow = MutableSharedFlow<VerificationEvent>(extraBufferCapacity = 4, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     suspend fun send(intent: VerificationIntent) {
         channel.send(intent)
@@ -230,7 +242,7 @@ internal class VerificationActor @AssistedInject constructor(
                 handleIncomingRequest(msg)
             }
             is VerificationIntent.ActionReadyRequest -> {
-                handleReadyRequest(msg)
+                handleActionReadyRequest(msg)
             }
             is VerificationIntent.ActionStartSasVerification -> {
                 handleSasStart(msg)
@@ -323,15 +335,21 @@ internal class VerificationActor @AssistedInject constructor(
                     if (existingTx != null) {
                         existingTx.state = SasTransactionState.Cancelled(cancelCode, false)
                         txMap[msg.fromUser]?.remove(msg.validCancel.transactionId)
-                        eventFlow.emit(VerificationEvent.TransactionUpdated(existingTx))
+                        dispatchUpdate(VerificationEvent.TransactionUpdated(existingTx))
                     }
-                    eventFlow.emit(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
+                    dispatchUpdate(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
                 }
             }
             is VerificationIntent.OnReadyByAnotherOfMySessionReceived -> {
                 handleReadyByAnotherOfMySessionReceived(msg)
             }
         }
+    }
+
+    private fun dispatchUpdate(update: VerificationEvent) {
+        // We don't want to block on emit.
+        // If no subscriber there is a small buffer and too old would be dropped
+        eventFlow.tryEmit(update)
     }
 
     private suspend fun handleIncomingRequest(msg: VerificationIntent.OnVerificationRequestReceived) {
@@ -395,7 +413,7 @@ internal class VerificationActor @AssistedInject constructor(
             }
         }
         matchingRequest.state = EVerificationState.Started
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
     }
 
     private suspend fun handleReceiveStartForQR(request: KotlinVerificationRequest, reciprocate: ValidVerificationInfoStart.ReciprocateVerificationInfoStart) {
@@ -518,7 +536,7 @@ internal class VerificationActor @AssistedInject constructor(
 
         // cancel if network error (would not send back a cancel but at least current user will see feedback?)
         try {
-            sendToOther(request, EventType.KEY_VERIFICATION_ACCEPT, accept)
+            transportLayer.sendToOther(request, EventType.KEY_VERIFICATION_ACCEPT, accept)
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value)
                     .v("[${myUserId.take(8)}] Failed to send accept for ${request.requestId}")
@@ -569,7 +587,7 @@ internal class VerificationActor @AssistedInject constructor(
                 Timber.tag(loggerTag.value)
                         .v("[${myUserId.take(8)}]: Sending my key $pubKey")
             }
-            sendToOther(
+            transportLayer.sendToOther(
                     matchingRequest,
                     EventType.KEY_VERIFICATION_KEY,
                     keyMessage,
@@ -578,13 +596,13 @@ internal class VerificationActor @AssistedInject constructor(
             existing.state = SasTransactionState.Cancelled(CancelCode.UserError, true)
             matchingRequest.cancelCode = CancelCode.UserError
             matchingRequest.state = EVerificationState.Cancelled
-            eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
-            eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+            dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+            dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
             return
         }
         existing.accepted = accept
         existing.state = SasTransactionState.SasKeySent
-        eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+        dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
     }
 
     private suspend fun handleSasStart(msg: VerificationIntent.ActionStartSasVerification) {
@@ -617,7 +635,7 @@ internal class VerificationActor @AssistedInject constructor(
                 requestId = msg.requestId
         )
 
-        sendToOther(
+        transportLayer.sendToOther(
                 matchingRequest,
                 EventType.KEY_VERIFICATION_START,
                 startMessage,
@@ -643,7 +661,7 @@ internal class VerificationActor @AssistedInject constructor(
         )
 
         matchingRequest.state = EVerificationState.WeStarted
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
         addTransaction(tx)
 
         msg.deferred.complete(tx)
@@ -805,7 +823,7 @@ internal class VerificationActor @AssistedInject constructor(
         }
 
         try {
-            sendToOther(matchingRequest, EventType.KEY_VERIFICATION_START, message)
+            transportLayer.sendToOther(matchingRequest, EventType.KEY_VERIFICATION_START, message)
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value)
                     .d("[${myUserId.take(8)}] Failed to send reciprocate message")
@@ -814,7 +832,7 @@ internal class VerificationActor @AssistedInject constructor(
         }
 
         matchingRequest.state = EVerificationState.WeStarted
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
 
         val tx = KotlinQRVerification(
                 channel = this.channel,
@@ -881,7 +899,7 @@ internal class VerificationActor @AssistedInject constructor(
             val pubKey = existing.getSAS().publicKey
             val keyMessage = KotlinSasTransaction.sasKeyMessage(matchingRequest.roomId != null, requestId, pubKey)
             try {
-                sendToOther(
+                transportLayer.sendToOther(
                         matchingRequest,
                         EventType.KEY_VERIFICATION_KEY,
                         keyMessage,
@@ -898,13 +916,13 @@ internal class VerificationActor @AssistedInject constructor(
                     Timber.tag(loggerTag.value)
                             .v("[${myUserId.take(8)}]:i EMOJI CODE ${existing.getEmojiCodeRepresentation().joinToString(" ") { it.emoji }}")
                 }
-                eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
             } catch (failure: Throwable) {
                 existing.state = SasTransactionState.Cancelled(CancelCode.UserError, true)
                 matchingRequest.state = EVerificationState.Cancelled
                 matchingRequest.cancelCode = CancelCode.UserError
-                eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
-                eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
+                dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
                 return
             }
         } else {
@@ -931,7 +949,7 @@ internal class VerificationActor @AssistedInject constructor(
                 }
                 existing.calculateSASBytes(otherKey)
                 existing.state = SasTransactionState.SasShortCodeReady
-                eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
                 if (BuildConfig.LOG_PRIVATE_DATA) {
                     Timber.tag(loggerTag.value)
                             .v("[${myUserId.take(8)}]:o CODE ${existing.getDecimalCodeRepresentation()}")
@@ -966,7 +984,7 @@ internal class VerificationActor @AssistedInject constructor(
                 // I can start verify, store it
                 existing.theirMac = msg.validMac
                 existing.state = SasTransactionState.SasMacReceived(false)
-                eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
             }
             else -> {
                 // it's a wrong state should cancel?
@@ -1026,12 +1044,12 @@ internal class VerificationActor @AssistedInject constructor(
 
                 if (isCorrectState) {
                     existing.state = SasTransactionState.Done(true)
-                    eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                    dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
                     // we can forget about it
                     txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
                     // XXX whatabout waiting for done?
                     matchingRequest.state = EVerificationState.Done
-                    eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                    dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
                 } else {
                     // TODO cancel?
                     Timber.tag(loggerTag.value)
@@ -1048,7 +1066,7 @@ internal class VerificationActor @AssistedInject constructor(
                     }
                     QRCodeVerificationState.WaitingForOtherDone -> {
                         matchingRequest.state = EVerificationState.Done
-                        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
                     }
                     else -> {
                         Timber.tag(loggerTag.value)
@@ -1101,7 +1119,7 @@ internal class VerificationActor @AssistedInject constructor(
             }
         }
 
-        sendToOther(
+        transportLayer.sendToOther(
                 matchingRequest,
                 EventType.KEY_VERIFICATION_DONE,
                 if (matchingRequest.roomId != null) {
@@ -1117,11 +1135,11 @@ internal class VerificationActor @AssistedInject constructor(
         )
 
         existing.state = QRCodeVerificationState.Done
-        eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+        dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
         // we can forget about it
         txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
         matchingRequest.state = EVerificationState.WaitingForDone
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
 
         if (shouldRequestSecret) {
             matchingRequest.otherDeviceId()?.let { otherDeviceId ->
@@ -1167,7 +1185,7 @@ internal class VerificationActor @AssistedInject constructor(
 
         val macMsg = KotlinSasTransaction.sasMacMessage(matchingRequest.roomId != null, transactionId, macInfo)
         try {
-            sendToOther(matchingRequest, EventType.KEY_VERIFICATION_MAC, macMsg)
+            transportLayer.sendToOther(matchingRequest, EventType.KEY_VERIFICATION_MAC, macMsg)
         } catch (failure: Throwable) {
             // it's a network problem, we don't need to cancel, user can retry?
             msg.deferred.completeExceptionally(failure)
@@ -1180,7 +1198,7 @@ internal class VerificationActor @AssistedInject constructor(
             finalizeSasTransaction(existing, theirMac, matchingRequest, transactionId)
         } else {
             existing.state = SasTransactionState.SasMacSent
-            eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+            dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
         }
 
         msg.deferred.complete(Unit)
@@ -1237,7 +1255,7 @@ internal class VerificationActor @AssistedInject constructor(
                 }
 
                 // we should send done and wait for done
-                sendToOther(
+                transportLayer.sendToOther(
                         matchingRequest,
                         EventType.KEY_VERIFICATION_DONE,
                         if (matchingRequest.roomId != null) {
@@ -1253,11 +1271,11 @@ internal class VerificationActor @AssistedInject constructor(
                 )
 
                 existing.state = SasTransactionState.Done(false)
-                eventFlow.emit(VerificationEvent.TransactionUpdated(existing))
+                dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
                 pastTransactions.getOrPut(transactionId) { mutableMapOf() }[transactionId] = existing
                 txMap[matchingRequest.otherUserId]?.remove(transactionId)
                 matchingRequest.state = EVerificationState.WaitingForDone
-                eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+                dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
             }
             KotlinSasTransaction.MacVerificationResult.MismatchKeys,
             KotlinSasTransaction.MacVerificationResult.MismatchMacCrossSigning,
@@ -1268,7 +1286,7 @@ internal class VerificationActor @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleReadyRequest(msg: VerificationIntent.ActionReadyRequest) {
+    private suspend fun handleActionReadyRequest(msg: VerificationIntent.ActionReadyRequest) {
         val existing = pendingRequests
                 .flatMap { it.value }
                 .firstOrNull { it.requestId == msg.transactionId }
@@ -1317,7 +1335,7 @@ internal class VerificationActor @AssistedInject constructor(
                 fromDevice = cryptoStore.getDeviceId()
         )
         try {
-            sendToOther(existing, EventType.KEY_VERIFICATION_READY, message)
+            transportLayer.sendToOther(existing, EventType.KEY_VERIFICATION_READY, message)
         } catch (failure: Throwable) {
             msg.deferred.completeExceptionally(failure)
             return
@@ -1326,7 +1344,9 @@ internal class VerificationActor @AssistedInject constructor(
         existing.readyInfo = readyInfo
         existing.qrCodeData = qrCodeData
         existing.state = EVerificationState.Ready
-        eventFlow.emit(VerificationEvent.RequestUpdated(existing.toPendingVerificationRequest()))
+
+        // We want to try emit, if not this will suspend until someone consume the flow
+        dispatchUpdate(VerificationEvent.RequestUpdated(existing.toPendingVerificationRequest()))
 
         Timber.tag(loggerTag.value).v("Request ${msg.transactionId} updated $existing")
         msg.deferred.complete(existing.toPendingVerificationRequest())
@@ -1424,13 +1444,11 @@ internal class VerificationActor @AssistedInject constructor(
                         timestamp = validInfo.timestamp,
                         methods = validInfo.methods
                 )
-                val event = createEventAndLocalEcho(
-                        localId = validLocalId,
+                val eventId = transportLayer.sendInRoom(
                         type = EventType.MESSAGE,
                         roomId = msg.roomId,
                         content = info.toContent()
                 )
-                val eventId = sendEventInRoom(event)
                 val request = KotlinVerificationRequest(
                         requestId = eventId,
                         incoming = false,
@@ -1443,10 +1461,10 @@ internal class VerificationActor @AssistedInject constructor(
                 }
                 requestsForUser.add(request)
                 msg.deferred.complete(request.toPendingVerificationRequest())
-                eventFlow.emit(VerificationEvent.RequestAdded(request.toPendingVerificationRequest()))
+                dispatchUpdate(VerificationEvent.RequestAdded(request.toPendingVerificationRequest()))
             } else {
                 val requestId = LocalEcho.createLocalEchoId()
-                sendToDeviceEvent(
+                transportLayer.sendToDeviceEvent(
                         messageType = EventType.KEY_VERIFICATION_REQUEST,
                         toSendToDeviceObject = KeyVerificationRequest(
                                 transactionId = requestId,
@@ -1470,7 +1488,7 @@ internal class VerificationActor @AssistedInject constructor(
                 }
                 requestsForUser.add(request)
                 msg.deferred.complete(request.toPendingVerificationRequest())
-                eventFlow.emit(VerificationEvent.RequestAdded(request.toPendingVerificationRequest()))
+                dispatchUpdate(VerificationEvent.RequestAdded(request.toPendingVerificationRequest()))
             }
         } catch (failure: Throwable) {
             // some network problem
@@ -1499,13 +1517,13 @@ internal class VerificationActor @AssistedInject constructor(
             Timber.tag(loggerTag.value)
                     .v("[${myUserId.take(8)}]: ready from another of my devices, make inactive")
             matchingRequest.state = EVerificationState.HandledByOtherSession
-            eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+            dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
             return
         }
 
         matchingRequest.readyInfo = msg.readyInfo
         matchingRequest.state = EVerificationState.Ready
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
 
 //        if (matchingRequest.readyInfo != null) {
 //            // TODO we already received a ready, cancel? or ignore
@@ -1530,7 +1548,7 @@ internal class VerificationActor @AssistedInject constructor(
                     .orEmpty()
 
             try {
-                sendToDeviceEvent(
+                transportLayer.sendToDeviceEvent(
                         EventType.KEY_VERIFICATION_CANCEL,
                         KeyVerificationCancel(
                                 msg.transactionId,
@@ -1556,7 +1574,7 @@ internal class VerificationActor @AssistedInject constructor(
         Timber.tag(loggerTag.value)
                 .v("[${myUserId.take(8)}]: ready from another of my devices, make inactive")
         matchingRequest.state = EVerificationState.HandledByOtherSession
-        eventFlow.emit(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
         return
     }
 
@@ -1570,12 +1588,12 @@ internal class VerificationActor @AssistedInject constructor(
 //            requestsForUser.removeAt(index)
 //        }
 //        requestsForUser.add(updated)
-//        eventFlow.emit(VerificationEvent.RequestUpdated(updated))
+//        dispatchUpdate(VerificationEvent.RequestUpdated(updated))
 //    }
 
     private suspend fun dispatchRequestAdded(tx: KotlinVerificationRequest) {
         Timber.v("## SAS dispatchRequestAdded txId:${tx.requestId}")
-        eventFlow.emit(VerificationEvent.RequestAdded(tx.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestAdded(tx.toPendingVerificationRequest()))
     }
 
 // Utilities
@@ -1655,77 +1673,77 @@ internal class VerificationActor @AssistedInject constructor(
         )
     }
 
-    private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
-        return Event(
-                roomId = roomId,
-                originServerTs = clock.epochMillis(),
-                senderId = myUserId,
-                eventId = localId,
-                type = type,
-                content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localId)
-        ).also {
-            localEchoEventFactory.createLocalEcho(it)
-        }
-    }
-
-    private suspend fun sendEventInRoom(event: Event): String {
-        return sendVerificationMessageTask.execute(SendVerificationMessageTask.Params(event, 5)).eventId
-    }
-
-    private suspend fun sendToDeviceEvent(messageType: String, toSendToDeviceObject: SendToDeviceObject, otherUserId: String, targetDevices: List<String>) {
-        // TODO currently to device verification messages are sent unencrypted
-        // as per spec not recommended
-        // > verification messages may be sent unencrypted, though this is not encouraged.
-
-        val contentMap = MXUsersDevicesMap<Any>()
-
-        targetDevices.forEach {
-            contentMap.setObject(otherUserId, it, toSendToDeviceObject)
-        }
-
-        sendToDeviceTask
-                .execute(SendToDeviceTask.Params(messageType, contentMap))
-    }
-
-    suspend fun sendToOther(
-            request: KotlinVerificationRequest,
-            type: String,
-            verificationInfo: VerificationInfo<*>,
-    ) {
-        val roomId = request.roomId
-        if (roomId != null) {
-            val event = createEventAndLocalEcho(
-                    type = type,
-                    roomId = roomId,
-                    content = verificationInfo.toEventContent()!!
-            )
-            sendEventInRoom(event)
-        } else {
-            sendToDeviceEvent(
-                    type,
-                    verificationInfo.toSendToDeviceObject()!!,
-                    request.otherUserId,
-                    request.otherDeviceId()?.let { listOf(it) }.orEmpty()
-            )
-        }
-    }
+//    private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
+//        return Event(
+//                roomId = roomId,
+//                originServerTs = clock.epochMillis(),
+//                senderId = myUserId,
+//                eventId = localId,
+//                type = type,
+//                content = content,
+//                unsignedData = UnsignedData(age = null, transactionId = localId)
+//        ).also {
+//            localEchoEventFactory.createLocalEcho(it)
+//        }
+//    }
+//
+//    private suspend fun sendEventInRoom(event: Event): String {
+//        return sendVerificationMessageTask.execute(SendVerificationMessageTask.Params(event, 5)).eventId
+//    }
+//
+//    private suspend fun sendToDeviceEvent(messageType: String, toSendToDeviceObject: SendToDeviceObject, otherUserId: String, targetDevices: List<String>) {
+//        // TODO currently to device verification messages are sent unencrypted
+//        // as per spec not recommended
+//        // > verification messages may be sent unencrypted, though this is not encouraged.
+//
+//        val contentMap = MXUsersDevicesMap<Any>()
+//
+//        targetDevices.forEach {
+//            contentMap.setObject(otherUserId, it, toSendToDeviceObject)
+//        }
+//
+//        sendToDeviceTask
+//                .execute(SendToDeviceTask.Params(messageType, contentMap))
+//    }
+//
+//    suspend fun sendToOther(
+//            request: KotlinVerificationRequest,
+//            type: String,
+//            verificationInfo: VerificationInfo<*>,
+//    ) {
+//        val roomId = request.roomId
+//        if (roomId != null) {
+//            val event = createEventAndLocalEcho(
+//                    type = type,
+//                    roomId = roomId,
+//                    content = verificationInfo.toEventContent()!!
+//            )
+//            sendEventInRoom(event)
+//        } else {
+//            sendToDeviceEvent(
+//                    type,
+//                    verificationInfo.toSendToDeviceObject()!!,
+//                    request.otherUserId,
+//                    request.otherDeviceId()?.let { listOf(it) }.orEmpty()
+//            )
+//        }
+//    }
 
     private suspend fun cancelRequest(request: KotlinVerificationRequest, code: CancelCode) {
         request.state = EVerificationState.Cancelled
         request.cancelCode = code
-        eventFlow.emit(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
+        dispatchUpdate(VerificationEvent.RequestUpdated(request.toPendingVerificationRequest()))
 
         // should also update SAS/QR transaction
         getExistingTransaction<KotlinSasTransaction>(request.otherUserId, request.requestId)?.let {
             it.state = SasTransactionState.Cancelled(code, true)
             txMap[request.otherUserId]?.remove(request.requestId)
-            eventFlow.emit(VerificationEvent.TransactionUpdated(it))
+            dispatchUpdate(VerificationEvent.TransactionUpdated(it))
         }
         getExistingTransaction<KotlinQRVerification>(request.otherUserId, request.requestId)?.let {
             it.state = QRCodeVerificationState.Cancelled
             txMap[request.otherUserId]?.remove(request.requestId)
-            eventFlow.emit(VerificationEvent.TransactionUpdated(it))
+            dispatchUpdate(VerificationEvent.TransactionUpdated(it))
         }
 
         cancelRequest(request.requestId, request.roomId, request.otherUserId, request.otherDeviceId(), code)
@@ -1756,21 +1774,26 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun cancelTransactionToDevice(transactionId: String, otherUserId: String, otherUserDeviceId: String?, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
-        val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
-        sendToDeviceTask
-                .execute(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap))
+//        val contentMap = MXUsersDevicesMap<Any>()
+//        contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
+        transportLayer.sendToDeviceEvent(
+                messageType = EventType.KEY_VERIFICATION_CANCEL,
+                toSendToDeviceObject = cancelMessage,
+                otherUserId = otherUserId,
+                targetDevices = otherUserDeviceId?.let { listOf(it) } ?: emptyList()
+        )
+//        sendToDeviceTask
+//                .execute(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap))
     }
 
     private suspend fun cancelTransactionInRoom(roomId: String, transactionId: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = MessageVerificationCancelContent.create(transactionId, code)
-        val event = createEventAndLocalEcho(
+        transportLayer.sendInRoom(
                 type = EventType.KEY_VERIFICATION_CANCEL,
                 roomId = roomId,
                 content = cancelMessage.toEventContent()
         )
-        sendEventInRoom(event)
     }
 
     private fun hashUsingAgreedHashMethod(hashMethod: String?, toHash: String): String {
@@ -1785,7 +1808,7 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun addTransaction(tx: VerificationTransaction) {
         val txInnerMap = txMap.getOrPut(tx.otherUserId) { mutableMapOf() }
         txInnerMap[tx.transactionId] = tx
-        eventFlow.emit(VerificationEvent.TransactionAdded(tx))
+        dispatchUpdate(VerificationEvent.TransactionAdded(tx))
     }
 
     private inline fun <reified T : VerificationTransaction> getExistingTransaction(otherUserId: String, transactionId: String): T? {

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.verification
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -89,13 +88,7 @@ internal class DefaultVerificationService @Inject constructor(
     private val stateMachine: VerificationActor
 
     init {
-        val channel = Channel<VerificationIntent>(
-                capacity = Channel.UNLIMITED,
-        )
-        stateMachine = verificationActorFactory.create(channel)
-        executorScope.launch {
-            for (msg in channel) stateMachine.onReceive(msg)
-        }
+        stateMachine = verificationActorFactory.create(executorScope)
     }
     // It's obselete but not deprecated
     // It's ok as it will be replaced by rust implementation

@@ -17,6 +17,7 @@
 package im.vector.app.test.fakes
 
 import androidx.lifecycle.MutableLiveData
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -55,22 +56,19 @@ class FakeCryptoService(
     override fun getMyDevicesInfoLive(deviceId: String) = myDevicesInfoWithIdLiveData
 
     fun givenSetDeviceNameSucceeds() {
-        val matrixCallback = slot<MatrixCallback<Unit>>()
-        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
-            thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
+        coEvery { setDeviceName(any(), any()) } answers {
+            Unit
         }
     }
 
     fun givenSetDeviceNameFailsWithError(error: Exception) {
-        val matrixCallback = slot<MatrixCallback<Unit>>()
-        every { setDeviceName(any(), any(), capture(matrixCallback)) } answers {
-            thirdArg<MatrixCallback<Unit>>().onFailure(error)
+        coEvery { setDeviceName(any(), any()) } answers {
+            throw error
         }
     }
 
     fun givenDeleteDeviceSucceeds(deviceId: String) {
-        val matrixCallback = slot<MatrixCallback<Unit>>()
-        every { deleteDevice(deviceId, any(), capture(matrixCallback)) } answers {
+        coEvery { deleteDevice(deviceId, any()) } answers {
             thirdArg<MatrixCallback<Unit>>().onSuccess(Unit)
         }
     }
