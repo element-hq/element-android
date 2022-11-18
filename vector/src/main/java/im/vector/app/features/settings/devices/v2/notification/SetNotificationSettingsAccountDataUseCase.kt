@@ -16,18 +16,15 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toContent
 import javax.inject.Inject
 
-class SetNotificationSettingsAccountDataUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
+class SetNotificationSettingsAccountDataUseCase @Inject constructor() {
 
-    suspend fun execute(deviceId: String, localNotificationSettingsContent: LocalNotificationSettingsContent) {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
+    suspend fun execute(session: Session, deviceId: String, localNotificationSettingsContent: LocalNotificationSettingsContent) {
         session.accountDataService().updateUserAccountData(
                 UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId,
                 localNotificationSettingsContent.toContent(),

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
+import im.vector.app.test.fakes.FakeSession
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -35,15 +36,17 @@ class DeleteNotificationSettingsAccountDataUseCaseTest {
     fun `given a device id when execute then empty content is set for the account data`() = runTest {
         // Given
         val aDeviceId = "device-id"
-        coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any()) }
+        val aSession = FakeSession()
+        aSession.givenSessionId(aDeviceId)
+        coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val expectedContent = LocalNotificationSettingsContent(
                 isSilenced = null
         )
 
         // When
-        deleteNotificationSettingsAccountDataUseCase.execute(aDeviceId)
+        deleteNotificationSettingsAccountDataUseCase.execute(aSession)
 
         // Then
-        coVerify { fakeSetNotificationSettingsAccountDataUseCase.execute(aDeviceId, expectedContent) }
+        coVerify { fakeSetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId, expectedContent) }
     }
 }

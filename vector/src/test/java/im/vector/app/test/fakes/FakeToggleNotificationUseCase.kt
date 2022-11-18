@@ -21,7 +21,7 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
 
-class FakeTogglePushNotificationUseCase {
+class FakeToggleNotificationUseCase {
 
     val instance = mockk<ToggleNotificationUseCase> {
         coJustRun { execute(any(), any()) }

@@ -16,11 +16,9 @@
 
 package im.vector.app.features.settings.notifications
 
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.settings.devices.v2.notification.CheckIfCanToggleNotificationsViaPusherUseCase
 import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationUseCase
-import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.CheckIfCanTogglePushNotificationsViaPusherUseCase
-import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun

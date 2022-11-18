@@ -17,31 +17,29 @@
 package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.test.fakes.FakeSession
+import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.events.model.toContent
 
 private const val A_DEVICE_ID = "device-id"
 
 class CheckIfCanToggleNotificationsViaAccountDataUseCaseTest {
 
+    private val fakeGetNotificationSettingsAccountDataUseCase = mockk<GetNotificationSettingsAccountDataUseCase>()
     private val fakeSession = FakeSession()
 
     private val checkIfCanToggleNotificationsViaAccountDataUseCase =
-            CheckIfCanToggleNotificationsViaAccountDataUseCase()
+            CheckIfCanToggleNotificationsViaAccountDataUseCase(
+                    getNotificationSettingsAccountDataUseCase = fakeGetNotificationSettingsAccountDataUseCase,
+            )
 
     @Test
     fun `given current session and an account data with a content for the device id when execute then result is true`() {
         // Given
-        fakeSession
-                .accountDataService()
-                .givenGetUserAccountDataEventReturns(
-                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
-                        content = LocalNotificationSettingsContent(isSilenced = true).toContent(),
-                )
+        val content = LocalNotificationSettingsContent(isSilenced = true)
+        every { fakeGetNotificationSettingsAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns content
 
         // When
         val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
@@ -53,12 +51,8 @@ class CheckIfCanToggleNotificationsViaAccountDataUseCaseTest {
     @Test
     fun `given current session and an account data with empty content for the device id when execute then result is false`() {
         // Given
-        fakeSession
-                .accountDataService()
-                .givenGetUserAccountDataEventReturns(
-                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
-                        content = mockk(),
-                )
+        val content = LocalNotificationSettingsContent(isSilenced = null)
+        every { fakeGetNotificationSettingsAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns content
 
         // When
         val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
@@ -70,12 +64,8 @@ class CheckIfCanToggleNotificationsViaAccountDataUseCaseTest {
     @Test
     fun `given current session and NO account data for the device id when execute then result is false`() {
         // Given
-        fakeSession
-                .accountDataService()
-                .givenGetUserAccountDataEventReturns(
-                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + A_DEVICE_ID,
-                        content = null,
-                )
+        val content = null
+        every { fakeGetNotificationSettingsAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns content
 
         // When
         val result = checkIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)

@@ -17,17 +17,22 @@
 package im.vector.app.features.settings.devices.v2.notification
 
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
+/**
+ * Delete the content of any associated notification settings to the current session.
+ */
 class DeleteNotificationSettingsAccountDataUseCase @Inject constructor(
         private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
 ) {
 
-    // TODO to be called when switching to push notifications method
-    suspend fun execute(deviceId: String) {
+    // TODO to be called when switching to push notifications method (check notification method setting)
+    suspend fun execute(session: Session) {
+        val deviceId = session.sessionParams.deviceId ?: return
         val emptyNotificationSettingsContent = LocalNotificationSettingsContent(
                 isSilenced = null
         )
-        setNotificationSettingsAccountDataUseCase.execute(deviceId, emptyNotificationSettingsContent)
+        setNotificationSettingsAccountDataUseCase.execute(session, deviceId, emptyNotificationSettingsContent)
     }
 }

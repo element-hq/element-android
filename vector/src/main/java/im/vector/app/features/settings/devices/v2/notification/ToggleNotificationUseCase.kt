@@ -39,7 +39,7 @@ class ToggleNotificationUseCase @Inject constructor(
 
         if (checkIfCanToggleNotificationsViaAccountDataUseCase.execute(session, deviceId)) {
             val newNotificationSettingsContent = LocalNotificationSettingsContent(isSilenced = !enabled)
-            setNotificationSettingsAccountDataUseCase.execute(deviceId, newNotificationSettingsContent)
+            setNotificationSettingsAccountDataUseCase.execute(session, deviceId, newNotificationSettingsContent)
         }
     }
 }

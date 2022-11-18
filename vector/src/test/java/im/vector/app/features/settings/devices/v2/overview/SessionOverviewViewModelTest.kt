@@ -30,7 +30,7 @@ import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
-import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
+import im.vector.app.test.fakes.FakeToggleNotificationUseCase
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -76,7 +76,7 @@ class SessionOverviewViewModelTest {
     private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
-    private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
+    private val toggleNotificationUseCase = FakeToggleNotificationUseCase()
     private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
     private val fakeVectorPreferences = FakeVectorPreferences()
@@ -91,7 +91,7 @@ class SessionOverviewViewModelTest {
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
-            togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
+            toggleNotificationUseCase = toggleNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
             vectorPreferences = fakeVectorPreferences.instance,
             toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
@@ -436,7 +436,7 @@ class SessionOverviewViewModelTest {
 
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
-        togglePushNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
+        toggleNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
         viewModel.test().assertLatestState { state -> state.notificationsStatus == NotificationsStatus.ENABLED }.finish()
     }
 }

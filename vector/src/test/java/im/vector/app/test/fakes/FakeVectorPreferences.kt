@@ -73,4 +73,8 @@ class FakeVectorPreferences {
     fun givenAreNotificationsEnabledForDevice(notificationsEnabled: Boolean) {
         every { instance.areNotificationEnabledForDevice() } returns notificationsEnabled
     }
+
+    fun givenIsBackgroundSyncEnabled(isEnabled: Boolean) {
+        every { instance.isBackgroundSyncEnabled() } returns isEnabled
+    }
 }

@@ -53,8 +53,8 @@ class GetNotificationsStatusUseCaseTest {
 
     private val getNotificationsStatusUseCase =
             GetNotificationsStatusUseCase(
-                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanToggleNotificationsViaAccountDataUseCase,
-                    canTogglePushNotificationsViaPusherUseCase = fakeCanToggleNotificationsViaPusherUseCase,
+                    checkIfCanToggleNotificationsViaAccountDataUseCase = fakeCheckIfCanToggleNotificationsViaAccountDataUseCase,
+                    canToggleNotificationsViaPusherUseCase = fakeCanToggleNotificationsViaPusherUseCase,
             )
 
     @Before

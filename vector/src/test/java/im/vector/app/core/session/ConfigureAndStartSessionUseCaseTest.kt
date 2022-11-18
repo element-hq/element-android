@@ -20,6 +20,7 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.sync.SyncUtils
+import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeEnableNotificationsSettingUpdater
 import im.vector.app.test.fakes.FakeSession
@@ -47,6 +48,7 @@ class ConfigureAndStartSessionUseCaseTest {
     private val fakeUpdateMatrixClientInfoUseCase = mockk<UpdateMatrixClientInfoUseCase>()
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val fakeEnableNotificationsSettingUpdater = FakeEnableNotificationsSettingUpdater()
+    private val fakeUpdateNotificationSettingsAccountDataUseCase = mockk<UpdateNotificationSettingsAccountDataUseCase>()
 
     private val configureAndStartSessionUseCase = ConfigureAndStartSessionUseCase(
             context = fakeContext.instance,
@@ -54,6 +56,7 @@ class ConfigureAndStartSessionUseCaseTest {
             updateMatrixClientInfoUseCase = fakeUpdateMatrixClientInfoUseCase,
             vectorPreferences = fakeVectorPreferences.instance,
             enableNotificationsSettingUpdater = fakeEnableNotificationsSettingUpdater.instance,
+            updateNotificationSettingsAccountDataUseCase = fakeUpdateNotificationSettingsAccountDataUseCase,
     )
 
     @Before
@@ -68,47 +71,55 @@ class ConfigureAndStartSessionUseCaseTest {
     }
 
     @Test
-    fun `given start sync needed and client info recording enabled when execute then it should be configured properly`() = runTest {
+    fun `given start sync needed and enabled related preferences when execute then it should be configured properly`() = runTest {
         // Given
-        val fakeSession = givenASession()
-        every { fakeSession.coroutineScope } returns this
+        val aSession = givenASession()
+        every { aSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
+        coJustRun { fakeUpdateNotificationSettingsAccountDataUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
-        fakeEnableNotificationsSettingUpdater.givenOnSessionsStarted(fakeSession)
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(isEnabled = true)
+        fakeEnableNotificationsSettingUpdater.givenOnSessionsStarted(aSession)
 
         // When
-        configureAndStartSessionUseCase.execute(fakeSession, startSyncing = true)
+        configureAndStartSessionUseCase.execute(aSession, startSyncing = true)
         advanceUntilIdle()
 
         // Then
-        verify { fakeSession.startSyncing(fakeContext.instance) }
-        fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
-        fakeSession.fakePushersService.verifyRefreshPushers()
+        verify { aSession.startSyncing(fakeContext.instance) }
+        aSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
+        aSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
-        coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
+        coVerify {
+            fakeUpdateMatrixClientInfoUseCase.execute(aSession)
+            fakeUpdateNotificationSettingsAccountDataUseCase.execute(aSession)
+        }
     }
 
     @Test
-    fun `given start sync needed and client info recording disabled when execute then it should be configured properly`() = runTest {
+    fun `given start sync needed and disabled related preferences when execute then it should be configured properly`() = runTest {
         // Given
-        val fakeSession = givenASession()
-        every { fakeSession.coroutineScope } returns this
+        val aSession = givenASession()
+        every { aSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
-        coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = false)
-        fakeEnableNotificationsSettingUpdater.givenOnSessionsStarted(fakeSession)
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(isEnabled = false)
+        fakeEnableNotificationsSettingUpdater.givenOnSessionsStarted(aSession)
 
         // When
-        configureAndStartSessionUseCase.execute(fakeSession, startSyncing = true)
+        configureAndStartSessionUseCase.execute(aSession, startSyncing = true)
         advanceUntilIdle()
 
         // Then
-        verify { fakeSession.startSyncing(fakeContext.instance) }
-        fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
-        fakeSession.fakePushersService.verifyRefreshPushers()
+        verify { aSession.startSyncing(fakeContext.instance) }
+        aSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
+        aSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
-        coVerify(inverse = true) { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
+        coVerify(inverse = true) {
+            fakeUpdateMatrixClientInfoUseCase.execute(aSession)
+            fakeUpdateNotificationSettingsAccountDataUseCase.execute(aSession)
+        }
     }
 
     @Test
@@ -118,7 +129,9 @@ class ConfigureAndStartSessionUseCaseTest {
         every { fakeSession.coroutineScope } returns this
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
+        coJustRun { fakeUpdateNotificationSettingsAccountDataUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(isEnabled = true)
         fakeEnableNotificationsSettingUpdater.givenOnSessionsStarted(fakeSession)
 
         // When
@@ -130,7 +143,10 @@ class ConfigureAndStartSessionUseCaseTest {
         fakeSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         fakeSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
-        coVerify { fakeUpdateMatrixClientInfoUseCase.execute(fakeSession) }
+        coVerify {
+            fakeUpdateMatrixClientInfoUseCase.execute(fakeSession)
+            fakeUpdateNotificationSettingsAccountDataUseCase.execute(fakeSession)
+        }
     }
 
     private fun givenASession(): FakeSession {

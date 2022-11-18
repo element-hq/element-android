@@ -16,23 +16,19 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
-class CreateNotificationSettingsAccountDataUseCase @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase
-) {
+class GetNotificationSettingsAccountDataUseCase @Inject constructor() {
 
-    // TODO to be called on session start when background sync is enabled + when switching to background sync
-    suspend fun execute(session: Session) {
-        val deviceId = session.sessionParams.deviceId ?: return
-        val isSilenced = !vectorPreferences.areNotificationEnabledForDevice()
-        val notificationSettingsContent = LocalNotificationSettingsContent(
-                isSilenced = isSilenced
-        )
-        setNotificationSettingsAccountDataUseCase.execute(deviceId, notificationSettingsContent)
+    fun execute(session: Session, deviceId: String): LocalNotificationSettingsContent? {
+        return session
+                .accountDataService()
+                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
+                ?.content
+                .toModel<LocalNotificationSettingsContent>()
     }
 }

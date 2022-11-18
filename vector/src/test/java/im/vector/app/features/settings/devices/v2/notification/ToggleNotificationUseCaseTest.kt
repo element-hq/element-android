@@ -39,8 +39,8 @@ class ToggleNotificationUseCaseTest {
     private val toggleNotificationUseCase =
             ToggleNotificationUseCase(
                     activeSessionHolder = activeSessionHolder.instance,
-                    checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanToggleNotificationsViaPusherUseCase,
-                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanToggleNotificationsViaAccountDataUseCase,
+                    checkIfCanToggleNotificationsViaPusherUseCase = fakeCheckIfCanToggleNotificationsViaPusherUseCase,
+                    checkIfCanToggleNotificationsViaAccountDataUseCase = fakeCheckIfCanToggleNotificationsViaAccountDataUseCase,
                     setNotificationSettingsAccountDataUseCase = fakeSetNotificationSettingsAccountDataUseCase,
             )
 
@@ -72,7 +72,7 @@ class ToggleNotificationUseCaseTest {
         val fakeSession = activeSessionHolder.fakeSession
         every { fakeCheckIfCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns false
         every { fakeCheckIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, sessionId) } returns true
-        coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any()) }
+        coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val expectedLocalNotificationSettingsContent = LocalNotificationSettingsContent(
                 isSilenced = false
         )
@@ -82,7 +82,7 @@ class ToggleNotificationUseCaseTest {
 
         // Then
         coVerify {
-            fakeSetNotificationSettingsAccountDataUseCase.execute(sessionId, expectedLocalNotificationSettingsContent)
+            fakeSetNotificationSettingsAccountDataUseCase.execute(fakeSession, sessionId, expectedLocalNotificationSettingsContent)
         }
     }
 }

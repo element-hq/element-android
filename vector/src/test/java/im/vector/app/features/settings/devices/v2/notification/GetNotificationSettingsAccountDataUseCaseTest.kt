@@ -17,31 +17,33 @@
 package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.test.fakes.FakeSession
-import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toContent
 
-class SetNotificationSettingsAccountDataUseCaseTest {
+class GetNotificationSettingsAccountDataUseCaseTest {
 
-    private val setNotificationSettingsAccountDataUseCase = SetNotificationSettingsAccountDataUseCase()
+    private val getNotificationSettingsAccountDataUseCase = GetNotificationSettingsAccountDataUseCase()
 
     @Test
-    fun `given a content when execute then update local notification settings with this content`() = runTest {
+    fun `given a device id when execute then retrieve the account data event corresponding to this id if any`() {
         // Given
-        val sessionId = "a_session_id"
-        val localNotificationSettingsContent = LocalNotificationSettingsContent()
-        val fakeSession = FakeSession()
-        fakeSession.accountDataService().givenUpdateUserAccountDataEventSucceeds()
+        val aDeviceId = "device-id"
+        val aSession = FakeSession()
+        val expectedContent = LocalNotificationSettingsContent()
+        aSession
+                .accountDataService()
+                .givenGetUserAccountDataEventReturns(
+                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + aDeviceId,
+                        content = expectedContent.toContent(),
+                )
 
         // When
-        setNotificationSettingsAccountDataUseCase.execute(fakeSession, sessionId, localNotificationSettingsContent)
+        val result = getNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
 
         // Then
-        fakeSession.accountDataService().verifyUpdateUserAccountDataEventSucceeds(
-                UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + sessionId,
-                localNotificationSettingsContent.toContent(),
-        )
+        result shouldBeEqualTo expectedContent
     }
 }

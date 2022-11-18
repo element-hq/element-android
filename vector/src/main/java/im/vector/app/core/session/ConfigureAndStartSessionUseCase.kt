@@ -25,6 +25,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.sync.SyncUtils
+import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -36,6 +37,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val updateMatrixClientInfoUseCase: UpdateMatrixClientInfoUseCase,
         private val vectorPreferences: VectorPreferences,
         private val enableNotificationsSettingUpdater: EnableNotificationsSettingUpdater,
+        private val updateNotificationSettingsAccountDataUseCase: UpdateNotificationSettingsAccountDataUseCase,
 ) {
 
     fun execute(session: Session, startSyncing: Boolean = true) {
@@ -49,11 +51,24 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         }
         session.pushersService().refreshPushers()
         webRtcCallManager.checkForProtocolsSupportIfNeeded()
+        updateMatrixClientInfoIfNeeded(session)
+        createNotificationSettingsAccountDataIfNeeded(session)
+        enableNotificationsSettingUpdater.onSessionsStarted(session)
+    }
+
+    private fun updateMatrixClientInfoIfNeeded(session: Session) {
         session.coroutineScope.launch {
             if (vectorPreferences.isClientInfoRecordingEnabled()) {
                 updateMatrixClientInfoUseCase.execute(session)
             }
         }
-        enableNotificationsSettingUpdater.onSessionsStarted(session)
+    }
+
+    private fun createNotificationSettingsAccountDataIfNeeded(session: Session) {
+        session.coroutineScope.launch {
+            if (vectorPreferences.isBackgroundSyncEnabled()) {
+                updateNotificationSettingsAccountDataUseCase.execute(session)
+            }
+        }
     }
 }
