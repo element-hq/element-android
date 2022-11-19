@@ -187,7 +187,7 @@ class UserVerificationController @Inject constructor(
             notice(scanCodeInstructions.toEpoxyCharSequence())
         }
 
-        if (request.otherCanScanQrCode && !request.qrCodeText.isNullOrEmpty()) {
+        if (request.weShouldDisplayQRCode && !request.qrCodeText.isNullOrEmpty()) {
             bottomSheetVerificationQrCodeItem {
                 id("qr")
                 data(request.qrCodeText!!)
@@ -198,7 +198,7 @@ class UserVerificationController @Inject constructor(
             }
         }
 
-        if (request.otherCanShowQrCode) {
+        if (request.weShouldShowScanOption) {
             bottomSheetVerificationActionItem {
                 id("openCamera")
                 title(scanOtherCodeTitle)

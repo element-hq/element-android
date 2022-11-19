@@ -206,14 +206,14 @@ class VerificationTest : InstrumentedTest {
 
         aliceReadyPendingVerificationRequest!!.let { pr ->
             pr.isSasSupported shouldBe expectedResultForAlice.sasIsSupported
-            pr.otherCanShowQrCode shouldBe expectedResultForAlice.otherCanShowQrCode
-            pr.otherCanScanQrCode shouldBe expectedResultForAlice.otherCanScanQrCode
+            pr.weShouldShowScanOption shouldBe expectedResultForAlice.otherCanShowQrCode
+            pr.weShouldDisplayQRCode shouldBe expectedResultForAlice.otherCanScanQrCode
         }
 
         bobReadyPendingVerificationRequest!!.let { pr ->
             pr.isSasSupported shouldBe expectedResultForBob.sasIsSupported
-            pr.otherCanShowQrCode shouldBe expectedResultForBob.otherCanShowQrCode
-            pr.otherCanScanQrCode shouldBe expectedResultForBob.otherCanScanQrCode
+            pr.weShouldShowScanOption shouldBe expectedResultForBob.otherCanShowQrCode
+            pr.weShouldDisplayQRCode shouldBe expectedResultForBob.otherCanScanQrCode
         }
 
         cryptoTestData.cleanUp(testHelper)

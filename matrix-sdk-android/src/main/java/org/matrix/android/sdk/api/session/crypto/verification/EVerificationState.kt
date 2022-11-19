@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,32 +31,4 @@ enum class EVerificationState {
     Done,
     Cancelled,
     HandledByOtherSession
-}
-
-// TODO remove that
-interface IVerificationRequest {
-
-    fun requestId(): String
-
-    fun incoming(): Boolean
-    fun otherUserId(): String
-    fun roomId(): String?
-
-    // target devices in case of to_device self verification
-    fun targetDevices(): List<String>?
-
-    fun state(): EVerificationState
-    fun ageLocalTs(): Long
-
-    fun isSasSupported(): Boolean
-    fun otherCanShowQrCode(): Boolean
-    fun otherCanScanQrCode(): Boolean
-
-    fun otherDeviceId(): String?
-
-    fun qrCodeText(): String?
-
-    fun isFinished(): Boolean = state() == EVerificationState.Cancelled || state() == EVerificationState.Done
-
-    fun cancelCode(): CancelCode?
 }

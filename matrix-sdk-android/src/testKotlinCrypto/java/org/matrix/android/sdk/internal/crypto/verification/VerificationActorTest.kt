@@ -17,9 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.verification.org.matrix.android.sdk.internal.crypto.verification
 
 import android.util.Base64
-import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -27,44 +25,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import org.amshove.kluent.fail
+import org.amshove.kluent.internal.assertEquals
+import org.amshove.kluent.internal.assertNotEquals
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldNotBe
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
-import org.matrix.android.sdk.api.session.crypto.verification.IVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
-import org.matrix.android.sdk.internal.crypto.SecretShareManager
-import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.verification.FakeCryptoStoreForVerification
-import org.matrix.android.sdk.internal.crypto.verification.StoreMode
 import org.matrix.android.sdk.internal.crypto.verification.VerificationActor
-import org.matrix.android.sdk.internal.crypto.verification.VerificationInfo
+import org.matrix.android.sdk.internal.crypto.verification.VerificationActorHelper
 import org.matrix.android.sdk.internal.crypto.verification.VerificationIntent
-import org.matrix.android.sdk.internal.crypto.verification.VerificationTransportLayer
-import org.matrix.android.sdk.internal.util.time.Clock
-import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class VerificationActorTest {
 
     val transportScope = CoroutineScope(SupervisorJob())
-    val actorAScope = CoroutineScope(SupervisorJob())
-    val actorBScope = CoroutineScope(SupervisorJob())
+//    val actorAScope = CoroutineScope(SupervisorJob())
+//    val actorBScope = CoroutineScope(SupervisorJob())
 
     @Before
     fun setUp() {
@@ -86,38 +72,10 @@ class VerificationActorTest {
     }
 
     @Test
-    fun `Request and accept`() = runTest {
-        var bobChannel: SendChannel<VerificationIntent>? = null
-        var aliceChannel: SendChannel<VerificationIntent>? = null
-
-        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { bobChannel }
-        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { aliceChannel }
-
-        val aliceActor = fakeActor(
-                actorAScope,
-                FakeCryptoStoreForVerification.aliceMxId,
-                FakeCryptoStoreForVerification(StoreMode.Alice).instance,
-                aliceTransportLayer,
-                mockk<dagger.Lazy<CrossSigningService>> {
-                    every {
-                        get()
-                    } returns mockk<CrossSigningService>(relaxed = true)
-                }
-        )
-        aliceChannel = aliceActor.channel
-
-        val bobActor = fakeActor(
-                actorBScope,
-                FakeCryptoStoreForVerification.aliceMxId,
-                FakeCryptoStoreForVerification(StoreMode.Alice).instance,
-                bobTransportLayer,
-                mockk<dagger.Lazy<CrossSigningService>> {
-                    every {
-                        get()
-                    } returns mockk<CrossSigningService>(relaxed = true)
-                }
-        )
-        bobChannel = bobActor.channel
+    fun `If ready both side should support sas and Qr show and scan`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
 
         val completableDeferred = CompletableDeferred<PendingVerificationRequest>()
 
@@ -130,23 +88,14 @@ class VerificationActorTest {
             }
         }
 
-        awaitDeferrable<PendingVerificationRequest> {
-            aliceActor.send(
-                    VerificationIntent.ActionRequestVerification(
-                            otherUserId = FakeCryptoStoreForVerification.bobMxId,
-                            roomId = "aRoom",
-                            methods = listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SHOW, VerificationMethod.QR_CODE_SCAN),
-                            deferred = it
-                    )
-            )
-        }
+        aliceActor.requestVerification(listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SHOW, VerificationMethod.QR_CODE_SCAN))
 
         val bobIncomingRequest = completableDeferred.await()
         bobIncomingRequest.state shouldBeEqualTo EVerificationState.Requested
 
         val aliceReadied = CompletableDeferred<PendingVerificationRequest>()
 
-        val theJob = transportScope.launch {
+        transportScope.launch {
             aliceActor.eventFlow.collect {
                 if (it is VerificationEvent.RequestUpdated && it.request.state == EVerificationState.Ready) {
                     aliceReadied.complete(it.request)
@@ -156,7 +105,7 @@ class VerificationActorTest {
         }
 
         // test ready
-        awaitDeferrable<PendingVerificationRequest?> {
+        val bobReadied = awaitDeferrable<PendingVerificationRequest?> {
             bobActor.send(
                     VerificationIntent.ActionReadyRequest(
                             bobIncomingRequest.transactionId,
@@ -168,11 +117,143 @@ class VerificationActorTest {
 
         val readiedAliceSide = aliceReadied.await()
 
-        println("transporte scope active? ${transportScope.isActive}")
-        println("the job? ${theJob.isActive}")
-
         readiedAliceSide.isSasSupported shouldBeEqualTo true
-        readiedAliceSide.otherCanScanQrCode shouldBeEqualTo true
+        readiedAliceSide.weShouldDisplayQRCode shouldBeEqualTo true
+
+        bobReadied shouldNotBe null
+        bobReadied!!.isSasSupported shouldBeEqualTo true
+        bobReadied.weShouldDisplayQRCode shouldBeEqualTo true
+
+        bobReadied.qrCodeText shouldNotBe null
+        readiedAliceSide.qrCodeText shouldNotBe null
+    }
+
+    @Test
+    fun `Test alice can show but not scan QR`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
+
+        println("Alice sends a request")
+        val outgoingRequest = aliceActor.requestVerification(
+                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SHOW)
+        )
+
+        // wait for bob to get it
+        println("Wait for bob to get it")
+        waitForBobToSeeIncomingRequest(bobActor, outgoingRequest)
+
+        println("let bob ready it")
+        val bobReady = bobActor.readyVerification(
+                outgoingRequest.transactionId,
+                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW)
+        )
+
+        println("Wait for alice to get the ready")
+        retryUntil {
+            awaitDeferrable<PendingVerificationRequest?> {
+                aliceActor.send(VerificationIntent.GetExistingRequest(outgoingRequest.transactionId, outgoingRequest.otherUserId, it))
+            }?.state == EVerificationState.Ready
+        }
+
+        val aliceReady = awaitDeferrable<PendingVerificationRequest?> {
+            aliceActor.send(VerificationIntent.GetExistingRequest(outgoingRequest.transactionId, outgoingRequest.otherUserId, it))
+        }!!
+
+        aliceReady.isSasSupported shouldBeEqualTo bobReady.isSasSupported
+
+        // alice can't scan so there should not be option to do so
+        assertEquals("Alice should not show scan option", false, aliceReady.weShouldShowScanOption)
+        assertEquals("Alice should show QR as bob can scan", true, aliceReady.weShouldDisplayQRCode)
+
+        assertEquals("Bob should be able to scan", true, bobReady.weShouldShowScanOption)
+        assertEquals("Bob should not show QR as alice can scan", false, bobReady.weShouldDisplayQRCode)
+    }
+
+    @Test
+    fun `Test bob can show but not scan QR`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
+
+        println("Alice sends a request")
+        val outgoingRequest = aliceActor.requestVerification(
+                listOf(VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW)
+        )
+
+        // wait for bob to get it
+        println("Wait for bob to get it")
+        waitForBobToSeeIncomingRequest(bobActor, outgoingRequest)
+
+        println("let bob ready it")
+        val bobReady = bobActor.readyVerification(
+                outgoingRequest.transactionId,
+                listOf(VerificationMethod.QR_CODE_SHOW)
+        )
+
+        println("Wait for alice to get the ready")
+        retryUntil {
+            awaitDeferrable<PendingVerificationRequest?> {
+                aliceActor.send(VerificationIntent.GetExistingRequest(outgoingRequest.transactionId, outgoingRequest.otherUserId, it))
+            }?.state == EVerificationState.Ready
+        }
+
+        val aliceReady = awaitDeferrable<PendingVerificationRequest?> {
+            aliceActor.send(VerificationIntent.GetExistingRequest(outgoingRequest.transactionId, outgoingRequest.otherUserId, it))
+        }!!
+
+        assertEquals("Alice sas is not supported", false, aliceReady.isSasSupported)
+        aliceReady.isSasSupported shouldBeEqualTo bobReady.isSasSupported
+
+        // alice can't scan so there should not be option to do so
+        assertEquals("Alice should show scan option", true, aliceReady.weShouldShowScanOption)
+        assertEquals("Alice QR data should be null", null, aliceReady.qrCodeText)
+        assertEquals("Alice should not show QR as bob can scan", false, aliceReady.weShouldDisplayQRCode)
+
+        assertEquals("Bob should not should not show cam option as it can't scan", false, bobReady.weShouldShowScanOption)
+        assertNotEquals("Bob QR data should be there", null, bobReady.qrCodeText)
+        assertEquals("Bob should show QR as alice can scan", true, bobReady.weShouldDisplayQRCode)
+    }
+
+    private suspend fun VerificationActor.requestVerification(methods: List<VerificationMethod>): PendingVerificationRequest {
+        return awaitDeferrable<PendingVerificationRequest> {
+            send(
+                    VerificationIntent.ActionRequestVerification(
+                            otherUserId = FakeCryptoStoreForVerification.bobMxId,
+                            roomId = "aRoom",
+                            methods = methods,
+                            deferred = it
+                    )
+            )
+        }
+    }
+
+    private suspend fun waitForBobToSeeIncomingRequest(bobActor: VerificationActor, aliceOutgoing: PendingVerificationRequest) {
+        retryUntil {
+            awaitDeferrable<PendingVerificationRequest?> {
+                bobActor.send(
+                        VerificationIntent.GetExistingRequest(
+                                aliceOutgoing.transactionId,
+                                FakeCryptoStoreForVerification.aliceMxId, it
+                        )
+                )
+            }?.state == EVerificationState.Requested
+        }
+    }
+
+    private val backoff = listOf(500L, 1_000L, 1_000L, 3_000L, 3_000L, 5_000L)
+
+    private suspend fun retryUntil(condition: suspend (() -> Boolean)) {
+        var tryCount = 0
+        while (!condition()) {
+            if (tryCount >= backoff.size) {
+                fail("Retry Until Fialed")
+            }
+            withContext(Dispatchers.IO) {
+                delay(backoff[tryCount])
+            }
+            tryCount++
+        }
     }
 
     private suspend fun <T> awaitDeferrable(block: suspend ((CompletableDeferred<T>) -> Unit)): T {
@@ -181,113 +262,85 @@ class VerificationActorTest {
         return deferred.await()
     }
 
-    private fun mockTransportTo(fromUser: String, otherChannel: (() -> SendChannel<VerificationIntent>?)): VerificationTransportLayer {
-        return mockk<VerificationTransportLayer> {
-            coEvery { sendToOther(any(), any(), any()) } answers {
-                val request = firstArg<IVerificationRequest>()
-                val type = secondArg<String>()
-                val info = thirdArg<VerificationInfo<*>>()
-
-                transportScope.launch(Dispatchers.IO) {
-                    when (type) {
-                        EventType.KEY_VERIFICATION_READY -> {
-                            val readyContent = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnReadyReceived(
-                                            transactionId = request.requestId(),
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId(),
-                                            readyInfo = readyContent as ValidVerificationInfoReady,
-                                    )
-                            )
-                        }
-                    }
-                }
-            }
-            coEvery { sendInRoom(any(), any(), any(), any()) } answers {
-                val type = secondArg<String>()
-                val roomId = thirdArg<String>()
-                val content = arg<Content>(3)
-
-                val fakeEventId = UUID.randomUUID().toString()
-                transportScope.launch(Dispatchers.IO) {
-                    when (type) {
-                        EventType.MESSAGE -> {
-                            val requestContent = content.toModel<MessageVerificationRequestContent>()?.copy(
-                                    transactionId = fakeEventId
-                            )?.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnVerificationRequestReceived(
-                                            requestContent!!,
-                                            senderId = FakeCryptoStoreForVerification.aliceMxId,
-                                            roomId = roomId,
-                                            timeStamp = 0
-                                    )
-                            )
-                        }
-                        EventType.KEY_VERIFICATION_READY -> {
-                            val readyContent = content.toModel<MessageVerificationReadyContent>()
-                                    ?.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnReadyReceived(
-                                            transactionId = readyContent!!.transactionId,
-                                            fromUser = fromUser,
-                                            viaRoom = roomId,
-                                            readyInfo = readyContent,
-                                    )
-                            )
-                        }
-                    }
-                }
-                fakeEventId
-            }
-        }
+    private suspend fun VerificationActor.readyVerification(transactionId: String, methods: List<VerificationMethod>): PendingVerificationRequest {
+        return awaitDeferrable<PendingVerificationRequest?> {
+            send(
+                    VerificationIntent.ActionReadyRequest(
+                            transactionId,
+                            methods = methods,
+                            it
+                    )
+            )
+        }!!
     }
 
-    @Test
-    fun `Every testing`() {
-        val mockStore = mockk<IMXCryptoStore>()
-        every { mockStore.getDeviceId() } returns "A"
-        println("every ${mockStore.getDeviceId()}")
-        every { mockStore.getDeviceId() } returns "B"
-        println("every ${mockStore.getDeviceId()}")
+//    @Test
+//    fun `Every testing`() {
+//        val mockStore = mockk<IMXCryptoStore>()
+//        every { mockStore.getDeviceId() } returns "A"
+//        println("every ${mockStore.getDeviceId()}")
+//        every { mockStore.getDeviceId() } returns "B"
+//        println("every ${mockStore.getDeviceId()}")
+//
+//        every { mockStore.getDeviceId() } returns "A"
+//        every { mockStore.getDeviceId() } returns "B"
+//        println("every ${mockStore.getDeviceId()}")
+//
+//        every { mockStore.getCrossSigningInfo(any()) } returns null
+//        every { mockStore.getCrossSigningInfo("alice") } returns MXCrossSigningInfo("alice", emptyList(), false)
+//
+//        println("XS ${mockStore.getCrossSigningInfo("alice")}")
+//        println("XS ${mockStore.getCrossSigningInfo("bob")}")
+//    }
 
-        every { mockStore.getDeviceId() } returns "A"
-        every { mockStore.getDeviceId() } returns "B"
-        println("every ${mockStore.getDeviceId()}")
-
-        every { mockStore.getCrossSigningInfo(any()) } returns null
-        every { mockStore.getCrossSigningInfo("alice") } returns MXCrossSigningInfo("alice", emptyList(), false)
-
-        println("XS ${mockStore.getCrossSigningInfo("alice")}")
-        println("XS ${mockStore.getCrossSigningInfo("bob")}")
-    }
-
-    private fun fakeActor(
-            scope: CoroutineScope,
-            userId: String,
-            cryptoStore: IMXCryptoStore,
-            transportLayer: VerificationTransportLayer,
-            crossSigningService: dagger.Lazy<CrossSigningService>,
-    ): VerificationActor {
-        return VerificationActor(
-                scope,
-//                channel = channel,
-                clock = mockk<Clock> {
-                    every { epochMillis() } returns System.currentTimeMillis()
-                },
-                myUserId = userId,
-                cryptoStore = cryptoStore,
-                secretShareManager = mockk<SecretShareManager> {},
-                transportLayer = transportLayer,
-                crossSigningService = crossSigningService,
-                setDeviceVerificationAction = SetDeviceVerificationAction(
-                        cryptoStore = cryptoStore,
-                        userId = userId,
-                        defaultKeysBackupService = mockk {
-                            coEvery { checkAndStartKeysBackup() } coAnswers { }
-                        }
-                )
-        )
-    }
+//    @Test
+//    fun `Basic channel test`() {
+// //        val sharedFlow = MutableSharedFlow<Int>(replay = 0, extraBufferCapacity = 2, BufferOverflow.DROP_OLDEST)
+//        val sharedFlow = MutableSharedFlow<Int>(replay = 0)//, extraBufferCapacity = 0, BufferOverflow.DROP_OLDEST)
+//
+//        val scope = CoroutineScope(SupervisorJob())
+//        val deferred = CompletableDeferred<Unit>()
+//        val listener = scope.launch {
+//            sharedFlow.onEach {
+//                println("L1 : Just collected $it")
+//                delay(1000)
+//                println("L1 : Just processed $it")
+//                if (it == 2) {
+//                    deferred.complete(Unit)
+//                }
+//            }.launchIn(scope)
+//        }
+//
+// //        scope.launch {
+// //            delay(700)
+//        println("Pre Emit 1")
+//        sharedFlow.tryEmit(1)
+//        println("Emited 1")
+//        sharedFlow.tryEmit(2)
+//        println("Emited 2")
+// //        }
+//
+// //        runBlocking {
+// //            deferred.await()
+// //        }
+//
+//        sharedFlow.onEach {
+//            println("L2: Just collected $it")
+//            delay(1000)
+//            println("L2: Just processed $it")
+//        }.launchIn(scope)
+//
+//
+//        runBlocking {
+//            deferred.await()
+//        }
+//
+//        val now = System.currentTimeMillis()
+//        println("Just give some time for execution")
+//        val job = scope.launch { delay(10_000) }
+//        runBlocking {
+//            job.join()
+//        }
+//        println("enough ${System.currentTimeMillis() - now}")
+//    }
 }

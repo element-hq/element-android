@@ -130,8 +130,8 @@ internal class VerificationActor @AssistedInject constructor(
      */
     private val pendingRequests = HashMap<String, MutableList<KotlinVerificationRequest>>()
 
-    // Replaces the typical list of listeners pattern. Looks to me as the sane setup, not sure if more than 1 is needed as extraBufferCapacity
-    // We don't want to use emit as it would block if no listener is subscribed
+    // Replaces the typical list of listeners pattern.
+    // Looks to me as the sane setup, not sure if more than 1 is needed as extraBufferCapacity
     // So we should use try emit using extraBufferCapacity, we use drop_oldest instead of suspend.
     val eventFlow = MutableSharedFlow<VerificationEvent>(extraBufferCapacity = 4, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
@@ -214,7 +214,7 @@ internal class VerificationActor @AssistedInject constructor(
                 .v("[${myUserId.take(8)}]: $msg")
         when (msg) {
             is VerificationIntent.ActionRequestVerification -> {
-                handleRequestAdd(msg)
+                handleActionRequestVerification(msg)
             }
             is VerificationIntent.OnReadyReceived -> {
                 handleReadyReceived(msg)
@@ -1046,7 +1046,7 @@ internal class VerificationActor @AssistedInject constructor(
                     existing.state = SasTransactionState.Done(true)
                     dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
                     // we can forget about it
-                    txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
+                    txMap[matchingRequest.otherUserId]?.remove(matchingRequest.requestId)
                     // XXX whatabout waiting for done?
                     matchingRequest.state = EVerificationState.Done
                     dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
@@ -1137,7 +1137,7 @@ internal class VerificationActor @AssistedInject constructor(
         existing.state = QRCodeVerificationState.Done
         dispatchUpdate(VerificationEvent.TransactionUpdated(existing))
         // we can forget about it
-        txMap[matchingRequest.otherUserId()]?.remove(matchingRequest.requestId)
+        txMap[matchingRequest.otherUserId]?.remove(matchingRequest.requestId)
         matchingRequest.state = EVerificationState.WaitingForDone
         dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))
 
@@ -1309,6 +1309,11 @@ internal class VerificationActor @AssistedInject constructor(
         if (commonMethods.isEmpty()) {
             Timber.tag(loggerTag.value).v("Request ${msg.transactionId} no common methods")
             cancelRequest(existing, CancelCode.UnknownMethod)
+            // Upon receipt of Alice’s m.key.verification.request message, if Bob’s device does not understand any of the methods,
+            // it should not cancel the request as one of his other devices may support the request.
+
+            // XXX How to o that??
+            // Instead, Bob’s device should tell Bob that no supported method was found, and allow him to manually reject the request.
             msg.deferred.complete(null)
             return
         }
@@ -1367,7 +1372,7 @@ internal class VerificationActor @AssistedInject constructor(
 
     private fun getMethodAgreement(
             otherUserMethods: List<String>?,
-            methods: List<VerificationMethod>,
+            myMethods: List<VerificationMethod>,
     ): List<String> {
         if (otherUserMethods.isNullOrEmpty()) {
             return emptyList()
@@ -1375,18 +1380,18 @@ internal class VerificationActor @AssistedInject constructor(
 
         val result = mutableSetOf<String>()
 
-        if (VERIFICATION_METHOD_SAS in otherUserMethods && VerificationMethod.SAS in methods) {
+        if (VERIFICATION_METHOD_SAS in otherUserMethods && VerificationMethod.SAS in myMethods) {
             // Other can do SAS and so do I
             result.add(VERIFICATION_METHOD_SAS)
         }
 
-        if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods || VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods) {
-            if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods && VerificationMethod.QR_CODE_SHOW in methods) {
+        if (VERIFICATION_METHOD_RECIPROCATE in otherUserMethods) {
+            if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods && VerificationMethod.QR_CODE_SHOW in myMethods) {
                 // Other can Scan and I can show QR code
                 result.add(VERIFICATION_METHOD_QR_CODE_SHOW)
                 result.add(VERIFICATION_METHOD_RECIPROCATE)
             }
-            if (VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods && VerificationMethod.QR_CODE_SCAN in methods) {
+            if (VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods && VerificationMethod.QR_CODE_SCAN in myMethods) {
                 // Other can show and I can scan QR code
                 result.add(VERIFICATION_METHOD_QR_CODE_SCAN)
                 result.add(VERIFICATION_METHOD_RECIPROCATE)
@@ -1400,7 +1405,11 @@ internal class VerificationActor @AssistedInject constructor(
         return contains(VERIFICATION_METHOD_QR_CODE_SCAN) && contains(VERIFICATION_METHOD_RECIPROCATE)
     }
 
-    private suspend fun handleRequestAdd(msg: VerificationIntent.ActionRequestVerification) {
+    private fun List<String>.canShowCode(): Boolean {
+        return contains(VERIFICATION_METHOD_QR_CODE_SHOW) && contains(VERIFICATION_METHOD_RECIPROCATE)
+    }
+
+    private suspend fun handleActionRequestVerification(msg: VerificationIntent.ActionRequestVerification) {
         val requestsForUser = pendingRequests.getOrPut(msg.otherUserId) { mutableListOf() }
         // there can only be one active request per user, so cancel existing ones
         requestsForUser.toList().forEach { existingRequest ->
@@ -1409,8 +1418,6 @@ internal class VerificationActor @AssistedInject constructor(
                 cancelRequest(existingRequest, CancelCode.User)
             }
         }
-
-        val validLocalId = LocalEcho.createLocalEchoId()
 
         val methodValues = if (cryptoStore.getMyCrossSigningInfo()?.isTrusted().orFalse()) {
             // Add reciprocate method if application declares it can scan or show QR codes
@@ -1521,6 +1528,10 @@ internal class VerificationActor @AssistedInject constructor(
             return
         }
 
+        if (matchingRequest.requestInfo?.methods?.canShowCode().orFalse() &&
+                msg.readyInfo.methods.canScanCode()) {
+            matchingRequest.qrCodeData = createQrCodeData(matchingRequest.requestId, msg.fromUser, msg.readyInfo.fromDevice)
+        }
         matchingRequest.readyInfo = msg.readyInfo
         matchingRequest.state = EVerificationState.Ready
         dispatchUpdate(VerificationEvent.RequestUpdated(matchingRequest.toPendingVerificationRequest()))

@@ -38,11 +38,10 @@ data class PendingVerificationRequest(
         // if available store here the qr code to show
         val qrCodeText: String? = null,
         val isSasSupported: Boolean = false,
-        val otherCanShowQrCode: Boolean = false,
-        val otherCanScanQrCode: Boolean = false,
+        val weShouldShowScanOption: Boolean = false,
+        val weShouldDisplayQRCode: Boolean = false,
 
-) {
+        ) {
 //    val isReady: Boolean = readyInfo != null
 //
-//    val isFinished: Boolean = isSuccessful || cancelConclusion != null
 }

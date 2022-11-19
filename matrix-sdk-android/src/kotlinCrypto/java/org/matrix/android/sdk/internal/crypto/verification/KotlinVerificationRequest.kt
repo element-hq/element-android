@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.verification
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
-import org.matrix.android.sdk.api.session.crypto.verification.IVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
@@ -35,7 +34,7 @@ internal class KotlinVerificationRequest(
         val otherUserId: String,
         var state: EVerificationState,
         val ageLocalTs: Long
-) : IVerificationRequest {
+) {
 
     var roomId: String? = null
     var qrCodeData: QrCodeData? = null
@@ -44,21 +43,21 @@ internal class KotlinVerificationRequest(
     var readyInfo: ValidVerificationInfoReady? = null
     var cancelCode: CancelCode? = null
 
-    override fun requestId() = requestId
+//    fun requestId() = requestId
+//
+//    fun incoming() = incoming
+//
+//    fun otherUserId() = otherUserId
+//
+//    fun roomId() = roomId
+//
+//    fun targetDevices() = targetDevices
+//
+//    fun state() = state
+//
+//    fun ageLocalTs() = ageLocalTs
 
-    override fun incoming() = incoming
-
-    override fun otherUserId() = otherUserId
-
-    override fun roomId() = roomId
-
-    override fun targetDevices() = targetDevices
-
-    override fun state() = state
-
-    override fun ageLocalTs() = ageLocalTs
-
-    override fun otherDeviceId(): String? {
+    fun otherDeviceId(): String? {
         return if (incoming) {
             requestInfo?.fromDevice
         } else {
@@ -66,12 +65,12 @@ internal class KotlinVerificationRequest(
         }
     }
 
-    override fun cancelCode(): CancelCode? = cancelCode
+    fun cancelCode(): CancelCode? = cancelCode
 
     /**
      * SAS is supported if I support it and the other party support it.
      */
-    override fun isSasSupported(): Boolean {
+    private fun isSasSupported(): Boolean {
         return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse() &&
                 readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
     }
@@ -79,7 +78,7 @@ internal class KotlinVerificationRequest(
     /**
      * Other can show QR code if I can scan QR code and other can show QR code.
      */
-    override fun otherCanShowQrCode(): Boolean {
+    private fun otherCanShowQrCode(): Boolean {
         return if (incoming) {
             requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse() &&
                     readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
@@ -92,7 +91,7 @@ internal class KotlinVerificationRequest(
     /**
      * Other can scan QR code if I can show QR code and other can scan QR code.
      */
-    override fun otherCanScanQrCode(): Boolean {
+    private fun otherCanScanQrCode(): Boolean {
         return if (incoming) {
             requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse() &&
                     readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
@@ -102,7 +101,7 @@ internal class KotlinVerificationRequest(
         }
     }
 
-    override fun qrCodeText() = qrCodeData?.toEncodedString()
+    fun qrCodeText() = qrCodeData?.toEncodedString()
 
     override fun toString(): String {
         return toPendingVerificationRequest().toString()
@@ -122,9 +121,11 @@ internal class KotlinVerificationRequest(
                 targetDevices = targetDevices,
                 qrCodeText = qrCodeText(),
                 isSasSupported = isSasSupported(),
-                otherCanShowQrCode = otherCanShowQrCode(),
-                otherCanScanQrCode = otherCanScanQrCode(),
+                weShouldShowScanOption = otherCanShowQrCode(),
+                weShouldDisplayQRCode = otherCanScanQrCode(),
                 otherDeviceId = otherDeviceId()
         )
     }
+
+    fun isFinished() = state == EVerificationState.Cancelled || state == EVerificationState.Done
 }
