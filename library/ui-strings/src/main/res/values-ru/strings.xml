@@ -2949,4 +2949,5 @@
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ В этой комнате есть неподтверждённые устройства, они не смогут расшифровывать сообщения, отправленные вами.</string>
     <string name="grant_permission">Дать разрешение</string>
     <string name="ftue_auth_create_account_username_entry_footer">Другие пользователи могут найти вас по %s</string>
+    <string name="voice_broadcast_recording_time_left">Осталось %1$s</string>
 </resources>
