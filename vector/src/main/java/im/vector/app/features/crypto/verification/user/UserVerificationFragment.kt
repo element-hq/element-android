@@ -85,7 +85,7 @@ class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
     }
 
     override fun onDone(b: Boolean) {
-//        viewModel.handle(VerificationAction.)
+        viewModel.handle(VerificationAction.GotItConclusion(true))
     }
 
     override fun onDoNotMatchButtonTapped() {

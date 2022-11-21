@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
@@ -72,10 +73,23 @@ class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents { event ->
             when (event) {
-                VerificationBottomSheetViewEvents.AccessSecretStore -> TODO()
-                VerificationBottomSheetViewEvents.Dismiss -> TODO()
-                VerificationBottomSheetViewEvents.GoToSettings -> TODO()
-                is VerificationBottomSheetViewEvents.ModalError -> TODO()
+                VerificationBottomSheetViewEvents.AccessSecretStore -> {
+                    // nop for user verification?
+                }
+                VerificationBottomSheetViewEvents.Dismiss -> {
+                    dismiss()
+                }
+                VerificationBottomSheetViewEvents.GoToSettings -> {
+                    // nop for user verificaiton
+                }
+                is VerificationBottomSheetViewEvents.ModalError -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.dialog_title_error))
+                            .setMessage(event.errorMessage)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
             }
         }
     }

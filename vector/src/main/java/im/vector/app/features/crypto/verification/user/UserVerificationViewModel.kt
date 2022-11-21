@@ -365,7 +365,7 @@ class UserVerificationViewModel @AssistedInject constructor(
                     viewModelScope.launch {
                         val transaction = session.cryptoService().verificationService()
                                 .getExistingTransaction(state.otherUserId, state.transactionId.orEmpty())
-                        (transaction as? SasVerificationTransaction)?.shortCodeDoesNotMatch()
+                        (transaction as? SasVerificationTransaction)?.userHasVerifiedShortCode()
                     }
                 }
             }
