@@ -26,6 +26,8 @@ import kotlin.contracts.contract
  * Executes the given [block] while measuring the transaction.
  *
  * @param block Action/Task to be executed within this span.
+ *
+ * @returns Output of the [block()]
  */
 @OptIn(ExperimentalContracts::class)
 inline fun <T> List<MetricPlugin>.measureTransaction(block: () -> T): T {
@@ -49,6 +51,8 @@ inline fun <T> List<MetricPlugin>.measureTransaction(block: () -> T): T {
  * @param operation Name of the new span.
  * @param description Description of the new span.
  * @param block Action/Task to be executed within this span.
+ *
+ * @returns Output of the [block()]
  */
 @OptIn(ExperimentalContracts::class)
 inline fun <T> List<SpannableMetricPlugin>.measureSpan(operation: String, description: String, block: () -> T): T {
