@@ -16,16 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.crypto.MXCryptoAlgorithms
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
 enum class StoreMode {
     Alice,
@@ -34,10 +33,10 @@ enum class StoreMode {
 
 internal class FakeCryptoStoreForVerification(private val mode: StoreMode) {
 
-    val instance = mockk<IMXCryptoStore>()
+    val instance = mockk<VerificationTrustBackend>()
 
     init {
-        every { instance.getDeviceId() } answers {
+        every { instance.getMyDeviceId() } answers {
             when (mode) {
                 StoreMode.Alice -> aliceDevice1Id
                 StoreMode.Bob -> bobDeviceId
@@ -47,84 +46,53 @@ internal class FakeCryptoStoreForVerification(private val mode: StoreMode) {
         // order matters here but can't find any info in doc about that
         every { instance.getUserDevice(any(), any()) } returns null
         every { instance.getUserDevice(aliceMxId, aliceDevice1Id) } returns aliceFirstDevice
-        every { instance.getUserDevice(bobDeviceId, bobDeviceId) } returns aBobDevice
+        every { instance.getUserDevice(bobMxId, bobDeviceId) } returns aBobDevice
 
-        every { instance.getCrossSigningInfo(aliceMxId) } answers {
+        every { instance.getUserDeviceList(aliceMxId) } returns listOf(aliceFirstDevice)
+        every { instance.getUserDeviceList(bobMxId) } returns listOf(aBobDevice)
+        coEvery { instance.locallyTrustDevice(any(), any()) } returns Unit
 
+        coEvery { instance.getMyTrustedMasterKeyBase64() } answers {
             when (mode) {
                 StoreMode.Alice -> {
-                    MXCrossSigningInfo(
-                            aliceMxId,
-                            listOf(
-                                    aliceMSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                    aliceUSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                    aliceSSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                            ),
-                            wasTrustedOnce = true
-                    )
+                    aliceMSK
                 }
                 StoreMode.Bob -> {
-                    MXCrossSigningInfo(
-                            aliceMxId,
-                            listOf(
-                                    aliceMSKBase.copy(trustLevel = DeviceTrustLevel(false, false)),
-                                    aliceUSKBase.copy(trustLevel = DeviceTrustLevel(false, false)),
-                            ),
-                            wasTrustedOnce = false
-                    )
+                    bobMSK
                 }
             }
         }
 
-        every { instance.getCrossSigningInfo(bobMxId) } answers {
+        coEvery { instance.getUserMasterKeyBase64(any()) } answers {
+            val mxId = firstArg<String>()
+            when (mxId) {
+                aliceMxId -> aliceMSK
+                bobMxId -> bobMSK
+                else -> null
+            }
+        }
 
+        coEvery { instance.getMyDeviceId() } answers {
             when (mode) {
-                StoreMode.Alice -> {
-                    MXCrossSigningInfo(
-                            bobMxId,
-                            listOf(
-                                    bobMSKBase.copy(trustLevel = DeviceTrustLevel(false, false)),
-                                    bobUSKBase.copy(trustLevel = DeviceTrustLevel(false, false)),
-                            ),
-                            wasTrustedOnce = true
-                    )
-                }
-                StoreMode.Bob -> {
-                    MXCrossSigningInfo(
-                            bobMxId,
-                            listOf(
-                                    bobMSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                    bobUSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                    bobSSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                            ),
-                            wasTrustedOnce = false
-                    )
-                }
+                StoreMode.Alice -> aliceDevice1Id
+                StoreMode.Bob -> bobDeviceId
             }
         }
 
-        every { instance.getMyCrossSigningInfo() }  answers {
+        coEvery { instance.getMyDevice() } answers {
             when (mode) {
-                StoreMode.Alice ->  MXCrossSigningInfo(
-                        aliceMxId,
-                        listOf(
-                                aliceMSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                aliceUSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                aliceSSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                        ),
-                        wasTrustedOnce = false
-                )
-                StoreMode.Bob ->  MXCrossSigningInfo(
-                        bobMxId,
-                        listOf(
-                                bobMSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                bobUSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                                bobSSKBase.copy(trustLevel = DeviceTrustLevel(true, true)),
-                        ),
-                        wasTrustedOnce = false
-                )
+                StoreMode.Alice -> aliceFirstDevice
+                StoreMode.Bob -> aBobDevice
             }
         }
+
+        coEvery {
+            instance.trustOwnDevice(any())
+        } returns Unit
+
+        coEvery {
+            instance.trustUser(any())
+        } returns Unit
     }
 
     companion object {
@@ -133,7 +101,7 @@ internal class FakeCryptoStoreForVerification(private val mode: StoreMode) {
         val bobMxId = "bob@example.com"
         val bobDeviceId = "MKRJDSLYGA"
 
-        private val aliceDevice1Id = "MGDAADVDMG"
+        val aliceDevice1Id = "MGDAADVDMG"
 
         private val aliceMSK = "Ru4ni66dbQ6FZgUoHyyBtmjKecOHMvMSsSBZ2SABtt0"
         private val aliceSSK = "Rw6MiEn5do57mBWlWUvL6VDZJ7vAfGrTC58UXVyA0eo"

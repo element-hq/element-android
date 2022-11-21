@@ -17,7 +17,11 @@
 package org.matrix.android.sdk.internal.crypto.verification.org.matrix.android.sdk.internal.crypto.verification
 
 import android.util.Base64
+import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +30,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
@@ -34,23 +41,29 @@ import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.internal.assertNotEquals
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBe
+import org.amshove.kluent.shouldNotBeEqualTo
+import org.json.JSONObject
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.matrix.android.sdk.MatrixTest
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.getRequest
 import org.matrix.android.sdk.internal.crypto.verification.FakeCryptoStoreForVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationActor
 import org.matrix.android.sdk.internal.crypto.verification.VerificationActorHelper
 import org.matrix.android.sdk.internal.crypto.verification.VerificationIntent
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class VerificationActorTest {
+class VerificationActorTest : MatrixTest {
 
     val transportScope = CoroutineScope(SupervisorJob())
-//    val actorAScope = CoroutineScope(SupervisorJob())
-//    val actorBScope = CoroutineScope(SupervisorJob())
 
     @Before
     fun setUp() {
@@ -69,6 +82,20 @@ class VerificationActorTest {
             val array = firstArg<String>()
             java.util.Base64.getDecoder().decode(array)
         }
+
+        // to mock canonical json
+        mockkConstructor(JSONObject::class)
+        every { anyConstructed<JSONObject>().keys() } returns emptyList<String>().listIterator()
+
+//        mockkConstructor(KotlinSasTransaction::class)
+//        every { anyConstructed<KotlinSasTransaction>().getSAS() } returns mockk<OlmSAS>() {
+//            every { publicKey } returns "Tm9JRGVhRmFrZQo="
+//        }
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
@@ -171,6 +198,39 @@ class VerificationActorTest {
     }
 
     @Test
+    fun `If Bobs device does not understand any of the methods, it should not cancel the request`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
+
+        val outgoingRequest = aliceActor.requestVerification(
+                listOf(VerificationMethod.SAS)
+        )
+
+        // wait for bob to get it
+        waitForBobToSeeIncomingRequest(bobActor, outgoingRequest)
+
+        println("let bob ready it")
+        try {
+            bobActor.readyVerification(
+                    outgoingRequest.transactionId,
+                    listOf(VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW)
+            )
+            // Upon receipt of Alice’s m.key.verification.request message, if Bob’s device does not understand any of the methods,
+            // it should not cancel the request as one of his other devices may support the request
+            fail("Ready should fail as no common methods")
+        } catch (failure: Throwable) {
+            // should throw
+        }
+
+        val bodSide = awaitDeferrable<PendingVerificationRequest?> {
+            bobActor.send(VerificationIntent.GetExistingRequest(outgoingRequest.transactionId, FakeCryptoStoreForVerification.aliceMxId, it))
+        }!!
+
+        bodSide.state shouldNotBeEqualTo EVerificationState.Cancelled
+    }
+
+    @Test
     fun `Test bob can show but not scan QR`() = runTest {
         val testData = VerificationActorHelper().setUpActors()
         val aliceActor = testData.aliceActor
@@ -213,6 +273,199 @@ class VerificationActorTest {
         assertEquals("Bob should not should not show cam option as it can't scan", false, bobReady.weShouldShowScanOption)
         assertNotEquals("Bob QR data should be there", null, bobReady.qrCodeText)
         assertEquals("Bob should show QR as alice can scan", true, bobReady.weShouldDisplayQRCode)
+    }
+
+    @Test
+    fun `Test verify to users that trust their cross signing keys`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
+
+        coEvery { testData.bobStore.instance.canCrossSign() } returns true
+        coEvery { testData.aliceStore.instance.canCrossSign() } returns true
+
+        fullSasVerification(bobActor, aliceActor)
+
+        coVerify {
+            testData.bobStore.instance.locallyTrustDevice(
+                    FakeCryptoStoreForVerification.aliceMxId,
+                    FakeCryptoStoreForVerification.aliceDevice1Id,
+            )
+        }
+
+        coVerify {
+            testData.bobStore.instance.trustUser(
+                    FakeCryptoStoreForVerification.aliceMxId
+            )
+        }
+
+        coVerify {
+            testData.aliceStore.instance.locallyTrustDevice(
+                    FakeCryptoStoreForVerification.bobMxId,
+                    FakeCryptoStoreForVerification.bobDeviceId,
+            )
+        }
+
+        coVerify {
+            testData.aliceStore.instance.trustUser(
+                    FakeCryptoStoreForVerification.bobMxId
+            )
+        }
+    }
+
+    @Test
+    fun `Test user verification when alice do not trust her keys`() = runTest {
+        val testData = VerificationActorHelper().setUpActors()
+        val aliceActor = testData.aliceActor
+        val bobActor = testData.bobActor
+
+        coEvery { testData.bobStore.instance.canCrossSign() } returns true
+        coEvery { testData.aliceStore.instance.canCrossSign() } returns false
+        coEvery { testData.aliceStore.instance.getMyTrustedMasterKeyBase64() } returns null
+
+        fullSasVerification(bobActor, aliceActor)
+
+        coVerify {
+            testData.bobStore.instance.locallyTrustDevice(
+                    FakeCryptoStoreForVerification.aliceMxId,
+                    FakeCryptoStoreForVerification.aliceDevice1Id,
+            )
+        }
+
+        coVerify(exactly = 0) {
+            testData.bobStore.instance.trustUser(
+                    FakeCryptoStoreForVerification.aliceMxId
+            )
+        }
+
+        coVerify {
+            testData.aliceStore.instance.locallyTrustDevice(
+                    FakeCryptoStoreForVerification.bobMxId,
+                    FakeCryptoStoreForVerification.bobDeviceId,
+            )
+        }
+
+        coVerify(exactly = 0) {
+            testData.aliceStore.instance.trustUser(
+                    FakeCryptoStoreForVerification.bobMxId
+            )
+        }
+    }
+
+    private suspend fun fullSasVerification(bobActor: VerificationActor, aliceActor: VerificationActor) {
+        transportScope.launch {
+            bobActor.eventFlow
+                    .collect {
+                        println("Bob flow 1 event $it")
+                        if (it is VerificationEvent.RequestAdded) {
+                            // auto accept
+                            bobActor.readyVerification(
+                                    it.transactionId,
+                                    listOf(VerificationMethod.SAS)
+                            )
+                            // then start
+                            bobActor.send(
+                                    VerificationIntent.ActionStartSasVerification(
+                                            FakeCryptoStoreForVerification.aliceMxId,
+                                            it.transactionId,
+                                            CompletableDeferred()
+                                    )
+                            )
+                        }
+                        return@collect cancel()
+                    }
+        }
+
+        val aliceCode = CompletableDeferred<SasVerificationTransaction>()
+        val bobCode = CompletableDeferred<SasVerificationTransaction>()
+
+        aliceActor.eventFlow.onEach {
+            println("Alice flow event $it")
+            if (it is VerificationEvent.TransactionUpdated) {
+                val sasVerificationTransaction = it.transaction as SasVerificationTransaction
+                if (sasVerificationTransaction.state() is SasTransactionState.SasShortCodeReady) {
+                    aliceCode.complete(sasVerificationTransaction)
+                }
+            }
+        }.launchIn(transportScope)
+
+        bobActor.eventFlow.onEach {
+            println("Bob flow event $it")
+            if (it is VerificationEvent.TransactionUpdated) {
+                val sasVerificationTransaction = it.transaction as SasVerificationTransaction
+                if (sasVerificationTransaction.state() is SasTransactionState.SasShortCodeReady) {
+                    bobCode.complete(sasVerificationTransaction)
+                }
+            }
+        }.launchIn(transportScope)
+
+        println("Alice sends a request")
+        val outgoingRequest = aliceActor.requestVerification(
+                listOf(VerificationMethod.SAS)
+        )
+
+        // asserting the code won't help much here as all is mocked
+        // we are checking state progression
+        // Both transaction should be in sas ready
+        val aliceCodeReadyTx = aliceCode.await()
+        bobCode.await()
+
+        // If alice accept the code, bob should pass to state mac received but code not comfirmed
+        aliceCodeReadyTx.userHasVerifiedShortCode()
+
+        retryUntil {
+            val tx = bobActor.getTransactionBobPov(outgoingRequest.transactionId)
+            val sasTx = tx as? SasVerificationTransaction
+            val state = sasTx?.state()
+            (state is SasTransactionState.SasMacReceived && !state.codeConfirmed)
+        }
+
+        val bobTransaction = bobActor.getTransactionBobPov(outgoingRequest.transactionId) as SasVerificationTransaction
+
+        val bobDone = CompletableDeferred(Unit)
+        val aliceDone = CompletableDeferred(Unit)
+        transportScope.launch {
+            bobActor.eventFlow
+                    .collect {
+                        println("Bob flow 1 event $it")
+                        it.getRequest()?.let {
+                            if (it.transactionId == outgoingRequest.transactionId && it.state == EVerificationState.Done) {
+                                bobDone.complete(Unit)
+                                return@collect cancel()
+                            }
+                        }
+                    }
+        }
+        transportScope.launch {
+            aliceActor.eventFlow
+                    .collect {
+                        println("Bob flow 1 event $it")
+                        it.getRequest()?.let {
+                            if (it.transactionId == outgoingRequest.transactionId && it.state == EVerificationState.Done) {
+                                bobDone.complete(Unit)
+                                return@collect cancel()
+                            }
+                        }
+                    }
+        }
+
+        // mark as verified from bob side
+        bobTransaction.userHasVerifiedShortCode()
+
+        aliceDone.await()
+        bobDone.await()
+    }
+
+    internal suspend fun VerificationActor.getTransactionBobPov(transactionId: String): VerificationTransaction? {
+        return awaitDeferrable<VerificationTransaction?> {
+            channel.send(
+                    VerificationIntent.GetExistingTransaction(
+                            transactionId = transactionId,
+                            fromUser = FakeCryptoStoreForVerification.aliceMxId,
+                            it
+                    )
+            )
+        }
     }
 
     private suspend fun VerificationActor.requestVerification(methods: List<VerificationMethod>): PendingVerificationRequest {
@@ -273,74 +526,4 @@ class VerificationActorTest {
             )
         }!!
     }
-
-//    @Test
-//    fun `Every testing`() {
-//        val mockStore = mockk<IMXCryptoStore>()
-//        every { mockStore.getDeviceId() } returns "A"
-//        println("every ${mockStore.getDeviceId()}")
-//        every { mockStore.getDeviceId() } returns "B"
-//        println("every ${mockStore.getDeviceId()}")
-//
-//        every { mockStore.getDeviceId() } returns "A"
-//        every { mockStore.getDeviceId() } returns "B"
-//        println("every ${mockStore.getDeviceId()}")
-//
-//        every { mockStore.getCrossSigningInfo(any()) } returns null
-//        every { mockStore.getCrossSigningInfo("alice") } returns MXCrossSigningInfo("alice", emptyList(), false)
-//
-//        println("XS ${mockStore.getCrossSigningInfo("alice")}")
-//        println("XS ${mockStore.getCrossSigningInfo("bob")}")
-//    }
-
-//    @Test
-//    fun `Basic channel test`() {
-// //        val sharedFlow = MutableSharedFlow<Int>(replay = 0, extraBufferCapacity = 2, BufferOverflow.DROP_OLDEST)
-//        val sharedFlow = MutableSharedFlow<Int>(replay = 0)//, extraBufferCapacity = 0, BufferOverflow.DROP_OLDEST)
-//
-//        val scope = CoroutineScope(SupervisorJob())
-//        val deferred = CompletableDeferred<Unit>()
-//        val listener = scope.launch {
-//            sharedFlow.onEach {
-//                println("L1 : Just collected $it")
-//                delay(1000)
-//                println("L1 : Just processed $it")
-//                if (it == 2) {
-//                    deferred.complete(Unit)
-//                }
-//            }.launchIn(scope)
-//        }
-//
-// //        scope.launch {
-// //            delay(700)
-//        println("Pre Emit 1")
-//        sharedFlow.tryEmit(1)
-//        println("Emited 1")
-//        sharedFlow.tryEmit(2)
-//        println("Emited 2")
-// //        }
-//
-// //        runBlocking {
-// //            deferred.await()
-// //        }
-//
-//        sharedFlow.onEach {
-//            println("L2: Just collected $it")
-//            delay(1000)
-//            println("L2: Just processed $it")
-//        }.launchIn(scope)
-//
-//
-//        runBlocking {
-//            deferred.await()
-//        }
-//
-//        val now = System.currentTimeMillis()
-//        println("Just give some time for execution")
-//        val job = scope.launch { delay(10_000) }
-//        runBlocking {
-//            job.join()
-//        }
-//        println("enough ${System.currentTimeMillis() - now}")
-//    }
 }

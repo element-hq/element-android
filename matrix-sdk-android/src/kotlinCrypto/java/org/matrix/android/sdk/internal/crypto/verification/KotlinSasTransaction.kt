@@ -62,7 +62,8 @@ internal class KotlinSasTransaction(
         override val isIncoming: Boolean,
         val startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null,
         val isToDevice: Boolean,
-        var state: SasTransactionState
+        var state: SasTransactionState,
+        val olmSAS: OlmSAS,
 ) : SasVerificationTransaction {
 
     override val method: VerificationMethod
@@ -183,11 +184,8 @@ internal class KotlinSasTransaction(
         }
     }
 
-    private var olmSas: OlmSAS? = null
-
-    fun getSAS(): OlmSAS {
-        if (olmSas == null) olmSas = OlmSAS()
-        return olmSas!!
+    override fun toString(): String {
+        return "KotlinSasTransaction(transactionId=$transactionId, state=$state, otherUserId=$otherUserId, otherDeviceId=$otherDeviceId, isToDevice=$isToDevice)"
     }
 
     // To override finalize(), all you need to do is simply declare it, without using the override keyword:
@@ -197,8 +195,7 @@ internal class KotlinSasTransaction(
 
     private fun releaseSAS() {
         // finalization logic
-        olmSas?.releaseSas()
-        olmSas = null
+        olmSAS.releaseSas()
     }
 
     var accepted: ValidVerificationInfoAccept? = null
@@ -206,6 +203,7 @@ internal class KotlinSasTransaction(
     var shortCodeBytes: ByteArray? = null
     var myMac: ValidVerificationInfoMac? = null
     var theirMac: ValidVerificationInfoMac? = null
+    var verifiedSuccessInfo: MacVerificationResult.Success? = null
 
     override fun state() = this.state
 
@@ -262,7 +260,7 @@ internal class KotlinSasTransaction(
 
     fun calculateSASBytes(otherKey: String) {
         this.otherKey = otherKey
-        getSAS().setTheirPublicKey(otherKey)
+        olmSAS.setTheirPublicKey(otherKey)
         shortCodeBytes = when (accepted!!.keyAgreementProtocol) {
             KEY_AGREEMENT_V1 -> {
                 // (Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
@@ -280,7 +278,7 @@ internal class KotlinSasTransaction(
                         append(otherDeviceId)
                         append(myUserId)
                         append(myDeviceId)
-                        append(getSAS().publicKey)
+                        append(olmSAS.publicKey)
                     } else {
                         append(myUserId)
                         append(myDeviceId)
@@ -291,7 +289,7 @@ internal class KotlinSasTransaction(
                 }
                 // decimal: generate five bytes by using HKDF.
                 // emoji: generate six bytes by using HKDF.
-                getSAS().generateShortCode(sasInfo, 6)
+                olmSAS.generateShortCode(sasInfo, 6)
             }
             KEY_AGREEMENT_V2 -> {
                 val sasInfo = buildString {
@@ -302,18 +300,18 @@ internal class KotlinSasTransaction(
                         append(otherKey).append('|')
                         append(myUserId).append('|')
                         append(myDeviceId).append('|')
-                        append(getSAS().publicKey).append('|')
+                        append(olmSAS.publicKey).append('|')
                     } else {
                         append(myUserId).append('|')
                         append(myDeviceId).append('|')
-                        append(getSAS().publicKey).append('|')
+                        append(olmSAS.publicKey).append('|')
                         append(otherUserId).append('|')
                         append(otherDeviceId).append('|')
                         append(otherKey).append('|')
                     }
                     append(transactionId)
                 }
-                getSAS().generateShortCode(sasInfo, 6)
+                olmSAS.generateShortCode(sasInfo, 6)
             }
             else -> {
                 // Protocol has been checked earlier
@@ -463,13 +461,16 @@ internal class KotlinSasTransaction(
         return MacVerificationResult.Success(
                 verifiedDevices,
                 otherMasterKeyIsVerified
-        )
+        ).also {
+            // store and will persist when transaction is actually done
+            verifiedSuccessInfo = it
+        }
     }
 
     private fun macUsingAgreedMethod(message: String, info: String): String? {
         return when (accepted?.messageAuthenticationCode?.lowercase(Locale.ROOT)) {
-            SAS_MAC_SHA256_LONGKDF -> getSAS().calculateMacLongKdf(message, info)
-            SAS_MAC_SHA256 -> getSAS().calculateMac(message, info)
+            SAS_MAC_SHA256_LONGKDF -> olmSAS.calculateMacLongKdf(message, info)
+            SAS_MAC_SHA256 -> olmSAS.calculateMac(message, info)
             else -> null
         }
     }

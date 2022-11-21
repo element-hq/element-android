@@ -42,14 +42,6 @@ internal sealed class VerificationIntent {
 //            val deferred: CompletableDeferred<IVerificationRequest>,
     ) : VerificationIntent()
 
-    data class FailToSendRequest(
-            val request: PendingVerificationRequest,
-    ) : VerificationIntent()
-
-//    data class UpdateRequest(
-//            val request: IVerificationRequest,
-//    ) : VerificationIntent()
-
     data class ActionReadyRequest(
             val transactionId: String,
             val methods: List<VerificationMethod>,

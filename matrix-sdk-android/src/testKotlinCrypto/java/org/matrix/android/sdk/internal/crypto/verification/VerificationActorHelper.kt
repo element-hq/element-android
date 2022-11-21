@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import dagger.Lazy
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -25,17 +24,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
+import org.matrix.android.sdk.api.session.room.model.message.ValidVerificationDone
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
-import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.time.Clock
+import org.matrix.olm.OlmSAS
 import java.util.UUID
 
 internal class VerificationActorHelper {
@@ -43,6 +41,8 @@ internal class VerificationActorHelper {
     data class TestData(
             val aliceActor: VerificationActor,
             val bobActor: VerificationActor,
+            val aliceStore: FakeCryptoStoreForVerification,
+            val bobStore: FakeCryptoStoreForVerification,
     )
 
     val actorAScope = CoroutineScope(SupervisorJob())
@@ -56,35 +56,29 @@ internal class VerificationActorHelper {
         val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { bobChannel }
         val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { aliceChannel }
 
+        val fakeAliceStore = FakeCryptoStoreForVerification(StoreMode.Alice)
         val aliceActor = fakeActor(
                 actorAScope,
                 FakeCryptoStoreForVerification.aliceMxId,
-                FakeCryptoStoreForVerification(StoreMode.Alice).instance,
+                fakeAliceStore.instance,
                 aliceTransportLayer,
-                mockk<Lazy<CrossSigningService>> {
-                    every {
-                        get()
-                    } returns mockk<CrossSigningService>(relaxed = true)
-                }
         )
         aliceChannel = aliceActor.channel
 
+        val fakeBobStore = FakeCryptoStoreForVerification(StoreMode.Bob)
         val bobActor = fakeActor(
                 actorBScope,
-                FakeCryptoStoreForVerification.aliceMxId,
-                FakeCryptoStoreForVerification(StoreMode.Alice).instance,
-                bobTransportLayer,
-                mockk<Lazy<CrossSigningService>> {
-                    every {
-                        get()
-                    } returns mockk<CrossSigningService>(relaxed = true)
-                }
+                FakeCryptoStoreForVerification.bobMxId,
+                fakeBobStore.instance,
+                bobTransportLayer
         )
         bobChannel = bobActor.channel
 
         return TestData(
-                aliceActor,
-                bobActor
+                aliceActor = aliceActor,
+                bobActor = bobActor,
+                aliceStore = fakeAliceStore,
+                bobStore = fakeBobStore
         )
     }
 
@@ -105,6 +99,56 @@ internal class VerificationActorHelper {
                                             fromUser = fromUser,
                                             viaRoom = request.roomId,
                                             readyInfo = readyContent as ValidVerificationInfoReady,
+                                    )
+                            )
+                        }
+                        EventType.KEY_VERIFICATION_START -> {
+                            val startContent = info.asValidObject()
+                            otherChannel()?.send(
+                                    VerificationIntent.OnStartReceived(
+                                            fromUser = fromUser,
+                                            viaRoom = request.roomId,
+                                            validVerificationInfoStart = startContent as ValidVerificationInfoStart,
+                                    )
+                            )
+                        }
+                        EventType.KEY_VERIFICATION_ACCEPT -> {
+                            val content = info.asValidObject()
+                            otherChannel()?.send(
+                                    VerificationIntent.OnAcceptReceived(
+                                            fromUser = fromUser,
+                                            viaRoom = request.roomId,
+                                            validAccept = content as ValidVerificationInfoAccept,
+                                    )
+                            )
+                        }
+                        EventType.KEY_VERIFICATION_KEY -> {
+                            val content = info.asValidObject()
+                            otherChannel()?.send(
+                                    VerificationIntent.OnKeyReceived(
+                                            fromUser = fromUser,
+                                            viaRoom = request.roomId,
+                                            validKey = content as ValidVerificationInfoKey,
+                                    )
+                            )
+                        }
+                        EventType.KEY_VERIFICATION_MAC -> {
+                            val content = info.asValidObject()
+                            otherChannel()?.send(
+                                    VerificationIntent.OnMacReceived(
+                                            fromUser = fromUser,
+                                            viaRoom = request.roomId,
+                                            validMac = content as ValidVerificationInfoMac,
+                                    )
+                            )
+                        }
+                        EventType.KEY_VERIFICATION_DONE -> {
+                            val content = info.asValidObject()
+                            otherChannel()?.send(
+                                    VerificationIntent.OnDoneReceived(
+                                            fromUser = fromUser,
+                                            viaRoom = request.roomId,
+                                            transactionId = (content as ValidVerificationDone).transactionId,
                                     )
                             )
                         }
@@ -154,9 +198,8 @@ internal class VerificationActorHelper {
     private fun fakeActor(
             scope: CoroutineScope,
             userId: String,
-            cryptoStore: IMXCryptoStore,
+            cryptoStore: VerificationTrustBackend,
             transportLayer: VerificationTransportLayer,
-            crossSigningService: dagger.Lazy<CrossSigningService>,
     ): VerificationActor {
         return VerificationActor(
                 scope,
@@ -165,17 +208,19 @@ internal class VerificationActorHelper {
                     every { epochMillis() } returns System.currentTimeMillis()
                 },
                 myUserId = userId,
-                cryptoStore = cryptoStore,
+                verificationTrustBackend = cryptoStore,
                 secretShareManager = mockk<SecretShareManager> {},
                 transportLayer = transportLayer,
-                crossSigningService = crossSigningService,
-                setDeviceVerificationAction = SetDeviceVerificationAction(
-                        cryptoStore = cryptoStore,
-                        userId = userId,
-                        defaultKeysBackupService = mockk {
-                            coEvery { checkAndStartKeysBackup() } coAnswers { }
-                        }
-                )
+                verificationRequestsStore = VerificationRequestsStore(),
+                olmPrimitiveProvider = mockk<VerificationCryptoPrimitiveProvider> {
+                    every { provideOlmSas() } returns mockk<OlmSAS> {
+                        every { publicKey } returns "Tm9JRGVhRmFrZQo="
+                        every { setTheirPublicKey(any()) } returns Unit
+                        every { generateShortCode(any(), any()) } returns byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+                        every { calculateMac(any(), any()) } returns "mic mac mec"
+                    }
+                    every { sha256(any()) } returns "fake_hash"
+                }
         )
     }
 }
