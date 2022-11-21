@@ -28,9 +28,9 @@ import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSes
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
-import im.vector.app.test.fakes.FakeSharedPreferences
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
+import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -78,7 +78,7 @@ class SessionOverviewViewModelTest {
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
     private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
-    private val fakeSharedPreferences = FakeSharedPreferences()
+    private val fakeVectorPreferences = FakeVectorPreferences()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -91,7 +91,7 @@ class SessionOverviewViewModelTest {
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
-            sharedPreferences = fakeSharedPreferences,
+            vectorPreferences = fakeVectorPreferences.instance,
     )
 
     @Before
@@ -106,7 +106,7 @@ class SessionOverviewViewModelTest {
                 A_SESSION_ID_1,
                 notificationsStatus
         )
-        fakeSharedPreferences.givenSessionManagerShowIpAddress(false)
+        fakeVectorPreferences.givenSessionManagerShowIpAddress(false)
     }
 
     private fun givenVerificationService(): FakeVerificationService {

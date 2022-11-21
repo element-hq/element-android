@@ -1231,4 +1231,14 @@ class VectorPreferences @Inject constructor(
         return vectorFeatures.isVoiceBroadcastEnabled() &&
                 defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
     }
+
+    fun showIpAddressInDeviceManagerScreens(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, getDefault(R.bool.settings_device_manager_show_ip_address))
+    }
+
+    fun setIpAddressVisibilityInDeviceManagerScreens(isVisible: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, isVisible)
+        }
+    }
 }
