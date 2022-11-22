@@ -260,7 +260,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         if (isTextFormattingEnabled) {
             views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
         } else {
-            views.richTextComposerEditText.setText(views.plainTextComposerEditText.text.toString())
+            views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
         }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
