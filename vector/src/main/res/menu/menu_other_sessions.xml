@@ -10,6 +10,11 @@
         app:showAsAction="withText|never" />
 
     <item
+        android:id="@+id/otherSessionsToggleIpAddress"
+        android:title="@string/device_manager_other_sessions_show_ip_address"
+        app:showAsAction="withText|never" />
+
+    <item
         android:id="@+id/otherSessionsMultiSignout"
         android:title="@plurals/device_manager_other_sessions_multi_signout_all"
         app:showAsAction="withText|never" />

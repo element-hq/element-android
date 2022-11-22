@@ -85,6 +85,12 @@ class OtherSessionsFragment :
             menu.findItem(R.id.otherSessionsSelectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsDeselectAll).isVisible = isSelectModeEnabled
             menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
+            menu.findItem(R.id.otherSessionsToggleIpAddress).isVisible = !isSelectModeEnabled
+            menu.findItem(R.id.otherSessionsToggleIpAddress).title = if (state.isShowingIpAddress) {
+                getString(R.string.device_manager_other_sessions_hide_ip_address)
+            } else {
+                getString(R.string.device_manager_other_sessions_show_ip_address)
+            }
             updateMultiSignoutMenuItem(menu, state)
         }
     }
@@ -130,8 +136,16 @@ class OtherSessionsFragment :
                 confirmMultiSignout()
                 true
             }
+            R.id.otherSessionsToggleIpAddress -> {
+                toggleIpAddressVisibility()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun toggleIpAddressVisibility() {
+        viewModel.handle(OtherSessionsAction.ToggleIpAddressVisibility)
     }
 
     private fun confirmMultiSignout() {
@@ -213,7 +227,7 @@ class OtherSessionsFragment :
         updateLoading(state.isLoading)
         if (state.devices is Success) {
             val devices = state.devices.invoke()
-            renderDevices(devices, state.currentFilter)
+            renderDevices(devices, state.currentFilter, state.isShowingIpAddress)
             updateToolbar(devices, state.isSelectModeEnabled)
         }
     }
@@ -237,7 +251,7 @@ class OtherSessionsFragment :
         toolbar?.title = title
     }
 
-    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType) {
+    private fun renderDevices(devices: List<DeviceFullInfo>, currentFilter: DeviceManagerFilterType, isShowingIpAddress: Boolean) {
         views.otherSessionsFilterBadgeImageView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.otherSessionsSecurityRecommendationView.isVisible = currentFilter != DeviceManagerFilterType.ALL_SESSIONS
         views.deviceListHeaderOtherSessions.isVisible = currentFilter == DeviceManagerFilterType.ALL_SESSIONS
@@ -299,7 +313,8 @@ class OtherSessionsFragment :
         } else {
             views.deviceListOtherSessions.isVisible = true
             views.otherSessionsNotFoundLayout.isVisible = false
-            views.deviceListOtherSessions.render(devices = devices, totalNumberOfDevices = devices.size, showViewAll = false)
+            val mappedDevices = if (isShowingIpAddress) devices else devices.map { it.copy(deviceInfo = it.deviceInfo.copy(lastSeenIp = null)) }
+            views.deviceListOtherSessions.render(devices = mappedDevices, totalNumberOfDevices = mappedDevices.size, showViewAll = false)
         }
     }
 

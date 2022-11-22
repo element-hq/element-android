@@ -33,4 +33,5 @@ sealed class OtherSessionsAction : VectorViewModelAction {
     object SelectAll : OtherSessionsAction()
     object DeselectAll : OtherSessionsAction()
     object MultiSignout : OtherSessionsAction()
+    object ToggleIpAddressVisibility : OtherSessionsAction()
 }

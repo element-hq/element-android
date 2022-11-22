@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
@@ -30,6 +31,7 @@ import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
 import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
+import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
@@ -77,6 +79,8 @@ class SessionOverviewViewModelTest {
     private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
     private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
+    private val fakeVectorPreferences = FakeVectorPreferences()
+    private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -89,6 +93,8 @@ class SessionOverviewViewModelTest {
             refreshDevicesUseCase = refreshDevicesUseCase,
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
+            vectorPreferences = fakeVectorPreferences.instance,
+            toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
     )
 
     @Before
@@ -103,6 +109,7 @@ class SessionOverviewViewModelTest {
                 A_SESSION_ID_1,
                 notificationsStatus
         )
+        fakeVectorPreferences.givenSessionManagerShowIpAddress(false)
     }
 
     private fun givenVerificationService(): FakeVerificationService {

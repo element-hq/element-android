@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.list
+package im.vector.app.features.settings.devices.v2
 
-import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.VectorPreferences
+import javax.inject.Inject
 
-data class SessionInfoViewState(
-        val isCurrentSession: Boolean,
-        val deviceFullInfo: DeviceFullInfo,
-        val isVerifyButtonVisible: Boolean = true,
-        val isDetailsButtonVisible: Boolean = true,
-        val isLearnMoreLinkVisible: Boolean = false,
-        val isLastSeenDetailsVisible: Boolean = false,
-        val isShowingIpAddress: Boolean = false,
-)
+class ToggleIpAddressVisibilityUseCase @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+) {
+
+    fun execute() {
+        val currentVisibility = vectorPreferences.showIpAddressInSessionManagerScreens()
+        vectorPreferences.setIpAddressVisibilityInDeviceManagerScreens(!currentVisibility)
+    }
+}
