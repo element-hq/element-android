@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.overview
 
+import android.content.SharedPreferences
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
@@ -27,6 +28,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
 import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
@@ -56,9 +58,10 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val getNotificationsStatusUseCase: GetNotificationsStatusUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,
+        private val toggleIpAddressVisibilityUseCase: ToggleIpAddressVisibilityUseCase,
 ) : VectorSessionsListViewModel<SessionOverviewViewState, SessionOverviewAction, SessionOverviewViewEvent>(
         initialState, activeSessionHolder, refreshDevicesUseCase
-) {
+), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object : MavericksViewModelFactory<SessionOverviewViewModel, SessionOverviewViewState> by hiltMavericksViewModelFactory()
 
@@ -73,8 +76,21 @@ class SessionOverviewViewModel @AssistedInject constructor(
         observeCurrentSessionInfo()
         observeNotificationsStatus(initialState.deviceId)
         refreshIpAddressVisibility()
+        observePreferences()
     }
 
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        refreshIpAddressVisibility()
+    }
+
+    private fun observePreferences() {
+        vectorPreferences.subscribeToChanges(this)
+    }
+
+    override fun onCleared() {
+        vectorPreferences.unsubscribeToChanges(this)
+        super.onCleared()
+    }
     private fun refreshIpAddressVisibility() {
         val shouldShowIpAddress = vectorPreferences.showIpAddressInDeviceManagerScreens()
         setState {
@@ -125,12 +141,8 @@ class SessionOverviewViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleToggleIpAddressVisibility() = withState { state ->
-        val isShowingIpAddress = state.isShowingIpAddress
-        setState {
-            copy(isShowingIpAddress = !isShowingIpAddress)
-        }
-        vectorPreferences.setIpAddressVisibilityInDeviceManagerScreens(!isShowingIpAddress)
+    private fun handleToggleIpAddressVisibility() {
+        toggleIpAddressVisibilityUseCase.execute()
     }
 
     private fun handleVerifySessionAction() = withState { viewState ->

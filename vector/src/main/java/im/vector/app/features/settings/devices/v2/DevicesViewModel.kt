@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import android.content.SharedPreferences
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
@@ -51,7 +52,11 @@ class DevicesViewModel @AssistedInject constructor(
         private val pendingAuthHandler: PendingAuthHandler,
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,
-) : VectorSessionsListViewModel<DevicesViewState, DevicesAction, DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase) {
+        private val toggleIpAddressVisibilityUseCase: ToggleIpAddressVisibilityUseCase,
+) : VectorSessionsListViewModel<DevicesViewState,
+        DevicesAction,
+        DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase),
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
@@ -66,6 +71,20 @@ class DevicesViewModel @AssistedInject constructor(
         refreshDevicesOnCryptoDevicesChange()
         refreshDeviceList()
         refreshIpAddressVisibility()
+        observePreferences()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        refreshIpAddressVisibility()
+    }
+
+    private fun observePreferences() {
+        vectorPreferences.subscribeToChanges(this)
+    }
+
+    override fun onCleared() {
+        vectorPreferences.unsubscribeToChanges(this)
+        super.onCleared()
     }
 
     private fun refreshIpAddressVisibility() {
@@ -126,12 +145,8 @@ class DevicesViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleToggleIpAddressVisibility() = withState { state ->
-        val isShowingIpAddress = state.isShowingIpAddress
-        setState {
-            copy(isShowingIpAddress = !isShowingIpAddress)
-        }
-        vectorPreferences.setIpAddressVisibilityInDeviceManagerScreens(!isShowingIpAddress)
+    private fun handleToggleIpAddressVisibility() {
+        toggleIpAddressVisibilityUseCase.execute()
     }
 
     private fun handleVerifyCurrentSessionAction() {

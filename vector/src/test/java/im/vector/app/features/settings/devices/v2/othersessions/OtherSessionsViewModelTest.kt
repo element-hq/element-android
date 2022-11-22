@@ -22,6 +22,7 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePendingAuthHandler
@@ -68,6 +69,7 @@ class OtherSessionsViewModelTest {
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val fakeVectorPreferences = FakeVectorPreferences()
+    private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
 
     private fun createViewModel(viewState: OtherSessionsViewState = OtherSessionsViewState(defaultArgs)) =
             OtherSessionsViewModel(
@@ -78,6 +80,7 @@ class OtherSessionsViewModelTest {
                     pendingAuthHandler = fakePendingAuthHandler.instance,
                     refreshDevicesUseCase = fakeRefreshDevicesUseCase,
                     vectorPreferences = fakeVectorPreferences.instance,
+                    toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
             )
 
     @Before

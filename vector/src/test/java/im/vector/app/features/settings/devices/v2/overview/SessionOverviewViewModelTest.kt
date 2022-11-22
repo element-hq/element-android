@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
@@ -79,6 +80,7 @@ class SessionOverviewViewModelTest {
     private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
     private val fakeVectorPreferences = FakeVectorPreferences()
+    private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
 
     private fun createViewModel() = SessionOverviewViewModel(
             initialState = SessionOverviewViewState(args),
@@ -92,6 +94,7 @@ class SessionOverviewViewModelTest {
             togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
             vectorPreferences = fakeVectorPreferences.instance,
+            toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
     )
 
     @Before

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import android.content.SharedPreferences
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
@@ -76,6 +77,7 @@ class DevicesViewModelTest {
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val fakeVectorPreferences = FakeVectorPreferences()
+    private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
@@ -90,6 +92,7 @@ class DevicesViewModelTest {
                 pendingAuthHandler = fakePendingAuthHandler.instance,
                 refreshDevicesUseCase = fakeRefreshDevicesUseCase,
                 vectorPreferences = fakeVectorPreferences.instance,
+                toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
         )
     }
 
@@ -364,11 +367,15 @@ class DevicesViewModelTest {
         // When
         val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
+        every { toggleIpAddressVisibilityUseCase.execute() } just runs
+        every { fakeVectorPreferences.instance.setIpAddressVisibilityInDeviceManagerScreens(true) } just runs
+        every { fakeVectorPreferences.instance.showIpAddressInDeviceManagerScreens() } returns true
+
         viewModel.handle(DevicesAction.ToggleIpAddressVisibility)
+        viewModel.onSharedPreferenceChanged(null, null)
 
         // Then
         viewModelTest.assertLatestState { it.isShowingIpAddress == true }
-        every { fakeVectorPreferences.instance.setIpAddressVisibilityInDeviceManagerScreens(true) } just runs
         viewModelTest.finish()
     }
 
