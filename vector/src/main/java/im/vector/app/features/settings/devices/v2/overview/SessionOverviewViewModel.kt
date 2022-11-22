@@ -92,7 +92,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         super.onCleared()
     }
     private fun refreshIpAddressVisibility() {
-        val shouldShowIpAddress = vectorPreferences.showIpAddressInDeviceManagerScreens()
+        val shouldShowIpAddress = vectorPreferences.showIpAddressInSessionManagerScreens()
         setState {
             copy(isShowingIpAddress = shouldShowIpAddress)
         }

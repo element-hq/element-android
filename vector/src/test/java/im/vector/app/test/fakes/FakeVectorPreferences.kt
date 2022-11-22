@@ -54,6 +54,6 @@ class FakeVectorPreferences {
     }
 
     fun givenSessionManagerShowIpAddress(showIpAddress: Boolean) {
-        every { instance.showIpAddressInDeviceManagerScreens() } returns showIpAddress
+        every { instance.showIpAddressInSessionManagerScreens() } returns showIpAddress
     }
 }

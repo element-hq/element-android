@@ -368,7 +368,7 @@ class DevicesViewModelTest {
         val viewModelTest = viewModel.test()
         every { toggleIpAddressVisibilityUseCase.execute() } just runs
         every { fakeVectorPreferences.instance.setIpAddressVisibilityInDeviceManagerScreens(true) } just runs
-        every { fakeVectorPreferences.instance.showIpAddressInDeviceManagerScreens() } returns true
+        every { fakeVectorPreferences.instance.showIpAddressInSessionManagerScreens() } returns true
 
         viewModel.handle(DevicesAction.ToggleIpAddressVisibility)
         viewModel.onSharedPreferenceChanged(null, null)

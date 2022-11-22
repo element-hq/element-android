@@ -24,7 +24,7 @@ class ToggleIpAddressVisibilityUseCase @Inject constructor(
 ) {
 
     fun execute() {
-        val currentVisibility = vectorPreferences.showIpAddressInDeviceManagerScreens()
+        val currentVisibility = vectorPreferences.showIpAddressInSessionManagerScreens()
         vectorPreferences.setIpAddressVisibilityInDeviceManagerScreens(!currentVisibility)
     }
 }

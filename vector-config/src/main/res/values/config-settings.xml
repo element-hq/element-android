@@ -51,12 +51,13 @@
     <bool name="settings_labs_rich_text_editor_default">false</bool>
     <bool name="settings_labs_enable_voice_broadcast_visible">true</bool>
     <bool name="settings_labs_enable_voice_broadcast_default">false</bool>
-    <bool name="settings_device_manager_show_ip_address">false</bool>
     <!-- Level 1: Advanced settings -->
 
     <!-- Level 1: Help and about -->
 
     <!-- Level 1: Legals -->
 
+    <!-- Level 3: Security & Privacy, Sessions -->
+    <bool name="settings_session_manager_show_ip_address">false</bool>
 
 </resources>
