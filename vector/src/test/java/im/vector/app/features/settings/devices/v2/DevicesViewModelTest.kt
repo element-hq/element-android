@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings.devices.v2
 
-import android.content.SharedPreferences
 import android.os.SystemClock
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule

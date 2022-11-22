@@ -188,8 +188,7 @@ class SessionInfoView @JvmOverloads constructor(
         } else {
             views.sessionInfoLastActivityTextView.isGone = true
         }
-        views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isLastSeenDetailsVisible })
-        views.sessionInfoLastIPAddressTextView.isVisible = isShowingIpAddress
+        views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isLastSeenDetailsVisible && isShowingIpAddress })
     }
 
     private fun renderDetailsButton(isDetailsButtonVisible: Boolean) {
