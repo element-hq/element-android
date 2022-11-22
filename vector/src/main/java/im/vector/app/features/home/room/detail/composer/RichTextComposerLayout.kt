@@ -48,8 +48,8 @@ import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
+import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import uniffi.wysiwyg_composer.MenuState
 
 class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
@@ -206,16 +206,16 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     private fun setupRichTextMenu() {
-        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.Bold) {
+        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.BOLD) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.Italic) {
+        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.ITALIC) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.Underline) {
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.UNDERLINE) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
     }
@@ -238,12 +238,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        views.richTextComposerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
-            if (state is MenuState.Update) {
-                updateMenuStateFor(ComposerAction.Bold, state)
-                updateMenuStateFor(ComposerAction.Italic, state)
-                updateMenuStateFor(ComposerAction.Underline, state)
-                updateMenuStateFor(ComposerAction.StrikeThrough, state)
+        views.richTextComposerEditText.actionStatesChangedListener = EditorEditText.OnActionStatesChangedListener { state ->
+            for (action in state.keys) {
+                updateMenuStateFor(action, state)
             }
         }
 
@@ -261,7 +258,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
      */
     private fun syncEditTexts() =
         if (isTextFormattingEnabled) {
-            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getPlainText())
+            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
         } else {
             views.richTextComposerEditText.setText(views.plainTextComposerEditText.text.toString())
         }
@@ -279,10 +276,11 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
     }
 
-    private fun updateMenuStateFor(action: ComposerAction, menuState: MenuState.Update) {
+    private fun updateMenuStateFor(action: ComposerAction, menuState: Map<ComposerAction, ActionState>) {
         val button = findViewWithTag<ImageButton>(action) ?: return
-        button.isEnabled = !menuState.disabledActions.contains(action)
-        button.isSelected = menuState.reversedActions.contains(action)
+        val stateForAction = menuState[action]
+        button.isEnabled = stateForAction != ActionState.DISABLED
+        button.isSelected = stateForAction == ActionState.REVERSED
     }
 
     fun estimateCollapsedHeight(): Int {
