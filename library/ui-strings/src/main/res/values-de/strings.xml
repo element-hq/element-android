@@ -2852,4 +2852,17 @@
     </plurals>
     <string name="device_manager_other_sessions_multi_signout_selection">Abmelden</string>
     <string name="voice_broadcast_recording_time_left">%1$s übrig</string>
+    <string name="quoting">Zitieren</string>
+    <string name="editing">Bearbeiten</string>
+    <string name="message_reply_to_sender_created_poll">erstellte eine Abstimmung.</string>
+    <string name="message_reply_to_sender_sent_sticker">sandte einen Sticker.</string>
+    <string name="message_reply_to_sender_sent_video">sandte ein Video.</string>
+    <string name="message_reply_to_sender_sent_image">sandte ein Bild.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sandte eine Sprachnachricht.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sandte eine Audiodatei.</string>
+    <string name="message_reply_to_sender_sent_file">sandte eine Datei.</string>
+    <string name="message_reply_to_prefix">Als Antwort auf</string>
+    <string name="replying_to">%s antworten</string>
+    <string name="device_manager_other_sessions_hide_ip_address">IP-Adresse ausblenden</string>
+    <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
 </resources>
