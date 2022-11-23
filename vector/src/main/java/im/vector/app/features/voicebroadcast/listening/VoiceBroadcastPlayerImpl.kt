@@ -145,17 +145,23 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         playingState = State.BUFFERING
 
-        observeVoiceBroadcastLiveState(voiceBroadcast)
+        observeVoiceBroadcastStateEvent(voiceBroadcast)
         fetchPlaylistAndStartPlayback(voiceBroadcast)
     }
 
-    private fun observeVoiceBroadcastLiveState(voiceBroadcast: VoiceBroadcast) {
+    private fun observeVoiceBroadcastStateEvent(voiceBroadcast: VoiceBroadcast) {
         voiceBroadcastStateObserver = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
-                .onEach {
-                    currentVoiceBroadcastEvent = it.getOrNull()
-                    updateLiveListeningMode()
-                }
+                .onEach { onVoiceBroadcastStateEventUpdated(it.getOrNull()) }
                 .launchIn(sessionScope)
+    }
+
+    private fun onVoiceBroadcastStateEventUpdated(event: VoiceBroadcastEvent?) {
+        if (event == null) {
+            stop()
+        } else {
+            currentVoiceBroadcastEvent = event
+            updateLiveListeningMode()
+        }
     }
 
     private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
