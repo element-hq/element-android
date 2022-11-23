@@ -2844,4 +2844,17 @@
     <string name="a11y_voice_broadcast_fast_forward">Manda avanti di 30 secondi</string>
     <string name="a11y_voice_broadcast_fast_backward">Manda indietro di 30 secondi</string>
     <string name="voice_broadcast_recording_time_left">%1$s rimasti</string>
+    <string name="message_reply_to_sender_created_poll">creato un sondaggio.</string>
+    <string name="message_reply_to_sender_sent_sticker">inviato un adesivo.</string>
+    <string name="message_reply_to_sender_sent_video">inviato un video.</string>
+    <string name="message_reply_to_sender_sent_image">inviata un\'immagine.</string>
+    <string name="message_reply_to_sender_sent_voice_message">inviato un messaggio vocale.</string>
+    <string name="message_reply_to_sender_sent_audio_file">inviato un file audio.</string>
+    <string name="message_reply_to_sender_sent_file">inviato un file.</string>
+    <string name="message_reply_to_prefix">In risposta a</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Nascondi indirizzo IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Mostra indirizzo IP</string>
+    <string name="quoting">Citazione</string>
+    <string name="replying_to">Risposta a %s</string>
+    <string name="editing">Modifica</string>
 </resources>
