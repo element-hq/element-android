@@ -45,6 +45,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.extensions.showKeyboard
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
@@ -110,6 +111,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
             setCornerSize(cornerSize.toFloat())
         }
     }
+
+    private val dimensionConverter = DimensionConverter(resources)
 
     fun setFullScreen(isFullScreen: Boolean) {
         editText.updateLayoutParams<ViewGroup.LayoutParams> {
@@ -258,7 +261,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
 
         // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints
-        val dp = { px: Int -> (px * resources.displayMetrics.density).toInt() }
+        val dpToPx = { dp: Int -> dimensionConverter.dpToPx(dp) }
         ConstraintSet().apply {
             clone(views.composerLayoutContent)
             clear(R.id.composerEditTextOuterBorder, ConstraintSet.TOP)
@@ -266,13 +269,13 @@ class RichTextComposerLayout @JvmOverloads constructor(
             clear(R.id.composerEditTextOuterBorder, ConstraintSet.START)
             clear(R.id.composerEditTextOuterBorder, ConstraintSet.END)
             if (isTextFormattingEnabled) {
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dp(8))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(8))
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.sendButton, ConstraintSet.TOP, 0)
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.composerLayoutContent, ConstraintSet.START, dp(12))
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.composerLayoutContent, ConstraintSet.END, dp(12))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.composerLayoutContent, ConstraintSet.START, dpToPx(12))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.composerLayoutContent, ConstraintSet.END, dpToPx(12))
             } else {
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dp(10))
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dp(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dpToPx(10))
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.attachmentButton, ConstraintSet.END, 0)
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.sendButton, ConstraintSet.START, 0)
             }
@@ -281,8 +284,10 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     private fun updateFullScreenButtonVisibility() {
+        val isLargeScreenDevice = resources.configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         // There's no point in having full screen in landscape since there's almost no vertical space
-        views.composerFullScreenButton.isInvisible = !isTextFormattingEnabled || resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        views.composerFullScreenButton.isInvisible = !isTextFormattingEnabled || (isLandscape && !isLargeScreenDevice)
     }
 
     /**
