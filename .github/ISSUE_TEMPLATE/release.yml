@@ -61,44 +61,15 @@ body:
 
         The SDK2 and the sample app are released only when Element has been pushed to production.
 
-        - [ ] Checkout the `main` branch on Element Android project
+        - [ ] On the [SDK2 project](https://github.com/matrix-org/matrix-android-sdk2), run the script ./tools/releaseScript.sh and follow the instructions.
 
-        #### On the SDK2 project
-
-        https://github.com/matrix-org/matrix-android-sdk2
-
-        - [ ] Create a release with GitFlow
-        - [ ] Update the value of VERSION_NAME in the file gradle.properties
-        - [ ] Update the files `./build.gradle` and `./gradle/gradle-wrapper.properties` manually, to use the latest version for the dependency. You can get inspired by the same files on Element Android project.
-        - [ ] Run the script `./tools/import_from_element.sh`
-        - [ ] Check the diff in the file `./matrix-sdk-android/build.gradle` and restore what may have been erased (in particular the line `apply plugin: "com.vanniktech.maven.publish"` and the line about the version)
-        - [ ] Let the script finish to build the library
-        - [ ] Update the file `CHANGES.md`
-        - [ ] Finish the release using GitFlow
-        - [ ] Push the branch `main`, the new tag and the branch `develop` to origin
-
-        ##### Release on MavenCentral
-
-        - [ ] Checkout the branch `main`
-        - [ ] Run the command `./gradlew publish --no-daemon --no-parallel`. You'll need some non-public element to do so
-        - [ ] Run the command `./gradlew closeAndReleaseRepository`. If it is working well, you can jump directly to the final step of this section.
-
-        If `./gradlew closeAndReleaseRepository` fails (for instance, several repositories are waiting to be handled), you have to close and release the repository manually. Do the following steps:
+        Note: if the step `./gradlew closeAndReleaseRepository` fails (for instance, several repositories are waiting to be handled), you have to close and release the repository manually. Do the following steps:
 
         - [ ] Connect to https://s01.oss.sonatype.org
         - [ ] Click on Staging Repositories and check the the files have been uploaded
         - [ ] Click on close
         - [ ] Wait (check Activity tab until step "Repository closed" is displayed)
         - [ ] Click on release. The staging repository will disappear
-
-        Final step
-
-        - [ ] Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/ (it can take a few minutes)
-
-        ##### Release on GitHub
-
-        - [ ] Create the release on GitHub from [the tag](https://github.com/matrix-org/matrix-android-sdk2/tags)
-        - [ ] Upload the AAR on the GitHub release
 
         ### Android SDK2 sample
 
