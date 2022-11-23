@@ -2843,4 +2843,13 @@
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.</string>
     <string name="a11y_voice_broadcast_fast_forward">30 Sekunden vorspulen</string>
     <string name="a11y_voice_broadcast_fast_backward">30 Sekunden zurückspulen</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Auf verifizierte Sitzungen kannst du überall mit deinem Konto zugreifen, wenn du deine Passphrase eingegeben oder Element mit einer anderen Sitzung verifiziert hast.
+\n
+\nDies bedeutet, dass du alle Schlüssel zum Entsperren deiner verschlüsselten Nachrichten hast und anderen bestätigst, dieser Sitzung zu vertrauen.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Von %1$d Sitzung abmelden</item>
+        <item quantity="other">Von %1$d Sitzungen abmelden</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Abmelden</string>
+    <string name="voice_broadcast_recording_time_left">%1$s übrig</string>
 </resources>
