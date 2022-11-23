@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.query
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.internal.database.helper.isMoreRecentThan
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
@@ -69,16 +70,21 @@ private fun TimelineEventEntity.isBeforeLatestReadReceipt(realm: Realm, roomId: 
  * Missing events can be caused by the latest timeline chunk no longer contain an older event or
  * by fast lane eagerly displaying events before the database has finished updating.
  */
-private fun hasReadMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
-    return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)
+private fun hasReadMissingEvent(realm: Realm,
+                                latestChunkEntity: ChunkEntity,
+                                roomId: String,
+                                userId: String,
+                                eventId: String,
+                                threadId: String? = ReadService.THREAD_ID_MAIN): Boolean {
+    return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId, threadId)
 }
 
 private fun Realm.doesEventExistInChunkHistory(eventId: String): Boolean {
     return ChunkEntity.findIncludingEvent(this, eventId) != null
 }
 
-private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, roomId: String, userId: String): Boolean {
-    return ReadReceiptEntity.where(this, roomId = roomId, userId = userId).findFirst()?.let {
+private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, roomId: String, userId: String, threadId: String?): Boolean {
+    return ReadReceiptEntity.where(this, roomId = roomId, userId = userId, threadId = threadId).findFirst()?.let {
         latestChunkEntity.timelineEvents.find(it.eventId)
     } != null
 }

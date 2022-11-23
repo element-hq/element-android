@@ -122,6 +122,7 @@ internal class ReadReceiptHandler @Inject constructor(
     ) {
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
+            Timber.d("INIT_SYNC Insert during incremental sync RR for room $roomId")
             doIncrementalSyncStrategy(realm, roomId, it)
             aggregator?.ephemeralFilesToDelete?.add(roomId)
         }

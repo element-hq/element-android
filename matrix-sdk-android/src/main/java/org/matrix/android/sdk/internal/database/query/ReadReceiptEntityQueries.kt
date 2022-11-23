@@ -36,12 +36,6 @@ internal fun ReadReceiptEntity.Companion.forMainTimelineWhere(realm: Realm, room
             .equalTo(ReadReceiptEntityFields.PRIMARY_KEY, buildPrimaryKey(roomId, userId, null))
 }
 
-internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, userId: String): RealmQuery<ReadReceiptEntity> {
-    return realm.where<ReadReceiptEntity>()
-            .equalTo(ReadReceiptEntityFields.USER_ID, userId)
-            .equalTo(ReadReceiptEntityFields.ROOM_ID, roomId)
-}
-
 internal fun ReadReceiptEntity.Companion.whereUserId(realm: Realm, userId: String): RealmQuery<ReadReceiptEntity> {
     return realm.where<ReadReceiptEntity>()
             .equalTo(ReadReceiptEntityFields.USER_ID, userId)
@@ -79,4 +73,10 @@ internal fun ReadReceiptEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
                     }
 }
 
-private fun buildPrimaryKey(roomId: String, userId: String, threadId: String?) = "${roomId}_${userId}_${threadId ?: "null"}"
+private fun buildPrimaryKey(roomId: String, userId: String, threadId: String?): String {
+    return if (threadId == null) {
+        "${roomId}_${userId}"
+    } else {
+        "${roomId}_${userId}_${threadId}"
+    }
+}

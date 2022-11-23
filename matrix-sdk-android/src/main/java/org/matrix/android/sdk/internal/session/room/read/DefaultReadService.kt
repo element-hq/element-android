@@ -22,7 +22,6 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.util.Optional
@@ -36,6 +35,7 @@ import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -43,7 +43,7 @@ internal class DefaultReadService @AssistedInject constructor(
         private val setReadMarkersTask: SetReadMarkersTask,
         private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
         @UserId private val userId: String,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource
 ) : ReadService {
 
     @AssistedFactory
@@ -52,7 +52,7 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override suspend fun markAsRead(params: ReadService.MarkAsReadParams, mainTimeLineOnly: Boolean) {
-        val readReceiptThreadId = if (homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications) {
+        val readReceiptThreadId = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canUseThreadReadReceiptsAndNotifications == true) {
             if (mainTimeLineOnly) ReadService.THREAD_ID_MAIN else null
         } else {
             null
@@ -67,7 +67,7 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override suspend fun setReadReceipt(eventId: String, threadId: String) {
-        val readReceiptThreadId = if (homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications) {
+        val readReceiptThreadId = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canUseThreadReadReceiptsAndNotifications == true) {
             threadId
         } else {
             null
@@ -82,7 +82,7 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override fun isEventRead(eventId: String): Boolean {
-        val shouldCheckIfReadInEventsThread = homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+        val shouldCheckIfReadInEventsThread = homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canUseThreadReadReceiptsAndNotifications == true
         return isEventRead(monarchy.realmConfiguration, userId, roomId, eventId, shouldCheckIfReadInEventsThread)
     }
 
@@ -96,9 +96,9 @@ internal class DefaultReadService @AssistedInject constructor(
         }
     }
 
-    override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
+    override fun getMyReadReceiptLive(threadId: String?): LiveData<Optional<String>> {
         val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadReceiptEntity.where(it, roomId = roomId, userId = userId) },
+                { ReadReceiptEntity.where(it, roomId = roomId, userId = userId, threadId = threadId) },
                 { it.eventId }
         )
         return Transformations.map(liveRealmData) {

@@ -411,6 +411,7 @@ internal class DefaultTimeline(
     private fun ensureReadReceiptAreLoaded(realm: Realm) {
         readReceiptHandler.getContentFromInitSync(roomId)
                 ?.also {
+                    Timber.d("INIT_SYNC Insert when opening timeline RR for room $roomId")
                 }
                 ?.let { readReceiptContent ->
                     realm.executeTransactionAsync {
