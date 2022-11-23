@@ -34,8 +34,6 @@ class JumpToBottomViewVisibilityManager(
         private val layoutManager: LinearLayoutManager
 ) {
 
-    private var canShowButtonOnScroll = true
-
     init {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -45,7 +43,7 @@ class JumpToBottomViewVisibilityManager(
 
                 if (scrollingToPast) {
                     jumpToBottomView.hide()
-                } else if (canShowButtonOnScroll) {
+                } else {
                     maybeShowJumpToBottomViewVisibility()
                 }
             }
@@ -68,13 +66,7 @@ class JumpToBottomViewVisibilityManager(
         }
     }
 
-    fun hideAndPreventVisibilityChangesWithScrolling() {
-        jumpToBottomView.hide()
-        canShowButtonOnScroll = false
-    }
-
     private fun maybeShowJumpToBottomViewVisibility() {
-        canShowButtonOnScroll = true
         if (layoutManager.findFirstVisibleItemPosition() > 1) {
             jumpToBottomView.show()
         } else {

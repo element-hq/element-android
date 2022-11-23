@@ -49,6 +49,7 @@
     <dimen name="composer_attachment_margin">1dp</dimen>
     <dimen name="rich_text_composer_corner_radius_single_line">28dp</dimen>
     <dimen name="rich_text_composer_corner_radius_expanded">14dp</dimen>
+    <dimen name="rich_text_composer_menu_item_size">44dp</dimen>
 
     <dimen name="chat_bubble_margin_start">28dp</dimen>
     <dimen name="chat_bubble_margin_end">6dp</dimen>

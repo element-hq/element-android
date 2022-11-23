@@ -1,183 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/composerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:constraintSet="@layout/composer_rich_text_layout_constraint_set_compact"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
-
-    <!-- ========================
-        /!\ Constraints for this layout are defined in external layout files that are used as constraint set for animation.
-        /!\ These 3 files must be modified to stay coherent!
-    ======================== -->
-    <View
-        android:id="@+id/related_message_background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?colorSurface"
-        tools:ignore="MissingConstraints" />
-
-    <View
-        android:id="@+id/related_message_background_top_separator"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?vctr_list_separator"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/composerRelatedMessageAvatar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:importantForAccessibility="no"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/composerRelatedMessageTitle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        tools:text="@tools:sample/first_names"
-        tools:visibility="gone" />
-
-    <TextView
-        android:id="@+id/composerRelatedMessageContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:textColor="?vctr_message_text_color"
-        tools:ignore="MissingConstraints"
-        tools:text="@tools:sample/lorem"
-        tools:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/composerRelatedMessageActionIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:importantForAccessibility="no"
-        app:tint="?vctr_content_primary"
-        tools:ignore="MissingConstraints,MissingPrefix" />
-
-    <ImageView
-        android:id="@+id/composerRelatedMessageImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:importantForAccessibility="no"
-        tools:ignore="MissingPrefix" />
-
-    <ImageButton
-        android:id="@+id/composerRelatedMessageCloseButton"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/action_cancel"
-        android:src="@drawable/ic_close_round"
-        app:tint="?colorError"
-        tools:ignore="MissingConstraints,MissingPrefix" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/composer_preview_barrier"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:barrierDirection="bottom"
-        app:barrierMargin="8dp"
-        app:constraint_referenced_ids="composerRelatedMessageContent,composerRelatedMessageActionIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageButton
-        android:id="@+id/attachmentButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingTop="2dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/option_send_files"
-        android:src="@drawable/ic_attachment"
-        tools:ignore="MissingConstraints" />
+    android:orientation="vertical"
+    android:background="@drawable/bg_composer_rich_bottom_sheet">
 
     <FrameLayout
-        android:id="@+id/composerEditTextOuterBorder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_composer_rich_edit_text_single_line" />
-
-    <io.element.android.wysiwyg.EditorEditText
-        android:id="@+id/richTextComposerEditText"
-        style="@style/Widget.Vector.EditText.RichTextComposer"
-        android:layout_width="0dp"
+        android:id="@+id/bottomSheetHandle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
-        android:nextFocusLeft="@id/richTextComposerEditText"
-        android:nextFocusUp="@id/richTextComposerEditText"
-        tools:hint="@string/room_message_placeholder"
-        tools:text="@tools:sample/lorem/random"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Use a separate EditText for plain text editing while the rich text editor doesn't support this mode -->
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/plainTextComposerEditText"
-        style="@style/Widget.Vector.EditText.RichTextComposer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:nextFocusLeft="@id/plainTextComposerEditText"
-        android:nextFocusUp="@id/plainTextComposerEditText"
-        tools:hint="@string/room_message_placeholder"
-        tools:text="@tools:sample/lorem/random"
-        tools:ignore="MissingConstraints" />
+        <View
+            android:layout_width="36dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bottomsheet_handle" />
 
-    <ImageButton
-        android:id="@+id/composerFullScreenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
-        app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
-        app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
-        android:src="@drawable/ic_composer_full_screen"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/rich_text_editor_full_screen_toggle" />
+    </FrameLayout>
 
-    <ImageButton
-        android:id="@+id/sendButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_send"
-        android:contentDescription="@string/action_send"
-        android:src="@drawable/ic_send"
-        tools:ignore="MissingConstraints" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        app:layout_constraintTop_toTopOf="@id/sendButton"
-        app:layout_constraintStart_toEndOf="@id/attachmentButton"
-        app:layout_constraintEnd_toStartOf="@id/sendButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:fillViewport="true">
+        <ImageButton
+            android:id="@+id/attachmentButton"
+            android:layout_width="56dp"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/composer_attachment_margin"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/option_send_files"
+            android:src="@drawable/ic_rich_composer_add"
+            android:paddingStart="4dp"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintBottom_toBottomOf="@id/sendButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/sendButton"
+            app:layout_goneMarginBottom="57dp"
+            tools:ignore="MissingPrefix,RtlSymmetry" />
 
-        <LinearLayout
-            android:id="@+id/richTextMenu"
+        <FrameLayout
+            android:id="@+id/composerEditTextOuterBorder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:minHeight="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/sendButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/composerModeIconView"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            tools:src="@drawable/ic_quote"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toTopOf="@id/composerModeTitleView"
+            app:layout_constraintBottom_toBottomOf="@id/composerModeTitleView"
+            app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
+            app:tint="?vctr_content_tertiary" />
+
+        <TextView android:id="@+id/composerModeTitleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="2dp"
+            android:fontFamily="sans-serif-medium"
+            tools:text="Editing"
+            style="@style/BottomSheetItemTime"
+            app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintStart_toEndOf="@id/composerModeIconView" />
 
-        </LinearLayout>
+        <ImageButton android:id="@+id/composerModeCloseView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_composer_rich_text_editor_close"
+            android:background="?android:selectableItemBackground"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@string/action_close"
+            app:layout_constraintTop_toTopOf="@id/composerModeIconView"
+            app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder" />
 
-    </HorizontalScrollView>
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/composerModeBarrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="composerModeIconView,composerModeTitleView,composerModeCloseView" />
 
-    <!--
-    <ImageButton
-        android:id="@+id/voiceMessageMicButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/a11y_start_voice_message"
-        android:src="@drawable/ic_voice_mic" />
-    -->
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/composerModeGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:constraint_referenced_ids="composerModeIconView,composerModeTitleView,composerModeCloseView" />
 
-</merge>
+        <io.element.android.wysiwyg.EditorEditText
+            android:id="@+id/richTextComposerEditText"
+            style="@style/Widget.Vector.EditText.RichTextComposer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_default="wrap"
+            android:gravity="top"
+            android:hint="@string/room_message_placeholder"
+            android:nextFocusLeft="@id/richTextComposerEditText"
+            android:nextFocusUp="@id/richTextComposerEditText"
+            android:layout_marginStart="12dp"
+            android:imeOptions="flagNoExtractUi"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
+            app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
+            tools:text="@tools:sample/lorem/random" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/plainTextComposerEditText"
+            style="@style/Widget.Vector.EditText.RichTextComposer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_default="wrap"
+            android:visibility="gone"
+            android:hint="@string/room_message_placeholder"
+            android:nextFocusLeft="@id/plainTextComposerEditText"
+            android:nextFocusUp="@id/plainTextComposerEditText"
+            android:layout_marginStart="12dp"
+            android:gravity="top"
+            android:imeOptions="flagNoExtractUi"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
+            app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
+            tools:text="@tools:sample/lorem/random" />
+
+        <ImageButton
+            android:id="@+id/composerFullScreenButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
+            app:layout_constraintBottom_toBottomOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintVertical_bias="0"
+            android:src="@drawable/ic_composer_full_screen"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/rich_text_editor_full_screen_toggle" />
+
+        <ImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="56dp"
+            android:layout_height="60dp"
+            android:paddingEnd="4dp"
+            android:contentDescription="@string/action_send"
+            android:scaleType="center"
+            android:src="@drawable/ic_rich_composer_send"
+            android:visibility="invisible"
+            android:background="?android:selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="1"
+            tools:ignore="MissingPrefix,RtlSymmetry"
+            tools:visibility="visible" />
+
+        <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="52dp"
+            app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
+            app:layout_constraintStart_toEndOf="@id/attachmentButton"
+            app:layout_constraintEnd_toStartOf="@id/sendButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/richTextMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

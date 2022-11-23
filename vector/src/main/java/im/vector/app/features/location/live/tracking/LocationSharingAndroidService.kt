@@ -21,7 +21,6 @@ import android.os.IBinder
 import android.os.Parcelable
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.location.LocationData
@@ -125,10 +124,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
         val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
-                ?.startLiveLocationShare(
-                        timeoutMillis = roomArgs.durationMillis,
-                        description = getString(R.string.live_location_description)
-                )
+                ?.startLiveLocationShare(roomArgs.durationMillis)
 
         updateLiveResult
                 ?.let { result ->

@@ -47,10 +47,9 @@ interface LocationSharingService {
     /**
      * Starts sharing live location in the room.
      * @param timeoutMillis timeout of the live in milliseconds
-     * @param description description of the live for text fallback
      * @return the result of the update of the live
      */
-    suspend fun startLiveLocationShare(timeoutMillis: Long, description: String): UpdateLiveLocationShareResult
+    suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult
 
     /**
      * Stops sharing live location in the room.
