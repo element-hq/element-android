@@ -32,7 +32,27 @@ class GetNotificationSettingsAccountDataUseCaseTest {
         // Given
         val aDeviceId = "device-id"
         val aSession = FakeSession()
-        val expectedContent = LocalNotificationSettingsContent()
+        val expectedContent = LocalNotificationSettingsContent(isSilenced = true)
+        aSession
+                .accountDataService()
+                .givenGetUserAccountDataEventReturns(
+                        type = UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + aDeviceId,
+                        content = expectedContent.toContent(),
+                )
+
+        // When
+        val result = getNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
+
+        // Then
+        result shouldBeEqualTo expectedContent
+    }
+
+    @Test
+    fun `given a device id and empty content when execute then retrieve the account data event corresponding to this id if any`() {
+        // Given
+        val aDeviceId = "device-id"
+        val aSession = FakeSession()
+        val expectedContent = LocalNotificationSettingsContent(isSilenced = null)
         aSession
                 .accountDataService()
                 .givenGetUserAccountDataEventReturns(

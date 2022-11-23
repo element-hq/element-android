@@ -32,15 +32,17 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val fakeGetNotificationSettingsAccountDataUseCase = mockk<GetNotificationSettingsAccountDataUseCase>()
     private val fakeSetNotificationSettingsAccountDataUseCase = mockk<SetNotificationSettingsAccountDataUseCase>()
+    private val fakeDeleteNotificationSettingsAccountDataUseCase = mockk<DeleteNotificationSettingsAccountDataUseCase>()
 
     private val updateNotificationSettingsAccountDataUseCase = UpdateNotificationSettingsAccountDataUseCase(
             vectorPreferences = fakeVectorPreferences.instance,
             getNotificationSettingsAccountDataUseCase = fakeGetNotificationSettingsAccountDataUseCase,
             setNotificationSettingsAccountDataUseCase = fakeSetNotificationSettingsAccountDataUseCase,
+            deleteNotificationSettingsAccountDataUseCase = fakeDeleteNotificationSettingsAccountDataUseCase,
     )
 
     @Test
-    fun `given a device id and a different local setting compared to remote when execute then content is updated`() = runTest {
+    fun `given back sync enabled, a device id and a different local setting compared to remote when execute then content is updated`() = runTest {
         // Given
         val aDeviceId = "device-id"
         val aSession = FakeSession()
@@ -48,6 +50,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
         fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
                         isSilenced = null
@@ -61,14 +64,16 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
 
         // Then
         verify {
+            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
             fakeVectorPreferences.instance.areNotificationEnabledForDevice()
             fakeGetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
         }
+        coVerify(inverse = true) { fakeDeleteNotificationSettingsAccountDataUseCase.execute(aSession) }
         coVerify { fakeSetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId, expectedContent) }
     }
 
     @Test
-    fun `given a device id and a same local setting compared to remote when execute then content is not updated`() = runTest {
+    fun `given back sync enabled, a device id and a same local setting compared to remote when execute then content is not updated`() = runTest {
         // Given
         val aDeviceId = "device-id"
         val aSession = FakeSession()
@@ -76,6 +81,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
         fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
                         isSilenced = false
@@ -89,9 +95,31 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
 
         // Then
         verify {
+            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
             fakeVectorPreferences.instance.areNotificationEnabledForDevice()
             fakeGetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
         }
+        coVerify(inverse = true) { fakeDeleteNotificationSettingsAccountDataUseCase.execute(aSession) }
         coVerify(inverse = true) { fakeSetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId, expectedContent) }
+    }
+
+    @Test
+    fun `given back sync disabled and a device id when execute then content is deleted`() = runTest {
+        // Given
+        val aDeviceId = "device-id"
+        val aSession = FakeSession()
+        aSession.givenSessionId(aDeviceId)
+        coJustRun { fakeDeleteNotificationSettingsAccountDataUseCase.execute(any()) }
+        fakeVectorPreferences.givenIsBackgroundSyncEnabled(false)
+
+        // When
+        updateNotificationSettingsAccountDataUseCase.execute(aSession)
+
+        // Then
+        verify {
+            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
+        }
+        coVerify { fakeDeleteNotificationSettingsAccountDataUseCase.execute(aSession) }
+        coVerify(inverse = true) { fakeSetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId, any()) }
     }
 }

@@ -22,24 +22,37 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**
- * Update the notification settings account data for the current session.
+ * Update the notification settings account data for the current session depending on whether
+ * the background sync is enabled or not.
  */
 class UpdateNotificationSettingsAccountDataUseCase @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val getNotificationSettingsAccountDataUseCase: GetNotificationSettingsAccountDataUseCase,
-        private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase
+        private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
+        private val deleteNotificationSettingsAccountDataUseCase: DeleteNotificationSettingsAccountDataUseCase,
 ) {
 
-    // TODO to be called when switching to background sync (in notification method setting)
     suspend fun execute(session: Session) {
+        if (vectorPreferences.isBackgroundSyncEnabled()) {
+            setCurrentNotificationStatus(session)
+        } else {
+            deleteCurrentNotificationStatus(session)
+        }
+    }
+
+    private suspend fun setCurrentNotificationStatus(session: Session) {
         val deviceId = session.sessionParams.deviceId ?: return
-        val isSilencedLocal = !vectorPreferences.areNotificationEnabledForDevice()
-        val isSilencedRemote = getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced
-        if (isSilencedLocal != isSilencedRemote) {
+        val areNotificationsSilenced = !vectorPreferences.areNotificationEnabledForDevice()
+        val isSilencedAccountData = getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced
+        if (areNotificationsSilenced != isSilencedAccountData) {
             val notificationSettingsContent = LocalNotificationSettingsContent(
-                    isSilenced = isSilencedLocal
+                    isSilenced = areNotificationsSilenced
             )
             setNotificationSettingsAccountDataUseCase.execute(session, deviceId, notificationSettingsContent)
         }
+    }
+
+    private suspend fun deleteCurrentNotificationStatus(session: Session) {
+        deleteNotificationSettingsAccountDataUseCase.execute(session)
     }
 }

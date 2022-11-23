@@ -24,15 +24,17 @@ import javax.inject.Inject
  * Delete the content of any associated notification settings to the current session.
  */
 class DeleteNotificationSettingsAccountDataUseCase @Inject constructor(
+        private val getNotificationSettingsAccountDataUseCase: GetNotificationSettingsAccountDataUseCase,
         private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
 ) {
 
-    // TODO to be called when switching to push notifications method (check notification method setting)
     suspend fun execute(session: Session) {
         val deviceId = session.sessionParams.deviceId ?: return
-        val emptyNotificationSettingsContent = LocalNotificationSettingsContent(
-                isSilenced = null
-        )
-        setNotificationSettingsAccountDataUseCase.execute(session, deviceId, emptyNotificationSettingsContent)
+        if (getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced != null) {
+            val emptyNotificationSettingsContent = LocalNotificationSettingsContent(
+                    isSilenced = null
+            )
+            setNotificationSettingsAccountDataUseCase.execute(session, deviceId, emptyNotificationSettingsContent)
+        }
     }
 }

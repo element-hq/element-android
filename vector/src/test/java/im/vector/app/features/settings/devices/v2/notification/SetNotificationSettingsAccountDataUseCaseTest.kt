@@ -31,7 +31,7 @@ class SetNotificationSettingsAccountDataUseCaseTest {
     fun `given a content when execute then update local notification settings with this content`() = runTest {
         // Given
         val sessionId = "a_session_id"
-        val localNotificationSettingsContent = LocalNotificationSettingsContent()
+        val localNotificationSettingsContent = LocalNotificationSettingsContent(isSilenced = true)
         val fakeSession = FakeSession()
         fakeSession.accountDataService().givenUpdateUserAccountDataEventSucceeds()
 
