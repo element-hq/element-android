@@ -84,7 +84,7 @@ sed "s/\"SDK_VERSION\", .*$/\"SDK_VERSION\", \"\\\\\"${version}\\\\\"\"/" ./matr
 rm ./matrix-sdk-android/build.gradle.bak
 
 # This commit may have no effect because generally we do not change the version during the release.
-commit -a -m "Setting version for the release ${version}"
+git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 read -p "Please check the crashes from the PlayStore. You can commit fixes if any on the release branch. Press enter when it's done."
