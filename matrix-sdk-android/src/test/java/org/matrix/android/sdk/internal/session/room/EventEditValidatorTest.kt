@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
-class EditValidationTest {
+class EventEditValidatorTest {
 
     private val mockTextEvent = Event(
             type = EventType.MESSAGE,
@@ -180,17 +180,23 @@ class EditValidationTest {
 
         validator
                 .validateEdit(
-                        encryptedEvent.copy().apply {
+                        encryptedEvent.copy(
+                                content = encryptedEvent.content!!.toMutableMap().apply {
+                                    put(
+                                            "m.relates_to",
+                                            mapOf(
+                                                    "rel_type" to "m.replace",
+                                                    "event_id" to mockTextEvent.eventId
+                                            )
+                                    )
+                                }
+                        ).apply {
                             mxDecryptionResult = encryptedEditEvent.mxDecryptionResult!!.copy(
                                     payload = mapOf(
                                             "type" to EventType.MESSAGE,
                                             "content" to mapOf(
                                                     "body" to "some message",
                                                     "msgtype" to "m.text",
-                                                    "m.relates_to" to mapOf(
-                                                            "rel_type" to "m.replace",
-                                                            "event_id" to mockTextEvent.eventId
-                                                    )
                                             ),
                                     )
                             )

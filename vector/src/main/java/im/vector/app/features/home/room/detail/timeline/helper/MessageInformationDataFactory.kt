@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -45,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.internal.session.events.toValidDecryptedEvent
 import javax.inject.Inject
 
 /**
@@ -57,7 +57,7 @@ class MessageInformationDataFactory @Inject constructor(
         private val reactionsSummaryFactory: ReactionsSummaryFactory
 ) {
 
-    fun create(params: TimelineItemFactoryParams, lastEdit: Event? = null): MessageInformationData {
+    fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
         val nextDisplayableEvent = params.nextDisplayableEvent
         val prevDisplayableEvent = params.prevDisplayableEvent
@@ -74,14 +74,8 @@ class MessageInformationDataFactory @Inject constructor(
                 prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val e2eDecoration = getE2EDecoration(roomSummary, lastEdit ?: event.root)
-        val senderId = if (event.isEncrypted()) {
-            event.root.toValidDecryptedEvent()?.let {
-                session.cryptoService().deviceWithIdentityKey(it.cryptoSenderKey, it.algorithm)?.userId
-            } ?: event.root.senderId.orEmpty()
-        } else {
-            event.root.senderId.orEmpty()
-        }
+        val e2eDecoration = getE2EDecoration(roomSummary, params.lastEdit ?: event.root)
+        val senderId = getSenderId(event)
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
@@ -137,6 +131,14 @@ class MessageInformationDataFactory @Inject constructor(
                     event.root.getMsgType()
                 }
         )
+    }
+
+    private fun getSenderId(event: TimelineEvent) = if (event.isEncrypted()) {
+        event.root.toValidDecryptedEvent()?.let {
+            session.cryptoService().deviceWithIdentityKey(it.cryptoSenderKey, it.algorithm)?.userId
+        } ?: event.root.senderId.orEmpty()
+    } else {
+        event.root.senderId.orEmpty()
     }
 
     private fun getSendStateDecoration(

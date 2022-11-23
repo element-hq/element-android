@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * <code>
+ * ```
  *  {
  *       "m.annotation": {
  *          "chunk": [
@@ -43,7 +43,7 @@ import com.squareup.moshi.JsonClass
  *           "count": 1
  *           }
  *      }
- * </code>
+ * ```
  */
 
 @JsonClass(generateAdapter = true)

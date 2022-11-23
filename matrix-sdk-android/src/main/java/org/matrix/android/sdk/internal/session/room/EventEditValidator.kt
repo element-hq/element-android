@@ -17,11 +17,14 @@
 package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.session.events.toValidDecryptedEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCryptoStore) {
@@ -47,9 +50,15 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
      * If the original event was encrypted, the replacement should be too.
      */
     fun validateEdit(originalEvent: Event?, replaceEvent: Event): EditValidity {
+        Timber.v("###REPLACE valide event $originalEvent replaced $replaceEvent")
         // we might not know the original event at that time. In this case we can't perform the validation
         // Edits should be revalidated when the original event is received
         if (originalEvent == null) {
+            return EditValidity.Unknown
+        }
+
+        if (LocalEcho.isLocalEchoId(replaceEvent.eventId.orEmpty())) {
+            // Don't validate local echo
             return EditValidity.Unknown
         }
 
@@ -71,7 +80,7 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
             val originalCryptoSenderId = cryptoStore.deviceWithIdentityKey(originalDecrypted.cryptoSenderKey)?.userId
             val editCryptoSenderId = cryptoStore.deviceWithIdentityKey(replaceDecrypted.cryptoSenderKey)?.userId
 
-            if (originalDecrypted.clearContent.toModel<MessageContent>()?.relatesTo?.type == RelationType.REPLACE) {
+            if (originalDecrypted.getRelationContent()?.type == RelationType.REPLACE) {
                 return EditValidity.Invalid("The original event must not, itself, have a rel_type of m.replace ")
             }
 
@@ -96,7 +105,7 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
                 return EditValidity.Invalid("replacement event must have an m.new_content property")
             }
         } else {
-            if (originalEvent.content.toModel<MessageContent>()?.relatesTo?.type == RelationType.REPLACE) {
+            if (originalEvent.getRelationContent()?.type == RelationType.REPLACE) {
                 return EditValidity.Invalid("The original event must not, itself, have a rel_type of m.replace ")
             }
 

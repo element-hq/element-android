@@ -19,7 +19,6 @@ package org.matrix.android.sdk.test.fakes
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.slot
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.database.awaitTransaction
@@ -33,8 +32,7 @@ internal class FakeRealmConfiguration {
     val instance = mockk<RealmConfiguration>()
 
     fun <T> givenAwaitTransaction(realm: Realm) {
-        val transaction = slot<(Realm) -> T>()
-        coEvery { awaitTransaction(instance, capture(transaction)) } answers {
+        coEvery { awaitTransaction(instance, any<(Realm) -> T>()) } answers {
             secondArg<(Realm) -> T>().invoke(realm)
         }
     }

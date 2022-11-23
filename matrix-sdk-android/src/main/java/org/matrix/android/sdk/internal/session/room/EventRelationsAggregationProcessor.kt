@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -81,13 +82,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             EventType.REDACTION,
             EventType.REACTION,
             // The aggregator handles verification events but just to render tiles in the timeline
-            // It's not participating in verfication it's self, just timeline display
+            // It's not participating in verification itself, just timeline display
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL,
             EventType.KEY_VERIFICATION_ACCEPT,
             EventType.KEY_VERIFICATION_START,
             EventType.KEY_VERIFICATION_MAC,
-            // TODO Add ?
             EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_KEY,
             EventType.ENCRYPTED
@@ -168,28 +168,28 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 // As for now Live event processors are not receiving UTD events.
                 // They will get an update if the event is decrypted later
                 EventType.ENCRYPTED -> {
-//                    // Relation type is in clear, it might be possible to do some things?
-//                    // Notice that if the event is decrypted later, process be called again
-//                    val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-//                    when (encryptedEventContent?.relatesTo?.type) {
-//                        RelationType.REPLACE -> {
-//                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-//                            // A replace!
-//                            handleReplace(realm, event, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-//                        }
-//                        RelationType.RESPONSE -> {
-//                            // can we / should we do we something for UTD response??
-//                            Timber.w("## UTD response in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-//                        }
-//                        RelationType.REFERENCE -> {
-//                            // can we / should we do we something for UTD reference??
-//                            Timber.w("## UTD reference in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-//                        }
-//                        RelationType.ANNOTATION -> {
-//                            // can we / should we do we something for UTD annotation??
-//                            Timber.w("## UTD annotation in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-//                        }
-//                    }
+                    // Relation type is in clear, it might be possible to do some things?
+                    // Notice that if the event is decrypted later, process be called again
+                    val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+                    when (encryptedEventContent?.relatesTo?.type) {
+                        RelationType.REPLACE -> {
+                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                            // A replace!
+                            handleReplace(realm, event, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                        }
+                        RelationType.RESPONSE -> {
+                            // can we / should we do we something for UTD response??
+                            Timber.w("## UTD response in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
+                        }
+                        RelationType.REFERENCE -> {
+                            // can we / should we do we something for UTD reference??
+                            Timber.w("## UTD reference in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
+                        }
+                        RelationType.ANNOTATION -> {
+                            // can we / should we do we something for UTD annotation??
+                            Timber.w("## UTD annotation in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
+                        }
+                    }
                 }
                 EventType.REDACTION -> {
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
@@ -256,7 +256,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             relatedEventId: String?
     ) {
         val eventId = event.eventId ?: return
-        val targetEventId = relatedEventId ?: return // ?: content.relatesTo?.eventId ?: return
+        val targetEventId = relatedEventId ?: return
         val editedEvent = EventEntity.where(realm, targetEventId).findFirst()
 
         when (val validity = editValidator.validateEdit(editedEvent?.asDomain(), event)) {
@@ -301,15 +301,16 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 // ok it has already been managed
                 Timber.v("###REPLACE Receiving remote echo of edit (edit already done)")
                 existingSummary.editions.firstOrNull { it.eventId == txId }?.let {
-                    it.eventId = event.eventId
+                    it.eventId = eventId
                     it.timestamp = event.originServerTs ?: clock.epochMillis()
                     it.isLocalEcho = false
+                    it.event = EventEntity.where(realm, eventId).findFirst()
                 }
             } else {
                 Timber.v("###REPLACE Computing aggregated edit summary (isLocalEcho:$isLocalEcho)")
                 existingSummary.editions.add(
                         EditionOfEvent(
-                                eventId = event.eventId,
+                                eventId = eventId,
                                 event = EventEntity.where(realm, eventId).findFirst(),
                                 timestamp = if (isLocalEcho) {
                                     clock.epochMillis()
@@ -343,7 +344,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
      * @param editions list of edition of event
      */
     private fun handleThreadSummaryEdition(
-            editedEvent: EventEntity?, replaceEvent: TimelineEventEntity?,
+            editedEvent: EventEntity?,
+            replaceEvent: TimelineEventEntity?,
             editions: List<EditionOfEvent>?
     ) {
         replaceEvent ?: return

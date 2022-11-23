@@ -161,7 +161,7 @@ class MessageItemFactory @Inject constructor(
         val callback = params.callback
         event.root.eventId ?: return null
         roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(params, params.event.annotations?.editSummary?.latestEdit)
+        val informationData = messageInformationDataFactory.create(params)
         val threadDetails = if (params.isFromThreadTimeline()) null else event.root.threadDetails
 
         if (event.root.isRedacted()) {

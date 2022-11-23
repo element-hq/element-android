@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.api.session.events.model
 
+import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+
 data class ValidDecryptedEvent(
         val type: String,
         val eventId: String,
@@ -29,25 +32,6 @@ data class ValidDecryptedEvent(
         val algorithm: String,
 )
 
-fun Event.toValidDecryptedEvent(): ValidDecryptedEvent? {
-    if (!this.isEncrypted()) return null
-    val decryptedContent = this.getDecryptedContent() ?: return null
-    val eventId = this.eventId ?: return null
-    val roomId = this.roomId ?: return null
-    val type = this.getDecryptedType() ?: return null
-    val senderKey = this.getSenderKey() ?: return null
-    val algorithm = this.content?.get("algorithm") as? String ?: return null
-
-    return ValidDecryptedEvent(
-            type = type,
-            eventId = eventId,
-            clearContent = decryptedContent,
-            prevContent = this.prevContent,
-            originServerTs = this.originServerTs ?: 0,
-            cryptoSenderKey = senderKey,
-            roomId = roomId,
-            unsignedData = this.unsignedData,
-            redacts = this.redacts,
-            algorithm = algorithm
-    )
+fun ValidDecryptedEvent.getRelationContent(): RelationDefaultContent? {
+    return clearContent.toModel<MessageRelationContent?>()?.relatesTo
 }

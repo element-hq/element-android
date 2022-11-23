@@ -16,11 +16,9 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import org.matrix.android.sdk.api.session.room.model.EditAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedSummary
-import org.matrix.android.sdk.internal.database.model.EditionOfEvent
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 
 internal object EventAnnotationsSummaryMapper {
@@ -36,27 +34,7 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceLocalEcho.toList()
                     )
                 },
-                editSummary = annotationsSummary.editSummary
-                        ?.let { summary ->
-                            /**
-                             * The most recent event is determined by comparing origin_server_ts;
-                             * if two or more replacement events have identical origin_server_ts,
-                             * the event with the lexicographically largest event_id is treated as more recent.
-                             */
-                            val latestEdition = summary.editions.sortedWith(compareBy<EditionOfEvent> { it.timestamp }.thenBy { it.eventId })
-                                    .lastOrNull() ?: return@let null
-                            // get the event and validate?
-                            val editEvent = latestEdition.event
-
-                            EditAggregatedSummary(
-                                    latestEdit = editEvent?.asDomain(),
-                                    sourceEvents = summary.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
-                                            .map { editionOfEvent -> editionOfEvent.eventId },
-                                    localEchos = summary.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }
-                                            .map { editionOfEvent -> editionOfEvent.eventId },
-                                    lastEditTs = latestEdition.timestamp
-                            )
-                        },
+                editSummary = EditAggregatedSummaryEntityMapper.map(annotationsSummary.editSummary),
                 referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
                     ReferencesAggregatedSummary(
                             ContentMapper.map(it.content),
