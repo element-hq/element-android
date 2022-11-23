@@ -100,6 +100,7 @@ internal class FakeCryptoStoreForVerification(private val mode: StoreMode) {
         val aliceMxId = "alice@example.com"
         val bobMxId = "bob@example.com"
         val bobDeviceId = "MKRJDSLYGA"
+        val bobDeviceId2 = "RRIWTEKZEI"
 
         val aliceDevice1Id = "MGDAADVDMG"
 
@@ -145,6 +146,22 @@ internal class FakeCryptoStoreForVerification(private val mode: StoreMode) {
                         )
                 ),
                 unsigned = UnsignedDeviceInfo(deviceDisplayName = "Element Ios")
+        )
+
+        val aBobDevice2 = CryptoDeviceInfo(
+                deviceId = bobDeviceId2,
+                userId = bobMxId,
+                algorithms = MXCryptoAlgorithms.supportedAlgorithms(),
+                keys = mapOf(
+                        "curve25519:$bobDeviceId" to "mE4WKAcyRRv7Gk1IDIVm0lZNzb8g9YL2eRQZUHmkkCI",
+                        "ed25519:$bobDeviceId" to "yB/9LITHTqrvdXWDR2k6Qw/MDLUBWABlP9v2eYuqHPE",
+                ),
+                signatures = mapOf(
+                        bobMxId to mapOf(
+                                "ed25519:$bobDeviceId" to "zAJqsmOSzkx8EWXcrynCsWtbgWZifN7A6DLyEBs+ZPPLnNuPN5Jwzc1Rg+oZWZaRPvOPcSL0cgcxRegSBU0NBA",
+                        )
+                ),
+                unsigned = UnsignedDeviceInfo(deviceDisplayName = "Element Android")
         )
 
         private val aliceMSKBase = CryptoCrossSigningKey(

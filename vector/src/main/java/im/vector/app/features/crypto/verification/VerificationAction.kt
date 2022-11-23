@@ -21,6 +21,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 // TODO Remove otherUserId and transactionId when it's not necessary. Should be known by the ViewModel, no?
 sealed class VerificationAction : VectorViewModelAction {
     object RequestVerificationByDM : VerificationAction()
+    object RequestSelfVerification : VerificationAction()
     object StartSASVerification : VerificationAction()
     data class RemoteQrCodeScanned(val otherUserId: String, val transactionId: String, val scannedData: String) : VerificationAction()
     object OtherUserScannedSuccessfully : VerificationAction()
@@ -28,6 +29,7 @@ sealed class VerificationAction : VectorViewModelAction {
     object SASMatchAction : VerificationAction()
     object SASDoNotMatchAction : VerificationAction()
     data class GotItConclusion(val verified: Boolean) : VerificationAction()
+    object FailedToGetKeysFrom4S : VerificationAction()
     object SkipVerification : VerificationAction()
     object VerifyFromPassphrase : VerificationAction()
     object ReadyPendingVerification : VerificationAction()

@@ -52,6 +52,7 @@ import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.crypto.verification.self.SelfVerificationBottomSheet
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -104,6 +105,7 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.getRoom
@@ -266,12 +268,13 @@ class DefaultNavigator @Inject constructor(
     override fun requestSelfSessionVerification(context: Context) {
         coroutineScope.launch {
             val session = sessionHolder.getSafeActiveSession() ?: return@launch
-            val otherSessions = session.cryptoService()
-                    .getCryptoDeviceInfoList(session.myUserId)
-                    .filter { it.deviceId != session.sessionParams.deviceId }
-                    .map { it.deviceId }
+//            val otherSessions = session.cryptoService()
+//                    .getCryptoDeviceInfoList(session.myUserId)
+//                    .filter { it.deviceId != session.sessionParams.deviceId }
+//                    .map { it.deviceId }
             if (context is AppCompatActivity) {
-                TODO()
+                SelfVerificationBottomSheet.verifyOwnUntrustedDevice()
+                        .show(context.supportFragmentManager, "VERIF")
 //                if (otherSessions.isNotEmpty()) {
 //                    val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
 //                            supportedVerificationMethodsProvider.provide())
@@ -285,11 +288,13 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-//    override fun waitSessionVerification(fragmentActivity: FragmentActivity) {
+    override fun showIncomingSelfVerification(fragmentActivity: FragmentActivity, transactionId: String) {
 //        val session = sessionHolder.getSafeActiveSession() ?: return
-//        VerificationBottomSheet.forSelfVerification(session)
-//                .show(fragmentActivity.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-//    }
+        coroutineScope.launch(Dispatchers.Main) {
+            SelfVerificationBottomSheet.forTransaction(transactionId)
+                    .show(fragmentActivity.supportFragmentManager, "SELF_VERIF_TAG")
+        }
+    }
 
     override fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean) {
         BootstrapBottomSheet.show(

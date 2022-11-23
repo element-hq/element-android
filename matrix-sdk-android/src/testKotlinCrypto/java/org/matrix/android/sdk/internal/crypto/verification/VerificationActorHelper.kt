@@ -22,6 +22,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
@@ -53,8 +54,8 @@ internal class VerificationActorHelper {
     var aliceChannel: SendChannel<VerificationIntent>? = null
 
     fun setUpActors(): TestData {
-        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { bobChannel }
-        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { aliceChannel }
+        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { listOf(bobChannel) }
+        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { listOf(aliceChannel) }
 
         val fakeAliceStore = FakeCryptoStoreForVerification(StoreMode.Alice)
         val aliceActor = fakeActor(
@@ -82,7 +83,53 @@ internal class VerificationActorHelper {
         )
     }
 
-    private fun mockTransportTo(fromUser: String, otherChannel: (() -> SendChannel<VerificationIntent>?)): VerificationTransportLayer {
+    fun setupMultipleSessions() {
+        val aliceTargetChannels = mutableListOf<Channel<VerificationIntent>>()
+        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { aliceTargetChannels }
+        val bobTargetChannels = mutableListOf<Channel<VerificationIntent>>()
+        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bobTargetChannels }
+        val bob2TargetChannels = mutableListOf<Channel<VerificationIntent>>()
+        val bob2TransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bob2TargetChannels }
+
+        val fakeAliceStore = FakeCryptoStoreForVerification(StoreMode.Alice)
+        val aliceActor = fakeActor(
+                actorAScope,
+                FakeCryptoStoreForVerification.aliceMxId,
+                fakeAliceStore.instance,
+                aliceTransportLayer,
+        )
+
+        val fakeBobStore1 = FakeCryptoStoreForVerification(StoreMode.Bob)
+        val bobActor = fakeActor(
+                actorBScope,
+                FakeCryptoStoreForVerification.bobMxId,
+                fakeBobStore1.instance,
+                bobTransportLayer
+        )
+
+        val actorCScope = CoroutineScope(SupervisorJob())
+        val fakeBobStore2 = FakeCryptoStoreForVerification(StoreMode.Bob)
+        every { fakeBobStore2.instance.getMyDeviceId() } returns FakeCryptoStoreForVerification.bobDeviceId2
+        every { fakeBobStore2.instance.getMyDevice() } returns FakeCryptoStoreForVerification.aBobDevice2
+
+        val bobActor2 = fakeActor(
+                actorCScope,
+                FakeCryptoStoreForVerification.bobMxId,
+                fakeBobStore2.instance,
+                bobTransportLayer
+        )
+
+        aliceTargetChannels.add(bobActor.channel)
+        aliceTargetChannels.add(bobActor2.channel)
+
+        bobTargetChannels.add(aliceActor.channel)
+        bobTargetChannels.add(bobActor2.channel)
+
+        bob2TargetChannels.add(aliceActor.channel)
+        bob2TargetChannels.add(bobActor.channel)
+    }
+
+    private fun mockTransportTo(fromUser: String, otherChannel: (() -> List<SendChannel<VerificationIntent>?>)): VerificationTransportLayer {
         return mockk<VerificationTransportLayer> {
             coEvery { sendToOther(any(), any(), any()) } answers {
                 val request = firstArg<KotlinVerificationRequest>()
@@ -93,64 +140,76 @@ internal class VerificationActorHelper {
                     when (type) {
                         EventType.KEY_VERIFICATION_READY -> {
                             val readyContent = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnReadyReceived(
-                                            transactionId = request.requestId,
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            readyInfo = readyContent as ValidVerificationInfoReady,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnReadyReceived(
+                                                transactionId = request.requestId,
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                readyInfo = readyContent as ValidVerificationInfoReady,
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_START -> {
                             val startContent = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnStartReceived(
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            validVerificationInfoStart = startContent as ValidVerificationInfoStart,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnStartReceived(
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                validVerificationInfoStart = startContent as ValidVerificationInfoStart,
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_ACCEPT -> {
                             val content = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnAcceptReceived(
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            validAccept = content as ValidVerificationInfoAccept,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnAcceptReceived(
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                validAccept = content as ValidVerificationInfoAccept,
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_KEY -> {
                             val content = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnKeyReceived(
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            validKey = content as ValidVerificationInfoKey,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnKeyReceived(
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                validKey = content as ValidVerificationInfoKey,
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_MAC -> {
                             val content = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnMacReceived(
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            validMac = content as ValidVerificationInfoMac,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnMacReceived(
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                validMac = content as ValidVerificationInfoMac,
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_DONE -> {
                             val content = info.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnDoneReceived(
-                                            fromUser = fromUser,
-                                            viaRoom = request.roomId,
-                                            transactionId = (content as ValidVerificationDone).transactionId,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnDoneReceived(
+                                                fromUser = fromUser,
+                                                viaRoom = request.roomId,
+                                                transactionId = (content as ValidVerificationDone).transactionId,
+                                        )
+                                )
+                            }
                         }
                     }
                 }
@@ -167,26 +226,30 @@ internal class VerificationActorHelper {
                             val requestContent = content.toModel<MessageVerificationRequestContent>()?.copy(
                                     transactionId = fakeEventId
                             )?.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnVerificationRequestReceived(
-                                            requestContent!!,
-                                            senderId = FakeCryptoStoreForVerification.aliceMxId,
-                                            roomId = roomId,
-                                            timeStamp = 0
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnVerificationRequestReceived(
+                                                requestContent!!,
+                                                senderId = FakeCryptoStoreForVerification.aliceMxId,
+                                                roomId = roomId,
+                                                timeStamp = 0
+                                        )
+                                )
+                            }
                         }
                         EventType.KEY_VERIFICATION_READY -> {
                             val readyContent = content.toModel<MessageVerificationReadyContent>()
                                     ?.asValidObject()
-                            otherChannel()?.send(
-                                    VerificationIntent.OnReadyReceived(
-                                            transactionId = readyContent!!.transactionId,
-                                            fromUser = fromUser,
-                                            viaRoom = roomId,
-                                            readyInfo = readyContent,
-                                    )
-                            )
+                            otherChannel().onEach {
+                                it?.send(
+                                        VerificationIntent.OnReadyReceived(
+                                                transactionId = readyContent!!.transactionId,
+                                                fromUser = fromUser,
+                                                viaRoom = roomId,
+                                                readyInfo = readyContent,
+                                        )
+                                )
+                            }
                         }
                     }
                 }

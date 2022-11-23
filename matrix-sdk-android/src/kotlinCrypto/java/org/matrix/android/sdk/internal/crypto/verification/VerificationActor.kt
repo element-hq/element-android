@@ -1354,7 +1354,14 @@ internal class VerificationActor @AssistedInject constructor(
             }
         }
 
-        val methodValues = if (verificationTrustBackend.getMyTrustedMasterKeyBase64() != null) {
+        // XXX We should probably throw here if you try to verify someone else from an untrusted session
+        val shouldShowQROption = if (msg.otherUserId == myUserId) {
+            true
+        } else {
+            // It's verifying someone else, I should trust my key before doing it?
+            verificationTrustBackend.getUserMasterKeyBase64(myUserId) != null
+        }
+        val methodValues = if (shouldShowQROption) {
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
             val reciprocateMethod = msg.methods
@@ -1452,8 +1459,11 @@ internal class VerificationActor @AssistedInject constructor(
             cancelRequest(matchingRequest, CancelCode.UnexpectedMessage)
             return
         }
-        // for room verification
-        if (msg.fromUser == myUserId && msg.readyInfo.fromDevice != myDevice) {
+        // for room verification (user)
+        // TODO if room and incoming I should check that right?
+        // actually it will not reach that point? handleReadyByAnotherOfMySessionReceived would be called instead? and
+        // the actor never sees event send by me in rooms
+        if (matchingRequest.otherUserId != myUserId && msg.fromUser == myUserId && msg.readyInfo.fromDevice != myDevice) {
             // it's a ready from another of my devices, so we should just
             // ignore following messages related to that request
             Timber.tag(loggerTag.value)

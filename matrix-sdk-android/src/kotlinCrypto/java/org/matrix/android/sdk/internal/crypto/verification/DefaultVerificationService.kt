@@ -63,7 +63,7 @@ import javax.inject.Inject
 @SessionScope
 internal class DefaultVerificationService @Inject constructor(
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val myDeviceId: String?,
         private val cryptoStore: IMXCryptoStore,
 //        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
 //        private val secretShareManager: SecretShareManager,
@@ -582,7 +582,7 @@ internal class DefaultVerificationService @Inject constructor(
         } else if (userId > otherUserId) {
             return true
         } else {
-            return otherDeviceId < deviceId ?: ""
+            return otherDeviceId < myDeviceId ?: ""
         }
     }
 
@@ -1299,8 +1299,10 @@ internal class DefaultVerificationService @Inject constructor(
     override suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String?): PendingVerificationRequest {
         // TODO refactor this with the DM one
 
-        val targetDevices = otherDeviceId?.let { listOf(it) } ?: cryptoStore.getUserDevices(otherUserId)
-                ?.values?.map { it.deviceId }.orEmpty()
+        val targetDevices = otherDeviceId?.let { listOf(it) }
+                ?: cryptoStore.getUserDevices(otherUserId)
+                        ?.filter { it.key != myDeviceId }
+                        ?.values?.map { it.deviceId }.orEmpty()
 
         Timber.i("## Requesting verification to user: $otherUserId with device list $targetDevices")
 

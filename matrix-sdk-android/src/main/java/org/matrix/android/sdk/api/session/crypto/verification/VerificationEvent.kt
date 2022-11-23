@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
-sealed class VerificationEvent(val transactionId: String) {
-    data class RequestAdded(val request: PendingVerificationRequest) : VerificationEvent(request.transactionId)
-    data class RequestUpdated(val request: PendingVerificationRequest) : VerificationEvent(request.transactionId)
-    data class TransactionAdded(val transaction: VerificationTransaction) : VerificationEvent(transaction.transactionId)
-    data class TransactionUpdated(val transaction: VerificationTransaction) : VerificationEvent(transaction.transactionId)
+sealed class VerificationEvent(val transactionId: String, val otherUserId: String) {
+    data class RequestAdded(val request: PendingVerificationRequest) : VerificationEvent(request.transactionId, request.otherUserId)
+    data class RequestUpdated(val request: PendingVerificationRequest) : VerificationEvent(request.transactionId, request.otherUserId)
+    data class TransactionAdded(val transaction: VerificationTransaction) : VerificationEvent(transaction.transactionId, transaction.otherUserId)
+    data class TransactionUpdated(val transaction: VerificationTransaction) : VerificationEvent(transaction.transactionId, transaction.otherUserId)
 }
 
 fun VerificationEvent.getRequest(): PendingVerificationRequest? {

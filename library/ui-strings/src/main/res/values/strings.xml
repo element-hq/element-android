@@ -2287,6 +2287,7 @@
     <string name="verification_verify_user">Verify %s</string>
     <string name="verification_verified_user">Verified %s</string>
     <string name="verification_request_waiting_for">Waiting for %s…</string>
+    <string name="verification_request_waiting_for_recovery">Verifying from Secure Key or Phrase…</string>
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Messages here are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
@@ -2396,6 +2397,8 @@
     <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
     <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
+    <string name="verification_verify_with_another_device">Verify with another device</string>
+    <string name="verification_verify_identity">Verify your identity to access encrypted messages and prove your identity to others.</string>
     <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
     <string name="verification_profile_verify">Verify</string>

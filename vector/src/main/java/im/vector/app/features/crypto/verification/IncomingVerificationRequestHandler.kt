@@ -187,8 +187,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
-                                    // TODO
-                                    // it.navigator.waitSessionVerification(it)
+                                    if (pr.otherUserId == session?.myUserId) {
+                                        it.navigator.showIncomingSelfVerification(it, pr.transactionId)
+                                    }
                                 } else {
                                     it.navigator.openRoom(
                                             context = it,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.crypto.verification.user
+package im.vector.app.features.crypto.verification.self
 
 import android.app.Activity
 import android.os.Bundle
@@ -40,12 +40,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
-        BaseEpoxyVerificationController.InteractionListener {
+class SelfVerificationFragment  : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+        SelfVerificationController.InteractionListener {
 
-    @Inject lateinit var controller: UserVerificationController
+    @Inject lateinit var controller: SelfVerificationController
 
-    private val viewModel by parentFragmentViewModel(UserVerificationViewModel::class)
+    private val viewModel by parentFragmentViewModel(SelfVerificationViewModel::class)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
         return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
@@ -72,20 +72,32 @@ class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
         controller.update(state)
     }
 
-    override fun acceptRequest() {
-        viewModel.handle(VerificationAction.ReadyPendingVerification)
+    override fun onClickRecoverFromPassphrase() {
+        viewModel.handle(VerificationAction.VerifyFromPassphrase)
     }
 
-    override fun declineRequest() {
-        viewModel.handle(VerificationAction.CancelPendingVerification)
+    override fun onClickSkip() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickResetSecurity() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDoneFrom4S() {
+        viewModel.handle(VerificationAction.GotItConclusion(true))
+    }
+
+    override fun keysNotIn4S() {
+        viewModel.handle(VerificationAction.FailedToGetKeysFrom4S)
     }
 
     override fun onClickOnVerificationStart() {
-        viewModel.handle(VerificationAction.RequestVerificationByDM)
+        viewModel.handle(VerificationAction.RequestSelfVerification)
     }
 
     override fun onDone(b: Boolean) {
-        viewModel.handle(VerificationAction.GotItConclusion(true))
+        viewModel.handle(VerificationAction.GotItConclusion(b))
     }
 
     override fun onDoNotMatchButtonTapped() {
@@ -130,8 +142,8 @@ class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(viewModel) { state ->
         viewModel.handle(
                 VerificationAction.RemoteQrCodeScanned(
-                        state.otherUserId,
-                        state.pendingRequest.invoke()?.transactionId ?: "",
+                        state.pendingRequest.invoke()?.otherUserId.orEmpty(),
+                        state.pendingRequest.invoke()?.transactionId.orEmpty(),
                         remoteQrCode
                 )
         )
@@ -142,10 +154,18 @@ class UserVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
     }
 
     override fun onUserDeniesQrCodeScanned() {
-       viewModel.handle(VerificationAction.OtherUserDidNotScanned)
+        viewModel.handle(VerificationAction.OtherUserDidNotScanned)
     }
 
     override fun onUserConfirmsQrCodeScanned() {
         viewModel.handle(VerificationAction.OtherUserScannedSuccessfully)
+    }
+
+    override fun acceptRequest() {
+        viewModel.handle(VerificationAction.ReadyPendingVerification)
+    }
+
+    override fun declineRequest() {
+        viewModel.handle(VerificationAction.CancelPendingVerification)
     }
 }

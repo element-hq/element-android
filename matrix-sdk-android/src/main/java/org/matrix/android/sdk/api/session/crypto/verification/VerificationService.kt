@@ -58,7 +58,7 @@ interface VerificationService {
      * If no specific device should be verified, but we would like to request
      * verification from all our devices, use [requestSelfKeyVerification] instead.
      */
-    suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String?): PendingVerificationRequest?
+    suspend fun requestDeviceVerification(methods: List<VerificationMethod>, otherUserId: String, otherDeviceId: String?): PendingVerificationRequest
 
     /**
      * Request key verification with another user via room events (instead of the to-device API).

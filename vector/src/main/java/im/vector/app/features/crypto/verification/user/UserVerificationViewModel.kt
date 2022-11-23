@@ -59,8 +59,8 @@ import timber.log.Timber
 
 data class UserVerificationViewState(
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
-        val startedTransaction: Async<VerificationTransactionData> = Uninitialized,
         // need something immutable for state to work properly, VerificationTransaction is not
+        val startedTransaction: Async<VerificationTransactionData> = Uninitialized,
         val otherUserMxItem: MatrixItem,
         val otherUserId: String,
         val otherDeviceId: String? = null,
@@ -103,7 +103,7 @@ sealed class VerificationTransactionData(
     ) : VerificationTransactionData(transactionId, otherUserId)
 }
 
-private fun VerificationTransaction.toDataClass(): VerificationTransactionData? {
+fun VerificationTransaction.toDataClass(): VerificationTransactionData? {
     return when (this) {
         is SasVerificationTransaction -> {
             VerificationTransactionData.SasTransactionData(
@@ -255,7 +255,6 @@ class UserVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VerificationAction.CancelledFromSsss -> TODO()
             is VerificationAction.GotItConclusion -> {
                 // just dismiss
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
@@ -369,7 +368,6 @@ class UserVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VerificationAction.SkipVerification -> TODO()
             is VerificationAction.StartSASVerification -> {
                 withState { state ->
                     val request = state.pendingRequest.invoke() ?: return@withState
@@ -379,8 +377,14 @@ class UserVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VerificationAction.VerifyFromPassphrase -> TODO()
-            VerificationAction.SecuredStorageHasBeenReset -> TODO()
+            VerificationAction.CancelledFromSsss,
+            VerificationAction.SkipVerification,
+            VerificationAction.VerifyFromPassphrase,
+            VerificationAction.SecuredStorageHasBeenReset,
+            VerificationAction.FailedToGetKeysFrom4S -> {
+                // Not applicable for user verification
+            }
+            VerificationAction.RequestSelfVerification -> TODO()
         }
     }
 

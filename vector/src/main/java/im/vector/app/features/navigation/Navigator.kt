@@ -83,7 +83,7 @@ interface Navigator {
 
     fun requestSelfSessionVerification(context: Context)
 
-//    fun waitSessionVerification(fragmentActivity: FragmentActivity)
+    fun showIncomingSelfVerification(fragmentActivity: FragmentActivity, transactionId: String)
 
     fun upgradeSessionSecurity(fragmentActivity: FragmentActivity, initCrossSigningOnly: Boolean)
 

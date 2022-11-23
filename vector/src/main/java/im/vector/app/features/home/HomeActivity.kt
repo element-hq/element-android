@@ -64,7 +64,6 @@ import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -77,6 +76,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceCreationActivity
@@ -87,9 +87,11 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
@@ -452,8 +454,16 @@ class HomeActivity :
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            TODO()
-           // it.navigator.waitSessionVerification(it)
+            // check first if it's not an outdated request?
+            activeSessionHolder.getSafeActiveSession()?.let { session ->
+                session.coroutineScope.launch {
+                    if (!session.cryptoService().crossSigningService().isCrossSigningVerified()) {
+                        withContext(Dispatchers.Main) {
+                            it.navigator.requestSelfSessionVerification(it)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -464,11 +474,11 @@ class HomeActivity :
                 R.string.crosssigning_verify_this_session,
                 R.string.confirm_your_identity
         ) {
-            navigator.openSettings(this, SettingsActivityPayload.SecurityPrivacy)
+//            navigator.openSettings(this, SettingsActivityPayload.SecurityPrivacy)
 //            if (event.waitForIncomingRequest) {
 //                //it.navigator.waitSessionVerification(it)
 //            } else {
-//                it.navigator.requestSelfSessionVerification(it)
+                it.navigator.requestSelfSessionVerification(it)
 //            }
         }
     }
