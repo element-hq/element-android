@@ -18,6 +18,7 @@ package im.vector.app.features.voicebroadcast.recording
 
 import androidx.annotation.IntRange
 import im.vector.app.features.voice.VoiceRecorder
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import java.io.File
 
 interface VoiceBroadcastRecorder : VoiceRecorder {
@@ -31,7 +32,7 @@ interface VoiceBroadcastRecorder : VoiceRecorder {
     /** Current remaining time of recording, in seconds, if any. */
     val currentRemainingTime: Long?
 
-    fun startRecord(roomId: String, chunkLength: Int, maxLength: Int)
+    fun startRecordVoiceBroadcast(voiceBroadcast: VoiceBroadcast, chunkLength: Int, maxLength: Int)
     fun addListener(listener: Listener)
     fun removeListener(listener: Listener)
 

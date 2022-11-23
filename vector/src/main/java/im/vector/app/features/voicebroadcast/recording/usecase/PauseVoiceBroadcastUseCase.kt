@@ -62,11 +62,5 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
                         lastChunkSequence = voiceBroadcastRecorder?.currentSequence,
                 ).toContent(),
         )
-
-        pauseRecording()
-    }
-
-    private fun pauseRecording() {
-        voiceBroadcastRecorder?.pauseRecord()
     }
 }

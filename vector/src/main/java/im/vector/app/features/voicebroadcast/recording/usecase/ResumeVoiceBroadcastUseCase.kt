@@ -20,7 +20,6 @@ import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -31,8 +30,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ResumeVoiceBroadcastUseCase @Inject constructor(
-        private val session: Session,
-        private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
+        private val session: Session
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -66,11 +64,5 @@ class ResumeVoiceBroadcastUseCase @Inject constructor(
                         voiceBroadcastStateStr = VoiceBroadcastState.RESUMED.value,
                 ).toContent(),
         )
-
-        resumeRecording()
-    }
-
-    private fun resumeRecording() {
-        voiceBroadcastRecorder?.resumeRecord()
     }
 }
