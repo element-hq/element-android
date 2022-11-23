@@ -41,10 +41,9 @@ class NotificationsSettingUpdater @Inject constructor(
     private var job: Job? = null
     private var prefChangeListener: OnSharedPreferenceChangeListener? = null
 
-    // TODO add unit tests
-    fun onSessionsStarted(session: Session) {
+    fun onSessionStarted(session: Session) {
         updateEnableNotificationsSettingOnChange(session)
-        updateNotificationSettingsAccountDataOnChange(session)
+        updateAccountDataOnBackgroundSyncChange(session)
     }
 
     private fun updateEnableNotificationsSettingOnChange(session: Session) {
@@ -54,7 +53,7 @@ class NotificationsSettingUpdater @Inject constructor(
         }
     }
 
-    private fun updateNotificationSettingsAccountDataOnChange(session: Session) {
+    private fun updateAccountDataOnBackgroundSyncChange(session: Session) {
         prefChangeListener?.let { vectorPreferences.unsubscribeToChanges(it) }
         prefChangeListener = null
         prefChangeListener = createPrefListener(session).also {

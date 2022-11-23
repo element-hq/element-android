@@ -53,7 +53,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         webRtcCallManager.checkForProtocolsSupportIfNeeded()
         updateMatrixClientInfoIfNeeded(session)
         createNotificationSettingsAccountDataIfNeeded(session)
-        notificationsSettingUpdater.onSessionsStarted(session)
+        notificationsSettingUpdater.onSessionStarted(session)
     }
 
     private fun updateMatrixClientInfoIfNeeded(session: Session) {

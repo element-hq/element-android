@@ -26,6 +26,6 @@ class FakeNotificationsSettingUpdater {
     val instance = mockk<NotificationsSettingUpdater>()
 
     fun givenOnSessionsStarted(session: Session) {
-        justRun { instance.onSessionsStarted(session) }
+        justRun { instance.onSessionStarted(session) }
     }
 }
