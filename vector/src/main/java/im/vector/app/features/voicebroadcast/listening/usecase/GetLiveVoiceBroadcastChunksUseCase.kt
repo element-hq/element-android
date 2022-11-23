@@ -24,7 +24,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.sequence
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
 import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +48,7 @@ import javax.inject.Inject
  */
 class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastEventUseCase,
+        private val getVoiceBroadcastEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase,
 ) {
 
     fun execute(voiceBroadcast: VoiceBroadcast): Flow<List<MessageAudioEvent>> {
