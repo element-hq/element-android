@@ -17,7 +17,7 @@
 package im.vector.app.features.sync
 
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 
 object SyncUtils {
     // Get only managed types by Element

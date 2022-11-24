@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.session.filter.DefaultGetCurrentFilterTask
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.test.fakes.FakeFilterRepository
 import org.matrix.android.sdk.test.fakes.FakeHomeServerCapabilitiesDataSource

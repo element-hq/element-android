@@ -22,7 +22,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 
 class FakeFilterService : FilterService by mockk() {
 

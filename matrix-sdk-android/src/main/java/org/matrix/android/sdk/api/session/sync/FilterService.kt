@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.sync
 
-import org.matrix.android.sdk.internal.session.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 
 interface FilterService {
 
