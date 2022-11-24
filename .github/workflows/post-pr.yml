@@ -16,7 +16,7 @@ env:
 jobs:
 
   # More info on should-i-run:
-  # If this fails to run (the IF doesn't complete) then the needs will not be satisfied for any of the 
+  # If this fails to run (the IF doesn't complete) then the needs will not be satisfied for any of the
   # other jobs below, so none will run.
   # except for the notification job at the bottom which will run all the time, unless should-i-run isn't
   # successful, or all the other jobs have succeeded
@@ -27,11 +27,12 @@ jobs:
     if: github.event.pull_request.merged # Additionally require PR to have been completely merged.
     steps:
       - run: echo "Run those tests!" # no-op success
-        
+
   ui-tests:
     name: UI Tests (Synapse)
     needs: should-i-run
     runs-on: buildjet-4vcpu-ubuntu-2204
+    timeout-minutes: 90 # We might need to increase it if the time for tests grows
     strategy:
       fail-fast: false
       matrix:
