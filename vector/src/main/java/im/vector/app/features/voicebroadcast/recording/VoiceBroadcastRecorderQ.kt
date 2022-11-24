@@ -97,6 +97,7 @@ class VoiceBroadcastRecorderQ(
     }
 
     override fun pauseRecord() {
+        if (recordingState != VoiceBroadcastRecorder.State.Recording) return
         tryOrNull { mediaRecorder?.stop() }
         mediaRecorder?.reset()
         recordingState = VoiceBroadcastRecorder.State.Paused
@@ -105,6 +106,7 @@ class VoiceBroadcastRecorderQ(
     }
 
     override fun resumeRecord() {
+        if (recordingState != VoiceBroadcastRecorder.State.Paused) return
         currentSequence++
         currentVoiceBroadcast?.let { startRecord(it.roomId) }
         recordingState = VoiceBroadcastRecorder.State.Recording
