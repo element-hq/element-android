@@ -7,6 +7,7 @@
     * [Create a GitHub token](#create-a-github-token)
   * [Provide artifact URL](#provide-artifact-url)
   * [Next steps](#next-steps)
+  * [Future improvement](#future-improvement)
 
 <!--- END -->
 

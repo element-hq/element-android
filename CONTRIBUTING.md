@@ -13,6 +13,7 @@
   * [Code quality](#code-quality)
     * [Internal tool](#internal-tool)
     * [ktlint](#ktlint)
+    * [knit](#knit)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
   * [Tests](#tests)
