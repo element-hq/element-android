@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformWhile
-import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -125,7 +125,7 @@ class GetMostRecentVoiceBroadcastStateEventUseCase @Inject constructor(
                                         event.hasValue() && event.get().root.isRedacted().not()
                                     }
                                     .flatMapLatest { event ->
-                                        if (event.getOrNull()?.root?.isRedacted().orFalse()) {
+                                        if (event.getOrNull()?.root?.isRedacted().orTrue()) {
                                             // event is null or redacted, switch to the latest not redacted event
                                             getMostRecentRelatedEventFlow(room, voiceBroadcast)
                                         } else {
