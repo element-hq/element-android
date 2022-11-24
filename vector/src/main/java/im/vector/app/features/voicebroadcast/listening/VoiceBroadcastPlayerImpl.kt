@@ -376,6 +376,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             // Notify live mode change to all the listeners attached to the current voice broadcast id
             listeners[voiceBroadcastId]?.forEach { listener -> listener.onLiveModeChanged(isLiveListening) }
         }
+
+        // Live has ended and last chunk has been reached, we can stop the playback
+        if (!isLiveListening && playingState == State.BUFFERING && playlist.currentSequence == mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence) {
+            stop()
+        }
     }
 
     private fun onNextMediaPlayerStarted(mp: MediaPlayer) {
