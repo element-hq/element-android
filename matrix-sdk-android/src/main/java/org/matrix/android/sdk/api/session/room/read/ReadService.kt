@@ -38,6 +38,8 @@ interface ReadService {
 
     /**
      * Set the read receipt on the event with provided eventId.
+     * @param eventId the id of the event where read receipt will be set
+     * @param threadId the id of the thread in which read receipt will be set. For main thread use [ReadService.THREAD_ID_MAIN] constant
      */
     suspend fun setReadReceipt(eventId: String, threadId: String)
 
