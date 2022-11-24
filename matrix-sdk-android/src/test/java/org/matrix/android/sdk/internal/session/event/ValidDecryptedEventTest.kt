@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 
 class ValidDecryptedEventTest {
 
-    val fakeEvent = Event(
+    private val fakeEvent = Event(
             type = EventType.ENCRYPTED,
             eventId = "\$eventId",
             roomId = "!fakeRoom",
