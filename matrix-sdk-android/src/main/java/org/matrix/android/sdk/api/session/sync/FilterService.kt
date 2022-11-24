@@ -23,5 +23,5 @@ interface FilterService {
     /**
      * Configure the filter for the sync.
      */
-    fun setSyncFilter(filterBuilder: SyncFilterBuilder)
+    suspend fun setSyncFilter(filterBuilder: SyncFilterBuilder)
 }

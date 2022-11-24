@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -31,10 +30,8 @@ internal class DefaultFilterService @Inject constructor(
 ) : FilterService {
 
     // TODO Pass a list of support events instead
-    override fun setSyncFilter(filterBuilder: SyncFilterBuilder) {
-        taskExecutor.executorScope.launch {
-            filterRepository.storeFilterParams(filterBuilder.extractParams())
-        }
+    override suspend fun setSyncFilter(filterBuilder: SyncFilterBuilder) {
+        filterRepository.storeFilterParams(filterBuilder.extractParams())
 
         // don't upload/store filter until homeserver capabilities are fetched
         homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.let { homeServerCapabilities ->

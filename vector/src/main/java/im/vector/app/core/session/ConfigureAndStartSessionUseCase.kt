@@ -41,7 +41,9 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
     fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
-        session.filterService().setSyncFilter(SyncUtils.getSyncFilterBuilder())
+        session.coroutineScope.launch {
+            session.filterService().setSyncFilter(SyncUtils.getSyncFilterBuilder())
+        }
         if (startSyncing) {
             session.startSyncing(context)
         }
