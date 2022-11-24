@@ -54,7 +54,8 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
     private suspend fun pauseVoiceBroadcast(room: Room, reference: RelationDefaultContent?) {
         Timber.d("## PauseVoiceBroadcastUseCase: Send new voice broadcast info state event")
 
-        // immediately pause the recording
+        // save the last sequence number and immediately pause the recording
+        val lastSequence = voiceBroadcastRecorder?.currentSequence
         pauseRecording()
 
         room.stateService().sendStateEvent(
@@ -63,7 +64,7 @@ class PauseVoiceBroadcastUseCase @Inject constructor(
                 body = MessageVoiceBroadcastInfoContent(
                         relatesTo = reference,
                         voiceBroadcastStateStr = VoiceBroadcastState.PAUSED.value,
-                        lastChunkSequence = voiceBroadcastRecorder?.currentSequence,
+                        lastChunkSequence = lastSequence,
                 ).toContent(),
         )
     }
