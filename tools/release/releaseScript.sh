@@ -214,7 +214,7 @@ else
 fi
 
 printf "\n================================================================================\n"
-read -p "Wait for Buildkite https://buildkite.com/matrix-dot-org/element-android/builds?branch=main to build the 'main' branch. Press enter when it's done."
+read -p "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch. Press enter when it's done."
 
 printf "\n================================================================================\n"
 printf "Running the release script...\n"

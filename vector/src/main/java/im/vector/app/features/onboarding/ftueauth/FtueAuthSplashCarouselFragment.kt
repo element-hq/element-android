@@ -94,8 +94,8 @@ class FtueAuthSplashCarouselFragment :
         if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
-            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}#${buildMeta.buildNumber}\n" +
-                    "Branch: ${buildMeta.gitBranchName}"
+            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
+                    "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
         views.splashCarousel.registerAutomaticUntilInteractionTransitions()
