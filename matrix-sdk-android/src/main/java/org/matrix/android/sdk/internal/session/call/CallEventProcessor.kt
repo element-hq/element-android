@@ -54,7 +54,7 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
         return allowedTypes.contains(eventType)
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         eventsToPostProcess.add(event)
     }
 

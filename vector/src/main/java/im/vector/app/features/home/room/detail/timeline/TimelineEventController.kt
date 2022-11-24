@@ -442,6 +442,7 @@ class TimelineEventController @Inject constructor(
                 val timelineEventsGroup = timelineEventsGroups.getOrNull(event)
                 val params = TimelineItemFactoryParams(
                         event = event,
+                        lastEdit = event.annotations?.editSummary?.latestEdit,
                         prevEvent = prevEvent,
                         prevDisplayableEvent = prevDisplayableEvent,
                         nextEvent = nextEvent,

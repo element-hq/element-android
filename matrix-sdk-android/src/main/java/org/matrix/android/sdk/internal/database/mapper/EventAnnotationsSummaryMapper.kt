@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import org.matrix.android.sdk.api.session.room.model.EditAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedSummary
@@ -35,18 +34,7 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceLocalEcho.toList()
                     )
                 },
-                editSummary = annotationsSummary.editSummary
-                        ?.let {
-                            val latestEdition = it.editions.maxByOrNull { editionOfEvent -> editionOfEvent.timestamp } ?: return@let null
-                            EditAggregatedSummary(
-                                    latestContent = ContentMapper.map(latestEdition.content),
-                                    sourceEvents = it.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
-                                            .map { editionOfEvent -> editionOfEvent.eventId },
-                                    localEchos = it.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }
-                                            .map { editionOfEvent -> editionOfEvent.eventId },
-                                    lastEditTs = latestEdition.timestamp
-                            )
-                        },
+                editSummary = EditAggregatedSummaryEntityMapper.map(annotationsSummary.editSummary),
                 referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
                     ReferencesAggregatedSummary(
                             ContentMapper.map(it.content),

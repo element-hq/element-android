@@ -19,7 +19,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * <code>
+ * Server side relation aggregation.
+ * ```
  *  {
  *       "m.annotation": {
  *          "chunk": [
@@ -43,12 +44,13 @@ import com.squareup.moshi.JsonClass
  *           "count": 1
  *           }
  *      }
- * </code>
+ * ```
  */
 
 @JsonClass(generateAdapter = true)
 data class AggregatedRelations(
         @Json(name = "m.annotation") val annotations: AggregatedAnnotation? = null,
         @Json(name = "m.reference") val references: DefaultUnsignedRelationInfo? = null,
+        @Json(name = "m.replace") val replaces: AggregatedReplace? = null,
         @Json(name = RelationType.THREAD) val latestThread: LatestThreadUnsignedRelation? = null
 )

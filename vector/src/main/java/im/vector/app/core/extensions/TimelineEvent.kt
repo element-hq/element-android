@@ -19,6 +19,7 @@ package im.vector.app.core.extensions
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -40,7 +41,8 @@ fun TimelineEvent.getVectorLastMessageContent(): MessageContent? {
     // Iterate on event types which are not part of the matrix sdk, otherwise fallback to the sdk method
     return when (root.getClearType()) {
         VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
-            (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageVoiceBroadcastInfoContent>()
+            (annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>().toContent().toModel<MessageVoiceBroadcastInfoContent>()
+                    ?: root.getClearContent().toModel<MessageVoiceBroadcastInfoContent>())
         }
         else -> getLastMessageContent()
     }

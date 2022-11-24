@@ -83,7 +83,6 @@ internal fun ChunkEntity.addTimelineEvent(
         this.eventId = eventId
         this.roomId = roomId
         this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
-                ?.also { it.cleanUp(eventEntity.sender) }
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
         this.ownedByThreadChunk = ownedByThreadChunk
