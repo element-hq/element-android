@@ -16,11 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.task.Task
-import timber.log.Timber
 import javax.inject.Inject
 
 internal interface GetCurrentFilterTask : Task<Unit, String>

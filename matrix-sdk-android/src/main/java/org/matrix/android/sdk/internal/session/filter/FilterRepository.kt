@@ -16,27 +16,27 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 
 /**
- * Repository for request filters
+ * Repository for request filters.
  */
 internal interface FilterRepository {
 
     /**
-     * Stores sync filter and room filter
+     * Stores sync filter and room filter.
      * Note: It looks like we could use [Filter.room.timeline] instead of a separate [RoomEventFilter], but it's not clear if it's safe, so research is needed
      * @return true if the filterBody has changed, or need to be sent to the server.
      */
     suspend fun storeSyncFilter(filter: Filter, filterId: String, roomEventFilter: RoomEventFilter)
 
     /**
-     * Returns stored sync filter's JSON body if it exists
+     * Returns stored sync filter's JSON body if it exists.
      */
     suspend fun getStoredSyncFilterBody(): String?
 
     /**
-     * Returns stored sync filter's ID if it exists
+     * Returns stored sync filter's ID if it exists.
      */
     suspend fun getStoredSyncFilterId(): String?
 
@@ -46,12 +46,12 @@ internal interface FilterRepository {
     suspend fun getRoomFilterBody(): String
 
     /**
-     * Returns filter params stored in local storage if it exists
+     * Returns filter params stored in local storage if it exists.
      */
     suspend fun getStoredFilterParams(): SyncFilterParams?
 
     /**
-     * Stores filter params to local storage
+     * Stores filter params to local storage.
      */
     suspend fun storeFilterParams(params: SyncFilterParams)
 }

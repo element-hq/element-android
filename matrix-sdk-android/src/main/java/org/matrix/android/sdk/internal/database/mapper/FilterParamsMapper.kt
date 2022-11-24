@@ -17,19 +17,19 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import io.realm.RealmList
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 import javax.inject.Inject
 
 internal class FilterParamsMapper @Inject constructor() {
 
     fun map(entity: SyncFilterParamsEntity): SyncFilterParams {
-        val eventTypes = if (entity.listOfSupportedEventTypesHasSet) {
+        val eventTypes = if (entity.listOfSupportedEventTypesHasBeenSet) {
             entity.listOfSupportedEventTypes?.toList()
         } else {
             null
         }
-        val stateEventTypes = if (entity.listOfSupportedStateEventTypesHasSet) {
+        val stateEventTypes = if (entity.listOfSupportedStateEventTypesHasBeenSet) {
             entity.listOfSupportedStateEventTypes?.toList()
         } else {
             null
@@ -49,9 +49,9 @@ internal class FilterParamsMapper @Inject constructor() {
                 lazyLoadMembersForMessageEvents = params.lazyLoadMembersForMessageEvents,
                 lazyLoadMembersForStateEvents = params.lazyLoadMembersForStateEvents,
                 listOfSupportedEventTypes = params.listOfSupportedEventTypes.toRealmList(),
-                listOfSupportedEventTypesHasSet = params.listOfSupportedEventTypes != null,
+                listOfSupportedEventTypesHasBeenSet = params.listOfSupportedEventTypes != null,
                 listOfSupportedStateEventTypes = params.listOfSupportedStateEventTypes.toRealmList(),
-                listOfSupportedStateEventTypesHasSet = params.listOfSupportedEventTypes != null,
+                listOfSupportedStateEventTypesHasBeenSet = params.listOfSupportedStateEventTypes != null,
         )
     }
 

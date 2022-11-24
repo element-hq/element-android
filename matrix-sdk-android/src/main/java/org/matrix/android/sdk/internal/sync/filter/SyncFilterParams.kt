@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.sync.filter
+package org.matrix.android.sdk.internal.sync.filter
 
 internal data class SyncFilterParams(
         val lazyLoadMembersForStateEvents: Boolean? = null,

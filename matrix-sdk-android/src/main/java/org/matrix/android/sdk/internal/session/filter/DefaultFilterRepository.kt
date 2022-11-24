@@ -18,18 +18,19 @@ package org.matrix.android.sdk.internal.session.filter
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.database.mapper.FilterParamsMapper
 import org.matrix.android.sdk.internal.database.model.FilterEntity
 import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal class DefaultFilterRepository @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
+        private val filterParamsMapper: FilterParamsMapper
 ) : FilterRepository {
 
     override suspend fun storeSyncFilter(filter: Filter, filterId: String, roomEventFilter: RoomEventFilter) {
@@ -72,15 +73,14 @@ internal class DefaultFilterRepository @Inject constructor(
     override suspend fun getStoredFilterParams(): SyncFilterParams? {
         return monarchy.awaitTransaction { realm ->
             realm.where<SyncFilterParamsEntity>().findFirst()?.let {
-                val params = FilterParamsMapper().map(it)
-                 params
+                filterParamsMapper.map(it)
             }
         }
     }
 
     override suspend fun storeFilterParams(params: SyncFilterParams) {
         return monarchy.awaitTransaction { realm ->
-            val entity = FilterParamsMapper().map(params)
+            val entity = filterParamsMapper.map(params)
             realm.insertOrUpdate(entity)
         }
     }

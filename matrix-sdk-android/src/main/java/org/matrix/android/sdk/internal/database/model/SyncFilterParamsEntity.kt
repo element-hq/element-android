@@ -20,16 +20,16 @@ import io.realm.RealmList
 import io.realm.RealmObject
 
 /**
- * This entity stores Sync Filter configuration data, provided by the client
+ * This entity stores Sync Filter configuration data, provided by the client.
  */
 internal open class SyncFilterParamsEntity(
         var lazyLoadMembersForStateEvents: Boolean? = null,
         var lazyLoadMembersForMessageEvents: Boolean? = null,
         var useThreadNotifications: Boolean? = null,
         var listOfSupportedEventTypes: RealmList<String>? = null,
-        var listOfSupportedEventTypesHasSet: Boolean = false,
+        var listOfSupportedEventTypesHasBeenSet: Boolean = false,
         var listOfSupportedStateEventTypes: RealmList<String>? = null,
-        var listOfSupportedStateEventTypesHasSet: Boolean = false,
+        var listOfSupportedStateEventTypesHasBeenSet: Boolean = false,
 ) : RealmObject() {
 
     companion object

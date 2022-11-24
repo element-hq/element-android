@@ -24,8 +24,8 @@ import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.launch
 import im.vector.app.features.sync.SyncUtils
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.task.TaskExecutor

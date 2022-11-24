@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 
 class SyncFilterBuilder {
     private var lazyLoadMembersForStateEvents: Boolean? = null
