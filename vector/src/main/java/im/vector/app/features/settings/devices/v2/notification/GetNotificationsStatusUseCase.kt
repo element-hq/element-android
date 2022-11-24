@@ -31,20 +31,30 @@ import javax.inject.Inject
 
 class GetNotificationsStatusUseCase @Inject constructor(
         private val canToggleNotificationsViaPusherUseCase: CanToggleNotificationsViaPusherUseCase,
-        private val checkIfCanToggleNotificationsViaAccountDataUseCase: CheckIfCanToggleNotificationsViaAccountDataUseCase,
+        private val canToggleNotificationsViaAccountDataUseCase: CanToggleNotificationsViaAccountDataUseCase,
 ) {
 
     fun execute(session: Session, deviceId: String): Flow<NotificationsStatus> {
-        return when {
-            checkIfCanToggleNotificationsViaAccountDataUseCase.execute(session, deviceId) -> {
-                session.flow()
-                        .liveUserAccountData(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
-                        .unwrap()
-                        .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
-                        .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
-                        .distinctUntilChanged()
-            }
-            else -> canToggleNotificationsViaPusherUseCase.execute(session)
+        return canToggleNotificationsViaAccountDataUseCase.execute(session, deviceId)
+                .flatMapLatest { canToggle ->
+                    if (canToggle) {
+                        notificationStatusFromAccountData(session, deviceId)
+                    } else {
+                        notificationStatusFromPusher(session, deviceId)
+                    }
+                }
+                .distinctUntilChanged()
+    }
+
+    private fun notificationStatusFromAccountData(session: Session, deviceId: String) =
+            session.flow()
+                    .liveUserAccountData(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
+                    .unwrap()
+                    .map { it.content.toModel<LocalNotificationSettingsContent>()?.isSilenced?.not() }
+                    .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
+
+    private fun notificationStatusFromPusher(session: Session, deviceId: String) =
+            canToggleNotificationsViaPusherUseCase.execute(session)
                     .flatMapLatest { canToggle ->
                         if (canToggle) {
                             session.flow()
@@ -63,6 +73,4 @@ class GetNotificationsStatusUseCase @Inject constructor(
                             flowOf(NotificationsStatus.NOT_SUPPORTED)
                         }
                     }
-        }
-    }
 }
