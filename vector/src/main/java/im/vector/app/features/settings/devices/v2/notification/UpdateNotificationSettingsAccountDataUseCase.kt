@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.notification
 
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.session.Session
@@ -27,13 +28,14 @@ import javax.inject.Inject
  */
 class UpdateNotificationSettingsAccountDataUseCase @Inject constructor(
         private val vectorPreferences: VectorPreferences,
+        private val unifiedPushHelper: UnifiedPushHelper,
         private val getNotificationSettingsAccountDataUseCase: GetNotificationSettingsAccountDataUseCase,
         private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
         private val deleteNotificationSettingsAccountDataUseCase: DeleteNotificationSettingsAccountDataUseCase,
 ) {
 
     suspend fun execute(session: Session) {
-        if (vectorPreferences.isBackgroundSyncEnabled()) {
+        if (unifiedPushHelper.isBackgroundSync()) {
             setCurrentNotificationStatus(session)
         } else {
             deleteCurrentNotificationStatus(session)

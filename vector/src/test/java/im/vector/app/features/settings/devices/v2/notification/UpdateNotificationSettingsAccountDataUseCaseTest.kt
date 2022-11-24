@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.FakeUnifiedPushHelper
 import im.vector.app.test.fakes.FakeVectorPreferences
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -30,12 +31,14 @@ import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 class UpdateNotificationSettingsAccountDataUseCaseTest {
 
     private val fakeVectorPreferences = FakeVectorPreferences()
+    private val fakeUnifiedPushHelper = FakeUnifiedPushHelper()
     private val fakeGetNotificationSettingsAccountDataUseCase = mockk<GetNotificationSettingsAccountDataUseCase>()
     private val fakeSetNotificationSettingsAccountDataUseCase = mockk<SetNotificationSettingsAccountDataUseCase>()
     private val fakeDeleteNotificationSettingsAccountDataUseCase = mockk<DeleteNotificationSettingsAccountDataUseCase>()
 
     private val updateNotificationSettingsAccountDataUseCase = UpdateNotificationSettingsAccountDataUseCase(
             vectorPreferences = fakeVectorPreferences.instance,
+            unifiedPushHelper = fakeUnifiedPushHelper.instance,
             getNotificationSettingsAccountDataUseCase = fakeGetNotificationSettingsAccountDataUseCase,
             setNotificationSettingsAccountDataUseCase = fakeSetNotificationSettingsAccountDataUseCase,
             deleteNotificationSettingsAccountDataUseCase = fakeDeleteNotificationSettingsAccountDataUseCase,
@@ -50,7 +53,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
         fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
-        fakeVectorPreferences.givenIsBackgroundSyncEnabled(true)
+        fakeUnifiedPushHelper.givenIsBackgroundSyncReturns(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
                         isSilenced = null
@@ -64,7 +67,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
 
         // Then
         verify {
-            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
+            fakeUnifiedPushHelper.instance.isBackgroundSync()
             fakeVectorPreferences.instance.areNotificationEnabledForDevice()
             fakeGetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
         }
@@ -81,7 +84,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
         fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
-        fakeVectorPreferences.givenIsBackgroundSyncEnabled(true)
+        fakeUnifiedPushHelper.givenIsBackgroundSyncReturns(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
                         isSilenced = false
@@ -95,7 +98,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
 
         // Then
         verify {
-            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
+            fakeUnifiedPushHelper.instance.isBackgroundSync()
             fakeVectorPreferences.instance.areNotificationEnabledForDevice()
             fakeGetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId)
         }
@@ -110,14 +113,14 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         val aSession = FakeSession()
         aSession.givenSessionId(aDeviceId)
         coJustRun { fakeDeleteNotificationSettingsAccountDataUseCase.execute(any()) }
-        fakeVectorPreferences.givenIsBackgroundSyncEnabled(false)
+        fakeUnifiedPushHelper.givenIsBackgroundSyncReturns(false)
 
         // When
         updateNotificationSettingsAccountDataUseCase.execute(aSession)
 
         // Then
         verify {
-            fakeVectorPreferences.instance.isBackgroundSyncEnabled()
+            fakeUnifiedPushHelper.instance.isBackgroundSync()
         }
         coVerify { fakeDeleteNotificationSettingsAccountDataUseCase.execute(aSession) }
         coVerify(inverse = true) { fakeSetNotificationSettingsAccountDataUseCase.execute(aSession, aDeviceId, any()) }

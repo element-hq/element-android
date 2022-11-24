@@ -31,4 +31,8 @@ class FakeUnifiedPushHelper {
     fun givenGetEndpointOrTokenReturns(endpoint: String?) {
         every { instance.getEndpointOrToken() } returns endpoint
     }
+
+    fun givenIsBackgroundSyncReturns(enabled: Boolean) {
+        every { instance.isBackgroundSync() } returns enabled
+    }
 }
