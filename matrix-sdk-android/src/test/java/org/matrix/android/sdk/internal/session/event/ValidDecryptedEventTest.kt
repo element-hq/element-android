@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
-import org.matrix.android.sdk.internal.session.events.toValidDecryptedEvent
 
 class ValidDecryptedEventTest {
 

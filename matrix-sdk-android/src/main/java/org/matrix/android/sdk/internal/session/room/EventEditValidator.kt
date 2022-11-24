@@ -21,9 +21,9 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.session.events.toValidDecryptedEvent
 import timber.log.Timber
 import javax.inject.Inject
 

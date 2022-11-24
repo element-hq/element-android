@@ -18,8 +18,8 @@ package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
-import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo043(realm: DynamicRealm) : RealmMigrator(realm, 43) {
@@ -27,11 +27,9 @@ internal class MigrateSessionTo043(realm: DynamicRealm) : RealmMigrator(realm, 4
     override fun doMigrate(realm: DynamicRealm) {
         // content(string) & senderId(string) have been removed and replaced by a link to the actual event
         realm.schema.get("EditionOfEvent")
-                ?.removeField("senderId")
-                ?.removeField("content")
                 ?.addRealmObjectField(EditionOfEventFields.EVENT.`$`, realm.schema.get("EventEntity")!!)
                 ?.transform { dynamicObject ->
-                    realm.where(EventEntity::javaClass.name)
+                    realm.where("EventEntity")
                             .equalTo(EventEntityFields.EVENT_ID, dynamicObject.getString(EditionOfEventFields.EVENT_ID))
                             .equalTo(EventEntityFields.SENDER, dynamicObject.getString("senderId"))
                             .findFirst()
@@ -39,5 +37,7 @@ internal class MigrateSessionTo043(realm: DynamicRealm) : RealmMigrator(realm, 4
                                 dynamicObject.setObject(EditionOfEventFields.EVENT.`$`, it)
                             }
                 }
+                ?.removeField("senderId")
+                ?.removeField("content")
     }
 }

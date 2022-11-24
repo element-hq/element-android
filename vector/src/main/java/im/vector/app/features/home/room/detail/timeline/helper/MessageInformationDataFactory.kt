@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -44,7 +45,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.internal.session.events.toValidDecryptedEvent
 import javax.inject.Inject
 
 /**
