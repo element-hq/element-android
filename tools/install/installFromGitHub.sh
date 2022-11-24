@@ -4,7 +4,8 @@
 set -e
 
 if [[ "$#" -ne 1 ]]; then
-  echo "Usage: $0 GitHub_token" >&2
+  echo "Usage: $0 GitHub_Token" >&2
+  echo "Read more about this script in the doc ./docs/installing_from_ci.md"
   exit 1
 fi
 
