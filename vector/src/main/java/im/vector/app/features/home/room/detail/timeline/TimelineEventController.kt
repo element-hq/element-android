@@ -515,7 +515,8 @@ class TimelineEventController @Inject constructor(
                 readReceiptsItem = readReceiptsItemFactory.create(
                         event.eventId,
                         readReceipts,
-                        callback
+                        callback,
+                        partialState.isFromThreadTimeline(),
                 ),
                 formattedDayModel = formattedDayModel,
                 mergedHeaderModel = mergedHeaderModel
