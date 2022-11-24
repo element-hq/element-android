@@ -19,13 +19,10 @@ package org.matrix.android.sdk.internal.session.filter
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultFilterService @Inject constructor(
         private val saveFilterTask: SaveFilterTask,
-        private val taskExecutor: TaskExecutor,
         private val filterRepository: FilterRepository,
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : FilterService {
@@ -36,13 +33,11 @@ internal class DefaultFilterService @Inject constructor(
 
         // don't upload/store filter until homeserver capabilities are fetched
         homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.let { homeServerCapabilities ->
-            saveFilterTask
-                    .configureWith(
-                            SaveFilterTask.Params(
-                                    filter = filterBuilder.build(homeServerCapabilities)
-                            )
+            saveFilterTask.execute(
+                    SaveFilterTask.Params(
+                            filter = filterBuilder.build(homeServerCapabilities)
                     )
-                    .executeBy(taskExecutor)
+            )
         }
     }
 }
