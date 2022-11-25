@@ -2791,4 +2791,25 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_voice_broadcast_unauthorized_title">Tidak dapat memulai siaran suara baru</string>
     <string name="a11y_voice_broadcast_fast_forward">Maju cepat 30 detik</string>
     <string name="a11y_voice_broadcast_fast_backward">Mundur cepat 30 detik</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Sesi terverifikasi ada di mana pun Anda menggunakan Element setelah memasukkan frasa sandi atau mengonfirmasi identitas Anda dengan sesi terverifikasi lainnya.
+\n
+\nIni berarti Anda memiliki semua kunci yang diperlukan untuk membuka kunci pesan terenkripsi dan mengonfirmasi kepada pengguna lain bahwa Anda memercayai sesi ini.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="other">Keluarkan %1$d sesi</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Keluarkan</string>
+    <string name="voice_broadcast_recording_time_left">%1$s tersisa</string>
+    <string name="message_reply_to_sender_created_poll">membuat pemungutan suara.</string>
+    <string name="message_reply_to_sender_sent_sticker">mengirim stiker.</string>
+    <string name="message_reply_to_sender_sent_video">mengirim video.</string>
+    <string name="message_reply_to_sender_sent_image">mengirim gambar.</string>
+    <string name="message_reply_to_sender_sent_file">mengirim file.</string>
+    <string name="message_reply_to_sender_sent_audio_file">mengirim file audio.</string>
+    <string name="message_reply_to_sender_sent_voice_message">mengirim pesan suara.</string>
+    <string name="message_reply_to_prefix">Membalas ke</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Sembunyikan alamat IP</string>
+    <string name="quoting">Mengutip</string>
+    <string name="editing">Mengedit</string>
+    <string name="device_manager_other_sessions_show_ip_address">Tampilkan alamat IP</string>
+    <string name="replying_to">Membalas ke %s</string>
 </resources>
