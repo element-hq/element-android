@@ -30,7 +30,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ResumeVoiceBroadcastUseCase @Inject constructor(
-        private val session: Session
+        private val session: Session,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
