@@ -89,6 +89,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 
                 handleTimelineThreadSummaryIfNeeded(realm, eventToPrune, isLocalEcho)
             }
+            else -> {
+                Timber.w("Not pruning event (type $typeToPrune)")
+            }
         }
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
             TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId).forEach {
