@@ -2965,4 +2965,17 @@
     </plurals>
     <string name="device_manager_other_sessions_multi_signout_selection">Вийти</string>
     <string name="voice_broadcast_recording_time_left">Залишилося %1$s</string>
+    <string name="message_reply_to_sender_sent_audio_file">відправив аудіофайл.</string>
+    <string name="message_reply_to_sender_sent_file">відправив файл.</string>
+    <string name="message_reply_to_prefix">У відповідь на</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Сховати IP-адресу</string>
+    <string name="message_reply_to_sender_created_poll">створив голосування.</string>
+    <string name="message_reply_to_sender_sent_sticker">відправив наліпку.</string>
+    <string name="message_reply_to_sender_sent_video">відправив відео.</string>
+    <string name="message_reply_to_sender_sent_image">відправив зображення.</string>
+    <string name="message_reply_to_sender_sent_voice_message">відправив голосове повідомлення.</string>
+    <string name="device_manager_other_sessions_show_ip_address">Показати IP-адресу</string>
+    <string name="quoting">Цитуючи</string>
+    <string name="replying_to">У відповідь на %s</string>
+    <string name="editing">Редагування</string>
 </resources>
