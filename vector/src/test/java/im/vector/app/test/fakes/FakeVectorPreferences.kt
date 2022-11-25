@@ -56,4 +56,8 @@ class FakeVectorPreferences {
     fun givenSessionManagerShowIpAddress(showIpAddress: Boolean) {
         every { instance.showIpAddressInSessionManagerScreens() } returns showIpAddress
     }
+
+    fun givenUnverifiedSessionsAlertLastShownMillis(lastShownMillis: Long) {
+        every { instance.getUnverifiedSessionsAlertLastShownMillis() } returns lastShownMillis
+    }
 }
