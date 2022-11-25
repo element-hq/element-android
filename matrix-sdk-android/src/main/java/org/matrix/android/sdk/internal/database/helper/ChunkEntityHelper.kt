@@ -132,7 +132,7 @@ private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventE
     val originServerTs = eventEntity.originServerTs
     if (originServerTs != null) {
         val timestampOfEvent = originServerTs.toDouble()
-        val readReceiptOfSender = ReadReceiptEntity.getOrCreate(realm, roomId = roomId, userId = senderId, threadId = eventEntity.rootThreadEventId)
+        val readReceiptOfSender = ReadReceiptEntity.getOrCreate(realm, roomId = roomId, userId = senderId)
         // If the synced RR is older, update
         if (timestampOfEvent > readReceiptOfSender.originServerTs) {
             val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = readReceiptOfSender.eventId).findFirst()

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.read
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.isEventRead
@@ -46,9 +45,8 @@ internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
             val roomId: String,
             val fullyReadEventId: String? = null,
             val readReceiptEventId: String? = null,
-            val readReceiptThreadId: String? = null,
             val forceReadReceipt: Boolean = false,
-            val forceReadMarker: Boolean = false,
+            val forceReadMarker: Boolean = false
     )
 }
 
@@ -63,14 +61,12 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         @UserId private val userId: String,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = mutableMapOf<String, String>()
         Timber.v("Execute set read marker with params: $params")
         val latestSyncedEventId = latestSyncedEventId(params.roomId)
-        val readReceiptThreadId = params.readReceiptThreadId
         val fullyReadEventId = if (params.forceReadMarker) {
             latestSyncedEventId
         } else {
@@ -81,7 +77,6 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         } else {
             params.readReceiptEventId
         }
-
         if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy.realmConfiguration, params.roomId, fullyReadEventId)) {
             if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")
@@ -89,12 +84,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 markers[READ_MARKER] = fullyReadEventId
             }
         }
-
-        val shouldCheckIfReadInEventsThread = readReceiptThreadId != null &&
-                homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
-
         if (readReceiptEventId != null &&
-                !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId, shouldCheckIfReadInEventsThread)) {
+                !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {
@@ -104,7 +95,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
 
         val shouldUpdateRoomSummary = readReceiptEventId != null && readReceiptEventId == latestSyncedEventId
         if (markers.isNotEmpty() || shouldUpdateRoomSummary) {
-            updateDatabase(params.roomId, readReceiptThreadId, markers, shouldUpdateRoomSummary)
+            updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
         if (markers.isNotEmpty()) {
             executeRequest(
@@ -113,8 +104,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             ) {
                 if (markers[READ_MARKER] == null) {
                     if (readReceiptEventId != null) {
-                        val readBody = ReadBody(threadId = params.readReceiptThreadId)
-                        roomAPI.sendReceipt(params.roomId, READ_RECEIPT, readReceiptEventId, readBody)
+                        roomAPI.sendReceipt(params.roomId, READ_RECEIPT, readReceiptEventId)
                     }
                 } else {
                     // "m.fully_read" value is mandatory to make this call
@@ -129,7 +119,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId
             }
 
-    private suspend fun updateDatabase(roomId: String, readReceiptThreadId: String?, markers: Map<String, String>, shouldUpdateRoomSummary: Boolean) {
+    private suspend fun updateDatabase(roomId: String, markers: Map<String, String>, shouldUpdateRoomSummary: Boolean) {
         monarchy.awaitTransaction { realm ->
             val readMarkerId = markers[READ_MARKER]
             val readReceiptId = markers[READ_RECEIPT]
@@ -137,7 +127,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 roomFullyReadHandler.handle(realm, roomId, FullyReadContent(readMarkerId))
             }
             if (readReceiptId != null) {
-                val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId, readReceiptThreadId, clock.epochMillis())
+                val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId, clock.epochMillis())
                 readReceiptHandler.handle(realm, roomId, readReceiptContent, false, null)
             }
             if (shouldUpdateRoomSummary) {

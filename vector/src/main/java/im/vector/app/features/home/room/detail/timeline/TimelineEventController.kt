@@ -74,7 +74,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -517,7 +516,7 @@ class TimelineEventController @Inject constructor(
                         event.eventId,
                         readReceipts,
                         callback,
-                        partialState.isFromThreadTimeline(),
+                        partialState.isFromThreadTimeline()
                 ),
                 formattedDayModel = formattedDayModel,
                 mergedHeaderModel = mergedHeaderModel
@@ -560,7 +559,7 @@ class TimelineEventController @Inject constructor(
             val event = itr.previous()
             timelineEventsGroups.addOrIgnore(event)
             val currentReadReceipts = ArrayList(event.readReceipts).filter {
-                it.roomMember.userId != session.myUserId && it.isVisibleInThisThread()
+                it.roomMember.userId != session.myUserId
             }
             if (timelineEventVisibilityHelper.shouldShowEvent(
                             timelineEvent = event,
@@ -575,14 +574,6 @@ class TimelineEventController @Inject constructor(
             }
             val existingReceipts = receiptsByEvent.getOrPut(lastShownEventId) { ArrayList() }
             existingReceipts.addAll(currentReadReceipts)
-        }
-    }
-
-    private fun ReadReceipt.isVisibleInThisThread(): Boolean {
-        return if (partialState.isFromThreadTimeline()) {
-            this.threadId == partialState.rootThreadEventId
-        } else {
-            this.threadId == null || this.threadId == ReadService.THREAD_ID_MAIN
         }
     }
 
