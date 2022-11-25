@@ -32,9 +32,8 @@ internal open class EditAggregatedSummaryEntity(
 
 @RealmClass(embedded = true)
 internal open class EditionOfEvent(
-        var senderId: String = "",
         var eventId: String = "",
-        var content: String? = null,
         var timestamp: Long = 0,
-        var isLocalEcho: Boolean = false
+        var isLocalEcho: Boolean = false,
+        var event: EventEntity? = null,
 ) : RealmObject()

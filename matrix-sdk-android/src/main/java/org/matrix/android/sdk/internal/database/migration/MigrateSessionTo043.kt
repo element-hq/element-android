@@ -17,19 +17,26 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntityFields
+import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo043(realm: DynamicRealm) : RealmMigrator(realm, 43) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.create("SyncFilterParamsEntity")
-                .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_STATE_EVENTS, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_MESSAGE_EVENTS, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.USE_THREAD_NOTIFICATIONS, Boolean::class.java)
-                .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES.`$`, String::class.java)
-                .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES.`$`, String::class.java)
+        // content(string) & senderId(string) have been removed and replaced by a link to the actual event
+        realm.schema.get("EditionOfEvent")
+                ?.addRealmObjectField(EditionOfEventFields.EVENT.`$`, realm.schema.get("EventEntity")!!)
+                ?.transform { dynamicObject ->
+                    realm.where("EventEntity")
+                            .equalTo(EventEntityFields.EVENT_ID, dynamicObject.getString(EditionOfEventFields.EVENT_ID))
+                            .equalTo(EventEntityFields.SENDER, dynamicObject.getString("senderId"))
+                            .findFirst()
+                            .let {
+                                dynamicObject.setObject(EditionOfEventFields.EVENT.`$`, it)
+                            }
+                }
+                ?.removeField("senderId")
+                ?.removeField("content")
     }
 }

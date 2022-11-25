@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.othersessions
 
+import android.content.SharedPreferences
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
@@ -25,8 +26,10 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.features.auth.PendingAuthHandler
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.GetDeviceFullInfoListUseCase
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
+import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
@@ -42,10 +45,12 @@ class OtherSessionsViewModel @AssistedInject constructor(
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
-        refreshDevicesUseCase: RefreshDevicesUseCase
+        refreshDevicesUseCase: RefreshDevicesUseCase,
+        private val vectorPreferences: VectorPreferences,
+        private val toggleIpAddressVisibilityUseCase: ToggleIpAddressVisibilityUseCase,
 ) : VectorSessionsListViewModel<OtherSessionsViewState, OtherSessionsAction, OtherSessionsViewEvents>(
         initialState, activeSessionHolder, refreshDevicesUseCase
-) {
+), SharedPreferences.OnSharedPreferenceChangeListener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<OtherSessionsViewModel, OtherSessionsViewState> {
@@ -58,6 +63,28 @@ class OtherSessionsViewModel @AssistedInject constructor(
 
     init {
         observeDevices(initialState.currentFilter)
+        refreshIpAddressVisibility()
+        observePreferences()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        refreshIpAddressVisibility()
+    }
+
+    private fun observePreferences() {
+        vectorPreferences.subscribeToChanges(this)
+    }
+
+    override fun onCleared() {
+        vectorPreferences.unsubscribeToChanges(this)
+        super.onCleared()
+    }
+
+    private fun refreshIpAddressVisibility() {
+        val shouldShowIpAddress = vectorPreferences.showIpAddressInSessionManagerScreens()
+        setState {
+            copy(isShowingIpAddress = shouldShowIpAddress)
+        }
     }
 
     private fun observeDevices(currentFilter: DeviceManagerFilterType) {
@@ -85,7 +112,12 @@ class OtherSessionsViewModel @AssistedInject constructor(
             OtherSessionsAction.DeselectAll -> handleDeselectAll()
             OtherSessionsAction.SelectAll -> handleSelectAll()
             OtherSessionsAction.MultiSignout -> handleMultiSignout()
+            OtherSessionsAction.ToggleIpAddressVisibility -> handleToggleIpAddressVisibility()
         }
+    }
+
+    private fun handleToggleIpAddressVisibility() {
+        toggleIpAddressVisibilityUseCase.execute()
     }
 
     private fun handleFilterDevices(action: OtherSessionsAction.FilterDevices) {

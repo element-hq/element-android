@@ -209,6 +209,9 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
         const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
 
+        // New Session Manager
+        const val SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS = "SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS"
+
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
         private const val SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY"
@@ -1227,5 +1230,15 @@ class VectorPreferences @Inject constructor(
     fun isVoiceBroadcastEnabled(): Boolean {
         return vectorFeatures.isVoiceBroadcastEnabled() &&
                 defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
+    }
+
+    fun showIpAddressInSessionManagerScreens(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, getDefault(R.bool.settings_session_manager_show_ip_address))
+    }
+
+    fun setIpAddressVisibilityInDeviceManagerScreens(isVisible: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, isVisible)
+        }
     }
 }

@@ -1,6 +1,6 @@
 // Default configuration copied from https://runningcode.github.io/gradle-doctor/configuration/
 
-def isCiBuild = System.env.BUILDKITE == "true" || System.env.GITHUB_ACTIONS == "true"
+def isCiBuild = System.env.GITHUB_ACTIONS == "true"
 println "Is CI build: $isCiBuild"
 
 doctor {

@@ -19,7 +19,6 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
-import timber.log.Timber
 
 internal open class EventAnnotationsSummaryEntity(
         @PrimaryKey
@@ -31,21 +30,6 @@ internal open class EventAnnotationsSummaryEntity(
         var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null,
         var liveLocationShareAggregatedSummary: LiveLocationShareAggregatedSummaryEntity? = null,
 ) : RealmObject() {
-
-    /**
-     * Cleanup undesired editions, done by users different from the originalEventSender.
-     */
-    fun cleanUp(originalEventSenderId: String?) {
-        originalEventSenderId ?: return
-
-        editSummary?.editions?.filter {
-            it.senderId != originalEventSenderId
-        }
-                ?.forEach {
-                    Timber.w("Deleting an edition from ${it.senderId} of event sent by $originalEventSenderId")
-                    it.deleteFromRealm()
-                }
-    }
 
     companion object
 }

@@ -22,7 +22,7 @@ import io.realm.RealmModel
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import java.util.concurrent.atomic.AtomicReference
 
-internal suspend fun <T> Monarchy.awaitTransaction(transaction: suspend (realm: Realm) -> T): T {
+internal suspend fun <T> Monarchy.awaitTransaction(transaction: (realm: Realm) -> T): T {
     return awaitTransaction(realmConfiguration, transaction)
 }
 

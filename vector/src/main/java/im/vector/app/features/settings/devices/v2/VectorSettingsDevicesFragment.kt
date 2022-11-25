@@ -146,9 +146,17 @@ class VectorSettingsDevicesFragment :
                     confirmMultiSignoutOtherSessions()
                     true
                 }
+                R.id.otherSessionsHeaderToggleIpAddress -> {
+                    handleToggleIpAddressVisibility()
+                    true
+                }
                 else -> false
             }
         }
+    }
+
+    private fun handleToggleIpAddressVisibility() {
+        viewModel.handle(DevicesAction.ToggleIpAddressVisibility)
     }
 
     private fun confirmMultiSignoutOtherSessions() {
@@ -240,7 +248,7 @@ class VectorSettingsDevicesFragment :
 
             renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount, isCurrentSessionVerified)
             renderCurrentDevice(currentDeviceInfo)
-            renderOtherSessionsView(otherDevices)
+            renderOtherSessionsView(otherDevices, state.isShowingIpAddress)
         } else {
             hideSecurityRecommendations()
             hideCurrentSessionView()
@@ -297,7 +305,7 @@ class VectorSettingsDevicesFragment :
         hideInactiveSessionsRecommendation()
     }
 
-    private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?) {
+    private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?, isShowingIpAddress: Boolean) {
         if (otherDevices.isNullOrEmpty()) {
             hideOtherSessionsView()
         } else {
@@ -308,12 +316,18 @@ class VectorSettingsDevicesFragment :
             multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
             multiSignoutItem.setTextColor(color)
             views.deviceListOtherSessions.isVisible = true
+            val devices = if (isShowingIpAddress) otherDevices else otherDevices.map { it.copy(deviceInfo = it.deviceInfo.copy(lastSeenIp = null)) }
             views.deviceListOtherSessions.render(
-                    devices = otherDevices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
-                    totalNumberOfDevices = otherDevices.size,
-                    showViewAll = otherDevices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
+                    devices = devices.take(NUMBER_OF_OTHER_DEVICES_TO_RENDER),
+                    totalNumberOfDevices = devices.size,
+                    showViewAll = devices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
             )
-        }
+            views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderToggleIpAddress).title = if (isShowingIpAddress) {
+                stringProvider.getString(R.string.device_manager_other_sessions_hide_ip_address)
+            } else {
+                stringProvider.getString(R.string.device_manager_other_sessions_show_ip_address)
+            }
+         }
     }
 
     private fun hideOtherSessionsView() {

@@ -13,6 +13,7 @@
   * [Code quality](#code-quality)
     * [Internal tool](#internal-tool)
     * [ktlint](#ktlint)
+    * [knit](#knit)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
   * [Tests](#tests)
@@ -125,6 +126,23 @@ Note that you can run
 </pre>
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
+
+#### knit
+
+[knit](https://github.com/Kotlin/kotlinx-knit) is a tool which checks markdown files on the project. Also it generates/updates the table of content (toc) of the markdown files.
+
+So everytime the toc should be updated, just run
+<pre>
+./gradlew knit
+</pre>
+
+and commit the changes.
+
+The CI will check that markdown files are up to date by running
+
+<pre>
+./gradlew knitCheck
+</pre>
 
 #### lint
 

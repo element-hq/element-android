@@ -21,6 +21,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -95,7 +96,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      * Create a local room entity from the given room creation params.
      * This will also generate and store in database the chunk and the events related to the room params in order to retrieve and display the local room.
      */
-    private suspend fun createLocalRoomEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody) {
+    private fun createLocalRoomEntity(realm: Realm, roomId: String, createRoomBody: CreateRoomBody) {
         RoomEntity.getOrCreate(realm, roomId).apply {
             membership = Membership.JOIN
             chunks.add(createLocalRoomChunk(realm, roomId, createRoomBody))
@@ -148,13 +149,16 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
      *
      * @return a chunk entity
      */
-    private suspend fun createLocalRoomChunk(realm: Realm, roomId: String, createRoomBody: CreateRoomBody): ChunkEntity {
+    private fun createLocalRoomChunk(realm: Realm, roomId: String, createRoomBody: CreateRoomBody): ChunkEntity {
         val chunkEntity = realm.createObject<ChunkEntity>().apply {
             isLastBackward = true
             isLastForward = true
         }
 
-        val eventList = createLocalRoomStateEventsTask.execute(CreateLocalRoomStateEventsTask.Params(createRoomBody))
+        // Can't suspend when using realm as it could jump thread
+        val eventList = runBlocking {
+            createLocalRoomStateEventsTask.execute(CreateLocalRoomStateEventsTask.Params(createRoomBody))
+        }
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.timeline
 
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -142,11 +143,19 @@ fun TimelineEvent.getEditedEventId(): String? {
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
         EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
-        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
-        in EventType.BEACON_LOCATION_DATA -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
-        else -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        // XXX
+        // Polls/Beacon are not message contents like others as there is no msgtype subtype to discriminate moshi parsing
+        // so toModel<MessageContent> won't parse them correctly
+        // It's discriminated on event type instead. Maybe it shouldn't be MessageContent at all to avoid confusion?
+        in EventType.POLL_START -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.STATE_ROOM_BEACON_INFO -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
+        in EventType.BEACON_LOCATION_DATA -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
+        else -> (getLastEditNewContent() ?: root.getClearContent()).toModel()
     }
+}
+
+fun TimelineEvent.getLastEditNewContent(): Content? {
+    return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
 }
 
 /**

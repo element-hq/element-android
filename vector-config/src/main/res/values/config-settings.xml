@@ -57,5 +57,7 @@
 
     <!-- Level 1: Legals -->
 
+    <!-- Level 3: Security & Privacy, Sessions -->
+    <bool name="settings_session_manager_show_ip_address">false</bool>
 
 </resources>

@@ -34,6 +34,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -44,12 +45,13 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.extensions.showKeyboard
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
+import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import uniffi.wysiwyg_composer.MenuState
 
 class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
@@ -72,6 +74,11 @@ class RichTextComposerLayout @JvmOverloads constructor(
             field = value
             updateTextFieldBorder(isFullScreen)
             updateEditTextVisibility()
+            updateFullScreenButtonVisibility()
+            // If formatting is no longer enabled and it's in full screen, minimise the editor
+            if (!value && isFullScreen) {
+                callback?.onFullScreenModeChanged()
+            }
         }
 
     override val text: Editable?
@@ -104,6 +111,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
             setCornerSize(cornerSize.toFloat())
         }
     }
+
+    private val dimensionConverter = DimensionConverter(resources)
 
     fun setFullScreen(isFullScreen: Boolean) {
         editText.updateLayoutParams<ViewGroup.LayoutParams> {
@@ -191,8 +200,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
 
         views.composerFullScreenButton.apply {
-            // There's no point in having full screen in landscape since there's almost no vertical space
-            isInvisible = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            updateFullScreenButtonVisibility()
             setOnClickListener {
                 callback?.onFullScreenModeChanged()
             }
@@ -206,16 +214,16 @@ class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     private fun setupRichTextMenu() {
-        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.Bold) {
+        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.BOLD) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.Italic) {
+        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.ITALIC) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.Underline) {
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.UNDERLINE) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.StrikeThrough) {
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
     }
@@ -238,12 +246,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        views.richTextComposerEditText.menuStateChangedListener = EditorEditText.OnMenuStateChangedListener { state ->
-            if (state is MenuState.Update) {
-                updateMenuStateFor(ComposerAction.Bold, state)
-                updateMenuStateFor(ComposerAction.Italic, state)
-                updateMenuStateFor(ComposerAction.Underline, state)
-                updateMenuStateFor(ComposerAction.StrikeThrough, state)
+        views.richTextComposerEditText.actionStatesChangedListener = EditorEditText.OnActionStatesChangedListener { state ->
+            for (action in state.keys) {
+                updateMenuStateFor(action, state)
             }
         }
 
@@ -254,6 +259,35 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.richTextComposerEditText.isVisible = isTextFormattingEnabled
         views.richTextMenu.isVisible = isTextFormattingEnabled
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
+
+        // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints
+        val dpToPx = { dp: Int -> dimensionConverter.dpToPx(dp) }
+        ConstraintSet().apply {
+            clone(views.composerLayoutContent)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.TOP)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.START)
+            clear(R.id.composerEditTextOuterBorder, ConstraintSet.END)
+            if (isTextFormattingEnabled) {
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(8))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.sendButton, ConstraintSet.TOP, 0)
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.composerLayoutContent, ConstraintSet.START, dpToPx(12))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.composerLayoutContent, ConstraintSet.END, dpToPx(12))
+            } else {
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dpToPx(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.attachmentButton, ConstraintSet.END, 0)
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.sendButton, ConstraintSet.START, 0)
+            }
+            applyTo(views.composerLayoutContent)
+        }
+    }
+
+    private fun updateFullScreenButtonVisibility() {
+        val isLargeScreenDevice = resources.configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        // There's no point in having full screen in landscape since there's almost no vertical space
+        views.composerFullScreenButton.isInvisible = !isTextFormattingEnabled || (isLandscape && !isLargeScreenDevice)
     }
 
     /**
@@ -261,9 +295,9 @@ class RichTextComposerLayout @JvmOverloads constructor(
      */
     private fun syncEditTexts() =
         if (isTextFormattingEnabled) {
-            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getPlainText())
+            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
         } else {
-            views.richTextComposerEditText.setText(views.plainTextComposerEditText.text.toString())
+            views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
         }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
@@ -279,10 +313,11 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
     }
 
-    private fun updateMenuStateFor(action: ComposerAction, menuState: MenuState.Update) {
+    private fun updateMenuStateFor(action: ComposerAction, menuState: Map<ComposerAction, ActionState>) {
         val button = findViewWithTag<ImageButton>(action) ?: return
-        button.isEnabled = !menuState.disabledActions.contains(action)
-        button.isSelected = menuState.reversedActions.contains(action)
+        val stateForAction = menuState[action]
+        button.isEnabled = stateForAction != ActionState.DISABLED
+        button.isSelected = stateForAction == ActionState.REVERSED
     }
 
     fun estimateCollapsedHeight(): Int {
