@@ -2333,9 +2333,9 @@
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
     <string name="location_activity_title_preview">Standort</string>
     <string name="closed_poll_option_description">Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest</string>
-    <string name="closed_poll_option_title">Abgeschlossene Umfrage</string>
+    <string name="closed_poll_option_title">Versteckte Umfrage</string>
     <string name="open_poll_option_description">Abstimmende können die Ergebnisse nach Stimmabgabe sehen</string>
-    <string name="open_poll_option_title">Laufende Umfrage</string>
+    <string name="open_poll_option_title">Offene Umfrage</string>
     <string name="poll_type_title">Umfragetyp</string>
     <string name="edit_poll_title">Umfrage bearbeiten</string>
     <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
