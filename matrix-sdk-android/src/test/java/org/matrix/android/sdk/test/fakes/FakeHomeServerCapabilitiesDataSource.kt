@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package org.matrix.android.sdk.test.fakes
 
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.just
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.runs
-import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 
-class FakeFilterService : FilterService by mockk() {
+internal class FakeHomeServerCapabilitiesDataSource {
+    val instance = mockk<HomeServerCapabilitiesDataSource>()
 
-    fun givenSetFilterSucceeds() {
-        coEvery { setSyncFilter(any()) } just runs
-    }
-
-    fun verifySetSyncFilter(filterBuilder: SyncFilterBuilder) {
-        coVerify { setSyncFilter(filterBuilder) }
+    fun givenHomeServerCapabilities(homeServerCapabilities: HomeServerCapabilities) {
+        every { instance.getHomeServerCapabilities() } returns homeServerCapabilities
     }
 }

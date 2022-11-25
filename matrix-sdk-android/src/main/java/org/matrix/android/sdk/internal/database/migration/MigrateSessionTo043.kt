@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.database.migration
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
-import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo043(realm: DynamicRealm) : RealmMigrator(realm, 43) {

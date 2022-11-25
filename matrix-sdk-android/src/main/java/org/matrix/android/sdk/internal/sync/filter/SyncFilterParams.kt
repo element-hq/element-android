@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.migration
+package org.matrix.android.sdk.internal.sync.filter
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.ReadReceiptEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
-
-internal class MigrateSessionTo044(realm: DynamicRealm) : RealmMigrator(realm, 44) {
-
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("ReadReceiptEntity")
-                ?.addField(ReadReceiptEntityFields.THREAD_ID, String::class.java)
-    }
-}
+internal data class SyncFilterParams(
+        val lazyLoadMembersForStateEvents: Boolean? = null,
+        val lazyLoadMembersForMessageEvents: Boolean? = null,
+        val useThreadNotifications: Boolean? = null,
+        val listOfSupportedEventTypes: List<String>? = null,
+        val listOfSupportedStateEventTypes: List<String>? = null,
+)

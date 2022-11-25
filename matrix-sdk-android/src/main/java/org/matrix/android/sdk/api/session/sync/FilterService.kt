@@ -16,19 +16,12 @@
 
 package org.matrix.android.sdk.api.session.sync
 
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
+
 interface FilterService {
-
-    enum class FilterPreset {
-        NoFilter,
-
-        /**
-         * Filter for Element, will include only known event type.
-         */
-        ElementFilter
-    }
 
     /**
      * Configure the filter for the sync.
      */
-    fun setFilter(filterPreset: FilterPreset)
+    suspend fun setSyncFilter(filterBuilder: SyncFilterBuilder)
 }
