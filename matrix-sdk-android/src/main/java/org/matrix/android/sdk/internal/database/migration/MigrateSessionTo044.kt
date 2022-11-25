@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-internal class MigrateSessionTo044(realm: DynamicRealm) : RealmMigrator(realm, 43) {
+internal class MigrateSessionTo044(realm: DynamicRealm) : RealmMigrator(realm, 44) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("ReadReceiptEntity")
