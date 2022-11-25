@@ -16,6 +16,8 @@
 
 package im.vector.app.config
 
+import kotlin.time.Duration.Companion.days
+
 /**
  * Set of flags to configure the application.
  */
@@ -93,4 +95,6 @@ object Config {
      * Can be disabled by providing Analytics.Disabled
      */
     val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "NIGHTLY")
+
+    val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
 }
