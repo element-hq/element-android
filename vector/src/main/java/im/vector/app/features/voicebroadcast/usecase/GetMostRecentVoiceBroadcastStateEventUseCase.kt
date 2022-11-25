@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformWhile
@@ -76,17 +75,15 @@ class GetMostRecentVoiceBroadcastStateEventUseCase @Inject constructor(
                         // otherwise, observe most recent event changes
                         getMostRecentRelatedEventFlow(room, voiceBroadcast)
                                 .transformWhile { mostRecentEvent ->
-                                    emit(mostRecentEvent)
-                                    mostRecentEvent.hasValue()
-                                }
-                                .map {
-                                    if (!it.hasValue()) {
-                                        // no most recent event, fallback to started event
-                                        startedEvent
+                                    val hasValue = mostRecentEvent.hasValue()
+                                    if (hasValue) {
+                                        // keep the most recent event
+                                        emit(mostRecentEvent)
                                     } else {
-                                        // otherwise, keep the most recent event
-                                        it
+                                        // no most recent event, fallback to started event
+                                        emit(startedEvent)
                                     }
+                                    hasValue
                                 }
                     }
                 }
