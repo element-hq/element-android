@@ -2899,4 +2899,27 @@
     <string name="error_voice_broadcast_unauthorized_title">Nelze zahájit nové hlasové vysílání</string>
     <string name="a11y_voice_broadcast_fast_backward">Přetočení o 30 sekund zpět</string>
     <string name="a11y_voice_broadcast_fast_forward">Přetočení o 30 sekund dopředu</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Ověřené relace jsou všude tam, kde tento účet používáte po zadání přístupové fráze nebo po potvrzení své totožnosti jinou ověřenou relací.
+\n
+\nTo znamená, že máte všechny klíče potřebné k odemknutí zašifrovaných zpráv a potvrzení ostatním uživatelům, že této relaci důvěřujete.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Odhlásit se z %1$d relace</item>
+        <item quantity="few">Odhlásit se ze %1$d relací</item>
+        <item quantity="other">Odhlásit se z %1$d relací</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Odhlásit se</string>
+    <string name="voice_broadcast_recording_time_left">zbývá %1$s</string>
+    <string name="message_reply_to_sender_created_poll">vytvořil hlasování.</string>
+    <string name="message_reply_to_sender_sent_sticker">poslal nálepku.</string>
+    <string name="message_reply_to_sender_sent_video">poslal video.</string>
+    <string name="message_reply_to_sender_sent_image">poslal obrázek.</string>
+    <string name="message_reply_to_sender_sent_voice_message">poslal hlasovou zprávu.</string>
+    <string name="message_reply_to_sender_sent_audio_file">poslal zvukový soubor.</string>
+    <string name="message_reply_to_sender_sent_file">odeslal soubor.</string>
+    <string name="message_reply_to_prefix">V odpovědi na</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Skrýt IP adresu</string>
+    <string name="device_manager_other_sessions_show_ip_address">Zobrazit IP adresu</string>
+    <string name="quoting">Citace</string>
+    <string name="replying_to">Odpovídám na %s</string>
+    <string name="editing">Úpravy</string>
 </resources>

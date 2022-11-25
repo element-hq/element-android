@@ -2827,4 +2827,34 @@
         <item quantity="one">%1$d selezionato</item>
         <item quantity="other">%1$d selezionati</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Attiva/disattiva schermo intero</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Le sessioni verificate sono ovunque usi questo account dopo l\'inserimento della password o la conferma della tua identità con un\'altra sessione verificata.
+\n
+\nCiò significa che hai tutte le chiavi necessarie per sbloccare i tuoi messaggi cifrati e per confermare agli altri utenti che ti fidi di questa sessione.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Disconnetti da %1$d sessione</item>
+        <item quantity="other">Disconnetti da %1$d sessioni</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Disconnetti</string>
+    <string name="attachment_type_selector_text_formatting">Formattazione testo</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Stai già registrando una trasmissione vocale. Termina quella in corso per iniziarne una nuova.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Qualcun altro sta già registrando una trasmissione vocale. Aspetta che finisca prima di iniziarne una nuova.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Non hai l\'autorizzazione necessaria per iniziare una trasmissione vocale in questa stanza. Contatta un amministratore della stanza per aggiornare le tue autorizzazioni.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Impossibile iniziare una nuova trasmissione vocale</string>
+    <string name="a11y_voice_broadcast_fast_forward">Manda avanti di 30 secondi</string>
+    <string name="a11y_voice_broadcast_fast_backward">Manda indietro di 30 secondi</string>
+    <string name="voice_broadcast_recording_time_left">%1$s rimasti</string>
+    <string name="message_reply_to_sender_created_poll">creato un sondaggio.</string>
+    <string name="message_reply_to_sender_sent_sticker">inviato un adesivo.</string>
+    <string name="message_reply_to_sender_sent_video">inviato un video.</string>
+    <string name="message_reply_to_sender_sent_image">inviata un\'immagine.</string>
+    <string name="message_reply_to_sender_sent_voice_message">inviato un messaggio vocale.</string>
+    <string name="message_reply_to_sender_sent_audio_file">inviato un file audio.</string>
+    <string name="message_reply_to_sender_sent_file">inviato un file.</string>
+    <string name="message_reply_to_prefix">In risposta a</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Nascondi indirizzo IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Mostra indirizzo IP</string>
+    <string name="quoting">Citazione</string>
+    <string name="replying_to">Risposta a %s</string>
+    <string name="editing">Modifica</string>
 </resources>

@@ -2835,4 +2835,26 @@
     <string name="error_voice_broadcast_unauthorized_title">Uue ringhäälingukõne alustamine pole võimalik</string>
     <string name="a11y_voice_broadcast_fast_backward">Keri tagasi 30 sekundi kaupa</string>
     <string name="a11y_voice_broadcast_fast_forward">Keri edasi 30 sekundi kaupa</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verifitseeritud sessioonideks loetakse Element\'is või mõnes muus Matrix\'i rakenduses selliseid sessioone, kus sa kas oled sisestanud oma salafraasi või tuvastanud end mõne teise oma verifitseeritud sessiooni abil.
+\n
+\nSee tähendab, et selles sessioonis on ka kõik vajalikud võtmed krüptitud sõnumite lugemiseks ja teistele kasutajatele kinnitamiseks, et sa usaldad seda sessiooni.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Logi välja %1$d\'st sessioonist</item>
+        <item quantity="other">Logi välja %1$d\'st sessioonist</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Logi välja</string>
+    <string name="voice_broadcast_recording_time_left">jäänud %1$s</string>
+    <string name="editing">Muudan sõnumit</string>
+    <string name="replying_to">Vastan sõnumile %s</string>
+    <string name="quoting">Tsiteerides</string>
+    <string name="device_manager_other_sessions_show_ip_address">Näita IP-aadressi</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Peida IP-aadress</string>
+    <string name="message_reply_to_prefix">Vastuseks kasutajale</string>
+    <string name="message_reply_to_sender_sent_file">saatis faili.</string>
+    <string name="message_reply_to_sender_sent_audio_file">saatis helifaili.</string>
+    <string name="message_reply_to_sender_sent_voice_message">saatis häälsõnumi.</string>
+    <string name="message_reply_to_sender_sent_image">saatis pildi.</string>
+    <string name="message_reply_to_sender_sent_video">saatis video.</string>
+    <string name="message_reply_to_sender_sent_sticker">saatis kleepsu.</string>
+    <string name="message_reply_to_sender_created_poll">koostas küsitluse.</string>
 </resources>

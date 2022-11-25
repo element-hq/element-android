@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: opravy různých chyb a vylepšení.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases
