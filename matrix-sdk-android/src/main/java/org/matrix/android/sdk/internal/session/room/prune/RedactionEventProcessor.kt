@@ -163,8 +163,7 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         return when {
             EventType.isCallEvent(eventType) -> false
             EventType.isVerificationEvent(eventType) -> false
-            eventType == EventType.ROOM_KEY ||
-                    eventType == EventType.STATE_ROOM_WIDGET_LEGACY ||
+            eventType == EventType.STATE_ROOM_WIDGET_LEGACY ||
                     eventType == EventType.STATE_ROOM_WIDGET ||
                     eventType == EventType.STATE_ROOM_NAME ||
                     eventType == EventType.STATE_ROOM_TOPIC ||
@@ -179,11 +178,6 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                     eventType == EventType.STATE_ROOM_PINNED_EVENT ||
                     eventType == EventType.STATE_ROOM_ENCRYPTION ||
                     eventType == EventType.STATE_ROOM_SERVER_ACL ||
-                    eventType == EventType.ROOM_KEY_REQUEST ||
-                    eventType == EventType.FORWARDED_ROOM_KEY ||
-                    eventType in EventType.ROOM_KEY_WITHHELD.values ||
-                    eventType == EventType.REQUEST_SECRET ||
-                    eventType == EventType.SEND_SECRET ||
                     eventType == EventType.REACTION -> false
             else -> true
         }
