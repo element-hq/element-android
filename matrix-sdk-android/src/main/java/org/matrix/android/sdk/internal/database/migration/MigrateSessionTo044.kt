@@ -17,19 +17,13 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntityFields
+import org.matrix.android.sdk.internal.database.model.ReadReceiptEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo044(realm: DynamicRealm) : RealmMigrator(realm, 44) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.create("SyncFilterParamsEntity")
-                .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_STATE_EVENTS, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_MESSAGE_EVENTS, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
-                .addField(SyncFilterParamsEntityFields.USE_THREAD_NOTIFICATIONS, Boolean::class.java)
-                .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES.`$`, String::class.java)
-                .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES.`$`, String::class.java)
+        realm.schema.get("ReadReceiptEntity")
+                ?.addField(ReadReceiptEntityFields.THREAD_ID, String::class.java)
     }
 }

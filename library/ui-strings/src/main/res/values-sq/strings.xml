@@ -2822,4 +2822,33 @@
     <string name="verify_invalid_qr_notice">Ky kod QR duket i formuar keq. Ju lutemi, provoni ta verifikoni me tjetër metodë.</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 Keni aktivizuar fshehtëzim për sesionie të verifikuar vetëm për krejt dhomat, që nga Rregullime Sigurie.</string>
     <string name="settings_autoplay_animated_images_summary">Luaj figura të animuara te rrjedha kohora sapo zënë të duken</string>
+    <string name="message_reply_to_sender_created_poll">krijoi një pyetësor.</string>
+    <string name="message_reply_to_sender_sent_sticker">dërgoi një ngjitës.</string>
+    <string name="message_reply_to_sender_sent_video">dërgoi një video.</string>
+    <string name="message_reply_to_sender_sent_image">dërgoi një figurë.</string>
+    <string name="message_reply_to_sender_sent_voice_message">dërgoi një mesazh zanor.</string>
+    <string name="message_reply_to_sender_sent_audio_file">dërgoi një kartelë audio.</string>
+    <string name="message_reply_to_sender_sent_file">dërgoi një kartelë.</string>
+    <string name="message_reply_to_prefix">Në përgjigje të</string>
+    <string name="rich_text_editor_full_screen_toggle">Hyni/Dilni nga mënyra “Sa krejt ekrani”</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Sesionet e verifikuar janë kudo ku përdorni këtë llogari pas dhënies së frazëkalimit tuaj, apo ripohimit të identitetit tuaj me një sesion tjetër të verifikuar.
+\n
+\nKjo do të thotë se keni krejt kyçet e nevojshëm për të shkyçur mesazhet tuaj të fshehtëzuar dhe për të ripohuar se e besoni këtë sesion.</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Fshihe adresën IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Shfaq adresë IP</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Dilni nga %1$d sesion</item>
+        <item quantity="other">Dilni nga %1$d sesione</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Dilni</string>
+    <string name="attachment_type_selector_text_formatting">Formatim teksti</string>
+    <string name="voice_broadcast_recording_time_left">Edhe %1$s</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Jeni duke incizuar tashmë një transmetim zanor. Ju lutemi, që të nisni një të ri, përfundoni transmetimin tuaj aktual zanor.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Dikush tjetër është tashmë duke incizuar një transmetim zanor. Prisni që të përfundojë transmetimi zanor i tij, pa të filloni një të ri.</string>
+    <string name="error_voice_broadcast_permission_denied_message">S’keni lejet e domosdoshme për të nisur një transmetim zanor në këtë dhomë. Lidhuni me një përgjegjës dhome që të përmirësojë lejet tuaja.</string>
+    <string name="error_voice_broadcast_unauthorized_title">S’mund të niset një transmetim i ri zanor</string>
+    <string name="a11y_voice_broadcast_fast_forward">Shtyrje përpara 30 sekonda</string>
+    <string name="a11y_voice_broadcast_fast_backward">Kthim prapa 30 sekonda</string>
+    <string name="replying_to">Si përgjigje për %s</string>
+    <string name="labs_enable_deferred_dm_title">Aktivizo MD të lënë për më vonë</string>
 </resources>
