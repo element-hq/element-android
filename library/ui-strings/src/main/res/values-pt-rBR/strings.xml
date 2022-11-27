@@ -2844,4 +2844,26 @@
     <string name="error_voice_broadcast_unauthorized_title">Não dá pra começar um novo broadcast de voz</string>
     <string name="a11y_voice_broadcast_fast_forward">Avançar rápido 30 segundos</string>
     <string name="a11y_voice_broadcast_fast_backward">Retroceder 30 segundos</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Sessões verificadas são onde quer que você está usando esta conta depois de entrar sua frasepasse ou confirmar sua identidade com uma outra sessão verificada.
+\n
+\nIsto significa que você tem todas as chaves necessitadas para destrancar suas mensagens encriptadas e confirmar a outras(os) usuárias(os) que você confia nesta sessão.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Fazer signout de %1$d sessão</item>
+        <item quantity="other">Fazer signout de %1$d sessões</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Fazer signout</string>
+    <string name="voice_broadcast_recording_time_left">%1$s restando</string>
+    <string name="message_reply_to_sender_created_poll">criou uma sondagem.</string>
+    <string name="message_reply_to_sender_sent_sticker">enviou um sticker.</string>
+    <string name="message_reply_to_sender_sent_video">enviou um vídeo.</string>
+    <string name="message_reply_to_sender_sent_image">enviou uma imagem.</string>
+    <string name="message_reply_to_sender_sent_voice_message">enviou uma mensagem de voz.</string>
+    <string name="message_reply_to_sender_sent_audio_file">enviou um arquivo de áudio.</string>
+    <string name="message_reply_to_sender_sent_file">enviou um arquivo.</string>
+    <string name="message_reply_to_prefix">Em resposta a</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Esconder endereço de IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Mostrar endereço de IP</string>
+    <string name="quoting">Citando</string>
+    <string name="replying_to">Respondendo a %s</string>
+    <string name="editing">Editando</string>
 </resources>

@@ -2765,7 +2765,7 @@
     <string name="labs_enable_new_app_layout_title">Zapnúť nové usporiadanie</string>
     <string name="device_manager_learn_more_session_rename">Ostatní používatelia v priamych správach a miestnostiach, do ktorých sa pripojíte, si môžu pozrieť úplný zoznam vašich relácií.
 \n
-\nTo im poskytuje istotu, že sa s vami naozaj rozprávajú, ale zároveň to znamená, že vidia názov relácie, ktorý sem zadáte.</string>
+\nTo im poskytuje istotu, že sa komunikujú naozaj s vami, ale zároveň to znamená, že vidia názov relácie, ktorý sem zadáte.</string>
     <string name="device_manager_learn_more_session_rename_title">Premenovanie relácií</string>
     <string name="device_manager_learn_more_sessions_verified">Overené relácie, do ktorých ste sa prihlásili pomocou svojich prihlasovacích údajov a ktoré boli následne overené buď pomocou vašej bezpečnostnej prístupovej frázy, alebo krížovým overením.
 \n
@@ -2899,4 +2899,27 @@
     <string name="error_voice_broadcast_unauthorized_title">Nie je možné spustiť nové hlasové vysielanie</string>
     <string name="a11y_voice_broadcast_fast_backward">Rýchle posunutie dozadu o 30 sekúnd</string>
     <string name="a11y_voice_broadcast_fast_forward">Rýchle posunutie dopredu o 30 sekúnd</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Overené relácie sú všade tam, kde používate toto konto po zadaní svojho prístupového hesla alebo po potvrdení svojej totožnosti inou overenou reláciou.
+\n
+\nTo znamená, že máte všetky kľúče potrebné na odomknutie zašifrovaných správ a potvrdenie pre ostatných používateľov, že tejto relácii dôverujete.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Odhlásiť sa z %1$d relácie</item>
+        <item quantity="few">Odhlásiť sa z %1$d relácií</item>
+        <item quantity="other">Odhlásiť sa z %1$d relácií</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Odhlásiť sa</string>
+    <string name="voice_broadcast_recording_time_left">Ostáva %1$s</string>
+    <string name="quoting">Cituje</string>
+    <string name="message_reply_to_sender_created_poll">vytvoril/a anketu.</string>
+    <string name="message_reply_to_sender_sent_sticker">poslal/a nálepku.</string>
+    <string name="message_reply_to_sender_sent_video">poslal/a video.</string>
+    <string name="message_reply_to_sender_sent_image">poslal/a obrázok.</string>
+    <string name="message_reply_to_sender_sent_voice_message">poslal/a zvukovú správu.</string>
+    <string name="message_reply_to_sender_sent_audio_file">poslal/a zvukový súbor.</string>
+    <string name="message_reply_to_sender_sent_file">poslal súbor.</string>
+    <string name="message_reply_to_prefix">V odpovedi na</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Skryť IP adresu</string>
+    <string name="device_manager_other_sessions_show_ip_address">Zobraziť IP adresu</string>
+    <string name="replying_to">Odpoveď na %s</string>
+    <string name="editing">Úprava</string>
 </resources>

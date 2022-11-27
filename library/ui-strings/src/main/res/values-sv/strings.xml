@@ -2836,4 +2836,20 @@
         <item quantity="one">%1$d vald</item>
         <item quantity="other">%1$d valda</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Växla fullskärmsläge</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verifierade sessioner är alla ställen där du använder det här kontot efter att ha angett din lösenfras eller bekräftat din identitet med en annan verifierad session.
+\n
+\nDetta betyder att du har alla nycklar som krävs för att låsa upp dina krypterade meddelanden att bekräfta för andra användare att du litar på den här sessionen.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Logga ut ur %1$d session</item>
+        <item quantity="other">Logga ut ur %1$d sessioner</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Logga ut</string>
+    <string name="attachment_type_selector_text_formatting">Textformatering</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Du spelar redan in en röstsändning. Avsluta din nuvarande röstsändning för att starta en ny.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning avslutas för att starta en ny.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Du är inte behörig att starta en ny röstsändning i det här rummet. Kontakta en rumsadministratör för att uppgradera dina behörigheter.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Kan inte starta en ny röstsändning</string>
+    <string name="a11y_voice_broadcast_fast_forward">Spola framåt 30 sekunder</string>
+    <string name="a11y_voice_broadcast_fast_backward">Spola tillbaka 30 sekunder</string>
 </resources>

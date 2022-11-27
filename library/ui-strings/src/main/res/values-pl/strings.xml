@@ -2715,7 +2715,7 @@
     <string name="home_layout_preferences">Preferencje interfejsu</string>
     <string name="explore_rooms">Przeglądaj pokoje</string>
     <string name="create_room">Utwórz pokój</string>
-    <string name="start_chat">Zacznij rozmawiać</string>
+    <string name="start_chat">Rozpocznij czat</string>
     <string name="all_chats">Wszystkie rozmowy</string>
     <string name="device_manager_other_sessions_description_unverified">Nie zweryfikowano · Ostatnia aktywność %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Zweryfikowano · Ostatnia aktywność %1$s</string>

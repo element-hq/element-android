@@ -2789,4 +2789,25 @@
     <string name="error_voice_broadcast_unauthorized_title">無法開始新的語音廣播</string>
     <string name="a11y_voice_broadcast_fast_forward">快轉30秒</string>
     <string name="a11y_voice_broadcast_fast_backward">快退30秒</string>
+    <string name="device_manager_learn_more_sessions_verified_description">已驗證的工作階段是您輸入通關密語或透過另一個已驗證工作階段確認您的身份後使用此帳號的任何地方。
+\n
+\n這代表了您擁有解鎖加密訊息並向其他使用者確認您信任此工作階段所需的所有金鑰。</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="other">登出 %1$d 個工作階段</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">登出</string>
+    <string name="voice_broadcast_recording_time_left">剩餘 %1$s</string>
+    <string name="message_reply_to_sender_created_poll">已建立投票。</string>
+    <string name="message_reply_to_sender_sent_sticker">已傳送貼圖。</string>
+    <string name="message_reply_to_sender_sent_video">已傳送影片。</string>
+    <string name="message_reply_to_sender_sent_image">已傳送圖片。</string>
+    <string name="message_reply_to_sender_sent_voice_message">已傳送語音訊息。</string>
+    <string name="message_reply_to_sender_sent_audio_file">已傳送音訊檔。</string>
+    <string name="message_reply_to_sender_sent_file">已傳送檔案。</string>
+    <string name="message_reply_to_prefix">回覆給</string>
+    <string name="device_manager_other_sessions_hide_ip_address">隱藏 IP 位置</string>
+    <string name="device_manager_other_sessions_show_ip_address">顯示 IP 位置</string>
+    <string name="quoting">引用</string>
+    <string name="replying_to">回覆給 %s</string>
+    <string name="editing">正在編輯</string>
 </resources>
