@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
@@ -346,6 +347,10 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         assertTrue(registrationResult is RegistrationResult.Success)
         val session = (registrationResult as RegistrationResult.Success).session
         session.open()
+        session.filterService().setSyncFilter(
+                SyncFilterBuilder()
+                        .lazyLoadMembersForStateEvents(true)
+        )
         if (sessionTestParams.withInitialSync) {
             syncSession(session, 120_000)
         }
