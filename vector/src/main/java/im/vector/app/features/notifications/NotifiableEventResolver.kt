@@ -66,7 +66,7 @@ class NotifiableEventResolver @Inject constructor(
 ) {
 
     private val nonEncryptedNotifiableEventTypes: List<String> =
-            listOf(EventType.MESSAGE) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+            listOf(EventType.MESSAGE) + EventType.POLL_START.values + EventType.STATE_ROOM_BEACON_INFO.values
 
     suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
