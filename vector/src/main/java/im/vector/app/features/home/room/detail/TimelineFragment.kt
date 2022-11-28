@@ -972,6 +972,7 @@ class TimelineFragment :
     override fun onResume() {
         super.onResume()
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
+        notificationDrawerManager.setCurrentThread(timelineArgs.threadTimelineArgs?.rootThreadEventId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
     }
@@ -991,6 +992,7 @@ class TimelineFragment :
     override fun onPause() {
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
+        notificationDrawerManager.setCurrentThread(null)
     }
 
     private val emojiActivityResultLauncher = registerStartForActivityResult { activityResult ->
