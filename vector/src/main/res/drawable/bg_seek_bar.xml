@@ -13,7 +13,7 @@
             <shape
                 android:shape="line">
                 <stroke
-                    android:color="?vctr_content_tertiary"
+                    android:color="?vctr_content_secondary"
                     android:width="2dp"/>
             </shape>
         </clip>

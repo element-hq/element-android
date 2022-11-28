@@ -142,7 +142,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:progressDrawable="@drawable/bg_seek_bar"
-        android:thumbTint="?vctr_content_tertiary"
+        android:thumbTint="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playbackDuration"
         app:layout_constraintStart_toStartOf="parent"
