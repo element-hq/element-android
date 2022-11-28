@@ -3092,12 +3092,13 @@
     <string name="audio_message_file_size">(%1$s)</string>
 
     <string name="voice_broadcast_live">Live</string>
+    <!-- TODO Rename id to voice_broadcast_buffering -->
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
     <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
     <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
     <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
     <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
     <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
