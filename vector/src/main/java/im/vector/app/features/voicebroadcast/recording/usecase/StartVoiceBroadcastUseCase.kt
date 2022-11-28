@@ -85,7 +85,10 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         )
 
         val voiceBroadcast = VoiceBroadcast(roomId = room.roomId, voiceBroadcastId = eventId)
+
+        // TODO Update unit test to cover the following line
         room.flow().liveTimelineEvent(eventId).unwrap().first() // wait for the event come back from the sync
+
         startRecording(room, voiceBroadcast, chunkLength, maxLength)
     }
 
