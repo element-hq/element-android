@@ -17,74 +17,71 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.mapper.FilterParamsMapper
 import org.matrix.android.sdk.internal.database.model.FilterEntity
-import org.matrix.android.sdk.internal.database.model.FilterEntityFields
+import org.matrix.android.sdk.internal.database.model.SyncFilterParamsEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
-internal class DefaultFilterRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : FilterRepository {
+internal class DefaultFilterRepository @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val filterParamsMapper: FilterParamsMapper
+) : FilterRepository {
 
-    override suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val filterEntity = FilterEntity.get(realm)
-            // Filter has changed, or no filter Id yet
-            filterEntity == null ||
-                    filterEntity.filterBodyJson != filter.toJSONString() ||
-                    filterEntity.filterId.isBlank()
-        }.also { hasChanged ->
-            if (hasChanged) {
-                // Filter is new or has changed, store it and reset the filter Id.
-                // This has to be done outside of the Realm.use(), because awaitTransaction change the current thread
-                monarchy.awaitTransaction { realm ->
-                    // We manage only one filter for now
-                    val filterJson = filter.toJSONString()
-                    val roomEventFilterJson = roomEventFilter.toJSONString()
-
-                    val filterEntity = FilterEntity.getOrCreate(realm)
-
-                    filterEntity.filterBodyJson = filterJson
-                    filterEntity.roomEventFilterJson = roomEventFilterJson
-                    // Reset filterId
-                    filterEntity.filterId = ""
-                }
-            }
-        }
-    }
-
-    override suspend fun storeFilterId(filter: Filter, filterId: String) {
-        monarchy.awaitTransaction {
+    override suspend fun storeSyncFilter(filter: Filter, filterId: String, roomEventFilter: RoomEventFilter) {
+        monarchy.awaitTransaction { realm ->
             // We manage only one filter for now
             val filterJson = filter.toJSONString()
+            val roomEventFilterJson = roomEventFilter.toJSONString()
 
-            // Update the filter id, only if the filter body matches
-            it.where<FilterEntity>()
-                    .equalTo(FilterEntityFields.FILTER_BODY_JSON, filterJson)
-                    ?.findFirst()
-                    ?.filterId = filterId
+            val filterEntity = FilterEntity.getOrCreate(realm)
+
+            filterEntity.filterBodyJson = filterJson
+            filterEntity.roomEventFilterJson = roomEventFilterJson
+            filterEntity.filterId = filterId
         }
     }
 
-    override suspend fun getFilter(): String {
+    override suspend fun getStoredSyncFilterBody(): String {
         return monarchy.awaitTransaction {
-            val filter = FilterEntity.getOrCreate(it)
-            if (filter.filterId.isBlank()) {
-                // Use the Json format
-                filter.filterBodyJson
+            FilterEntity.getOrCreate(it).filterBodyJson
+        }
+    }
+
+    override suspend fun getStoredSyncFilterId(): String? {
+        return monarchy.awaitTransaction {
+            val id = FilterEntity.get(it)?.filterId
+            if (id.isNullOrBlank()) {
+                null
             } else {
-                // Use FilterId
-                filter.filterId
+                id
             }
         }
     }
 
-    override suspend fun getRoomFilter(): String {
+    override suspend fun getRoomFilterBody(): String {
         return monarchy.awaitTransaction {
             FilterEntity.getOrCreate(it).roomEventFilterJson
+        }
+    }
+
+    override suspend fun getStoredFilterParams(): SyncFilterParams? {
+        return monarchy.awaitTransaction { realm ->
+            realm.where<SyncFilterParamsEntity>().findFirst()?.let {
+                filterParamsMapper.map(it)
+            }
+        }
+    }
+
+    override suspend fun storeFilterParams(params: SyncFilterParams) {
+        return monarchy.awaitTransaction { realm ->
+            val entity = filterParamsMapper.map(params)
+            realm.insertOrUpdate(entity)
         }
     }
 }
