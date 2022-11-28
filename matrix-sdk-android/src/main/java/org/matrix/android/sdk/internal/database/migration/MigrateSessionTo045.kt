@@ -25,10 +25,13 @@ internal class MigrateSessionTo045(realm: DynamicRealm) : RealmMigrator(realm, 4
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("SyncFilterParamsEntity")
                 .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_STATE_EVENTS, Boolean::class.java)
+                .setNullable(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_STATE_EVENTS, true)
                 .addField(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_MESSAGE_EVENTS, Boolean::class.java)
+                .setNullable(SyncFilterParamsEntityFields.LAZY_LOAD_MEMBERS_FOR_MESSAGE_EVENTS, true)
                 .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
                 .addField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES_HAS_BEEN_SET, Boolean::class.java)
                 .addField(SyncFilterParamsEntityFields.USE_THREAD_NOTIFICATIONS, Boolean::class.java)
+                .setNullable(SyncFilterParamsEntityFields.USE_THREAD_NOTIFICATIONS, true)
                 .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_EVENT_TYPES.`$`, String::class.java)
                 .addRealmListField(SyncFilterParamsEntityFields.LIST_OF_SUPPORTED_STATE_EVENT_TYPES.`$`, String::class.java)
     }
