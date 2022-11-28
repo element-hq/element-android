@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_rect_shape_8"
     android:backgroundTint="?vctr_content_quinary"
-    android:padding="@dimen/layout_vertical_margin">
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/liveIndicator"
