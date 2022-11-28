@@ -72,7 +72,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         @MainThread
         set(value) {
             if (field != value) {
-                Timber.w("## Voice Broadcast | isLiveListening: $field -> $value")
+                Timber.d("## Voice Broadcast | isLiveListening: $field -> $value")
                 field = value
                 onLiveListeningChanged(value)
             }
@@ -82,7 +82,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         @MainThread
         set(value) {
             if (field != value) {
-                Timber.w("## Voice Broadcast | playingState: $field -> $value")
+                Timber.d("## Voice Broadcast | playingState: $field -> $value")
                 field = value
                 onPlayingStateChanged(value)
             }
